@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドイツ出張旅程表 (アーヘン 2025)</title>
+    <!-- Google Fonts と Material Icons を読み込み -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+
+        /* --- EMO旅程表のスタイルをそのまま適用 --- */
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.7;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            color: #1a3a6c;
+            border-bottom: 2px solid #1a3a6c;
+            padding-bottom: 10px;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 5px solid #005ab3;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tips-box h3 {
+            border-bottom: 1px solid #ddd;
+            font-size: 1.2em;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .overview-box, .tips-box {
+            background-color: #eaf3fb;
+            border-left: 5px solid #005ab3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .overview-box ul, .tips-box ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .overview-box li, .tips-box li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+         .tips-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        .tips-box li > div {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            /* word-break: break-all; */ /* URLが長くない場合は不要 */
+        }
+        .overview-box li strong {
+            flex-shrink: 0;
+            width: 130px;
+            margin-right: 15px;
+            color: #1a3a6c;
+        }
+
+        /* ▼▼▼ [追加] 日別概要テーブルスタイル ▼▼▼ */
+        .summary-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+            font-size: 0.9em; /* 少し小さくしてボックスに収める */
+        }
+        .summary-table th, .summary-table td {
+            padding: 8px;
+            border: 1px solid #b0c4de;
+            vertical-align: top;
+            word-break: break-word; /* 宿泊先が長いので折り返す */
+        }
+        .summary-table th {
+            background-color: #d0e3f5;
+            text-align: left;
+            width: 30%; /* [変更] 幅を調整 */
+        }
+        .summary-table th:first-child { /* 月日 */
+            width: 20%;
+            white-space: nowrap;
+        }
+        .summary-table th:nth-child(3) { /* [追加] 移動手段 */
+            width: 25%;
+        }
+        .summary-table th:nth-child(4) { /* [追加] 宿泊先 */
+            width: 25%;
+        }
+        .summary-table tr:nth-child(odd) td {
+             background-color: #fff;
+        }
+        .summary-table tr:nth-child(even) td {
+             background-color: #f7faff;
+        }
+        /* ▲▲▲ [追加] 日別概要テーブルスタイル ▲▲▲ */
+
+        .tips-box .tip-item strong {
+            width: 180px;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .tips-box .address {
+            font-size: 0.9em;
+            color: #555;
+            display: block;
+            margin-top: 4px;
+        }
+        
+        .tip-item .details {
+            padding-left: 20px;
+        }
+
+        /* Souvenir section styles */
+        .souvenir-item {
+            display: flex;
+            align-items: flex-start;
+        }
+        .souvenir-item strong {
+             width: 180px;
+             flex-shrink: 0;
+        }
+        .souvenir-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .souvenir-details p {
+            margin: 0 0 10px 0;
+            padding: 0;
+        }
+         .souvenir-details p:last-child {
+            margin-bottom: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 14px 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #1a3a6c;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f7faff;
+        }
+
+        .time-col {
+            width: 18%;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .event-col {
+            width: 25%;
+            font-weight: bold;
+        }
+        .location-col {
+            width: 25%;
+        }
+        .details-col {
+            width: 32%;
+            font-size: 0.9em;
+        }
+        .details-col ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+        .timezone {
+            font-size: 0.8em;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        .no-print {
+            text-align: center;
+            padding: 10px;
+            background: #fffbe6;
+            border: 1px solid #ffe58f;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .material-symbols-outlined {
+            margin-right: 8px;
+            vertical-align: middle;
+            color: #005ab3;
+        }
+        .event-col .material-symbols-outlined {
+            color: #1a3a6c;
+        }
+        
+        .event-text {
+             display: inline-block;
+             vertical-align: middle;
+        }
+        
+        .important-note {
+            color: #c53030;
+            font-weight: bold;
+            background: #fff0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        /* ▼▼▼ [追加] 印刷用スタイル（中国版v6ベース） ▼▼▼ */
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+                margin: 0;
+                font-size: 10pt;
+                width: 100%;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+            .no-print {
+                display: none;
+            }
+
+            /* --- 必須の改ページ設定 --- */
+            .overview-box {
+                page-break-after: always; /* 概要の後で改ページ */
+            }
+            .itinerary-day {
+                page-break-after: always; /* 各日付の後で改ページ */
+            }
+            .itinerary-day:last-child {
+                page-break-after: avoid; /* 最後の日は改ページしない */
+            }
+            .tips-section {
+                page-break-before: always; /*「Tips & 連絡先」セクションは新しいページから開始 */
+            }
+
+            /* --- ページ内部の改ページ制御 --- */
+            .overview-box li,
+            .tips-box .tip-item,
+            .souvenir-item {
+                page-break-inside: avoid; /* これらの要素の途中で改ページされるのを防ぐ */
+            }
+
+            /* --- 概要テーブルのアイコンを印刷時も表示 --- */
+            .summary-table .material-symbols-outlined {
+                display: inline-block !important;
+                font-size: 1em;
+                vertical-align: middle;
+                margin-right: 4px;
+            }
+            :not(.summary-table) > .material-symbols-outlined, 
+            :not(.summary-table) strong > .material-symbols-outlined,
+            .event-col .material-symbols-outlined,
+            .overview-box li strong > .material-symbols-outlined {
+                 display: none; /* 概要テーブル以外は非表示 */
+            }
+            /* --- */
+
+            h1, h2, h3 {
+                border-bottom: 2px solid #333;
+                color: #000;
+            }
+            h2 {
+                 border-left: 5px solid #333;
+            }
+            th {
+                background-color: #eee !important;
+                color: #000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            tr:nth-child(even) {
+                background-color: #f9f9f9 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            table {
+                 table-layout: fixed;
+                 width: 100%;
+            }
+            td, th {
+                word-wrap: break-word;
+            }
+            a {
+                text-decoration: none;
+                color: #000;
+            }
+            .tips-box a {
+                color: #005ab3;
+            }
+            .material-symbols-outlined {
+                display: none; /* アイコンを印刷しない */
+            }
+        }
+        /* ▲▲▲ 印刷用スタイルここまで ▲▲▲ */
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🇩🇪 ドイツ出張旅程表 (アーヘン 2025 - 村上様)</h1>
+        <div class="no-print">
+            <p>💡 <strong>印刷のヒント:</strong> ブラウザの印刷機能（Ctrl+P または Command+P）を使用してください。各日付が1ページに収まるように設定されています。</p>
+        </div>
+
+        <!-- 概要 -->
+        <div class="overview-box">
+            <h3>旅程概要</h3>
+            <ul>
+                <li><strong><span class="material-symbols-outlined">calendar_month</span>期間:</strong> <div>2025年12月8日(月) ～ 2025年12月13日(土)</div></li>
+                <li><strong><span class="material-symbols-outlined">location_city</span>訪問都市:</strong> <div>アーヘン、ケルン、フランクフルト (ドイツ)</div></li>
+                <li><strong><span class="material-symbols-outlined">business_center</span>主目的:</strong> <div>ICNAP Annual Meeting 2025 参加</div></li>
+                <li><strong><span class="material-symbols-outlined">person</span>参加者:</strong> <div>村上</div></li>
+                
+                <!-- ▼▼▼ [ここから追加] 日別概要 ▼▼▼ -->
+                <li style="margin-top: 15px; border-top: 1px dashed #005ab3; padding-top: 15px;">
+                    <strong><span class="material-symbols-outlined">list_alt</span>日別概要:</strong>
+                    <div class="daily-summary">
+                        
+                        <table class="summary-table">
+                            <thead>
+                                <tr>
+                                    <th>月日</th>
+                                    <th>概要</th>
+                                    <th>主な移動手段</th>
+                                    <th>宿泊先</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>12/8 (月)</td>
+                                    <td>本社業務後 出発</td>
+                                    <td><span class="material-symbols-outlined" style="font-size: 1.1em; vertical-align: middle;">flight</span> フィンエアー AY068</td>
+                                    <td>(機内泊)</td>
+                                </tr>
+                                <tr>
+                                    <td>12/9 (火)</td>
+                                    <td>ドイツ入国・アーヘン移動</td>
+                                    <td><span class="material-symbols-outlined" style="font-size: 1.1em; vertical-align: middle;">flight</span> AY1391, <span class="material-symbols-outlined" style="font-size: 1.1em; vertical-align: middle;">train</span> 鉄道</td>
+                                    <td>メルキュールホテル アーヘン</td>
+                                </tr>
+                                <tr>
+                                    <td>12/10 (水)</td>
+                                    <td>深夜会議 / ICNAP 1日目</td>
+                                    <td>(市内移動)</td>
+                                    <td>メルキュールホテル アーヘン</td>
+                                </tr>
+                                <tr>
+                                    <td>12/11 (木)</td>
+                                    <td>ICNAP 2日目 / ケルン観光</td>
+                                    <td><span class="material-symbols-outlined" style="font-size: 1.1em; vertical-align: middle;">train</span> 鉄道</td>
+                                    <td>メルキュールホテル アーヘン</td>
+                                </tr>
+                                <tr>
+                                    <td>12/12 (金)</td>
+                                    <td>フランクフルト観光 / ドイツ出国</td>
+                                    <td><span class="material-symbols-outlined" style="font-size: 1.1em; vertical-align: middle;">train</span> 鉄道 (ICE), <span class="material-symbols-outlined" style="font-size: 1.1em; vertical-align: middle;">flight</span> JAL JL408</td>
+                                    <td>(機内泊)</td>
+                                </tr>
+                                <tr>
+                                    <td>12/13 (土)</td>
+                                    <td>日本帰国日</td>
+                                    <td><span class="material-symbols-outlined" style="font-size: 1.1em; vertical-align: middle;">flight</span> JAL JL3009</td>
+                                    <td>(なし)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </li>
+                <!-- ▲▲▲ [追加] 日別概要ここまで ▲▲▲ -->
+
+            </ul>
+        </div>
+
+        <!-- 12月8日(月) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年12月8日 (月) - 本社業務後 出発</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="time-col">時刻 (JST)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>08:00 - 17:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">work</span><span class="event-text">本社業務</span></td>
+                        <td>本社</td>
+                        <td class="details-col"><ul><li>通常業務</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>18:00頃</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">空港へ移動</span></td>
+                        <td>京都駅 → 関西国際空港</td>
+                        <td class="details-col"><ul><li>特急はるか 利用 (23:25発に合わせて調整)</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>19:30 - 23:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">lounge</span><span class="event-text">出国・ラウンジ</span></td>
+                        <td>関西国際空港 (KIX)</td>
+                        <td class="details-col"><ul><li>出国前にラウンジでシャワー・着替え</li><li>出国手続き</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>23:25 <span class="timezone">(JST)</span> →<br>05:30+1 <span class="timezone">(EEST)</span></td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight</span><span class="event-text">フライト</span></td>
+                        <td>大阪 (KIX) → ヘルシンキ (HEL)</td>
+                        <td class="details-col"><ul><li>便名: フィンエアー AY068</li><li><strong>所要時間: 12時間5分</strong></li></ul></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 12月9日(火) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年12月9日 (火) - ドイツ入国・アーヘン移動</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="time-col">時刻 (現地時間)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>05:30 - 07:40</td>
+                        <td class="event-col"><span class="material-symbols-outlined">passport</span><span class="event-text">乗り継ぎ</span></td>
+                        <td>ヘルシンキ・ヴァンター空港 (HEL)</td>
+                        <td class="details-col"><ul><li>シェンゲン圏入国審査</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>07:40 <span class="timezone">(EEST)</span> →<br>09:10 <span class="timezone">(CEST)</span></td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight</span><span class="event-text">フライト</span></td>
+                        <td>ヘルシンキ (HEL) → デュッセルドルフ (DUS)</td>
+                        <td class="details-col"><ul><li>便名: フィンエアー AY1391</li><li><strong>所要時間: 2時間30分</strong></li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>09:10 - 10:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">luggage</span><span class="event-text">荷物受取</span></td>
+                        <td>デュッセルドルフ空港 (DUS)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>10:00 - 12:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>DUS空港 → アーヘン中央駅</td>
+                        <td class="details-col"><ul><li>列車 (RE 1など) で移動（約1.5時間）</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>12:00頃</td>
+                        <td class="event-col"><span class="material-symbols-outlined">hotel</span><span class="event-text">ホテル到着</span></td>
+                        <td>メルキュールホテル アーヘン</td>
+                        <td class="details-col"><ul><li>アーリーチェックイン または 荷物預け</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>午後</td>
+                        <td class="event-col"><span class="material-symbols-outlined">airline_seat_individual_suite</span><span class="event-text">休憩・調整</span></td>
+                        <td>ホテル・アーヘン市内</td>
+                        <td class="details-col"><ul><li>深夜のWEB会議に備え、仮眠推奨</li><li>市内散策、ランチ</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>夜</td>
+                        <td class="event-col"><span class="material-symbols-outlined">restaurant</span><span class="event-text">ディナー・就寝</span></td>
+                        <td>ホテルまたは近辺</td>
+                        <td class="details-col"><ul><li>単独でディナー</li><li><span class="important-note">⚠️ 深夜01:00からのWEB会議に備え、早めに就寝</span></li></ul></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 12月10日(水) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年12月10日 (水) - 深夜会議 / ICNAP 1日目</h2>
+            <table>
+                 <thead>
+                    <tr>
+                        <th class="time-col">時刻 (CEST)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01:00 - 03:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">laptop_mac</span><span class="event-text">WEB会議</span></td>
+                        <td>ホテル</td>
+                        <td class="details-col"><ul><li><span class="important-note">⚠️ 日本本社とのWEB会議 (日本時間 09:00-11:30)</span></li><li>会議終了後、仮眠 (約3.5時間)</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>07:30 - 08:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">breakfast_dining</span><span class="event-text">朝食</span></td>
+                        <td>ホテル</td>
+                        <td class="details-col"><ul><li>廣瀬様・北尾様と合流</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>08:00 - 08:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">local_taxi</span><span class="event-text">会場へ移動</span></td>
+                        <td>ホテル → 会場</td>
+                        <td class="details-col"><ul><li>タクシー推奨 (3名で移動)</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>08:30 - 16:15</td>
+                        <td class="event-col"><span class="material-symbols-outlined">business_center</span><span class="event-text">ICNAP Day 1</span></td>
+                        <td>INC Invention Center, Aachen</td>
+                        <td class="details-col">
+                            <ul>
+                                <li>08:30: 受付</li>
+                                <li>09:00: 開会・基調講演</li>
+                                <li>11:15: ワークショップ</li>
+                                <li>12:15: ランチ＆ネットワーキング</li>
+                                <li>13:00: ポスターセッション</li>
+                                <li>14:45: WG紹介 等</li>
+                                <li>16:15: 1日目終了</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>16:15 - 16:45</td>
+                        <td class="event-col"><span class="material-symbols-outlined">local_taxi</span><span class="event-text">ホテルへ移動</span></td>
+                        <td>会場 → ホテル</td>
+                        <td class="details-col"><ul><li>移動時間 約30分</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>16:45 - 19:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">hotel</span><span class="event-text">ホテル待機・休憩</span></td>
+                        <td>ホテル</td>
+                        <td class="details-col"><ul><li>ネットワーキングイベントに備えて休憩</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>19:00 -</td>
+                        <td class="event-col"><span class="material-symbols-outlined">groups</span><span class="event-text">ネットワーキング</span></td>
+                        <td>アーヘン クリスマスマーケット</td>
+                        <td class="details-col"><ul><li>ICNAP主催 Get-Together</li></ul></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 12月11日(木) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年12月11日 (木) - ICNAP 2日目 / ケルン観光</h2>
+            <table>
+                 <thead>
+                    <tr>
+                        <th class="time-col">時刻 (CEST)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>07:45 - 08:15</td>
+                        <td class="event-col"><span class="material-symbols-outlined">breakfast_dining</span><span class="event-text">朝食</span></td>
+                        <td>ホテル</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>08:15 - 08:45</td>
+                        <td class="event-col"><span class="material-symbols-outlined">local_taxi</span><span class="event-text">会場へ移動</span></td>
+                        <td>ホテル → 会場</td>
+                        <td class="details-col"><ul><li>タクシー推奨 (3名で移動)</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>08:45 - 15:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">business_center</span><span class="event-text">ICNAP Day 2</span></td>
+                        <td>INC Invention Center, Aachen</td>
+                        <td class="details-col">
+                            <ul>
+                                <li>09:00: 2日目開会</li>
+                                <li>09:15: ICNAP研究紹介</li>
+                                <li>10:00: デモセッション</li>
+                                <li>11:15: Hackathon発表</li>
+                                <li>11:45: 2026年テーマ ピッチ</li>
+                                <li>12:45: ランチ</li>
+                                <li>13:45: ポスターセッション＆投票</li>
+                                <li>15:00: 閉会式</li>
+                                <li>15:30: 会議終了</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>15:30 - 16:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">directions_walk</span><span class="event-text">移動</span></td>
+                        <td>会場 → ホテル → アーヘン中央駅</td>
+                        <td class="details-col"><ul><li>ホテルで荷物をピックアップ</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>16:51 - 17:44</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>アーヘン中央駅 → ケルン中央駅</td>
+                        <td class="details-col"><ul><li>列車: RE 1</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>17:45 - 20:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">nightlife</span><span class="event-text">ケルン観光・ディナー</span></td>
+                        <td>ケルン市内</td>
+                        <td class="details-col"><ul><li>ケルン大聖堂</li><li>クリスマスマーケット (ディナー)</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>20:15 - 21:07</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>ケルン中央駅 → アーヘン中央駅</td>
+                        <td class="details-col"><ul><li>アーヘン中央駅よりホテルへ</li></ul></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 12月12日(金) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年12月12日 (金) - フランクフルト観光 / ドイツ出国</h2>
+            <table>
+                 <thead>
+                    <tr>
+                        <th class="time-col">時刻 (CEST)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>08:00 - 09:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">breakfast_dining</span><span class="event-text">朝食・荷造り</span></td>
+                        <td>ホテル</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>09:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">logout</span><span class="event-text">チェックアウト</span></td>
+                        <td>メルキュールホテル アーヘン</td>
+                        <td class="details-col"><ul><li>3名でアーヘン中央駅へ</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>09:39 - 11:17</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>アーヘン中央駅 → フランクフルト空港駅</td>
+                        <td class="details-col"><ul><li>列車: ICE 13</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>11:17 - 11:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight_takeoff</span><span class="event-text">空港手続き</span></td>
+                        <td>フランクフルト空港 (FRA)</td>
+                        <td class="details-col"><ul><li>JALカウンターでチェックイン・荷物預け入れ</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>11:30 - 12:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">市内へ移動</span></td>
+                        <td>フランクフルト空港 → 市内</td>
+                        <td class="details-col"><ul><li>Sバーンで移動</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>12:00 - 14:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">storefront</span><span class="event-text">フランクフルト市内</span></td>
+                        <td>レーマー広場 等</td>
+                        <td class="details-col"><ul><li>クリスマスマーケットでランチ</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>14:30 - 15:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">空港へ移動</span></td>
+                        <td>市内 → フランクフルト空港 (FRA)</td>
+                        <td class="details-col"><ul><li>廣瀬様・北尾様とお別れ</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>15:00 - 19:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">lounge</span><span class="event-text">保安検査・出国・ラウンジ</span></td>
+                        <td>フランクフルト空港 (FRA)</td>
+                        <td class="details-col"><ul><li>保安検査・出国審査</li><li><span class="important-note">JMBサファイヤ資格でラウンジ利用</span></li><li>シャワー、軽食、休憩</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>20:05 <span class="timezone">(CEST)</span> →<br>17:05+1 <span class="timezone">(JST)</span></td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight</span><span class="event-text">フライト</span></td>
+                        <td>フランクフルト (FRA) → 東京 (NRT)</td>
+                        <td class="details-col"><ul><li>便名: JAL JL408</li><li><strong>所要時間: 15時間00分</strong></li></ul></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 12月13日(土) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年12月13日 (土) - 日本帰国日</h2>
+            <table>
+                 <thead>
+                    <tr>
+                        <th class="time-col">時刻 (JST)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>17:05</td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight_land</span><span class="event-text">到着</span></td>
+                        <td>東京・成田国際空港 (NRT)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>17:05 - 18:25</td>
+                        <td class="event-col"><span class="material-symbols-outlined">connecting_airports</span><span class="event-text">国内線乗り継ぎ</span></td>
+                        <td>成田国際空港 (NRT)</td>
+                        <td class="details-col"><ul><li>入国審査・荷物受取・税関</li><li>国内線チェックイン</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>18:25 - 19:55</td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight</span><span class="event-text">国内線フライト</span></td>
+                        <td>東京 (NRT) → 大阪 (ITM)</td>
+                        <td class="details-col"><ul><li>便名: JAL JL3009</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>19:55 -</td>
+                        <td class="event-col"><span class="material-symbols-outlined">home</span><span class="event-text">ご帰宅</span></td>
+                        <td>大阪・伊丹空港 → ご自宅</td>
+                        <td class="details-col"><ul><li>中書島のご自宅へ</li><li>お疲れ様でした。</li></ul></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- チップス (アーヘン版に修正) -->
+        <div class="tips-section">
+            <h2><span class="material-symbols-outlined">info</span>Tips & 連絡先</h2>
+            <div class="tips-box">
+                <h3>宿泊先情報</h3>
+                <ul>
+                    <li class="tip-item"><strong><span class="material-symbols-outlined">hotel</span>アーヘン:</strong> <div>メルキュールホテル アーヘン (Mercure Hotel Aachen am Dom)<span class="address">住所: Peterstraße 1, 52062 Aachen, Germany</span></div></li>
+                </ul>
+                <h3>緊急連絡先</h3>
+                 <ul>
+                    <li class="tip-item"><strong><span class="material-symbols-outlined">flag</span>在デュッセルドルフ日本国総領事館:</strong> <div>+49 (0)211 16482-0 (アーヘン管轄)</div></li>
+                    <li class="tip-item"><strong><span class="material-symbols-outlined">local_police</span>警察:</strong> <div>110</div></li>
+                    <li class="tip-item"><strong><span class="material-symbols-outlined">emergency</span>消防・救急車:</strong> <div>112</div></li>
+                </ul>
+                <h3>交通について</h3>
+                <ul>
+                    <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">confirmation_number</span>鉄道チケット:</strong>
+                        <div class="details">DB Navigatorアプリが便利です。チケットの購入、時刻表の確認、遅延情報の取得が可能です。</div>
+                    </li>
+                    <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">local_taxi</span>アーヘン市内の移動:</strong>
+                        <div class="details">ミーティング会場 (Melaten Campus) へは、ホテルからタクシー利用が最も効率的です (約10-15分)。</div>
+                    </li>
+                </ul>
+                <h3>支払いについて</h3>
+                <ul>
+                    <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">payments</span>チップ:</strong>
+                        <div class="details">レストランでは合計金額の5～10%を目安に、会計時にキリの良い金額を伝えてお釣りを調整してもらうのがスマートです。</div>
+                    </li>
+                     <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">euro</span>クリスマスマーケット:</strong>
+                        <div class="details">マーケットでの飲食や買い物は、現金（ユーロ）のみの場合が多いので、少額紙幣や硬貨を準備しておくと便利です。</div>
+                    </li>
+                </ul>
+                <h3>生活・文化</h3>
+                <ul>
+                    <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">power</span>電源プラグと電圧:</strong>
+                        <div class="details">ドイツはCまたはFタイプです。電圧は230Vです。PCやスマートフォンの充電器が「100-240V」対応かご確認ください。</div>
+                    </li>
+                    <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">water_drop</span>飲料水:</strong>
+                        <div class="details">水道水は安全に飲めます。レストランで炭酸なしの水を希望する場合は「stilles Wasser（シュティレス・ヴァッサー）」とご注文ください。</div>
+                    </li>
+                </ul>
+                <h3>お土産について (アーヘン・ケルン・フランクフルト)</h3>
+                <ul class="souvenir-list">
+                    <li class="souvenir-item">
+                        <strong><span class="material-symbols-outlined">bakery_dining</span>アーヘン:</strong> 
+                        <div class="souvenir-details">
+                            <p>「<strong>アーヘナー・プリンテン (Aachener Printen)</strong>」という、スパイスとシロップで作られた硬めのクッキー（ジンジャーブレッドに似ています）が伝統的な名物です。</p>
+                        </div>
+                    </li>
+                    <li class="souvenir-item">
+                        <strong><span class="material-symbols-outlined">church</span>ケルン:</strong>
+                        <div class="souvenir-details">
+                             <p>世界的に有名なオーデコロン「<a href="https://www.4711.com/" target="_blank" rel="noopener noreferrer">4711</a>」はケルンが発祥地です。大聖堂の形をしたお菓子やグッズも定番です。</p>
+                        </div>
+                    </li>
+                    <li class="souvenir-item">
+                        <strong><span class="material-symbols-outlined">local_bar</span>フランクフルト:</strong>
+                        <div class="souvenir-details">
+                            <p>リンゴ酒「アプフェルヴァイン (Apfelwein)」や、それ専用の陶器のジョッキ「ベンベル (Bembel)」が有名です。レーマー広場のグッズも人気です。</p>
+                        </div>
+                    </li>
+                    <li class="souvenir-item">
+                        <strong><span class="material-symbols-outlined">flight</span>ヘルシンキ空港:</strong>
+                        <div class="souvenir-details">
+                            <p>乗り継ぎ時間にはフィンランド土産も狙い目です。<a href="https://www.fazer.com/" target="_blank" rel="noopener noreferrer">Fazer（ファッツェル）のチョコレート</a>や、ムーミングッズなどが充実しています。</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

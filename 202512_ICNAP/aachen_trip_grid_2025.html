@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドイツ(アーヘン)出張 管理用タイムテーブル (3名版)</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            font-size: 14px;
+        }
+        .container {
+            max-width: 95%;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        h1 {
+            text-align: center;
+            background-color: #182848;
+            color: white;
+            padding: 20px 0;
+            margin: 0;
+            font-size: 1.8em;
+        }
+        .table-wrapper {
+            overflow-x: auto; /* 画面閲覧時は横スクロールを許可 */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85em;
+            min-width: 1200px; /* 宿泊先カラム追加のため最小幅を拡大 */
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 10px;
+            vertical-align: top; /* ズレ防止のため top に揃える */
+            text-align: left;
+            line-height: 1.6;
+        }
+        thead th {
+            background-color: #34495e;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            white-space: nowrap;
+            text-align: center;
+        }
+        
+        .col-date { width: 5%; }
+        .col-day { width: 4%; }
+        .col-time-jp { width: 7%; } /* JST */
+        .col-time-cet { width: 7%; } /* CET */
+        .col-murakami { width: 28%; } 
+        .col-hirose-kitao { width: 28%; }
+        .col-hotel { width: 21%; } /* 宿泊先カラム */
+
+        tbody.day-page {
+            border-top: 4px solid #182848; /* 日付の区切りを明確に */
+        }
+        
+        td.time-cell {
+            text-align: center;
+            vertical-align: middle;
+            background-color: #f9f9f9;
+            white-space: nowrap;
+            padding: 8px 5px; /* 時間セルのパディング調整 */
+        }
+        
+        /* 滞在場所に応じたクラスでJST/CETの色分け（主副） */
+        .day-in-japan .time-jp { 
+            font-weight: 700; font-size: 1.1em; color: #182848; 
+        }
+        .day-in-japan .time-cet { 
+            font-weight: 400; color: #777; 
+        }
+        .day-in-germany .time-jp { 
+            font-weight: 400; color: #777; 
+        }
+        .day-in-germany .time-cet { 
+            font-weight: 700; font-size: 1.1em; color: #182848; 
+        }
+        
+        .note-time {
+            font-size: 0.85em;
+            color: #888;
+            font-weight: 400;
+            display: block;
+        }
+
+        td.schedule-cell {
+            vertical-align: top; /* スケジュールは上詰めで統一 */
+        }
+        
+        td.hotel-cell {
+            vertical-align: top;
+            background: #fdfdfd;
+        }
+
+        /* スケジュール要素のスタイル */
+        .event {
+            padding: 6px 10px;
+            margin: 4px 0;
+            border-radius: 5px;
+            display: block;
+            border-left: 4px solid;
+        }
+        .flight { background-color: #fff3cd; border-color: #ffc107; color: #664d03; }
+        .transport { background-color: #e8f4f8; border-color: #3498db; color: #0c5464; }
+        .meeting { background-color: #d4edda; border-color: #28a745; color: #155724; }
+        .personal { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .hotel { background-color: #e7e7ff; border-color: #764ba2; color: #3f0085; }
+        .work { background-color: #fef8e2; border-color: #f0ad4e; color: #7a5100; }
+        .all-event { background-color: #e6f7f3; border-color: #155724; color: #0b2e13; font-weight: 700; }
+        .note { font-size: 0.9em; color: #555; margin-top: 4px; display: block; }
+        .hotel-note { font-size: 0.9em; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px dashed #ccc; }
+        .hotel-note:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .hotel-note strong { color: #182848; }
+
+        /* 曜日スタイル */
+        .day-sat { color: #337ab7; }
+        .day-sun { color: #d9534f; }
+        
+        /* --- 印刷用スタイル (A4横・1日1ページ) --- */
+        @media print {
+            @page {
+                size: A4 landscape; /* A4横を指定 */
+                margin: 1cm; /* 余白を調整 */
+            }
+            body { 
+                padding: 0; 
+                font-size: 8pt; /* A4横に合わせフォントを調整 */
+                background: #fff;
+                -webkit-print-color-adjust: exact; /* 背景色を印刷 (Chrome/Safari) */
+                print-color-adjust: exact; /* 背景色を印刷 (標準) */
+            }
+            .container { 
+                box-shadow: none; 
+                border: none;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 0;
+                margin: 0;
+            }
+            h1 {
+                font-size: 1.5em;
+                padding: 10px 0;
+                background-color: #182848 !important;
+                color: white !important;
+            }
+            .table-wrapper {
+                overflow: visible; /* 印刷時はスクロールバー非表示 */
+            }
+            table {
+                min-width: 0; /* 最小幅を解除 */
+                font-size: 8pt;
+            }
+            thead th { 
+                background-color: #eee !important;
+                color: #000 !important; 
+                font-size: 9pt;
+            }
+            th, td { 
+                border: 1px solid #ccc; 
+                padding: 4px 6px; /* パディングを詰める */
+            }
+            
+            /* 1日1ページ設定 */
+            tbody.day-page {
+                page-break-after: always; /* 各日付の後に改ページ */
+                border-top: none;
+            }
+            tbody.day-page-last {
+                page-break-after: avoid; /* 最後のページは改ページしない */
+            }
+
+            /* イベントの背景色を強制的に印刷 */
+            .event {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .flight { background-color: #fff3cd !important; color: #664d03 !important; }
+            .transport { background-color: #e8f4f8 !important; color: #0c5464 !important; }
+            .meeting { background-color: #d4edda !important; color: #155724 !important; }
+            .personal { background-color: #f8d7da !important; color: #721c24 !important; }
+            .hotel { background-color: #e7e7ff !important; color: #3f0085 !important; }
+            .work { background-color: #fef8e2 !important; color: #7a5100 !important; }
+            .all-event { background-color: #e6f7f3 !important; color: #0b2e13 !important; }
+            
+            /* 印刷時の時間色分けを強制 */
+            .day-in-japan .time-jp { color: #000 !important; font-weight: 700; font-size: 1em; }
+            .day-in-japan .time-cet { color: #666 !important; font-weight: 400; font-size: 1em; }
+            .day-in-germany .time-jp { color: #666 !important; font-weight: 400; font-size: 1em; }
+            .day-in-germany .time-cet { color: #000 !important; font-weight: 700; font-size: 1em; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ドイツ(アーヘン)出張 管理用タイムテーブル (2025年12月)</h1>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-date">年月日</th>
+                        <th class="col-day">曜日</th>
+                        <th class="col-time-jp">時間 (JST)</th>
+                        <th class="col-time-cet">時間 (CET)</th>
+                        <th class="col-murakami">👤 村上</th>
+                        <th class="col-hirose-kitao">👥 廣瀬・北尾</th>
+                        <th class="col-hotel">🏨 宿泊先</th>
+                    </tr>
+                </thead>
+                
+                <tbody class="day-page day-in-japan"> <tr>
+                        <td rowspan="24" class="time-cell">2025/12/07</td>
+                        <td rowspan="24" class="time-cell day-sun">日</td>
+                        <td class="time-cell time-jp">00:00</td> 
+                        <td class="time-cell time-cet">16:00<span class="note-time">(-1日)</span></td>
+                        <td class="schedule-cell" rowspan="24">
+                            <span class="event personal">🎌 休日（国内）</span>
+                            <span class="note">出発準備・自宅泊</span>
+                        </td>
+                        <td class="schedule-cell" rowspan="18">
+                            <span class="event personal">🎌 休日（国内）</span>
+                            <span class="note">出発準備</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="22">
+                            <div class="hotel-note"><strong>👤 村上:</strong> （自宅泊）</div>
+                            <div class="hotel-note"><strong>👥 廣瀬・北尾:</strong> （自宅泊）</div>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">01:00</td><td class="time-cell time-cet">17:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">02:00</td><td class="time-cell time-cet">18:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">03:00</td><td class="time-cell time-cet">19:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">04:00</td><td class="time-cell time-cet">20:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">05:00</td><td class="time-cell time-cet">21:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">06:00</td><td class="time-cell time-cet">22:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">07:00</td><td class="time-cell time-cet">23:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">08:00</td><td class="time-cell time-cet">00:00</td></tr>
+                    <tr><td class="time-cell time-jp">09:00</td><td class="time-cell time-cet">01:00</td></tr>
+                    <tr><td class="time-cell time-jp">10:00</td><td class="time-cell time-cet">02:00</td></tr>
+                    <tr><td class="time-cell time-jp">11:00</td><td class="time-cell time-cet">03:00</td></tr>
+                    <tr><td class="time-cell time-jp">12:00</td><td class="time-cell time-cet">04:00</td></tr>
+                    <tr><td class="time-cell time-jp">13:00</td><td class="time-cell time-cet">05:00</td></tr>
+                    <tr><td class="time-cell time-jp">14:00</td><td class="time-cell time-cet">06:00</td></tr>
+                    <tr><td class="time-cell time-jp">15:00</td><td class="time-cell time-cet">07:00</td></tr>
+                    <tr><td class="time-cell time-jp">16:00</td><td class="time-cell time-cet">08:00</td></tr>
+                    <tr><td class="time-cell time-jp">17:00</td><td class="time-cell time-cet">09:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">18:00</td>
+                        <td class="time-cell time-cet">10:00</td>
+                        <td class="schedule-cell" rowspan="4">
+                            <span class="event transport">KIXへ移動・出国手続き</span>
+                            <span class="note">18:00頃 空港着想定</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">19:00</td><td class="time-cell time-cet">11:00</td></tr>
+                    <tr><td class="time-cell time-jp">20:00</td><td class="time-cell time-cet">12:00</td></tr>
+                    <tr><td class="time-cell time-jp">21:00</td><td class="time-cell time-cet">13:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">22:00</td>
+                        <td class="time-cell time-cet">14:00</td>
+                        <td class="schedule-cell" rowspan="2">
+                            <span class="event flight">✈️ KIX → IST (トルコ航空)</span>
+                            <span class="note">22:30 KIX 発</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="2">
+                            <div class="hotel-note"><strong>👤 村上:</strong> （自宅泊）</div>
+                            <div class="hotel-note"><strong>👥 廣瀬・北尾:</strong> （機中泊）</div>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">23:00</td><td class="time-cell time-cet">15:00</td></tr>
+                </tbody>
+
+                <tbody class="day-page day-in-germany"> <tr>
+                        <td rowspan="24" class="time-cell">2025/12/08</td>
+                        <td rowspan="24" class="time-cell">月</td>
+                        <td class="time-cell time-jp">00:00</td> 
+                        <td class="time-cell time-cet">16:00<span class="note-time">(-1日)</span></td>
+                        <td class="schedule-cell" rowspan="17">
+                            <span class="event work">🏢 本社にて通常業務</span>
+                            <span class="note">08:00 - 17:00 (JST)</span>
+                        </td>
+                        <td class="schedule-cell" rowspan="13">
+                            <span class="event flight">✈️ (機中泊)</span>
+                            <span class="note">JST 13:20 (CET 05:20) IST着</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="17">
+                            <div class="hotel-note"><strong>👤 村上:</strong> （自宅泊）</div>
+                            <div class="hotel-note"><strong>👥 廣瀬・北尾:</strong> （機中泊）</div>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">01:00</td><td class="time-cell time-cet">17:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">02:00</td><td class="time-cell time-cet">18:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">03:00</td><td class="time-cell time-cet">19:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">04:00</td><td class="time-cell time-cet">20:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">05:00</td><td class="time-cell time-cet">21:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">06:00</td><td class="time-cell time-cet">22:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">07:00</td><td class="time-cell time-cet">23:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">08:00</td><td class="time-cell time-cet">00:00</td></tr>
+                    <tr><td class="time-cell time-jp">09:00</td><td class="time-cell time-cet">01:00</td></tr>
+                    <tr><td class="time-cell time-jp">10:00</td><td class="time-cell time-cet">02:00</td></tr>
+                    <tr><td class="time-cell time-jp">11:00</td><td class="time-cell time-cet">03:00</td></tr>
+                    <tr><td class="time-cell time-jp">12:00</td><td class="time-cell time-cet">04:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">13:00</td>
+                        <td class="time-cell time-cet">05:00</td>
+                        <td class="schedule-cell" rowspan="3">
+                            <span class="event personal">イスタンブール (IST) 乗り継ぎ</span>
+                            <span class="note">05:20着</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">14:00</td><td class="time-cell time-cet">06:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">15:00</td>
+                        <td class="time-cell time-cet">07:00</td>
+                        <td class="schedule-cell" rowspan="3">
+                            <span class="event flight">✈️ IST → DUS (トルコ航空)</span>
+                            <span class="note">07:00発 → 09:20着 (CET)</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">16:00</td><td class="time-cell time-cet">08:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">17:00</td>
+                        <td class="time-cell time-cet">09:00</td>
+                        <td class="schedule-cell" rowspan="3">
+                            <span class="event transport">🚆 KIXへ移動</span>
+                            <span class="note">17:00 業務終了 → 18:00頃 京都駅発 (JST)</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="3">
+                                <div class="hotel-note"><strong>👤 村上:</strong> （移動中）</div>
+                                <div class="hotel-note"><strong>👥 廣瀬・北尾:</strong> （機中泊）</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell time-jp">18:00</td>
+                        <td class="time-cell time-cet">10:00</td>
+                        <td class="schedule-cell" rowspan="3">
+                            <span class="event transport">🚆 DUS → アーヘンへ移動</span>
+                            <span class="note">09:20着, 入国 → 列車移動 (約1.5h)</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">19:00</td><td class="time-cell time-cet">11:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">20:00</td>
+                        <td class="time-cell time-cet">12:00</td>
+                        <td class="schedule-cell" rowspan="3">
+                            <span class="event personal">KIX 出国手続き</span>
+                            <span class="note">19:25頃 KIX着 → ラウンジでシャワー (JST)</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="3">
+                            <div class="hotel-note"><strong>👤 村上:</strong> （移動中）</div>
+                            <div class="hotel-note"><strong>👥 廣瀬・北尾:</strong> （移動中）</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell time-jp">21:00</td>
+                        <td class="time-cell time-cet">13:00</td>
+                        <td class="schedule-cell" rowspan="3">
+                            <span class="event hotel">🏨 ホテルチェックイン</span>
+                            <span class="event personal">アーヘン散策</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">22:00</td><td class="time-cell time-cet">14:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">23:00</td>
+                        <td class="time-cell time-cet">15:00</td>
+                        <td class="schedule-cell">
+                            <span class="event flight">✈️ AY068 (KIX → HEL)</span>
+                            <span class="note">23:25 KIX 発 (JST)</span>
+                        </td>
+                        <td class="hotel-cell">
+                            <div class="hotel-note"><strong>👤 村上:</strong> （機中泊）</div>
+                            <div class="hotel-note"><strong>👥 廣瀬・北尾:</strong> メルキュールホテル アーヘン泊</div>
+                        </td>
+                    </tr>
+                </tbody>
+
+                <tbody class="day-page day-in-germany">
+                    <tr>
+                        <td rowspan="24" class="time-cell">2025/12/09</td>
+                        <td rowspan="24" class="time-cell">火</td>
+                        <td class="time-cell time-jp">08:00</td>
+                        <td class="time-cell time-cet">00:00</td>
+                        <td class="schedule-cell" rowspan="6">
+                            <span class="event flight">✈️ AY068 (機中泊)</span>
+                            <span class="note">CET 05:30 (JST 13:30) HEL着</span>
+                        </td>
+                        <td class="schedule-cell" rowspan="12">
+                                <span class="event hotel">🏨 ホテルにて休憩・自由行動</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="12">
+                            <div class="hotel-note"><strong>👤 村上:</strong> （機中泊）</div>
+                            <div class="hotel-note"><strong>👥 廣瀬・北尾:</strong> メルキュールホテル アーヘン泊</div>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">09:00</td><td class="time-cell time-cet">01:00</td></tr>
+                    <tr><td class="time-cell time-jp">10:00</td><td class="time-cell time-cet">02:00</td></tr>
+                    <tr><td class="time-cell time-jp">11:00</td><td class="time-cell time-cet">03:00</td></tr>
+                    <tr><td class="time-cell time-jp">12:00</td><td class="time-cell time-cet">04:00</td></tr>
+                    <tr><td class="time-cell time-jp">13:00</td><td class="time-cell time-cet">05:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">14:00</td>
+                        <td class="time-cell time-cet">06:00</td>
+                        <td class="schedule-cell" rowspan="2">
+                            <span class="event personal">ヘルシンキ (HEL) 乗り継ぎ</span>
+                            <span class="note">05:30着 (乗継 2h10m)</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">15:00</td><td class="time-cell time-cet">07:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">16:00</td>
+                        <td class="time-cell time-cet">08:00</td>
+                        <td class="schedule-cell" rowspan="2">
+                            <span class="event flight">✈️ AY1391 (HEL → DUS)</span>
+                            <span class="note">07:40発 → 09:10着</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">17:00</td><td class="time-cell time-cet">09:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">18:00</td>
+                        <td class="time-cell time-cet">10:00</td>
+                        <td class="schedule-cell" rowspan="2">
+                            <span class="event transport">🚆 DUS → アーヘンへ移動</span>
+                            <span class="note">09:10着, 入国 → 10:32 RE 1 発</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">19:00</td><td class="time-cell time-cet">11:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">20:00</td>
+                        <td class="time-cell time-cet">12:00</td>
+                        <td class="schedule-cell" rowspan="1">
+                            <span class="event hotel">🏨 ホテルチェックイン</span>
+                            <span class="note">12:07 アーヘン着 → 廣瀬・北尾と合流</span>
+                        </td>
+                        <td class="schedule-cell" rowspan="1">
+                            <span class="event hotel">🏨 休憩・村上と合流</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="13">
+                            <span class="event hotel">メルキュールホテル アーヘン泊</span>
+                            <span class="note">(全員合流)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell time-jp">21:00</td>
+                        <td class="time-cell time-cet">13:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="1">
+                            <span class="event all-event">🤝 全員でランチ・会場へ移動</span>
+                            <span class="note">13:30 受付開始</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell time-jp">22:00</td>
+                        <td class="time-cell time-cet">14:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="7">
+                            <span class="event all-event">🏭 Industrial Day 参加 (全員)</span>
+                            <span class="note">13:45: Welcome</span>
+                            <span class="note">14:00: Keynote</span>
+                            <span class="note">15:30: Coffee Break</span>
+                            <span class="note">15:45: Workshop</span>
+                            <span class="note">16:30: Shopfloor Tour</span>
+                            <span class="note">18:00: Networking (〜20:00)</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">23:00</td><td class="time-cell time-cet">15:00</td></tr>
+                    <tr><td class="time-cell time-jp">00:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">16:00</td></tr>
+                    <tr><td class="time-cell time-jp">01:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">17:00</td></tr>
+                    <tr><td class="time-cell time-jp">02:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">18:00</td></tr>
+                    <tr><td class="time-cell time-jp">03:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">19:00</td></tr>
+                    <tr><td class="time-cell time-jp">04:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">20:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">05:00<span class="note-time">(+1日)</span></td>
+                        <td class="time-cell time-cet">21:00</td>
+                        <td class="schedule-cell" rowspan="3">
+                            <span class="event work">💻 WEB会議待機・仮眠</span>
+                            <span class="note">20:00 イベント終了後ホテルへ</span>
+                        </td>
+                        <td class="schedule-cell" rowspan="3">
+                            <span class="event hotel">🏨 ホテルへ移動・就寝</span>
+                            <span class="note">20:00 イベント終了後</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">06:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">22:00</td></tr>
+                    <tr><td class="time-cell time-jp">07:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">23:00</td></tr>
+                </tbody>
+
+                <tbody class="day-page day-in-germany">
+                    <tr>
+                        <td rowspan="24" class="time-cell">2025/12/10</td>
+                        <td rowspan="24" class="time-cell">水</td>
+                        <td class="time-cell time-jp">08:00</td>
+                        <td class="time-cell time-cet">00:00</td>
+                        <td class="schedule-cell" rowspan="1">
+                            <span class="event hotel">🏨 ホテルにて休憩</span>
+                        </td>
+                        <td class="schedule-cell" rowspan="1">
+                            <span class="event hotel">🏨 ホテルにて休憩</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="24">
+                            <span class="event hotel">メルキュールホテル アーヘン泊</span>
+                            <span class="note">(全員)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell time-jp">09:00</td>
+                        <td class="time-cell time-cet">01:00</td>
+                        <td class="schedule-cell" rowspan="3">
+                            <span class="event work">💻 WEB会議参加</span>
+                            <span class="note">現地 01:00-03:30</span>
+                        </td>
+                        <td class="schedule-cell" rowspan="7">
+                            <span class="event hotel">💤 就寝</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">10:00</td><td class="time-cell time-cet">02:00</td></tr>
+                    <tr><td class="time-cell time-jp">11:00</td><td class="time-cell time-cet">03:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">12:00</td>
+                        <td class="time-cell time-cet">04:00</td>
+                        <td class="schedule-cell" rowspan="3">
+                            <span class="event hotel">💤 仮眠</span>
+                            <span class="note">会議終了後</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">13:00</td><td class="time-cell time-cet">05:00</td></tr>
+                    <tr><td class="time-cell time-jp">14:00</td><td class="time-cell time-cet">06:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">15:00</td>
+                        <td class="time-cell time-cet">07:00</td>
+                        <td class="schedule-cell" rowspan="1">
+                            <span class="event hotel">起床・朝食 (07:30)</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell time-jp">16:00</td>
+                        <td class="time-cell time-cet">08:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="1">
+                            <span class="event all-event">🤝 07:30 ホテルにて朝食 (全員)</span>
+                            <span class="event all-event">🚆 08:00 ホテル → 会場へ移動</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell time-jp">17:00</td>
+                        <td class="time-cell time-cet">09:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="8">
+                            <span class="event all-event">🎓 ICNAP Annual Meeting - Day 1</span>
+                            <span class="note">08:30: 受付</span>
+                            <span class="note">09:00: Welcoming</span>
+                            <span class="note">10:45: Coffee Break</span>
+                            <span class="note">12:15: Lunch</span>
+                            <span class="note">14:15: Coffee Break</span>
+                            <span class="note">16:15: 終了</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">18:00</td><td class="time-cell time-cet">10:00</td></tr>
+                    <tr><td class="time-cell time-jp">19:00</td><td class="time-cell time-cet">11:00</td></tr>
+                    <tr><td class="time-cell time-jp">20:00</td><td class="time-cell time-cet">12:00</td></tr>
+                    <tr><td class="time-cell time-jp">21:00</td><td class="time-cell time-cet">13:00</td></tr>
+                    <tr><td class="time-cell time-jp">22:00</td><td class="time-cell time-cet">14:00</td></tr>
+                    <tr><td class="time-cell time-jp">23:00</td><td class="time-cell time-cet">15:00</td></tr>
+                    <tr><td class="time-cell time-jp">00:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">16:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">01:00<span class="note-time">(+1日)</span></td>
+                        <td class="time-cell time-cet">17:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="2">
+                            <span class="event all-event">🏨 会場 → ホテルへ移動・休憩</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">02:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">18:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">03:00<span class="note-time">(+1日)</span></td>
+                        <td class="time-cell time-cet">19:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="3">
+                            <span class="event all-event">🍽️ ネットワーキングディナー</span>
+                            <span class="note">19:00〜 クリスマスマーケットにて (ICNAP主催)</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">04:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">20:00</td></tr>
+                    <tr><td class="time-cell time-jp">05:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">21:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">06:00<span class="note-time">(+1日)</span></td>
+                        <td class="time-cell time-cet">22:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="2">
+                            <span class="event all-event">🏨 ホテルへ移動・就寝</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">07:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">23:00</td></tr>
+                </tbody>
+                
+                <tbody class="day-page day-in-germany">
+                    <tr>
+                        <td rowspan="24" class="time-cell">2025/12/11</td>
+                        <td rowspan="24" class="time-cell">木</td>
+                        <td class="time-cell time-jp">08:00</td>
+                        <td class="time-cell time-cet">00:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="8">
+                            <span class="event all-event">🏨 ホテルにて就寝</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="24">
+                            <span class="event hotel">メルキュールホテル アーヘン泊</span>
+                            <span class="note">(全員)</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">09:00</td><td class="time-cell time-cet">01:00</td></tr>
+                    <tr><td class="time-cell time-jp">10:00</td><td class="time-cell time-cet">02:00</td></tr>
+                    <tr><td class="time-cell time-jp">11:00</td><td class="time-cell time-cet">03:00</td></tr>
+                    <tr><td class="time-cell time-jp">12:00</td><td class="time-cell time-cet">04:00</td></tr>
+                    <tr><td class="time-cell time-jp">13:00</td><td class="time-cell time-cet">05:00</td></tr>
+                    <tr><td class="time-cell time-jp">14:00</td><td class="time-cell time-cet">06:00</td></tr>
+                    <tr><td class="time-cell time-jp">15:00</td><td class="time-cell time-cet">07:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">16:00</td>
+                        <td class="time-cell time-cet">08:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="1">
+                            <span class="event all-event">🤝 07:45 ホテルにて朝食 (全員)</span>
+                            <span class="event all-event">🚆 08:15 ホテル → 会場へ移動</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell time-jp">17:00</td>
+                        <td class="time-cell time-cet">09:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="7">
+                            <span class="event all-event">🎓 ICNAP Annual Meeting - Day 2</span>
+                            <span class="note">08:45: 受付</span>
+                            <span class="note">09:00: Welcome</span>
+                            <span class="note">10:45: Coffee Break</span>
+                            <span class="note">12:45: Lunch</span>
+                            <span class="note">15:30: 終了</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">18:00</td><td class="time-cell time-cet">10:00</td></tr>
+                    <tr><td class="time-cell time-jp">19:00</td><td class="time-cell time-cet">11:00</td></tr>
+                    <tr><td class="time-cell time-jp">20:00</td><td class="time-cell time-cet">12:00</td></tr>
+                    <tr><td class="time-cell time-jp">21:00</td><td class="time-cell time-cet">13:00</td></tr>
+                    <tr><td class="time-cell time-jp">22:00</td><td class="time-cell time-cet">14:00</td></tr>
+                    <tr><td class="time-cell time-jp">23:00</td><td class="time-cell time-cet">15:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">00:00<span class="note-time">(+1日)</span></td>
+                        <td class="time-cell time-cet">16:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="2">
+                                <span class="event all-event">🚆 アーヘン → ケルンへ移動</span>
+                                <span class="note">15:30 終了 → ホテル経由 → 16:51 Aachen Hbf 発</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">01:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">17:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">02:00<span class="note-time">(+1日)</span></td>
+                        <td class="time-cell time-cet">18:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="4">
+                            <span class="event all-event">🏰 ケルン観光・ディナー</span>
+                            <span class="note">17:44 Köln Hbf 着 → 大聖堂・マーケット散策 → 20:15 発</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">03:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">19:00</td></tr>
+                    <tr><td class="time-cell time-jp">04:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">20:00</td></tr>
+                    <tr><td class="time-cell time-jp">05:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">21:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">06:00<span class="note-time">(+1日)</span></td>
+                        <td class="time-cell time-cet">22:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="2">
+                            <span class="event all-event">🚆 ケルン → アーヘンへ移動</span>
+                            <span class="note">21:07 Aachen Hbf 着 → ホテルへ</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">07:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">23:00</td></tr>
+                </tbody>
+
+                <tbody class="day-page day-in-germany">
+                    <tr>
+                        <td rowspan="24" class="time-cell">2025/12/12</td>
+                        <td rowspan="24" class="time-cell">金</td>
+                        <td class="time-cell time-jp">08:00</td>
+                        <td class="time-cell time-cet">00:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="9">
+                            <span class="event all-event">🏨 ホテルにて就寝</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="9">
+                            <span class="event hotel">メルキュールホテル アーヘン泊</span>
+                            <span class="note">(全員)</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">09:00</td><td class="time-cell time-cet">01:00</td></tr>
+                    <tr><td class="time-cell time-jp">10:00</td><td class="time-cell time-cet">02:00</td></tr>
+                    <tr><td class="time-cell time-jp">11:00</td><td class="time-cell time-cet">03:00</td></tr>
+                    <tr><td class="time-cell time-jp">12:00</td><td class="time-cell time-cet">04:00</td></tr>
+                    <tr><td class="time-cell time-jp">13:00</td><td class="time-cell time-cet">05:00</td></tr>
+                    <tr><td class="time-cell time-jp">14:00</td><td class="time-cell time-cet">06:00</td></tr>
+                    <tr><td class="time-cell time-jp">15:00</td><td class="time-cell time-cet">07:00</td></tr>
+                    <tr><td class="time-cell time-jp">16:00</td><td class="time-cell time-cet">08:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">17:00</td>
+                        <td class="time-cell time-cet">09:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="2">
+                            <span class="event all-event">🚆 アーヘン → フランクフルト空港 (FRA)</span>
+                            <span class="event hotel">🏨 ホテル チェックアウト (09:00)</span>
+                            <span class="note">09:39 Aachen Hbf 発 (ICE 13)</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="7">
+                                <div class="hotel-note"><strong>全員:</strong> （チェックアウト・移動）</div>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">18:00</td><td class="time-cell time-cet">10:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">19:00</td>
+                        <td class="time-cell time-cet">11:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="2">
+                            <span class="event all-event">🧳 チェックイン・荷物預入</span>
+                            <span class="note">11:17 FRA 着 → 各自カウンターへ</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">20:00</td><td class="time-cell time-cet">12:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">21:00</td>
+                        <td class="time-cell time-cet">13:00</td>
+                        <td class="schedule-cell" colspan="2" rowspan="3">
+                            <span class="event all-event">🏛️ フランクフルト市内観光・ランチ</span>
+                            <span class="note">12:30 Sバーンで市内へ → レーマー広場・マーケット → 15:00 空港へ戻る</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">22:00</td><td class="time-cell time-cet">14:00</td></tr>
+                    <tr><td class="time-cell time-jp">23:00</td><td class="time-cell time-cet">15:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">00:00<span class="note-time">(+1日)</span></td>
+                        <td class="time-cell time-cet">16:00</td>
+                        <td class="schedule-cell" rowspan="4">
+                            <span class="event personal">☕ FRA 保安検査・出国</span>
+                            <span class="event personal">ラウンジ (JAL)</span>
+                            <span class="note">15:30〜</span>
+                        </td>
+                        <td class="schedule-cell" rowspan="2">
+                            <span class="event personal">☕ FRA 保安検査・出国</span>
+                            <span class="event personal">ラウンジ (TK)</span>
+                            <span class="note">15:25頃〜</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="8">
+                            <div class="hotel-note"><strong>👤 村上:</strong> （機中泊）</div>
+                            <div class="hotel-note"><strong>👥 廣瀬・北尾:</strong> （機中泊）</div>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">01:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">17:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">02:00<span class="note-time">(+1日)</span></td>
+                        <td class="time-cell time-cet">18:00</td>
+                        <td class="schedule-cell" rowspan="6">
+                            <span class="event flight">✈️ FRA → IST (トルコ航空)</span>
+                            <span class="note">18:25 CET 発 → 23:35 TRT 着 (21:35 CET)</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">03:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">19:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">04:00<span class="note-time">(+1日)</span></td>
+                        <td class="time-cell time-cet">20:00</td>
+                        <td class="schedule-cell" rowspan="4">
+                            <span class="event flight">✈️ JL408 (FRA → NRT)</span>
+                            <span class="note">20:05 CET 発 (JST 04:05)</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">05:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">21:00</td></tr>
+                    <tr><td class="time-cell time-jp">06:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">22:00</td></tr>
+                    <tr><td class="time-cell time-jp">07:00<span class="note-time">(+1日)</span></td><td class="time-cell time-cet">23:00</td></tr>
+                </tbody>
+
+                <tbody class="day-page-last day-in-japan">
+                    <tr>
+                        <td rowspan="24" class="time-cell">2025/12/13</td>
+                        <td rowspan="24" class="time-cell day-sat">土</td>
+                        <td class="time-cell time-jp">00:00</td>
+                        <td class="time-cell time-cet">16:00<span class="note-time">(-1日)</span></td>
+                        <td class="schedule-cell" rowspan="18">
+                            <span class="event flight">✈️ JL408 (機中泊)</span>
+                            <span class="note">JST 17:05 成田着</span>
+                        </td>
+                        <td class="schedule-cell" rowspan="6">
+                            <span class="event flight">✈️ 機中泊 (FRA → IST)</span>
+                            <span class="note">JST 05:35 (TRT 23:35) IST着</span>
+                        </td>
+                        <td class="hotel-cell" rowspan="24">
+                            <div class="hotel-note"><strong>👤 村上:</strong> （機中泊）→ ご自宅</div>
+                            <div class="hotel-note"><strong>👥 廣瀬・北尾:</strong> （機中泊）→ ご自宅</div>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">01:00</td><td class="time-cell time-cet">17:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">02:00</td><td class="time-cell time-cet">18:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">03:00</td><td class="time-cell time-cet">19:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">04:00</td><td class="time-cell time-cet">20:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">05:00</td><td class="time-cell time-cet">21:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">06:00</td>
+                        <td class="time-cell time-cet">22:00<span class="note-time">(-1日)</span></td>
+                        <td class="schedule-cell" rowspan="3">
+                            <span class="event personal">イスタンブール (IST) 乗り継ぎ</span>
+                            <span class="note">JST 05:35 着 → JST 08:10 発</span>
+                            <span class="note">(TRT 23:35 → 02:10)</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">07:00</td><td class="time-cell time-cet">23:00<span class="note-time">(-1日)</span></td></tr>
+                    <tr><td class="time-cell time-jp">08:00</td><td class="time-cell time-cet">00:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">09:00</td>
+                        <td class="time-cell time-cet">01:00</td>
+                        <td class="schedule-cell" rowspan="11">
+                            <span class="event flight">✈️ 機中泊 (IST → KIX)</span>
+                            <span class="note">JST 19:05 KIX 着</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">10:00</td><td class="time-cell time-cet">02:00</td></tr>
+                    <tr><td class="time-cell time-jp">11:00</td><td class="time-cell time-cet">03:00</td></tr>
+                    <tr><td class="time-cell time-jp">12:00</td><td class="time-cell time-cet">04:00</td></tr>
+                    <tr><td class="time-cell time-jp">13:00</td><td class="time-cell time-cet">05:00</td></tr>
+                    <tr><td class="time-cell time-jp">14:00</td><td class="time-cell time-cet">06:00</td></tr>
+                    <tr><td class="time-cell time-jp">15:00</td><td class="time-cell time-cet">07:00</td></tr>
+                    <tr><td class="time-cell time-jp">16:00</td><td class="time-cell time-cet">08:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">17:00</td>
+                        <td class="time-cell time-cet">09:00</td>
+                        <td class="schedule-cell" rowspan="1">
+                            <span class="event personal">🛬 東京・成田 (NRT) 着</span>
+                            <span class="note">17:05着。入国・乗り継ぎ</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="time-cell time-jp">18:00</td>
+                        <td class="time-cell time-cet">10:00</td>
+                        <td class="schedule-cell" rowspan="2">
+                            <span class="event flight">✈️ JL3009 (NRT → ITM)</span>
+                            <span class="note">18:25発 → 19:55着</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">19:00</td><td class="time-cell time-cet">11:00</td></tr>
+                    <tr>
+                        <td class="time-cell time-jp">20:00</td>
+                        <td class="time-cell time-cet">12:00</td>
+                        <td class="schedule-cell" rowspan="4">
+                            <span class="event transport">🏠 帰宅</span>
+                            <span class="note">19:55 ITM着 → ご自宅へ (お疲れ様でした)</span>
+                        </td>
+                        <td class="schedule-cell" rowspan="4">
+                            <span class="event transport">🏠 帰宅</span>
+                            <span class="note">19:05 KIX着 → 入国 → ご自宅へ (お疲れ様でした)</span>
+                        </td>
+                    </tr>
+                    <tr><td class="time-cell time-jp">21:00</td><td class="time-cell time-cet">13:00</td></tr>
+                    <tr><td class="time-cell time-jp">22:00</td><td class="time-cell time-cet">14:00</td></tr>
+                    <tr><td class="time-cell time-jp">23:00</td><td class="time-cell time-cet">15:00</td></tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</body>
+</html>

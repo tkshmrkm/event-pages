@@ -1,0 +1,39 @@
+# Local editor settings
+**/.claude/
+**/.DS_Store
+**/Thumbs.db
+
+# Private or non-public documents
+**/*.pdf
+**/*.xlsx
+**/*.xls
+**/*.docx
+**/*.zip
+**/*.bak
+**/*.BAK
+**/*.ics
+**/*.csv
+**/*.gs
+**/ticket_text*.txt
+
+# Personal travel and expense documents
+**/*immigration*
+**/*Immigration*
+**/*passport*
+**/*Passport*
+**/*receipt*
+**/*Receipt*
+**/*TKT*
+**/*Arrival*
+**/*領収*
+**/*精算*
+
+# Source notes (keep the repository README)
+**/*.md
+!/README.md
+
+# Old versions and copies
+**/old/
+**/archive/
+**/* - コピー.*
+**/* - old.*

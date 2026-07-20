@@ -1,0 +1,994 @@
+<html>
+<head>
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>2025年出張旅程 - ロンドン &amp; サンフランシスコ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+        .toggle-section {
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .toggle-section:hover {
+            background-color: #f1f5f9;
+        }
+        .toggle-content {
+            display: none;
+            transition: max-height 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .toggle-content.active {
+            display: block;
+            max-height: 2000px;
+        }
+        .activity-card {
+            border-left: 4px solid;
+            padding-left: 1rem;
+        }
+        .flight { border-color: #3b82f6; }
+        .event { border-color: #10b981; }
+        .tourism { border-color: #f59e0b; }
+        .dining { border-color: #ec4899; }
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 0.75rem;
+            align-items: start;
+        }
+        .schedule-grid div:nth-child(odd) {
+            font-weight: 600;
+            color: #374151;
+        }
+        .comment-grid {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 0.75rem;
+            align-items: start;
+        }
+        .comment-grid div:nth-child(odd) {
+            font-weight: 600;
+            color: #374151;
+        }
+        section {
+            margin-bottom: 3rem;
+        }
+        .itinerary-day {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .card {
+            background-color: #f3f4f6;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+<style>
+  @media only screen and (max-width: 768px) {
+    body { font-size: 90%; padding: 1rem; }
+    h2, h3 { font-size: 1.2rem; }
+    table { font-size: 0.9rem; }
+  }
+  @media print {
+    .toggle-section::after { display: none; }
+    .toggle-content { display: block !important; }
+    .no-print { display: none !important; }
+  }
+  .toggle-section {
+    cursor: pointer;
+    padding: 0.5em;
+    background-color: #eef2ff;
+    border-left: 4px solid #6366f1;
+    margin-top: 1em;
+  }
+  .toggle-content {
+    display: none;
+    padding: 1em;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-top: none;
+  }
+  .toggle-content.active {
+    display: block;
+  }
+  .scrollable-table {
+    overflow-x: auto;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  thead th {
+    position: sticky;
+    top: 0;
+    background-color: #f3f4f6;
+    z-index: 2;
+  }
+</style>
+</head>
+<body class="bg-gray-50">
+<div class="container mx-auto p-4 sm:p-6 max-w-5xl bg-white shadow-xl rounded-2xl my-8">
+<!-- Header -->
+<header class="text-center mb-12">
+<h1 class="text-3xl sm:text-4xl font-bold text-gray-900 flex items-center justify-center gap-2">
+<span>✈️</span> 2025年出張旅程
+            </h1>
+<p class="text-lg text-gray-600 mt-2">ロンドン &amp; サンフランシスコ | 5月27日～6月7日</p>
+</header>
+<!-- Trip Overview -->
+<section class="mb-12">
+<h2 class="text-2xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+<span>📋</span> 出張概要
+            </h2>
+<div class="card space-y-4">
+<div>
+<span class="badge bg-blue-100 text-blue-800">期間</span>
+<p class="ml-2">2025年5月27日（火）～6月7日（土）</p>
+</div>
+<div>
+<span class="badge bg-blue-100 text-blue-800">観光都市</span>
+<p class="ml-2">ロンドン（イギリス）、サンフランシスコおよびミルピタス（アメリカ）</p>
+</div>
+<div>
+<span class="badge bg-blue-100 text-blue-800">目的</span>
+<ul class="list-none ml-4 space-y-1">
+<li>🔹 ロンドン: Humanoids Summit 2025への参加、展示会参加</li>
+<li>🔹 サンフランシスコ: TechEx North America 2025（AI &amp; Big Data Expo）への参加、企業観光</li>
+</ul>
+</div>
+<div>
+<span class="badge bg-blue-100 text-blue-800">移動手段</span>
+<ul class="list-none ml-4 space-y-1">
+<li>🔹 航空: 日本航空（JL）、ブリティッシュ・エアウェイズ（BA）</li>
+<li>🔹 地上: Uber / Lyft、鉄道、ロンドン地下鉄</li>
+</ul>
+</div>
+<div>
+<span class="badge bg-blue-100 text-blue-800">宿泊施設</span>
+<ul class="list-none ml-4 space-y-1">
+<li>🔹 大阪空港ホテル（伊丹、日本）</li>
+<li>🔹 ノボテル ロンドン ブレントフォード（ロンドン、イギリス）</li>
+<li>🔹 ハンプトン イン ミルピタス（ミルピタス、アメリカ）</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Itinerary Table -->
+<section class="mb-12">
+<h2 class="text-2xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+<span>📅</span> 旅程概要表
+            </h2>
+<div class="overflow-x-auto rounded-xl shadow-sm">
+<table class="w-full text-left border-collapse bg-gray-100">
+<thead>
+<tr class="bg-gray-200 text-gray-700">
+<th class="p-4">日付</th>
+<th class="p-4">主な内容</th>
+<th class="p-4">宿泊地</th>
+</tr>
+</thead>
+<tbody>
+<tr class="hover:bg-gray-50">
+<td class="p-4">5/27（火）</td>
+<td>京都→伊丹前泊</td>
+<td>大阪空港ホテル</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="p-4">5/28（水）</td>
+<td>日本出発、ロンドン到着</td>
+<td>ノボテル ロンドン ブレントフォード</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="p-4">5/29（木）</td>
+<td>Humanoids Summit 参加（1日目）</td>
+<td>ノボテル ロンドン ブレントフォード</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="p-4">5/30（金）</td>
+<td>Humanoids Summit 参加（2日目）</td>
+<td>ノボテル ロンドン ブレントフォード</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="p-4">5/31（土）</td>
+<td>オックスフォード観光（日帰り）</td>
+<td>ノボテル ロンドン ブレントフォード</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="p-4">6/1（日）</td>
+<td>ロンドン市内観光</td>
+<td>ノボテル ロンドン ブレントフォード</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="p-4">6/2（月）</td>
+<td>ロンドン→サンフランシスコ、観光</td>
+<td>ハンプトン イン ミルピタス</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="p-4">6/3（火）</td>
+<td>ミルピタス勤務</td>
+<td>ハンプトン イン ミルピタス</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="p-4">6/4（水）</td>
+<td>TechEx North America 参加（1日目）</td>
+<td>ハンプトン イン ミルピタス</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="p-4">6/5（木）</td>
+<td>TechEx North America 参加（2日目）</td>
+<td>ハンプトン イン ミルピタス</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="p-4">6/6（金）</td>
+<td>帰国便（サンフランシスコ→成田）</td>
+<td>機中泊</td>
+</tr>
+<tr class="hover:bg-gray-50">
+<td class="p-4">6/7（土）</td>
+<td>成田→伊丹→京都</td>
+<td>自宅</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Event Details -->
+<section class="mb-12">
+<h2 class="text-2xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+<span>🌐</span> イベント詳細
+            </h2>
+<div class="grid gap-6 sm:grid-cols-2">
+<!-- Humanoids Summit -->
+<div class="card">
+<h3 class="text-xl font-semibold text-gray-900 flex items-center gap-2">
+<span>🤖</span> Humanoids Summit London 2025
+                    </h3>
+<div class="mt-4 space-y-2">
+<p><span class="badge bg-green-100 text-green-800">開催日</span> 2025年5月29日～30日（木・金）</p>
+<p><span class="badge bg-green-100 text-green-800">会場</span> ノボテル ロンドン ウェスト</p>
+<p><span class="badge bg-green-100 text-green-800">公式サイト</span> <a class="text-blue-600 hover:underline" href="https://humanoidssummit.com/" rel="noopener noreferrer" target="_blank">Humanoids Summit</a></p>
+<p><span class="badge bg-green-100 text-green-800">概要</span> ヒューマノイドロボティクスの未来を探求する国際会議。最新技術の実演や議論が行われる。</p>
+<div>
+<span class="badge bg-green-100 text-green-800">特徴</span>
+<ul class="list-none ml-4 space-y-1">
+<li>🔹 ライブデモンストレーション: 先進的なヒューマノイドロボットの展示</li>
+<li>🔹 基調講演者: Rich Walker（Shadow Robot Company）、Pras Velagapudi（Agility Robotics）、Francesco Nori（Google DeepMind）</li>
+<li>🔹 セッション内容: ロボットの意識、オープンソースAI、センサー技術、アクチュエータ技術</li>
+<li>🔹 参加者: 研究者、開発者、投資家</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- TechEx North America -->
+<div class="card">
+<h3 class="text-xl font-semibold text-gray-900 flex items-center gap-2">
+<span>🧠</span> TechEx North America 2025
+                    </h3>
+<div class="mt-4 space-y-2">
+<p><span class="badge bg-green-100 text-green-800">開催日</span> 2025年6月4日～5日（水・木）</p>
+<p><span class="badge bg-green-100 text-green-800">会場</span> サンタクララ コンベンションセンター、カリフォルニア</p>
+<p><span class="badge bg-green-100 text-green-800">公式サイト</span> <a class="text-blue-600 hover:underline" href="https://techexevent.com/northamerica/" rel="noopener noreferrer" target="_blank">TechEx North America</a></p>
+<p><span class="badge bg-green-100 text-green-800">概要</span> AI、ビッグデータ、IoT、サイバーセキュリティ、クラウド、エッジコンピューティング、インテリジェントオートメーション、デジタルトランスフォーメーションをカバーする大規模技術会議。</p>
+<div>
+<span class="badge bg-green-100 text-green-800">特徴</span>
+<ul class="list-none ml-4 space-y-1">
+<li>🔹 AI &amp; Big Data Expo: 生成AI、エンタープライズAI、機械学習、AI倫理に焦点</li>
+<li>🔹 参加者数: 約8,000人の業界関係者</li>
+<li>🔹 スピーカー: 250名以上の専門家</li>
+<li>🔹 展示企業: 200社以上が最新技術を展示</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Detailed Itinerary -->
+<section class="mb-12">
+<h2 class="text-2xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+<span>📅</span> 詳細な旅程
+            </h2>
+<div class="space-y-6">
+<!-- May 27 -->
+<div class="card itinerary-day">
+<h3 class="text-xl font-semibold text-gray-900 toggle-section flex items-center gap-2">
+<span>📍</span> 2025年5月27日（火） – 出発前泊
+                    </h3>
+<div class="mt-4 toggle-content active">
+<div class="activity-card">
+<p><span class="badge bg-blue-100 text-blue-800">宿泊</span> 大阪空港ホテル（伊丹）</p>
+<p><span class="badge bg-blue-100 text-blue-800">スケジュール</span></p>
+<div class="schedule-grid">
+<div>17:30–19:00</div>
+<div class="activity-card flight">🛤️ 自宅～伊丹空港（電車）</div>
+<div>19:30</div>
+<div class="activity-card">🏨 ホテルチェックイン（国内宿泊手当あり）</div>
+</div>
+</div>
+</div>
+</div>
+<!-- May 28 -->
+<div class="card itinerary-day">
+<h3 class="text-xl font-semibold text-gray-900 toggle-section flex items-center gap-2">
+<span>📍</span> 2025年5月28日（水） – 日本出発、ロンドン到着
+                    </h3>
+<div class="mt-4 toggle-content active">
+<div class="activity-card">
+<p><span class="badge bg-blue-100 text-blue-800">宿泊</span> ノボテル ロンドン ブレントフォード</p>
+<p><span class="badge bg-blue-100 text-blue-800">スケジュール</span></p>
+<div class="schedule-grid">
+<div>05:30</div>
+<div class="activity-card">🏨 ホテルチェックアウト</div>
+<div>05:40</div>
+<div class="activity-card flight">✈️ 伊丹空港チェックイン</div>
+<div>07:00</div>
+<div class="activity-card dining">🍽️ 朝食（伊丹空港内カフェ）</div>
+<div>07:05–08:15</div>
+<div class="activity-card flight">✈️ 伊丹 → 羽田（JL102）</div>
+<div>09:45–15:50</div>
+<div class="activity-card flight">✈️ 羽田 → ロンドン（JL43、ヒースローT3着）</div>
+<div>15:50–17:00</div>
+<div class="activity-card flight">🛬 ヒースロー空港到着、荷物受取、税関通過</div>
+<div>17:00–17:45</div>
+<div class="activity-card flight">🚗 ヒースロー → ノボテル ロンドン ブレントフォード（Uber / AddisonLee、電車）</div>
+<div>18:00</div>
+<div class="activity-card">🏨 ホテルチェックイン</div>
+<div>18:00–19:00</div>
+<div class="activity-card dining">🍽️ 夕食（ホテル周辺）</div>
+</div>
+<p><span class="badge bg-blue-100 text-blue-800">備考</span></p>
+<div class="ml-4 space-y-2">
+<div class="comment-grid">
+<div>項目</div>
+<div>JAL</div>
+<div>詳細</div>
+<div>ヒースロー国際空港</div>
+</div>
+<div class="comment-grid">
+<div>項目</div>
+<div>ヒースロー空港ターミナル3到着後</div>
+<div>詳細</div>
+<div>到着ホール（Arrivals, Level 0）からUber / AddisonLeeピックアップポイント（Short Stay Car Parkまたは指定エリア）へ移動（徒歩5～10分）。</div>
+</div>
+<div class="comment-grid">
+<div>項目</div>
+<div>ターミナル3の内部地図</div>
+<div>詳細</div>
+<div><a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Heathrow+Terminal+3" rel="noopener noreferrer" target="_blank">Heathrow Terminal 3 Map</a></div>
+</div>
+<div class="comment-grid">
+<div>項目</div>
+<div>ノボテル ロンドン ブレントフォードへの移動</div>
+<div>詳細</div>
+<div>Elizabeth線（ヒースローT2&amp;3 → Ealing Broadway、約15分）＋徒歩/タクシー（約10分）がオプション。</div>
+</div>
+</div>
+<p><span class="badge bg-pink-100 text-pink-800">ディナー提案（ブレントフォード周辺）</span></p>
+<div class="grid gap-4 sm:grid-cols-2 ml-4">
+<div class="activity-card dining">
+<p>🍴 <strong>The Griffin</strong></p>
+<p>伝統的なパブ。ロースト料理やクラフトビールが人気。ホテルから徒歩5分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=The+Griffin+Brentford" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>The Weir Bar &amp; Dining Room</strong></p>
+<p>モダンな英国料理。川沿いの落ち着いた雰囲気。ホテルから徒歩8分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=The+Weir+Bar+Brentford" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>La Rosetta</strong></p>
+<p>イタリアン。パスタやシーフードが豊富でカジュアル。ホテルから徒歩7分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=La+Rosetta+Brentford" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- May 29 -->
+<div class="card itinerary-day">
+<h3 class="text-xl font-semibold text-gray-900 toggle-section flex items-center gap-2">
+<span>📍</span> 2025年5月29日（木） – Humanoids Summit Day 1
+                    </h3>
+<div class="mt-4 toggle-content active">
+<div class="activity-card">
+<p><span class="badge bg-blue-100 text-blue-800">宿泊</span> ノボテル ロンドン ブレントフォード</p>
+<p><span class="badge bg-blue-100 text-blue-800">スケジュール</span></p>
+<div class="schedule-grid">
+<div>07:00</div>
+<div class="activity-card dining">🍽️ 朝食（ホテル）</div>
+<div>08:15–09:00</div>
+<div class="activity-card flight">🚗 ホテル → 会場（Uber / AddisonLee）</div>
+<div>09:00–16:00</div>
+<div class="activity-card event">📊 展示会参加（ノボテル ロンドン ウェスト）</div>
+<div>16:00–17:00</div>
+<div class="activity-card flight">🚗 会場 → ホテル（Uber / AddisonLee）</div>
+<div>18:00–19:00</div>
+<div class="activity-card dining">🍽️ 夕食（会場付近）</div>
+</div>
+<p><span class="badge bg-blue-100 text-blue-800">備考</span></p>
+<div class="ml-4 space-y-2">
+<div class="comment-grid">
+<div>項目</div>
+<div>会場（ノボテル ロンドン ウェスト）</div>
+<div>詳細</div>
+<div>ハマースミスエリアに位置。ディナーは展示会後のネットワーキングやリラックスを考慮。</div>
+</div>
+</div>
+<p><span class="badge bg-pink-100 text-pink-800">ディナー提案（ハマースミス周辺）</span></p>
+<div class="grid gap-4 sm:grid-cols-2 ml-4">
+<div class="activity-card dining">
+<p>🍴 <strong>The Devonshire Arms</strong></p>
+<p>伝統的な英国パブ。ガストロパブ料理（ステーキ、フィッシュ＆チップス）が人気。会場から徒歩5分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=The+Devonshire+Arms+Hammersmith" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Toro Gordo</strong></p>
+<p>スペイン料理。タパスやパエリアが豊富でカジュアル。会場から徒歩7分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Toro+Gordo+Hammersmith" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Dishoom Hammersmith</strong></p>
+<p>インド料理の人気店。カレーやビリヤニが特徴。会場から徒歩10分、予約推奨。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Dishoom+Hammersmith" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>The Gate Hammersmith</strong></p>
+<p>ベジタリアン・ビーガン料理。高級感あるメニュー。会場から徒歩6分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=The+Gate+Hammersmith" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- May 30 -->
+<div class="card itinerary-day">
+<h3 class="text-xl font-semibold text-gray-900 toggle-section flex items-center gap-2">
+<span>📍</span> 2025年5月30日（金） – Humanoids Summit Day 2
+                    </h3>
+<div class="mt-4 toggle-content active">
+<div class="activity-card">
+<p><span class="badge bg-blue-100 text-blue-800">宿泊</span> ノボテル ロンドン ブレントフォード</p>
+<p><span class="badge bg-blue-100 text-blue-800">スケジュール</span></p>
+<div class="schedule-grid">
+<div>07:00</div>
+<div class="activity-card dining">🍽️ 朝食（ホテル）</div>
+<div>08:15–09:00</div>
+<div class="activity-card flight">🚗 ホテル → 会場（Uber / AddisonLee）</div>
+<div>09:00–16:00</div>
+<div class="activity-card event">📊 展示会参加（ノボテル ロンドン ウェスト）</div>
+<div>16:00–17:00</div>
+<div class="activity-card flight">🚗 会場 → ホテル（Uber / AddisonLee）</div>
+<div>18:00–19:00</div>
+<div class="activity-card dining">🍽️ 夕食（会場付近）</div>
+</div>
+<p><span class="badge bg-blue-100 text-blue-800">備考</span></p>
+<div class="ml-4 space-y-2">
+<div class="comment-grid">
+<div>項目</div>
+<div>会場（ノボテル ロンドン ウェスト）近くのハマースミスエリアでディナー</div>
+<div>詳細</div>
+<div>展示会最終日のネットワーキングや締めくくりに適した選択肢。</div>
+</div>
+</div>
+<p><span class="badge bg-pink-100 text-pink-800">ディナー提案（ハマースミス周辺）</span></p>
+<div class="grid gap-4 sm:grid-cols-2 ml-4">
+<div class="activity-card dining">
+<p>🍴 <strong>The Devonshire Arms</strong></p>
+<p>伝統的な英国パブ。ガストロパブ料理（ステーキ、フィッシュ＆チップス）が人気。会場から徒歩5分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=The+Devonshire+Arms+Hammersmith" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Toro Gordo</strong></p>
+<p>スペイン料理。タパスやパエリアが豊富でカジュアル。会場から徒歩7分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Toro+Gordo+Hammersmith" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Dishoom Hammersmith</strong></p>
+<p>インド料理の人気店。カレーやビリヤニが特徴。会場から徒歩10分、予約推奨。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Dishoom+Hammersmith" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>The Chipping Forecast</strong></p>
+<p>モダンなフィッシュ＆チップス専門店。カジュアルで手軽。会場から徒歩8分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=The+Chipping+Forecast+Hammersmith" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- May 31 -->
+<div class="card itinerary-day">
+<h3 class="text-xl font-semibold text-gray-900 toggle-section flex items-center gap-2">
+<span>📍</span> 2025年5月31日（土） – オックスフォード観光
+                    </h3>
+<div class="mt-4 toggle-content active">
+<div class="activity-card">
+<p><span class="badge bg-blue-100 text-blue-800">宿泊</span> ノボテル ロンドン ブレントフォード</p>
+<p><span class="badge bg-blue-100 text-blue-800">スケジュール</span></p>
+<div class="schedule-grid">
+<div>07:00</div>
+<div class="activity-card dining">🍽️ 朝食（ホテル）</div>
+<div>07:30–08:00</div>
+<div class="activity-card flight">🛤️ ブレントフォード駅 → パディントン駅（電車）</div>
+<div>08:30–09:30</div>
+<div class="activity-card flight">🛤️ パディントン駅 → オックスフォード駅（電車、36ポンド×3名、予約済）</div>
+<div>10:00</div>
+<div class="activity-card tourism">🏛️ クライストチャーチ観光（徒歩、22ポンド/人、予約済）</div>
+<div>11:30</div>
+<div class="activity-card tourism">📚 ボドリアン図書館（徒歩）</div>
+<div>13:00</div>
+<div class="activity-card dining">🍽️ 昼食（地元カフェ、徒歩）</div>
+<div>14:30</div>
+<div class="activity-card tourism">🖼️ アシュモレアン博物館（徒歩）</div>
+<div>16:00</div>
+<div class="activity-card flight">🛤️ オックスフォード駅 → パディントン駅（電車）</div>
+<div>17:00</div>
+<div class="activity-card flight">🛤️ パディントン駅 → ブレントフォード駅（電車）</div>
+<div>18:00</div>
+<div class="activity-card">🏨 ホテル到着</div>
+<div>18:30</div>
+<div class="activity-card dining">🍽️ ディナー（ホテル周辺、徒歩）</div>
+</div>
+<p><span class="badge bg-pink-100 text-pink-800">ディナー提案（ブレントフォード周辺）</span></p>
+<div class="grid gap-4 sm:grid-cols-2 ml-4">
+<div class="activity-card dining">
+<p>🍴 <strong>The Griffin</strong></p>
+<p>伝統的なパブ。ロースト料理やクラフトビールが楽しめる。ホテルから徒歩5分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=The+Griffin+Brentford" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>The Weir Bar &amp; Dining Room</strong></p>
+<p>モダンな英国料理。川沿いの雰囲気。ホテルから徒歩8分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=The+Weir+Bar+Brentford" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>La Rosetta</strong></p>
+<p>イタリアン。パスタやシーフードが豊富でカジュアル。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=La+Rosetta+Brentford" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Mambow</strong></p>
+<p>マレーシア料理の人気店。スパイシーな料理が特徴。地下鉄で20分（キリングワース）。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Mambow+London" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- June 1 -->
+<div class="card itinerary-day">
+<h3 class="text-xl font-semibold text-gray-900 toggle-section flex items-center gap-2">
+<span>📍</span> 2025年6月1日（日） – ロンドン市内観光
+                    </h3>
+<div class="mt-4 toggle-content active">
+<div class="activity-card">
+<p><span class="badge bg-blue-100 text-blue-800">宿泊</span> ノボテル ロンドン ブレントフォード</p>
+<p><span class="badge bg-blue-100 text-blue-800">スケジュール</span></p>
+<div class="schedule-grid">
+<div>07:00</div>
+<div class="activity-card dining">🍽️ 朝食（ホテル）</div>
+<div>08:30–09:15</div>
+<div class="activity-card flight">🚇 ブレントフォード → パディントン → タワーヒル（地下鉄）</div>
+<div>09:30–12:00</div>
+<div class="activity-card tourism">🏰 ロンドンタワー（徒歩）</div>
+<div>12:15–13:00</div>
+<div class="activity-card dining">🍽️ 昼食（タワー周辺、徒歩）</div>
+<div>13:00–14:00</div>
+<div class="activity-card flight">🚇 タワーヒル → ウェストミンスター（地下鉄）</div>
+<div>14:00–15:30</div>
+<div class="activity-card tourism">⛪ セントポール大聖堂（徒歩）</div>
+<div>15:30–17:00</div>
+<div class="activity-card tourism">🖼️ ナショナルギャラリー（トラファルガー広場、徒歩）</div>
+<div>17:30–19:00</div>
+<div class="activity-card dining">🍽️ ディナー（トラファルガー、徒歩）</div>
+<div>19:00–20:00</div>
+<div class="activity-card flight">🚇 ホテルへ戻る（地下鉄）</div>
+<div>20:00</div>
+<div class="activity-card">🏨 ホテル到着</div>
+</div>
+<p><span class="badge bg-pink-100 text-pink-800">ディナー提案（トラファルガー広場周辺）</span></p>
+<div class="grid gap-4 sm:grid-cols-2 ml-4">
+<div class="activity-card dining">
+<p>🍴 <strong>The Portrait by Richard Corrigan</strong></p>
+<p>高級英国料理。ナショナルギャラリー内にあり、特別なディナーに最適。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=The+Portrait+by+Richard+Corrigan+London" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Fallow</strong></p>
+<p>サステナブルなクリエイティブ料理。2025年ミシュラン候補。トラファルガーから徒歩10分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Fallow+London" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Rules</strong></p>
+<p>ロンドン最古のレストラン。伝統的な英国料理（ローストビーフなど）。コヴェントガーデン近く。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Rules+Restaurant+London" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Bistro Freddie</strong></p>
+<p>モダンフレンチビストロ。カジュアルかつ洗練された雰囲気。トラファルガーから徒歩圏内。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Bistro+Freddie+London" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- June 2 -->
+<div class="card itinerary-day">
+<h3 class="text-xl font-semibold text-gray-900 toggle-section flex items-center gap-2">
+<span>📍</span> 2025年6月2日（月） – ロンドン → サンフランシスコ
+                    </h3>
+<div class="mt-4 toggle-content active">
+<div class="activity-card">
+<p><span class="badge bg-blue-100 text-blue-800">宿泊</span> ハンプトン イン ミルピタス</p>
+<p><span class="badge bg-blue-100 text-blue-800">プライオリティパス</span> ヒースロー空港T5ラウンジ利用可（例：Aspire Lounge）</p>
+<p><span class="badge bg-blue-100 text-blue-800">スケジュール</span></p>
+<div class="schedule-grid">
+<div>06:30</div>
+<div class="activity-card dining">🍽️ 朝食（ホテル）</div>
+<div>07:00</div>
+<div class="activity-card">🏨 ホテルチェックアウト</div>
+<div>07:00–07:30</div>
+<div class="activity-card flight">🚗 ホテル → ヒースロー空港（Uber / AddisonLee）</div>
+<div>07:45</div>
+<div class="activity-card flight">✈️ ヒースロー空港チェックイン（MPC準備要）</div>
+<div>10:45–13:50</div>
+<div class="activity-card flight">✈️ ロンドン → サンフランシスコ（BA285、T5 → SFO国際線A）</div>
+<div>14:45–15:15</div>
+<div class="activity-card flight">🚗 SFO → Radical Storage（SoMa、Uber / Lyft、約40分、60ドル）</div>
+<div>15:15–15:30</div>
+<div class="activity-card">🧳 荷物預け（330 5th St、徒歩）</div>
+<div>15:30–16:30</div>
+<div class="activity-card tourism">🚗 Waymo体験（Pier 39またはFerry Building、Waymo）</div>
+<div>16:30–17:30</div>
+<div class="activity-card tourism">🏖️ 観光（徒歩）</div>
+<div>17:30–18:00</div>
+<div class="activity-card dining">🚶 夕食場所へ移動（徒歩）</div>
+<div>18:00–19:00</div>
+<div class="activity-card dining">🍽️ 夕食（市内、徒歩）</div>
+<div>19:00–19:15</div>
+<div class="activity-card">🧳 荷物回収（徒歩）</div>
+<div>19:15–20:45</div>
+<div class="activity-card flight">🚗 ミルピタスのホテルへ移動（Uber / Lyft、約1時間、80ドル）</div>
+<div>21:00–21:15</div>
+<div class="activity-card">🏨 ホテルチェックイン</div>
+</div>
+<p><span class="badge bg-pink-100 text-pink-800">ディナー提案（サンフランシスコ市内、Pier 39/Ferry Building周辺）</span></p>
+<div class="grid gap-4 sm:grid-cols-2 ml-4">
+<div class="activity-card dining">
+<p>🍴 <strong>In-N-Out Burger</strong></p>
+<p>コスト効率抜群のバーガー（Double-Doubleセット約$13.63、約2,181円）。Fisherman’s Wharf店。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=In-N-Out+Burger+Fisherman%E2%80%99s+Wharf" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Fog Harbor Fish House</strong></p>
+<p>新鮮なシーフード。クラムチャウダーやロブスターが人気。Pier 39の観光後におすすめ。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Fog+Harbor+Fish+House+Pier+39" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Scoma’s Restaurant</strong></p>
+<p>老舗シーフードレストラン。カジュアルかつ高品質。Pier 39から徒歩圏内。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Scoma%E2%80%99s+Restaurant+Pier+39" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Hog Island Oyster Co.</strong></p>
+<p>新鮮な牡蠣とシーフード。Ferry Building内の人気店。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Hog+Island+Oyster+Co+Ferry+Building" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- June 3 -->
+<div class="card itinerary-day">
+<h3 class="text-xl font-semibold text-gray-900 toggle-section flex items-center gap-2">
+<span>📍</span> 2025年6月3日（火） – ミルピタス勤務
+                    </h3>
+<div class="mt-4 toggle-content active">
+<div class="activity-card">
+<p><span class="badge bg-blue-100 text-blue-800">宿泊</span> ハンプトン イン ミルピタス</p>
+<p><span class="badge bg-blue-100 text-blue-800">スケジュール</span></p>
+<div class="schedule-grid">
+<div>07:00</div>
+<div class="activity-card dining">🍽️ 朝食（ホテル）</div>
+<div>08:00–17:00</div>
+<div class="activity-card event">💼 ホテル勤務</div>
+<div>18:00–20:00</div>
+<div class="activity-card dining">🍽️ 夕食</div>
+</div>
+<p><span class="badge bg-pink-100 text-pink-800">ディナー提案（ミルピタス周辺）</span></p>
+<div class="grid gap-4 sm:grid-cols-2 ml-4">
+<div class="activity-card dining">
+<p>🍴 <strong>In-N-Out Burger</strong></p>
+<p>コスト効率の良いバーガー（Double-Doubleセット約$13、約2,080円）。ホテルから車で5分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=In-N-Out+Burger+Milpitas" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Giorgio’s Italian Food &amp; Pizzeria</strong></p>
+<p>手頃な価格のイタリアン。ピザやパスタが豊富。ホテルから車で7分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Giorgio%E2%80%99s+Italian+Food+Milpitas" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Banana Leaf</strong></p>
+<p>マレーシア料理。スパイシーなカレーやロティが人気。ホテルから車で5分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Banana+Leaf+Milpitas" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- June 4 -->
+<div class="card itinerary-day">
+<h3 class="text-xl font-semibold text-gray-900 toggle-section flex items-center gap-2">
+<span>📍</span> 2025年6月4日（水） – TechEx North America Day 1
+                    </h3>
+<div class="mt-4 toggle-content active">
+<div class="activity-card">
+<p><span class="badge bg-blue-100 text-blue-800">宿泊</span> ハンプトン イン ミルピタス</p>
+<p><span class="badge bg-blue-100 text-blue-800">スケジュール</span></p>
+<div class="schedule-grid">
+<div>07:00</div>
+<div class="activity-card dining">🍽️ 朝食（ホテル）</div>
+<div>09:00–17:00</div>
+<div class="activity-card event">📊 展示会参加（Uber / Lyftで移動）</div>
+<div>18:00–20:00</div>
+<div class="activity-card dining">🍽️ 夕食</div>
+</div>
+<p><span class="badge bg-pink-100 text-pink-800">ディナー提案（ミルピタス周辺）</span></p>
+<div class="grid gap-4 sm:grid-cols-2 ml-4">
+<div class="activity-card dining">
+<p>🍴 <strong>In-N-Out Burger</strong></p>
+<p>コスト効率の良いバーガー（Double-Doubleセット約$13、約2,080円）。ホテルから車で5分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=In-N-Out+Burger+Milpitas" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Dishdash Middle Eastern Grill</strong></p>
+<p>中東料理。フムスやケバブが人気。ホテルから車で6分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Dishdash+Middle+Eastern+Grill+Milpitas" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>V Sushi</strong></p>
+<p>新鮮な寿司と和食。展示会後のリラックスした食事に。ホテルから車で5分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=V+Sushi+Milpitas" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- June 5 -->
+<div class="card itinerary-day">
+<h3 class="text-xl font-semibold text-gray-900 toggle-section flex items-center gap-2">
+<span>📍</span> 2025年6月5日（木） – TechEx North America Day 2
+                    </h3>
+<div class="mt-4 toggle-content active">
+<div class="activity-card">
+<p><span class="badge bg-blue-100 text-blue-800">宿泊</span> ハンプトン イン ミルピタス</p>
+<p><span class="badge bg-blue-100 text-blue-800">スケジュール</span></p>
+<div class="schedule-grid">
+<div>07:00</div>
+<div class="activity-card dining">🍽️ 朝食（ホテル）</div>
+<div>09:00–17:00</div>
+<div class="activity-card event">📊 展示会参加（Uber / Lyftで移動）</div>
+<div>18:00–20:00</div>
+<div class="activity-card dining">🍽️ 夕食</div>
+</div>
+<p><span class="badge bg-pink-100 text-pink-800">ディナー提案（ミルピタス周辺）</span></p>
+<div class="grid gap-4 sm:grid-cols-2 ml-4">
+<div class="activity-card dining">
+<p>🍴 <strong>In-N-Out Burger</strong></p>
+<p>コスト効率の良いバーガー（Double-Doubleセット約$13、約2,080円）。ホテルから車で5分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=In-N-Out+Burger+Milpitas" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Giorgio’s Italian Food &amp; Pizzeria</strong></p>
+<p>手頃な価格のイタリアン。ピザやパスタが豊富。ホテルから車で7分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Giorgio%E2%80%99s+Italian+Food+Milpitas" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+<div class="activity-card dining">
+<p>🍴 <strong>Banana Leaf</strong></p>
+<p>マレーシア料理。スパイシーなカレーやロティが人気。ホテルから車で5分。</p>
+<p><a class="text-blue-600 hover:underline" href="#">公式サイト</a> | <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Banana+Leaf+Milpitas" rel="noopener noreferrer" target="_blank">地図</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- June 6-7 -->
+<div class="card itinerary-day">
+<h3 class="text-xl font-semibold text-gray-900 toggle-section flex items-center gap-2">
+<span>📍</span> 2025年6月6日（金）～6月7日（土） – 帰国
+                    </h3>
+<div class="mt-4 toggle-content active">
+<div class="activity-card">
+<p><span class="badge bg-blue-100 text-blue-800">宿泊</span> 機中泊</p>
+<p><span class="badge bg-blue-100 text-blue-800">プライオリティパス</span> SFO国際線ターミナルAラウンジ利用可（例：Golden Gate Lounge）</p>
+<p><span class="badge bg-blue-100 text-blue-800">スケジュール</span></p>
+<div class="schedule-grid">
+<div>07:00</div>
+<div class="activity-card dining">🍽️ 朝食（ホテル）</div>
+<div>09:00–10:00</div>
+<div class="activity-card flight">🚗 ホテル → SFO空港（Uber / Lyft）</div>
+<div>10:30</div>
+<div class="activity-card flight">✈️ SFOチェックイン</div>
+<div>13:35–16:30</div>
+<div class="activity-card flight">✈️ サンフランシスコ → 成田（JL57、国際線A → 成田T2）、機内朝食あり</div>
+<div>18:25–19:45</div>
+<div class="activity-card flight">✈️ 成田 → 伊丹（JL3009）</div>
+<div>21:00–22:00</div>
+<div class="activity-card flight">🛤️ 伊丹 → 京都駅</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Reference Links -->
+<section class="mb-12">
+<h2 class="text-2xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
+<span>📍</span> 参考リンク
+            </h2>
+<div class="card space-y-6">
+<div>
+<span class="badge bg-blue-100 text-blue-800">イベント会場</span>
+<ul class="list-none ml-4 space-y-1">
+<li>🔹 <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Novotel+London+West" rel="noopener noreferrer" target="_blank">ノボテル ロンドン ウェスト</a>
+</li>
+<li>🔹 <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Santa+Clara+Convention+Center" rel="noopener noreferrer" target="_blank">サンタクララ コンベンションセンター</a>
+</li>
+</ul>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<span class="badge bg-blue-100 text-blue-800">イベント公式サイト</span>
+<ul class="list-none ml-4 space-y-1">
+<li>🔹 <a class="text-blue-600 hover:underline" href="https://humanoidssummit.com/" rel="noopener noreferrer" target="_blank">Humanoids Summit</a>
+</li>
+<li>🔹 <a class="text-blue-600 hover:underline" href="https://techexevent.com/northamerica/" rel="noopener noreferrer" target="_blank">TechEx North America</a>
+</li>
+</ul>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<span class="badge bg-blue-100 text-blue-800">観光地</span>
+<ul class="list-none ml-4 space-y-1">
+<li>🔹 <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Christ+Church+Oxford" rel="noopener noreferrer" target="_blank">クライストチャーチ（オックスフォード）</a>
+</li>
+<li>🔹 <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Bodleian+Library+Oxford" rel="noopener noreferrer" target="_blank">ボドリアン図書館（オックスフォード）</a>
+</li>
+<li>🔹 <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Ashmolean+Museum+Oxford" rel="noopener noreferrer" target="_blank">アシュモレアン博物館（オックスフォード）</a>
+</li>
+<li>🔹 <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=Tower+of+London" rel="noopener noreferrer" target="_blank">ロンドンタワー</a>
+</li>
+<li>🔹 <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=St+Paul's+Cathedral+London" rel="noopener noreferrer" target="_blank">セントポール大聖堂</a>
+</li>
+<li>🔹 <a class="text-blue-600 hover:underline" href="https://www.google.com/maps?q=National+Gallery+London" rel="noopener noreferrer" target="_blank">ナショナルギャラリー</a>
+</li>
+</ul>
+</div>
+<div class="border-t border-gray-200 pt-4">
+<span class="badge bg-blue-100 text-blue-800">プライオリティパス対応施設</span>
+<div class="ml-4 space-y-6">
+<!-- Itami Airport (ITM) -->
+<div>
+<p class="font-semibold text-gray-800 ml-2">伊丹空港 (ITM)</p>
+<div class="card">
+<div class="space-y-2">
+<p><span class="font-semibold text-gray-700">名称:</span> <a class="text-blue-600 hover:underline" href="https://www.prioritypass.com/ja/lounges/japan/osaka-itami-i-intl/itm2d-osaka-airport-winery" rel="noopener noreferrer" target="_blank">Osaka Airport Winery</a></p>
+<p><span class="font-semibold text-gray-700">場所:</span> 国内線ターミナル、飲食店</p>
+<p><span class="font-semibold text-gray-700">アメニティ:</span> ワインと軽食を提供、プライオリティパスで食事利用可</p>
+<p><span class="font-semibold text-gray-700">営業時間:</span> 11:00～22:00（毎日）</p>
+</div>
+</div>
+</div>
+<!-- Haneda Airport (HND) -->
+<div>
+<p class="font-semibold text-gray-800 ml-2">羽田空港 (HND)</p>
+<div class="grid gap-4 sm:grid-cols-2">
+<div class="card">
+<div class="space-y-2">
+<p><span class="font-semibold text-gray-700">名称:</span> <a class="text-blue-600 hover:underline" href="https://www.prioritypass.com/ja/lounges/japan/tokyo-haneda-intl/hnd18-sky-lounge-south" rel="noopener noreferrer" target="_blank">Sky Lounge South</a></p>
+<p><span class="font-semibold text-gray-700">場所:</span> 国際線ターミナル3、ゲート108付近</p>
+<p><span class="font-semibold text-gray-700">アメニティ:</span> ビュッフェとシャワー完備</p>
+<p><span class="font-semibold text-gray-700">営業時間:</span> 24時間営業</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Heathrow Airport (LHR) -->
+<div>
+<p class="font-semibold text-gray-800 ml-2">ヒースロー空港 (LHR)</p>
+<div class="grid gap-4 sm:grid-cols-2">
+<div class="card"><p><strong>名称：</strong><a class="text-blue-600 hover:underline" href="https://www.prioritypass.com/ja/lounges/united-kingdom/london-heathrow/lhr14-aspire-the-lounge-and-spa-at-lhr-t5" rel="noopener noreferrer" target="_blank">Club Aspire Lounge (T5)</a></p><p><strong>場所：</strong> ターミナル5、ゲートA18付近</p><p><strong>アメニティ：</strong> 軽食とドリンク、リラックス空間</p><p><strong>営業時間：</strong> 5:00～21:00（毎日）</p></div>
+</div>
+</div>
+<!-- SFO International Terminal A -->
+<div>
+<p class="font-semibold text-gray-800 ml-2">サンフランシスコ国際空港 (SFO)</p>
+<div class="grid gap-4 sm:grid-cols-2">
+</div>
+<div class="card"><p><strong>名称：</strong><a class="text-blue-600 hover:underline" href="https://www.prioritypass.com/lounges/usa/san-francisco-ca-intl/sfo11-air-france---klm-lounge" rel="noopener noreferrer" target="_blank">Golden Gate Lounge</a></p><p><strong>場所：</strong> 国際線ターミナル（コンコースA）</p><p><strong>アメニティ：</strong> 軽食、アルコール、Wi-Fi、新聞、ラウンジチェア</p><p><strong>営業時間：</strong> 11:00～23:30（毎日）</p></div>
+</div>
+</div>
+<div>
+<p class="font-semibold text-gray-800 ml-2">成田空港 (NRT)</p>
+<div class="grid gap-4 sm:grid-cols-2">
+<div class="card">
+<p><strong>名称：</strong><a class="text-blue-600 hover:underline" href="https://www.prioritypass.com/lounges/japan/tokyo-narita-international/nrt11-9h-nine-hours-narita-airport" rel="noopener noreferrer" target="_blank">9h nine hours Narita Airport</a></p>
+<p><strong>場所：</strong> 第1ターミナル中央ビル本館5階</p>
+<p><strong>アメニティ：</strong> 軽食、ドリンク、Wi-Fi、新聞、ビジネス設備</p>
+<p><strong>営業時間：</strong> 07:00～21:00（毎日）</p>
+</div>
+</div>
+</div></div>
+</div>
+</section>
+</div> <!-- container -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toggles = document.querySelectorAll(".toggle-section");
+    toggles.forEach((toggle) => {
+      toggle.addEventListener("click", function () {
+        const content = this.nextElementSibling;
+        content.classList.toggle("active");
+      });
+    });
+  });
+</script>
+</body>
+</html>

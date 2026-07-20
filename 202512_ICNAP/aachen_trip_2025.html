@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025年 ドイツ（アーヘン）出張旅程 (グリッド版)</title>
+    <style>
+        /* --- 全体のスタイル --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            line-height: 1.7;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px; /* 2カラムのため幅を広げます */
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        /* --- ヘッダー --- */
+        .trip-header {
+            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        .trip-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.2rem;
+        }
+        .trip-header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .trip-header .hotel-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        /* --- 旅程全体 --- */
+        .itinerary-body {
+            padding: 30px;
+        }
+
+        /* --- 概要 --- */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .overview-card {
+            background: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .overview-card h3 {
+            margin-top: 0;
+            color: #4b6cb7;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 8px;
+        }
+
+        /* --- 日付ブロック --- */
+        .day-block {
+            margin-bottom: 30px;
+        }
+        .day-header {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px 8px 0 0;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .day-header .date-badge {
+            background: #4b6cb7;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            min-width: 120px;
+            text-align: center;
+        }
+        .day-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #182848;
+        }
+
+        .day-content {
+            border: 1px solid #e0e0e0;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 25px;
+        }
+
+        /* --- 時間帯グリッド (NEW) --- */
+        .time-block {
+            display: grid;
+            grid-template-columns: 120px 1fr; /* 左:時間 / 右:内容 */
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #d0d0d0;
+        }
+        .time-block:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .time-label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #4b6cb7;
+            padding-top: 15px;
+        }
+        
+        .actors-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 左右2カラム */
+            gap: 20px;
+        }
+
+        .actor-cell {
+            background: #fdfdfd;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .actor-cell.empty {
+            background: #f9f9f9;
+            opacity: 0.7;
+        }
+        .actor-cell h4 {
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .actor-cell h4.you { color: #4b6cb7; }
+        .actor-cell h4.colleague { color: #d94662; }
+        .actor-cell h4.all { color: #155724; }
+        
+        .actor-cell ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+        .actor-cell li {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        .actor-cell .note, .actor-cell .important {
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        .actor-cell .note {
+            background: #f4f4f4;
+            border-left: 4px solid #aaa;
+        }
+        .actor-cell .important {
+            background: #fff0f0;
+            border-left: 4px solid #e53e3e;
+            font-weight: bold;
+            color: #c53030;
+        }
+
+        /* --- 全員行動 / マーカー --- */
+        .full-width-cell {
+            grid-column: 1 / -1; /* グリッドをまたいで全幅に */
+            background: #e6f7f3;
+            border: 1px solid #c3e6dc;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .full-width-cell h4 {
+            color: #155724;
+            margin: 0 0 10px 0;
+            font-size: 1.1rem;
+        }
+        .full-width-cell ul {
+            padding-left: 20px;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        
+        .merge-marker, .split-marker {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        .merge-marker {
+            background: #e6f7f3;
+            border: 1px solid #c3e6dc;
+            color: #155724;
+        }
+        .split-marker {
+            background: #fce9ec;
+            border: 1px solid #f0c8cf;
+            color: #721c24;
+        }
+
+        /* --- レスポンシブ対応 --- */
+        @media (max-width: 900px) {
+            .time-block {
+                grid-template-columns: 1fr; /* 時間ラベルと内容を縦積みに */
+            }
+            .time-label {
+                padding-top: 0;
+                margin-bottom: -10px;
+            }
+            .actors-grid {
+                grid-template-columns: 1fr; /* 2カラムを1カラムに */
+            }
+            .itinerary-body {
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .trip-header {
+                padding: 25px;
+            }
+            .day-header {
+                padding: 15px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        
+        /* --- 印刷用スタイル (A4横) --- */
+        @media print {
+            @page {
+                size: A4 landscape; /* A4横を指定 */
+                margin: 1cm; /* 余白を調整 */
+            }
+            body { 
+                padding: 0; 
+                font-size: 8pt; /* A4横に合わせフォントを調整 */
+                background: #fff;
+                -webkit-print-color-adjust: exact; /* 背景色を印刷 (Chrome/Safari) */
+                print-color-adjust: exact; /* 背景色を印刷 (標準) */
+            }
+            .container { 
+                box-shadow: none; 
+                border: none;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 0;
+                margin: 0;
+            }
+            .trip-header {
+                padding: 15px;
+                /* 印刷用に背景色を強制指定 */
+                background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%) !important;
+                color: white !important;
+            }
+            .itinerary-body {
+                padding: 15px 10px;
+            }
+            .overview-grid {
+                grid-template-columns: 1fr 1fr 1fr; /* 概要は3カラムで固定 */
+            }
+            .overview-card {
+                padding: 10px;
+            }
+            .day-block {
+                page-break-inside: avoid; /* 日付ごとに改ページされないようにする */
+                margin-bottom: 15px;
+            }
+            .day-header {
+                padding: 10px 15px;
+            }
+            .day-content {
+                padding: 15px;
+            }
+            .time-block {
+                grid-template-columns: 80px 1fr; /* 時間ラベル幅を縮小 */
+                gap: 10px;
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+            }
+            .time-label {
+                padding-top: 10px;
+            }
+            .actors-grid {
+                gap: 10px; /* カラム間の隙間を縮小 */
+            }
+            .actor-cell, .full-width-cell {
+                padding: 10px; /* セルの余白を縮小 */
+                font-size: 0.95em;
+            }
+            .actor-cell ul li {
+                margin-bottom: 5px;
+            }
+            .actor-cell .note, .actor-cell .important {
+                padding: 8px 10px;
+                margin-top: 5px;
+            }
+            .merge-marker, .split-marker {
+                padding: 10px;
+                margin: 15px 0;
+            }
+
+            /* 印刷時の色を強制 */
+            .full-width-cell { background: #e6f7f3 !important; border-color: #c3e6dc !important; color: #155724 !important; }
+            .full-width-cell h4 { color: #155724 !important; }
+            .merge-marker { background: #e6f7f3 !important; border-color: #c3e6dc !important; color: #155724 !important; }
+            .split-marker { background: #fce9ec !important; border-color: #f0c8cf !important; color: #721c24 !important; }
+            .actor-cell .important { background: #fff0f0 !important; border-color: #e53e3e !important; color: #c53030 !important; }
+            .actor-cell h4.you { color: #4b6cb7 !important; }
+            .actor-cell h4.colleague { color: #d94662 !important; }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- ===== ヘッダー ===== -->
+        <header class="trip-header">
+            <h1>🇩🇪 2025年 ドイツ（アーヘン）出張旅程</h1>
+            <div class="subtitle">👥 参加者: 3名（村上・廣瀬・北尾）</div>
+            <div class="hotel-info">
+                <strong>🏨 宿泊先:</strong> メルキュールホテル アーヘン
+            </div>
+        </header>
+
+        <div class="itinerary-body">
+            <!-- ===== 概要 ===== -->
+            <section class="overview-grid">
+                <div class="overview-card">
+                    <h3>👤 村上</h3>
+                    <strong>出発:</strong> 12/8（月）夜 KIX発<br>
+                    <strong>到着:</strong> 12/9（火）朝 DUS着<br>
+                    <strong>帰国:</strong> 12/12（金）夜 FRA発<br>
+                    <strong>経由:</strong> ヘルシンキ (HEL)
+                </div>
+                <div class="overview-card">
+                    <h3>👥 廣瀬・北尾</h3>
+                    <strong>出発:</strong> 12/7（土）夜 KIX発<br>
+                    <strong>到着:</strong> 12/8（日）朝 DUS着<br>
+                    <strong>帰国:</strong> 12/12（金）夕方 FRA発<br>
+                    <strong>経由:</strong> イスタンブール (IST)
+                </div>
+                <div class="overview-card">
+                    <h3>🎯 主な目的</h3>
+                    <strong>12/9:</strong> Industrial Day（廣瀬・北尾）<br>
+                    <strong>12/10-11:</strong> ICNAP Meeting（全員）<br>
+                    <strong>12/11-12:</strong> ケルン・フランクフルト視察
+                </div>
+            </section>
+
+            <!-- ===== 12月7日（日） ===== -->
+            <section class="day-block">
+                <div class="day-header">
+                    <div class="date-badge">12月7日（日）</div>
+                    <h2>廣瀬・北尾 日本出発</h2>
+                </div>
+                <div class="day-content">
+                    <div class="time-block">
+                        <div class="time-label">終日</div>
+                        <div class="actors-grid">
+                            <div class="actor-cell">
+                                <h4 class="you">👤 村上</h4>
+                                <ul>
+                                    <li>🎌 休日（国内）</li>
+                                    <li>出発準備など</li>
+                                </ul>
+                            </div>
+                            <div class="actor-cell empty">
+                                <!-- 同僚は夜まで行動なし -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">夜 (22:00〜)</div>
+                        <div class="actors-grid">
+                            <div class="actor-cell empty">
+                                <!-- あなたは行動なし -->
+                            </div>
+                            <div class="actor-cell">
+                                <h4 class="colleague">👥 廣瀬・北尾</h4>
+                                <ul>
+                                    <li><strong>22:30</strong> ✈️ 関西国際空港（KIX）発</li>
+                                    <li>便名：トルコ航空（イスタンブールへ）</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== 12月8日（月） ===== -->
+            <section class="day-block">
+                <div class="day-header">
+                    <div class="date-badge">12月8日（月）</div>
+                    <h2>廣瀬・北尾 到着 / 村上 本社業務後 出発</h2>
+                </div>
+                <div class="day-content">
+                    <div class="time-block">
+                        <div class="time-label">早朝 (05:00〜)</div>
+                        <div class="actors-grid">
+                            <div class="actor-cell empty">
+                                <!-- あなたの行動 -->
+                            </div>
+                            <div class="actor-cell">
+                                <h4 class="colleague">👥 廣瀬・北尾</h4>
+                                <ul>
+                                    <li><strong>05:20</strong> ✈️ イスタンブール（IST）着</li>
+                                    <li>乗り継ぎ</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">午前 (09:00〜)</div>
+                        <div class="actors-grid">
+                            <div class="actor-cell empty">
+                                <!-- あなたの行動 -->
+                            </div>
+                            <div class="actor-cell">
+                                <h4 class="colleague">👥 廣瀬・北尾</h4>
+                                <ul>
+                                    <li><strong>09:20</strong> 🛬 デュッセルドルフ（DUS）着</li>
+                                    <li>入国審査・荷物受け取り</li>
+                                    <li><strong>午前中</strong> 🚆 DUS空港 → アーヘン中央駅</li>
+                                    <li>列車 (RE 1など) で移動（約1.5時間）</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">午後 (12:00〜)</div>
+                        <div class="actors-grid">
+                            <div class="actor-cell empty">
+                                <!-- あなたの行動 -->
+                            </div>
+                            <div class="actor-cell">
+                                <h4 class="colleague">👥 廣瀬・北尾</h4>
+                                <ul>
+                                    <li>🏨 ホテル チェックイン</li>
+                                    <li>メルキュールホテル アーヘン</li>
+                                    <li>🍽️ アーヘン散策</li>
+                                    <li>クリスマスマーケット、旧市街散策など</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">夕方 (17:00〜)</div>
+                        <div class="actors-grid">
+                            <div class="actor-cell">
+                                <h4 class="you">👤 村上</h4>
+                                <ul>
+                                    <li><strong>08:00 - 17:00</strong> 🏢 本社にて通常業務</li>
+                                </ul>
+                            </div>
+                            <div class="actor-cell">
+                                <h4 class="colleague">👥 廣瀬・北尾</h4>
+                                <ul>
+                                    <li>ホテルで休憩、または市内散策</li>
+                                    <li>各自で早めのランチを済ませる</li>
+                                </ul>
+                                <div class="note">Industrial Dayは午後（13:30）から開始</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">午後 (12:00〜)</div>
+                        <div class="actors-grid">
+                            <div class="actor-cell">
+                                <h4 class="you">👤 村上</h4>
+                                <ul>
+                                    <li><strong>17:00</strong> 業務終了</li>
+                                    <li><strong>18:00頃</strong> 🚆 京都駅 → 関西国際空港へ</li>
+                                    <li>（特急はるか利用）</li>
+                                    <li><strong>19:25頃</strong> 🛬 関西国際空港（KIX）着</li>
+                                    <li>ラウンジ（出国前）でシャワー・着替え</li>
+                                </ul>
+                            </div>
+                            <div class="actor-cell empty">
+                                <ul>
+                                    <li><strong>13:00頃:</strong> ホテル → 会場へ移動（タクシー推奨）</li>
+                                    <li><strong>13:30:</strong> 🏭 Industrial Day 受付開始</li>
+                                    <li>会場：INC Invention Center, Aachen (Melaten Campus)</li>
+                                    <li><strong>13:45:</strong> Welcome & Introduction</li>
+                                    <li><strong>14:00:</strong> 基調講演 (Fraunhofer Research Insights)</li>
+                                    <li><strong>14:30:</strong> The Power of ICNAP</li>
+                                    <li><strong>14:45:</strong> ICNAP Community (Insights from Members)</li>
+                                    <li><strong>15:30:</strong> Coffee Break</li>
+                                    <li><strong>15:45:</strong> Workshop: Roadmap to Networked, Adaptive Production</li>
+                                    <li><strong>16:30:</strong> ショップフロアツアー (Aachen's Fraunhofer Institutes)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">夜 (19:00〜)</div>
+                        <div class="actors-grid">
+                            <div class="actor-cell">
+                                <h4 class="you">👤 村上</h4>
+                                <ul>
+                                    <li><strong>19:00頃</strong> 🍽️ ディナー（単独）</li>
+                                    <li>Homeburgers などホテル近辺で</li>
+                                </ul>
+                                <div class="note">深夜のWEB会議に備え、早めに就寝</div>
+                            </div>
+                            <div class="actor-cell">
+                                <h4 class="colleague">👥 廣瀬・北尾</h4>
+                                <ul>
+                                    <li><strong>18:00:</strong> 🤝 ネットワーキング＆軽食（会場にて）</li>
+                                    <li><strong>20:00:</strong> イベント終了</li>
+                                    <li><strong>20:00以降:</strong> 会場 → ホテルへ移動（タクシー推奨）</li>
+                                </ul>
+                                <div class="note">この日は別行動</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 合流マーカー -->
+            <div class="merge-marker">
+                🤝 3名合流！ここからICNAP会議で一緒に行動
+            </div>
+
+            <!-- ===== 12月10日（水） ===== -->
+            <section class="day-block">
+                <div class="day-header">
+                    <div class="date-badge">12月10日（水）</div>
+                    <h2>ICNAP Annual Meeting 1日目</h2>
+                </div>
+                <div class="day-content">
+                    <div class="time-block">
+                        <div class="time-label">深夜 (01:00〜)</div>
+                        <div class="actors-grid">
+                            <div class="actor-cell">
+                                <h4 class="you">👤 村上</h4>
+                                <ul>
+                                    <li><strong>01:00 - 03:30</strong> 💻 WEB会議参加</li>
+                                    <li>（日本時間：09:00 - 11:30）</li>
+                                </ul>
+                                <div class="important">⚠️ ハードスケジュール！会議終了後、仮眠（約3.5時間）</div>
+                            </div>
+                            <div class="actor-cell">
+                                <h4 class="colleague">👥 廣瀬・北尾</h4>
+                                <ul>
+                                    <li>💤 ホテルにて就寝</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">朝〜夕方</div>
+                        <div class="full-width-cell">
+                            <h4 class="all">🤝 全員（3名）</h4>
+                            <ul>
+                                <li><strong>07:30</strong> 🍽️ ホテルにて朝食</li>
+                                <li><strong>08:00</strong> 🚆 ホテル → 会場へ移動（タクシー推奨）</li>
+                                <li><strong>08:30 - 16:15</strong> 🎓 ICNAP Annual Meeting - Day 1</li>
+                                <li>会場：INC Invention Center, Aachen (Melaten Campus)</li>
+                                <li><strong>08:30:</strong> Admission & Registration</li>
+                                <li><strong>09:00:</strong> Welcoming, Introduction, and Community News</li>
+                                <li><strong>09:15:</strong> Opening Speech</li>
+                                <li><strong>09:45:</strong> The NEMESI Project</li>
+                                <li><strong>10:15:</strong> Keynote 2</li>
+                                <li><strong>10:45:</strong> ☕ Coffee Break</li>
+                                <li><strong>11:15:</strong> Interactive Workshop</li>
+                                <li><strong>12:15:</strong> 🍽️ Lunch & Networking</li>
+                                <li><strong>13:00:</strong> ICNAP Transfer – Poster Session</li>
+                                <li><strong>13:45:</strong> ICNAP Studies – Manufacturing "Secured by Design"</li>
+                                <li><strong>14:00:</strong> ICNAP Studies – Approval of AI Systems for Quality Control</li>
+                                <li><strong>14:15:</strong> ☕ Coffee Break</li>
+                                <li><strong>14:45:</strong> ICNAP Working Groups 2025</li>
+                                <li><strong>15:45:</strong> ICNAP Studies – Production Optimization</li>
+                                <li><strong>16:00:</strong> Outlook on Day 2</li>
+                                <li><strong>16:15:</strong> End of Day 1 (会場 → ホテルへ移動)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">夜 (19:00〜)</div>
+                        <div class="full-width-cell">
+                            <h4 class="all">🤝 全員（3名）</h4>
+                            <ul>
+                                <li><strong>19:00</strong> 🍽️ ネットワーキングディナー</li>
+                                <li>ICNAP主催のGet-Together</li>
+                                <li>アーヘン クリスマスマーケットにて</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== 12月11日（木） ===== -->
+            <section class="day-block">
+                <div class="day-header">
+                    <div class="date-badge">12月11日（木）</div>
+                    <h2>ICNAP 2日目 ＆ ケルン観光</h2>
+                </div>
+                <div class="day-content">
+                    <div class="time-block">
+                        <div class="time-label">朝〜夕方</div>
+                        <div class="full-width-cell">
+                            <h4 class="all">🤝 全員（3名）</h4>
+                            <ul>
+                                <li><strong>07:45頃</strong> 🍽️ ホテルにて朝食</li>
+                                <li><strong>08:15頃</strong> 🚆 ホテル → 会場へ移動（タクシー推奨）</li>
+                                <li><strong>08:45 - 15:30</strong> 🎓 ICNAP Annual Meeting - Day 2</li>
+                                <li>会場：INC Invention Center, Aachen</li>
+                                <li><strong>08:45:</strong> Admission & Registration</li>
+                                <li><strong>09:00:</strong> Welcome to Day 2</li>
+                                <li><strong>09:15:</strong> ICNAP Studies – A Digital Process Twin for Manufacturing</li>
+                                <li><strong>09:30:</strong> ICNAP Studies – Integration of Sensor Technology</li>
+                                <li><strong>09:45:</strong> Presentation of New Member: Toshiba</li>
+                                <li><strong>10:00:</strong> Demonstrator Session</li>
+                                <li><strong>10:45:</strong> ☕ Coffee Break</li>
+                                <li><strong>11:15:</strong> Hackathon 2025 – Presentations of the Winning Teams</li>
+                                <li><strong>11:45:</strong> ICNAP Studies – Topics 2026 – Pitches</li>
+                                <li><strong>12:45:</strong> 🍽️ Lunch</li>
+                                <li><strong>13:45:</strong> ICNAP Studies – Poster Session & Voting</li>
+                                <li><strong>14:45:</strong> Deadline for Voting</li>
+                                <li><strong>15:00:</strong> Wrap-Up, Winners Ceremony & Outlook on ICNAP Year 2026</li>
+                                <li><strong>15:30:</strong> End of Meeting (会場 → ホテルへ移動)</li>
+                                <li><strong>15:30</strong> 🚆 ホテルへ移動 → ケルンへ</li>
+                                <li><strong>16:51</strong> アーヘン中央駅 発 (RE 1)</li>
+                                <li><strong>17:44</strong> 📍 ケルン中央駅 到着</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">夜 (17:45〜)</div>
+                        <div class="full-width-cell">
+                            <h4 class="all">🤝 全員（3名）</h4>
+                            <ul>
+                                <li><strong>17:45 - 20:00</strong> 🏰 ケルン観光＆ディナー</li>
+                                <li>ケルン大聖堂、クリスマスマーケット、ホーエンツォレルン橋</li>
+                                <li>マーケットでディナー（ケルシュビール等）</li>
+                                <li><strong>20:15</strong> 🚆 ケルン中央駅 発</li>
+                                <li><strong>21:07</strong> アーヘン中央駅 着 → ホテルへ</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== 12月12日（金） ===== -->
+            <section class="day-block">
+                <div class="day-header">
+                    <div class="date-badge">12月12日（金）</div>
+                    <h2>フランクフルト観光 → ドイツ出発</h2>
+                </div>
+                <div class="day-content">
+                    <div class="time-block">
+                        <div class="time-label">午前 (09:00〜)</div>
+                        <div class="full-width-cell">
+                            <h4 class="all">🤝 全員（3名）</h4>
+                            <ul>
+                                <li><strong>09:00</strong> 🏨 ホテル チェックアウト（3名でアーヘン中央駅へ）</li>
+                                <li><strong>09:39</strong> 🚆 アーヘン中央駅 発（列車：ICE 13 フランクフルト空港へ）</li>
+                                <li><strong>11:17</strong> 📍 フランクフルト空港駅 着</li>
+                                <li>各自のカウンターでチェックイン・荷物預け入れ</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">午後 (12:00〜)</div>
+                        <div class="full-width-cell">
+                            <h4 class="all">🤝 全員（3名）</h4>
+                            <ul>
+                                <li><strong>12:30 - 15:00</strong> 🏛️ フランクフルト市内観光＆ランチ</li>
+                                <li>Sバーンで市内へ。レーマー広場、クリスマスマーケット（世界最古級）でランチ</li>
+                                <li><strong>15:00</strong> 🚆 市内 → フランクフルト空港へ（Sバーンで戻る）</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 分岐マーカー -->
+                    <div class="split-marker">
+                        👋 ここで3人お別れ - それぞれの帰国便へ
+                    </div>
+                    
+                    <div class="time-block" style="margin-top: 25px; border-bottom: none; padding-bottom: 0;">
+                        <div class="time-label">夕方〜夜</div>
+                        <div class="actors-grid">
+                            <div class="actor-cell">
+                                <h4 class="you">👤 村上</h4>
+                                <ul>
+                                    <li><strong>15:30 - 19:30</strong> ☕ 空港ラウンジで休憩</li>
+                                    <li>保安検査・出国審査後</li>
+                                    <li><strong>20:05</strong> ✈️ フランクフルト（FRA）発</li>
+                                    <li>便名：**JL408**（日本航空 東京・成田へ）</li>
+                                </ul>
+                                <div class="note">JMBサファイア資格でラウンジ利用。シャワー・着替え、軽食。</div>
+                            </div>
+                            <div class="actor-cell">
+                                <h4 class="colleague">👥 廣瀬・北尾</h4>
+                                <ul>
+                                    <li><strong>15:25頃</strong> ✅ 保安検査・出国審査</li>
+                                    <li><strong>18:25</strong> ✈️ フランクフルト（FRA）発</li>
+                                    <li>便名：トルコ航空（イスタンブールへ）</li>
+                                    <li><strong>23:35</strong> ✈️ イスタンブール（IST）着</li>
+                                    <li>乗り継ぎ</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- ===== 12月13日（土） ===== -->
+            <section class="day-block">
+                <div class="day-header">
+                    <div class="date-badge">12月13日（土）</div>
+                    <h2>日本 帰国</h2>
+                </div>
+                <div class="day-content">
+                    <div class="time-block" style="border-bottom: none; padding-bottom: 0;">
+                        <div class="time-label">終日</div>
+                        <div class="actors-grid">
+                            <div class="actor-cell">
+                                <h4 class="you">👤 村上</h4>
+                                <ul>
+                                    <li><strong>17:05</strong> 🛬 東京・成田（NRT）着</li>
+                                    <li>入国審査・国内線乗り継ぎ</li>
+                                    <li><strong>18:25</strong> ✈️ 東京・成田（NRT）発</li>
+                                    <li>便名：**JL3009**（伊丹へ）</li>
+                                    <li><strong>19:55</strong> 🛬 大阪・伊丹（ITM）着</li>
+                                    <li>🏠 ご自宅（中書島）へ移動</li>
+                                    <li>お疲れ様でした！</li>
+                                </ul>
+                            </div>
+                            <div class="actor-cell">
+                                <h4 class="colleague">👥 廣瀬・北尾</h4>
+                                <ul>
+                                    <li><strong>02:10</strong> ✈️ イスタンブール（IST）発</li>
+                                    <li>便名：トルコ航空（KIXへ）</li>
+                                    <li><strong>19:05</strong> 🛬 大阪・関西（KIX）着</li>
+                                    <li>お疲れ様でした！</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+</body>
+</html>

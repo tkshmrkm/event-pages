@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muratec R&D 共有ファイルポータル</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts: Noto Sans JP -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #fdfbf7; /* Warm Neutral Background */
+            color: #1f2937;
+        }
+
+        /* Chart Container Styling */
+        .chart-wrapper {
+            position: relative;
+            height: 220px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af; 
+        }
+
+        /* Card Hover Effects */
+        .resource-card, .company-card {
+            transition: all 0.3s ease;
+        }
+        .resource-card:hover, .company-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .company-logo-placeholder {
+            background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center space-x-3 mb-2 md:mb-0">
+                <div class="w-10 h-10 bg-sky-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-md">
+                    M
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-800 tracking-tight">Muratec R&D</h1>
+                    <p class="text-xs text-gray-500 font-medium">共有リソースポータル</p>
+                </div>
+            </div>
+            <div class="text-sm text-gray-500">
+                <span id="date-display"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8 space-y-12">
+
+        <!-- Intro Section & Chart -->
+        <section class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div class="flex flex-col md:flex-row gap-8 items-center">
+                <div class="md:w-1/2 space-y-4">
+                    <h2 class="text-2xl font-bold text-gray-800 border-l-4 border-sky-500 pl-4">概要</h2>
+                    <!-- Updated Description -->
+                    <p class="text-gray-600 leading-relaxed text-sm">
+                        このダッシュボードは、2025年11月18日～20日に実施した中国ヒューマノイドロボットベンチャー視察において撮影・収集した資料の一部を共有するものです。現地で確認した最新技術のデモ映像や写真、および関連企業の詳細情報を集約しています。
+                    </p>
+                    <div class="flex space-x-4 pt-2">
+                        <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold flex items-center">
+                            <span class="mr-2 text-xl">📂</span> <span id="total-count">0</span> リソース
+                        </div>
+                        <div class="bg-amber-50 text-amber-700 px-4 py-2 rounded-full text-sm font-semibold flex items-center">
+                            <span class="mr-2 text-xl">🏢</span> <span id="company-count">0</span> 関連企業
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2 w-full flex flex-col items-center bg-gray-50/50 rounded-xl p-4">
+                    <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 border-b border-gray-200 pb-1 w-full text-center">企業別リソース収集状況</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="sourceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Control Bar -->
+        <section class="sticky top-20 z-40 bg-[#fdfbf7]/95 backdrop-blur-sm py-2 border-b border-gray-200/50">
+            <!-- Responsive layout: Stacks on mobile, Row on desktop -->
+            <div class="flex flex-col lg:flex-row justify-between items-center gap-4 bg-white p-2 rounded-xl border border-gray-200 shadow-sm">
+                
+                <!-- Search -->
+                <div class="relative w-full lg:flex-1">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 font-bold">🔍</span>
+                    <input type="text" id="searchInput" placeholder="ファイル名、企業名、キーワードで検索..." 
+                        class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all text-sm"
+                    >
+                </div>
+
+                <!-- Controls Group -->
+                <div class="flex flex-wrap items-center justify-end gap-2 w-full lg:w-auto shrink-0">
+                    <!-- Sort Dropdown -->
+                    <div class="relative">
+                        <select id="sortSelect" class="appearance-none bg-white border border-gray-300 text-gray-700 py-1.5 pl-3 pr-8 rounded-md focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 text-xs font-medium shadow-sm cursor-pointer transition-colors hover:border-gray-400">
+                            <option value="company">企業順 (デフォルト)</option>
+                            <option value="type">種類順</option>
+                            <option value="date_desc">日付順 (新しい順)</option>
+                            <option value="id">ID順</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                            <svg class="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                        </div>
+                    </div>
+
+                    <!-- View Toggle -->
+                    <div class="flex bg-gray-200 rounded-lg p-1">
+                        <button id="viewGridBtn" class="px-3 py-1.5 rounded-md text-xs font-medium transition-all shadow-sm bg-white text-gray-800">
+                            グリッド
+                        </button>
+                        <button id="viewListBtn" class="px-3 py-1.5 rounded-md text-xs font-medium transition-all text-gray-600 hover:text-gray-800">
+                            リスト
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resource Browser -->
+        <section>
+            <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                <span class="mr-2">📂</span> リンク・ファイル集
+            </h2>
+            <div id="resourcesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Content injected via JS -->
+            </div>
+            <div id="noResults" class="hidden text-center py-12 text-gray-500">
+                <p class="text-xl mb-2">🤷‍♂️</p>
+                <p>一致するリソースが見つかりませんでした。</p>
+            </div>
+        </section>
+
+        <!-- Company Directory (Footer Section) -->
+        <section class="border-t border-gray-200 pt-8">
+            <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                <span class="mr-2">🤖</span> 関連企業ディレクトリ
+            </h2>
+            <div id="companyContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Company Cards injected via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm">&copy; 2024 Murata Machinery, Ltd. All Rights Reserved.</p>
+            <p class="text-xs text-gray-500 mt-2">Internal Use Only</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Data Source ---
+        const resources = [
+            { 
+                id: 1, 
+                name: "UniX AI 家庭用片付けロボット \"Wanda\"", 
+                url: "https://muratecrd.box.com/s/g35kwqoz76bplp4lq6in7upiwsy9ny0i", 
+                type: "Video", 
+                date: "2025-11-18",
+                description: "上海のロボット企業UniX AIが開発したヒューマノイドロボット。洗濯物の片付けや食器洗い、繊細な物体操作（豆腐を掴むなど）を自律的に行うデモンストレーション映像です。",
+                company: {
+                    name: "UniX AI (优理奇)",
+                    url: "https://www.unix-group.ai/",
+                    memo: "上海拠点。車輪移動型ロボット「Wanda」は、独自ハンドとAIで不定形物や柔らかい物体の把持を実現。"
+                }
+            },
+            { 
+                id: 2, 
+                name: "AGIBOT ワーク搬送・ラベル整列デモ", 
+                url: "https://muratecrd.box.com/s/d179ki1h70vvmv3zqhgy886sub3nrmoz", 
+                type: "Video", 
+                date: "2025-11-19",
+                description: "元Huaweiエンジニア創業の上海AGIBOT（智元ロボット）。ワークのラベル面を視覚認識して整列させる産業用ロボットデモ。",
+                company: {
+                    name: "AGIBOT (智元机器人)",
+                    url: "https://www.agibot.com/",
+                    memo: "元Huawei「天才少年」創業。社内3チームを競わせる体制やGenieのデータセンター応用が特徴。センサは購入品、ギア等は自社設計・外部加工で軽量化し、社内は設計・組立に特化する効率的な体制を構築。データセンターも拡張中です。"
+                }
+            },
+            { 
+                id: 3, 
+                name: "AGIBOT ヒューマノイド ダンス・モーション学習", 
+                url: "https://muratecrd.box.com/s/q3m6m7erelvcvbyj4uugdr6d9mwshglc", 
+                type: "Video", 
+                date: "2025-11-19",
+                description: "AGIBOTによるダンスデモ。人間の動画から動作を生成する「LinkCraft」技術により、複雑な動作を短期間で習得。",
+                company: {
+                    name: "AGIBOT (智元机器人)",
+                    url: "https://www.agibot.com/",
+                    memo: "元Huawei「天才少年」創業。社内3チームを競わせる体制やGenieのデータセンター応用が特徴。センサは購入品、ギア等は自社設計・外部加工で軽量化し、社内は設計・組立に特化する効率的な体制を構築。データセンターも拡張中です。"
+                }
+            },
+            { 
+                id: 4, 
+                name: "PaXini Tech 触覚ハンド \"DexH5\" コンベアピッキング", 
+                url: "https://muratecrd.box.com/s/jgu739uqqlno57ma3wh1rarzk17qsjb5", 
+                type: "Video", 
+                date: "2025-11-20",
+                description: "深センのPaXini（帕西尼）による4本指ハンド「DexH5」。独自開発の多次元触覚センサ（ITPU）で繊細なピッキングを実現。",
+                company: {
+                    name: "PaXini Tech (帕西尼)",
+                    url: "https://paxini.com/",
+                    memo: "触覚技術特化。早稲田大出身者在籍。圧力・摩擦・材質感を検知する「ITPU」センサがコア技術。"
+                }
+            },
+            { 
+                id: 5, 
+                name: "Ai2 Robotics (智平方) ソフトクリームロボット", 
+                url: "https://muratecrd.box.com/s/q3l5lprz9ru7j0ydc51dpak9d2426kzx", 
+                type: "Video", 
+                date: "2025-11-20",
+                description: "深センのAi2 Robotics（智平方）による調理ロボット。マクドナルド等でのPoC実績あり。",
+                company: {
+                    name: "Ai2 Robotics (智平方)",
+                    url: "https://ai2robotics.com/",
+                    memo: "深セン拠点。Embodied AIの実社会適用に注力し、調理ロボやドローン配送連携など実用ソリューションを展開。"
+                }
+            },
+            { 
+                id: 6, 
+                name: "AGIBOT (智元ロボット) 和太鼓演奏デモ", 
+                url: "https://muratecrd.box.com/s/v13rk7zqrra4mpqamakwxz8rvsx3d0im", 
+                type: "Video", 
+                date: "2025-11-19",
+                description: "AGIBOTによる和太鼓演奏。強化学習でバチの反発やダイナミクスを制御し、美しい音色を実現。",
+                company: {
+                    name: "AGIBOT (智元机器人)",
+                    url: "https://www.agibot.com/",
+                    memo: "元Huawei「天才少年」創業。社内3チームを競わせる体制やGenieのデータセンター応用が特徴。センサは購入品、ギア等は自社設計・外部加工で軽量化し、社内は設計・組立に特化する効率的な体制を構築。データセンターも拡張中です。"
+                }
+            },
+            { 
+                id: 7, 
+                name: "深圳ドローン宅配サービス (Ai2 Robotics社前)", 
+                url: "https://muratecrd.box.com/s/jk80a1f5oqgvao1c90f0gfks6eer4zuh", 
+                type: "Video", 
+                date: "2025-11-20",
+                description: "Ai2 Robotics社前でのドローン配送の様子。深圳では美団などが低空経済インフラを構築済み。",
+                company: {
+                    name: "Ai2 Robotics (智平方)",
+                    url: "https://ai2robotics.com/",
+                    memo: "深セン拠点。Embodied AIの実社会適用に注力し、調理ロボやドローン配送連携など実用ソリューションを展開。"
+                }
+            },
+            {
+                id: 8,
+                name: "MagicLab (魔法实验室) 公式サイト",
+                url: "https://www.magiclab.ai/", 
+                type: "Website",
+                date: "2025-11-18",
+                description: "高い運動性能を持つヒューマノイドロボットや、高トルク密度のアクチュエータ開発を行う企業。",
+                company: {
+                    name: "MagicLab (魔法实验室)",
+                    url: "https://www.magiclab.ai/",
+                    memo: "運動制御と高性能アクチュエータ技術に特化。非常に高いトルク密度を持つモーター技術により、小型ながらダイナミックな動作が可能なロボットを開発。"
+                }
+            },
+            {
+                id: 9,
+                name: "GALBOT (银河通用) 公式サイト",
+                url: "https://www.galbot.com/",
+                type: "Website",
+                date: "2025-11-18",
+                description: "汎用具身智能ロボット（Embodied AI）の開発を行う企業。車輪移動型のヒューマノイド「Galbot」を展開しています。",
+                company: {
+                    name: "GALBOT (银河通用)",
+                    url: "https://www.galbot.com/",
+                    memo: "北京大学/清華大学出身の研究者らが設立。車輪型ヒューマノイド「G1」は、透明な物体の把持や複雑な家事動作が可能で、非常に長いバッテリー稼働時間（24時間連続稼働等）を特徴とします。"
+                }
+            },
+            {
+                id: 10,
+                name: "Ti5 Robot (钛虎机器人) 公式サイト",
+                url: "https://www.ti5robot.com/",
+                type: "Website",
+                date: "2025-11-19",
+                description: "軽量かつ高性能なロボット関節モジュールと、それを活用したヒューマノイドロボットを提供する企業。",
+                company: {
+                    name: "Ti5 Robot (钛虎机器人)",
+                    url: "https://www.ti5robot.com/",
+                    memo: "自社開発の「軽量化一体型関節モジュール」が核心技術。これを活用し、身長170cm級の「T170」や大型の「T230」などのヒューマノイドを低コスト・短期間で開発しています。"
+                }
+            },
+            {
+                id: 11,
+                name: "GALBOT 自動コンビニ (蘇州公園) - 外観1",
+                url: "https://muratecrd.box.com/s/8eso893jvqvnsuw2tlufvzz8835a4nj7",
+                type: "Image",
+                date: "2025-11-18",
+                description: "蘇州の公園広場に設置されたGALBOT（銀河通用）の箱型自動コンビニ（無人キオスク）の写真。ロボットが内部で稼働するリテールソリューションの事例。",
+                company: {
+                    name: "GALBOT (银河通用)",
+                    url: "https://www.galbot.com/",
+                    memo: "北京大学/清華大学出身の研究者らが設立。車輪型ヒューマノイド「G1」は、透明な物体の把持や複雑な家事動作が可能で、非常に長いバッテリー稼働時間（24時間連続稼働等）を特徴とします。"
+                }
+            },
+            {
+                id: 12,
+                name: "GALBOT 自動コンビニ (蘇州公園) - 外観2",
+                url: "https://muratecrd.box.com/s/6e6iuv90i46339wnxp6okdr5os8lvi94",
+                type: "Image",
+                date: "2025-11-18",
+                description: "蘇州の公園広場にあるGALBOTの無人店舗の写真。ヒューマノイドロボット技術を小売・サービス分野に応用した実証実験または常設店舗の様子。",
+                company: {
+                    name: "GALBOT (银河通用)",
+                    url: "https://www.galbot.com/",
+                    memo: "北京大学/清華大学出身の研究者らが設立。車輪型ヒューマノイド「G1」は、透明な物体の把持や複雑な家事動作が可能で、非常に長いバッテリー稼働時間（24時間連続稼働等）を特徴とします。"
+                }
+            },
+            {
+                id: 13,
+                name: "PaXini Tech 触覚ハンド単体デモ",
+                url: "https://muratecrd.box.com/s/k5w0x0l7r4pw7h93n162keahsvbltwpn",
+                type: "Video", 
+                date: "2025-11-20",
+                description: "PaXini Tech（帕西尼感知科技）の多次元触覚センサ搭載バイオニックハンド単体の動作デモンストレーション。PCカメラで捉えた人間の手の動きをリアルタイムに模倣するほか、指先にかかる把持力の分布を可視化する高度なフィードバック機能が確認できます。",
+                company: {
+                    name: "PaXini Tech (帕西尼)",
+                    url: "https://paxini.com/",
+                    memo: "触覚技術特化。早稲田大出身者在籍。圧力・摩擦・材質感を検知する「ITPU」センサがコア技術。"
+                }
+            },
+            {
+                id: 14,
+                name: "MagicLab ロボット リモコン操作デモ",
+                url: "https://muratecrd.box.com/s/kb1tcbdq5132wako1f91un84pmocuk2a",
+                type: "Video", 
+                date: "2025-11-18",
+                description: "MagicLab（魔法实验室）のヒューマノイドロボットをリモコンで遠隔操作しているデモンストレーション映像。",
+                company: {
+                    name: "MagicLab (魔法实验室)",
+                    url: "https://www.magiclab.ai/",
+                    memo: "運動制御と高性能アクチュエータ技術に特化。非常に高いトルク密度を持つモーター技術により、小型ながらダイナミックな動作が可能なロボットを開発。"
+                }
+            },
+            {
+                id: 15,
+                name: "Ti5 Robot 倉庫内物流デモ (イメージ)",
+                url: "https://muratecrd.box.com/s/sy8ppe05oasvvfoobsk5vjiesg2c4mla",
+                type: "Video",
+                date: "2025-11-19",
+                description: "Ti5 Robotのヒューマノイドが倉庫内での物流作業を行うデモンストレーションの映像。同社の軽量・高トルクな関節モジュールにより、実際の物流現場におけるピッキングや搬送タスクへの適応を目指しています。",
+                company: {
+                    name: "Ti5 Robot (钛虎机器人)",
+                    url: "https://www.ti5robot.com/",
+                    memo: "自社開発の「軽量化一体型関節モジュール」が核心技術。これを活用し、身長170cm級の「T170」や大型の「T230」などのヒューマノイドを低コスト・短期間で開発しています。"
+                }
+            },
+            {
+                id: 16,
+                name: "GALBOT (银河通用) PoC現場 - 貴重ショット",
+                url: "https://muratecrd.box.com/s/0kfvos9fjyi3px3dfxeftlmblbgja36t",
+                type: "Video",
+                date: "2025-11-18",
+                description: "GALBOT（銀河通用）の実証実験（PoC）現場を捉えた極めて貴重な映像。通常は撮影が許可されていない非公開の検証環境であり、実店舗や倉庫での導入に向けたリアルな稼働状況が窺えます。",
+                company: {
+                    name: "GALBOT (银河通用)",
+                    url: "https://www.galbot.com/",
+                    memo: "北京大学/清華大学出身の研究者らが設立。車輪型ヒューマノイド「G1」は、透明な物体の把持や複雑な家事動作が可能で、非常に長いバッテリー稼働時間（24時間連続稼働等）を特徴とします。"
+                }
+            },
+            {
+                id: 17,
+                name: "Ti5 Robot 歩行実験映像",
+                url: "https://muratecrd.box.com/s/kt1gh16gfqwgfnkg7u8xcqeh509pt3s2",
+                type: "Video", 
+                date: "2025-11-19",
+                description: "Ti5 Robot（T170モデル等）の歩行制御実験の映像。独自開発の軽量関節モジュールが高いトルク密度を発揮し、安定した二足歩行と環境適応能力を確認できる開発中のフッテージです。",
+                company: {
+                    name: "Ti5 Robot (钛虎机器人)",
+                    url: "https://www.ti5robot.com/",
+                    memo: "自社開発の「軽量化一体型関節モジュール」が核心技術。これを活用し、身長170cm級の「T170」や大型の「T230」などのヒューマノイドを低コスト・短期間で開発しています。"
+                }
+            },
+            {
+                id: 18,
+                name: "UniX AI (优理奇) 公式サイト",
+                url: "https://www.unix-group.ai/",
+                type: "Website",
+                date: "2025-11-18",
+                description: "上海を拠点とするロボットスタートアップ UniX AIの公式サイト。",
+                company: {
+                    name: "UniX AI (优理奇)",
+                    url: "https://www.unix-group.ai/",
+                    memo: "上海拠点。車輪移動型ロボット「Wanda」は、独自ハンドとAIで不定形物や柔らかい物体の把持を実現。"
+                }
+            },
+            {
+                id: 19,
+                name: "AGIBOT (智元机器人) 公式サイト",
+                url: "https://www.agibot.com/",
+                type: "Website",
+                date: "2025-11-19",
+                description: "元Huaweiエンジニア創業の上海AGIBOT（智元ロボット）の公式サイト。",
+                company: {
+                    name: "AGIBOT (智元机器人)",
+                    url: "https://www.agibot.com/",
+                    memo: "元Huawei「天才少年」創業。社内3チームを競わせる体制やGenieのデータセンター応用が特徴。センサは購入品、ギア等は自社設計・外部加工で軽量化し、社内は設計・組立に特化する効率的な体制を構築。データセンターも拡張中です。"
+                }
+            },
+            {
+                id: 20,
+                name: "PaXini Tech (帕西尼感知科技) 公式サイト",
+                url: "https://paxini.com/",
+                type: "Website",
+                date: "2025-11-20",
+                description: "深センの触覚技術スタートアップ PaXini Tech（帕西尼）の公式サイト。",
+                company: {
+                    name: "PaXini Tech (帕西尼)",
+                    url: "https://paxini.com/",
+                    memo: "触覚技術特化。早稲田大出身者在籍。圧力・摩擦・材質感を検知する「ITPU」センサがコア技術。"
+                }
+            },
+            {
+                id: 21,
+                name: "Ai2 Robotics (智平方) 公式サイト",
+                url: "https://ai2robotics.com/",
+                type: "Website",
+                date: "2025-11-20",
+                description: "深圳のAIロボットスタートアップ Ai2 Robotics（智平方）の公式サイト。",
+                company: {
+                    name: "Ai2 Robotics (智平方)",
+                    url: "https://ai2robotics.com/",
+                    memo: "深セン拠点。Embodied AIの実社会適用に注力し、調理ロボやドローン配送連携など実用ソリューションを展開。"
+                }
+            },
+            {
+                id: 22,
+                name: "AGIBOT 会社案内・フロアガイドデモ",
+                url: "https://muratecrd.box.com/s/ji67vea8501a40pa7teortj71wt2hl8m",
+                type: "Video",
+                date: "2025-11-19",
+                description: "AGIBOT（智元ロボット）の2足歩行ロボットが社内フロアを案内するデモンストレーション映像。スムーズな移動とジェスチャーを交えたガイド動作により、受付や案内業務への活用可能性を示しています。",
+                company: {
+                    name: "AGIBOT (智元机器人)",
+                    url: "https://www.agibot.com/",
+                    memo: "元Huawei「天才少年」創業。社内3チームを競わせる体制やGenieのデータセンター応用が特徴。センサは購入品、ギア等は自社設計・外部加工で軽量化し、社内は設計・組立に特化する効率的な体制を構築。データセンターも拡張中です。"
+                }
+            }
+        ];
+
+        // --- State Management ---
+        const state = {
+            viewMode: 'grid', // 'grid' or 'list'
+            filterText: '',
+            sortBy: 'company' // Default is Company
+        };
+
+        // --- DOM Elements ---
+        const container = document.getElementById('resourcesContainer');
+        const companyContainer = document.getElementById('companyContainer');
+        const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        const viewGridBtn = document.getElementById('viewGridBtn');
+        const viewListBtn = document.getElementById('viewListBtn');
+        const totalCountEl = document.getElementById('total-count');
+        const companyCountEl = document.getElementById('company-count');
+        const noResultsEl = document.getElementById('noResults');
+        const dateDisplayEl = document.getElementById('date-display');
+
+        // --- Initialization ---
+        function init() {
+            const today = new Date();
+            dateDisplayEl.textContent = today.toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' });
+
+            renderChart();
+            renderCompanyDirectory();
+            renderResources();
+
+            // Stats
+            totalCountEl.textContent = resources.length;
+            // Count unique companies
+            const uniqueCompanies = new Set(resources.filter(r => r.company).map(r => r.company.name));
+            companyCountEl.textContent = uniqueCompanies.size;
+
+            // Event Listeners
+            searchInput.addEventListener('input', (e) => {
+                state.filterText = e.target.value.toLowerCase();
+                renderResources();
+            });
+
+            sortSelect.addEventListener('change', (e) => {
+                state.sortBy = e.target.value;
+                renderResources();
+            });
+
+            viewGridBtn.addEventListener('click', () => {
+                state.viewMode = 'grid';
+                updateViewButtons();
+                renderResources();
+            });
+
+            viewListBtn.addEventListener('click', () => {
+                state.viewMode = 'list';
+                updateViewButtons();
+                renderResources();
+            });
+        }
+
+        // --- Chart Rendering ---
+        function renderChart() {
+            const ctx = document.getElementById('sourceChart').getContext('2d');
+            
+            // Count resources by Company
+            const companyCounts = {};
+            resources.forEach(r => {
+                if (r.company) {
+                    companyCounts[r.company.name] = (companyCounts[r.company.name] || 0) + 1;
+                }
+            });
+
+            const labels = Object.keys(companyCounts);
+            const data = Object.values(companyCounts);
+            
+            // Generate nice colors based on number of companies
+            const colors = [
+                '#0ea5e9', '#f59e0b', '#10b981', '#ec4899', '#8b5cf6', '#6366f1', '#14b8a6'
+            ];
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderWidth: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: { 
+                            position: 'right', 
+                            labels: { 
+                                boxWidth: 10, 
+                                font: { size: 10, family: "'Noto Sans JP', sans-serif" },
+                                padding: 15
+                            } 
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.label}: ${context.raw} 件`;
+                                }
+                            }
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'centerText',
+                    beforeDraw: function(chart) {
+                        const width = chart.width,
+                              height = chart.height,
+                              ctx = chart.ctx;
+                
+                        ctx.restore();
+                        const fontSize = (height / 114).toFixed(2);
+                        ctx.font = "bold " + fontSize + "em 'Noto Sans JP', sans-serif";
+                        ctx.textBaseline = "middle";
+                        ctx.fillStyle = "#6b7280";
+                
+                        const text = resources.length + " 件";
+                        const textX = Math.round((width - ctx.measureText(text).width) / 2);
+                        // Adjust X for legend on right (approximate)
+                        const chartAreaWidth = chart.chartArea.right - chart.chartArea.left;
+                        const centerX = chart.chartArea.left + chartAreaWidth / 2;
+                        
+                        const textXCentered = centerX - (ctx.measureText(text).width / 2);
+                        const textY = height / 2;
+                
+                        ctx.fillText(text, textXCentered, textY);
+                        ctx.save();
+                    }
+                }]
+            });
+        }
+
+        // --- Company Directory Logic ---
+        function renderCompanyDirectory() {
+            const companyMap = new Map();
+            resources.forEach(item => {
+                if (item.company && !companyMap.has(item.company.name)) {
+                    companyMap.set(item.company.name, item.company);
+                }
+            });
+
+            companyContainer.innerHTML = '';
+            
+            // Sort map keys alphabetically for directory
+            const sortedCompanies = Array.from(companyMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'ja'));
+
+            sortedCompanies.forEach((comp) => {
+                const card = document.createElement('div');
+                card.className = "company-card bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col h-full";
+                
+                const initials = comp.name.substring(0, 2).toUpperCase();
+
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-10 h-10 company-logo-placeholder rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-inner shrink-0">
+                            ${initials}
+                        </div>
+                        <h3 class="text-sm font-bold text-gray-800 leading-tight">${comp.name}</h3>
+                    </div>
+                    <p class="text-xs text-gray-600 mb-4 flex-grow line-clamp-3 leading-relaxed">
+                        ${comp.memo}
+                    </p>
+                    <a href="${comp.url}" target="_blank" class="text-center w-full block bg-gray-50 hover:bg-gray-100 text-sky-600 text-xs font-bold py-2 rounded border border-gray-200 transition-colors">
+                        公式サイトへ ↗
+                    </a>
+                `;
+                companyContainer.appendChild(card);
+            });
+        }
+
+        // --- Resource Rendering Logic ---
+        function updateViewButtons() {
+            if (state.viewMode === 'grid') {
+                viewGridBtn.className = "px-3 py-1.5 rounded-md text-xs font-medium transition-all shadow-sm bg-white text-gray-800 border border-gray-200";
+                viewListBtn.className = "px-3 py-1.5 rounded-md text-xs font-medium transition-all text-gray-600 hover:text-gray-800";
+            } else {
+                viewListBtn.className = "px-3 py-1.5 rounded-md text-xs font-medium transition-all shadow-sm bg-white text-gray-800 border border-gray-200";
+                viewGridBtn.className = "px-3 py-1.5 rounded-md text-xs font-medium transition-all text-gray-600 hover:text-gray-800";
+            }
+        }
+
+        function getFileIcon(type) {
+            if (type === 'Video') return `<div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-xl">🎬</div>`;
+            if (type === 'Website') return `<div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 text-xl">🌐</div>`;
+            if (type === 'Image') return `<div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 text-xl">📷</div>`;
+            return `<div class="w-10 h-10 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 text-xl">📄</div>`;
+        }
+
+        function copyToClipboard(text) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            alert("クリップボードにコピーしました: " + text);
+        }
+
+        function renderResources() {
+            container.innerHTML = '';
+            
+            // 1. Filter
+            let filtered = resources.filter(r => 
+                r.name.toLowerCase().includes(state.filterText) || 
+                r.url.toLowerCase().includes(state.filterText) ||
+                r.description.toLowerCase().includes(state.filterText) ||
+                (r.company && r.company.name.toLowerCase().includes(state.filterText))
+            );
+
+            // 2. Sort
+            if (state.sortBy === 'id') {
+                filtered.sort((a, b) => a.id - b.id);
+            } else if (state.sortBy === 'date_desc') {
+                filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            } else if (state.sortBy === 'company') {
+                filtered.sort((a, b) => {
+                    // Primary: Company Name
+                    const nameA = a.company ? a.company.name : 'zzz'; 
+                    const nameB = b.company ? b.company.name : 'zzz';
+                    const cmp = nameA.localeCompare(nameB, 'ja');
+                    
+                    // Secondary: Type (Website > Video > Image > File)
+                    if (cmp === 0) {
+                        const typeOrder = { 'Website': 1, 'Video': 2, 'Image': 3, 'Box File': 4 };
+                        const typeA = typeOrder[a.type] || 99;
+                        const typeB = typeOrder[b.type] || 99;
+                        return typeA - typeB;
+                    }
+                    return cmp;
+                });
+            } else if (state.sortBy === 'type') {
+                filtered.sort((a, b) => a.type.localeCompare(b.type));
+            }
+
+            if (filtered.length === 0) {
+                container.classList.add('hidden');
+                noResultsEl.classList.remove('hidden');
+                return;
+            } else {
+                container.classList.remove('hidden');
+                noResultsEl.classList.add('hidden');
+            }
+
+            if (state.viewMode === 'grid') {
+                container.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6";
+            } else {
+                container.className = "flex flex-col space-y-3";
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                const hasCompany = item.company ? true : false;
+                
+                // Highlight Website cards slightly
+                const cardBgClass = item.type === 'Website' ? 'bg-emerald-50/30' : 'bg-white';
+
+                card.className = state.viewMode === 'grid' 
+                    ? `resource-card ${cardBgClass} rounded-xl p-5 shadow-sm border border-gray-100 flex flex-col h-full`
+                    : `resource-card ${cardBgClass} rounded-lg p-3 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-4`;
+
+                const descriptionHtml = item.description 
+                    ? `<p class="text-xs text-gray-600 mb-3 line-clamp-2 bg-gray-50 p-2 rounded border border-gray-100 h-12">${item.description}</p>` 
+                    : `<p class="text-xs text-gray-400 mb-3 italic">No description</p>`;
+
+                const companySection = hasCompany ? `
+                    <div class="mt-4 pt-4 border-t border-gray-100 bg-gray-50 -mx-5 -mb-5 px-5 py-4 rounded-b-xl">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Company Info</span>
+                            <a href="${item.company.url}" target="_blank" class="text-xs text-sky-600 hover:text-sky-800 font-semibold flex items-center">
+                                ${item.company.name} <span class="ml-1">→</span>
+                            </a>
+                        </div>
+                        <p class="text-xs text-gray-600 leading-relaxed bg-white p-3 rounded border border-gray-200 shadow-sm">
+                            <span class="font-bold text-gray-400 block mb-1 text-[10px]">MEMO</span>
+                            ${item.company.memo}
+                        </p>
+                    </div>
+                ` : '';
+
+                // List View Company Section
+                const companySectionList = hasCompany ? `
+                    <div class="mt-2 md:mt-0 md:ml-4 md:w-1/3 bg-gray-50 p-3 rounded border border-gray-100 text-xs text-gray-600 shrink-0">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-bold text-gray-700">${item.company.name}</span>
+                            <a href="${item.company.url}" target="_blank" class="text-sky-600 hover:underline">Link ↗</a>
+                        </div>
+                        <p class="line-clamp-2">${item.company.memo}</p>
+                    </div>
+                ` : '';
+
+                // Grid View Template
+                if (state.viewMode === 'grid') {
+                    card.innerHTML = `
+                        <div class="flex-grow">
+                            <div class="flex items-start justify-between mb-3">
+                                ${getFileIcon(item.type)}
+                                <div class="text-right">
+                                    <span class="block bg-gray-100 text-gray-500 text-[10px] px-2 py-0.5 rounded font-mono mb-1">ID: ${item.id}</span>
+                                    ${item.type === 'Website' ? '<span class="bg-emerald-50 text-emerald-600 text-[10px] px-2 py-0.5 rounded font-bold">Link</span>' : ''}
+                                    ${item.type === 'Image' ? '<span class="bg-pink-50 text-pink-600 text-[10px] px-2 py-0.5 rounded font-bold">Image</span>' : ''}
+                                </div>
+                            </div>
+                            <h3 class="text-base font-bold text-gray-800 mb-2 leading-tight h-10 overflow-hidden">${item.name}</h3>
+                            <div class="flex items-center mb-2 text-gray-500 text-[10px]">
+                                <span class="mr-2">📅 ${item.date}</span>
+                            </div>
+                            ${descriptionHtml}
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex space-x-2 mt-auto">
+                                <a href="${item.url}" target="_blank" class="flex-1 bg-white border border-gray-200 hover:bg-gray-50 text-sky-600 text-center py-2 rounded-lg text-xs font-bold transition-colors">
+                                    開く ↗
+                                </a>
+                                <button onclick="copyToClipboard('${item.url}')" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-500 rounded-lg transition-colors" title="URLコピー">
+                                    📋
+                                </button>
+                            </div>
+                        </div>
+                        ${companySection}
+                    `;
+                } 
+                // List View Template
+                else {
+                    card.innerHTML = `
+                        <div class="flex items-center gap-4 flex-grow min-w-0 w-full md:w-auto">
+                            <div class="hidden sm:block shrink-0">${getFileIcon(item.type)}</div>
+                            <div class="min-w-0 flex-grow">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <h3 class="text-sm font-bold text-gray-800 truncate">${item.name}</h3>
+                                    <span class="text-[10px] bg-gray-100 text-gray-500 px-1.5 rounded">${item.date}</span>
+                                </div>
+                                <p class="text-xs text-gray-500 truncate max-w-2xl">${item.description}</p>
+                                <div class="flex items-center gap-3 mt-1 md:hidden">
+                                     <a href="${item.url}" target="_blank" class="text-sky-600 hover:underline text-xs font-bold">開く ↗</a>
+                                </div>
+                            </div>
+                        </div>
+                        ${companySectionList}
+                        <div class="hidden md:flex items-center gap-2 shrink-0 w-auto justify-end ml-4">
+                            <a href="${item.url}" target="_blank" class="px-3 py-1.5 bg-sky-50 text-sky-700 hover:bg-sky-100 rounded text-xs font-bold transition-colors">
+                                開く ↗
+                            </a>
+                        </div>
+                    `;
+                }
+                container.appendChild(card);
+            });
+        }
+
+        // Start
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

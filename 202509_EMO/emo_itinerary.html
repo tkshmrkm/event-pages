@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドイツ出張旅程表 (EMO Hannover 2025)</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.7;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px
+ 6px rgba(0,0,0,0.1);
+        }
+
+        h1, h2, h3 {
+            color: #1a3a6c;
+            border-bottom: 2px solid #1a3a6c;
+            padding-bottom: 10px;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 5px solid #005ab3;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tips-box h3 {
+            border-bottom: 1px solid #ddd;
+            font-size: 1.2em;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .overview-box, .tips-box {
+            background-color: #eaf3fb;
+            border-left: 5px solid #005ab3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .overview-box ul, .tips-box ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .overview-box li, .tips-box li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+         .tips-box li:last-child {
+            margin-bottom: 0;
+        }
+
+        .tips-box li > div {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+        .overview-box li strong {
+            flex-shrink: 0;
+            width: 130px;
+            margin-right: 15px;
+            color: #1a3a6c;
+        }
+        .tips-box .tip-item strong {
+            width: 180px;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .tips-box .address {
+            font-size: 0.9em;
+            color: #555;
+            display: block;
+            margin-top: 4px;
+        }
+        
+        .tip-item .details {
+            padding-left: 20px;
+        }
+
+        /* Souvenir section styles */
+        .souvenir-item {
+            display: flex;
+            align-items: flex-start;
+        }
+        .souvenir-item strong {
+             width: 180px;
+             flex-shrink: 0;
+        }
+        .souvenir-details {
+            display: flex;
+            flex-direction: column;
+        }
+        .souvenir-details p {
+            margin: 0 0 10px 0;
+            padding: 0;
+        }
+         .souvenir-details p:last-child {
+            margin-bottom: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 14px 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #1a3a6c;
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f7faff;
+        }
+
+        .time-col {
+            width: 18%;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .event-col {
+            width: 25%;
+            font-weight: bold;
+        }
+        .location-col {
+            width: 25%;
+        }
+        .details-col {
+            width: 32%;
+            font-size: 0.9em;
+        }
+        .details-col ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+        .timezone {
+            font-size: 0.8em;
+            color: #666;
+            font-weight: normal;
+        }
+        
+        .no-print {
+            text-align: center;
+            padding: 10px;
+            background: #fffbe6;
+            border: 1px solid #ffe58f;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .material-symbols-outlined {
+            margin-right: 8px;
+            vertical-align: middle;
+            color: #005ab3;
+        }
+        .event-col .material-symbols-outlined {
+            color: #1a3a6c;
+        }
+        
+        .event-text {
+             display: inline-block;
+             vertical-align: middle;
+        }
+
+        /* 印刷用スタイル */
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+                font-size: 10pt;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+            .itinerary-day {
+                page-break-after: always;
+            }
+            .itinerary-day:last-child, .tips-section {
+                page-break-after: avoid;
+            }
+            h1, h2, h3 {
+                border-bottom: 2px solid #333;
+                color: #000;
+            }
+            h2 {
+                 border-left: 5px solid #333;
+            }
+            th {
+                background-color: #eee !important;
+                color: #000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            tr:nth-child(even) {
+                background-color: #f9f9f9 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            a {
+                text-decoration: none;
+                color: #000;
+            }
+            .tips-box a {
+                color: #005ab3;
+            }
+            .material-symbols-outlined {
+                display: none; /* アイコンを印刷しない */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ドイツ出張旅程表 (EMO Hannover 2025)</h1>
+        <div class="no-print">
+            <p>💡 <strong>印刷のヒント:</strong> ブラウザの印刷機能（Ctrl+P または Command+P）を使用してください。各日付が1ページに収まるように設定されています。</p>
+        </div>
+
+        <!-- 概要 -->
+        <div class="overview-box">
+            <h3>旅程概要</h3>
+            <ul>
+                <li><strong><span class="material-symbols-outlined">calendar_month</span>期間:</strong> <div>2025年9月20日(土) ～ 2025年9月26日(金)</div></li>
+                <li><strong><span class="material-symbols-outlined">location_city</span>訪問都市:</strong> <div>ヴォルフスブルク、ハノーファー、ベルリン (ドイツ)</div></li>
+                <li><strong><span class="material-symbols-outlined">business_center</span>主目的:</strong> <div>EMO Hannover 2025 視察</div></li>
+                <li><strong><span class="material-symbols-outlined">groups</span>副目的:</strong> <div>社内関係者との会食、関連技術リサーチ</div></li>
+            </ul>
+        </div>
+
+        <!-- 9月20日(土) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年9月20日 (土) - 出発日</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="time-col">時刻 (JST)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>18:00 - 19:25</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">空港へ移動</span></td>
+                        <td>京都駅 → 関西国際空港</td>
+                        <td class="details-col"><ul><li>列車: はるか49号</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>19:25 - 20:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">assignment_ind</span><span class="event-text">出国手続き</span></td>
+                        <td>関西国際空港 (KIX)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>20:00 - 21:35</td>
+                        <td class="event-col"><span class="material-symbols-outlined">lounge</span><span class="event-text">ラウンジ利用</span></td>
+                        <td>関西国際空港 (KIX)</td>
+                        <td class="details-col"><ul><li>搭乗開始時刻に合わせてゲートへ移動</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>21:40頃</td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight_takeoff</span><span class="event-text">搭乗開始</span></td>
+                        <td>搭乗ゲート</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>22:25 <span class="timezone">(JST)</span> →<br>05:30+1 <span class="timezone">(EEST)</span></td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight</span><span class="event-text">フライト</span></td>
+                        <td>大阪 (KIX) → ヘルシンキ (HEL)</td>
+                        <td class="details-col"><ul><li>便名: フィンエアー AY068</li><li>座席: 35C</li><li><strong>所要時間: 13時間5分</strong></li></ul></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 9月21日(日) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年9月21日 (日) - ドイツ入国</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="time-col">時刻 (現地時間)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>05:30 - 07:05</td>
+                        <td class="event-col"><span class="material-symbols-outlined">passport</span><span class="event-text">乗り継ぎ（入国）</span></td>
+                        <td>ヘルシンキ・ヴァンター空港 (HEL)</td>
+                        <td class="details-col"><ul><li><strong>入国審査 (パスポートコントロール)</strong></li><li>保安検査</li><li>搭乗ゲートへ移動</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>07:05 <span class="timezone">(EEST)</span> →<br>08:05 <span class="timezone">(CEST)</span></td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight</span><span class="event-text">フライト</span></td>
+                        <td>ヘルシンキ (HEL) → ベルリン (BER)</td>
+                        <td class="details-col"><ul><li>便名: フィンエアー AY1431</li><li>座席: 07C</li><li>ベルリン・ブランデンブルク空港 T1着</li><li><strong>所要時間: 2時間0分</strong></li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>08:58 - 10:52</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>BER空港 → ヴォルフスブルク中央駅</td>
+                        <td class="details-col"><ul><li>列車: FEX19818 → ICE942 (1等席)</li><li>ベルリン中央駅で乗り換え</li></ul></td>
+                    </tr>
+                     <tr>
+                        <td>11:00 - 11:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">luggage</span><span class="event-text">荷物預け</span></td>
+                        <td>Hotel Wolfsburg Centrum</td>
+                        <td class="details-col"><ul><li>チェックイン前に荷物を預ける</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>11:30 - 13:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">restaurant</span><span class="event-text">昼食</span></td>
+                        <td>Café Extrablatt, Wolfsburg</td>
+                        <td class="details-col"><ul><li>費用目安: €10-15</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>13:00 - 17:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">directions_car</span><span class="event-text">観光</span></td>
+                        <td>アウトシュタット</td>
+                        <td class="details-col"><ul><li>フォルクスワーゲンのテーマパーク視察</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>18:00 - 18:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">hotel</span><span class="event-text">チェックイン</span></td>
+                        <td>Hotel Wolfsburg Centrum</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>19:00 - 21:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">restaurant_menu</span><span class="event-text">ディナー</span></td>
+                        <td>Aqua at The Ritz-Carlton</td>
+                        <td class="details-col"><ul><li>ミシュラン3つ星レストラン</li></ul></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 9月22日(月) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年9月22日 (月) - EMO視察 ①</h2>
+            <table>
+                 <thead>
+                    <tr>
+                        <th class="time-col">時刻 (CEST)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>07:00 - 07:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">breakfast_dining</span><span class="event-text">朝食</span></td>
+                        <td>ホテル</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>07:53 - 08:48</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>ヴォルフスブルク → ハノーファーメッセ</td>
+                        <td class="details-col"><ul><li>列車: ICE 644 → ICE 573 (1等席)</li><li>費用: 往復 €66.99</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>09:30 - 17:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">business_center</span><span class="event-text">EMO視察</span></td>
+                        <td>Hannover Messe</td>
+                        <td class="details-col"><ul><li>テーマ: 工作機械・自動化</li><li>視察先: DMG MORI, Mazak, Hermle, KUKA, ABB, Fanuc 等</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>17:30 - 18:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>EMO会場 → ハノーファー中央駅</td>
+                        <td class="details-col"><ul><li>列車: S5線</li><li>費用: €3.10</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>18:00 - 20:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">groups</span><span class="event-text">社内関係者会食</span></td>
+                        <td>Bavarium, Hannover</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>20:37 - 21:27</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>ハノーファー → ヴォルフスブルク</td>
+                        <td class="details-col"><ul><li>列車: RE3 Regional Express</li><li>費用: €10.50</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>21:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">hotel</span><span class="event-text">ホテル着</span></td>
+                        <td>Hotel Wolfsburg Centrum</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 9月23日(火) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年9月23日 (火) - EMO視察 ②</h2>
+            <table>
+                 <thead>
+                    <tr>
+                        <th class="time-col">時刻 (CEST)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>07:00 - 07:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">breakfast_dining</span><span class="event-text">朝食</span></td>
+                        <td>ホテル</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>07:53 - 08:48</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>ヴォルフスブルク → ハノーファーメッセ</td>
+                        <td class="details-col"><ul><li>列車: ICE 644 → ICE 573 (1等席)</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>09:30 - 17:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">business_center</span><span class="event-text">EMO視察</span></td>
+                        <td>Hannover Messe</td>
+                        <td class="details-col"><ul><li>テーマ: 測定器・工具</li><li>視察先: Zeiss, Mitutoyo, Hexagon, Sandvik, Kennametal 等</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>17:30 - 18:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>EMO会場 → ハノーファー中央駅</td>
+                        <td class="details-col"><ul><li>列車: S5線</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>18:15 - 19:45</td>
+                        <td class="event-col"><span class="material-symbols-outlined">restaurant</span><span class="event-text">ディナー</span></td>
+                        <td>ハノーファー市内</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>20:07 - 20:57</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>ハノーファー → ヴォルフスブルク</td>
+                        <td class="details-col"><ul><li>列車: RE3 Regional Express</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>21:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">hotel</span><span class="event-text">ホテル着</span></td>
+                        <td>Hotel Wolfsburg Centrum</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 9月24日(水) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年9月24日 (水) - EMO視察 ③ / ベルリン移動</h2>
+            <table>
+                 <thead>
+                    <tr>
+                        <th class="time-col">時刻 (CEST)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>07:00 - 07:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">breakfast_dining</span><span class="event-text">朝食</span></td>
+                        <td>ホテル</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>07:53 - 08:48</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>ヴォルフスブルク → ハノーファーメッセ</td>
+                        <td class="details-col"><ul><li>列車: ICE 644 → ICE 573 (1等席)</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>09:30 - 14:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">business_center</span><span class="event-text">EMO視察</span></td>
+                        <td>Hannover Messe</td>
+                        <td class="details-col"><ul><li>テーマ: Future Tech, 技術動向調査</li><li>Future Tech Forum「Manufacturing 2030」参加</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>14:15 - 14:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">directions_walk</span><span class="event-text">移動</span></td>
+                        <td>EMO会場 → ハノーファーメッセ駅</td>
+                        <td class="details-col"><ul><li>徒歩</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>14:30 - 17:04</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>ハノーファーメッセ → ベルリン中央駅</td>
+                        <td class="details-col"><ul><li>列車: ICE 759 (1等席)</li><li>費用: €39.99</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>17:04 - 17:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">local_taxi</span><span class="event-text">ホテルへ移動</span></td>
+                        <td>ベルリン中央駅 → ホテル</td>
+                        <td class="details-col"><ul><li>タクシーまたは地下鉄</li><li>費用目安: €25-35</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>17:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">hotel</span><span class="event-text">チェックイン</span></td>
+                        <td>Mercure Hotel Berlin Tempelhof</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>18:00 - 20:00</td>
+                        <td class="event-col"><span class="material-symbols-outlined">restaurant</span><span class="event-text">ディナー</span></td>
+                        <td>-</td>
+                        <td class="details-col"><ul><li>タクシーで約15分</li></ul></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 9月25日(木) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年9月25日 (木) - ドイツ出国日</h2>
+            <table>
+                 <thead>
+                    <tr>
+                        <th class="time-col">時刻 (CEST)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>07:00 - 07:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">breakfast_dining</span><span class="event-text">朝食</span></td>
+                        <td>ホテル</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>07:30 - 10:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">laptop_mac</span><span class="event-text">勤務・荷造り</span></td>
+                        <td>ホテル</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>10:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">logout</span><span class="event-text">チェックアウト</span></td>
+                        <td>Mercure Hotel Berlin Tempelhof</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>10:45 - 11:15</td>
+                        <td class="event-col"><span class="material-symbols-outlined">local_taxi</span><span class="event-text">空港へ移動</span></td>
+                        <td>ホテル → ベルリン空港 (BER)</td>
+                        <td class="details-col"><ul><li>タクシーで移動</li><li>費用目安: €30-35</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>11:15 - 11:30</td>
+                        <td class="event-col"><span class="material-symbols-outlined">assignment_ind</span><span class="event-text">空港手続き</span></td>
+                        <td>ベルリン空港 (BER)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>11:30 - 12:20</td>
+                        <td class="event-col"><span class="material-symbols-outlined">shopping_bag</span><span class="event-text">ラウンジ & 買物</span></td>
+                        <td>Lounge Tempelhof (BER)</td>
+                        <td class="details-col"><ul><li>空港内でお土産などのショッピング</li><li>搭乗開始時刻に合わせてゲートへ移動</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>12:25頃</td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight_takeoff</span><span class="event-text">搭乗開始</span></td>
+                        <td>搭乗ゲート</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>13:10 <span class="timezone">(CEST)</span> →<br>16:05 <span class="timezone">(EEST)</span></td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight</span><span class="event-text">フライト</span></td>
+                        <td>ベルリン (BER) → ヘルシンキ (HEL)</td>
+                        <td class="details-col"><ul><li>便名: フィンエアー AY1434</li><li>座席: 12C</li><li><strong>所要時間: 1時間55分</strong></li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>16:05 - 17:45</td>
+                        <td class="event-col"><span class="material-symbols-outlined">passport</span><span class="event-text">乗り継ぎ（出国）</span></td>
+                        <td>ヘルシンキ・ヴァンター空港 (HEL)</td>
+                        <td class="details-col"><ul><li><strong>出国審査 (パスポートコントロール)</strong></li><li>免税店でのお買い物</li><li>ラウンジ利用</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>17:45 <span class="timezone">(EEST)</span> →<br>12:35+1 <span class="timezone">(JST)</span></td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight</span><span class="event-text">フライト</span></td>
+                        <td>ヘルシンキ (HEL) → 大阪 (KIX)</td>
+                        <td class="details-col"><ul><li>便名: フィンエアー AY067</li><li>座席: 32D</li><li><strong>所要時間: 12時間50分</strong></li></ul></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 9月26日(金) -->
+        <div class="itinerary-day">
+            <h2><span class="material-symbols-outlined">today</span>2025年9月26日 (金) - 日本帰国日</h2>
+            <table>
+                 <thead>
+                    <tr>
+                        <th class="time-col">時刻 (JST)</th>
+                        <th class="event-col">予定</th>
+                        <th class="location-col">場所</th>
+                        <th class="details-col">詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>12:35</td>
+                        <td class="event-col"><span class="material-symbols-outlined">flight_land</span><span class="event-text">到着</span></td>
+                        <td>大阪・関西国際空港 (KIX) T1</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>13:46 - 15:05</td>
+                        <td class="event-col"><span class="material-symbols-outlined">train</span><span class="event-text">鉄道移動</span></td>
+                        <td>関西国際空港 → 京都駅</td>
+                        <td class="details-col"><ul><li>列車: 特急はるか</li><li>費用目安: ¥3,430 (指定席)</li></ul></td>
+                    </tr>
+                    <tr>
+                        <td>15:05 -</td>
+                        <td class="event-col"><span class="material-symbols-outlined">home</span><span class="event-text">ご帰宅</span></td>
+                        <td>京都駅 → ご自宅</td>
+                        <td class="details-col"><ul><li>お疲れ様でした。</li></ul></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- チップス -->
+        <div class="tips-section">
+            <h2><span class="material-symbols-outlined">info</span>Tips & 連絡先</h2>
+            <div class="tips-box">
+                <h3>宿泊先情報</h3>
+                <ul>
+                    <li class="tip-item"><strong><span class="material-symbols-outlined">hotel</span>ヴォルフスブルク:</strong> <div>Hotel Wolfsburg Centrum affiliated by Meliá<span class="address">住所: Porschestraße 45, 38440 Wolfsburg, Germany</span></div></li>
+                    <li class="tip-item"><strong><span class="material-symbols-outlined">hotel</span>ベルリン:</strong> <div>Mercure Hotel Berlin Tempelhof<span class="address">住所: Hermannstraße 214-216, 12049 Berlin, Germany</span></div></li>
+                </ul>
+                <h3>緊急連絡先</h3>
+                 <ul>
+                    <li class="tip-item"><strong><span class="material-symbols-outlined">flag</span>在ドイツ日本国大使館:</strong> <div>+49 (0)30 21094-0</div></li>
+                    <li class="tip-item"><strong><span class="material-symbols-outlined">local_police</span>警察:</strong> <div>110</div></li>
+                    <li class="tip-item"><strong><span class="material-symbols-outlined">emergency</span>消防・救急車:</strong> <div>112</div></li>
+                </ul>
+                <h3>交通について</h3>
+                <ul>
+                    <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">confirmation_number</span>鉄道チケット:</strong>
+                        <div class="details">DB Navigatorアプリが便利です。チケットの購入、時刻表の確認、遅延情報の取得が可能です。</div>
+                    </li>
+                    <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">rule</span>公共交通機関の注意点:</strong>
+                        <div class="details">U-Bahn（地下鉄）やトラムの券売機で切符を買った場合、乗車前にホームにある刻印機（Entwerter）で打刻が必要な場合があります。打刻忘れは罰金の対象となるためご注意ください。</div>
+                    </li>
+                </ul>
+                <h3>支払いについて</h3>
+                <ul>
+                    <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">credit_card</span>クレジットカード:</strong>
+                        <div class="details">VISA、Mastercardは広く使えますが、小規模な店舗やマーケットでは現金のみの場合も多いです。少額の現金（ユーロ）を準備しておくと安心です。</div>
+                    </li>
+                    <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">payments</span>チップ:</strong>
+                        <div class="details">ドイツではチップは必須ではありませんが、良いサービスには渡すのが一般的です。レストランでは合計金額の5～10%を目安に、会計時に「Stimmt so（シュティムト・ゾー / お釣りは結構です）」と伝えるか、キリの良い金額を伝えてお釣りを調整してもらうのがスマートです。</div>
+                    </li>
+                </ul>
+                <h3>生活・文化</h3>
+                <ul>
+                    <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">power</span>電源プラグと電圧:</strong>
+                        <div class="details">ドイツはCまたはFタイプです。変換プラグをご用意ください。電圧も230Vと日本（100V）より高いため、PCやスマートフォンの充電器が「100-240V」対応かご確認ください。</div>
+                    </li>
+                    <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">water_drop</span>飲料水:</strong>
+                        <div class="details">水道水は安全に飲めます。レストランで水を注文すると炭酸入り（mit Kohlensäure）が主流です。炭酸なしを希望する場合は「stilles Wasser（シュティレス・ヴァッサー）」とご注文ください。</div>
+                    </li>
+                    <li class="tip-item">
+                        <strong><span class="material-symbols-outlined">storefront</span>日曜・祝日の営業:</strong>
+                        <div class="details">スーパーやデパートなど、ほとんどの小売店は日曜・祝日は法律で営業が禁止されています。駅や空港内の一部の店舗は営業しています。</div>
+                    </li>
+                </ul>
+                <h3>お土産について</h3>
+                <ul class="souvenir-list">
+                    <li class="souvenir-item">
+                        <strong><span class="material-symbols-outlined">directions_car</span>ヴォルフスブルク:</strong> 
+                        <div class="souvenir-details">
+                            <p><a href="https://www.autostadt.de/shops" target="_blank" rel="noopener noreferrer">フォルクスワーゲン関連グッズ</a>が豊富です。アウトシュタット内のショップで、ミニカーやアパレル、文房具など限定品を探すのがおすすめです。</p>
+                        </div>
+                    </li>
+                    <li class="souvenir-item">
+                        <strong><span class="material-symbols-outlined">cookie</span>ハノーファー:</strong>
+                        <div class="souvenir-details">
+                             <p><a href="https://www.thebahlsenfamily.com/de/de/our-brands/leibniz" target="_blank" rel="noopener noreferrer">ライプニッツのバタービスケット</a>が有名です。スーパーマーケットなどで手軽に購入できます。</p>
+                        </div>
+                    </li>
+                    <li class="souvenir-item">
+                        <strong><span class="material-symbols-outlined">traffic</span>ベルリン:</strong>
+                        <div class="souvenir-details">
+                            <p>旧東ドイツの歩行者信号のマーク「<a href="https://www.ampelmann.de/" target="_blank" rel="noopener noreferrer">アンペルマン</a>」のグッズは、可愛らしくてベルリン土産の定番です。また、ベルリンの壁のかけら（証明書付き）や、バディベアのミニチュア像も人気があります。</p>
+                        </div>
+                    </li>
+                    <li class="souvenir-item">
+                        <strong><span class="material-symbols-outlined">flight</span>ヘルシンキ空港:</strong>
+                        <div class="souvenir-details">
+                            <p>乗り継ぎ時間にはフィンランド土産も狙い目です。<a href="https://www.fazer.com/" target="_blank" rel="noopener noreferrer">Fazer（ファッツェル）のチョコレート</a>や、<a href="https://www.marimekko.com/" target="_blank" rel="noopener noreferrer">Marimekko（マリメッコ）の小物</a>、ムーミングッズなどが充実しています。</p>
+                        </div>
+                    </li>
+                    <li class="souvenir-item">
+                        <strong><span class="material-symbols-outlined">icecream</span>ドイツ全般:</strong>
+                        <div class="souvenir-details">
+                            <p>スーパーで買える<a href="https://www.haribo.com/" target="_blank" rel="noopener noreferrer">Haribo（ハリボー）のグミ</a>は、日本未発売の種類も多く、ばらまき土産に最適です。</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
+

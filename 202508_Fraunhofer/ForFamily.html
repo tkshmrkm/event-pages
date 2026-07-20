@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【地図付き】スウェーデン・ドイツ出張の旅程表</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f4f4f5;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+        }
+        .container-screen {
+            max-width: 1122px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3, h4 {
+            font-weight: 700;
+        }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 0.5rem 1rem;
+        }
+        .summary-grid dt {
+            font-weight: 700;
+            text-align: right;
+            padding-right: 1rem;
+            border-right: 2px solid #60a5fa;
+        }
+        .day-container-screen {
+            display: flex;
+            gap: 1.5rem;
+            width: 100%;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background-color: #fafafa;
+        }
+        .day-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .day-table th, .day-table td {
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            vertical-align: top;
+        }
+        .day-table th {
+            background-color: #dbeafe;
+            width: 30%;
+        }
+        .day-table .date-header {
+            background-color: #3b82f6;
+            color: white;
+            font-size: 1.25rem;
+            text-align: center;
+        }
+        .info-table th, .info-table td {
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        .info-table th {
+            background-color: #e0e7ff;
+            width: 20%;
+        }
+        .emergency-table th {
+             background-color: #fee2e2;
+             width: 20%;
+        }
+        .map-container {
+            height: 400px;
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+            z-index: 0;
+        }
+        .map-grid-screen {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Print Styles */
+        @media screen {
+            .container-print {
+                display: none;
+            }
+        }
+
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 1cm;
+            }
+            body {
+                background-color: white;
+                margin: 0;
+                padding: 0;
+            }
+            .container-screen {
+                display: none;
+            }
+            .container-print {
+                display: block;
+            }
+            /* ★修正点1: 印刷時に不要な要素を非表示にするクラス */
+            .no-print {
+                display: none !important;
+            }
+            .print-page {
+                page-break-after: always;
+                width: 100%;
+                height: 100%;
+            }
+            .print-page:last-child {
+                page-break-after: auto;
+            }
+            #map-overview-print {
+                height: 65vh; 
+            }
+            .map-grid-print {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 1rem;
+                height: 80vh;
+            }
+            .map-grid-print .map-container {
+                 height: 100%;
+            }
+            .print-day-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+                page-break-inside: avoid; /* コンテナの途中で改ページされるのを防ぐ */
+                margin-bottom: 1rem;
+            }
+             .day-table {
+                font-size: 0.85rem;
+            }
+            .info-table, .summary-grid {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container-screen">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-3xl text-gray-800">スウェーデン・ドイツ出張の旅程表</h1>
+                <h2 class="text-xl text-gray-600">2025年8月30日 - 2025年9月10日</h2>
+            </div>
+            <button onclick="window.print()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 no-print">
+                🖨️ 印刷する
+            </button>
+        </div>
+        
+        <div class="mb-8 p-6 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
+            <h3 class="text-2xl mb-4 text-blue-800">全体の概要</h3>
+            <dl class="summary-grid">
+                <dt>出張期間</dt>
+                <dd>2025年8月30日(土) ～ 2025年9月10日(水)</dd>
+                <dt>訪問国・都市</dt>
+                <dd>🇸🇪 スウェーデン (ヨーテボリ)<br>🇩🇪 ドイツ (マクデブルク, ドルトムント, シュトゥットガルト, フランクフルト, ベルリン)</dd>
+                <dt>主な目的</dt>
+                <dd>企業との打ち合わせ、研究所の視察、国際展示会(IFA)の見学</dd>
+                <dt>時差について</dt>
+                <dd class="bg-yellow-100 p-2 rounded-md">滞在中の国は、日本より <strong class="text-red-600">7時間</strong> 遅れています。(例: 日本の夕方4時 → 現地の朝9時)</dd>
+            </dl>
+        </div>
+        
+        <div class="mb-8">
+            <h3 class="text-2xl mb-4 text-gray-800">移動経路マップ</h3>
+            <div class="mb-8">
+                <h4 class="text-xl mb-2 text-purple-700">全体旅程</h4>
+                <div id="map-overview" class="map-container"></div>
+            </div>
+            <div class="map-grid-screen">
+                <div>
+                    <h4 class="text-xl mb-2 text-green-700">✈️ 往路フライト (8/30-31)</h4>
+                    <div id="map-outbound" class="map-container"></div>
+                </div>
+                <div>
+                    <h4 class="text-xl mb-2 text-orange-700">✈️ 欧州内フライト① (9/2)</h4>
+                    <div id="map-europe1" class="map-container"></div>
+                </div>
+                <div>
+                    <h4 class="text-xl mb-2 text-teal-700">🚌 陸路移動 (9/2-5)</h4>
+                    <div id="map-land" class="map-container"></div>
+                </div>
+                <div>
+                    <h4 class="text-xl mb-2 text-red-700">✈️ 欧州内フライト② (9/6)</h4>
+                    <div id="map-europe2" class="map-container"></div>
+                </div>
+                 <div>
+                    <h4 class="text-xl mb-2 text-blue-700">✈️ 復路フライト (9/9-10)</h4>
+                    <div id="map-return" class="map-container"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h3 class="text-2xl mb-4 text-indigo-800">滞在先ホテル一覧</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm info-table">
+                    <thead class="bg-indigo-100">
+                        <tr>
+                            <th>滞在都市</th>
+                            <th>滞在日</th>
+                            <th>ホテル名</th>
+                            <th>住所</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><th>ヨーテボリ</th><td>8/31-9/2</td><td>ProfilHotels Opera</td><td>Nils Ericsonsgatan 23, 411 03 Göteborg, Sweden</td></tr>
+                        <tr><th>マクデブルク</th><td>9/2-9/3</td><td>Maritim Hotel Magdeburg</td><td>Otto-von-Guericke-Straße 87, 39104 Magdeburg, Germany</td></tr>
+                        <tr><th>ドルトムント</th><td>9/3-9/4</td><td>Mercure Hotel Dortmund Centrum</td><td>Olpe 2, 44135 Dortmund, Germany</td></tr>
+                        <tr><th>シュトゥットガルト</th><td>9/4-9/5</td><td>Steigenberger Graf Zeppelin</td><td>Arnulf-Klett-Platz 7, 70173 Stuttgart, Germany</td></tr>
+                        <tr><th>フランクフルト</th><td>9/5-9/6</td><td>IntercityHotel Frankfurt Hauptbahnhof Süd</td><td>Mannheimer Str. 21, 60329 Frankfurt am Main, Germany</td></tr>
+                        <tr><th>ベルリン</th><td>9/6-9/9</td><td>AC Hotel Berlin Humboldthain Park</td><td>Hochstraße 3, 13357 Berlin, Germany</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <h3 class="text-2xl mb-4 text-red-800">緊急連絡先 (パスポート紛失など)</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm info-table emergency-table">
+                     <thead class="bg-red-100">
+                        <tr>
+                            <th>国</th>
+                            <th>機関名</th>
+                            <th>電話番号</th>
+                            <th>住所</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><th>スウェーデン 🇸🇪</th><td>在スウェーデン日本国大使館</td><td>+46 8 579 353 00</td><td>Gärdesgatan 10, 115 27 Stockholm, Sweden</td></tr>
+                        <tr><th>ドイツ 🇩🇪</th><td>在ドイツ日本国大使館</td><td>+49 30 210 940</td><td>Hiroshimastraße 6, 10785 Berlin, Germany</td></tr>
+                        <tr><th>共通</th><td>欧州共通緊急通報番号 (警察・消防・救急)</td><td colspan="2"><strong>112</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <h3 class="text-2xl mb-4 text-gray-800">詳細スケジュール</h3>
+        <div id="schedule-screen"></div>
+    </div>
+
+    <div class="container-print">
+        <div class="print-page">
+            <h1 class="text-3xl text-gray-800">スウェーデン・ドイツ出張の旅程表</h1>
+            <h2 class="text-xl text-gray-600 mb-4">2025年8月30日 - 2025年9月10日</h2>
+            <div class="mb-4 p-4 bg-blue-50 border-l-4 border-blue-500">
+                 <h3 class="text-2xl mb-4 text-blue-800">全体の概要</h3>
+                 <dl class="summary-grid">
+                    <dt>出張期間</dt><dd>2025年8月30日(土) ～ 2025年9月10日(水)</dd>
+                    <dt>訪問国・都市</dt><dd>🇸🇪 スウェーデン (ヨーテボリ)<br>🇩🇪 ドイツ (マクデブルク, ドルトムント, シュトゥットガルト, フランクフルト, ベルリン)</dd>
+                    <dt>主な目的</dt><dd>企業との打ち合わせ、研究所の視察、国際展示会(IFA)の見学</dd>
+                    <dt>時差について</dt><dd class="bg-yellow-100 p-2 rounded-md">滞在中の国は、日本より <strong class="text-red-600">7時間</strong> 遅れています。(例: 日本の夕方4時 → 現地の朝9時)</dd>
+                </dl>
+            </div>
+            <h4 class="text-xl mb-2 text-purple-700">全体旅程マップ</h4>
+            <div id="map-overview-print" class="map-container"></div>
+        </div>
+
+        <div class="print-page">
+             <h3 class="text-2xl mb-4 text-gray-800">詳細移動経路マップ</h3>
+             <div class="map-grid-print">
+                <div>
+                    <h4 class="text-lg mb-2 text-green-700">✈️ 往路フライト (8/30-31)</h4>
+                    <div id="map-outbound-print" class="map-container"></div>
+                </div>
+                <div>
+                    <h4 class="text-lg mb-2 text-orange-700">✈️ 欧州内フライト① (9/2)</h4>
+                    <div id="map-europe1-print" class="map-container"></div>
+                </div>
+                <div>
+                    <h4 class="text-lg mb-2 text-teal-700">🚌 陸路移動 (9/2-5)</h4>
+                    <div id="map-land-print" class="map-container"></div>
+                </div>
+                <div>
+                    <h4 class="text-lg mb-2 text-red-700">✈️ 欧州内フライト② (9/6)</h4>
+                    <div id="map-europe2-print" class="map-container"></div>
+                </div>
+                 <div>
+                    <h4 class="text-lg mb-2 text-blue-700">✈️ 復路フライト (9/9-10)</h4>
+                    <div id="map-return-print" class="map-container"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="print-page">
+            <h3 class="text-2xl mb-4 text-indigo-800">滞在先ホテル一覧</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm info-table">
+                    <thead class="bg-indigo-100">
+                        <tr><th>滞在都市</th><th>滞在日</th><th>ホテル名</th><th>住所</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><th>ヨーテボリ</th><td>8/31-9/2</td><td>ProfilHotels Opera</td><td>Nils Ericsonsgatan 23, 411 03 Göteborg, Sweden</td></tr>
+                        <tr><th>マクデブルク</th><td>9/2-9/3</td><td>Maritim Hotel Magdeburg</td><td>Otto-von-Guericke-Straße 87, 39104 Magdeburg, Germany</td></tr>
+                        <tr><th>ドルトムント</th><td>9/3-9/4</td><td>Mercure Hotel Dortmund Centrum</td><td>Olpe 2, 44135 Dortmund, Germany</td></tr>
+                        <tr><th>シュトゥットガルト</th><td>9/4-9/5</td><td>Steigenberger Graf Zeppelin</td><td>Arnulf-Klett-Platz 7, 70173 Stuttgart, Germany</td></tr>
+                        <tr><th>フランクフルト</th><td>9/5-9/6</td><td>IntercityHotel Frankfurt Hauptbahnhof Süd</td><td>Mannheimer Str. 21, 60329 Frankfurt am Main, Germany</td></tr>
+                        <tr><th>ベルリン</th><td>9/6-9/9</td><td>AC Hotel Berlin Humboldthain Park</td><td>Hochstraße 3, 13357 Berlin, Germany</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        
+            <h3 class="text-2xl mt-8 mb-4 text-red-800">緊急連絡先</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm info-table emergency-table">
+                     <thead class="bg-red-100">
+                        <tr><th>国</th><th>機関名</th><th>電話番号</th><th>住所</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><th>スウェーデン 🇸🇪</th><td>在スウェーデン日本国大使館</td><td>+46 8 579 353 00</td><td>Gärdesgatan 10, 115 27 Stockholm, Sweden</td></tr>
+                        <tr><th>ドイツ 🇩🇪</th><td>在ドイツ日本国大使館</td><td>+49 30 210 940</td><td>Hiroshimastraße 6, 10785 Berlin, Germany</td></tr>
+                        <tr><th>共通</th><td>欧州共通緊急通報番号 (警察・消防・救急)</td><td colspan="2"><strong>112</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        const scheduleData = [
+            { date: '8月30日 (土)', city: '機内', details: '✈️ <strong>22:25</strong> 関西国際空港 出発<br>(フィンエアー AY068便)', timeJST: '(8/30) 22:25', hotel: '🏨 機中泊', contact: '🌙 離陸後は連絡がとれません。', contactBg: 'bg-red-50' },
+            { date: '8月31日 (日)', city: 'ヨーテボリ (スウェーデン) 🇸🇪', details: '✈️ <strong>05:30</strong> ヘルシンキ着、乗り継ぎ<br>✈️ <strong>07:10</strong> ヘルシンキ発 (AY861便)<br>✈️ <strong>07:40</strong> ヨーテボリ着<br>🏨 <strong>15:00</strong> ホテルチェックイン', timeJST: '(8/31) 12:30 ヘルシンキ着<br>(8/31) 14:10 ヘルシンキ発<br>(8/31) 14:40 ヨーテボリ着<br>(8/31) 22:00 チェックイン', hotel: '🏨 ProfilHotels Opera', contact: '✅ 日本時間の深夜以降なら連絡可能です。', contactBg: 'bg-green-50' },
+            { date: '9月1日 (月)', city: 'ヨーテボリ (スウェーデン) 🇸🇪', details: '🏢 <strong>終日</strong><br>AGVE社にて打ち合わせ<br>🌃 夜は懇親会', timeJST: '(9/1) 夕方〜深夜', hotel: '🏨 ProfilHotels Opera', contact: '✅ 日本時間の日中(夕方まで)は連絡可能です。', contactBg: 'bg-green-50' },
+            { date: '9月2日 (火)', city: 'マクデブルク (ドイツ) 🇩🇪', details: '🏨 <strong>午前</strong> ホテルチェックアウト<br>✈️ <strong>09:50</strong> ヨーテボリ発 (SK443便)<br>✈️ <strong>13:50</strong> ベルリン着、バス移動<br>🏨 <strong>18:45頃</strong> ホテルチェックイン', timeJST: '(9/2) 16:50 ヨーテボリ発<br>(9/2) 20:50 ベルリン着<br>(9/3) 01:45頃 チェックイン', hotel: '🏨 Maritim Hotel Magdeburg', contact: '⚠️ 移動が多いため、連絡がとりにくいかもしれません。', contactBg: 'bg-yellow-50' },
+            { date: '9月3日 (水)', city: 'ドルトムント (ドイツ) 🇩🇪', details: '🏢 <strong>午前</strong> Fraunhofer IFF 見学<br>🚌 <strong>午後</strong> ドルトムントへ移動<br>🏨 <strong>18:00頃</strong> ホテルチェックイン', timeJST: '(9/3) 夕方<br>(9/4) 01:00頃 チェックイン', hotel: '🏨 Mercure Hotel Dortmund Centrum', contact: '✅ 日本時間の日中(夕方まで)は連絡可能です。', contactBg: 'bg-green-50' },
+            { date: '9月4日 (木)', city: 'シュトゥットガルト (ドイツ) 🇩🇪', details: '🏢 <strong>午前</strong> Fraunhofer IML 見学<br>🚌 <strong>午後</strong> シュトゥットガルトへ移動<br>🏨 <strong>18:00頃</strong> ホテルチェックイン', timeJST: '(9/4) 夕方<br>(9/5) 01:00頃 チェックイン', hotel: '🏨 Steigenberger Graf Zeppelin', contact: '✅ 日本時間の日中(夕方まで)は連絡可能です。', contactBg: 'bg-green-50' },
+            { date: '9月5日 (金)', city: 'フランクフルト (ドイツ) 🇩🇪', details: '🏢 <strong>午前</strong> Fraunhofer IPA 見学<br>🚆 <strong>午後</strong> フランクフルトへ移動<br>🏨 <strong>15:15頃</strong> ホテルチェックイン', timeJST: '(9/5) 夕方<br>(9/5) 22:15頃 チェックイン', hotel: '🏨 IntercityHotel Frankfurt', contact: '✅ 日本時間の日中(夕方まで)は連絡可能です。', contactBg: 'bg-green-50' },
+            { date: '9月6日 (土)', city: 'ベルリン (ドイツ) 🇩🇪', details: '🏨 <strong>午前</strong> ホテルチェックアウト<br>✈️ <strong>09:45</strong> フランクフルト発 (LH178便)<br>✈️ <strong>10:55</strong> ベルリン着<br>🏨 <strong>14:00頃</strong> ホテルチェックイン', timeJST: '(9/6) 16:45 フランクフルト発<br>(9/6) 17:55 ベルリン着<br>(9/6) 21:00頃 チェックイン', hotel: '🏨 AC Hotel Berlin', contact: '✅ 移動時間以外は連絡可能です。', contactBg: 'bg-green-50' },
+            { date: '9月7日 (日)', city: 'ベルリン (ドイツ) 🇩🇪', details: '🎪 <strong>終日</strong><br>IFA(国際展示会)を見学', timeJST: '(9/7) 夕方〜深夜', hotel: '🏨 AC Hotel Berlin', contact: '✅ 日本時間の日中(夕方まで)は連絡可能です。', contactBg: 'bg-green-50' },
+            { date: '9月8日 (月)', city: 'ベルリン (ドイツ) 🇩🇪', details: '🎪 <strong>終日</strong><br>IFA(国際展示会)を見学', timeJST: '(9/8) 夕方〜深夜', hotel: '🏨 AC Hotel Berlin', contact: '✅ 日本時間の日中(夕方まで)は連絡可能です。', contactBg: 'bg-green-50' },
+            { date: '9月9日 (火)', city: '機内', details: '🏨 <strong>午前</strong> ホテルチェックアウト<br>✈️ <strong>13:10</strong> ベルリン発 (AY1434便)<br>✈️ <strong>17:45</strong> ヘルシンキ発 (AY067便)', timeJST: '(9/9) 20:10 ベルリン発<br>(9/10) 00:45 ヘルシンキ発', hotel: '🏨 機中泊', contact: '🌙 離陸後は連絡がとれません。', contactBg: 'bg-red-50' },
+            { date: '9月10日 (水)', city: '日本 🇯🇵', details: '✈️ <strong>12:35</strong> 関西国際空港 到着<br>🏡 京都の自宅へ', timeJST: '(9/10) 12:35', hotel: '-', contact: '🎉 お疲れ様でした！', contactBg: '' }
+        ];
+
+        function createDayTable(day) {
+            return `
+                <table class="day-table">
+                    <thead><tr><th colspan="2" class="date-header">${day.date}</th></tr></thead>
+                    <tbody>
+                        <tr><th>滞在都市</th><td>${day.city}</td></tr>
+                        <tr><th>主な予定<br>(現地時間)</th><td>${day.details}</td></tr>
+                        <tr><th>(参考)<br>日本時間</th><td>${day.timeJST}</td></tr>
+                        <tr><th>宿泊先</th><td>${day.hotel}</td></tr>
+                        <tr><th>連絡について</th><td class="${day.contactBg}">${day.contact}</td></tr>
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        // --- Schedule Generation ---
+        const scheduleScreen = document.getElementById('schedule-screen');
+        for (let i = 0; i < scheduleData.length; i += 2) {
+            const day1 = scheduleData[i];
+            const day2 = scheduleData[i+1];
+            const container = document.createElement('div');
+            container.className = 'day-container-screen';
+            container.innerHTML = createDayTable(day1) + (day2 ? createDayTable(day2) : '');
+            scheduleScreen.appendChild(container);
+        }
+
+        // ★修正点3: 印刷用のスケジュールを自動でページ分割して生成するロジック
+        const printContainer = document.querySelector('.container-print');
+        const daysPerPageForPrint = 6; // 印刷1ページあたりの日数 (2日で1コンテナなので、3コンテナ分)
+        
+        for (let i = 0; i < scheduleData.length; i += daysPerPageForPrint) {
+            const page = document.createElement('div');
+            page.className = 'print-page';
+
+            const header = document.createElement('h3');
+            header.className = 'text-2xl mb-4 text-gray-800';
+            header.textContent = i === 0 ? '詳細スケジュール' : '詳細スケジュール (続き)';
+            page.appendChild(header);
+
+            const chunk = scheduleData.slice(i, i + daysPerPageForPrint);
+            for (let j = 0; j < chunk.length; j += 2) {
+                const day1 = chunk[j];
+                const day2 = chunk[j + 1];
+                const container = document.createElement('div');
+                container.className = 'print-day-container';
+                container.innerHTML = createDayTable(day1) + (day2 ? createDayTable(day2) : '');
+                page.appendChild(container);
+            }
+            printContainer.appendChild(page);
+        }
+
+
+        // --- Map Initialization ---
+        const tileLayerUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+        const planeIcon = L.divIcon({ html: '✈️', className: 'text-2xl', iconSize: [24, 24], iconAnchor: [12, 12] });
+        const cityIcon = (number) => L.divIcon({ html: `<div class="bg-purple-600 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold text-sm">${number}</div>`, className: '', iconSize: [24, 24], iconAnchor: [12, 12] });
+
+        const points = {
+            kix: { lat: 34.4272, lng: 135.2442, name: '関西国際空港 (KIX)' }, hel: { lat: 60.3172, lng: 24.9633, name: 'ヘルシンキ (HEL)' }, got: { lat: 57.6628, lng: 12.2798, name: 'ヨーテボリ (GOT)' }, cph: { lat: 55.6179, lng: 12.6561, name: 'コペンハーゲン (CPH)' }, ber: { lat: 52.3667, lng: 13.5033, name: 'ベルリン (BER)' }, fra: { lat: 50.0379, lng: 8.5622, name: 'フランクフルト (FRA)' }, mag: { lat: 52.1205, lng: 11.6276, name: 'マクデブルク' }, dor: { lat: 51.5136, lng: 7.4653,  name: 'ドルトムント' }, stu: { lat: 48.7758, lng: 9.1829,  name: 'シュトゥットガルト' }
+        };
+
+        const allMaps = [];
+        function setupMap(mapId, pointsData, options) {
+            const map = L.map(mapId);
+            allMaps.push(map);
+            L.tileLayer(tileLayerUrl, { attribution }).addTo(map);
+            pointsData.forEach((p, i) => {
+                const icon = options.iconType === 'plane' ? planeIcon : cityIcon(p.number || i + 1);
+                L.marker([p.lat, p.lng], { icon: icon }).addTo(map).bindPopup(p.name);
+            });
+            if (options.polyline) {
+                L.polyline(pointsData.map(p => [p.lat, p.lng]), options.polyline).addTo(map);
+            }
+            map.fitBounds(pointsData.map(p => [p.lat, p.lng]), { padding: [50, 50] });
+        }
+
+        const overviewPoints = [
+            {...points.got, name: '1. ヨーテボリ', number: 1}, {...points.mag, name: '2. マクデブルク', number: 2}, {...points.dor, name: '3. ドルトムント', number: 3}, {...points.stu, name: '4. シュトゥットガルト', number: 4}, {...points.fra, name: '5. フランクフルト', number: 5}, {...points.ber, name: '6. ベルリン', number: 6}
+        ];
+        const landPoints = [
+            {...points.ber, name: '1. ベルリン', number: 1}, {...points.mag, name: '2. マクデブルク', number: 2}, {...points.dor, name: '3. ドルトムント', number: 3}, {...points.stu, name: '4. シュトゥットガルト', number: 4}, {...points.fra, name: '5. フランクフルト', number: 5}
+        ];
+        
+        // Screen Maps
+        setupMap('map-overview', overviewPoints, { iconType: 'city', polyline: { color: 'purple', weight: 2 } });
+        setupMap('map-outbound', [points.kix, points.hel, points.got], { iconType: 'plane', polyline: { color: 'green', dashArray: '5, 10' } });
+        setupMap('map-europe1', [points.got, points.cph, points.ber], { iconType: 'plane', polyline: { color: 'orange', dashArray: '5, 10' } });
+        setupMap('map-land', landPoints, { iconType: 'city', polyline: { color: 'teal', weight: 3 } });
+        setupMap('map-europe2', [points.fra, points.ber], { iconType: 'plane', polyline: { color: 'red', dashArray: '5, 10' } });
+        setupMap('map-return', [points.ber, points.hel, points.kix], { iconType: 'plane', polyline: { color: 'blue', dashArray: '5, 10' } });
+
+        // Print Maps
+        setupMap('map-overview-print', overviewPoints, { iconType: 'city', polyline: { color: 'purple', weight: 2 } });
+        setupMap('map-outbound-print', [points.kix, points.hel, points.got], { iconType: 'plane', polyline: { color: 'green', dashArray: '5, 10' } });
+        setupMap('map-europe1-print', [points.got, points.cph, points.ber], { iconType: 'plane', polyline: { color: 'orange', dashArray: '5, 10' } });
+        setupMap('map-land-print', landPoints, { iconType: 'city', polyline: { color: 'teal', weight: 3 } });
+        setupMap('map-europe2-print', [points.fra, points.ber], { iconType: 'plane', polyline: { color: 'red', dashArray: '5, 10' } });
+        setupMap('map-return-print', [points.ber, points.hel, points.kix], { iconType: 'plane', polyline: { color: 'blue', dashArray: '5, 10' } });
+
+        window.onbeforeprint = () => {
+            setTimeout(() => allMaps.forEach(map => map.invalidateSize()), 500);
+        };
+    </script>
+</body>
+</html>

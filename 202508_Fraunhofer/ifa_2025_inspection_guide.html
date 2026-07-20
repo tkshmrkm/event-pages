@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFA 2025視察ガイド - チェックリスト＆見学コース</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section-title {
+            font-size: 1.8em;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+        .section-title::before {
+            content: "📋";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        .day-schedule {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .day-title {
+            font-size: 1.5em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .time-slot {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .time-slot h4 {
+            margin: 0 0 10px 0;
+            color: #28a745;
+            font-size: 1.2em;
+        }
+        .company-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .company-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .company-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+        .company-card.priority {
+            border-color: #dc3545;
+            border-width: 3px;
+        }
+        .company-card.priority::before {
+            content: "⭐ 最重要";
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            background: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .company-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .company-details {
+            display: grid;
+            gap: 8px;
+        }
+        .detail-row {
+            display: flex;
+            align-items: center;
+        }
+        .detail-label {
+            font-weight: bold;
+            color: #666;
+            min-width: 80px;
+            margin-right: 10px;
+        }
+        .detail-value {
+            color: #333;
+        }
+        .tech-highlights {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border-left: 4px solid #2196f3;
+        }
+        .tech-highlights h5 {
+            margin: 0 0 8px 0;
+            color: #1976d2;
+            font-size: 1em;
+        }
+        .tech-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .tech-list li {
+            padding: 3px 0;
+            color: #333;
+        }
+        .tech-list li::before {
+            content: "🔸";
+            margin-right: 8px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+        .checkbox-item label {
+            cursor: pointer;
+            flex: 1;
+        }
+        .important-note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .important-note::before {
+            content: "⚠️ ";
+            font-weight: bold;
+        }
+        .map-info {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+        }
+        .map-info h5 {
+            margin: 0 0 8px 0;
+            color: #155724;
+        }
+        @media print {
+            body { background: white; }
+            .container { box-shadow: none; padding: 0; }
+            .company-card:hover { transform: none; box-shadow: none; }
+        }
+        @media (max-width: 768px) {
+            .company-list {
+                grid-template-columns: 1fr;
+            }
+            .header h1 { font-size: 2em; }
+            .container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>IFA 2025 視察ガイド</h1>
+            <p>📅 2025年9月7日（土）～8日（日） | 📍 メッセ・ベルリン（ドイツ）</p>
+            <p>🤖 ロボティクス・AI・スマートホーム技術の最前線を探る</p>
+        </div>
+
+        <!-- 事前チェックリスト -->
+        <div class="section">
+            <h2 class="section-title">事前準備チェックリスト</h2>
+            <div class="checkbox-item">
+                <input type="checkbox" id="check1">
+                <label for="check1">📱 IFA公式アプリをダウンロード済み</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="check2">
+                <label for="check2">🎫 入場券・バッジの準備完了</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="check3">
+                <label for="check3">🗺️ 会場マップの印刷・ダウンロード済み</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="check4">
+                <label for="check4">💼 名刺・パンフレット用のバッグ準備</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="check5">
+                <label for="check5">🔋 モバイルバッテリー・充電器の準備</label>
+            </div>
+            <div class="checkbox-item">
+                <input type="checkbox" id="check6">
+                <label for="check6">👟 歩きやすい靴で参加</label>
+            </div>
+
+            <h3 style="color: #ff9800; font-size: 1.4em; margin: 25px 0 15px 0;">🏭 IFA Global Markets - 製造・サプライチェーン最前線</h3>
+            <div class="important-note" style="background: #fff3e0; border-color: #ff9800; color: #ef6c00;">
+                <strong>IFA Global Markets（Hall 26）:</strong> 407社が出展する製造・B2Bエリア。大手ブランドの製造を支える中国系メーカーが集結
+            </div>
+
+            <div class="company-list">
+                <div class="company-card" style="border-color: #ff9800;">
+                    <div class="company-name">🤖 GuangDong Takdir Smart Robot Co.,Ltd.</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">IFA Global Markets H26 / H26b-937</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">スマートロボット製造（中国）</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights" style="background: #fff3e0; border-color: #ff9800;">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>スマートロボット大量生産技術</li>
+                            <li>ODM/OEMロボティクス・ソリューション</li>
+                            <li>コスト効率重視の製造プロセス</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card" style="border-color: #ff9800;">
+                    <div class="company-name">🧹 Cleanix Robotics Co., Ltd.</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">IFA NEXT Hall 25 / H25-260</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">清掃ロボティクス（中国）</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights" style="background: #fce4ec; border-color: #e91e63;">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>産業・商業用清掃ロボット</li>
+                            <li>AI清掃ルート最適化</li>
+                            <li>大規模施設対応システム</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card" style="border-color: #ff9800;">
+                    <div class="company-name">🦘 Arpobot</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">IFA NEXT Hall 25 / H25-231</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">イノベーティブ・ロボティクス（オーストラリア）</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights" style="background: #fce4ec; border-color: #e91e63;">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>独自の動作制御アルゴリズム</li>
+                            <li>オーストラリア発の革新技術</li>
+                            <li>環境適応型ロボット</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="important-note" style="background: #f3e5f5; border-color: #9c27b0; color: #6a1b9a;">
+                <strong>🔍 中国製造ハブ地域分析:</strong> 
+                <br>• <strong>Cixi（慈溪）エリア:</strong> 16社 - 小型家電製造の集積地
+                <br>• <strong>Dongguan（東莞）エリア:</strong> 20社 - 電子部品・プラスチック製品
+                <br>• <strong>Foshan（佛山）エリア:</strong> 18社 - 大型家電・キッチン機器
+                <br>• <strong>Ningbo（寧波）エリア:</strong> 45社 - 最大の家電製造集積地
+                <br>• <strong>Zhongshan（中山）エリア:</strong> 25社 - 高品質家電・技術革新
+            </div>
+        </div>
+
+        <!-- ロボティクス最前線 -->
+        <div class="section">
+            <h2 class="section-title" style="color: #e91e63; border-color: #e91e63;">🤖 ロボティクス技術最前線</h2>
+            <div class="important-note" style="background: #fce4ec; border-color: #e91e63; color: #880e4f;">
+                <strong>IFA 2025注目ポイント:</strong> ヒューマノイドロボットが初めて主要コンシューマーショーに本格参戦。産業用から家庭・サービス向けへの大転換期
+            </div>
+
+            <div class="company-list">
+                <div class="company-card priority" style="border-color: #e91e63;">
+                    <div class="company-name">🦾 UBTECH Robotics</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">Hall 1.2 (1.2-142)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">スマートホーム・ロボティクス</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights" style="background: #fce4ec; border-color: #e91e63;">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>歩行可能な人型ロボット</li>
+                            <li>AI高齢者ケアロボット</li>
+                            <li>教育用ロボット多彩ラインナップ</li>
+                            <li>ロボット芝刈り機（UBHOME）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card priority" style="border-color: #e91e63;">
+                    <div class="company-name">🧠 Neura Robotics GmbH</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">IFA NEXT Hall 25 / H25-181</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">認知ロボティクス（ドイツ）</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights" style="background: #fce4ec; border-color: #e91e63;">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>認知ロボティクスのパイオニア</li>
+                            <li>「4NE1」「MiPA」シリーズ</li>
+                            <li>安全な人間協働ロボット</li>
+                            <li>産業用から家庭用まで対応</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card priority" style="border-color: #e91e63;">
+                    <div class="company-name">⚡ Unitree Robotics</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">IFA NEXT Hall 25 / H25-275</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">ダイナミック・ロボティクス（中国）</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights" style="background: #fce4ec; border-color: #e91e63;">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>ヒューマノイド「G1」「B2-W」</li>
+                            <li>俊敏な四足歩行ロボット技術</li>
+                            <li>ダイナミックな動作・AIアバター</li>
+                            <li>エンターテインメント応用</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card priority" style="border-color: #e91e63;">
+                    <div class="company-name">👤 Realbotix</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">IFA NEXT Hall 25 / H25-301</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">ヒューマンライク・ロボティクス（カナダ）</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights" style="background: #fce4ec; border-color: #e91e63;">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>リアルな外観のヒューマノイド</li>
+                            <li>「M-Series」感情的知能搭載</li>
+                            <li>コンパニオン・ケアロボット</li>
+                            <li>人間との深いインタラクション</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card" style="border-color: #e91e63;">
+                    <div class="company-name">🔬 Alpha Robotics</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">IFA NEXT Hall 25 / H25-159</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">先進ロボティクス（中国）</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights" style="background: #fce4ec; border-color: #e91e63;">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>次世代ロボティクス技術</li>
+                            <li>AI統合型ロボットシステム</li>
+                            <li>多用途対応プラットフォーム</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card" style="border-color: #e91e63;">
+                    <div class="company-name">🚀 Booster Robotics Technology</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">IFA NEXT Hall 25 / H25-217</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">ロボティクス・ブースター技術（中国）</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights" style="background: #fce4ec; border-color: #e91e63;">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>ロボット性能向上技術</li>
+                            <li>AI加速システム</li>
+                            <li>高効率ロボティクス・ソリューション</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card priority" style="border-color: #e91e63;">
+                    <div class="company-name">🧹 Dreame Technology</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">Hall 7.1a (7.1A-101)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">スマート清掃ロボティクス</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights" style="background: #fce4ec; border-color: #e91e63;">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>新世代ロボット掃除機（世界初披露）</li>
+                            <li>SLAM自己位置推定技術</li>
+                            <li>モノクロームAIビジョン</li>
+                            <li>150件以上の特許技術</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最重要視察企業リスト -->
+        <div class="section">
+            <h2 class="section-title">最重要視察企業リスト</h2>
+            <div class="important-note">
+                <strong>注目ポイント:</strong> AI統合、Matter対応、サステナビリティ、ディスプレイ革新技術
+            </div>
+            
+            <div class="company-list">
+                <div class="company-card priority">
+                    <div class="company-name">Samsung Electronics</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">CityCube Berlin (CCB-101)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">ホーム&エンターテインメント</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>110インチRGB MicroLEDテレビ</li>
+                            <li>SmartThings統合AIエコシステム</li>
+                            <li>次世代スマートホーム提案</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card priority">
+                    <div class="company-name">LG Electronics</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">Hall 18 (18-101)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">ホーム&エンターテインメント</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>AI Appliances Orchestra (ThinQ ON)</li>
+                            <li>AIエージェント「FURON」</li>
+                            <li>最新OLEDテレビ・透明ディスプレイ</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card">
+                    <div class="company-name">Panasonic</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">Hall 27 (27-101)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">ホーム&エンターテインメント</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>次世代OLEDテレビ</li>
+                            <li>GREEN IMPACT（持続可能技術）</li>
+                            <li>12以上の新製品発表予定</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card">
+                    <div class="company-name">Bosch Home Appliances</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">Hall 1.1 (1.1-102)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">ホームアプライアンス</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>AIレシピ連携スマートオーブン</li>
+                            <li>Matter対応家電シリーズ</li>
+                            <li>Industry 4.0発想の高機能家電</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card">
+                    <div class="company-name">UBTECH Robotics</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">Hall 1.2 (1.2-142)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">スマートホーム・ロボティクス</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>ヒューマノイドロボット</li>
+                            <li>AI高齢者ケアロボット</li>
+                            <li>教育用ロボット各種</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="company-card">
+                    <div class="company-name">Dreame Technology</div>
+                    <div class="company-details">
+                        <div class="detail-row">
+                            <span class="detail-label">ホール:</span>
+                            <span class="detail-value">Hall 7.1a (7.1A-101)</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">カテゴリ:</span>
+                            <span class="detail-value">ホームアプライアンス</span>
+                        </div>
+                    </div>
+                    <div class="tech-highlights">
+                        <h5>🎯 注目技術</h5>
+                        <ul class="tech-list">
+                            <li>新世代ロボット掃除機</li>
+                            <li>SLAM自己位置推定技術</li>
+                            <li>150件以上の特許技術</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2日間の詳細スケジュール -->
+        <div class="section">
+            <h2 class="section-title">2日間視察スケジュール</h2>
+            
+            <div class="day-schedule">
+                <div class="day-title">📅 Day 1 - 9月7日（土）｜🤖 ロボティクス→スマートホーム→民生品統合</div>
+                
+                <div class="time-slot" style="border-left-color: #e91e63;">
+                    <h4 style="color: #e91e63;">🤖 10:00～12:00 | ロボティクス技術最前線</h4>
+                    <div style="background: #fce4ec; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p><strong>🎯 IFA NEXT（Hall 25）- ヒューマノイド＆先進ロボティクス</strong></p>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>H25-181 Neura Robotics:</strong> 認知ロボティクス実演（25分）</li>
+                            <li><strong>H25-275 Unitree Robotics:</strong> ダイナミック動作デモ（25分）</li>
+                            <li><strong>H25-301 Realbotix:</strong> 感情的AI対話体験（25分）</li>
+                            <li><strong>H25-159 Alpha Robotics:</strong> 先進技術展示（15分）</li>
+                            <li><strong>H25-217 Booster Robotics:</strong> 技術ブースター実演（15分）</li>
+                        </ul>
+                        <p><strong>📍 追加視察:</strong> H25-260 Cleanix、H25-231 Arpobot（各10分）</p>
+                    </div>
+                    <div class="important-note" style="background: #fff3cd; border-color: #ffc107; color: #856404;">
+                        <strong>評価ポイント:</strong> 各企業の技術哲学の違い（認知vs動作vs感情vs実用性）を比較分析
+                    </div>
+                </div>
+
+                <div class="time-slot">
+                    <h4>🕐 12:00～13:00 | 昼食休憩</h4>
+                    <p>Hall 25隣接エリアで軽食・ロボティクス技術の整理</p>
+                </div>
+
+                <div class="time-slot" style="border-left-color: #e91e63;">
+                    <h4 style="color: #e91e63;">🦾 13:00～13:30 | UBTECH Robotics (Hall 1.2)</h4>
+                    <p><strong>重点視察:</strong> 家庭向けサービスロボット、ロボット芝刈り機（UBHOME）</p>
+                    <div style="background: #fce4ec; padding: 10px; border-radius: 5px; margin: 5px 0;">
+                        <p><strong>接続ポイント:</strong> IFA NEXTの先進技術と実用化されたサービスロボットの橋渡し</p>
+                    </div>
+                </div>
+
+                <div class="time-slot">
+                    <h4>🕜 13:30～14:15 | スマートホーム統合技術</h4>
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p><strong>🏠 ロボティクス連携型スマートホーム</strong></p>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>H2.2-130 Anker (Eufy):</strong> ロボット掃除機＋スマートホーム統合（20分）</li>
+                            <li><strong>H7.1A-101 Dreame:</strong> 新世代清掃ロボット＋SLAM技術（25分）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="time-slot">
+                    <h4>🕑 14:15～15:00 | AI統合家電エコシステム</h4>
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p><strong>🏡 次世代スマートホーム（ロボット+AI家電）</strong></p>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>H1.1-102 Bosch:</strong> AI調理＋Matter対応＋Industry 4.0思想（25分）</li>
+                            <li><strong>H1.1-101 Siemens:</strong> Intelligent Kitchen コンセプト（20分）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="time-slot">
+                    <h4>🕕 15:00～16:00 | 大手エコシステム統合戦略</h4>
+                    <div style="background: #fff8e1; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p><strong>🌐 包括的AIエコシステム（最終統合段階）</strong></p>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>H18-101 LG:</strong> AI Appliances Orchestra＋ThinQ ON（30分）</li>
+                            <li><strong>CCB-101 Samsung:</strong> SmartThings統合プラットフォーム（30分）</li>
+                        </ul>
+                    </div>
+                    <div class="important-note" style="background: #fff3cd; border-color: #ffc107; color: #856404;">
+                        <strong>統合評価:</strong> ロボティクス→スマートホーム→大手エコシステムの技術連携度を評価
+                    </div>
+                </div>
+
+                <div class="time-slot">
+                    <h4>🕕 16:00～17:00 | 高品質民生品の極み</h4>
+                    <p><strong>H2.1-101 Miele:</strong> 耐久性20年・AI搭載・サステナビリティの最高峰技術</p>
+                    <div style="background: #f3e5f5; padding: 10px; border-radius: 5px; margin: 5px 0;">
+                        <p><strong>Day1総括:</strong> ロボティクス先端技術から民生品完成形までの技術進化を一日で体験</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="day-schedule">
+                <div class="day-title">📅 Day 2 - 9月8日（日）｜📺 ディスプレイ技術・モビリティ・製造エコシステム</div>
+                
+                <div class="time-slot">
+                    <h4>🕘 10:00～11:30 | ディスプレイ技術革新</h4>
+                    <div style="background: #f3e5f5; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p><strong>📺 次世代ディスプレイ技術の最前線</strong></p>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>CCB-101 Samsung:</strong> 110インチRGB MicroLEDテレビ（30分）</li>
+                            <li><strong>H18-101 LG:</strong> 最新OLED・透明ディスプレイ技術（30分）</li>
+                            <li><strong>H27-101 Panasonic:</strong> Z95B OLED＋GREEN IMPACT技術（30分）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="time-slot">
+                    <h4>🕚 11:30～12:30 | 競合ディスプレイ技術比較</h4>
+                    <p><strong>H21-101 TCL、H22 Sharp/Philips、H23 Hisense:</strong> 各社の技術差別化戦略</p>
+                </div>
+
+                <div class="time-slot">
+                    <h4>🕐 12:30～13:30 | 昼食休憩</h4>
+                    <p>Summer Garden エリアで休憩・午前の技術比較整理</p>
+                </div>
+
+                <div class="time-slot">
+                    <h4>🕜 13:30～14:30 | モビリティ＆エネルギー</h4>
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p><strong>🚗 スマートモビリティ＆エネルギーソリューション</strong></p>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>H10.2 Yadea:</strong> 電動スクーター試乗体験（20分）</li>
+                            <li><strong>H10.2 BYD:</strong> EVバッテリー＋エネルギー貯蔵技術（20分）</li>
+                            <li><strong>H10.2 NAVEE等:</strong> 次世代モビリティ各種（20分）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="time-slot" style="border-left-color: #ff9800;">
+                    <h4 style="color: #ff9800;">🏭 14:30～15:30 | 製造エコシステム深堀り</h4>
+                    <div style="background: #fff3e0; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <p><strong>🎯 IFA Global Markets（Hall 26）- 製造・サプライチェーン</strong></p>
+                        <ul style="margin: 8px 0; padding-left: 20px;">
+                            <li><strong>H26b-937 GuangDong Takdir Smart Robot:</strong> ロボット製造技術（20分）</li>
+                            <li><strong>中国製造ハブ企業群:</strong> Ningbo/Cixi/Dongguanエリア巡回（30分）</li>
+                            <li><strong>OEM/ODMソリューション:</strong> 大手ブランド製造の実態調査（10分）</li>
+                        </ul>
+                    </div>
+                    <div class="important-note" style="background: #fff3cd; border-color: #ffc107; color: #856404;">
+                        <strong>戦略ポイント:</strong> 欧米ブランドと中国製造業者の技術格差・協業関係を把握
+                    </div>
+                </div>
+
+                <div class="time-slot">
+                    <h4>🕞 15:30～16:00 | IFA NEXTスタートアップ探索</h4>
+                    <p>残りの革新的スタートアップ技術・再訪希望ブース</p>
+                </div>
+
+                <div class="time-slot">
+                    <h4>🕟 16:00～17:00 | 総合まとめ・情報整理</h4>
+                    <p>国別パビリオン、Expertバー、パンフレット整理</p>
+                    <div style="background: #e3f2fd; padding: 10px; border-radius: 5px; margin: 5px 0; border-left: 4px solid #2196f3;">
+                        <strong>2日間総括:</strong> ロボティクス→スマートホーム→民生品→ディスプレイ→モビリティ→製造の技術進化と産業構造を包括的に理解
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 現地で確認すべき重要ポイント -->
+        <div class="section">
+            <h2 class="section-title">現地確認チェックポイント</h2>
+            
+            <h3 style="color: #e91e63; font-size: 1.4em; margin: 20px 0 15px 0;">🤖 ロボティクス技術評価</h3>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="robot1">
+                <label for="robot1">🔍 <strong>ヒューマノイド実用性:</strong> デモ環境と実際の家庭環境でのギャップ評価</label>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="robot2">
+                <label for="robot2">🔍 <strong>AI認知能力:</strong> 単純な動作指示と複雑な状況判断の差</label>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="robot3">
+                <label for="robot3">🔍 <strong>安全性機構:</strong> 人間との接触・協働時の安全対策</label>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="robot4">
+                <label for="robot4">🔍 <strong>メンテナンス性:</strong> 故障時の修理・部品交換・ソフトウェア更新</label>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="robot5">
+                <label for="robot5">🔍 <strong>価格実現性:</strong> 量産時期・想定価格帯・市場投入戦略</label>
+            </div>
+
+            <h3 style="color: #667eea; font-size: 1.4em; margin: 25px 0 15px 0;">🏠 スマートホーム・エコシステム</h3>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="tech1">
+                <label for="tech1">🔍 <strong>AI統合レベル:</strong> 各社のAIが実際にどの程度「賢く」連携するか</label>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="tech2">
+                <label for="tech2">🔍 <strong>Matter相互運用性:</strong> 異なるブランド間でのデバイス連携実演</label>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="tech3">
+                <label for="tech3">🔍 <strong>Samsung RGB MicroLED:</strong> 本当のMicroLEDか高度液晶技術か</label>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="tech6">
+                <label for="tech6">🔍 <strong>価格戦略:</strong> プレミアム技術の市場投入時期・価格帯</label>
+            </div>
+
+            <h3 style="color: #ff9800; font-size: 1.4em; margin: 25px 0 15px 0;">🏭 製造・サプライチェーン</h3>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="supply1">
+                <label for="supply1">🔍 <strong>OEM/ODM実態:</strong> 大手ブランドと中国製造業者の技術協業レベル</label>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="supply2">
+                <label for="supply2">🔍 <strong>製造技術格差:</strong> 中国製造業者の独自技術開発vs受託製造の実態</label>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="supply3">
+                <label for="supply3">🔍 <strong>地域別製造特性:</strong> Ningbo/Cixi/Foshan/Dongguanの技術専門分野</label>
+            </div>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="supply4">
+                <label for="supply4">🔍 <strong>品質・コスト・納期:</strong> グローバル競争における中国製造業の優位性</label>
+            </div>
+
+            <h3 style="color: #28a745; font-size: 1.4em; margin: 25px 0 15px 0;">♻️ サステナビリティ</h3>
+            
+            <div class="checkbox-item">
+                <input type="checkbox" id="tech5">
+                <label for="tech5">🔍 <strong>サステナビリティ:</strong> 具体的な環境配慮技術・素材・製造プロセス</label>
+            </div>
+        </div>
+
+        <!-- 緊急時・実用情報 -->
+        <div class="section">
+            <h2 class="section-title">実用情報・緊急時対応</h2>
+            <div class="map-info">
+                <h5>🚇 交通アクセス</h5>
+                <p><strong>Uバーン:</strong> Kaiserdamm駅（U2線）徒歩5分</p>
+                <p><strong>Sバーン:</strong> Messe Nord/ICC駅（S41/S42線）</p>
+            </div>
+            
+            <div class="map-info">
+                <h5>🏢 展示エリア構成</h5>
+                <p><strong>IFA NEXT (Hall 25):</strong> 146社のスタートアップ・革新企業</p>
+                <p><strong>IFA Global Markets (Hall 26):</strong> 407社のB2B・製造企業</p>
+                <p><strong>メインホール (Hall 1-27):</strong> 大手ブランド・主要技術展示</p>
+                <p><strong>CityCube Berlin:</strong> Samsung等の超大型展示</p>
+            </div>
+            
+            <div class="map-info">
+                <h5>🕒 開場時間</h5>
+                <p><strong>一般来場者:</strong> 10:00～18:00</p>
+                <p><strong>推奨到着時間:</strong> 9:45（入場混雑を避けるため）</p>
+            </div>
+            
+            <div class="map-info">
+                <h5>📞 緊急連絡先</h5>
+                <p><strong>メッセ・ベルリン案内:</strong> +49 30 3038-0</p>
+                <p><strong>救急:</strong> 112（ドイツ緊急番号）</p>
+            </div>
+            
+            <div class="important-note">
+                <strong>重要:</strong> 展示内容は現地で変更される可能性があります。各ブースで最新情報を確認してください。
+            </div>
+        </div>
+    </div>
+</body>
+</html>

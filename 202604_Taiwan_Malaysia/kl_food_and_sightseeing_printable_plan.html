@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KL 5/3-5/4 自力観光・食事メモ</title>
+  <style>
+    a { color: var(--accent); font-weight: 700; text-decoration: underline; }
+    .maplink { white-space: nowrap; font-size: 12px; margin-left: 4px; }
+    :root {
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: #d1d5db;
+      --soft: #f3f4f6;
+      --accent: #0f766e;
+      --warn: #b45309;
+      --bad: #b91c1c;
+      --good: #047857;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      color: var(--ink);
+      background: white;
+      line-height: 1.55;
+      font-size: 14px;
+    }
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+    header {
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 26px;
+      letter-spacing: .02em;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      break-inside: avoid;
+      background: #fff;
+    }
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      color: var(--accent);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 6px;
+    }
+    .card h3 {
+      margin: 12px 0 6px;
+      font-size: 15px;
+    }
+    .note {
+      background: var(--soft);
+      border-left: 5px solid var(--accent);
+      padding: 10px 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+    }
+    .warning {
+      background: #fff7ed;
+      border-left-color: var(--warn);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 4px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 7px 8px;
+      vertical-align: top;
+    }
+    th {
+      background: var(--soft);
+      text-align: left;
+      white-space: nowrap;
+    }
+    .time {
+      width: 92px;
+      font-weight: 700;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+    ul {
+      margin: 6px 0 0 1.2em;
+      padding: 0;
+    }
+    li { margin: 3px 0; }
+    .tag {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin: 2px 4px 2px 0;
+      border: 1px solid var(--line);
+      background: var(--soft);
+    }
+    .good { color: var(--good); }
+    .bad { color: var(--bad); }
+    .warn { color: var(--warn); }
+    .phrase {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: .02em;
+      padding: 10px 12px;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 10px;
+      margin: 8px 0;
+    }
+    .compact p { margin: 6px 0; }
+    .full { grid-column: 1 / -1; }
+    footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+    @media print {
+      body { padding: 10mm; font-size: 12px; }
+      .page { max-width: none; }
+      .card { border-radius: 8px; padding: 10px; }
+      h1 { font-size: 22px; }
+      .card h2 { font-size: 16px; }
+      .grid { gap: 10px; }
+      a { color: var(--accent); text-decoration: underline; }
+      .no-print { display: none; }
+    }
+    @media (max-width: 760px) {
+      body { padding: 14px; }
+      .grid { grid-template-columns: 1fr; }
+      .full { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>クアラルンプール 自力観光・食事メモ</h1>
+      <div class="subtitle">宿泊：<a href="https://www.google.com/maps/search/?api=1&query=Holiday%20Inn%20Express%20Kuala%20Lumpur%20City%20Centre" target="_blank" rel="noopener">Holiday Inn Express Kuala Lumpur City Centre</a>｜5/3・5/4用｜パクチー回避版</div>
+    </header>
+
+    <section class="card full compact">
+      <h2>方針</h2>
+      <p><strong>ツアーは使わず、Grab＋徒歩＋モノレールで動く。</strong> 朝に屋外、昼〜午後は屋内・休憩、夜に食事と街歩き。</p>
+      <p><strong>食事は中華系・インド系・モール/フードコート中心。</strong> パクチー事故を避けるため、ラクサ・トムヤム・ハーブ系スープ麺は避ける。</p>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <h2>5/3：観光メインの日</h2>
+        <table>
+          <tr><th>時間</th><th>行動</th></tr>
+          <tr><td class="time">07:30</td><td>ホテル出発。Grabで<a href="https://www.google.com/maps/search/?api=1&query=Batu%20Caves%20Kuala%20Lumpur" target="_blank" rel="noopener">Batu Caves</a>へ。</td></tr>
+          <tr><td class="time">08:00</td><td><strong><a href="https://www.google.com/maps/search/?api=1&query=Batu%20Caves%20Kuala%20Lumpur" target="_blank" rel="noopener">Batu Caves</a></strong>。暑くなる前に272段を上がる。</td></tr>
+          <tr><td class="time">09:30</td><td>Grabで<a href="https://www.google.com/maps/search/?api=1&query=Masjid%20Jamek%20Kuala%20Lumpur" target="_blank" rel="noopener">Masjid Jamek</a>周辺へ。</td></tr>
+          <tr><td class="time">10:15</td><td><a href="https://www.google.com/maps/search/?api=1&query=Masjid%20Jamek%20Kuala%20Lumpur" target="_blank" rel="noopener">Masjid Jamek</a> / <a href="https://www.google.com/maps/search/?api=1&query=River%20of%20Life%20Kuala%20Lumpur" target="_blank" rel="noopener">River of Life</a> / <a href="https://www.google.com/maps/search/?api=1&query=Sultan%20Abdul%20Samad%20Building%20Kuala%20Lumpur" target="_blank" rel="noopener">Sultan Abdul Samad Building</a> / <a href="https://www.google.com/maps/search/?api=1&query=Merdeka%20Square%20Kuala%20Lumpur" target="_blank" rel="noopener">Merdeka Square</a>。</td></tr>
+          <tr><td class="time">11:30</td><td><a href="https://www.google.com/maps/search/?api=1&query=Central%20Market%20Kuala%20Lumpur" target="_blank" rel="noopener">Central Market</a> / <a href="https://www.google.com/maps/search/?api=1&query=Chinatown%20Kuala%20Lumpur" target="_blank" rel="noopener">Chinatown</a>。土産・雑貨・軽食。</td></tr>
+          <tr><td class="time">12:30</td><td>ホテルに戻って休憩。暑さ・雷雨回避。</td></tr>
+          <tr><td class="time">15:00</td><td><a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" rel="noopener">Pavilion</a>、<a href="https://www.google.com/maps/search/?api=1&query=Suria%20KLCC%20Kuala%20Lumpur" target="_blank" rel="noopener">Suria KLCC</a>、または<a href="https://www.google.com/maps/search/?api=1&query=Islamic%20Arts%20Museum%20Malaysia" target="_blank" rel="noopener">Islamic Arts Museum Malaysia</a>。</td></tr>
+          <tr><td class="time">17:30</td><td><a href="https://www.google.com/maps/search/?api=1&query=Petronas%20Twin%20Towers%20Kuala%20Lumpur" target="_blank" rel="noopener">Petronas Twin Towers</a>外観 / <a href="https://www.google.com/maps/search/?api=1&query=KLCC%20Park%20Kuala%20Lumpur" target="_blank" rel="noopener">KLCC Park</a>。</td></tr>
+          <tr><td class="time">19:00</td><td><a href="https://www.google.com/maps/search/?api=1&query=Jalan%20Alor%20Food%20Street%20Kuala%20Lumpur" target="_blank" rel="noopener">Jalan Alor</a>または<a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" rel="noopener">Pavilion</a>で夕食。</td></tr>
+          <tr><td class="time">21:00</td><td>ホテル戻り。</td></tr>
+        </table>
+        <div class="note warning"><strong>雨が強い場合：</strong> <a href="https://www.google.com/maps/search/?api=1&query=Batu%20Caves%20Kuala%20Lumpur" target="_blank" rel="noopener">Batu Caves</a>だけ済ませて、午後は<a href="https://www.google.com/maps/search/?api=1&query=Central%20Market%20Kuala%20Lumpur" target="_blank" rel="noopener">Central Market</a> → <a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" rel="noopener">Pavilion</a> → <a href="https://www.google.com/maps/search/?api=1&query=Suria%20KLCC%20Kuala%20Lumpur" target="_blank" rel="noopener">Suria KLCC</a>に寄せる。</div>
+      </section>
+
+      <section class="card">
+        <h2>5/4：合流・夜ご飯の日</h2>
+        <table>
+          <tr><th>時間</th><th>行動</th></tr>
+          <tr><td class="time">朝</td><td>ホテル朝食、またはカヤトースト＋半熟卵＋コピ。</td></tr>
+          <tr><td class="time">10:00</td><td>近場で軽く散歩。<a href="https://www.google.com/maps/search/?api=1&query=Central%20Market%20Kuala%20Lumpur" target="_blank" rel="noopener">Central Market</a> / <a href="https://www.google.com/maps/search/?api=1&query=Chinatown%20Kuala%20Lumpur" target="_blank" rel="noopener">Chinatown</a> または <a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" rel="noopener">Pavilion</a>。</td></tr>
+          <tr><td class="time">12:00</td><td><strong><a href="https://www.google.com/maps/search/?api=1&query=Lot%2010%20Hutong%20Kuala%20Lumpur" target="_blank" rel="noopener">Lot 10 Hutong</a></strong>で昼食。屋内で涼しい。</td></tr>
+          <tr><td class="time">14:00</td><td>ホテル休憩。部下の到着便・入国状況を確認。</td></tr>
+          <tr><td class="time">15:45目安</td><td>KIX発マレーシア航空 MH53 がKUL着予定。遅延・入国・荷物・市内移動を見込む。</td></tr>
+          <tr><td class="time">18:00〜19:00</td><td>ホテルまたは<a href="https://www.google.com/maps/search/?api=1&query=Bukit%20Bintang%20Kuala%20Lumpur" target="_blank" rel="noopener">Bukit Bintang</a>周辺で合流。</td></tr>
+          <tr><td class="time">19:00</td><td>合流後の夜ご飯。<a href="https://www.google.com/maps/search/?api=1&query=Jalan%20Alor%20Food%20Street%20Kuala%20Lumpur" target="_blank" rel="noopener">Jalan Alor</a>、<a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" rel="noopener">Pavilion</a>、<a href="https://www.google.com/maps/search/?api=1&query=Lot%2010%20Hutong%20Kuala%20Lumpur" target="_blank" rel="noopener">Lot 10 Hutong</a>、または<a href="https://www.google.com/maps/search/?api=1&query=Suria%20KLCC%20Kuala%20Lumpur" target="_blank" rel="noopener">Suria KLCC</a>周辺。</td></tr>
+          <tr><td class="time">21:00</td><td>翌日に備えて早めに解散・ホテル戻り。</td></tr>
+        </table>
+        <div class="note"><strong>4日は合流優先。</strong> 部下は移動日なので、夜ご飯はホテル近く・屋内寄り・軽めが安全。</div>
+      </section>
+
+      <section class="card">
+        <h2>注文時の必須フレーズ</h2>
+        <div class="phrase">No coriander, please.</div>
+        <div class="phrase">No cilantro, please.</div>
+        <div class="phrase">Tak nak daun ketumbar.</div>
+        <p><strong>意味：</strong>パクチーを入れないでください。</p>
+        <p>英語の <strong>No coriander</strong> が一番無難。中華系では cilantro と言われることもある。</p>
+      </section>
+
+      <section class="card">
+        <h2>食べ物：安全度リスト</h2>
+        <h3 class="good">かなり安全</h3>
+        <span class="tag">カヤトースト</span>
+        <span class="tag">ロティチャナイ</span>
+        <span class="tag">チキンライス</span>
+        <span class="tag">チャークイティオ</span>
+        <span class="tag">ワンタンミー</span>
+        <span class="tag">サテー</span>
+        <span class="tag">バクテー</span>
+        <h3 class="warn">注意して頼めばOK</h3>
+        <span class="tag">ナシレマッ</span>
+        <span class="tag">ホッケンミー</span>
+        <span class="tag">カリーミー</span>
+        <span class="tag">ミーゴレン</span>
+        <span class="tag">炒飯</span>
+        <h3 class="bad">避ける寄り</h3>
+        <span class="tag">ラクサ</span>
+        <span class="tag">アッサムラクサ</span>
+        <span class="tag">トムヤム</span>
+        <span class="tag">ハーブ系スープ麺</span>
+        <span class="tag">ベトナム/タイ系の麺</span>
+      </section>
+
+      <section class="card full">
+        <h2>5/4 夜ご飯候補：部下合流後</h2>
+        <table>
+          <tr><th>候補</th><th>向いている状況</th><th>食べ方</th></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&query=Jalan%20Alor%20Food%20Street%20Kuala%20Lumpur" target="_blank" rel="noopener">Jalan Alor</a></strong></td><td>初KL感を出したい。雨が弱い。歩く元気がある。</td><td>サテー、チキンウィング、炒飯、炒め麺。毎回No coriander。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&query=Lot%2010%20Hutong%20Kuala%20Lumpur" target="_blank" rel="noopener">Lot 10 Hutong</a></strong></td><td>移動疲れあり。屋内で安全に食べたい。</td><td>チキンライス、チャークイティオ、ワンタンミー、バクテー。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" rel="noopener">Pavilion</a></strong></td><td>雨・疲労・会話重視。失敗したくない。</td><td>モール飯。辛さ・香草を避けやすい。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&query=Suria%20KLCC%20Kuala%20Lumpur" target="_blank" rel="noopener">Suria KLCC</a></strong></td><td>夜景も見せたい。Petronas Twin Towers外観を回収したい。</td><td>食後に外観写真。雨ならモール内で完結。</td></tr>
+        </table>
+        <div class="note warning"><strong>合流日の注意：</strong> 到着予定15:45でも、入国・荷物・市内移動でホテル到着は18時前後になりやすい。予約するなら19:00以降。</div>
+      </section>
+
+      <section class="card full">
+        <h2>エリア別メモ</h2>
+        <table>
+          <tr><th>場所</th><th>使い方</th><th>食事の狙い</th></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&query=Batu%20Caves%20Kuala%20Lumpur" target="_blank" rel="noopener">Batu Caves</a></strong></td><td>朝イチで行く。暑くなる前に撤収。</td><td>食事目的ではなく観光目的。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&query=Masjid%20Jamek%20Kuala%20Lumpur" target="_blank" rel="noopener">Masjid Jamek</a> / <a href="https://www.google.com/maps/search/?api=1&query=Merdeka%20Square%20Kuala%20Lumpur" target="_blank" rel="noopener">Merdeka Square</a></strong></td><td>写真・街歩き。暑ければ短縮。</td><td>無理に食べない。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&query=Central%20Market%20Kuala%20Lumpur" target="_blank" rel="noopener">Central Market</a> / <a href="https://www.google.com/maps/search/?api=1&query=Chinatown%20Kuala%20Lumpur" target="_blank" rel="noopener">Chinatown</a></strong></td><td>土産・雑貨・軽食。屋内避難にも使える。</td><td>中華系の麺・チキンライス系。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&query=Lot%2010%20Hutong%20Kuala%20Lumpur" target="_blank" rel="noopener">Lot 10 Hutong</a></strong></td><td>昼食の本命。屋内・選択肢多い。</td><td>チキンライス、チャークイティオ、ワンタンミー、バクテー。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" rel="noopener">Pavilion</a> / <a href="https://www.google.com/maps/search/?api=1&query=Suria%20KLCC%20Kuala%20Lumpur" target="_blank" rel="noopener">Suria KLCC</a></strong></td><td>雨・暑さ回避。買い物・カフェ・モール飯。</td><td>安全運転ならモール飯。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&query=Jalan%20Alor%20Food%20Street%20Kuala%20Lumpur" target="_blank" rel="noopener">Jalan Alor</a></strong></td><td>夜の雰囲気を楽しむ。ホテルから近い。</td><td>サテー、チキンウィング、炒飯、炒め麺。毎回No coriander。</td></tr>
+        </table>
+      </section>
+
+      <section class="card full">
+        <h2>移動ルール</h2>
+        <ul>
+          <li><strong><a href="https://www.google.com/maps/search/?api=1&query=Batu%20Caves%20Kuala%20Lumpur" target="_blank" rel="noopener">Batu Caves</a>はGrab優先。</strong> 朝なら効率が良い。</li>
+          <li><strong>市内は徒歩＋モノレール＋Grab。</strong> 暑い・雨・疲れたらすぐGrab。</li>
+          <li><strong>昼〜午後は無理に外を歩かない。</strong> ホテル休憩を入れる。</li>
+          <li><strong>夜はホテル周辺で完結。</strong> <a href="https://www.google.com/maps/search/?api=1&query=Jalan%20Alor%20Food%20Street%20Kuala%20Lumpur" target="_blank" rel="noopener">Jalan Alor</a>、<a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" rel="noopener">Pavilion</a>、<a href="https://www.google.com/maps/search/?api=1&query=Bukit%20Bintang%20Kuala%20Lumpur" target="_blank" rel="noopener">Bukit Bintang</a>で十分。</li>
+        </ul>
+      </section>
+    </div>
+
+    <footer>
+      印刷用メモ：現地では天候・体調・Grab料金を見て柔軟に変更。パクチー回避は毎回「No coriander, please.」を付ける。
+    </footer>
+  </div>
+</body>
+</html>

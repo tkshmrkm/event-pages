@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HRS Europe 2026 出張ガイド（フィンエアー NGO-FRA・第一候補）</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+  body { font-family:'Noto Sans JP','Yu Gothic','Meiryo',sans-serif; padding-bottom:20px; }
+  .chip { display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;border:1px solid;white-space:nowrap; }
+  .chip-tbd  { background:rgba(234,179,8,.15);border-color:rgba(234,179,8,.5);color:#78350f; }
+  .chip-pending { background:rgba(99,102,241,.12);border-color:rgba(99,102,241,.4);color:#3730a3; }
+  .chip-booked { background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.5);color:#14532d; }
+  .chip-skip { background:#f1f5f9;border-color:#cbd5e1;color:#64748b; }
+  .tbd-banner { background:repeating-linear-gradient(45deg,#fef9c3,#fef9c3 10px,#fefce8 10px,#fefce8 20px);border:1px dashed #ca8a04;border-radius:8px;padding:10px 14px;font-size:12px;color:#854d0e; }
+
+  .sp-table { border-collapse:collapse;width:100%; }
+  .sp-table th,.sp-table td { border:1px solid #e2e8f0;padding:6px 8px;vertical-align:top;font-size:12px; }
+  .sp-table thead th { background:#334155;color:#fff;font-weight:700;text-align:left; }
+  .tc { color:#64748b;font-size:11px;white-space:nowrap;font-weight:700; }
+  .etag { display:inline-block;padding:1px 6px;border-radius:999px;font-size:10px;font-weight:600;margin-bottom:2px; }
+  .t-fly  { background:#dbeafe;color:#1e40af; }
+  .t-conf { background:#ffe4e6;color:#9f1239; }
+  .t-move { background:#d1fae5;color:#065f46; }
+  .t-hotel{ background:#f1f5f9;color:#334155;border:1px solid #cbd5e1; }
+  .t-tbd  { background:#fef9c3;color:#854d0e;border:1px dashed #ca8a04; }
+  .t-food { background:#fef3c7;color:#92400e; }
+
+  .todo-item { display:flex;align-items:flex-start;gap:10px;padding:8px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .1s; }
+  .todo-item:hover { background:#f8fafc; }
+  .todo-item input { width:16px;height:16px;cursor:pointer;flex-shrink:0;margin-top:3px; }
+  .todo-item.done label { text-decoration:line-through;color:#94a3b8; }
+  .todo-item label { cursor:pointer;font-size:13px;line-height:1.5; }
+  .sub { font-size:11px;color:#64748b;display:block;margin-top:2px; }
+
+  .section-anchor { scroll-margin-top: 64px; }
+  @media print { .no-print { display:none!important; } }
+</style>
+</head>
+<body class="bg-[#fcfcfc] text-slate-800 antialiased">
+
+<header class="bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-40 shadow-sm no-print">
+  <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3 flex-wrap">
+    <div>
+      <h1 class="text-base font-bold leading-tight">🇩🇪 HRS Europe 2026 出張ガイド <span class="text-amber-600 font-normal">（フィンエアー NGO-FRA・第一候補）</span></h1>
+      <p class="text-[11px] text-slate-500 mt-0.5">9/7発〜9/14着 ｜ Stuttgart（HRS）＋ 9/12-13の過ごし方は複数案検討中</p>
+    </div>
+    <div class="flex gap-1 text-[11px] flex-wrap no-print">
+      <a href="#overview" class="px-2 py-1 rounded text-slate-600 hover:bg-slate-100">概要</a>
+      <a href="#flight-criteria" class="px-2 py-1 rounded text-slate-600 hover:bg-slate-100">選定基準</a>
+      <a href="#schedule" class="px-2 py-1 rounded text-slate-600 hover:bg-slate-100">日程表</a>
+      <a href="#todo" class="px-2 py-1 rounded text-slate-600 hover:bg-slate-100">ToDo</a>
+      <a href="#travelers" class="px-2 py-1 rounded text-slate-600 hover:bg-slate-100">渡航者</a>
+      <button onclick="window.print()" class="px-2 py-1 bg-slate-700 text-white rounded"><i class="fas fa-print"></i></button>
+    </div>
+  </div>
+</header>
+
+<div class="max-w-4xl mx-auto px-4 py-4 space-y-4">
+
+  <!-- 機密注意 -->
+  <div class="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-3 flex items-start gap-2 text-xs text-amber-800">
+    <i class="fas fa-lock mt-0.5"></i>
+    <div><strong>公開用：</strong>個人情報および予約識別番号は除外しています。</div>
+  </div>
+
+  <!-- 現状ステータス -->
+  <div class="tbd-banner flex items-start gap-2">
+    <i class="fas fa-triangle-exclamation text-amber-500 mt-0.5 shrink-0"></i>
+    <div><span class="font-bold">フライト＝フィンエアー NGO⇔FRA で確定。宿泊もMaritim Stuttgartで予約済。残るは9/12-13の過ごし方の選択のみ</span><br>
+    フライトは<strong>フィンエアー NGO⇔FRA（AY・HEL経由）で決定</strong>（確定見積 総額¥361,010・他案は比較一覧をアーカイブ）。Stuttgart宿泊は<strong>Maritim Stuttgart（会場隣接）で予約完了</strong>。9/12（土）は<strong>プランA/B（Mainz観戦 KO15:30/18:30）or プランC（ポルシェ博物館）</strong>、9/13（日）の日中は<strong>X（ケルン日帰り）／Y（フランクフルト市内）／Z（Mainz）</strong>で選択。</div>
+  </div>
+
+  <!-- 概要 -->
+  <section id="overview" class="section-anchor">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-4">
+      <h2 class="font-bold text-sm mb-3"><i class="fas fa-users text-slate-400 mr-1"></i>出張概要</h2>
+      <div class="bg-purple-50 border border-purple-200 rounded-lg p-2.5 mb-3 text-xs text-purple-800 font-semibold">
+        <i class="fas fa-robot mr-1"></i>HRS Europe 2026：9/9〜9/11 参加（参加者A・参加者B 2名）
+      </div>
+      <div class="grid grid-cols-2 gap-3 mb-3 text-xs">
+        <div class="border border-purple-200 rounded-lg p-3 bg-purple-50">
+          <span class="chip chip-pending">👤 参加者A</span>
+          <div class="mt-2 space-y-0.5 text-slate-600">
+            <div>出発地：京都 ⇔ NGO（中部国際空港）</div>
+          </div>
+        </div>
+        <div class="border border-purple-200 rounded-lg p-3 bg-purple-50">
+          <span class="chip chip-pending">👤 参加者B</span>
+          <div class="mt-2 space-y-0.5 text-slate-600">
+            <div>出発地：犬山 ⇔ NGO（中部国際空港）</div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-slate-50 rounded p-3 text-xs text-slate-600 space-y-1">
+        <div class="font-semibold text-slate-700">ホテル（2拠点）</div>
+        <div><i class="fas fa-hotel mr-1 text-teal-500"></i><strong>Maritim Stuttgart（★★★★／Seidenstraße 34, 70174）：</strong>9/8〜9/12（4泊・朝食込・各388.84 EUR＝97.21 EUR/泊）｜2名計 777.68 EUR <span class="chip chip-booked ml-1">予約済</span><br><span class="text-emerald-700 font-semibold">✔ 会場 Liederhalle に隣接（徒歩約3分）。旧予約 Garner Hotel から変更。</span><br><span class="text-slate-500">クラシックダブル28㎡・禁煙・チェックイン15:00｜無料キャンセル 9/5 23:00(現地)まで｜TEL +49 711 9420</span></div>
+        <div><i class="fas fa-hotel mr-1 text-teal-500"></i><strong>Best Western Hotel Airport Frankfurt：</strong>9/12〜9/13（1泊・朝食付・各107.00 EUR） <span class="chip chip-booked ml-1">予約済</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- フライト選定基準 -->
+  <section id="flight-criteria" class="section-anchor">
+    <div class="bg-white rounded-xl shadow-sm border border-cyan-200 overflow-hidden">
+      <div class="bg-cyan-700 text-white px-4 py-2.5 font-bold text-sm"><i class="fas fa-plane mr-1"></i>フライト選定基準（2026年9月）</div>
+      <div class="p-4 text-xs space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-cyan-50 rounded-lg p-3">
+            <div class="font-semibold text-cyan-700 mb-1"><i class="fas fa-plane-departure mr-1"></i>往路条件</div>
+            <div>出発：9/7（月）22時 〜 9/8（火）朝</div>
+            <div>到着：9/8（火）20時着まで</div>
+          </div>
+          <div class="bg-cyan-50 rounded-lg p-3">
+            <div class="font-semibold text-cyan-700 mb-1"><i class="fas fa-plane-arrival mr-1"></i>復路条件</div>
+            <div>出発：9/13（日）</div>
+            <div>到着：日本時間22時着まで（9/14着も可）</div>
+          </div>
+        </div>
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-amber-800">
+          <i class="fas fa-info-circle mr-1"></i>本ガイドは<strong>中部発着（NGO⇔FRA・フィンエアー）</strong>を採用（参加者B＝犬山のアクセスが最も楽で総合優位）。関空発着（ターキッシュ・ANA-LH）との比較は<strong>フライト比較一覧</strong>を参照。復路のFRA空港到着時刻は、<strong>国際線チェックイン（出発3時間前目安）</strong>に合わせて組み立てる。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 選択中フライト -->
+  <section class="section-anchor">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="bg-slate-700 text-white px-4 py-2.5 font-bold text-sm flex items-center justify-between">
+        <span><i class="fas fa-plane mr-1"></i>選択したフライト（確定：NGO⇔FRA Finnair）</span>
+        <span class="chip chip-booked">確定</span>
+      </div>
+      <div class="bg-emerald-50 border-b border-emerald-100 px-4 py-2 text-[11px] text-emerald-800">
+        <i class="fas fa-yen-sign mr-1"></i>往復エコノミー <strong>確定総額 ¥361,010</strong>（代理店見積2026/7/6・お一人様）。他案（ターキッシュKIX-STR ¥369,380／JAL NGO-FRA ¥415,780等）との比較一覧はアーカイブ済。<strong>前日入り可・参加者Bの中部アクセス最短で総合優位のため本便に決定。</strong>
+      </div>
+      <div class="p-4 text-xs space-y-3">
+        <!-- 往路 -->
+        <div class="border border-slate-200 rounded-lg overflow-hidden">
+          <div class="bg-blue-50 px-2 py-1 font-bold text-blue-800 flex justify-between"><span><span class="etag t-fly">✈往路</span> 9/7（月）〜9/8（火）</span><span class="text-slate-500 font-normal">総所要17時間30分</span></div>
+          <table class="sp-table text-[11px]">
+            <tr><td class="tc" style="width:96px">22:50</td><td><strong>NGO 中部</strong>発 <span class="text-slate-400">→ HEL</span></td><td class="text-slate-500">AY80｜A350｜13h05m<span class="text-slate-400">（深夜便）</span></td></tr>
+            <tr><td class="tc">9/8 5:55</td><td><strong>HEL ヘルシンキ</strong>着</td><td class="text-slate-500">乗継 <strong>1時間45分</strong></td></tr>
+            <tr><td class="tc">9/8 7:40</td><td><strong>HEL</strong>発 <span class="text-slate-400">→ FRA</span></td><td class="text-slate-500">AY1411｜A321｜2h40m</td></tr>
+            <tr><td class="tc">9/8 9:20</td><td><strong>FRA フランクフルト</strong>着</td><td class="text-slate-500">フィンエアー・エコノミー｜CO₂e 約661kg</td></tr>
+          </table>
+        </div>
+        <!-- 復路 -->
+        <div class="border border-slate-200 rounded-lg overflow-hidden">
+          <div class="bg-cyan-50 px-2 py-1 font-bold text-cyan-800 flex justify-between"><span><span class="etag t-fly">✈復路</span> 9/13（日）〜9/14（月）</span><span class="text-slate-500 font-normal">総所要17時間15分</span></div>
+          <table class="sp-table text-[11px]">
+            <tr><td class="tc" style="width:96px">19:20</td><td><strong>FRA フランクフルト</strong>発 <span class="text-slate-400">→ HEL</span></td><td class="text-slate-500">AY1416｜A321｜2h25m</td></tr>
+            <tr><td class="tc">22:45</td><td><strong>HEL ヘルシンキ</strong>着</td><td class="text-slate-500">乗継 <strong>2時間</strong></td></tr>
+            <tr><td class="tc">9/14 0:45</td><td><strong>HEL</strong>発 <span class="text-slate-400">→ NGO</span></td><td class="text-slate-500">AY79｜A350｜12h50m<span class="text-slate-400">（深夜便）</span></td></tr>
+            <tr><td class="tc">9/14 19:35</td><td><strong>NGO 中部</strong>着</td><td class="text-slate-500">フィンエアー・エコノミー｜CO₂e 約658kg</td></tr>
+          </table>
+        </div>
+        <div class="bg-cyan-50 rounded p-2 text-cyan-800"><i class="fas fa-clock mr-1"></i>復路19:20発 → 国際線チェックインは出発<strong>3時間前目安</strong>で、<strong>16:20頃までにFRA空港到着</strong>を目標に、9/13日中の予定を組む。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 日程表 -->
+  <section id="schedule" class="section-anchor">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-3">
+      <div class="text-sm font-bold mb-1">📅 日程表（9/7〜9/14）</div>
+      <div class="flex flex-wrap gap-1.5 text-[10px]">
+        <span class="etag t-fly">✈ フライト</span><span class="etag t-conf">🤖 HRS</span><span class="etag t-move">🚆 移動</span><span class="etag t-hotel">🏨 宿泊</span><span class="etag t-food">🍽 食事</span><span class="etag t-tbd">要検討</span>
+      </div>
+      <div class="mt-1 text-[11px] text-slate-500"><i class="fas fa-suitcase-rolling mr-1"></i>荷物方針：<strong>常にホテルに預ける</strong>（コインロッカーは使わない）。</div>
+    </div>
+  </section>
+
+  <!-- 9/7 -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="bg-slate-600 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/7（月）<span class="text-xs font-normal opacity-80">日本出発 — 京都／犬山それぞれからNGOへ</span></div>
+    <div class="grid grid-cols-2 divide-x divide-slate-200">
+      <div>
+        <div class="bg-purple-100 text-purple-800 px-3 py-1.5 font-bold text-xs">👤 参加者A（京都発）</div>
+        <table class="sp-table text-[11px]">
+          <tr><td class="tc" style="width:80px">18:00</td><td>自宅発 → 京都駅へ</td></tr>
+          <tr><td class="tc">18:30</td><td><span class="etag t-move">🚆</span> 京都駅発（新幹線）→ 名古屋（約35分）</td></tr>
+          <tr><td class="tc">19:10</td><td><span class="etag t-move">🚆</span> 名鉄名古屋発 ミュースカイ → セントレア（約28分）</td></tr>
+          <tr><td class="tc">19:40頃</td><td>セントレア着（出発3h10m前）→ チェックイン・保安検査・出国審査</td></tr>
+        </table>
+      </div>
+      <div>
+        <div class="bg-purple-100 text-purple-800 px-3 py-1.5 font-bold text-xs">👤 参加者B（犬山発）</div>
+        <table class="sp-table text-[11px]">
+          <tr><td class="tc" style="width:80px">18:10</td><td>自宅発 → 犬山駅へ</td></tr>
+          <tr><td class="tc">18:40頃</td><td><span class="etag t-move">🚆</span> 名鉄 犬山駅発 → セントレア（乗換1回、約70分）<span class="etag t-tbd ml-1">要確認</span></td></tr>
+          <tr><td class="tc">19:50頃</td><td>セントレア着（出発3h前）→ チェックイン・保安検査・出国審査</td></tr>
+        </table>
+      </div>
+    </div>
+    <table class="sp-table">
+      <tr><td class="tc" style="width:90px">20:00頃</td><td>セントレアで二人合流 → <i class="fas fa-couch mr-1"></i><strong>JAL サクララウンジ（国際線）</strong>へ（二人とも）</td></tr>
+      <tr><td class="tc">22:50発</td><td><span class="etag t-fly">✈</span><span class="etag t-tbd ml-1">発券手配中</span> NGO発 → HEL（フィンエアー AY80／A350）<span class="text-slate-500">機内泊</span></td></tr>
+    </table>
+  </div>
+
+  <!-- 9/8 -->
+  <div class="bg-white rounded-xl shadow-sm border border-green-200 overflow-hidden">
+    <div class="bg-green-700 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/8（火）<span class="text-xs font-normal opacity-80">FRA着 → Stuttgart移動（荷物は先にホテルへ）</span></div>
+    <table class="sp-table">
+      <tr><td class="tc" style="width:90px">5:55</td><td><span class="etag t-fly">✈</span> HEL着（乗継1h45m）→ 7:40 HEL発（AY1411／A321）<div class="text-slate-500"><i class="fas fa-couch mr-1"></i>乗継中はFinnair Business Lounge（非シェンゲン側）で朝食可。JAL/ワンワールドサファイア以上で利用可。</div></td></tr>
+      <tr><td class="tc">9:20</td><td><span class="etag t-fly">✈着</span> FRA着・入国審査・荷物受取</td></tr>
+      <tr><td class="tc">10:51</td><td><span class="etag t-move">🚆</span> Frankfurt(M) Flughafen Fernbf発（<strong>ICE 515</strong>・直通）→ Stuttgart Hbf（1h20m・€24.99〜）<span class="text-slate-500">※9:20着から約90分の余裕。<strong>直通ICEは毎時あるので、入国・荷物受取が早く済めば手前の便（例 ICE513 8:51発）に前倒しも、遅れたら次の直通に乗ればOK</strong>。乗換ありの便より直通を優先</span></td></tr>
+      <tr><td class="tc">12:11</td><td><span class="etag t-move">🚆</span> Stuttgart Hbf（中央駅）着 → ホテルまで約1.7km。<strong>S-Bahn（S1〜S6どれでも）で Feuersee 2駅・約4分 → 徒歩5分</strong>、または<strong>Uber/タクシー 約5〜7分（€10前後）</strong><span class="text-slate-500">※到着日は荷物が多いのでUberが楽。U2/U4等でBerliner Platz（会場前）下車でも可</span></td></tr>
+      <tr><td class="tc">12:30頃</td><td><span class="etag t-hotel">🏨</span> <strong>Maritim Stuttgart</strong>着・<strong>荷物を預ける</strong>（正式チェックインは15:00〜のため、フロントに荷物のみ預けて身軽に行動）<span class="text-slate-500">※会場Liederhalleは徒歩約3分</span></td></tr>
+      <tr><td class="tc">13:00〜14:00</td><td><span class="etag t-food">🍽</span> ランチ候補<span class="etag t-tbd ml-1">要検討</span><div class="text-slate-500">・Markthalle Stuttgart（食品市場内の軽食・惣菜／ホテルから徒歩圏）<br>・Bohnenviertel（旧市街の飲食街／シュヴァーベン料理のカジュアル店多数）<br>・Königstraße周辺のカフェ・ベーカリー</div></td></tr>
+      <tr><td class="tc">14:00〜</td><td>市内散策・時差調整（Schlossplatz、Königstraße等）<div class="text-slate-500">元気ならLudwigsburg半日観光も可（S-Bahnで約15〜20分。Residenzschloss＋Blühendes Barock庭園）。Stuttgart市内は連泊で毎日見るので、<strong>到着日はLudwigsburgで宮殿・庭園＋旧市街Marktplatz周辺でディナー</strong>にして早めに切り上げる手も。深夜便明けの体調次第、丸一日の遠出は9/12に温存。</div></td></tr>
+      <tr><td class="tc">夕方〜夜</td><td><span class="etag t-hotel">🏨</span> Maritim Stuttgart 正式チェックイン（15:00以降いつでも可）→ 夕食（市内 or Ludwigsburg）・休息</td></tr>
+    </table>
+  </div>
+
+  <!-- 9/9 HRS Day1 -->
+  <div class="bg-white rounded-xl shadow-sm border border-rose-200 overflow-hidden">
+    <div class="bg-rose-700 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/9（水）<span class="text-xs font-normal opacity-80">🤖 HRS Europe 2026 — Day 1</span></div>
+    <table class="sp-table">
+      <tr><td class="tc" style="width:90px">7:30</td><td><span class="etag t-food">🍽</span> ホテル朝食</td></tr>
+      <tr><td class="tc">8:50</td><td>ホテル → Liederhalle（徒歩約3分）</td></tr>
+      <tr><td class="tc">9:00〜17:00</td><td><span class="etag t-conf">🤖 Day1</span> 政策・市場・量産・Embodied AI・モーター技術<div class="text-slate-500">詳細タイムテーブルは公式プログラム確認（開場9:00・終了17:00頃を想定）</div></td></tr>
+      <tr><td class="tc">17:00〜18:00</td><td>Networking / Sponsorブース</td></tr>
+      <tr><td class="tc">夜</td><td><span class="etag t-food">🍽</span> 夕食 → <span class="etag t-hotel">🏨</span> Maritim Stuttgart泊</td></tr>
+    </table>
+  </div>
+
+  <!-- 9/10 HRS Day2 -->
+  <div class="bg-white rounded-xl shadow-sm border border-rose-200 overflow-hidden">
+    <div class="bg-rose-600 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/10（木）<span class="text-xs font-normal opacity-80">🤖 HRS Europe 2026 — Day 2</span></div>
+    <table class="sp-table">
+      <tr><td class="tc" style="width:90px">7:30</td><td><span class="etag t-food">🍽</span> ホテル朝食</td></tr>
+      <tr><td class="tc">8:50</td><td>ホテル → Liederhalle（徒歩約3分）</td></tr>
+      <tr><td class="tc">9:00〜17:00</td><td><span class="etag t-conf">🤖 Day2</span> 医療応用・センサー・GDPR・フレキシブル生産ライン<div class="text-slate-500">詳細タイムテーブルは公式プログラム確認</div></td></tr>
+      <tr><td class="tc">夜</td><td><span class="etag t-food">🍽</span> 夕食 → <span class="etag t-hotel">🏨</span> Maritim Stuttgart泊</td></tr>
+    </table>
+  </div>
+
+  <!-- 9/11 HRS Day3 -->
+  <div class="bg-white rounded-xl shadow-sm border border-rose-200 overflow-hidden">
+    <div class="bg-rose-600 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/11（金）<span class="text-xs font-normal opacity-80">🤖 HRS Europe 2026 — Day 3</span></div>
+    <table class="sp-table">
+      <tr><td class="tc" style="width:90px">7:30</td><td><span class="etag t-food">🍽</span> ホテル朝食</td></tr>
+      <tr><td class="tc">8:50</td><td>ホテル → Liederhalle（徒歩約3分）</td></tr>
+      <tr><td class="tc">9:00〜17:00</td><td><span class="etag t-conf">🤖 Day3</span> 40+展示ブース・ライブデモ・近郊企業訪問・ネットワーキング<div class="text-slate-500">詳細タイムテーブルは公式プログラム確認</div></td></tr>
+      <tr><td class="tc">夜</td><td><span class="etag t-food">🍽</span> 夕食 → <span class="etag t-hotel">🏨</span> Maritim Stuttgart泊（最終泊）</td></tr>
+    </table>
+    <div class="bg-rose-50 border-t border-rose-100 px-4 py-2 text-[11px] text-rose-700">
+      <i class="fas fa-star text-amber-400 mr-1"></i>注目登壇: Google DeepMind / NVIDIA / BMW / Boston Dynamics / Unitree / Siemens / Fraunhofer IPA｜参加費 Early Bird EUR 1,199（2名同時申込 EUR 1,899）申込済み
+    </div>
+  </div>
+
+  <!-- 9/9〜9/11 ディナー候補 -->
+  <details class="bg-white rounded-xl shadow-sm border border-amber-200 overflow-hidden">
+    <summary class="bg-amber-600 text-white px-4 py-2 font-bold text-sm flex items-center gap-2 cursor-pointer select-none"><i class="fas fa-utensils mr-1"></i>ディナー候補（9/9〜9/11・HRS期間中）<span class="text-xs font-normal opacity-80">ホテル・Königstraße周辺は店が密集。基本は当日ふらっとでOK</span><i class="fas fa-chevron-down ml-auto text-xs opacity-70"></i></summary>
+    <table class="sp-table text-[11px]">
+      <thead><tr><th style="width:150px">店名</th><th style="width:110px">種類</th><th>特徴・名物</th></tr></thead>
+      <tbody>
+        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Weinhaus+Stetter+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Weinhaus Stetter</a></td><td>シュヴァーベン</td><td>Bohnenviertelの気取らない老舗ワインシュトゥーベ。地ワイン豊富＋シュヴァーベン名物、良心価格。<span class="etag t-tbd ml-1">要予約</span></td></tr>
+        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Carls+Brauhaus+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Carl's Brauhaus</a></td><td>ビアレストラン</td><td>Schlossplatz正面で立地抜群。ビール＋シュヴァーベン名物、予約なしで気軽に。</td></tr>
+        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Gasthaus+Bären+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Gasthaus Bären</a></td><td>シュヴァーベン</td><td>「シュヴァーベン風タパス」で少量多品目。名物を色々試したい日に。</td></tr>
+        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Ciao+Bella+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Ciao Bella</a>／<a href="https://www.google.com/maps/search/?api=1&query=Terrazza+Stuttgart+Mitte" target="_blank" class="text-blue-600 hover:underline">Terrazza</a></td><td>イタリアン</td><td>中心部の気軽なイタリアン。自家製パスタ・薪窯ピザ。肉料理に飽きた日の口直しに。</td></tr>
+        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Takeshiis+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Takeshii's</a></td><td>ベトナム/アジア</td><td>Marienplatz近く。フォー等。地元人気の定番、リラックスして入れる。</td></tr>
+        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Ramen+8+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Ramen 8</a></td><td>日本/ラーメン</td><td>ラーメン。ドイツ料理が続いた時に恋しくなる和の一杯。</td></tr>
+        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Beykebab+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Beykebab</a></td><td>トルコ/ケバブ</td><td>ドネルケバブ。手早く安く済ませたい夜に。</td></tr>
+      </tbody>
+    </table>
+    <div class="bg-amber-50 border-t border-amber-100 px-4 py-2 text-[11px] text-amber-800">
+      <i class="fas fa-lightbulb mr-1"></i>方針：<strong>ホテル・Königstraße周辺は飲食店が密集</strong>。9月は屋外テラス席の店も多く、当日その場の雰囲気で決めて問題なし。<strong>上表は各ジャンル1〜2店の代表例</strong>で、イタリアンもビアレストランも実際は周辺に多数あるので、休み・満席でも近くに代わりはいくらでもある。シュヴァーベン名物（<strong>Maultaschen</strong>／<strong>Zwiebelrostbraten</strong>／<strong>Käsespätzle</strong>）だけは滞在中どこかで1〜2回押さえたい。金曜夜（9/11）や人気店を狙い撃ちする日だけ予約すれば十分。
+    </div>
+  </details>
+
+  <!-- 9/12 プラン比較 -->
+  <div class="bg-white rounded-xl shadow-sm border border-amber-200 overflow-hidden">
+    <div class="bg-amber-500 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/12（土）<span class="text-xs font-normal opacity-80">⚠ 過ごし方 検討中（A：Mainz観戦 KO15:30／B：Mainz観戦 KO18:30／C：ポルシェ博物館）</span></div>
+    <div class="p-3 text-xs bg-amber-50 border-b border-amber-100 text-amber-800">
+      <i class="fas fa-comment-dots mr-1"></i><strong>Mainz観戦（プランA・B）が第一希望、チケットが取れなければプランC（ポルシェ博物館）に切替。</strong>A・BはキックオフがA=15:30／B=18:30の違いのみ（対戦相手・KO時刻は公式日程発表待ち。ブンデスリーガに昼キックオフはなし。チケット発売は8月上〜中旬見込み）。観戦（A・B）の場合、荷物は<strong>Stuttgart Maritim チェックアウト後、先にFrankfurt BestWesternへ移動して預ける</strong>（翌日の帰国便に備えFrankfurtに置く）。その後身軽でMainzへ向かい観戦し、そのままFrankfurt BestWesternへ戻る。
+    </div>
+
+    <div class="bg-green-600 text-white px-3 py-1.5 font-bold text-xs"><i class="fas fa-futbol mr-1"></i>プランA・B：Mainz観戦（移動は共通、キックオフ時刻のみA=15:30／B=18:30）</div>
+    <table class="sp-table text-[11px]">
+      <tr><td class="tc" style="width:70px">9:45</td><td>Maritimチェックアウト（荷物持参）→ Feuersee/Berliner PlatzからS-BahnまたはU-BahnでStuttgart Hbfへ（約5分）<span class="text-slate-500">※荷物があればタクシー約5〜7分</span></td></tr>
+      <tr><td class="tc">10:26</td><td><span class="etag t-move">🚆</span> Stuttgart Hbf発（<strong>ICE 1010</strong>・直通）→ Frankfurt空港（1h12m・約€32）</td></tr>
+      <tr><td class="tc">11:38</td><td><span class="etag t-move">🚆</span> Frankfurt(M) Flughafen Fernbf着</td></tr>
+      <tr><td class="tc">11:50</td><td><span class="etag t-hotel">🏨</span> BestWestern着・<strong>荷物を預ける</strong>（アーリーチェックイン交渉）</td></tr>
+      <tr><td class="tc">12:20</td><td><span class="etag t-move">🚆</span> Frankfurt空港駅発 → Mainz Hbf（約35〜40分）</td></tr>
+      <tr><td class="tc">13:00〜</td><td>Mainz Altstadt散策・昼食（身軽に行動）<span class="text-slate-500">※KO時刻に応じ散策時間を調整（A=約2.5h／B=約4h）</span></td></tr>
+      <tr><td colspan="2" class="bg-green-50 text-green-800 font-semibold text-[10px] px-2">▼ ここからキックオフ時刻で分岐</td></tr>
+      <tr><td class="tc"><span class="text-green-700 font-bold">A</span> 13:30<br><span class="text-emerald-700 font-bold">B</span> 17:00</td><td>MEWA ARENA入場</td></tr>
+      <tr><td class="tc"><span class="text-green-700 font-bold">A</span> 15:30<br><span class="text-emerald-700 font-bold">B</span> 18:30</td><td><span class="etag t-conf">⚽</span> キックオフ（試合約1h45m｜対戦相手は公式日程発表待ち）</td></tr>
+      <tr><td class="tc"><span class="text-green-700 font-bold">A</span> 17:30<br><span class="text-emerald-700 font-bold">B</span> 20:30</td><td><span class="etag t-move">🚆</span> Mainz Hbf発 → Frankfurt空港（約35〜40分）</td></tr>
+      <tr><td class="tc"><span class="text-green-700 font-bold">A</span> 18:15頃<br><span class="text-emerald-700 font-bold">B</span> 21:15頃</td><td><span class="etag t-hotel">🏨</span> BestWestern本チェックイン・夕食</td></tr>
+    </table>
+    <div class="px-3 py-1.5 text-[11px] text-slate-500 bg-slate-50">ℹ 観戦後はFrankfurt空港へ直行（翌日の帰国便もFRAのため移動なし）。往路ICEは実便反映済（ICE1010 10:26発・直通）。KO時刻確定後にチケット手配を。</div>
+
+    <div class="bg-slate-600 text-white px-3 py-1.5 font-bold text-xs mt-2"><i class="fas fa-car mr-1"></i>プランC：ポルシェ博物館（観戦なし・Stuttgartに荷物預け）</div>
+    <table class="sp-table text-[11px]">
+      <tr><td class="tc" style="width:70px">9:00</td><td>Maritimチェックアウト・<strong>荷物はホテルに預ける</strong></td></tr>
+      <tr><td class="tc">9:30</td><td><span class="etag t-move">🚆</span> Feuerseeから S-Bahn（S6等）→ Neuwirtshaus (Porscheplatz)（約25分）<span class="text-slate-500">※MaritimからPorscheplatzはFeuersee経由が便利</span></td></tr>
+      <tr><td class="tc">10:00〜13:00</td><td>Porsche Museum見学（所要2〜3時間）</td></tr>
+      <tr><td class="tc">13:00</td><td><span class="etag t-move">🚆</span> Porscheplatz → Feuersee・Maritimで荷物回収</td></tr>
+      <tr><td class="tc">14:00</td><td><span class="etag t-food">🍽</span> Stuttgart市内で昼食</td></tr>
+      <tr><td class="tc">15:00</td><td><span class="etag t-move">🚆</span> Stuttgart Hbf発（ICE）→ Frankfurt空港（約1.5h）</td></tr>
+      <tr><td class="tc">16:30</td><td><span class="etag t-hotel">🏨</span> BestWesternチェックイン・夕食</td></tr>
+    </table>
+  </div>
+
+  <!-- 9/13 -->
+  <div class="bg-white rounded-xl shadow-sm border border-cyan-200 overflow-hidden">
+    <div class="bg-cyan-700 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/13（日）<span class="text-xs font-normal opacity-80">帰国日 — 日中の観光は3案（X：ケルン／Y：FFM市内／Z：Mainz）、夜は共通</span></div>
+    <div class="p-3 text-xs bg-cyan-50 border-b border-cyan-100 text-cyan-800">
+      <i class="fas fa-comment-dots mr-1"></i>朝チェックアウトし荷物はBestWesternに預けて観光。<strong>X（ケルン）</strong>は見どころ強いが往復ICEの遅延がフライト直結のリスク、<strong>Y（フランクフルト市内）</strong>は空港近くで最も低リスク、<strong>Z（Mainz）</strong>は9/12にポルシェ（プランC）を選び未訪問の場合の回収案。いずれも16:20の空港着目標に間に合う。
+    </div>
+
+    <div class="bg-cyan-600 text-white px-3 py-1.5 font-bold text-xs"><i class="fas fa-train mr-1"></i>プランX：ケルン日帰り</div>
+    <table class="sp-table text-[11px]">
+      <tr><td class="tc" style="width:70px">8:00</td><td>BestWesternチェックアウト・<strong>荷物はホテルフロントに預ける</strong></td></tr>
+      <tr><td class="tc">8:26</td><td><span class="etag t-move">🚆</span> Frankfurt(M) Flughafen Fernbf発（<strong>ICE 1612</strong>・直通）→ Köln（1h6m・早割€6.99〜）</td></tr>
+      <tr><td class="tc">9:32</td><td>Köln Hbf着（大聖堂の目の前）</td></tr>
+      <tr><td class="tc">9:32〜13:00</td><td>Kölner Dom・旧市街・ライン川沿い散策・昼食（約3.5h）</td></tr>
+      <tr><td class="tc">13:18</td><td><span class="etag t-move">🚆</span> Köln Hbf発（<strong>ICE 123</strong>・直通）→ Frankfurt空港（55分・約€28）</td></tr>
+      <tr><td class="tc">14:13</td><td><span class="etag t-hotel">🏨</span> Frankfurt空港着・BestWesternで荷物回収</td></tr>
+    </table>
+    <div class="px-3 py-1.5 text-[11px] text-slate-500 bg-slate-50">ℹ 往復ICEは実便（往路ICE1612 8:26発／復路ICE123 13:18発、Köln Hbf・直通約55分）。より遅い便（ICE519 13:54発→14:49着）も可。早割Sparpreisのため早期予約推奨。</div>
+
+    <div class="bg-teal-600 text-white px-3 py-1.5 font-bold text-xs mt-2"><i class="fas fa-city mr-1"></i>プランY：フランクフルト市内（低リスク・当日ふらっと向き）</div>
+    <table class="sp-table text-[11px]">
+      <tr><td class="tc" style="width:70px">9:00</td><td>BestWesternチェックアウト・<strong>荷物はホテルフロントに預ける</strong></td></tr>
+      <tr><td class="tc">9:30</td><td><span class="etag t-move">🚆</span> Frankfurt空港駅発 S-Bahn（S8/S9）→ 中心部（Hauptwache/Hbf、約11〜15分）</td></tr>
+      <tr><td class="tc">10:00〜13:30</td><td>Römerberg（旧市街）・Kaiserdom（大聖堂）・Eiserner Steg（鉄橋）・Kleinmarkthalle（市場で昼食）・Museumsufer（博物館通り、1館）</td></tr>
+      <tr><td class="tc">13:30</td><td><span class="etag t-move">🚆</span> 中心部発 S-Bahn → Frankfurt空港（約15分）</td></tr>
+      <tr><td class="tc">14:00頃</td><td><span class="etag t-hotel">🏨</span> Frankfurt空港着・BestWesternで荷物回収</td></tr>
+    </table>
+    <div class="px-3 py-1.5 text-[11px] text-slate-500 bg-slate-50">ℹ 空港⇔市内はS-Bahn約15分でICE遅延リスクなし。RMVチケットで往復数ユーロ。徒歩ルート：Eiserner Steg→Römerberg→Dom-Römer旧市街→Kaiserdom→Kleinmarkthalle→Museumsufer。</div>
+
+    <div class="bg-emerald-600 text-white px-3 py-1.5 font-bold text-xs mt-2"><i class="fas fa-landmark mr-1"></i>プランZ：Mainz観光（試合なし・9/12にポルシェを選んだ場合の有力案）</div>
+    <table class="sp-table text-[11px]">
+      <tr><td class="tc" style="width:70px">9:00</td><td>BestWesternチェックアウト・<strong>荷物はホテルフロントに預ける</strong></td></tr>
+      <tr><td class="tc">9:30</td><td><span class="etag t-move">🚆</span> Frankfurt空港駅発 → Mainz Hbf（約35〜40分）</td></tr>
+      <tr><td class="tc">10:15〜13:30</td><td>Gutenberg博物館（活版印刷発祥）・Mainzer Dom（大聖堂）・Marktplatz・旧市街・St.Stephan（シャガールの窓）・ライン川沿い</td></tr>
+      <tr><td class="tc">13:30</td><td><span class="etag t-move">🚆</span> Mainz Hbf発 → Frankfurt空港（約35〜40分）</td></tr>
+      <tr><td class="tc">14:15頃</td><td><span class="etag t-hotel">🏨</span> Frankfurt空港着・BestWesternで荷物回収</td></tr>
+    </table>
+    <div class="px-3 py-1.5 text-[11px] text-slate-500 bg-slate-50">ℹ 空港⇔Mainzは約35〜40分でケルンより近く低リスク。<strong>9/12にMainzでなくポルシェB博物館（プランC）を選んだ場合、未訪問のMainzをここで回収できる</strong>。コンパクトで徒歩観光向き。徒歩ルート：Gutenberg博物館→Dom→旧市街→St.Stephan→ライン川。</div>
+
+    <!-- 9/13 共通の夜（ラウンジ・フライト） -->
+    <div class="bg-slate-700 text-white px-3 py-1.5 font-bold text-xs mt-2"><i class="fas fa-plane-departure mr-1"></i>共通：夜（観光後・出発）</div>
+    <table class="sp-table text-[11px]">
+      <tr><td class="tc" style="width:70px">14:00〜</td><td>荷物回収後、チェックイン（出発3時間前の16:20より前に空港着が目標）</td></tr>
+      <tr><td class="tc">17:00〜19:00</td><td><i class="fas fa-couch mr-1"></i><strong>ラウンジ</strong>（参加者A・参加者B 二人とも）<span class="etag t-tbd ml-1">ラウンジ名は要確認</span><div class="text-slate-500">ワンワールド便。JAL/ワンワールドサファイア以上で利用可。FRAはFinnair出発ターミナルの提携ラウンジ（T2 Sky Loungeが有力・T3移転の可能性あり）を発券時に確認。</div></td></tr>
+      <tr><td class="tc">19:20発</td><td><span class="etag t-fly">✈</span><span class="etag t-tbd ml-1">発券手配中</span> FRA発 → HEL（フィンエアー AY1416／A321、22:45着）</td></tr>
+      <tr><td class="tc">0:45発</td><td><span class="etag t-fly">✈</span> HEL発 → NGO（AY79／A350、翌9/14 19:35着）<span class="text-slate-500">乗継2h・機内泊</span></td></tr>
+    </table>
+  </div>
+
+  <!-- 9/14 -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="bg-slate-500 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/14（月）<span class="text-xs font-normal opacity-80">日本着 → 京都／犬山の自宅まで</span></div>
+    <table class="sp-table">
+      <tr><td class="tc" style="width:90px">19:35</td><td><span class="etag t-fly">✈着</span> 中部国際空港（セントレア）着（現地日付+1）</td></tr>
+      <tr><td class="tc">19:35〜20:15</td><td>入国審査・荷物受取・税関</td></tr>
+      <tr><td class="tc">20:20頃</td><td>到着口出発（二人一緒）</td></tr>
+      <tr><td class="tc">20:35頃</td><td><span class="etag t-move">🚆</span> セントレア発 ミュースカイ（二人一緒）→ 名鉄名古屋（約28分）｜名古屋で分岐</td></tr>
+    </table>
+    <div class="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-200">
+      <div>
+        <div class="bg-purple-100 text-purple-800 px-3 py-1.5 font-bold text-xs">👤 参加者A（京都方面）</div>
+        <table class="sp-table text-[11px]">
+          <tr><td class="tc" style="width:80px">21:05頃</td><td>名古屋（通過）→ JR名古屋へ乗換</td></tr>
+          <tr><td class="tc">21:15頃</td><td><span class="etag t-move">🚆</span> JR名古屋発（東海道新幹線）→ 京都駅（約35分）</td></tr>
+          <tr><td class="tc">21:50頃</td><td>京都駅着 → 自宅へ</td></tr>
+        </table>
+      </div>
+      <div>
+        <div class="bg-purple-100 text-purple-800 px-3 py-1.5 font-bold text-xs">👤 参加者B（犬山方面）</div>
+        <table class="sp-table text-[11px]">
+          <tr><td class="tc" style="width:80px">21:05頃</td><td>名古屋（通過）→ 名鉄で乗継</td></tr>
+          <tr><td class="tc">21:10頃</td><td><span class="etag t-move">🚆</span> 名鉄名古屋発 → 犬山駅（約30分）<span class="etag t-tbd ml-1">要確認</span></td></tr>
+          <tr><td class="tc">21:40頃</td><td>犬山駅着 → 自宅へ</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ToDo -->
+  <section id="todo" class="section-anchor">
+    <div class="bg-white rounded-xl shadow-sm border border-red-200 p-4">
+      <div class="font-bold text-sm mb-2"><i class="fas fa-tasks text-red-500 mr-1"></i>要対応タスク</div>
+      <div class="todo-item done"><input type="checkbox" checked><label>フライト各案（NGO-FRA/KIX-STR/ITM-FRA）の比較（完了・比較一覧に整理）</label></div>
+      <div class="todo-item"><input type="checkbox"><label>フィンエアー NGO⇔FRA の発券・eチケット受領確認（確定総額¥361,010で採用決定済／代理店へ発券依頼）</label></div>
+      <div class="todo-item done"><input type="checkbox" checked><label>Stuttgart宿泊をMaritim Stuttgart（9/8〜9/12・4泊/朝食込・各388.84 EUR・HRS 202890141）に変更・予約完了（旧Garner Hotelは差替）</label></div>
+      <div class="todo-item done"><input type="checkbox" checked><label>BestWestern Frankfurt空港ホテル予約（完了）</label></div>
+      <div class="todo-item"><input type="checkbox"><label>9/12 プランA/B（Mainz観戦）かプランC（ポルシェ博物館）かを決定</label></div>
+      <div class="todo-item"><input type="checkbox"><label>Mainz観戦チケット購入（<strong>発売は試合4〜5週間前＝8月上〜中旬見込み</strong>・午前10時〜／mainz05.de・ファンショップ・電話）<span class="sub">同時にKO時刻（15:30=プランA か 18:30=プランB）も確定・DFL発表待ち</span></label></div>
+      <div class="todo-item done"><input type="checkbox" checked><label>プランB（18:30 KO）でも試合後のMainz→Frankfurt空港移動は問題なし（S8等が毎時3本以上・終電23:32・所要16〜24分。試合20:15終了でも余裕）</label></div>
+      <div class="todo-item"><input type="checkbox"><label>9/13 日中の観光をX（ケルン）／Y（フランクフルト市内）／Z（Mainz）で決定（9/12でポルシェ選択ならZが有力／いずれもFRA空港16:20着基準）</label></div>
+      <div class="todo-item"><input type="checkbox"><label>鉄道チケット手配（DB Navigator：Stuttgart→Frankfurt空港、プランX選択時はFrankfurt⇔Köln）</label></div>
+      <div class="todo-item"><input type="checkbox"><label>ラウンジ最終確認（<strong>ワンワールド前提</strong>：JAL/ワンワールドサファイア資格の有無を二人分／NGO=JALサクララウンジ・HEL=Finnair Business Lounge・FRAは提携ラウンジをFinnairで確認）<span class="sub">スターアライアンス(ANA/SFC)は本Finnair便では利用不可</span></label></div>
+    </div>
+  </section>
+
+  
+
+  <!-- 主要リンク -->
+  <section class="section-anchor">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 text-xs">
+      <div class="font-bold text-sm mb-2"><i class="fas fa-map-location-dot text-slate-400 mr-1"></i>地図リンク集（場所を見る）</div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="space-y-1">
+          <div class="font-semibold text-rose-600 text-[10px] uppercase">会場・ホテル</div>
+          <a href="https://www.google.com/maps/search/?api=1&query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" class="block text-blue-600 hover:underline">会場 Liederhalle (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" class="block text-blue-600 hover:underline">Maritim Stuttgart (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Stuttgart+Feuersee+station" target="_blank" class="block text-blue-600 hover:underline">最寄駅 Feuersee@S-Bahn (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" class="block text-blue-600 hover:underline">Best Western Hotel Airport Frankfurt (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=大阪空港ホテル+伊丹空港" target="_blank" class="block text-blue-600 hover:underline">大阪空港ホテル (地図・ITM案)</a>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold text-green-600 text-[10px] uppercase">サッカー・観光</div>
+          <a href="https://www.google.com/maps/search/?api=1&query=MEWA+ARENA+Mainz" target="_blank" class="block text-blue-600 hover:underline">MEWA ARENA@Mainz (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=PreZero+Arena+Sinsheim" target="_blank" class="block text-blue-600 hover:underline">PreZero Arena@ジンスハイム (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Technik+Museum+Sinsheim" target="_blank" class="block text-blue-600 hover:underline">Technik Museum@ジンスハイム (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Porsche+Museum+Stuttgart" target="_blank" class="block text-blue-600 hover:underline">Porsche Museum (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Koelner+Dom" target="_blank" class="block text-blue-600 hover:underline">Kölner Dom (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Roemerberg+Frankfurt" target="_blank" class="block text-blue-600 hover:underline">Römerberg Frankfurt (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Mainzer+Dom" target="_blank" class="block text-blue-600 hover:underline">Mainzer Dom (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Gutenberg+Museum+Mainz" target="_blank" class="block text-blue-600 hover:underline">Gutenberg博物館 (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Heidelberg+Schloss" target="_blank" class="block text-blue-600 hover:underline">Heidelberg城 (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Residenzschloss+Ludwigsburg" target="_blank" class="block text-blue-600 hover:underline">Ludwigsburg宮殿 (地図)</a>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold text-slate-600 text-[10px] uppercase">空港（地図＋案内図）・ラウンジ</div>
+          <div><a href="https://www.google.com/maps/search/?api=1&query=Frankfurt+Airport+FRA" target="_blank" class="text-blue-600 hover:underline">FRA (地図)</a>／<a href="https://www.frankfurt-airport.com/en.html" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
+          <div><a href="https://www.google.com/maps/search/?api=1&query=Stuttgart+Airport+STR" target="_blank" class="text-blue-600 hover:underline">STR (地図)</a>／<a href="https://www.stuttgart-airport.com/" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
+          <div><a href="https://www.google.com/maps/search/?api=1&query=Istanbul+Airport+IST" target="_blank" class="text-blue-600 hover:underline">IST (地図)</a>／<a href="https://www.istairport.com/en/" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
+          <div><a href="https://www.google.com/maps/search/?api=1&query=中部国際空港+セントレア" target="_blank" class="text-blue-600 hover:underline">NGO 中部 (地図)</a>／<a href="https://www.centrair.jp/" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
+          <div><a href="https://www.google.com/maps/search/?api=1&query=関西国際空港" target="_blank" class="text-blue-600 hover:underline">KIX 関空 (地図)</a>／<a href="https://www.kansai-airport.or.jp/" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
+          <div><a href="https://www.google.com/maps/search/?api=1&query=大阪国際空港+伊丹" target="_blank" class="text-blue-600 hover:underline">ITM 伊丹 (地図)</a>／<a href="https://www.osaka-airport.co.jp/" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
+          <div><a href="https://www.google.com/maps/search/?api=1&query=羽田空港+第3ターミナル" target="_blank" class="text-blue-600 hover:underline">HND 羽田 (地図)</a>／<a href="https://tokyo-haneda.com/" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
+          <div class="text-slate-400 text-[10px] pt-1">ラウンジ位置</div>
+          <a href="https://www.google.com/maps/search/?api=1&query=JAL+サクララウンジ+中部国際空港" target="_blank" class="block text-blue-600 hover:underline">JALサクララウンジ@NGO (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Finnair+Lounge+Helsinki+Airport" target="_blank" class="block text-blue-600 hover:underline">Finnair Lounge@HEL (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Turkish+Airlines+Lounge+Istanbul+Airport" target="_blank" class="block text-blue-600 hover:underline">ターキッシュ Lounge@IST (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=Lufthansa+Senator+Lounge+Frankfurt+Airport" target="_blank" class="block text-blue-600 hover:underline">Lufthansa Lounge@FRA (地図)</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=ANA+ラウンジ+羽田空港+第3ターミナル" target="_blank" class="block text-blue-600 hover:underline">ANAラウンジ@HND (地図)</a>
+        </div>
+      </div>
+
+      <div class="font-bold text-sm mb-2 mt-4"><i class="fas fa-link text-slate-400 mr-1"></i>その他リンク</div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="space-y-1">
+          <div class="font-semibold text-rose-600 text-[10px] uppercase">HRS・チケット</div>
+          <a href="https://acgrobot.com/" target="_blank" class="block text-blue-600 hover:underline">HRS 公式サイト</a>
+          <a href="https://acgrobot.com/contact/" target="_blank" class="block text-blue-600 hover:underline">HRS 参加登録</a>
+          <a href="https://www.eventbrite.com/e/humanoid-robots-summit-europe-2026-tickets-1989641450137" target="_blank" class="block text-blue-600 hover:underline">HRS Eventbrite</a>
+          <a href="https://www.bundesliga.com/en/bundesliga" target="_blank" class="block text-blue-600 hover:underline">Bundesliga 日程</a>
+          <a href="https://www.mainz05.de/tickets" target="_blank" class="block text-blue-600 hover:underline">Mainz 05 チケット</a>
+          <a href="https://www.tsg-hoffenheim.de/tickets" target="_blank" class="block text-blue-600 hover:underline">ホッフェンハイム チケット</a>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold text-cyan-600 text-[10px] uppercase">航空会社・鉄道</div>
+          <a href="https://www.finnair.com/" target="_blank" class="block text-blue-600 hover:underline">フィンエアー（NGO-FRA案）</a>
+          <a href="https://www.turkishairlines.com/" target="_blank" class="block text-blue-600 hover:underline">ターキッシュ（KIX-STR案）</a>
+          <a href="https://www.lufthansa.com/" target="_blank" class="block text-blue-600 hover:underline">ルフトハンザ（ITM-FRA案）</a>
+          <a href="https://www.jal.co.jp/" target="_blank" class="block text-blue-600 hover:underline">JAL（ワンワールド）</a>
+          <a href="https://www.ana.co.jp/" target="_blank" class="block text-blue-600 hover:underline">ANA（スターアライアンス）</a>
+          <a href="https://www.bahn.de/en" target="_blank" class="block text-blue-600 hover:underline">DB（ドイツ鉄道）</a>
+          <a href="https://www.meitetsu.co.jp/train/centrair/guidance/index.html" target="_blank" class="block text-blue-600 hover:underline">名鉄 ミュースカイ（NGO案）</a>
+          <a href="https://www.jr-odekake.net/railroad/train/haruka/" target="_blank" class="block text-blue-600 hover:underline">特急はるか（KIX案）</a>
+        </div>
+        <div class="space-y-1">
+          <div class="font-semibold text-amber-600 text-[10px] uppercase">アプリ・通信・緊急</div>
+          <a href="https://apps.apple.com/jp/app/db-navigator/id343555245" target="_blank" class="block text-blue-600 hover:underline">DB Navigator（App Store）</a>
+          <a href="https://play.google.com/store/apps/details?id=de.hafas.android.db" target="_blank" class="block text-blue-600 hover:underline">DB Navigator（Google Play）</a>
+          <a href="https://www.revolut.com" target="_blank" class="block text-blue-600 hover:underline">Revolut（両替・決済）</a>
+          <a href="https://www.airalo.com" target="_blank" class="block text-blue-600 hover:underline">Airalo（eSIM）</a>
+          <a href="https://www.de.emb-japan.go.jp/" target="_blank" class="block text-blue-600 hover:underline">在ドイツ日本国大使館</a>
+          <a href="https://www.anzen.mofa.go.jp/" target="_blank" class="block text-blue-600 hover:underline">外務省 海外安全ホームページ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="text-center text-[11px] text-slate-400 py-3 no-print">
+    作成日：2026年6月13日 ｜ 更新日：2026年7月7日（フライトをフィンエアーNGO-FRAに確定・宿泊をMaritim Stuttgartに変更）
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.todo-item').forEach(el=>{
+  const cb = el.querySelector('input');
+  el.addEventListener('click', e=>{
+    if(e.target!==cb){ cb.checked=!cb.checked; }
+    el.classList.toggle('done', cb.checked);
+  });
+});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    e.preventDefault();
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t) t.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>

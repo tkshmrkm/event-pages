@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>出張旅程 TW-MY 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .checkin-box {
+            color: #1f2937;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .transport-table {
+            width: 100%;
+            font-size: 13px;
+            border-collapse: collapse;
+        }
+
+        .transport-table th {
+            background: #f3f4f6;
+            color: inherit;
+            padding: 8px;
+            font-weight: 600;
+            text-align: left;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .transport-table td {
+            padding: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        /* 旅程表テーブル */
+        .itinerary-table { border-collapse: collapse; width: 100%; min-width: 860px; }
+        .itinerary-table th, .itinerary-table td { border: 1px solid #e2e8f0; }
+        .itinerary-table tbody tr:hover td { filter: brightness(0.97); }
+        .row-flight td { background-color: #f0f9ff !important; }
+        .row-hotel td { background-color: #f8fafc !important; }
+        .time-mono { font-family: 'Inter', monospace; }
+        .utc-badge { color: #64748b; font-size: 10px; }
+
+        .recommended {
+            background: #dbeafe;
+        }
+
+        .risk-low {
+            color: #10b981;
+        }
+
+        .risk-mid {
+            color: #f59e0b;
+        }
+
+        .risk-high {
+            color: #ef4444;
+        }
+
+        /* 入国審査シートの画面表示用 */
+        body.immi-active > main,
+        body.immi-active > header,
+        body.immi-active > nav { display: none !important; }
+        body.immi-active { overflow: auto; background: white; }
+
+        /* ===================== 印刷スタイル ===================== */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 12mm 14mm;
+            }
+
+            /* 印刷不要な要素を非表示 */
+            header, nav, .print-hide,
+            #tab-prep, #tab-docs, #tab-semicon, #tab-schedule {
+                display: none !important;
+            }
+
+            /* デフォルト: 旅程タブのみ表示 */
+            #tab-itinerary { display: block !important; }
+            #tab-family    { display: none  !important; }
+
+            /* 家族タブ印刷モード */
+            body.print-family #tab-itinerary { display: none  !important; }
+            body.print-family #tab-family    { display: block !important; }
+
+            /* 旅程表タブ印刷モード */
+            body.print-schedule #tab-itinerary { display: none  !important; }
+            body.print-schedule #tab-schedule  { display: block !important; }
+
+            /* 入国審査レター印刷モード */
+            body.immi-active #letter-tw.flex,
+            body.immi-active #letter-my.flex { display: block !important; position: static !important; }
+            .print-hide { display: none !important; }
+
+            /* 家族タブ: 各カードはページをまたがない */
+            body.print-family #tab-family > div {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                margin-bottom: 8px;
+            }
+
+            body {
+                background: white !important;
+                font-size: 11px;
+            }
+
+            main {
+                max-width: 100% !important;
+                padding: 0 !important;
+                padding-bottom: 0 !important;
+            }
+
+            /* 日ごとのカードはページをまたがない */
+            .day-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                margin-bottom: 8px;
+                border: 1px solid #e2e8f0 !important;
+                border-radius: 6px !important;
+                box-shadow: none !important;
+            }
+
+            /* 初日だけ途中分割を許可 */
+            .day-card-splittable {
+                break-inside: auto !important;
+                page-break-inside: auto !important;
+                margin-bottom: 8px;
+                border: 1px solid #e2e8f0 !important;
+                border-radius: 6px !important;
+                box-shadow: none !important;
+            }
+
+            /* 指定箇所でページ区切り */
+            .print-break-before {
+                break-before: page;
+                page-break-before: always;
+            }
+
+            /* 天気・現金カードはまとめて1ブロック */
+            .summary-cards {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+
+            /* 影を消す */
+            * {
+                box-shadow: none !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* テーブル文字を見やすく */
+            .transport-table th,
+            .transport-table td {
+                font-size: 10px;
+                padding: 4px 6px;
+            }
+
+            /* リンクのURL非表示 */
+            a[href]::after {
+                content: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-[#Fcfcfc] text-slate-800 antialiased selection:bg-slate-200 selection:text-slate-800">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200/80 text-slate-800 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-3xl mx-auto p-4">
+            <h1 class="text-xl font-bold">出張旅程 TW-MY 2026</h1>
+            <p class="text-sm text-slate-500 font-medium mt-1 text-[13px]">4/28 (火) - 5/7 (木)</p>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main class="max-w-3xl mx-auto p-4 pb-24">
+
+        <!-- TAB 1: 旅程 -->
+        <div id="tab-itinerary" class="tab-content active space-y-6">
+
+            <!-- 印刷ボタン -->
+            <div class="print-hide flex justify-end">
+                <button onclick="window.print()" class="flex items-center gap-2 bg-slate-700 hover:bg-slate-800 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+                    <i class="fas fa-print"></i> 旅程を印刷
+                </button>
+            </div>
+
+            <!-- 出張全体概要 -->
+            <div class="summary-cards bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-gradient-to-r from-slate-700 to-slate-600 text-white px-5 py-3 font-bold text-base flex items-center">
+                    <i class="fas fa-briefcase mr-2"></i>出張概要
+                </div>
+                <div class="p-4 space-y-3">
+
+                    <!-- タイトルと期間 -->
+                    <div class="flex flex-wrap items-start gap-2">
+                        <div class="flex-1">
+                            <div class="font-bold text-base text-slate-800">CFA台湾実験 / SEMICON SEA参加</div>
+                            <div class="text-sm text-slate-500 mt-0.5">2026年 4月28日(火) 〜 5月7日(木)　<span class="font-semibold text-slate-700">計10日間</span></div>
+                        </div>
+                        <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-semibold whitespace-nowrap">予約済み</span>
+                    </div>
+
+                    <!-- 行程フロー -->
+                    <div class="bg-slate-50 rounded-lg p-3">
+                        <div class="text-xs text-slate-500 font-semibold mb-2">行程フロー</div>
+                        <div class="flex items-center flex-wrap gap-1 text-sm font-semibold">
+                            <span class="bg-slate-200 text-slate-700 px-2 py-1 rounded">🇯🇵 京都</span>
+                            <span class="text-slate-400 text-xs">4/28 ✈BR129</span>
+                            <span class="bg-teal-100 text-teal-800 px-2 py-1 rounded">🇹🇼 台北</span>
+                            <span class="text-slate-400 text-xs">5/2 ✈BR227</span>
+                            <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded">🇲🇾 KL</span>
+                            <span class="text-slate-400 text-xs">5/6 ✈MH052</span>
+                            <span class="bg-slate-200 text-slate-700 px-2 py-1 rounded">🇯🇵 帰国</span>
+                        </div>
+                    </div>
+
+                    <!-- 2列グリッド：目的とフライト -->
+                    <div class="grid grid-cols-2 gap-3 text-xs">
+                        <div class="space-y-2">
+                            <div class="font-semibold text-slate-600 text-xs uppercase tracking-wide">主な目的</div>
+                            <div class="border-l-[3px] border-teal-400 pl-2 py-1">
+                                <div class="font-semibold text-teal-800">🇹🇼 台湾 (4/28-5/2)</div>
+                                <div class="text-slate-600 mt-0.5">CFA技術実験（4/29-4/30）<br>関係者との交流</div>
+                            </div>
+                            <div class="border-l-[3px] border-purple-400 pl-2 py-1">
+                                <div class="font-semibold text-purple-800">🇲🇾 KL (5/2-5/6)</div>
+                                <div class="text-slate-600 mt-0.5">SEMICON SEA視察（5/5-5/6）<br>市場調査・半導体動向</div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="font-semibold text-slate-600 text-xs uppercase tracking-wide">フライト</div>
+                            <div class="space-y-1.5">
+                                <div class="bg-teal-50 rounded p-1.5">
+                                    <div class="font-semibold text-teal-800">✈ BR129</div>
+                                    <div class="text-slate-600">4/28 KIX 18:30 → TPE 20:30</div>
+                                    <div class="text-slate-400">💺 23G &nbsp;🧳 2PC</div>
+                                </div>
+                                <div class="bg-purple-50 rounded p-1.5">
+                                    <div class="font-semibold text-purple-800">✈ BR227</div>
+                                    <div class="text-slate-600">5/2 TPE 09:30 → KUL 14:15</div>
+                                    <div class="text-slate-400">💺 22G &nbsp;🧳 2PC</div>
+                                </div>
+                                <div class="bg-slate-50 rounded p-1.5">
+                                    <div class="font-semibold text-slate-700">✈ MH052</div>
+                                    <div class="text-slate-600">5/6 KUL 22:25 → KIX 05:55</div>
+                                    <div class="text-slate-400">💺 17D &nbsp;🧳 35kg</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ホテル -->
+                    <div class="border-t border-slate-100 pt-2 flex gap-4 text-xs text-slate-600">
+                        <div><i class="fas fa-hotel text-teal-500 mr-1"></i><strong>台北:</strong> 老爺会館台北林森 (4/28-5/2)</div>
+                        <div><i class="fas fa-hotel text-purple-500 mr-1"></i><strong>KL:</strong> Holiday Inn Express KLCC (5/2-5/6)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 天気・気温サマリー -->
+            <div class="summary-cards bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden p-4">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-cloud-sun text-slate-600 mr-2"></i>現地の天気・気温</h2>
+                <div class="grid grid-cols-2 gap-4">
+
+                    <!-- 台湾 -->
+                    <div class="rounded-lg overflow-hidden border border-teal-100">
+                        <div class="bg-teal-600 text-white px-3 py-2 text-sm font-bold">🇹🇼 台湾（台北）<span class="font-normal text-xs ml-1 opacity-80">4/28-5/2</span></div>
+                        <div class="p-3 space-y-2 text-sm">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl font-bold text-teal-700">23<span class="text-base">〜</span>28°C</span>
+                            </div>
+                            <div class="space-y-1 text-xs text-slate-600">
+                                <div>☀️ <strong>比較的晴れ</strong>・梅雨前で過ごしやすい</div>
+                                <div>🌧️ 時々にわか雨あり</div>
+                                <div>💧 湿度 約75〜80%</div>
+                                <div>🕶️ UV指数 高め（5〜7）</div>
+                            </div>
+                            <div class="mt-2 bg-teal-50 rounded p-2 text-xs text-teal-800">
+                                👕 半袖＋薄手の羽織り<br>
+                                ☂️ 折り畳み傘あると安心
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- マレーシア -->
+                    <div class="rounded-lg overflow-hidden border border-purple-100">
+                        <div class="bg-purple-600 text-white px-3 py-2 text-sm font-bold">🇲🇾 KL<span class="font-normal text-xs ml-1 opacity-80">5/2-5/6</span></div>
+                        <div class="p-3 space-y-2 text-sm">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl font-bold text-purple-700">27<span class="text-base">〜</span>33°C</span>
+                            </div>
+                            <div class="space-y-1 text-xs text-slate-600">
+                                <div>🌩️ <strong>雨季・午後スコール多め</strong></div>
+                                <div>⏱️ スコールは30分〜2時間で止む</div>
+                                <div>💧 湿度 約85〜90%</div>
+                                <div>🕶️ UV指数 非常に高い（9〜11）</div>
+                            </div>
+                            <div class="mt-2 bg-purple-50 rounded p-2 text-xs text-purple-800">
+                                👕 半袖（速乾素材推奨）<br>
+                                ☂️ 折り畳み傘 <strong>必携</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="mt-3 text-xs text-slate-500 text-center">※ 平年値ベース。出発前に最新予報を確認してください。</div>
+            </div>
+
+            <!-- 現金必要額サマリー -->
+            <div class="summary-cards bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden p-4">
+                <h2 class="font-bold text-lg mb-3"><i class="fas fa-money-bill-wave text-slate-700 mr-2"></i>現金必要額</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="border-l-[3px] border-teal-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-3">
+                        <div class="text-sm text-slate-600">台湾 (4/28-5/2)</div>
+                        <div class="text-2xl font-bold text-teal-700 font-bold">1,000 TWD</div>
+                        <div class="text-xs text-slate-500 mt-1">≈ 4,700円 / 空港ATMで引出</div>
+                        <div class="text-xs text-slate-600 mt-2">💡 夜市用（1回分+予備）</div>
+                    </div>
+                    <div class="border-l-[3px] border-purple-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-3">
+                        <div class="text-sm text-slate-600">マレーシア (5/2-5/6)</div>
+                        <div class="text-2xl font-bold text-purple-700 font-bold">150 MYR</div>
+                        <div class="text-xs text-slate-500 mt-1">≈ 5,000円 / 空港ATMで引出</div>
+                        <div class="text-xs text-slate-600 mt-2">💡 ホーカー昼食3-4回分</div>
+                    </div>
+                </div>
+                <div class="mt-3 bg-slate-50 text-slate-800 border-l-[3px] border-green-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md p-3 text-sm">
+                    <strong>その他はカード可:</strong> コンビニ、Uber/Grab、ホテル、レストラン
+                </div>
+            </div>
+
+            <!-- Day 1: 4/28 前半 -->
+            <div class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-indigo-600 text-white px-5 py-4 font-bold text-lg flex items-center">
+                    4/28 (火) 移動日 JP→TW
+                </div>
+                <div class="p-4 space-y-4">
+
+                    <div class="space-y-3">
+                        <div class="border-l-[3px] border-blue-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                            <div class="text-sm text-slate-600">🏠 08:00 - 12:00</div>
+                            <div class="font-semibold text-lg">自宅でWEB会議</div>
+                            <div class="text-sm text-slate-600 mt-2">
+                                • 背景・マイク確認必須<br>
+                                • 機材セットアップ完了
+                            </div>
+                        </div>
+
+                        <div class="border-l-[3px] border-green-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                            <div class="text-sm text-slate-600">12:00 - 14:00</div>
+                            <div class="font-semibold">昼食・出発準備</div>
+                            <div class="text-sm text-slate-600 mt-1">
+                                • 荷物最終チェック<br>
+                                • 忘れ物確認（パスポート・充電器・薬等）
+                            </div>
+                        </div>
+
+                        <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                            <div class="text-sm text-slate-600">14:00 自宅出発</div>
+                            <div class="font-semibold text-lg">中書島 → 京都駅 → 関西空港</div>
+
+                            <div class="mt-3">
+                                <div class="text-sm font-semibold mb-2">移動ルート比較</div>
+                                <table class="transport-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ルート</th>
+                                            <th>出発</th>
+                                            <th>到着</th>
+                                            <th>所要</th>
+                                            <th>備考</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="recommended">
+                                            <td><strong>京阪+はるか</strong></td>
+                                            <td>14:00頃</td>
+                                            <td>16:05</td>
+                                            <td>2h</td>
+                                            <td class="risk-low">推奨</td>
+                                        </tr>
+                                        <tr>
+                                            <td>タクシー+はるか</td>
+                                            <td>14:00頃</td>
+                                            <td>16:05</td>
+                                            <td>2h</td>
+                                            <td class="risk-low">楽</td>
+                                        </tr>
+                                        <tr>
+                                            <td>リムジンバス</td>
+                                            <td>14:30</td>
+                                            <td>16:10</td>
+                                            <td>1h40m</td>
+                                            <td class="risk-low">直行</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="mt-2 text-sm text-slate-700 font-semibold">
+                                    <i class="fas fa-check-circle mr-1"></i>推奨: 中書島→京都駅(京阪15分)→はるか(80分)
+                                </div>
+                                <div class="mt-2 text-xs text-slate-600 bg-white p-2 rounded">
+                                    <strong>詳細ルート（推奨プラン）:</strong><br>
+                                    14:00 自宅出発 → <strong>14:08 中書島駅着（徒歩8分）</strong><br>
+                                    14:10頃 京阪中書島発 → 14:25頃 京都駅着（京阪15分）<br>
+                                    → 駅構内で軽食・休憩（30分）<br>
+                                    14:55頃 はるか乗り場へ移動<br>
+                                    <strong>15:00 JR特急はるか 京都発</strong><br>
+                                    <strong>16:05 関西空港着</strong>
+                                </div>
+                                <div
+                                    class="mt-2 text-xs text-slate-600 bg-slate-50 text-slate-800 p-2 rounded border-l-2 border-blue-300">
+                                    <strong>料金:</strong> 京阪 220円 + はるか自由席 1,200円 + 乗車券 = <strong>約1,800円</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 1: 4/28 後半 -->
+            <div class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-indigo-400 text-white px-5 py-3 font-semibold text-base flex items-center">
+                    ↳ 4/28 つづき — KIX出発・台北着
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="space-y-3">
+
+                        <div class="checkin-box" style="background: #e0f2fe;">
+                            <i class="fas fa-plane-arrival text-2xl"></i>
+                            <div>
+                                <div class="text-base">チェックイン時間</div>
+                                <div class="text-lg">16:00-16:15 到着 (18:30発の2.5h前)</div>
+                            </div>
+                        </div>
+
+                        <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2 bg-slate-50 text-slate-800">
+                            <div class="text-sm text-slate-600">16:00 - 18:30</div>
+                            <div class="font-semibold">関西空港での過ごし方 (2.5時間)</div>
+
+                            <div class="mt-3 space-y-2">
+                                <div class="bg-white p-3 rounded border-l-2 border-green-300">
+                                    <div class="font-semibold text-sm text-slate-800 font-semibold">📋 プランA: 即チェックイン型 (推奨)</div>
+                                    <div class="text-xs text-slate-600 mt-1">
+                                        16:05 到着 → 16:10 EVAカウンター → 16:25 保安検査 → 16:40 KIX Lounge Kansai入室<br>
+                                        <strong>メリット:</strong> ラウンジで約2時間ゆっくり休憩・軽食可能
+                                    </div>
+                                </div>
+
+                                <div class="bg-white p-3 rounded border-l-2 border-slate-300">
+                                    <div class="font-semibold text-sm text-slate-700">🛍️ プランB: 買い物型</div>
+                                    <div class="text-xs text-slate-600 mt-1">
+                                        16:05 到着 → エアロプラザで買い物(40分) → 16:50 EVAカウンター → 17:10 ラウンジ<br>
+                                        <strong>メリット:</strong> お土産・忘れ物購入できる
+                                    </div>
+                                </div>
+
+                                <div class="bg-white p-3 rounded border-l-2 border-slate-300">
+                                    <div class="font-semibold text-sm text-slate-700">☕ プランC: 制限区域外休憩型</div>
+                                    <div class="text-xs text-slate-600 mt-1">
+                                        16:05 到着 → カフェで仕事/メール処理(1h) → 17:10 EVAカウンター → 17:30 ラウンジ<br>
+                                        <strong>メリット:</strong> WiFi作業、最後まで自由に動ける
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 bg-slate-50 p-2 rounded text-xs">
+                                <i class="fas fa-lightbulb text-slate-600 mr-1"></i>
+                                <strong>国際線推奨:</strong> 出発2時間前までにチェックイン完了が安心
+                            </div>
+
+
+                            <ul class="text-sm text-slate-600 mt-3 space-y-1">
+                                <li>• EVAカウンターレーン（Star Alliance便）— <strong>KIX ターミナル1</strong></li>
+                                <li>• <strong>ラウンジ: KIX Lounge Kansai</strong>
+                                    <div class="text-xs mt-1 ml-3">
+                                        ✅ <strong>SFC資格</strong>（スターアライアンスゴールド）で入場<br>
+                                        📝 ANAラウンジ閉鎖後はKIX Lounge Kansaiを利用<br>
+                                        🍛 軽食、🚿 シャワー、📶 WiFi<br>
+                                        👥 同伴者1名も入室可
+                                    </div>
+                                </li>
+                            </ul>
+                            <div
+                                class="mt-2 bg-gradient-to-r from-teal-600 to-blue-600 text-white p-3 rounded font-semibold text-center">
+                                ✈️ EVA Air BR129 &nbsp;|&nbsp; 18:30 KIX <span class="text-xs font-normal opacity-80">T1</span> → 20:30 TPE <span class="text-xs font-normal opacity-80">T2</span> &nbsp;(3h)<br>
+                                <span class="text-sm font-normal">💺 座席 23G &nbsp;|&nbsp; 🧳 受託手荷物 2PC &nbsp;|&nbsp; 予約済み</span>
+                            </div>
+                        </div>
+
+                        <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                            <div class="text-sm text-slate-600">20:30 到着</div>
+                            <div class="font-semibold"><a href="https://maps.google.com/?q=Taiwan+Taoyuan+International+Airport" target="_blank" class="text-slate-800 font-semibold underline"><i class="fas fa-map-marker-alt"></i> 台北桃園空港 (TPE) <span class="text-sm font-normal text-slate-500">ターミナル2</span></a></div>
+                            <div class="bg-slate-50 text-slate-800 p-2 rounded mt-2 text-xs text-slate-700">
+                                <strong>⏱️ 入国手続き時間:</strong> 入国審査(e-Gate)+荷物受取で約30-40分<br>
+                                → <strong>21:00-21:10頃</strong>に到着ロビーへ
+                            </div>
+                            <ol class="text-sm text-slate-600 mt-2 space-y-1 list-decimal list-inside">
+                                <li>入国審査 (e-Gate利用: 比較的早い)</li>
+                                <li>荷物受取（ターンテーブル待ち込み）</li>
+                                <li><strong>Revolut ATM両替: 1,000 TWD</strong>（到着ロビー内）</li>
+                                <li>eSIM ON</li>
+                            </ol>
+
+                            <!-- Uber手順 -->
+                            <div class="mt-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                                <div class="font-bold text-blue-800 text-sm mb-2">
+                                    <i class="fas fa-car mr-1"></i>桃園空港 T2 → ホテル　Uber の乗り方
+                                </div>
+                                <ol class="space-y-2 text-xs text-slate-700">
+                                    <li class="flex gap-2">
+                                        <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">1</span>
+                                        <div>到着ロビー（1F）を出て、<strong>建物を出た正面の交通広場へ</strong>。タクシー・バス乗り場と同じエリア</div>
+                                    </li>
+                                    <li class="flex gap-2">
+                                        <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">2</span>
+                                        <div><strong>「計程車 / Taxi」エリアの外側</strong>（歩道沿い）が実質的なUber待機場所。「網路叫車（ライドシェア）」の案内板が目印</div>
+                                    </li>
+                                    <li class="flex gap-2">
+                                        <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">3</span>
+                                        <div><strong>Uberアプリで配車予約</strong>（ロビー内でも予約開始してOK）<br>目的地: <em>老爺会館台北林森（No. 83, Linsen N. Rd, Zhongshan）</em></div>
+                                    </li>
+                                    <li class="flex gap-2">
+                                        <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">4</span>
+                                        <div>アプリに表示された<strong>車種・ナンバープレート・ドライバー名</strong>を確認して乗車。<strong>支払いはカード決済</strong>（アプリ内設定済みのカード）</div>
+                                    </li>
+                                </ol>
+                                <div class="mt-2.5 grid grid-cols-2 gap-2 text-xs">
+                                    <div class="bg-white rounded p-2 border border-blue-100">
+                                        <div class="text-slate-400">料金目安</div>
+                                        <div class="font-bold text-slate-700">約 500〜700 TWD</div>
+                                    </div>
+                                    <div class="bg-white rounded p-2 border border-blue-100">
+                                        <div class="text-slate-400">所要時間</div>
+                                        <div class="font-bold text-slate-700">約 40〜60 分</div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-xs text-amber-700 bg-amber-50 rounded p-2">
+                                    ⚠️ <strong>注意:</strong> 深夜のため客引きタクシーに声をかけられやすいですが無視してOK。Uberは必ずアプリで呼んだ車に乗ること
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkin-box" style="background: #f0fdfa;">
+                            <i class="fas fa-hotel text-2xl"></i>
+                            <div>
+                                <div class="text-sm opacity-90">ホテル到着予定</div>
+                                <div class="text-lg">22:00-22:30 <a href="https://maps.google.com/?q=No.+83,+Linsen+N.+Rd,+Zhongshan+District,+Taipei" target="_blank" class="text-slate-800 font-semibold underline"><i class="fas fa-map-marker-alt"></i> 老爺会館台北林森</a></div>
+                                <div class="text-xs opacity-90 mt-1">標準チェックイン: 15:00 / 深夜到着OK</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2: 4/29 -->
+            <div class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-teal-600 text-white px-5 py-4 font-bold text-lg flex items-center">
+                    4/29 (水) 実験 Day1 🎌
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="border-l-[3px] border-green-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">07:30 - 08:15</div>
+                        <div class="font-semibold">朝食</div>
+                        <div class="text-sm text-slate-600 mt-1 space-y-1">
+                            <div>🏨 <strong>ホテル朝食</strong>（プランに含まれる場合）— NT$400〜600目安</div>
+                            <div>🥚 <strong>近隣の早餐店</strong>（蛋餅・豆漿・飯糰）— NT$50〜100・6:00〜開店</div>
+                            <div class="mt-1 flex flex-wrap gap-2">
+                                <a href="https://yutravel.blog/taipe-breakfast/" target="_blank" class="text-xs text-teal-700 underline">台北朝食おすすめ2026</a>
+                                <a href="https://flying-tenten.com/taipei-breakfast/" target="_blank" class="text-xs text-teal-700 underline">早朝から行ける朝食店まとめ</a>
+                                <a href="https://www.tripool.app/ja/articles/best-taipei-breakfast-spots" target="_blank" class="text-xs text-teal-700 underline">台北朝ごはん名店16選</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">08:30</div>
+                        <div class="font-semibold">ホテル出発 → 実験会場</div>
+                        <div class="text-sm text-slate-600">Uber手配、機材搬入確認</div>
+                    </div>
+                    <div class="border-l-[3px] border-blue-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">09:00 - 18:00</div>
+                        <div class="font-semibold">【業務】技術実験</div>
+                        <div class="text-sm text-slate-600">終日対応、昼食は施設近隣（カード可）</div>
+                    </div>
+                    <div class="border-l-[3px] border-green-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">18:00 -</div>
+                        <div class="font-semibold">夕食 / 現地会食</div>
+                        <div class="text-sm text-slate-600">現地スタッフと会食の可能性（カード可）</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 3: 4/30 -->
+            <div class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-teal-600 text-white px-5 py-4 font-bold text-lg flex items-center">
+                    4/30 (木) 実験 Day2
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="border-l-[3px] border-blue-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">09:00 - 18:00</div>
+                        <div class="font-semibold">【業務】技術実験</div>
+                        <div class="text-sm text-slate-600">終日対応、実験終了・撤収</div>
+                    </div>
+                    <div class="border-l-[3px] border-green-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">19:00 -</div>
+                        <div class="font-semibold">夕食 (台北市内)</div>
+                        <div class="text-sm text-slate-600">
+                            大安区レストラン（カード可） または <a href="https://maps.google.com/?q=Tonghua+Night+Market+Taipei" target="_blank" class="text-slate-800 font-semibold underline"><i class="fas fa-map-marker-alt"></i> 通化街夜市</a>（<strong>現金 500-800 TWD</strong>）
+                        </div>
+                    </div>
+                    <div class="border-l-[3px] border-red-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md p-3">
+                        <div class="font-semibold text-red-800 font-semibold"><i class="fas fa-exclamation-triangle mr-2"></i>重要:
+                            MDAC登録</div>
+                        <div class="text-sm text-red-700 mt-1">マレーシア入国3日前。本日中に登録必須。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 4: 5/1 -->
+            <div class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-teal-500 text-white px-5 py-4 font-bold text-lg flex items-center">
+                    5/01 (金) WEB会議 (祝日)
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="border-l-[3px] border-red-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md p-3">
+                        <div class="font-semibold text-red-800 font-semibold">⚠️ 時差注意: 日本09:00 = 現地08:00</div>
+                        <div class="text-sm text-red-700 mt-2">
+                            【業務】WEB会議 (終日)<br>
+                            背景設定・マイク確認必須<br>
+                            昼食: Uber Eats（カード可） or コンビニ（カード可）
+                        </div>
+                    </div>
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md p-3">
+                        <div class="font-semibold text-slate-800"><i class="fas fa-utensils mr-2 text-green-600"></i>夜: 渡辺さんと会食
+                        </div>
+                        <div class="text-sm text-slate-600 mt-1">台北市内にて（カード可）</div>
+                    </div>
+                    <div class="border-l-[3px] border-blue-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md p-3">
+                        <div class="font-semibold text-slate-800"><i class="fas fa-suitcase mr-2"></i>会食後: パッキング & MDAC確認
+                        </div>
+                        <div class="text-sm text-slate-700 mt-1">明日移動。Revolut両替推奨(週末手数料回避)。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 5: 5/2 -->
+            <div class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-indigo-500 text-white px-5 py-4 font-bold text-lg flex items-center">
+                    5/02 (土) 移動 TW→MY
+                </div>
+                <div class="p-4 space-y-4">
+
+                    <div class="space-y-3">
+                        <div class="border-l-[3px] border-teal-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                            <div class="text-sm text-slate-600">06:00-06:30</div>
+                            <div class="font-semibold">ホテルチェックアウト準備</div>
+                            <div class="text-sm text-slate-600">荷物整理・忘れ物チェック</div>
+                        </div>
+
+                        <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                            <div class="text-sm text-slate-600">06:40</div>
+                            <div class="font-semibold"><a href="https://maps.google.com/?q=No.+83,+Linsen+N.+Rd,+Zhongshan+District,+Taipei" target="_blank" class="text-slate-800 font-semibold underline"><i class="fas fa-map-marker-alt"></i> 老爺会館台北林森</a> チェックアウト → <span class="text-sm font-normal text-slate-500">桃園空港 ターミナル2</span></div>
+                            <div class="text-sm text-slate-600 mt-2">
+                                <strong>桃園空港へタクシー移動</strong><br>
+                                • 所要時間: 約40-50分（早朝のため順調想定）<br>
+                                • 料金: カード決済可<br>
+                                • 推奨: 06:40までにタクシー出発
+                            </div>
+                        </div>
+
+                        <div class="checkin-box" style="background: #e0f2fe;">
+                            <i class="fas fa-plane-arrival text-2xl"></i>
+                            <div>
+                                <div class="text-base">チェックイン時間</div>
+                                <div class="text-xl">07:20-07:30 到着 (09:30発の2h前)</div>
+                            </div>
+                        </div>
+
+
+                        <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                            <div class="text-sm text-slate-600">07:30 - 09:30</div>
+                            <div class="font-semibold"><a href="https://maps.google.com/?q=Taiwan+Taoyuan+International+Airport" target="_blank" class="text-slate-800 font-semibold underline"><i class="fas fa-map-marker-alt"></i> 台北桃園空港</a>ラウンジ</div>
+                            <div class="text-sm text-slate-600 mt-2">
+                                <strong>ラウンジ選択肢:</strong><br>
+                                <div class="ml-3 mt-1">
+                                    ✅ <strong>EVA Air Lounge (The Star)</strong> (Star Alliance Gold)<br>
+                                    <span class="text-xs">└ 朝食推奨、シャワー可</span><br>
+                                    ✅ <strong>Priority Pass対象ラウンジ</strong>も利用可<br>
+                                    <span class="text-xs">└ Plaza Premium Lounge等</span>
+                                </div>
+                            </div>
+                            <div
+                                class="mt-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-3 rounded font-semibold text-center">
+                                ✈️ EVA Air BR227 &nbsp;|&nbsp; 09:30 TPE <span class="text-xs font-normal opacity-80">T2</span> → 14:15 KUL <span class="text-xs font-normal opacity-80">T1</span> &nbsp;(4h45m)<br>
+                                <span class="text-sm font-normal">💺 座席 22G &nbsp;|&nbsp; 🧳 受託手荷物 2PC &nbsp;|&nbsp; 予約済み</span>
+                            </div>
+                        </div>
+
+                        <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                            <div class="text-sm text-slate-600">14:15 到着</div>
+                            <div class="font-semibold"><a href="https://maps.google.com/?q=Kuala+Lumpur+International+Airport+KLIA" target="_blank" class="text-slate-800 font-semibold underline"><i class="fas fa-map-marker-alt"></i> クアラルンプール空港 (KLIA) <span class="text-sm font-normal text-slate-500">ターミナル1</span></a></div>
+                            <div class="text-sm font-semibold text-slate-700 mt-2">MDAC提示必須</div>
+                            <div class="bg-slate-50 text-slate-800 p-2 rounded mt-2 text-xs text-slate-700">
+                                <strong>⏱️ 入国手続き時間:</strong> 入国審査(MDAC)+荷物受取で約30-40分<br>
+                                → <strong>15:00-15:15頃</strong>に到着ロビーへ
+                            </div>
+                            <ol class="text-sm text-slate-600 mt-2 space-y-1 list-decimal list-inside">
+                                <li>入国審査 (MDAC提示・Autogate利用可)</li>
+                                <li>荷物受取（ターンテーブル待ち込み）</li>
+                                <li><strong>Revolut ATM両替: 150 MYR</strong>（到着ロビー内）</li>
+                            </ol>
+
+                            <!-- Grab手順 -->
+                            <div class="mt-3 bg-green-50 border border-green-200 rounded-lg p-3">
+                                <div class="font-bold text-green-800 text-sm mb-2">
+                                    <i class="fas fa-car mr-1"></i>KLIA → ホテル　Grab の乗り方
+                                </div>
+                                <ol class="space-y-2 text-xs text-slate-700">
+                                    <li class="flex gap-2">
+                                        <span class="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">1</span>
+                                        <div>到着ロビー（Level 2）を出たら、<strong>エスカレーター/エレベーターで Level 1（Ground Floor）へ降りる</strong></div>
+                                    </li>
+                                    <li class="flex gap-2">
+                                        <span class="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">2</span>
+                                        <div>Level 1 の <strong>「e-Hailing / Ride Hailing」の案内板</strong>に従って進む。<strong>Door 3 または Door 4</strong> 付近が乗り場</div>
+                                    </li>
+                                    <li class="flex gap-2">
+                                        <span class="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">3</span>
+                                        <div><strong>Grabアプリで配車予約</strong>する（乗り場に着いてから予約でOK）<br>目的地: <em>Holiday Inn Express Kuala Lumpur City Centre</em></div>
+                                    </li>
+                                    <li class="flex gap-2">
+                                        <span class="bg-green-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold flex-shrink-0 mt-0.5">4</span>
+                                        <div>アプリに表示された<strong>車種・ナンバープレート・ドライバー名</strong>を確認して乗車。<strong>支払いはカード決済</strong>（アプリ内で設定済みのカードを使用）</div>
+                                    </li>
+                                </ol>
+                                <div class="mt-2.5 grid grid-cols-2 gap-2 text-xs">
+                                    <div class="bg-white rounded p-2 border border-green-100">
+                                        <div class="text-slate-400">料金目安</div>
+                                        <div class="font-bold text-slate-700">約 60〜80 MYR</div>
+                                    </div>
+                                    <div class="bg-white rounded p-2 border border-green-100">
+                                        <div class="text-slate-400">所要時間</div>
+                                        <div class="font-bold text-slate-700">約 45〜60 分</div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-xs text-amber-700 bg-amber-50 rounded p-2">
+                                    ⚠️ <strong>注意:</strong> タクシー客引きに声をかけられても無視してOK。Grab乗り場はLevel 1の屋内指定エリアにあります
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkin-box" style="background: #faf5ff;">
+                            <i class="fas fa-hotel text-2xl"></i>
+                            <div>
+                                <div class="text-sm opacity-90">ホテル到着予定</div>
+                                <div class="text-lg">16:15-16:30 <a href="https://maps.google.com/?q=Holiday+Inn+Express+Kuala+Lumpur+City+Centre" target="_blank" class="text-slate-800 font-semibold underline"><i class="fas fa-map-marker-alt"></i> Holiday Inn Express Kuala Lumpur City Centre</a></div>
+                                <div class="text-xs opacity-90 mt-1">標準チェックイン: 15:00 / デポジット必要 (Amex等)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 6: 5/3 前半 -->
+            <div class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-purple-500 text-white px-5 py-4 font-bold text-lg flex items-center">
+                    5/03 (日) 自力観光日 🌟
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-sm text-amber-900">
+                        🌿 <strong>方針：</strong>朝に屋外、昼はホテル休憩、夕方〜夜に食事と街歩き。Grab＋徒歩で動く。
+                    </div>
+
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">07:30</div>
+                        <div class="font-semibold">ホテル出発 → Grabで <a href="https://www.google.com/maps/search/?api=1&query=Batu%20Caves%20Kuala%20Lumpur" target="_blank" class="text-slate-800 underline"><i class="fas fa-map-marker-alt"></i> Batu Caves</a> へ</div>
+                        <div class="text-sm text-slate-600">片道 約25–35 MYR・30分。暑くなる前に移動</div>
+                    </div>
+
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">08:00</div>
+                        <div class="font-semibold"><a href="https://www.google.com/maps/search/?api=1&query=Batu%20Caves%20Kuala%20Lumpur" target="_blank" class="text-slate-800 underline"><i class="fas fa-map-marker-alt"></i> Batu Caves</a>：272段を上る</div>
+                        <div class="text-sm text-slate-600">入場無料。黄金の巨大ヒンドゥー神像・石灰岩の洞窟寺院。早朝が涼しくて快適</div>
+                    </div>
+
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">09:30</div>
+                        <div class="font-semibold">Grabで <a href="https://www.google.com/maps/search/?api=1&query=Masjid%20Jamek%20Kuala%20Lumpur" target="_blank" class="text-slate-800 underline"><i class="fas fa-map-marker-alt"></i> Masjid Jamek</a> 周辺へ移動</div>
+                    </div>
+
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">10:15</div>
+                        <div class="font-semibold">KL発祥エリアを散策</div>
+                        <div class="text-sm text-slate-600 mt-1">
+                            <a href="https://www.google.com/maps/search/?api=1&query=Masjid%20Jamek%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Masjid Jamek</a>
+                            → <a href="https://www.google.com/maps/search/?api=1&query=River%20of%20Life%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">River of Life</a>
+                            → <a href="https://www.google.com/maps/search/?api=1&query=Sultan%20Abdul%20Samad%20Building%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Sultan Abdul Samad Building</a>
+                            → <a href="https://www.google.com/maps/search/?api=1&query=Merdeka%20Square%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Merdeka Square</a>
+                        </div>
+                    </div>
+
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">11:30</div>
+                        <div class="font-semibold"><a href="https://www.google.com/maps/search/?api=1&query=Central%20Market%20Kuala%20Lumpur" target="_blank" class="text-slate-800 underline"><i class="fas fa-map-marker-alt"></i> Central Market</a> / <a href="https://www.google.com/maps/search/?api=1&query=Chinatown%20Kuala%20Lumpur" target="_blank" class="text-slate-800 underline">Chinatown</a></div>
+                        <div class="text-sm text-slate-600">土産・雑貨・軽食。中華系の麺やチキンライス系が◎</div>
+                    </div>
+
+                    <div class="bg-slate-50 border-l-[3px] border-slate-300 rounded-r-md p-3 mt-1">
+                        <div class="text-sm font-semibold text-slate-700">12:30 ホテルに戻って休憩</div>
+                        <div class="text-sm text-slate-600">💤 仮眠・シャワー・洗濯。昼〜午後の暑さ・雷雨を回避</div>
+                    </div>
+
+                    <div class="bg-orange-50 border border-orange-200 rounded-lg px-3 py-2 text-sm text-orange-900 mt-1">
+                        🌧 <strong>雨が強い場合：</strong>Batu Cavesだけ済ませて、午後は
+                        <a href="https://www.google.com/maps/search/?api=1&query=Central%20Market%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Central Market</a> →
+                        <a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Pavilion</a> →
+                        <a href="https://www.google.com/maps/search/?api=1&query=Suria%20KLCC%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Suria KLCC</a> に寄せる
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 6: 5/3 後半 -->
+            <div class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-purple-400 text-white px-5 py-3 font-semibold text-base flex items-center">
+                    ↳ 5/03 つづき — 午後・夕食
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">15:00</div>
+                        <div class="font-semibold">モール・博物館めぐり</div>
+                        <div class="text-sm text-slate-600 mt-1">
+                            <a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Pavilion</a>、
+                            <a href="https://www.google.com/maps/search/?api=1&query=Suria%20KLCC%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Suria KLCC</a>、または
+                            <a href="https://www.google.com/maps/search/?api=1&query=Islamic%20Arts%20Museum%20Malaysia" target="_blank" class="text-teal-700 underline">Islamic Arts Museum Malaysia</a>（入場約20 MYR）
+                        </div>
+                    </div>
+
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">17:30</div>
+                        <div class="font-semibold"><a href="https://www.google.com/maps/search/?api=1&query=Petronas%20Twin%20Towers%20Kuala%20Lumpur" target="_blank" class="text-slate-800 underline"><i class="fas fa-map-marker-alt"></i> Petronas Twin Towers</a> 外観 / <a href="https://www.google.com/maps/search/?api=1&query=KLCC%20Park%20Kuala%20Lumpur" target="_blank" class="text-slate-800 underline">KLCC Park</a></div>
+                        <div class="text-sm text-slate-600">ライトアップ前の外観撮影。KLCC公園で夕涼み・噴水ショー（18:00〜）</div>
+                    </div>
+
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">19:00</div>
+                        <div class="font-semibold">夕食</div>
+                        <div class="text-sm text-slate-600 mt-1">
+                            <strong>① <a href="https://www.google.com/maps/search/?api=1&query=Jalan%20Alor%20Food%20Street%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Jalan Alor</a></strong>（Grab 10分・片道約15 MYR）
+                            ― サテー、チキンウィング、炒飯。屋台ストリートの雰囲気◎<br>
+                            <strong>② <a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Pavilion</a></strong>
+                            ― 雨・疲れ・屋内希望なら徒歩圏でそのまま
+                        </div>
+                    </div>
+
+                    <div class="border-l-[3px] border-slate-300 rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">21:00</div>
+                        <div class="font-semibold">ホテル戻り</div>
+                    </div>
+
+                    <div class="bg-slate-50 border-l-[3px] border-slate-300 rounded-r-md p-3 text-xs text-slate-700">
+                        <strong><i class="fas fa-info-circle mr-1"></i>予算目安（5/3）</strong><br>
+                        Grab: <strong>カード払いOK</strong>（現金不要）<br>
+                        昼軽食: 15–25 MYR ／ 夕食: 40–60 MYR（Jalan Alor・現金）<br>
+                        <strong>現金合計: 約55–85 MYR</strong>（Islamic Arts Museum追加なら+20 MYR）
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 7: 5/4 -->
+            <div class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-purple-600 text-white px-5 py-4 font-bold text-lg flex items-center">
+                    5/04 (月) 合流・夜ご飯の日 🤝
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">朝</div>
+                        <div class="font-semibold">朝食</div>
+                        <div class="text-sm text-slate-600">ホテル朝食、またはカヤトースト＋半熟卵＋コピ（コーヒー）</div>
+                    </div>
+
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">10:00</div>
+                        <div class="font-semibold">近場で軽く散歩</div>
+                        <div class="text-sm text-slate-600">
+                            <a href="https://www.google.com/maps/search/?api=1&query=Central%20Market%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Central Market</a> /
+                            <a href="https://www.google.com/maps/search/?api=1&query=Chinatown%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Chinatown</a> または
+                            <a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Pavilion</a>
+                        </div>
+                    </div>
+
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">12:00</div>
+                        <div class="font-semibold">昼食：<a href="https://www.google.com/maps/search/?api=1&query=Lot%2010%20Hutong%20Kuala%20Lumpur" target="_blank" class="text-slate-800 underline"><i class="fas fa-map-marker-alt"></i> Lot 10 Hutong</a></div>
+                        <div class="text-sm text-slate-600">屋内で涼しい。チキンライス、チャークイティオ、ワンタンミー、バクテー等。パクチーリスク低め</div>
+                    </div>
+
+                    <div class="bg-slate-50 border-l-[3px] border-slate-300 rounded-r-md p-3">
+                        <div class="text-sm font-semibold text-slate-700">14:00 ホテル休憩</div>
+                        <div class="text-sm text-slate-600">部下の到着便・入国状況を確認しながら待機</div>
+                    </div>
+
+                    <div class="border-l-[3px] border-blue-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2 bg-blue-50">
+                        <div class="text-sm text-blue-700 font-semibold">15:45目安 — MH53 KUL着（部下）</div>
+                        <div class="text-sm text-slate-600">KIX発マレーシア航空 MH53。遅延・入国・荷物・市内移動を見込んで <strong>ホテル着は18時前後が目安</strong></div>
+                    </div>
+
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">18:00〜19:00</div>
+                        <div class="font-semibold">合流：ホテルまたは <a href="https://www.google.com/maps/search/?api=1&query=Bukit%20Bintang%20Kuala%20Lumpur" target="_blank" class="text-slate-800 underline"><i class="fas fa-map-marker-alt"></i> Bukit Bintang</a> 周辺</div>
+                    </div>
+
+                    <div class="border-l-[3px] border-green-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">19:00</div>
+                        <div class="font-semibold">合流後の夜ご飯</div>
+                        <div class="text-sm text-slate-600 mt-1">
+                            部下は移動日なので、<strong>ホテル近く・屋内・軽め</strong>が安全<br>
+                            ① <a href="https://www.google.com/maps/search/?api=1&query=Lot%2010%20Hutong%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Lot 10 Hutong</a>（屋内・安全運転）
+                            ② <a href="https://www.google.com/maps/search/?api=1&query=Jalan%20Alor%20Food%20Street%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Jalan Alor</a>（初KL感あり）
+                            ③ <a href="https://www.google.com/maps/search/?api=1&query=Pavilion%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Pavilion</a> / <a href="https://www.google.com/maps/search/?api=1&query=Suria%20KLCC%20Kuala%20Lumpur" target="_blank" class="text-teal-700 underline">Suria KLCC</a>（雨・疲労・会話重視）
+                        </div>
+                    </div>
+
+                    <div class="border-l-[3px] border-slate-300 rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">21:00</div>
+                        <div class="font-semibold">翌日に備えて早めに解散・ホテル戻り</div>
+                    </div>
+
+                    <div class="bg-teal-50 border border-teal-200 rounded-lg px-3 py-2 text-sm text-teal-900">
+                        🌿 <strong>パクチー回避：</strong>毎回 <strong>"No coriander, please."</strong>（英語）または <strong>"Tak nak daun ketumbar."</strong>（マレー語）を付ける。ラクサ・トムヤム・ハーブ系スープ麺は避ける。
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 8: 5/5 -->
+            <div class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-purple-600 text-white px-5 py-4 font-bold text-lg flex items-center">
+                    5/05 (火) SEMICON Day1
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="bg-white border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md p-3">
+                        <div class="text-sm text-slate-600">08:30 出発</div>
+                        <div class="font-semibold">ホテル → <a href="https://maps.google.com/?q=MITEC+Kuala+Lumpur" target="_blank" class="text-slate-800 font-semibold underline"><i class="fas fa-map-marker-alt"></i> MITEC会場</a></div>
+                        <div class="text-sm text-slate-800 font-bold mt-1">⚠️ 朝の渋滞注意 (通常20分→40分想定)</div>
+                        <div class="text-sm text-slate-600">Grab推奨（カード可）</div>
+                    </div>
+                    <div class="border-l-[3px] border-blue-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">10:00 - 18:00</div>
+                        <div class="font-semibold">SEMICON SEA 参加</div>
+                        <div class="text-sm text-slate-600">入場パス(QR)・名刺・メモ準備</div>
+                    </div>
+                    <div class="border-l-[3px] border-green-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">12:00 -</div>
+                        <div class="font-semibold">昼食</div>
+                        <div class="text-sm text-slate-600">会場内フードコート（<strong>現金 30-40 MYR</strong>）またはレストラン（カード可）</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 9: 5/6 -->
+            <div class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-slate-600 text-white px-5 py-4 font-bold text-lg flex items-center">
+                    5/06 (水) 帰国日
+                </div>
+                <div class="p-4 space-y-4">
+
+                    <div class="space-y-3">
+                        <div class="border-l-[3px] border-purple-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                            <div class="text-sm text-slate-600">08:00</div>
+                            <div class="font-semibold">チェックアウト</div>
+                            <div class="text-sm text-slate-600">荷物をホテルへ預けて会場へ</div>
+                        </div>
+
+                        <div class="border-l-[3px] border-blue-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                            <div class="text-sm text-slate-600">09:30 - 16:00</div>
+                            <div class="font-semibold">SEMICON SEA 2日目</div>
+                            <div class="text-sm text-slate-600">16:00撤収、ホテルで荷物ピック</div>
+                        </div>
+
+                        <div class="border-l-[3px] border-green-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                            <div class="text-sm text-slate-600">12:00 -</div>
+                            <div class="font-semibold">昼食</div>
+                            <div class="text-sm text-slate-600">会場内（<strong>現金 30-40 MYR</strong>）</div>
+                        </div>
+
+                        <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                            <div class="text-sm text-slate-600">16:30 - 17:30</div>
+                            <div class="font-semibold">KLCC → <a href="https://maps.google.com/?q=KL+Sentral+Station+Kuala+Lumpur" target="_blank" class="text-slate-800 font-semibold underline"><i class="fas fa-map-marker-alt"></i> KL Sentral</a> → <a href="https://maps.google.com/?q=Kuala+Lumpur+International+Airport+KLIA" target="_blank" class="text-slate-800 font-semibold underline"><i class="fas fa-map-marker-alt"></i> KLIA空港</a></div>
+
+                            <div class="mt-3">
+                                <div class="text-sm font-semibold mb-2">移動手段比較</div>
+                                <table class="transport-table">
+                                    <thead>
+                                        <tr>
+                                            <th>手段</th>
+                                            <th>出発</th>
+                                            <th>到着</th>
+                                            <th>料金</th>
+                                            <th>リスク</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="recommended">
+                                            <td><strong>KLIA Express</strong></td>
+                                            <td>17:00</td>
+                                            <td>17:33</td>
+                                            <td>55 MYR</td>
+                                            <td class="risk-low">☆☆☆ 最低</td>
+                                        </tr>
+                                        <tr>
+                                            <td>KLIA Express</td>
+                                            <td>18:00</td>
+                                            <td>18:33</td>
+                                            <td>55 MYR</td>
+                                            <td class="risk-mid">★☆☆ やや不安</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Grab</td>
+                                            <td>17:30</td>
+                                            <td>18:00-19:00</td>
+                                            <td>80 MYR</td>
+                                            <td class="risk-high">★★★ 渋滞大</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="mt-2 text-sm text-slate-700 font-semibold">
+                                    <i class="fas fa-check-circle mr-1"></i>推奨: KLIA Express 17:00発 (余裕3h / 確実性最高)
+                                </div>
+                                <div class="mt-2 text-xs text-slate-600">
+                                    KL Sentral駅まで徒歩 or Grab 5分、Express 33分で空港着（カード可）
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkin-box" style="background: #f1f5f9;">
+                            <i class="fas fa-plane-arrival text-2xl"></i>
+                            <div>
+                                <div class="text-base">チェックイン時間</div>
+                                <div class="text-lg">17:33 到着 (22:25発の5h前)</div>
+                                <div class="text-xs opacity-90 mt-1">推奨チェックイン: 19:55（2.5h前）～20:25（2h前）</div>
+                            </div>
+                        </div>
+
+                        <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2 bg-slate-50 text-slate-800">
+                            <div class="text-sm text-slate-600">17:40 - 22:25</div>
+                            <div class="font-semibold"><a href="https://maps.google.com/?q=Kuala+Lumpur+International+Airport+KLIA" target="_blank" class="text-slate-800 font-semibold underline"><i class="fas fa-map-marker-alt"></i> KLIA</a>ラウンジ（約4.5時間）</div>
+
+                            <div class="mt-3 text-sm">
+                                <div class="bg-white p-3 rounded border-l-2 border-slate-300 mb-2">
+                                    <div class="font-semibold text-slate-800">
+                                        ✅ <strong>Malaysia Airlines Golden Lounge</strong> (推奨)
+                                    </div>
+                                    <div class="text-xs text-slate-700 mt-1 ml-4">
+                                        • アクセス: <strong>OneWorld Sapphire</strong><br>
+                                        • 設備: 🚿 シャワー・着替え / 💤 仮眠室 / 🍽️ 食事<br>
+                                        • 特徴: 深夜便前の長時間滞在に最適
+                                    </div>
+                                </div>
+
+                                <div class="bg-white p-3 rounded border-l-2 border-slate-300">
+                                    <div class="font-semibold text-slate-800">
+                                        ✅ <strong>Priority Pass対象ラウンジ</strong>
+                                    </div>
+                                    <div class="text-xs text-slate-700 mt-1 ml-4">
+                                        • Plaza Premium Lounge（複数箇所）<br>
+                                        • Sama-Sama Express KLIA Lounge<br>
+                                        • 設備: シャワー・軽食（ラウンジにより異なる）<br>
+                                        • 注意: 滞在時間制限あり（通常3時間）
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="mt-2 bg-indigo-700 text-white p-3 rounded font-semibold text-center">
+                                ✈️ Malaysia Airlines MH052 &nbsp;|&nbsp; 22:25 KUL <span class="text-xs font-normal opacity-80">T1</span> → 翌05:55 KIX <span class="text-xs font-normal opacity-80">T1</span> &nbsp;(6h30m)<br>
+                                <span class="text-sm font-normal">💺 座席 17D &nbsp;|&nbsp; 🧳 受託手荷物 35kg &nbsp;|&nbsp; 予約済み</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 10: 5/7 -->
+            <div class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-slate-700 text-white px-5 py-4 font-bold text-lg flex items-center">
+                    5/07 (木) 帰国完了
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">05:55 着</div>
+                        <div class="font-semibold"><a href="https://maps.google.com/?q=Kansai+International+Airport+KIX" target="_blank" class="text-slate-800 font-semibold underline"><i class="fas fa-map-marker-alt"></i> 関西国際空港 (KIX) <span class="text-sm font-normal text-slate-500">ターミナル1</span></a> 到着</div>
+                        <div class="text-sm text-slate-600">お帰りなさい。自動化ゲートで入国。</div>
+                    </div>
+                    <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-4 py-2">
+                        <div class="text-sm text-slate-600">06:30 頃</div>
+                        <div class="font-semibold">自宅へ移動</div>
+                        <div class="text-sm text-slate-600">
+                            はるか / リムジンバス / MK（カード可）<br>
+                            朝ラッシュ注意
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 text-slate-800 border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md p-3">
+                        <div class="font-semibold text-slate-800 text-lg">🏁 08:15 京都到着・出張完了</div>
+                        <div class="text-sm text-slate-800 font-semibold">お疲れ様でした!</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 2: 準備 -->
+        <div id="tab-prep" class="tab-content space-y-4">
+
+            <!-- Checklist -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-gray-700 text-white p-4 font-bold flex justify-between items-center">
+                    <span><i class="fas fa-clipboard-check mr-2"></i>準備チェックリスト</span>
+                    <span id="checkProgress" class="bg-white/20 px-3 py-1 rounded-full text-sm">0/31</span>
+                </div>
+                <div class="p-4 space-y-1" id="checklistContainer">
+
+                    <div class="pt-2 pb-1 px-1 text-xs font-bold text-slate-500 uppercase tracking-wide border-b border-slate-200">🧳 機内・移動セット</div>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">スリッパ</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">アイマスク</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">のど飴</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">ノイズキャンセリングヘッドセット（帰国便・睡眠用）</span></label>
+
+                    <div class="pt-3 pb-1 px-1 text-xs font-bold text-slate-500 uppercase tracking-wide border-b border-slate-200">💻 ラップトップセット</div>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">ラップトップ PC</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">充電器・USB-Cケーブル類</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">モバイルバッテリー</span></label>
+
+                    <div class="pt-3 pb-1 px-1 text-xs font-bold text-slate-500 uppercase tracking-wide border-b border-slate-200">⚙️ 実験用（4/29・4/30）</div>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">安全靴</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">作業着</span></label>
+
+                    <div class="pt-3 pb-1 px-1 text-xs font-bold text-slate-500 uppercase tracking-wide border-b border-slate-200">👔 衣服</div>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">ビジネスカジュアル（SEMICON SEA用）</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">Tシャツ（実験日用）</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">インナー・靴下（10日分）</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">薄手の羽織り（機内・室内冷房対策）</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">折り畳み傘</span></label>
+
+                    <div class="pt-3 pb-1 px-1 text-xs font-bold text-slate-500 uppercase tracking-wide border-b border-slate-200">📄 書類・証明書</div>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">パスポート</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">eTicket 印刷 2枚（EVA Air / Malaysia Airlines）</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">ホテル予約確認書（台湾・KL）</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">海外旅行保険証書</span></label>
+
+                    <div class="pt-3 pb-1 px-1 text-xs font-bold text-slate-500 uppercase tracking-wide border-b border-slate-200">💼 仕事道具</div>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">名刺 100枚（SEMICON SEA用）</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">SEMICONパス QRコード確認</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">メモ帳・ペン</span></label>
+
+                    <div class="pt-3 pb-1 px-1 text-xs font-bold text-slate-500 uppercase tracking-wide border-b border-slate-200">💊 医薬・衛生</div>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">常備薬</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">整腸剤（食事変化対策）</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">日焼け止め</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">マスク</span></label>
+
+                    <div class="pt-3 pb-1 px-1 text-xs font-bold text-slate-500 uppercase tracking-wide border-b border-slate-200">💳 決済</div>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">クレジットカード複数（Amex / Visa）</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">Revolut チャージ確認</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">日本円 少量（帰国後交通費用）</span></label>
+
+                    <div class="pt-3 pb-1 px-1 text-xs font-bold text-slate-500 uppercase tracking-wide border-b border-slate-200">📋 事前タスク</div>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">🇲🇾 MDAC登録（4/30以降・必須）</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">🇲🇾 SEMICON SEA 来場登録（4/30迄・無料期限）</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">Uber（台湾）/ Grab（マレーシア）アプリ確認</span></label>
+                    <label class="flex items-center gap-3 p-3 bg-slate-50 rounded cursor-pointer hover:bg-slate-100"><input type="checkbox" onchange="updateCheckProgress()" class="w-5 h-5 accent-slate-600 flex-shrink-0"><span class="text-sm">🇹🇼 台湾 e-Gate 事前確認（任意）</span></label>
+
+                </div>
+            </div>
+
+            <!-- Hotels -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden p-4">
+                <h3 class="font-bold text-lg mb-3"><i class="fas fa-hotel text-slate-800 font-semibold mr-2"></i>ホテル情報</h3>
+
+                <div class="mb-4 border border-teal-200 rounded pl-4 py-2 bg-teal-50">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="font-bold text-teal-900">老爺会館台北林森</div>
+                        <span
+                            class="text-xs text-white px-2 py-1 rounded" style="background: linear-gradient(to right, #0d9488, #0891b2);">4/28-5/2</span>
+                    </div>
+                    <div class="text-sm text-slate-700 mb-2">Royal Inn Taipei Linsen</div>
+                    <div class="text-xs text-slate-600 bg-white p-2 rounded mb-2">
+                        4th Floor, No. 83, Linsen N. Rd., Zhongshan District, Taipei
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="tel:+886225676086"
+                            class="flex-1 bg-slate-700 text-white text-center py-2 rounded font-semibold text-sm">
+                            <i class="fas fa-phone mr-1"></i>電話
+                        </a>
+                        <a href="https://maps.google.com/?q=No.+83,+Linsen+N.+Rd,+Zhongshan+District,+Taipei"
+                            target="_blank"
+                            class="flex-1 bg-slate-700 text-white text-center py-2 rounded font-semibold text-sm">
+                            <i class="fas fa-map-marker-alt mr-1"></i>地図
+                        </a>
+                    </div>
+                </div>
+
+                <div class="border border-purple-200 rounded pl-4 py-2 bg-purple-50">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="font-bold text-purple-900">Holiday Inn Express Kuala Lumpur City Centre</div>
+                        <span class="text-xs bg-purple-500 text-white px-2 py-1 rounded">5/2-5/6</span>
+                    </div>
+                    <div class="text-xs text-slate-600 bg-white p-2 rounded mb-2">
+                        84, Jalan Raja Chulan, 50200 Kuala Lumpur
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="tel:+60321611111"
+                            class="flex-1 bg-slate-700 text-white text-center py-2 rounded font-semibold text-sm">
+                            <i class="fas fa-phone mr-1"></i>電話
+                        </a>
+                        <a href="https://maps.google.com/?q=84+Jalan+Raja+Chulan+50200+Kuala+Lumpur" target="_blank"
+                            class="flex-1 bg-slate-700 text-white text-center py-2 rounded font-semibold text-sm">
+                            <i class="fas fa-map-marker-alt mr-1"></i>地図
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency -->
+            <div class="bg-slate-50 rounded-xl shadow-sm border border-slate-200/60 p-4 border-l-[3px] border-red-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md">
+                <h3 class="font-bold text-slate-900 font-semibold mb-3"><i class="fas fa-exclamation-triangle mr-2"></i>緊急連絡先</h3>
+                <div class="space-y-2">
+                    <a href="tel:0300000000" class="flex justify-between items-center p-3 bg-white rounded">
+                        <span class="font-semibold">会社緊急連絡先</span>
+                        <span class="text-slate-700 font-bold"><i class="fas fa-phone mr-1"></i>発信</span>
+                    </a>
+                    <a href="tel:+886227138000" class="flex justify-between items-center p-3 bg-white rounded">
+                        <span class="font-semibold">🇹🇼 台湾 日本窓口</span>
+                        <span class="text-slate-700 font-bold"><i class="fas fa-phone mr-1"></i>発信</span>
+                    </a>
+                    <a href="tel:+60321772600" class="flex justify-between items-center p-3 bg-white rounded">
+                        <span class="font-semibold">🇲🇾 マレーシア大使館</span>
+                        <span class="text-slate-700 font-bold"><i class="fas fa-phone mr-1"></i>発信</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Immigration -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden p-4">
+                <h3 class="font-bold text-lg mb-3"><i class="fas fa-passport text-slate-700 mr-2"></i>入国審査対策</h3>
+                <div class="space-y-3 text-sm">
+                    <div class="border-l-[3px] border-red-400 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md p-3">
+                        <div class="font-bold text-red-800 font-semibold">❌ NGワード: "Work"</div>
+                        <div class="text-red-700">就労と誤解されトラブルの元</div>
+                    </div>
+                    <div class="bg-slate-50 text-slate-800 p-3 rounded">
+                        <div class="font-bold text-gray-800 mb-2">Q: Purpose?</div>
+                        <div class="text-slate-600">
+                            🇹🇼 "Technical meeting"<br>
+                            🇲🇾 "Attending SEMICON SEA conference"
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 text-slate-800 p-3 rounded">
+                        <div class="font-bold text-gray-800 mb-2">Q: How long?</div>
+                        <div class="text-slate-600">"5 days. Return on May 6th"</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diet / NG Food Card -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden p-4">
+                <h3 class="font-bold text-lg mb-2"><i class="fas fa-utensils text-orange-500 mr-2"></i>指差し: 食材お断りカード</h3>
+                <p class="text-xs text-slate-600 mb-3 md:text-sm">八角やパクチーが苦手な場合、<strong class="text-red-500 text-sm">注文時にこの画面を店員さんに見せて</strong>ください。</p>
+                <div class="space-y-3">
+                    <div class="bg-red-50 border-l-4 border-red-500 p-3 rounded shadow-sm">
+                        <div class="text-xs font-bold text-red-800 mb-1">🇹🇼 台湾（または中華系屋台）</div>
+                        <div class="text-2xl font-black text-slate-800 tracking-wider mt-1 mb-1">不要香菜　不要八角</div>
+                        <div class="text-[11px] text-slate-600">（意味: パクチーと八角を入れないでください）</div>
+                    </div>
+                    <div class="bg-orange-50 border-l-4 border-orange-500 p-3 rounded shadow-sm">
+                        <div class="text-xs font-bold text-orange-800 mb-1">🇲🇾 マレーシア（マレー系・インド系屋台）</div>
+                        <div class="text-xl font-black text-slate-800 tracking-wider mt-1 mb-1">Tak nak daun ketumbar</div>
+                        <div class="text-[11px] text-slate-600">（意味: パクチーを入れないでください。八角は元々入っていない事が多いです）</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MDAC -->
+            <div class="bg-gray-600 text-white rounded-xl shadow-sm border border-slate-200/60 p-4 text-center">
+                <h3 class="font-bold text-lg mb-2">🇲🇾 MDAC登録 (必須)</h3>
+                <p class="text-sm opacity-90 mb-3">
+                    到着3日前(4/30以降)に登録<br>
+                    登録後、最初の入国でもAutogate利用可
+                </p>
+                <a href="https://imigresen-online.imi.gov.my/mdac/main" target="_blank"
+                    class="block bg-white text-slate-800 font-semibold font-bold py-3 px-4 rounded-lg">
+                    登録サイトを開く <i class="fas fa-external-link-alt ml-1"></i>
+                </a>
+            </div>
+
+            <!-- SEMICON Registration -->
+            <div class="bg-blue-600 text-white rounded-xl shadow-sm border border-slate-200/60 p-4 text-center mt-4">
+                <h3 class="font-bold text-lg mb-2">🇲🇾 SEMICON SEA 来場登録</h3>
+                <p class="text-sm opacity-90 mb-3">
+                    5/5-5/6の展示会入場用<br>
+                    4/30までの登録で入場無料 (以降SGD 20)
+                </p>
+                <a href="https://www.semiconsea.org/" target="_blank"
+                    class="block bg-white text-slate-800 font-semibold font-bold py-3 px-4 rounded-lg">
+                    来場者登録を開く <i class="fas fa-external-link-alt ml-1"></i>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- TAB 3: 家族 -->
+        <div id="tab-family" class="tab-content">
+
+            <!-- 印刷ボタン -->
+            <div class="print-hide flex justify-end mb-2">
+                <button onclick="printFamily()" class="flex items-center gap-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors">
+                    <i class="fas fa-print"></i> 家族用を印刷
+                </button>
+            </div>
+
+            <!-- サマリー -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="bg-gray-700 text-white px-5 py-4 font-bold text-lg flex items-center">
+                    <i class="fas fa-users mr-2"></i>家族共有情報
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="bg-white border-l-4 border-gray-300 p-3 text-sm">
+                        <i class="fas fa-info-circle text-yellow-600 mr-2"></i>
+                        <strong>台湾・マレーシア2カ国出張</strong><br>
+                        4/28(火)出発 → 5/7(木)朝8時帰宅予定
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div class="bg-gray-50 p-3 rounded">
+                            <div class="font-semibold text-blue-800">🇹🇼 台湾滞在</div>
+                            <div class="text-gray-700">4/28夜～5/2昼</div>
+                        </div>
+                        <div class="bg-purple-50 p-3 rounded">
+                            <div class="font-semibold text-purple-800">🇲🇾 マレーシア滞在</div>
+                            <div class="text-gray-700">5/2夜～5/6夜</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- フライト情報 -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden mt-4">
+                <div class="bg-gray-600 text-white p-3 font-bold">
+                    <i class="fas fa-plane mr-2"></i>フライト情報（全便）
+                </div>
+                <div class="p-4 space-y-3 text-sm">
+                    <div class="border-l-4 border-teal-300 pl-3 py-2 bg-gray-50">
+                        <div class="font-semibold">✈️ 往路1: 日本→台湾</div>
+                        <div class="text-gray-700 mt-1">
+                            4/28(火)
+                            <table class="text-xs mt-1 mb-1 w-full">
+                                <tr>
+                                    <td class="pr-2 text-gray-500 w-16">出発</td>
+                                    <td><strong>🇯🇵 18:30 JST</strong> = 🇹🇼 17:30 現地</td>
+                                    <td class="text-gray-500"><a href="https://maps.google.com/?q=Kansai+International+Airport+KIX" target="_blank" class="text-teal-700 underline">KIX</a> T1</td>
+                                </tr>
+                                <tr>
+                                    <td class="pr-2 text-gray-500">到着</td>
+                                    <td><strong>🇹🇼 20:30 現地</strong> = 🇯🇵 21:30 JST</td>
+                                    <td class="text-gray-500"><a href="https://maps.google.com/?q=Taiwan+Taoyuan+International+Airport" target="_blank" class="text-teal-700 underline">TPE</a> T2</td>
+                                </tr>
+                            </table>
+                            <span class="text-xs text-gray-600">EVA Air BR129 / 約3時間 / 💺 23G / 🧳 2PC / 予約済み</span>
+                        </div>
+                    </div>
+
+                    <div class="border-l-4 border-purple-300 pl-3 py-2 bg-purple-50">
+                        <div class="font-semibold">✈️ 往路2: 台湾→マレーシア</div>
+                        <div class="text-gray-700 mt-1">
+                            5/2(土)
+                            <table class="text-xs mt-1 mb-1 w-full">
+                                <tr>
+                                    <td class="pr-2 text-gray-500 w-16">出発</td>
+                                    <td><strong>🇹🇼 09:30 現地</strong> = 🇯🇵 10:30 JST</td>
+                                    <td class="text-gray-500"><a href="https://maps.google.com/?q=Taiwan+Taoyuan+International+Airport" target="_blank" class="text-purple-700 underline">TPE</a> T2</td>
+                                </tr>
+                                <tr>
+                                    <td class="pr-2 text-gray-500">到着</td>
+                                    <td><strong>🇲🇾 14:15 現地</strong> = 🇯🇵 15:15 JST</td>
+                                    <td class="text-gray-500"><a href="https://maps.google.com/?q=Kuala+Lumpur+International+Airport+KLIA" target="_blank" class="text-purple-700 underline">KUL</a> T1</td>
+                                </tr>
+                            </table>
+                            <span class="text-xs text-gray-600">EVA Air BR227 / 約4時間45分 / 💺 22G / 🧳 2PC / 予約済み</span>
+                            <div class="text-xs text-gray-500 mt-1">※台湾・マレーシアは同じUTC+8（日本より1時間遅れ）</div>
+                        </div>
+                    </div>
+
+                    <div class="border-l-4 border-green-300 pl-3 py-2 bg-gray-50">
+                        <div class="font-semibold">✈️ 復路: マレーシア→日本</div>
+                        <div class="text-gray-700 mt-1">
+                            5/6(水)→5/7(木)
+                            <table class="text-xs mt-1 mb-1 w-full">
+                                <tr>
+                                    <td class="pr-2 text-gray-500 w-16">出発</td>
+                                    <td><strong>🇲🇾 22:25 現地</strong> = 🇯🇵 23:25 JST (5/6)</td>
+                                    <td class="text-gray-500"><a href="https://maps.google.com/?q=Kuala+Lumpur+International+Airport+KLIA" target="_blank" class="text-gray-700 underline">KUL</a> T1</td>
+                                </tr>
+                                <tr>
+                                    <td class="pr-2 text-gray-500">到着</td>
+                                    <td><strong>🇯🇵 05:55 JST</strong> (5/7) = 🇲🇾 04:55 現地</td>
+                                    <td class="text-gray-500"><a href="https://maps.google.com/?q=Kansai+International+Airport+KIX" target="_blank" class="text-gray-700 underline">KIX</a> T1</td>
+                                </tr>
+                            </table>
+                            <span class="text-xs text-gray-600">Malaysia Airlines MH052 / 約6時間30分 (深夜便) / 💺 17D / 🧳 35kg / 予約済み</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-3 rounded">
+                        <div class="font-semibold text-gray-800">📍 帰国後</div>
+                        <div class="text-gray-700">
+                            05:55 関空着 → 自宅へ移動<br>
+                            <strong>08:15頃 京都自宅到着予定</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ホテル情報 -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden mt-4">
+                <div class="bg-gray-600 text-white p-3 font-bold">
+                    <i class="fas fa-hotel mr-2"></i>宿泊先情報
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="border border-teal-200 rounded pl-4 py-2 bg-teal-50">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="font-bold text-teal-900">🇹🇼 老爺会館台北林森</div>
+                            <span
+                                class="text-xs text-white px-2 py-1 rounded" style="background: linear-gradient(to right, #0d9488, #0891b2);">4/28-5/2</span>
+                        </div>
+                        <div class="text-sm text-slate-700 space-y-1">
+                            <div class="text-xs text-slate-500">4th Floor, No. 83, Linsen N. Rd., Zhongshan District, Taipei</div>
+                            <div class="text-xs text-slate-600">チェックイン: 4/28 22:00-22:30 / チェックアウト: 5/2 06:40</div>
+                        </div>
+                        <div class="flex gap-2 mt-3">
+                            <a href="tel:+886225676086" class="flex-1 bg-slate-700 text-white text-center py-2 rounded font-semibold text-sm"><i class="fas fa-phone mr-1"></i>電話</a>
+                            <a href="https://maps.google.com/?q=No.+83,+Linsen+N.+Rd,+Zhongshan+District,+Taipei" target="_blank" class="flex-1 bg-slate-700 text-white text-center py-2 rounded font-semibold text-sm"><i class="fas fa-map-marker-alt mr-1"></i>地図</a>
+                        </div>
+                    </div>
+
+                    <div class="border border-purple-200 rounded pl-4 py-2 bg-purple-50">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="font-bold text-purple-900">🇲🇾 Holiday Inn Express Kuala Lumpur City Centre</div>
+                            <span class="text-xs bg-purple-500 text-white px-2 py-1 rounded">5/2-5/6</span>
+                        </div>
+                        <div class="text-sm text-slate-700 space-y-1">
+                            <div class="text-xs text-slate-500">84, Jalan Raja Chulan, 50200 Kuala Lumpur</div>
+                            <div class="text-xs text-slate-600">チェックイン: 5/2 16:15-16:30 / チェックアウト: 5/6 08:00</div>
+                        </div>
+                        <div class="flex gap-2 mt-3">
+                            <a href="tel:+60321105000" class="flex-1 bg-slate-700 text-white text-center py-2 rounded font-semibold text-sm"><i class="fas fa-phone mr-1"></i>電話</a>
+                            <a href="https://maps.google.com/?q=84+Jalan+Raja+Chulan+50200+Kuala+Lumpur" target="_blank" class="flex-1 bg-slate-700 text-white text-center py-2 rounded font-semibold text-sm"><i class="fas fa-map-marker-alt mr-1"></i>地図</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 時差情報 -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden mt-4">
+                <div class="bg-gray-600 text-white p-3 font-bold">
+                    <i class="fas fa-clock mr-2"></i>時差・連絡のタイミング
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="bg-gray-50 p-3 rounded text-sm">
+                        <div class="font-semibold text-orange-800 mb-2">⏰ 時差早見表</div>
+                        <div class="grid grid-cols-3 gap-2 text-center">
+                            <div class="font-semibold text-gray-700">日本</div>
+                            <div class="font-semibold text-teal-700">🇹🇼 台湾</div>
+                            <div class="font-semibold text-purple-700">🇲🇾 マレーシア</div>
+                            <div class="bg-white p-2 rounded">12:00</div>
+                            <div class="bg-blue-100 p-2 rounded">11:00 (-1h)</div>
+                            <div class="bg-purple-100 p-2 rounded">11:00 (-1h)</div>
+                        </div>
+                        <div class="text-xs text-gray-600 mt-2">
+                            ※台湾・マレーシアともに日本より<strong>1時間遅れ</strong>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-3 rounded text-sm">
+                        <div class="font-semibold text-green-800 mb-2">📱 連絡しやすい時間帯</div>
+                        <div class="text-gray-700 space-y-1">
+                            <div>• 平日夜: <strong>21:00以降</strong>（現地20時以降）</div>
+                            <div>• 休日(5/3): <strong>終日OK</strong></div>
+                            <div>• 機内(5/6夜～5/7朝): <strong>連絡不可</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 緊急連絡先 -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden mt-4">
+                <div class="bg-gray-600 text-white p-3 font-bold">
+                    <i class="fas fa-phone-alt mr-2"></i>緊急連絡先
+                </div>
+                <div class="p-4 space-y-2">
+                    <a href="tel:+81xxxxxxxxxx" class="block border-l-4 border-red-500 p-3 rounded">
+                        <div class="font-semibold text-red-800">📱 本人携帯</div>
+                        <div class="text-sm text-red-700">+81-xx-xxxx-xxxx</div>
+                        <div class="text-xs text-red-600">LINE・WhatsApp利用可</div>
+                    </a>
+
+                    <div class="bg-gray-50 p-3 rounded text-sm">
+                        <div class="font-semibold text-gray-800 mb-2">🏢 日本大使館</div>
+                        <div class="text-gray-700 space-y-1">
+                            <div>🇹🇼 台湾: <a href="tel:+886223495103" class="text-blue-600 font-semibold">+886-2-2349-5103</a></div>
+                            <div>🇲🇾 マレーシア: <a href="tel:+60321772600" class="text-blue-600 font-semibold">+60-3-2177-2600</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 日程詳細 -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden mt-4">
+                <div class="bg-gray-600 text-white p-3 font-bold">
+                    <i class="fas fa-calendar-alt mr-2"></i>日別スケジュール
+                </div>
+                <!-- 時差メモ -->
+                <div class="mx-4 mt-3 mb-1 bg-amber-50 border border-amber-200 rounded p-2 text-xs text-amber-800">
+                    <strong>⏰ 時差:</strong> 台湾🇹🇼・マレーシア🇲🇾 は日本🇯🇵より <strong>1時間遅れ</strong>（UTC+8 / 日本はUTC+9）<br>
+                    例) 日本 19:00 JST = 現地 18:00
+                </div>
+                <div class="p-4 pt-2">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50 text-gray-800">
+                            <tr class="border-b">
+                                <th class="px-2 py-2 text-left font-semibold text-xs">日付</th>
+                                <th class="px-2 py-2 text-left font-semibold text-xs">居場所・予定<br><span class="font-normal text-gray-500">🇯🇵 JST / 現地時刻</span></th>
+                                <th class="px-2 py-2 text-left font-semibold text-xs">連絡可<br><span class="font-normal text-gray-500">(JST)</span></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr class="bg-teal-50">
+                                <td class="px-2 py-3 text-xs font-semibold">4/28(火)</td>
+                                <td class="px-2 py-3">
+                                    <div class="text-xs font-semibold text-gray-700">🇯🇵 日本 → 🇹🇼 台湾</div>
+                                    <div class="text-xs text-gray-700 mt-1">08:00-12:00 自宅WEB会議</div>
+                                    <div class="text-xs text-gray-600 mt-1">
+                                        🛫 <strong>JST 18:30</strong> KIX発<br>
+                                        <span class="text-gray-400 ml-3">（現地 17:30 出発）</span><br>
+                                        🛬 <strong>現地 20:30</strong> TPE着<br>
+                                        <span class="text-gray-400 ml-3">（JST 21:30 着）</span><br>
+                                        🏨 現地 22:00-22:30 ホテル着<br>
+                                        <span class="text-gray-400 ml-3">（JST 23:00-23:30）</span>
+                                    </div>
+                                </td>
+                                <td class="px-2 py-3 text-teal-700 font-semibold text-xs">23:00以降</td>
+                            </tr>
+                            <tr class="bg-teal-50">
+                                <td class="px-2 py-3 text-xs font-semibold">4/29(水)</td>
+                                <td class="px-2 py-3">
+                                    <div class="text-xs font-semibold text-gray-700">🇹🇼 台湾 (実験Day1)</div>
+                                    <div class="text-xs text-gray-500 mt-1">現地 09:00-18:00 ＝ JST 10:00-19:00</div>
+                                </td>
+                                <td class="px-2 py-3 text-teal-700 font-semibold text-xs">21:00以降<br><span class="font-normal text-gray-400 text-xs">(現地20:00〜)</span></td>
+                            </tr>
+                            <tr class="bg-teal-50">
+                                <td class="px-2 py-3 text-xs font-semibold">4/30(木)</td>
+                                <td class="px-2 py-3">
+                                    <div class="text-xs font-semibold text-gray-700">🇹🇼 台湾 (実験Day2)</div>
+                                    <div class="text-xs text-gray-500 mt-1">現地 09:00-18:00 ＝ JST 10:00-19:00</div>
+                                </td>
+                                <td class="px-2 py-3 text-teal-700 font-semibold text-xs">21:00以降<br><span class="font-normal text-gray-400 text-xs">(現地20:00〜)</span></td>
+                            </tr>
+                            <tr class="bg-teal-50">
+                                <td class="px-2 py-3 text-xs font-semibold">5/1(金)</td>
+                                <td class="px-2 py-3">
+                                    <div class="text-xs font-semibold text-gray-700">🇹🇼 台湾 (終日WEB会議)</div>
+                                    <div class="text-xs text-gray-600 mt-1">
+                                        日本 09:00 JST = 現地 08:00<br>
+                                        ホテルから在宅勤務<br>
+                                        夜: 渡辺さんと会食
+                                    </div>
+                                </td>
+                                <td class="px-2 py-3 text-teal-700 font-semibold text-xs">20:00以降<br><span class="font-normal text-gray-400 text-xs">(現地19:00〜)</span></td>
+                            </tr>
+                            <tr>
+                                <td class="px-2 py-3 text-xs font-semibold">5/2(土)</td>
+                                <td class="px-2 py-3">
+                                    <div class="text-xs font-semibold text-gray-700">🇹🇼 台湾 → 🇲🇾 マレーシア</div>
+                                    <div class="text-xs text-gray-600 mt-1">
+                                        🛫 <strong>現地 09:30</strong> TPE発<br>
+                                        <span class="text-gray-400 ml-3">（JST 10:30）</span><br>
+                                        🛬 <strong>現地 14:15</strong> KUL着<br>
+                                        <span class="text-gray-400 ml-3">（JST 15:15）</span><br>
+                                        🏨 現地 16:15-16:30 ホテル着<br>
+                                        <span class="text-gray-400 ml-3">（JST 17:15-17:30）</span>
+                                    </div>
+                                </td>
+                                <td class="px-2 py-3 text-gray-700 font-semibold text-xs">18:00以降<br><span class="font-normal text-gray-400 text-xs">(JST)</span></td>
+                            </tr>
+                            <tr class="bg-purple-50">
+                                <td class="px-2 py-3 text-xs font-semibold">5/3(日)</td>
+                                <td class="px-2 py-3">
+                                    <div class="text-xs font-semibold text-gray-700">🇲🇾 マレーシア (観光)</div>
+                                    <div class="text-xs text-gray-500 mt-1">ツインタワー・市内散策<br>終日現地行動</div>
+                                </td>
+                                <td class="px-2 py-3 text-purple-700 font-semibold text-xs">終日OK</td>
+                            </tr>
+                            <tr class="bg-purple-50">
+                                <td class="px-2 py-3 text-xs font-semibold">5/4(月)</td>
+                                <td class="px-2 py-3">
+                                    <div class="text-xs font-semibold text-gray-700">🇲🇾 マレーシア (市場視察)</div>
+                                    <div class="text-xs text-gray-500 mt-1">現地 10:00〜 ＝ JST 11:00〜</div>
+                                </td>
+                                <td class="px-2 py-3 text-purple-700 font-semibold text-xs">21:00以降<br><span class="font-normal text-gray-400 text-xs">(現地20:00〜)</span></td>
+                            </tr>
+                            <tr class="bg-purple-50">
+                                <td class="px-2 py-3 text-xs font-semibold">5/5(火)</td>
+                                <td class="px-2 py-3">
+                                    <div class="text-xs font-semibold text-gray-700">🇲🇾 マレーシア (SEMICON Day1)</div>
+                                    <div class="text-xs text-gray-500 mt-1">現地 10:00-18:00 ＝ JST 11:00-19:00</div>
+                                </td>
+                                <td class="px-2 py-3 text-purple-700 font-semibold text-xs">21:00以降<br><span class="font-normal text-gray-400 text-xs">(現地20:00〜)</span></td>
+                            </tr>
+                            <tr class="bg-purple-50">
+                                <td class="px-2 py-3 text-xs font-semibold">5/6(水)</td>
+                                <td class="px-2 py-3">
+                                    <div class="text-xs font-semibold text-gray-700">🇲🇾 マレーシア (SEMICON Day2)→帰国便</div>
+                                    <div class="text-xs text-gray-600 mt-1">
+                                        現地 09:30-16:00 会場<br>
+                                        🛫 <strong>現地 22:25</strong> KUL発<br>
+                                        <span class="text-gray-400 ml-3">（JST 23:25）</span><br>
+                                        ✈️ 機内泊（連絡不可）
+                                    </div>
+                                </td>
+                                <td class="px-2 py-3 text-purple-700 font-semibold text-xs">〜18:00まで<br><span class="font-normal text-gray-400 text-xs">(JST〜19:00)</span></td>
+                            </tr>
+                            <tr class="bg-gray-100">
+                                <td class="px-2 py-3 text-xs font-semibold">5/7(木)</td>
+                                <td class="px-2 py-3">
+                                    <div class="text-xs font-semibold text-gray-700">🇯🇵 帰国・自宅</div>
+                                    <div class="text-xs text-gray-600 mt-1">
+                                        🛬 <strong>JST 05:55</strong> KIX着<br>
+                                        🏠 JST 08:15頃 自宅到着予定
+                                    </div>
+                                </td>
+                                <td class="px-2 py-3 text-gray-400 text-xs">〜05:55 機内<br><span class="text-gray-700 font-semibold">08:30以降</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB 4: 資料 (Docs) -->
+        <div id="tab-docs" class="tab-content space-y-4">
+
+            <!-- Immigration Documents -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden overflow-hidden">
+                <div class="bg-white/90 backdrop-blur-md border-b border-slate-200 text-slate-800 p-4 font-bold flex items-center">
+                    <i class="fas fa-id-card mr-2 text-slate-500"></i> 入国審査用 滞在インフォシート (英語)
+                </div>
+                <div class="p-4 space-y-3">
+                    <button onclick="showLetter('tw')" class="w-full text-left bg-slate-50 text-slate-800 border border-gray-200 rounded p-3 hover:bg-slate-100 transition-colors flex justify-between items-center group shadow-sm hover:shadow-md">
+                        <div>
+                            <div class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">🇹🇼 For Taiwan Immigration (台湾用)</div>
+                            <div class="text-sm text-slate-600 mt-1">スマホ画面でそのまま見せられます（印刷も可能）</div>
+                        </div>
+                        <i class="fas fa-mobile-alt text-slate-400 group-hover:text-blue-500 text-2xl"></i>
+                    </button>
+                    <button onclick="showLetter('my')" class="w-full text-left bg-slate-50 text-slate-800 border border-gray-200 rounded p-3 hover:bg-slate-100 transition-colors flex justify-between items-center group shadow-sm hover:shadow-md">
+                        <div>
+                            <div class="font-bold text-slate-800 group-hover:text-blue-700 transition-colors">🇲🇾 For Malaysia Immigration (マレーシア用)</div>
+                            <div class="text-sm text-slate-600 mt-1">スマホ画面でそのまま見せられます（印刷も可能）</div>
+                        </div>
+                        <i class="fas fa-mobile-alt text-slate-400 group-hover:text-blue-500 text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden overflow-hidden">
+                <div class="bg-white/90 backdrop-blur-md border-b border-slate-200 text-slate-800 p-4 font-bold flex items-center">
+                    <i class="fas fa-heartbeat mr-2 text-slate-500"></i> コンディショニングガイド
+                </div>
+                <div class="p-4 space-y-3">
+                    <a href="./Conditioning_Guide.html" target="_blank" class="block bg-slate-50 text-slate-800 border border-gray-200 rounded p-3 hover:bg-slate-100 transition-colors">
+                        <div class="font-bold text-slate-800"><i class="fas fa-file-code mr-1 text-slate-500"></i> Conditioning Guide (HTML版)</div>
+                        <div class="text-sm text-slate-600 mt-1">食事・睡眠等の調整マニュアル全般</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: SEMICON SEA -->
+        <div id="tab-semicon" class="tab-content space-y-4">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50 text-slate-800 font-bold text-lg flex items-center">
+                    <i class="fas fa-microchip mr-2 text-slate-400"></i> SEMICON SEA 2026 視察ポータル
+                </div>
+                <div class="p-4 space-y-4">
+                    <a href="./02_視察_SEMICON_SEA/SEMICON_SEA_2026/SEMICON_SEA_2026_共同調査ダッシュボード.html" target="_blank" class="block bg-slate-50 border border-slate-300 rounded p-4 hover:shadow-md transition-shadow">
+                        <div class="font-bold text-slate-900 text-lg"><i class="fas fa-users mr-2 text-slate-700"></i> 共同調査ダッシュボード</div>
+                        <div class="text-sm text-slate-700 mt-2">チームメンバーとの調査共有、ヒアリングメモの統合管理はこちら</div>
+                    </a>
+
+                    <div class="bg-slate-100/80 p-3 rounded text-sm text-slate-700">
+                        <p class="font-bold mb-1"><i class="fas fa-folder-open mr-1"></i> その他のファイル</p>
+                        <p>エクセル形式の企業リスト（エリア別等）や、データ変換ツール等が必要な場合は、ルート階層の <code>02_視察_SEMICON_SEA</code> フォルダを参照してください。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden overflow-hidden">
+                <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50 text-slate-800 font-bold text-lg flex items-center">
+                    <i class="fas fa-robot mr-2 text-slate-400"></i> 最優先ターゲット (AI / 自動化・FA)
+                </div>
+                <div class="p-4 space-y-3">
+                    <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-3 py-1">
+                        <div class="font-bold text-sm text-gray-800"><span class="bg-gray-200 px-1 rounded text-xs mr-1 text-slate-600">Booth 2637</span> Advantech</div>
+                        <div class="text-xs text-slate-600 mt-1">IoTエッジデバイス、自律制御コントローラ、AI推論ハードウェア基盤。</div>
+                    </div>
+                    <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-3 py-1">
+                        <div class="font-bold text-sm text-gray-800"><span class="bg-gray-200 px-1 rounded text-xs mr-1 text-slate-600">Booth 1410</span> ViTrox Technologies</div>
+                        <div class="text-xs text-slate-600 mt-1">【MYローカル】3D AOI、3D AXIなど検査自動化の世界的プレーヤー。省人化視察の目玉。</div>
+                    </div>
+                    <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-3 py-1">
+                        <div class="font-bold text-sm text-gray-800"><span class="bg-gray-200 px-1 rounded text-xs mr-1 text-slate-600">Booth 1232</span> Pentamaster Technology</div>
+                        <div class="text-xs text-slate-600 mt-1">【MYローカル】テストハンドラから工場全体のファクトリーオートメーション(FA)構築。</div>
+                    </div>
+                    <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-3 py-1">
+                        <div class="font-bold text-sm text-gray-800"><span class="bg-gray-200 px-1 rounded text-xs mr-1 text-slate-600">Booth 2484</span> Cognex</div>
+                        <div class="text-xs text-slate-600 mt-1">マシンビジョンのリーダー。ウェーハ読取やAI画像処理による自動欠陥検査。</div>
+                    </div>
+                    <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-3 py-1">
+                        <div class="font-bold text-sm text-gray-800"><span class="bg-gray-200 px-1 rounded text-xs mr-1 text-slate-600">Booth 2317</span> HANMI Semiconductor</div>
+                        <div class="text-xs text-slate-600 mt-1">AI用HBMメモリ等で必須となるTCボンダーを展開する後工程装置大手。</div>
+                    </div>
+                    <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-3 py-1">
+                        <div class="font-bold text-sm text-gray-800"><span class="bg-gray-200 px-1 rounded text-xs mr-1 text-slate-600">Booth 1598</span> ASE Inc</div>
+                        <div class="text-xs text-slate-600 mt-1">世界最大のOSAT(受託組立)。AI半導体に不可欠な先進2.5D/3Dパッケージ技術。</div>
+                    </div>
+                    <div class="border-l-[3px] border-blue-300 hover:border-slate-400 hover:bg-slate-50/50 transition-colors rounded-r-md pl-3 py-1 mt-2">
+                        <div class="font-bold text-sm text-gray-800 space-x-1">
+                            <span class="bg-gray-200 px-1 rounded text-xs text-slate-600">1264</span><span class="align-middle">KLA</span> /
+                            <span class="bg-gray-200 px-1 rounded text-xs text-slate-600">2118</span><span class="align-middle">Lasertec</span> / 
+                            <span class="bg-gray-200 px-1 rounded text-xs text-slate-600">1360</span><span class="align-middle">Onto Innovation</span>
+                        </div>
+                        <div class="text-xs text-slate-600 mt-1">歩留まり管理・光応用欠陥検査のグローバルリーダー。いずれも自動化検査の最先端技術を展示。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: 旅程表 -->
+        <div id="tab-schedule" class="tab-content space-y-4">
+
+            <!-- ヘッダー -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+                <div class="px-4 py-3 flex items-center gap-3 border-b border-slate-100">
+                    <i class="fas fa-plane text-slate-500 text-lg"></i>
+                    <div class="flex-1">
+                        <div class="font-bold text-slate-800 leading-tight">村上　武志　殿　　2026年 台湾・マレーシア出張　旅程表</div>
+                        <div class="text-xs text-slate-500 mt-0.5">2026/04/28 (火) 出発 ─ 2026/05/07 (木) 帰着 · Taipei &amp; Kuala Lumpur　　予約済み</div>
+                    </div>
+                    <button onclick="printSchedule()" class="print-hide flex-shrink-0 flex items-center gap-1.5 text-xs bg-slate-700 text-white px-3 py-1.5 rounded-lg hover:bg-slate-600 transition-colors">
+                        <i class="fas fa-print text-xs"></i> PDF/印刷
+                    </button>
+                </div>
+                <!-- 凡例 -->
+                <div class="px-4 py-2 flex flex-wrap gap-4 print-hide">
+                    <div class="flex items-center gap-2 text-xs text-slate-500">
+                        <div class="w-4 h-4 rounded bg-sky-50 border border-sky-200"></div>
+                        <span>フライト行</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs text-slate-500">
+                        <div class="w-4 h-4 rounded bg-slate-50 border border-slate-200"></div>
+                        <span>ホテル・滞在行</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 旅程表テーブル -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden overflow-x-auto">
+                <table class="itinerary-table text-sm">
+                    <thead>
+                        <tr>
+                            <th class="bg-slate-700 text-white px-4 py-3 font-semibold text-xs uppercase tracking-wide text-left" style="width:100px;">年月日</th>
+                            <th class="bg-slate-700 text-white px-3 py-3 font-semibold text-xs uppercase tracking-wide text-center" style="width:40px;">曜</th>
+                            <th class="bg-slate-700 text-white px-3 py-3 font-semibold text-xs uppercase tracking-wide text-left" style="width:120px;">時間（現地）</th>
+                            <th class="bg-slate-700 text-white px-3 py-3 font-semibold text-xs uppercase tracking-wide text-center" style="width:52px;">時差</th>
+                            <th class="bg-slate-700 text-white px-4 py-3 font-semibold text-xs uppercase tracking-wide text-left">内　容</th>
+                            <th class="bg-slate-700 text-white px-3 py-3 font-semibold text-xs uppercase tracking-wide text-left" style="width:150px;">移動手段（便名）</th>
+                            <th class="bg-slate-700 text-white px-4 py-3 font-semibold text-xs uppercase tracking-wide text-left" style="width:190px;">宿泊先</th>
+                            <th class="bg-slate-700 text-white px-3 py-3 font-semibold text-xs uppercase tracking-wide text-left" style="width:140px;">備考</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <!-- 2026/04/28 火 -->
+                        <tr>
+                            <td class="px-4 py-2 font-semibold text-slate-700 align-top" rowspan="6">2026/04/28</td>
+                            <td class="px-3 py-2 text-center font-medium align-top" rowspan="6"><span class="text-red-600">火</span></td>
+                            <td class="px-3 py-2 time-mono text-slate-700">08:00 - 12:00</td>
+                            <td class="px-3 py-2 text-center utc-badge">JST+0</td>
+                            <td class="px-4 py-2 text-slate-700">自宅にてWEB会議</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">―</td>
+                            <td class="px-4 py-2 text-slate-600 text-xs leading-snug align-top" rowspan="6">🇹🇼 台北<br><span class="font-medium">老爺会館台北林森</span></td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">背景・マイク確認</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 time-mono text-slate-700">14:00</td>
+                            <td class="px-3 py-2 text-center utc-badge">JST+0</td>
+                            <td class="px-4 py-2 text-slate-700">自宅出発（中書島）→ 京都駅 → 関西空港</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">京阪 + JR はるか</td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">約1,800円</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 time-mono text-slate-700">16:05</td>
+                            <td class="px-3 py-2 text-center utc-badge">JST+0</td>
+                            <td class="px-4 py-2 text-slate-700">関西空港着・チェックイン</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">―</td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">SFCラウンジ利用可</td>
+                        </tr>
+                        <tr class="row-flight">
+                            <td class="px-3 py-2 time-mono text-slate-700">18:30 JST発</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+9</td>
+                            <td class="px-4 py-2 text-slate-700 font-medium">関西空港 (KIX T1) → 台北桃園空港 (TPE T2)　3h</td>
+                            <td class="px-3 py-2 text-slate-700 font-semibold">✈ BR129</td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">座席 23G / 2PC</td>
+                        </tr>
+                        <tr class="row-flight">
+                            <td class="px-3 py-2 time-mono text-slate-700">20:30 TST着</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700">台北桃園空港着・入国審査（e-Gate）→ ホテルへ</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">Uber（約50分）</td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">ATM両替 1,000 TWD</td>
+                        </tr>
+                        <tr class="row-hotel">
+                            <td class="px-3 py-2 time-mono text-slate-700">22:00 - 22:30</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700">ホテルチェックイン</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">―</td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">深夜到着OK</td>
+                        </tr>
+
+                        <!-- 2026/04/29 水 -->
+                        <tr>
+                            <td class="px-4 py-2 font-semibold text-slate-700 align-top" rowspan="3">2026/04/29</td>
+                            <td class="px-3 py-2 text-center font-medium align-top" rowspan="3">水</td>
+                            <td class="px-3 py-2 time-mono text-slate-700">08:30</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700">ホテル出発 → 実験会場</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">Uber</td>
+                            <td class="px-4 py-2 text-slate-600 text-xs leading-snug align-top" rowspan="3">🇹🇼 台北<br><span class="font-medium">老爺会館台北林森</span></td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">機材搬入確認</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 time-mono text-slate-700">09:00 - 18:00</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700 font-medium">【業務】CFA 技術実験 Day 1</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">―</td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">終日対応</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 time-mono text-slate-700">18:00 -</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700">夕食 / 現地スタッフと会食</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">―</td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">カード可</td>
+                        </tr>
+
+                        <!-- 2026/04/30 木 -->
+                        <tr>
+                            <td class="px-4 py-2 font-semibold text-slate-700 align-top" rowspan="3">2026/04/30</td>
+                            <td class="px-3 py-2 text-center font-medium align-top" rowspan="3">木</td>
+                            <td class="px-3 py-2 time-mono text-slate-700">09:00 - 18:00</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700 font-medium">【業務】CFA 技術実験 Day 2・撤収</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">―</td>
+                            <td class="px-4 py-2 text-slate-600 text-xs leading-snug align-top" rowspan="3">🇹🇼 台北<br><span class="font-medium">老爺会館台北林森</span></td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">実験完了・片付け</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 time-mono text-slate-700">19:00 -</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700">夕食（台北市内）</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">―</td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">通化街夜市等</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 time-mono text-slate-700">当日中</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700 font-medium text-red-700">⚠️ MDAC登録（マレーシア入国事前登録）</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">―</td>
+                            <td class="px-3 py-2 text-red-400 text-xs font-semibold">本日中・必須</td>
+                        </tr>
+
+                        <!-- 2026/05/01 金 -->
+                        <tr>
+                            <td class="px-4 py-2 font-semibold text-slate-700 align-top" rowspan="3">2026/05/01</td>
+                            <td class="px-3 py-2 text-center font-medium align-top" rowspan="3">金</td>
+                            <td class="px-3 py-2 time-mono text-slate-700">08:00 - 17:00</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700 font-medium">【業務】WEB会議対応（終日）</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">―</td>
+                            <td class="px-4 py-2 text-slate-600 text-xs leading-snug align-top" rowspan="3">🇹🇼 台北<br><span class="font-medium">老爺会館台北林森</span></td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">JST -1h 注意</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 time-mono text-slate-700">夜</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700 font-medium">渡辺さんと会食</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">―</td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">台北市内・カード可</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 time-mono text-slate-700">会食後</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700">パッキング・MDAC登録確認・Revolut両替</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">―</td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">翌日移動準備</td>
+                        </tr>
+
+                        <!-- 2026/05/02 土 -->
+                        <tr>
+                            <td class="px-4 py-2 font-semibold text-slate-700 align-top" rowspan="6">2026/05/02</td>
+                            <td class="px-3 py-2 text-center font-medium align-top" rowspan="6"><span class="text-blue-600">土</span></td>
+                            <td class="px-3 py-2 time-mono text-slate-700">06:40</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700">老爺会館チェックアウト → 桃園空港 T2</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">タクシー（40-50分）</td>
+                            <td class="px-4 py-2 text-slate-600 text-xs leading-snug align-top" rowspan="6">🇲🇾 KL<br><span class="font-medium">Holiday Inn Express KLCC</span></td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">カード決済可</td>
+                        </tr>
+                        <tr>
+                            <td class="px-3 py-2 time-mono text-slate-700">07:30 - 09:00</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700">桃園空港 EVA Air Lounge（朝食・ラウンジ）</td>
+                            <td class="px-3 py-2 text-slate-500 text-xs">―</td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">The Star / Priority Pass</td>
+                        </tr>
+                        <tr class="row-flight">
+                            <td class="px-3 py-2 time-mono text-slate-700">09:30 TST発</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700 font-medium">台北桃園 (TPE T2) → クアラルンプール (KUL T1)　4h45m</td>
+                            <td class="px-3 py-2 text-slate-700 font-semibold">✈ BR227</td>
+                            <td class="px-3 py-2 text-slate-400 text-xs">座席 22G / 2PC</td>
+                        </tr>
+                        <tr class="row-flight">
+                            <td class="px-3 py-2 time-mono text-slate-700">14:15 MYT着</td>
+                            <td class="px-3 py-2 text-center utc-badge">UTC+8</td>
+                            <td class="px-4 py-2 text-slate-700">KLIA T1 着・入国審査（MDAC提示）</td>
+               

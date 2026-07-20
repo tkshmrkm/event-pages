@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025年 ドイツ（アーヘン）出張旅程 (電車時間確定版)</title>
+    <style>
+        /* --- 共通設定 --- */
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            line-height: 1.4;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* --- ヘッダー --- */
+        .trip-header {
+            background: #182848;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .trip-header h1 { margin: 0; font-size: 1.6rem; }
+        .trip-header .hotel-info {
+            margin-top: 8px;
+            font-weight: bold;
+            background: #fff;
+            color: #182848;
+            padding: 4px 12px;
+            display: inline-block;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .itinerary-body { padding: 20px; }
+
+        /* --- 日付ヘッダー --- */
+        .day-header {
+            background-color: #ddd;
+            border: 2px solid #000;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            page-break-after: avoid;
+        }
+        .day-header .date-badge {
+            background: #000;
+            color: #fff;
+            padding: 4px 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 4px;
+        }
+        .day-header h2 { margin: 0; font-size: 1.2rem; }
+
+        /* --- 時間ブロック --- */
+        .time-block {
+            display: grid;
+            grid-template-columns: 90px 1fr; /* 時間ラベル幅 */
+            gap: 10px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            page-break-inside: avoid;
+        }
+        .time-block:last-child { border-bottom: none; }
+
+        .time-label {
+            font-weight: bold;
+            font-size: 0.9rem;
+            padding-top: 5px;
+            text-align: right;
+            padding-right: 5px;
+        }
+
+        /* --- 左右カラム (2列) --- */
+        .actors-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .actor-cell {
+            border: 1px solid #000;
+            padding: 8px 10px;
+            background: #fff;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        /* 名前ラベル */
+        .actor-cell h4 {
+            margin: 0 0 5px 0;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 2px;
+            font-size: 0.95rem;
+            text-align: center;
+            background: #f0f0f0;
+        }
+        .actor-cell.you h4 { background: #e6f0ff; color: #000; font-weight: bold; } /* 村上様 */
+        .actor-cell.colleague h4 { background: #ffe6e6; color: #000; } /* 同行者様 */
+
+        /* --- 重要な時間の強調 --- */
+        .time-row {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+        .t-time {
+            font-weight: bold;
+            font-size: 1rem;
+            min-width: 55px;
+            color: #000;
+        }
+        .t-desc { flex: 1; }
+
+        .move-start { color: #d00; font-weight: bold; background: #fff0f0; padding: 0 2px; } /* 移動開始 */
+        .event-start { color: #0056b3; font-weight: bold; } /* イベント開始 */
+        
+        /* 全員共通セル */
+        .full-width-cell {
+            grid-column: 1 / -1;
+            background: #f9f9f9;
+            border: 2px solid #000; /* 枠線を太く */
+            padding: 8px 12px;
+        }
+        .full-width-cell h4 { margin: 0 0 5px 0; font-size: 1rem; border-bottom: 1px solid #999; }
+
+        /* 注記 */
+        .alert { 
+            color: #d00; font-weight: bold; border: 1px solid #d00; 
+            padding: 4px; margin-top: 5px; background: #fff; display: block; 
+            text-align: center; font-size: 0.85rem;
+        }
+        .note { font-size: 0.85rem; color: #555; background: #eee; padding: 2px 5px; display: block; margin-top: 3px; }
+
+        /* 改ページ */
+        .page-break { page-break-after: always; height: 0; margin: 0; }
+
+        /* =========================================
+           印刷用設定 (@media print)
+           ========================================= */
+        @media print {
+            body { background: white; padding: 0; font-size: 10pt; }
+            .container { box-shadow: none; width: 100%; max-width: none; border: none; }
+            .trip-header { background: none; color: black; border-bottom: 2px solid black; }
+            .trip-header h1 { font-size: 14pt; }
+            
+            /* 背景色強制出力 */
+            .actor-cell.you h4 { background: #e6f0ff !important; -webkit-print-color-adjust: exact; }
+            .actor-cell.colleague h4 { background: #ffe6e6 !important; -webkit-print-color-adjust: exact; }
+            .move-start { background: #eee !important; color: #000 !important; text-decoration: underline; }
+            
+            .actor-cell, .full-width-cell { border: 1px solid #000 !important; box-shadow: none; }
+            .full-width-cell { border-width: 2px !important; }
+
+            .empty { display: none; }
+            a { text-decoration: none; color: #000; }
+            
+            .page-break { display: block; }
+            .day-header { page-break-after: avoid; }
+            .time-block { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header class="trip-header">
+        <h1>🇩🇪 2025年 ドイツ（アーヘン）出張旅程</h1>
+        <div class="hotel-info">🏨 Mercure Hotel Aachen am Dom</div>
+        <div style="font-size:0.9rem; margin-top:5px;">※太字の時刻は「移動開始」または「フライト/イベント開始」の重要時刻です</div>
+    </header>
+
+    <div class="itinerary-body">
+
+        <section class="day-block">
+            <div class="day-header">
+                <div class="date-badge">12/7 (日)</div>
+                <h2>廣瀬・北尾 日本出発</h2>
+            </div>
+            <div class="time-block">
+                <div class="time-label">夜</div>
+                <div class="actors-grid">
+                    <div class="actor-cell empty"></div>
+                    <div class="actor-cell colleague">
+                        <h4>👥 廣瀬・北尾</h4>
+                        <div class="time-row">
+                            <span class="t-time">20:30</span>
+                            <span class="t-desc">空港集合目安</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time event-start">22:30</span>
+                            <span class="t-desc">✈️ KIX発 (TK87)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="day-block">
+            <div class="day-header">
+                <div class="date-badge">12/8 (月)</div>
+                <h2>廣瀬・北尾 到着 / 村上 出発</h2>
+            </div>
+            <div class="time-block">
+                <div class="time-label">朝〜昼</div>
+                <div class="actors-grid">
+                    <div class="actor-cell you">
+                        <h4>👤 村上</h4>
+                        <div class="time-row">
+                            <span class="t-time">08:00</span>
+                            <span class="t-desc">🏢 本社業務開始</span>
+                        </div>
+                    </div>
+                    <div class="actor-cell colleague">
+                        <h4>👥 廣瀬・北尾</h4>
+                        <div class="time-row">
+                            <span class="t-time">09:20</span>
+                            <span class="t-desc">🛬 DUS空港着</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time move-start">10:30頃</span>
+                            <span class="t-desc">🚆 空港発 (アーヘンへ)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="time-block">
+                <div class="time-label">夕方〜夜</div>
+                <div class="actors-grid">
+                    <div class="actor-cell you">
+                        <h4>👤 村上</h4>
+                        <div class="time-row">
+                            <span class="t-time move-start">18:00</span>
+                            <span class="t-desc">🚆 京都駅発 (関空へ)</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">19:25</span>
+                            <span class="t-desc">🛬 KIX着・ラウンジへ</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time event-start">23:25</span>
+                            <span class="t-desc">✈️ KIX発 (AY068)</span>
+                        </div>
+                    </div>
+                    <div class="actor-cell colleague">
+                        <h4>👥 廣瀬・北尾</h4>
+                        <div class="time-row">
+                            <span class="t-desc">ホテル チェックイン・夕食</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="page-break"></div>
+
+        <section class="day-block">
+            <div class="day-header">
+                <div class="date-badge">12/9 (火)</div>
+                <h2>村上 到着 / Industrial Day</h2>
+            </div>
+            <div class="time-block">
+                <div class="time-label">午前</div>
+                <div class="actors-grid">
+                    <div class="actor-cell you">
+                        <h4>👤 村上</h4>
+                        <div class="time-row">
+                            <span class="t-time">05:30</span>
+                            <span class="t-desc">🛬 ヘルシンキ着</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">07:40</span>
+                            <span class="t-desc">✈️ ヘルシンキ発</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">09:10</span>
+                            <span class="t-desc">🛬 DUS空港着</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time move-start">11:04</span>
+                            <span class="t-desc">🚆 DUS空港駅 発</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">12:36</span>
+                            <span class="t-desc">アーヘン中央駅 着</span>
+                        </div>
+                        <span class="note">13:00頃 ホテル着・休憩開始</span>
+                    </div>
+                    <div class="actor-cell colleague">
+                        <h4>👥 廣瀬・北尾</h4>
+                        <div class="time-row">
+                            <span class="t-desc">朝食・準備</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="time-block">
+                <div class="time-label">午後</div>
+                <div class="actors-grid">
+                    <div class="actor-cell you">
+                        <h4>👤 村上</h4>
+                        <div class="time-row">
+                            <span class="t-desc"><strong>🍵 自由行動・休息</strong></span>
+                        </div>
+                        <span class="note">※深夜会議に備えて仮眠推奨</span>
+                    </div>
+                    <div class="actor-cell colleague">
+                        <h4>👥 廣瀬・北尾</h4>
+                        <div class="time-row">
+                            <span class="t-time move-start">13:00</span>
+                            <span class="t-desc">🚕 ホテル出発 (会場へ)</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">13:30</span>
+                            <span class="t-desc">🏭 受付開始</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time event-start">14:00</span>
+                            <span class="t-desc">基調講演</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">16:30</span>
+                            <span class="t-desc">ショップフロアツアー</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="time-block">
+                <div class="time-label">夜</div>
+                <div class="actors-grid">
+                    <div class="actor-cell you">
+                        <h4>👤 村上</h4>
+                        <div class="time-row">
+                            <span class="t-desc">夕食（単独）・仮眠継続</span>
+                        </div>
+                        <div class="alert">⚠️ 25:00 (翌01:00) WEB会議</div>
+                    </div>
+                    <div class="actor-cell colleague">
+                        <h4>👥 廣瀬・北尾</h4>
+                        <div class="time-row">
+                            <span class="t-time event-start">18:00</span>
+                            <span class="t-desc">ネットワーキング夕食会</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time move-start">20:00</span>
+                            <span class="t-desc">🚕 会場発 → ホテルへ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="page-break"></div>
+
+        <section class="day-block">
+            <div class="day-header">
+                <div class="date-badge">12/10 (水)</div>
+                <h2>ICNAP Meeting Day 1</h2>
+            </div>
+            
+            <div class="time-block">
+                <div class="time-label">深夜</div>
+                <div class="actors-grid">
+                    <div class="actor-cell you">
+                        <h4>👤 村上</h4>
+                        <div class="time-row">
+                            <span class="t-time event-start">01:00</span>
+                            <span class="t-desc">💻 WEB会議 (~03:30)</span>
+                        </div>
+                        <span class="note">終了後、07:00まで仮眠</span>
+                    </div>
+                    <div class="actor-cell empty"></div>
+                </div>
+            </div>
+
+            <div class="time-block">
+                <div class="time-label">日中</div>
+                <div class="actors-grid" style="grid-template-columns: 1fr;">
+                    <div class="full-width-cell">
+                        <h4>🎓 全員行動：ICNAP Annual Meeting - Day 1</h4>
+                        <div class="time-row">
+                            <span class="t-time">07:30</span>
+                            <span class="t-desc">🍽️ 朝食</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time move-start">08:00</span>
+                            <span class="t-desc">🚕 ホテル出発 (会場へ)</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">08:30</span>
+                            <span class="t-desc">会場到着・登録</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time event-start">09:00</span>
+                            <span class="t-desc">開会・コミュニティニュース</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">12:15</span>
+                            <span class="t-desc">🍽️ ランチ</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">16:15</span>
+                            <span class="t-desc">Day 1 終了・ホテルへ移動</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="time-block">
+                <div class="time-label">夜</div>
+                <div class="actors-grid" style="grid-template-columns: 1fr;">
+                    <div class="full-width-cell">
+                        <h4>🍽️ 夕食会</h4>
+                        <div class="time-row">
+                            <span class="t-time event-start">19:00</span>
+                            <span class="t-desc">Get-Together (Xmas Market)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="page-break"></div>
+
+        <section class="day-block">
+            <div class="day-header">
+                <div class="date-badge">12/11 (木)</div>
+                <h2>ICNAP Meeting Day 2 & ケルン</h2>
+            </div>
+            
+            <div class="time-block">
+                <div class="time-label">日中</div>
+                <div class="actors-grid" style="grid-template-columns: 1fr;">
+                    <div class="full-width-cell">
+                        <h4>🎓 全員行動：ICNAP Annual Meeting - Day 2</h4>
+                        <div class="time-row">
+                            <span class="t-time">07:45</span>
+                            <span class="t-desc">🍽️ 朝食</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time move-start">08:15</span>
+                            <span class="t-desc">🚕 ホテル出発 (会場へ)</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">08:45</span>
+                            <span class="t-desc">会場到着</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time event-start">09:00</span>
+                            <span class="t-desc">Day 2 開始</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">15:00</span>
+                            <span class="t-desc">表彰式・閉会</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time move-start">15:30</span>
+                            <span class="t-desc">🚕 会場発 → ホテル/駅へ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="time-block">
+                <div class="time-label">夕方〜夜</div>
+                <div class="actors-grid" style="grid-template-columns: 1fr;">
+                    <div class="full-width-cell">
+                        <h4>🏰 全員行動：ケルン観光</h4>
+                        <div class="time-row">
+                            <span class="t-time move-start">16:51</span>
+                            <span class="t-desc">🚆 アーヘン中央駅 発 (RE 1)</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">18:00</span>
+                            <span class="t-desc">ケルン中央駅 着</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-desc">観光・ディナー (約2時間)</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time move-start">20:00</span>
+                            <span class="t-desc">🚆 ケルン中央駅 発</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">21:10</span>
+                            <span class="t-desc">アーヘン中央駅 着</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="page-break"></div>
+
+        <section class="day-block">
+            <div class="day-header">
+                <div class="date-badge">12/12 (金)</div>
+                <h2>フランクフルト & 帰国</h2>
+            </div>
+            
+            <div class="time-block">
+                <div class="time-label">午前〜午後</div>
+                <div class="actors-grid" style="grid-template-columns: 1fr;">
+                    <div class="full-width-cell">
+                        <h4>🚆 全員行動：移動と観光</h4>
+                        <div class="time-row">
+                            <span class="t-time move-start">09:00</span>
+                            <span class="t-desc">🏨 ホテル チェックアウト・出発</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time move-start">09:42</span>
+                            <span class="t-desc">🚆 アーヘン中央駅 発</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">12:26</span>
+                            <span class="t-desc">フランクフルト空港駅 着</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">12:45</span>
+                            <span class="t-desc">チェックイン・荷物預け完了</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time move-start">13:00</span>
+                            <span class="t-desc">🚆 市内へ移動</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">13:30</span>
+                            <span class="t-desc">レーマー広場・ランチ (~15:15)</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time move-start">15:30</span>
+                            <span class="t-desc">🚆 市内発 → 空港へ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="time-block">
+                <div class="time-label">夕方〜夜</div>
+                <div class="actors-grid">
+                    <div class="actor-cell you">
+                        <h4>👤 村上</h4>
+                        <div class="time-row">
+                            <span class="t-time">16:00</span>
+                            <span class="t-desc">ラウンジ入室 (休憩・シャワー)</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time event-start">20:05</span>
+                            <span class="t-desc">✈️ FRA発 (JL408)</span>
+                        </div>
+                    </div>
+                    <div class="actor-cell colleague">
+                        <h4>👥 廣瀬・北尾</h4>
+                        <div class="time-row">
+                            <span class="t-time">16:00</span>
+                            <span class="t-desc">出国審査・ゲートへ</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time event-start">18:25</span>
+                            <span class="t-desc">✈️ FRA発 (TK1594)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="day-block">
+            <div class="day-header">
+                <div class="date-badge">12/13 (土)</div>
+                <h2>日本到着</h2>
+            </div>
+            <div class="time-block">
+                <div class="time-label">到着</div>
+                <div class="actors-grid">
+                    <div class="actor-cell you">
+                        <h4>👤 村上</h4>
+                        <div class="time-row">
+                            <span class="t-time">17:05</span>
+                            <span class="t-desc">🛬 成田着</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time move-start">18:25</span>
+                            <span class="t-desc">✈️ 成田発 (JL3009)</span>
+                        </div>
+                        <div class="time-row">
+                            <span class="t-time">19:55</span>
+                            <span class="t-desc">🛬 伊丹着</span>
+                        </div>
+                    </div>
+                    <div class="actor-cell colleague">
+                        <h4>👥 廣瀬・北尾</h4>
+                        <div class="time-row">
+                            <span class="t-time">19:05</span>
+                            <span class="t-desc">🛬 関空着</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+</body>
+</html>
