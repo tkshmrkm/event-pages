@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Robotics Summit & ICRA デイリー旅程表 (Takeshi)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 12px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #1a3a6c;
+            padding-bottom: 20px;
+        }
+        h1 {
+            color: #1a3a6c;
+            font-size: 26px;
+            margin: 0 0 10px 0;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Strategy Box */
+        .strategy-box {
+            background-color: #fff7ed; /* Orange-50 */
+            border: 1px solid #ffedd5;
+            border-left: 5px solid #d97706;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 4px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .strategy-item h3 {
+            margin: 0 0 5px 0;
+            font-size: 15px;
+            color: #9a3412;
+            display: flex;
+            align-items: center;
+        }
+        .strategy-item p {
+            margin: 0;
+            font-size: 13px;
+            color: #431407;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            margin-top: 40px;
+            background-color: #f0f9ff; /* Sky-50 */
+            border: 1px solid #e0f2fe;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .tips-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #bae6fd;
+            padding-bottom: 10px;
+        }
+        .tips-header h2 {
+            font-size: 18px;
+            color: #0369a1;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        .tips-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .tip-card h3 {
+            font-size: 14px;
+            color: #0284c7;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        .tip-card ul {
+            margin: 0;
+            padding-left: 20px;
+            font-size: 13px;
+            color: #334155;
+        }
+        .tip-card li {
+            margin-bottom: 4px;
+        }
+
+        /* Day Section */
+        .day-section {
+            margin-bottom: 40px;
+            page-break-inside: avoid; /* Avoid breaking inside a day when printing */
+        }
+        
+        .day-header {
+            background-color: #1a3a6c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .day-header h2 {
+            margin: 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+        .day-header .date {
+            font-weight: 700;
+            margin-right: 15px;
+        }
+        .day-header .location {
+            font-size: 13px;
+            background-color: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        /* Day Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f3f4f6;
+            vertical-align: top;
+        }
+        
+        tr:last-child td {
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td.time {
+            width: 15%;
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 700;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        td.icon {
+            width: 5%;
+            text-align: center;
+            color: #1a3a6c;
+        }
+
+        td.content {
+            width: 45%;
+        }
+        
+        td.notes {
+            width: 35%;
+            font-size: 13px;
+            color: #64748b;
+            background-color: #f9fafb;
+        }
+
+        /* Content Styling */
+        .event-title {
+            font-weight: 700;
+            color: #1f2937;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .event-desc {
+            font-size: 13px;
+            color: #4b5563;
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-right: 5px;
+        }
+        .tag-flight { background: #e0f2fe; color: #0369a1; }
+        .tag-hotel { background: #dcfce7; color: #15803d; }
+        .tag-food { background: #fef3c7; color: #92400e; }
+        .tag-alert { background: #fee2e2; color: #991b1b; }
+        .tag-checkin { background: #e0e7ff; color: #3730a3; }
+        .tag-rec { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+
+        /* Lounge Info */
+        .lounge-pill {
+            display: inline-flex;
+            align-items: center;
+            background-color: #fff;
+            border: 1px solid #bae6fd;
+            color: #0284c7;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+        .lounge-pill .material-icons { font-size: 12px; margin-right: 3px; }
+
+        /* Date Nav */
+        .date-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #1a3a6c;
+            padding: 8px 12px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            margin: -40px -40px 24px -40px;
+        }
+        .date-nav::-webkit-scrollbar { display: none; }
+        .date-nav a {
+            display: inline-block;
+            color: rgba(255,255,255,0.85);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 11px;
+            border-radius: 16px;
+            margin-right: 5px;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.25);
+            transition: background 0.15s;
+        }
+        .date-nav a:hover,
+        .date-nav a:active { background: rgba(255,255,255,0.2); color: #fff; }
+
+        /* Back to nav link */
+        .back-to-nav {
+            display: block;
+            text-align: right;
+            padding: 6px 14px;
+            font-size: 12px;
+            color: #1a3a6c;
+            background: #f1f5f9;
+            text-decoration: none;
+            border-top: 1px solid #e2e8f0;
+            border-radius: 0 0 4px 4px;
+        }
+        .back-to-nav:hover { background: #e2e8f0; }
+
+        /* ── Mobile: card layout ── */
+        @media (max-width: 600px) {
+            body { padding: 0; }
+            .container { padding: 12px; border-radius: 0; box-shadow: none; }
+
+            .date-nav { margin: -12px -12px 16px -12px; }
+
+            /* Weather / Strategy: single column */
+            div[style*="f0fdf4"] { flex-direction: column !important; gap: 8px !important; }
+            .strategy-box { grid-template-columns: 1fr !important; }
+            .tips-grid { grid-template-columns: 1fr !important; }
+
+            /* Day header */
+            .day-header { border-radius: 8px 8px 0 0; padding: 8px 12px; }
+            .day-header h2 { font-size: 15px; }
+            .day-header .location { font-size: 11px; }
+
+            /* Table → card rows */
+            table { border: none; }
+            tr { display: flex; flex-wrap: wrap; padding: 8px 10px; border-bottom: 1px solid #e5e7eb; }
+            tr:last-child { border-bottom: 1px solid #e5e7eb; }
+
+            /* Hide icon column */
+            td.icon { display: none; }
+
+            /* Time: top-left badge */
+            td.time {
+                width: auto !important;
+                flex: 0 0 auto;
+                font-size: 12px;
+                font-weight: 700;
+                color: #1a3a6c;
+                padding: 0 8px 0 0;
+                border: none;
+                line-height: 1.4;
+                background: transparent;
+            }
+
+            /* Content: takes remaining width */
+            td.content {
+                width: auto !important;
+                flex: 1 1 0;
+                padding: 0;
+                border: none;
+            }
+            td.content .event-title { font-size: 14px; }
+            td.content .event-desc  { font-size: 12px; }
+
+            /* Notes: full-width row below */
+            td.notes {
+                width: 100% !important;
+                flex: 0 0 100%;
+                margin-top: 4px;
+                padding: 5px 8px;
+                font-size: 12px;
+                background: #f8fafc;
+                border: none;
+                border-left: 3px solid #e2e8f0;
+                border-radius: 0 4px 4px 0;
+            }
+            td.notes:empty { display: none; }
+
+            /* Back-to-nav */
+            .back-to-nav { font-size: 13px; padding: 8px 16px; }
+        }
+
+        @media print {
+            @page { size: A4; margin: 10mm 12mm; }
+
+            body {
+                background: none;
+                padding: 0;
+                margin: 0;
+                font-size: 9pt;
+                line-height: 1.4;
+                color: #000;
+                width: 100%;
+                overflow-x: hidden;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                width: 100%;
+                max-width: 100%;
+                border-radius: 0;
+                background: #fff;
+                overflow-x: hidden;
+            }
+
+            /* ヘッダー・Tips・天気を1枚目にまとめる */
+            header { margin-bottom: 8px; padding-bottom: 8px; }
+            header h1 { font-size: 14pt; }
+            .subtitle { font-size: 9pt; }
+
+            .no-print { display: none; }
+
+            /* 天気: 1行に圧縮 */
+            div[style*="f0fdf4"] { padding: 4px 8px !important; margin-bottom: 6px !important; }
+            div[style*="f0fdf4"] h3 { font-size: 8pt !important; margin-bottom: 1px !important; }
+            div[style*="f0fdf4"] p { font-size: 7.5pt !important; margin: 0 !important; }
+
+            /* Travel Tips: 極限圧縮 */
+            .tips-section { padding: 4px 8px; margin-bottom: 6px; }
+            .tips-header h2 { font-size: 8pt; margin: 0 0 3px 0; }
+            .tips-grid { gap: 6px; }
+            .tip-card h3 { font-size: 7.5pt; margin: 0 0 2px 0; }
+            .tip-card ul { font-size: 7pt; padding-left: 12px; margin: 0; }
+            .tip-card li { margin-bottom: 1px; }
+
+            /* 各日セクション: 途中で切れないように */
+            .day-section {
+                page-break-inside: avoid;
+                break-inside: avoid;
+                margin-bottom: 0;
+            }
+
+            /* 日ヘッダーは次ページに送らない */
+            .day-header {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+
+            /* テーブル全体も切れないように */
+            table {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            /* テーブル行が途中で切れないように */
+            table tr {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            /* Tips・戦略ボックスも切れないように */
+            .strategy-box, .tips-section {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            .day-header {
+                padding: 6px 12px;
+                border-radius: 0;
+            }
+            .day-header h2 { font-size: 11pt; }
+            .day-header .date { margin-right: 8px; }
+            .day-header .location { font-size: 8pt; }
+
+            /* テーブル */
+            table { margin: 0; box-shadow: none; border: 1px solid #ccc; width: 100%; table-layout: fixed; }
+            td {
+                padding: 4px 8px;
+                font-size: 8.5pt;
+                border-bottom: 1px solid #eee;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
+            td.time { font-size: 8pt; width: 13%; }
+            td.icon { width: 4%; }
+            td.content { width: 47%; }
+            td.notes { width: 36%; font-size: 8pt; background: #fafafa; border-left: 1px solid #ccc; }
+
+            .event-title { font-size: 8.5pt; }
+            .event-desc { font-size: 8pt; }
+
+            /* タグ */
+            .tag { font-size: 7pt; padding: 1px 4px; }
+
+            /* ラウンジPill */
+            .lounge-pill { font-size: 7.5pt; padding: 1px 4px; }
+            .lounge-pill .material-icons { font-size: 10px; }
+
+            /* Weekend Survival Tips */
+            .tips-section[style*="fffbeb"] {
+                page-break-before: avoid;
+                page-break-inside: avoid;
+                padding: 8px 10px !important;
+                margin-bottom: 0 !important;
+            }
+
+            /* リンクのURL非表示 */
+            a[href]:after { content: none; }
+
+            /* 背景色・影を除去 */
+            tr:hover { background: none !important; }
+            tr:nth-child(even) { background: #f9f9f9 !important; }
+            td.notes { background: #f9f9f9 !important; }
+
+            /* フッター */
+            div[style*="text-align:center"][style*="margin-top:40px"] { margin-top: 10px !important; font-size: 8pt; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="no-print" style="text-align:center; margin-bottom:20px; font-size:12px; color:#666;">
+        💡 印刷用レイアウト対応済み (Ctrl+P)
+    </div>
+
+    <header>
+        <h1>2026 Robotics Mission Daily Itinerary</h1>
+        <div class="subtitle">Takeshi (RD Manager) | Boston 🇺🇸 & Vienna 🇦🇹</div>
+    </header>
+
+
+    <!-- Weather Info -->
+    <div style="background-color: #f0fdf4; border-left: 5px solid #16a34a; padding: 15px 20px; margin-bottom: 20px; border-radius: 4px; display: flex; gap: 20px; justify-content: space-around;">
+        <div style="flex: 1;">
+            <h3 style="margin: 0 0 5px 0; color: #166534; font-size: 14px; display: flex; align-items: center;"><span class="material-icons" style="font-size: 16px; margin-right: 5px;">thermostat</span> ボストン (5月下旬) — 実況予報</h3>
+            <p style="margin: 0; font-size: 13px; color: #14532d;">気温: 最高 <strong>16〜24°C</strong> / 最低 11〜17°C<br>5/25は肌寒め（最高16°C）、5/27以降は24°Cまで上昇。朝晩・海風は冷えるため上着必須。夜のMLB観戦は特に注意。</p>
+        </div>
+        <div style="flex: 1;">
+            <h3 style="margin: 0 0 5px 0; color: #166534; font-size: 14px; display: flex; align-items: center;"><span class="material-icons" style="font-size: 16px; margin-right: 5px;">wb_sunny</span> ウィーン (5月末〜6月上旬) — 実況予報</h3>
+            <p style="margin: 0; font-size: 13px; color: #14532d;">気温: 最高 <strong>14〜28°C</strong> / 最低 9〜14°C<br>5/30は涼しめ（最高14°C）、6/4〜5にピーク（最高28°C）。期間中7日程度は雨の予報。折りたたみ傘と羽織るもの必携。</p>
+        </div>
+    </div>
+
+    
+
+    <!-- Travel Tips -->
+    <div class="tips-section">
+        <div class="tips-header">
+            <h2><span class="material-icons" style="margin-right:5px;">lightbulb</span> Travel Tips & Tools</h2>
+        </div>
+        <div class="tips-grid">
+            <div class="tip-card">
+                <h3><span class="material-icons" style="font-size:16px; margin-right:5px;">place</span> Boston 移動のコツ</h3>
+                <ul>
+                    <li><strong>スマホタッチで乗車OK:</strong> 地下鉄(T)やバスは、Apple Pay/Google Payやクレカのタッチ決済で直接改札を通れます。専用カード(CharlieCard)は不要です。</li>
+                    <li><strong>Uber / Lyft:</strong> 空港・ホテル間の移動に便利。両方入れて価格比較を推奨。</li>
+                    <li><strong>チップ:</strong> 配車アプリは乗車後にアプリ内で設定可(15-20%)。</li>
+                </ul>
+            </div>
+            <div class="tip-card">
+                <h3><span class="material-icons" style="font-size:16px; margin-right:5px;">train</span> Vienna 移動のコツ</h3>
+                <ul>
+                    <li><strong>WienMobilアプリ (必須):</strong> チケット購入・ルート検索。改札がないので購入忘れに注意（検札時罰金）。</li>
+                    <li><strong>空港バス (VAL 1):</strong> 西駅直行で快適。Wi-Fiあり。<a href="https://www.viennaairportbus.com/en/" target="_blank" style="color:#0284c7; text-decoration:underline;">[公式サイトで購入]</a></li>
+                    <li><strong>ランチ:</strong> 祝日(6/4)は会場内の売店が混雑予想。前日に西駅でパンなどを確保推奨。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <!-- DAY 1: 5/25 -->
+    <div class="day-section">
+        <div class="day-header">
+            <h2><span class="date">5/25 (月)</span> 出発・ボストン移動日</h2>
+            <span class="location">Japan ➔ Boston</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">10:30</td>
+                <td class="icon"><span class="material-icons">home</span></td>
+                <td class="content">
+                    <span class="event-title">自宅出発</span>
+                    <span class="event-desc">中書島 → 京都駅</span>
+                </td>
+                <td class="notes">余裕を持って早めに出発</td>
+            </tr>
+            <tr>
+                <td class="time">11:10</td>
+                <td class="icon"><span class="material-icons">directions_bus</span></td>
+                <td class="content">
+                    <span class="event-title">リムジンバス乗車</span>
+                    <span class="event-desc">京都駅八条口 → 伊丹空港</span>
+                </td>
+                <td class="notes">所要約50分</td>
+            </tr>
+            <tr>
+                <td class="time">12:00</td>
+                <td class="icon"><span class="material-icons">lunch_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">昼食</span>
+                    <span class="event-desc">伊丹空港 (ITM) 内レストラン</span>
+                </td>
+                <td class="notes">出発前にゆっくりランチ</td>
+            </tr>
+            <tr>
+                <td class="time">13:00</td>
+                <td class="icon"><span class="material-icons">group_add</span></td>
+                <td class="content">
+                    <span class="event-title">三浦氏と合流</span>
+                    <span class="event-desc">伊丹空港 (ITM)</span>
+                </td>
+                <td class="notes">チェックイン前に合流</td>
+            </tr>
+            <tr>
+                <td class="time">13:05</td>
+                <td class="icon"><span class="material-icons">assignment_ind</span></td>
+                <td class="content">
+                    <span class="tag tag-checkin">CHECK-IN</span> <strong>搭乗手続き (JAL カウンター)</strong><br>
+                    <span class="event-desc">伊丹空港 北ターミナル</span>
+                </td>
+                <td class="notes">
+                    <strong>JGC/優先カウンター</strong>利用<br>
+                    国際線スルーチェックイン（荷物はBOSまで）
+                </td>
+            </tr>
+            <tr>
+                <td class="time">13:30</td>
+                <td class="icon"><span class="material-icons">spa</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">LOUNGE</span><br>
+                    <span class="event-title">サクララウンジ (ITM)</span>
+                    <span class="event-desc">昼食・休憩</span>
+                </td>
+                <td class="notes">搭乗まで利用</td>
+            </tr>
+            <tr>
+                <td class="time">14:35</td>
+                <td class="icon"><span class="material-icons">flight</span></td>
+                <td class="content">
+                    <span class="tag tag-flight">JL3006</span> 伊丹(ITM) → 成田(NRT)<br>
+                    <span class="event-desc">14:35発 → 16:00着 T2 / 搭乗時間 1時間25分 / 乗り継ぎへ</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">16:30</td>
+                <td class="icon"><span class="material-icons">spa</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">LOUNGE</span><br>
+                    <span class="event-title">サクララウンジ (NRT T2)</span>
+                    <span class="event-desc">休憩・軽食</span>
+                </td>
+                <td class="notes">JL008搭乗まで利用</td>
+            </tr>
+            <tr>
+                <td class="time">18:25</td>
+                <td class="icon"><span class="material-icons">flight_takeoff</span></td>
+                <td class="content">
+                    <span class="tag tag-flight">JL008</span> 成田(NRT) T2 → ボストン(BOS)<br>
+                    <span class="event-desc">18:25発 → 18:15着 Terminal E (現地時間) / 搭乗時間 12時間50分</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">18:15</td>
+                <td class="icon"><span class="material-icons">flight_land</span></td>
+                <td class="content">
+                    <span class="event-title">ボストン到着 (現地時間)</span>
+                    <span class="event-desc">Logan Terminal E 到着 / 入国審査・荷物受取</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">19:30</td>
+                <td class="icon"><span class="material-icons">hotel</span></td>
+                <td class="content">
+                    <span class="tag tag-hotel">CHECK-IN</span><br>
+                    <span class="event-title">Hampton Inn Boston Logan Airport Chelsea</span>
+                </td>
+                <td class="notes">
+                    朝食無料 (Hampton標準) / 5泊 (5/25-5/30)<br>
+                    <span style="font-size:11px; font-weight:bold; color:#b45309; display:block; margin-top:4px;">💳 支払い目安 (1室あたり)</span>
+                    <span style="font-size:11px; color:#374151;">
+                        HRS予約番号: <strong>341683832</strong> / 処理番号: 201260923 / アクセス番号: 37546<br>
+                        住所: 200 2ND STREET, Chelsea, MA 02150<br>
+                        Tel: +1 617-884-3334 / Email: BOSHT_hampton@hilton.com<br>
+                        チェックイン開始: 15:00 / 予約タイプ: ギャランティー予約<br>
+                        合計: <strong>$1,192.45</strong> (1泊 $238.49) / 円換算(¥165/$): <strong>約¥196,800</strong><br>
+                        無料キャンセル: <strong>2026/5/20 23:59 現地時間まで</strong>。以降キャンセル料 $238.49
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="time">20:00</td>
+                <td class="icon"><span class="material-icons">dinner_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">夕食</span>
+                    <span class="event-desc">Chelsea周辺 (徒歩圏内)</span>
+                </td>
+                <td class="notes">
+                    時差疲れなので近場で済ませる<br>
+                    🍔 <strong>Five Guys</strong> — 徒歩2分 / バーガー<br>
+                    🍕 <strong>Buccieri's Pizzeria</strong> — 徒歩5分 / ピザ ★4.8<br>
+                    🍺 <strong>Chelsea Station</strong> — 徒歩5分 / バー・ウィング ★4.2
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- DAY 2: 5/26 -->
+    <div class="day-section">
+        <div class="day-header">
+            <h2><span class="date">5/26 (火)</span> 大学巡り & MLB観戦</h2>
+            <span class="location">Boston</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">08:00</td>
+                <td class="icon"><span class="material-icons">restaurant</span></td>
+                <td class="content">
+                    <span class="tag tag-food">朝食</span>
+                    <span class="event-desc">Hampton Inn 無料朝食 (Gold特典)</span>
+                </td>
+                <td class="notes">Hampton標準の無料ビュッフェ</td>
+            </tr>
+            <tr>
+                <td class="time">09:00</td>
+                <td class="icon"><span class="material-icons">directions_bus</span></td>
+                <td class="content">
+                    <span class="event-title">ホテル → Cambridge 移動</span>
+                    <span class="event-desc">シャトル → Logan → SL1 → South Station → Red Line</span>
+                </td>
+                <td class="notes">Red Line「Kendall/MIT」駅 or「Harvard」駅下車</td>
+            </tr>
+            <tr>
+                <td class="time">10:00</td>
+                <td class="icon"><span class="material-icons">school</span></td>
+                <td class="content">
+                    <span class="event-title">ボストン近郊 大学巡り</span>
+                    <span class="event-desc">MIT, Harvard大 キャンパス視察</span>
+                </td>
+                <td class="notes">T(地下鉄)のレッドラインで移動</td>
+            </tr>
+            <tr>
+                <td class="time">12:00</td>
+                <td class="icon"><span class="material-icons">lunch_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">昼食</span>
+                    <span class="event-desc">ケンブリッジ等のカフェ</span>
+                </td>
+                <td class="notes">予算目安: $15-20</td>
+            </tr>
+            <tr>
+                <td class="time">16:30</td>
+                <td class="icon"><span class="material-icons">directions_bus</span></td>
+                <td class="content">
+                    <span class="event-title">Cambridge → Fenway Park 移動</span>
+                    <span class="event-desc">Red Line → Green Line「Kenmore」駅下車</span>
+                </td>
+                <td class="notes">Fenway Park徒歩圏内</td>
+            </tr>
+            <tr>
+                <td class="time">18:00</td>
+                <td class="icon"><span class="material-icons">sports_baseball</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">EVENT</span><br>
+                    <span class="event-title">MLB観戦 (Fenway Park)</span>
+                    <span class="event-desc">レッドソックス戦 観戦</span>
+                </td>
+                <td class="notes">
+                    チケット事前手配推奨<br>
+                    夜は冷えるため上着持参<br>
+                    <span style="font-size:11px; font-weight:bold; color:#b45309; display:block; margin-top:5px;">🌭 注目フード</span>
+                    <span style="font-size:11px; color:#374151;">🦞 Lobstah Poutine (ロブスター×チャウダーのポテト)<br>🌭 Surf &amp; Turf Dog (神戸牛×ロブスター)<br>🌭 Boston Dog (ベイクドビーンズのせ)<br>🧀 Spicy Grilled Cheese</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="time">21:30</td>
+                <td class="icon"><span class="material-icons">directions_bus</span></td>
+                <td class="content">
+                    <span class="event-title">Fenway Park → ホテル 帰路</span>
+                    <span class="event-desc">Green Line「Kenmore」→「Government Center」→ Blue Line「Airport」駅 → ホテル無料シャトル</span>
+                </td>
+                <td class="notes">試合終了は約21:30〜22:00<br>混雑時はUber/Lyft も可（$20〜25程度）<br>Blue Line: Airport駅からHampton Innシャトル運行中</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- DAY 3: 5/27 -->
+    <div class="day-section">
+        <div class="day-header">
+            <h2><span class="date">5/27 (水)</span> Summit Day 1 & Gala</h2>
+            <span class="location">Boston</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">07:00</td>
+                <td class="icon"><span class="material-icons">restaurant</span></td>
+                <td class="content">
+                    <span class="tag tag-food">朝食</span>
+                    <span class="event-desc">Hampton Inn 無料朝食</span>
+                </td>
+                <td class="notes">Hampton標準の無料ビュッフェ</td>
+            </tr>
+            <tr>
+                <td class="time">08:00</td>
+                <td class="icon"><span class="material-icons">local_taxi</span></td>
+                <td class="content">
+                    <span class="event-title">ホテル → BCEC 移動</span>
+                    <span class="event-desc">Uber / Lyft 直行（朝は所要約20〜30分、渋滞時35分目安）</span>
+                </td>
+                <td class="notes">
+                    往復ともUber推奨<br>
+                    片道約$20〜30（混雑時は上振れあり）<br>
+                    8:00発なら9:00開始に十分余裕あり<br>
+                    <span style="font-size:11px; color:#666;">シャトル+SL1は約45分・無料だが、タイムコスト(¥5k/h×3人)換算で Uber の方が約¥3,000お得</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="time">09:00</td>
+                <td class="icon"><span class="material-icons">precision_manufacturing</span></td>
+                <td class="content">
+                    <span class="event-title">Robotics Summit 開幕</span>
+                    <span class="event-desc">基調講演・Expo視察</span>
+                </td>
+                <td class="notes">調査重点: 駆動系モジュール、構造部材</td>
+            </tr>
+            <tr>
+                <td class="time">12:00</td>
+                <td class="icon"><span class="material-icons">lunch_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">昼食</span> フードトラック<br>
+                    <span class="event-desc">会場屋外 "Lawn On D" 付近</span>
+                </td>
+                <td class="notes">$15-20目安。カード決済可。</td>
+            </tr>
+            <tr>
+                <td class="time">14:00</td>
+                <td class="icon"><span class="material-icons">engineering</span></td>
+                <td class="content">
+                    <span class="event-title">テクニカルセッション</span>
+                    <span class="event-desc">設計・製造プロセス関連</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">19:00</td>
+                <td class="icon"><span class="material-icons">restaurant</span></td>
+                <td class="content">
+                    <span class="tag tag-food">夕食</span><br>
+                    <span class="event-title">Chelsea 周辺で夕食</span>
+                    <span class="event-desc">ホテル近辺で夕食。<strong>Buccieri's Ristorante</strong>（イタリアン）または <strong>Chelsea Station</strong>（アメリカン）など</span>
+                </td>
+                <td class="notes">徒歩圏内<br>予約不要（飛び込み可）</td>
+            </tr>
+            <tr style="background-color:#fff7ed;">
+                <td class="time" style="color:#b45309;">20:00<br><span style="font-size:10px; font-weight:700; color:#dc2626;">🇯🇵 翌5/28<br>9:00 JST</span></td>
+                <td class="icon"><span class="material-icons" style="color:#b45309;">school</span></td>
+                <td class="content">
+                    <span class="tag tag-alert">オンライン</span><br>
+                    <span class="event-title">東北大学 共同研究 成果報告会</span>
+                    <span class="event-desc">日本時間 5/28（木）09:00〜09:30 / オンライン参加</span>
+                </td>
+                <td class="notes">
+                    <span style="color:#dc2626; font-weight:bold;">⚠ 要事前接続確認</span><br>
+                    RS Day 1終了後、ホテルに戻り参加。<br>PC・Wi-Fi環境を事前にチェック。
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- DAY 4: 5/28 -->
+    <div class="day-section">
+        <div class="day-header">
+            <h2><span class="date">5/28 (木)</span> Summit Day 2 (Final)</h2>
+            <span class="location">Boston</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">07:00</td>
+                <td class="icon"><span class="material-icons">restaurant</span></td>
+                <td class="content">
+                    <span class="tag tag-food">朝食</span>
+                    <span class="event-desc">Hampton Inn 無料朝食</span>
+                </td>
+                <td class="notes">Hampton標準の無料ビュッフェ</td>
+            </tr>
+            <tr>
+                <td class="time">08:00</td>
+                <td class="icon"><span class="material-icons">local_taxi</span></td>
+                <td class="content">
+                    <span class="event-title">ホテル → BCEC 移動</span>
+                    <span class="event-desc">Uber / Lyft 直行（朝は所要約20〜30分、渋滞時35分目安）</span>
+                </td>
+                <td class="notes">往復ともUber推奨。8:00発なら9:00開始に十分余裕あり</td>
+            </tr>
+            <tr>
+                <td class="time">09:00</td>
+                <td class="icon"><span class="material-icons">school</span></td>
+                <td class="content">
+                    <span class="event-title">セッション聴講</span>
+                    <span class="event-desc">技術深掘り・実装事例</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">12:00</td>
+                <td class="icon"><span class="material-icons">lunch_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">昼食</span> 会場内売店<br>
+                    <span class="event-desc">BCEC内カフェテリア</span>
+                </td>
+                <td class="notes">混雑時は時間をずらすのが吉</td>
+            </tr>
+            <tr>
+                <td class="time">15:30</td>
+                <td class="icon"><span class="material-icons">mic</span></td>
+                <td class="content">
+                    <span class="event-title">Closing Keynote</span>
+                    <span class="event-desc">クロージング講演（〜16:15終了）</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">16:15</td>
+                <td class="icon"><span class="material-icons">local_taxi</span></td>
+                <td class="content">
+                    <span class="event-title">BCEC → Seaport 移動</span>
+                    <span class="event-desc">Uber / Lyft（所要約10分）</span>
+                </td>
+                <td class="notes">BCEC から Seaport は近い</td>
+            </tr>
+            <tr>
+                <td class="time">18:00</td>
+                <td class="icon"><span class="material-icons">dinner_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">HIGHLIGHT</span> <span class="tag tag-food">夕食</span><br>
+                    <span class="event-title">ボストン最後の夜: Seaportで豪華ディナー</span>
+                    <span class="event-desc">Seaport地区</span>
+                </td>
+                <td class="notes">
+                    <strong>Del Frisco's</strong> / <strong>Mastro's</strong> / <strong>Ocean Prime</strong><br>
+                    🦞 ロブスター / 🥩 Surf &amp; Turf<br>
+                    翌日移動に備え早めに終了<br>
+                    要事前予約
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- DAY 5: 5/29 -->
+    <div class="day-section">
+        <div class="day-header" style="background-color: #1e3a5f;">
+            <h2><span class="date">5/29 (金)</span> 欧州へ移動</h2>
+            <span class="location">Boston ➔ Vienna</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">08:00</td>
+                <td class="icon"><span class="material-icons">restaurant</span></td>
+                <td class="content">
+                    <span class="tag tag-food">朝食</span>
+                    <span class="event-desc">Hampton Inn 無料朝食</span>
+                </td>
+                <td class="notes">Hampton標準の無料ビュッフェ</td>
+            </tr>
+            <tr>
+                <td class="time">08:00 - 10:00</td>
+                <td class="icon"><span class="material-icons">groups</span></td>
+                <td class="content">
+                    <span class="event-title">Robotics Summit 報告書打ち合わせ</span>
+                    <span class="event-desc">Hampton Inn Chelsea — ホテルロビー</span>
+                </td>
+                <td class="notes">3名・ホテルロビー</td>
+            </tr>
+            <tr>
+                <td class="time">10:30 - 18:00</td>
+                <td class="icon"><span class="material-icons">laptop</span></td>
+                <td class="content">
+                    <span class="event-title">ホテル内勤務（村上・佐藤）</span>
+                    <span class="event-desc">Hampton Inn Chelsea — 報告書作成・まとめ</span>
+                </td>
+                <td class="notes">
+                    <span class="tag tag-food">昼食</span> Uber Eatsデリバリー推奨<br>
+                    <span style="font-size:11px; color:#666;">席を離れず済む。Five Guys徒歩2分も可</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="time">18:15</td>
+                <td class="icon"><span class="material-icons">hotel</span></td>
+                <td class="content">
+                    <span class="event-title">チェックアウト・ロビー集合</span>
+                    <span class="event-desc">Hampton Inn Chelsea</span>
+                </td>
+                <td class="notes">宿泊予約は5/30チェックアウトまで確保済み。出発前にシャワー・着替えを済ませ、18:30までにロビー集合</td>
+            </tr>
+            <tr>
+                <td class="time">18:30</td>
+                <td class="icon"><span class="material-icons">airport_shuttle</span></td>
+                <td class="content">
+                    <span class="event-title">ホテル無料シャトル → ローガン空港 (BOS) Terminal E</span>
+                    <span class="event-desc">Chelsea → Logan は約10〜15分。待ち時間が長ければUber/Lyftへ切替</span>
+                </td>
+                <td class="notes">チェックアウト時にフロントでシャトル時刻・乗り場を確認。18:45までに出られない場合はUber推奨</td>
+            </tr>
+            <tr>
+                <td class="time">18:50</td>
+                <td class="icon"><span class="material-icons">assignment_ind</span></td>
+                <td class="content">
+                    <span class="tag tag-checkin">CHECK-IN</span> <strong>搭乗手続き (BA カウンター)</strong><br>
+                    <span class="event-desc">BOS Terminal E / 出発3時間前オープン</span>
+                </td>
+                <td class="notes">Oneworld Sapphire → Priority レーン利用</td>
+            </tr>
+            <tr>
+                <td class="time">19:10</td>
+                <td class="icon"><span class="material-icons">spa</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">LOUNGE</span><br>
+                    <span class="event-title">BA Galleries Club (BOS Terminal E)</span>
+                    <span class="event-desc">夕食・ドリンク</span>
+                </td>
+                <td class="notes">
+                    ビーフシチュー・ピザ・バーガー等ホットミール<br>
+                    ビール・ワインも充実<br>
+                    部下と一緒にゆっくり食事
+                </td>
+            </tr>
+            <tr>
+                <td class="time">21:10</td>
+                <td class="icon"><span class="material-icons">directions_walk</span></td>
+                <td class="content">
+                    <span class="event-title">搭乗ゲートへ移動</span>
+                    <span class="event-desc">Terminal E ゲート確認</span>
+                </td>
+                <td class="notes">出発40分前を目安に</td>
+            </tr>
+            <tr>
+                <td class="time">21:50</td>
+                <td class="icon"><span class="material-icons">flight_takeoff</span></td>
+                <td class="content">
+                    <span class="tag tag-flight">BA202</span> ボストン(BOS) Terminal E → ロンドン(LHR) T5<br>
+                    <span class="event-desc">21:50発 → 翌09:35着 / 搭乗時間 6時間45分 / British Airways (機内泊)</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- DAY 6: 5/30 -->
+    <div class="day-section">
+        <div class="day-header" style="background-color: #14532d;">
+            <h2><span class="date">5/30 (土)</span> ウィーン到着 & 市内視察</h2>
+            <span class="location">Vienna</span>
+        </div>
+        <table>
+                        <tr>
+                <td class="time">09:35</td>
+                <td class="icon"><span class="material-icons">flight_land</span></td>
+                <td class="content">
+                    <span class="event-title">ロンドン(LHR) 到着・乗継</span>
+                    <span class="event-desc">T5 到着 → T3へ移動（無料バス）・保安検査</span>
+                </td>
+                <td class="notes">乗継時間 約4時間55分。T5→T3の移動に注意</td>
+            </tr>
+            <tr>
+                <td class="time">10:30</td>
+                <td class="icon"><span class="material-icons">spa</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">LOUNGE</span><br>
+                    <span class="event-title">T3 ワンワールドラウンジ</span>
+                    <span class="event-desc">昼食・シャワー・休憩 / LHR T3</span>
+                </td>
+                <td class="notes">
+                    <strong>Cathay Pacific</strong> (推奨) or <strong>BA Galleries Club</strong><br>
+                    約5時間の余裕あり
+                </td>
+            </tr>
+            <tr>
+                <td class="time">14:30</td>
+                <td class="icon"><span class="material-icons">flight_takeoff</span></td>
+                <td class="content">
+                    <span class="tag tag-flight">BA724</span> ロンドン(LHR) T3 → ウィーン(VIE) T3<br>
+                    <span class="event-desc">14:30発 → 17:50着 / 搭乗時間 2時間20分 / British Airways</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">17:50</td>
+                <td class="icon"><span class="material-icons">flight_land</span></td>
+                <td class="content">
+                    <span class="event-title">ウィーン到着 (VIE) T3</span>
+                    <span class="event-desc">入国審査</span>
+                </td>
+                <td class="notes">ロンドン経由便で到着</td>
+            </tr>
+            <tr>
+                <td class="time">18:30</td>
+                <td class="icon"><span class="material-icons">directions_bus</span></td>
+                <td class="content">
+                    <span class="event-title">空港バス (VAL 1)</span>
+                    <span class="event-desc">Westbahnhof (西駅) 行き</span>
+                </td>
+                <td class="notes">終点まで直行 (所要40分)<br><span style="color:#dc2626; font-weight:bold;">⚠ Wochenkarte対象外</span><br>別途 €13/人 購入必要</td>
+            </tr>
+            <tr>
+                <td class="time">19:10</td>
+                <td class="icon"><span class="material-icons">confirmation_number</span></td>
+                <td class="content">
+                    <span class="tag tag-alert">購入</span> <strong>Wochenkarte（週間乗車券）購入</strong><br>
+                    <span class="event-desc">西駅の地下鉄券売機またはWienMobilアプリ</span>
+                </td>
+                <td class="notes">
+                    <span style="font-size:12px;">💶 €17.10/人 × 4人 = €68.40<br>7日間乗り放題。バス・U-Bahnすべて有効<br>WienMobilアプリで事前購入可</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="time">19:20</td>
+                <td class="icon"><span class="material-icons">hotel</span></td>
+                <td class="content">
+                    <span class="tag tag-hotel">CHECK-IN</span><br>
+                    <span class="event-title">Mercure Wien Westbahnhof</span>
+                </td>
+                <td class="notes">
+                    素泊まり (Room Only)<br>
+                    Accor Silver特典<br>
+                    <span style="font-size:11px; font-weight:bold; color:#b45309; display:block; margin-top:4px;">💳 支払い目安 (6泊分)</span>
+                    <span style="font-size:11px; color:#374151;">
+                        6泊: <strong>€639.00</strong><br>
+                        円換算(¥195/€): <strong>約¥124,700</strong><br>
+                        (1泊あたり €106.50 / 約¥20,800)
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="time">19:30</td>
+                <td class="icon"><span class="material-icons">shopping_cart</span></td>
+                <td class="content">
+                    <span class="tag tag-alert">重要</span> 食料調達<br>
+                    <span class="event-desc">西駅構内 SPAR/Billa にて</span>
+                </td>
+                <td class="notes">翌日(日曜)閉店前に必ず確保。水・軽食を買い込む</td>
+            </tr>
+            <tr>
+                <td class="time">20:00</td>
+                <td class="icon"><span class="material-icons">restaurant</span></td>
+                <td class="content">
+                    <span class="tag tag-food">夕食</span>
+                    <span class="event-desc">西駅周辺 (徒歩圏内)</span>
+                </td>
+                <td class="notes">
+                    🍕 <strong>Vapiano</strong> — 西駅構内・徒歩1分 / ピザ・パスタ<br>
+                    🍺 <strong>Mariahilferbräu</strong> — 徒歩5分 / シュニッツェル・地ビール<br>
+                    🥩 <strong>Schnitzel Wirt</strong> — 徒歩8分 / 本格シュニッツェル
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <!-- Weekend Survival Tips -->
+    <div class="tips-section" style="background-color: #fffbeb; border: 1px solid #fef3c7; margin-bottom: 40px; page-break-inside: avoid;">
+        <div class="tips-header" style="border-bottom: 1px solid #fde68a;">
+            <h2 style="color: #b45309;"><span class="material-icons" style="margin-right:5px;">local_police</span> Vienna Weekend Survival Tips</h2>
+        </div>
+        <div class="tips-grid">
+            <div class="tip-card">
+                <h3 style="color: #ea580c;"><span class="material-icons" style="font-size:16px; margin-right:5px;">local_laundry_service</span> コインランドリーの活用</h3>
+                <ul>
+                    <li>ホテル(Mercure)にセルフランドリーはありません。</li>
+                    <li>街のランドリー「<strong>Green & Clean</strong>」がお勧めです。（公式アプリで空き状況確認・クレカ決済完了可能）</li>
+                    <li>到着直後は夕方で忙しいため、<strong>5/31(日)の空き時間</strong>に利用するのが最も効率的です。</li>
+                </ul>
+            </div>
+            <div class="tip-card">
+                <h3 style="color: #ea580c;"><span class="material-icons" style="font-size:16px; margin-right:5px;">shopping_basket</span> 日曜・祝日の「店休」に注意</h3>
+                <ul>
+                    <li>オーストリアでは<strong>日曜日(5/31)と祝日(6/4)はスーパー・薬局が完全休業</strong>します。</li>
+                    <li>西駅構内の小規模スーパー(SPAR等)は例外で開いていますが、長蛇の列になることが多いです。水や軽食は前日までに調達を！</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- DAY 7: 5/31 -->
+    <div class="day-section">
+        <div class="day-header" style="background-color: #14532d;">
+            <h2><span class="date">5/31 (日)</span> 休日 (技術・歴史探訪プラン)</h2>
+            <span class="location">Vienna</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">08:00</td>
+                <td class="icon"><span class="material-icons">bakery_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">朝食</span>
+                    <span class="event-desc">西駅のAnker/Ströckにて</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">09:30</td>
+                <td class="icon"><span class="material-icons">museum</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">RECOMMENDED</span><br>
+                    <span class="event-title">ウィーン技術博物館 (TMW)</span>
+                    <span class="event-desc">蒸気機関・工作機械の歴史的展示</span>
+                </td>
+                <td class="notes">
+                    ホテルから徒歩15分<br>
+                    重工業・音響解析関連の展示が充実
+                </td>
+            </tr>
+            <tr>
+                <td class="time">12:30</td>
+                <td class="icon"><span class="material-icons">restaurant</span></td>
+                <td class="content">
+                    <span class="tag tag-food">昼食</span> <strong>Brandauer Schlossbräu</strong><br>
+                    <span class="event-desc">シェーンブルン宮殿近くの醸造所</span>
+                </td>
+                <td class="notes">日曜営業。リブやシュニッツェル。</td>
+            </tr>
+            <tr>
+                <td class="time">14:00</td>
+                <td class="icon"><span class="material-icons">park</span></td>
+                <td class="content">
+                    <span class="event-title">シェーンブルン宮殿 庭園散策</span>
+                    <span class="event-desc">グロリエッテの構造美を見学</span>
+                </td>
+                <td class="notes">頭の整理とリフレッシュ</td>
+            </tr>
+            <tr>
+                <td class="time">16:30</td>
+                <td class="icon"><span class="material-icons">badge</span></td>
+                <td class="content">
+                    <span class="event-title">ICRA プレ登録 (推奨)</span>
+                    <span class="event-desc">Messe Wien 会場へ移動 (U4→U2)</span>
+                </td>
+                <td class="notes">
+                    翌朝の混雑回避。<br>
+                    終了後、西駅に戻り夕食。
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- DAY 8: 6/1 -->
+    <div class="day-section">
+        <div class="day-header" style="background-color: #14532d;">
+            <h2><span class="date">6/1 (月)</span> ICRA Workshops</h2>
+            <span class="location">Vienna (Messe Wien)</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">08:00</td>
+                <td class="icon"><span class="material-icons">bakery_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">朝食</span>
+                    <span class="event-desc">西駅のAnker/Ströckにて</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">08:15</td>
+                <td class="icon"><span class="material-icons">subway</span></td>
+                <td class="content">
+                    <span class="event-title">ホテル → Messe Wien 移動</span>
+                    <span class="event-desc">U3(Westbahnhof) → Volkstheater → U2 → Messe-Prater</span>
+                </td>
+                <td class="notes">Wochenkarte利用 / 所要約25分<br>4人一緒に移動</td>
+            </tr>
+            <tr>
+                <td class="time">09:00</td>
+                <td class="icon"><span class="material-icons">school</span></td>
+                <td class="content">
+                    <span class="event-title">Workshops & Tutorials (午前)</span>
+                    <span class="event-desc">各Workshop 09:00〜12:30</span>
+                </td>
+                <td class="notes">Registration 07:00-19:30 (Foyer A)</td>
+            </tr>
+            <tr>
+                <td class="time">12:30</td>
+                <td class="icon"><span class="material-icons">lunch_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">昼食</span>
+                    <span class="event-desc">会場周辺または持参 (公式提供なし)</span>
+                </td>
+                <td class="notes">Lunch Break 12:30〜14:00</td>
+            </tr>
+            <tr>
+                <td class="time">14:00</td>
+                <td class="icon"><span class="material-icons">school</span></td>
+                <td class="content">
+                    <span class="event-title">Workshops & Tutorials (午後)</span>
+                    <span class="event-desc">各Workshop 14:00〜17:30</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">TBD</td>
+                <td class="icon"><span class="material-icons">directions_walk</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">TOUR</span><br>
+                    <span class="event-title">Technical Tours (要事前登録)</span>
+                    <span class="event-desc">
+                        🔬 TU Wien — Robotics Lab Tour<br>
+                        🏭 UAS Technikum Wien — Digital Factory / UGV &amp; UAV Lab
+                    </span>
+                </td>
+                <td class="notes">時間・登録方法は後日発表<br>振動制御・AMR関連で有益</td>
+            </tr>
+            <tr>
+                <td class="time">18:00</td>
+                <td class="icon"><span class="material-icons">celebration</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">EVENT</span><br>
+                    <span class="event-title">Welcome Reception</span>
+                    <span class="event-desc">Exhibition Hall / 18:00〜20:00</span>
+                </td>
+                <td class="notes">軽食・ドリンク提供あり<br>TEABxSAC Dinnerと同時間帯に注意</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- DAY 9: 6/2 -->
+    <div class="day-section">
+        <div class="day-header" style="background-color: #14532d;">
+            <h2><span class="date">6/2 (火)</span> ICRA Opening & Sessions</h2>
+            <span class="location">Vienna</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">07:00</td>
+                <td class="icon"><span class="material-icons">bakery_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">朝食</span>
+                    <span class="event-desc">西駅のAnker/Ströckにて</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">07:50</td>
+                <td class="icon"><span class="material-icons">subway</span></td>
+                <td class="content">
+                    <span class="event-title">ホテル → Messe Wien 移動</span>
+                    <span class="event-desc">U3(Westbahnhof) → Volkstheater → U2 → Messe-Prater</span>
+                </td>
+                <td class="notes">Wochenkarte利用 / 所要約25分</td>
+            </tr>
+            <tr>
+                <td class="time">09:00</td>
+                <td class="icon"><span class="material-icons">flag</span></td>
+                <td class="content">
+                    <span class="event-title">Opening / Keynote / Interactive Sessions</span>
+                    <span class="event-desc">Panels T1 / Keynote Tutorial T2 / Poster Area</span>
+                </td>
+                <td class="notes">Registration 07:00-19:30 (Foyer A/Hall A+C)</td>
+            </tr>
+            <tr>
+                <td class="time">11:00</td>
+                <td class="icon"><span class="material-icons">description</span></td>
+                <td class="content">
+                    <span class="event-title">Keynote / Oral Sessions</span>
+                    <span class="event-desc">T1〜T5 パラレルトラック</span>
+                </td>
+                <td class="notes">構造解析・制御理論エリア重点</td>
+            </tr>
+            <tr>
+                <td class="time">12:30</td>
+                <td class="icon"><span class="material-icons">lunch_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">昼食</span>
+                    <span class="event-desc">Lunch Break — Exhibition Hall</span>
+                </td>
+                <td class="notes">〜14:00</td>
+            </tr>
+            <tr>
+                <td class="time">14:00</td>
+                <td class="icon"><span class="material-icons">mic</span></td>
+                <td class="content">
+                    <span class="event-title">Plenary</span>
+                    <span class="event-desc">Hall A</span>
+                </td>
+                <td class="notes">〜15:00</td>
+            </tr>
+            <tr>
+                <td class="time">15:00</td>
+                <td class="icon"><span class="material-icons">description</span></td>
+                <td class="content">
+                    <span class="event-title">Sessions / Interactive / Oral</span>
+                    <span class="event-desc">T1〜T5 パラレルトラック (〜18:00)</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">18:15</td>
+                <td class="icon"><span class="material-icons">groups</span></td>
+                <td class="content">
+                    <span class="event-title">IEEE RAS Town Hall / SAC Social Hour</span>
+                    <span class="event-desc">18:15〜 / 19:15〜</span>
+                </td>
+                <td class="notes"><span style="color:#dc2626; font-weight:bold;">⚠ 会食のため不参加</span></td>
+            </tr>
+            <tr style="background-color:#fef3c7;">
+                <td class="time">19:00</td>
+                <td class="icon"><span class="material-icons">dinner_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">会食</span><br>
+                    <span class="event-title">樋口様との会食（Monomyth）</span>
+                    <span class="event-desc">ウィーン市内</span>
+                </td>
+                <td class="notes">要事前予約</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- DAY 10: 6/3 -->
+    <div class="day-section">
+        <div class="day-header" style="background-color: #14532d;">
+            <h2><span class="date">6/3 (水)</span> Sessions & Expo</h2>
+            <span class="location">Vienna</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">07:30</td>
+                <td class="icon"><span class="material-icons">bakery_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">朝食</span>
+                    <span class="event-desc">西駅のAnker/Ströckにて</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">08:15</td>
+                <td class="icon"><span class="material-icons">subway</span></td>
+                <td class="content">
+                    <span class="event-title">ホテル → Messe Wien 移動</span>
+                    <span class="event-desc">U3(Westbahnhof) → Volkstheater → U2 → Messe-Prater</span>
+                </td>
+                <td class="notes">Wochenkarte利用 / 所要約25分</td>
+            </tr>
+            <tr>
+                <td class="time">09:00</td>
+                <td class="icon"><span class="material-icons">science</span></td>
+                <td class="content">
+                    <span class="event-title">Sessions / Expo & Demo 調査</span>
+                    <span class="event-desc">T1〜T5 パラレルトラック・プロトタイプ展示</span>
+                </td>
+                <td class="notes">世界各国の大学・企業ブース</td>
+            </tr>
+            <tr>
+                <td class="time">12:30</td>
+                <td class="icon"><span class="material-icons">lunch_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">昼食</span>
+                    <span class="event-desc">Lunch Break — Exhibition Hall</span>
+                </td>
+                <td class="notes">〜14:00</td>
+            </tr>
+            <tr>
+                <td class="time">14:00</td>
+                <td class="icon"><span class="material-icons">mic</span></td>
+                <td class="content">
+                    <span class="event-title">Plenary</span>
+                    <span class="event-desc">Hall A</span>
+                </td>
+                <td class="notes">〜15:00</td>
+            </tr>
+            <tr>
+                <td class="time">15:00</td>
+                <td class="icon"><span class="material-icons">description</span></td>
+                <td class="content">
+                    <span class="event-title">Sessions / Interactive / Oral</span>
+                    <span class="event-desc">T1〜T5 パラレルトラック (〜18:00)</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">18:00</td>
+                <td class="icon"><span class="material-icons">shopping_basket</span></td>
+                <td class="content">
+                    <span class="tag tag-alert">重要</span> <strong>翌日(祝日)の食料確保</strong>
+                    <span class="event-desc">帰宅時にスーパーへ</span>
+                </td>
+                <td class="notes">明日は街中の店が閉まるため必須</td>
+            </tr>
+            <tr>
+                <td class="time">19:00</td>
+                <td class="icon"><span class="material-icons">castle</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">EVENT</span><br>
+                    <span class="event-title">Imperial Night</span>
+                    <span class="event-desc">Imperial Palace & Spanish Riding School</span>
+                </td>
+                <td class="notes"><span style="color:#dc2626; font-weight:bold;">要チケット事前購入</span><br>別途申込が必要</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- DAY 11: 6/4 -->
+    <div class="day-section">
+        <div class="day-header" style="background-color: #14532d;">
+            <h2><span class="date">6/4 (木)</span> 祝日 (聖体祭) & Banquet</h2>
+            <span class="location">Vienna</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">ALL DAY</td>
+                <td class="icon"><span class="material-icons">warning</span></td>
+                <td class="content">
+                    <span class="event-title">祝日 (Corpus Christi)</span>
+                    <span class="event-desc">学会は開催。街中店舗は休業。</span>
+                </td>
+                <td class="notes">食事は西駅ストックか会場で</td>
+            </tr>
+            <tr>
+                <td class="time">07:30</td>
+                <td class="icon"><span class="material-icons">bakery_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">朝食</span>
+                    <span class="event-desc">前日購入ストックのパン (祝日のため店舗休業)</span>
+                </td>
+                <td class="notes">6/3夜にスーパーで確保したもの</td>
+            </tr>
+            <tr>
+                <td class="time">08:15</td>
+                <td class="icon"><span class="material-icons">subway</span></td>
+                <td class="content">
+                    <span class="event-title">ホテル → Messe Wien 移動</span>
+                    <span class="event-desc">U3(Westbahnhof) → Volkstheater → U2 → Messe-Prater</span>
+                </td>
+                <td class="notes">Wochenkarte利用 / 所要約25分<br>祝日だが学会は通常開催</td>
+            </tr>
+                <td class="time">09:00</td>
+                <td class="icon"><span class="material-icons">school</span></td>
+                <td class="content">
+                    <span class="event-title">Sessions 継続</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">12:30</td>
+                <td class="icon"><span class="material-icons">lunch_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">昼食</span> <strong>Award Lunch (Plenary)</strong><br>
+                    <span class="event-desc">Exhibition Hall & Hall A / 〜14:00</span>
+                </td>
+                <td class="notes">学会主催。街中の店は休み</td>
+            </tr>
+            <tr style="background-color:#fef3c7;">
+                <td class="time">19:00</td>
+                <td class="icon"><span class="material-icons">dinner_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">会食</span><br>
+                    <span class="event-title">慶応大・高橋教授 ＆ JAXA大槻氏 との会食（計6名）</span>
+                    <span class="event-desc">Vienna Restaurant（場所詳細後日確定）〜21:00</span>
+                </td>
+                <td class="notes">
+                    研究動向・連携可能性ディスカッション<br>
+                    村上・佐藤・傳田・岡部<br>
+                    ＋ 高橋教授（慶応大）・大槻氏（JAXA）
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- DAY 12: 6/5 -->
+    <div class="day-section">
+        <div class="day-header" style="background-color: #14532d;">
+            <h2><span class="date">6/5 (金)</span> ICRA 最終日</h2>
+            <span class="location">Vienna</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">07:30</td>
+                <td class="icon"><span class="material-icons">bakery_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">朝食</span>
+                    <span class="event-desc">西駅のAnker/Ströckにて</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">08:15</td>
+                <td class="icon"><span class="material-icons">subway</span></td>
+                <td class="content">
+                    <span class="event-title">ホテル → Messe Wien 移動</span>
+                    <span class="event-desc">U3(Westbahnhof) → Volkstheater → U2 → Messe-Prater</span>
+                </td>
+                <td class="notes">Wochenkarte利用 / 所要約25分</td>
+            </tr>
+            <tr>
+                <td class="time">09:00</td>
+                <td class="icon"><span class="material-icons">school</span></td>
+                <td class="content">
+                    <span class="event-title">Workshops & Tutorials (午前)</span>
+                    <span class="event-desc">各Workshop 09:00〜12:30</span>
+                </td>
+                <td class="notes">Registration 07:00-14:00 (Foyer A/Hall A+C)</td>
+            </tr>
+            <tr>
+                <td class="time">TBD</td>
+                <td class="icon"><span class="material-icons">directions_walk</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">TOUR</span><br>
+                    <span class="event-title">Technical Tour (要事前登録)</span>
+                    <span class="event-desc">🤖 RoboCupJunior European Open 2026 — Event Tour</span>
+                </td>
+                <td class="notes">時間・登録方法は後日発表</td>
+            </tr>
+            <tr>
+                <td class="time">12:30</td>
+                <td class="icon"><span class="material-icons">lunch_dining</span></td>
+                <td class="content">
+                    <span class="tag tag-food">昼食</span>
+                    <span class="event-desc">会場周辺または持参 (公式提供なし)</span>
+                </td>
+                <td class="notes">Lunch Break 12:30〜14:00</td>
+            </tr>
+            <tr>
+                <td class="time">14:00</td>
+                <td class="icon"><span class="material-icons">school</span></td>
+                <td class="content">
+                    <span class="event-title">Workshops & Tutorials (午後)</span>
+                    <span class="event-desc">各Workshop 14:00〜17:30</span>
+                </td>
+                <td class="notes">ICRA最終日</td>
+            </tr>
+            <tr>
+                <td class="time">17:30</td>
+                <td class="icon"><span class="material-icons">explore</span></td>
+                <td class="content">
+                    <span class="event-title">帰路・総括</span>
+                    <span class="event-desc">ホテルへ戻り翌日帰国準備</span>
+                </td>
+                <td class="notes">荷造り・精算確認</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- DAY 13: 6/6 -->
+    <div class="day-section">
+        <div class="day-header" style="background-color: #14532d;">
+            <h2><span class="date">6/6 (土)</span> 帰路 (ウィーン出発)</h2>
+            <span class="location">Vienna ➔ Helsinki ➔</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">07:00</td>
+                <td class="icon"><span class="material-icons">hotel</span></td>
+                <td class="content">
+                    <span class="event-title">ホテルチェックアウト (Mercure)</span>
+                    <span class="event-desc">空港へ向かう</span>
+                </td>
+                <td class="notes">
+                    <span style="font-size:11px; font-weight:bold; color:#b45309;">💳 最終1泊分</span><br>
+                    <span style="font-size:11px; color:#374151;">
+                        1泊: <strong>€122.40</strong><br>
+                        円換算(¥195/€): <strong>約¥23,900</strong>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="time">07:30</td>
+                <td class="icon"><span class="material-icons">local_taxi</span></td>
+                <td class="content">
+                    <span class="event-title">空港へ移動</span>
+                    <span class="event-desc">VIE空港へ (CATまたはタクシー)</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">08:15</td>
+                <td class="icon"><span class="material-icons">assignment_ind</span></td>
+                <td class="content">
+                    <span class="tag tag-checkin">CHECK-IN</span> <strong>搭乗手続き (Finnair カウンター)</strong><br>
+                    <span class="event-desc">VIE Terminal 1</span>
+                </td>
+                <td class="notes">サファイア特典で<strong>Priorityレーン</strong>利用</td>
+            </tr>
+            <tr>
+                <td class="time">09:00</td>
+                <td class="icon"><span class="material-icons">spa</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">LOUNGE</span><br>
+                    <span class="event-title">SKY Lounge (VIE T1)</span>
+                    <span class="event-desc">軽食・ドリンク</span>
+                </td>
+                <td class="notes">サファイア特典で利用可<br>〜10:30頃までゆっくり</td>
+            </tr>
+            <tr>
+                <td class="time">11:35</td>
+                <td class="icon"><span class="material-icons">flight_takeoff</span></td>
+                <td class="content">
+                    <span class="tag tag-flight">AY1472</span> ウィーン T1 → ヘルシンキ(HEL)<br>
+                    <span class="event-desc">11:35発 → 15:00着 / 搭乗時間 2時間25分 / Finnair運航便</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">15:00</td>
+                <td class="icon"><span class="material-icons">flight_land</span></td>
+                <td class="content">
+                    <span class="event-title">ヘルシンキ到着 (HEL)</span>
+                    <span class="event-desc">日本方面ターミナルへ移動・出国審査</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">15:30</td>
+                <td class="icon"><span class="material-icons">spa</span></td>
+                <td class="content">
+                    <span class="tag tag-rec">LOUNGE</span><br>
+                    <span class="event-title">Finnair Business Lounge (HEL)</span>
+                    <span class="event-desc">シャワー・休憩</span>
+                </td>
+                <td class="notes">サファイア特典で利用可<br>長距離フライトに備え着替え推奨</td>
+            </tr>
+            <tr>
+                <td class="time">17:55</td>
+                <td class="icon"><span class="material-icons">flight_takeoff</span></td>
+                <td class="content">
+                    <span class="tag tag-flight">JL048</span> ヘルシンキ(HEL) → 羽田(HND) T3<br>
+                    <span class="event-desc">17:55発 → 翌13:55着 / 搭乗時間 14時間00分 / JAL長距離便 (機内泊)</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- DAY 14: 6/7 -->
+    <div class="day-section">
+        <div class="day-header" style="background-color: #1a3a6c;">
+            <h2><span class="date">6/7 (日)</span> 帰国</h2>
+            <span class="location">Japan</span>
+        </div>
+        <table>
+            <tr>
+                <td class="time">13:55</td>
+                <td class="icon"><span class="material-icons">flight_land</span></td>
+                <td class="content">
+                    <span class="event-title">羽田到着 T3</span>
+                    <span class="event-desc">入国審査・国内線乗継 (T3→T1)</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">16:30</td>
+                <td class="icon"><span class="material-icons">flight</span></td>
+                <td class="content">
+                    <span class="tag tag-flight">JL127</span> 羽田(HND) T1 → 伊丹(ITM)<br>
+                    <span class="event-desc">16:30発 → 17:35着 / 搭乗時間 1時間05分</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">17:35</td>
+                <td class="icon"><span class="material-icons">flight_land</span></td>
+                <td class="content">
+                    <span class="event-title">伊丹到着</span>
+                    <span class="event-desc">荷物受取</span>
+                </td>
+                <td class="notes"></td>
+            </tr>
+            <tr>
+                <td class="time">18:00</td>
+                <td class="icon"><span class="material-icons">home</span></td>
+                <td class="content">
+                    <span class="event-title">自宅帰宅</span>
+                    <span class="event-desc">中書島</span>
+                </td>
+                <td class="notes">お疲れ様でした！</td>
+            </tr>
+        </table>
+    </div>
+
+        <div style="text-align:center; margin-top:40px; color:#999; font-size:12px;">
+        Generated for Takeshi | 2026 Trip Itinerary
+    </div>
+
+</div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const days = document.querySelectorAll('.day-section');
+
+      // ナビ生成
+      const nav = document.createElement('div');
+      nav.id = 'date-nav';
+      nav.className = 'date-nav no-print';
+
+      days.forEach(function (day, i) {
+        const id = 'day' + (i + 1);
+        day.id = id;
+
+        const dateEl = day.querySelector('.date');
+        const label = dateEl ? dateEl.textContent.trim() : ('Day ' + (i + 1));
+
+        const a = document.createElement('a');
+        a.href = '#' + id;
+        a.textContent = label;
+        nav.appendChild(a);
+
+        // 各日の末尾に「▲ 日付選択へ」リンク
+        const backLink = document.createElement('a');
+        backLink.href = '#date-nav';
+        backLink.className = 'back-to-nav no-print';
+        backLink.textContent = '▲ 日付選択へ';
+        day.appendChild(backLink);
+      });
+
+      // ナビをcontainerの先頭（no-printヒントの次）に挿入
+      const container = document.querySelector('.container');
+      const noPrint = container.querySelector('.no-print');
+      if (noPrint) {
+        noPrint.insertAdjacentElement('afterend', nav);
+      } else {
+        container.insertBefore(nav, container.firstChild);
+      }
+    });
+  </script>
+</body>
+</html>

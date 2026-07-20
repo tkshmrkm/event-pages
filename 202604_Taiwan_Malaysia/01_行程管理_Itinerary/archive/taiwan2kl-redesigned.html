@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="台湾・マレーシア出張旅程表 2026年4月28日-5月7日">
+    <meta name="theme-color" content="#1e3a8a" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1e293b" media="(prefers-color-scheme: dark)">
+    <title>海外出張旅程表 2026</title>
+
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ========================================
+           CSS Variables & Design Tokens
+           ======================================== */
+        :root {
+            /* Colors - Light Mode */
+            --color-bg-primary: #f3f4f6;
+            --color-bg-secondary: #ffffff;
+            --color-bg-tertiary: #f9fafb;
+            --color-text-primary: #1f2937;
+            --color-text-secondary: #6b7280;
+            --color-text-tertiary: #9ca3af;
+            --color-border: #e5e7eb;
+            --color-accent: #1e3a8a;
+            --color-accent-light: #3b82f6;
+
+            /* Status Colors */
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-info: #3b82f6;
+
+            /* Flight/Location Colors */
+            --color-flight: #1e40af;
+            --color-taiwan: #14b8a6;
+            --color-malaysia: #a855f7;
+
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+
+            /* Typography */
+            --font-family: 'Noto Sans JP', sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-full: 9999px;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+
+            /* Z-index Scale */
+            --z-base: 0;
+            --z-dropdown: 10;
+            --z-sticky: 20;
+            --z-modal: 30;
+            --z-nav: 40;
+            --z-toast: 50;
+
+            /* Transitions */
+            --transition-fast: 150ms ease-in-out;
+            --transition-base: 250ms ease-in-out;
+            --transition-slow: 350ms ease-in-out;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-bg-primary: #0f172a;
+                --color-bg-secondary: #1e293b;
+                --color-bg-tertiary: #334155;
+                --color-text-primary: #f1f5f9;
+                --color-text-secondary: #94a3b8;
+                --color-text-tertiary: #64748b;
+                --color-border: #334155;
+                --color-accent: #3b82f6;
+            }
+        }
+
+        /* ========================================
+           Reset & Base Styles
+           ======================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-family);
+            font-size: var(--font-size-base);
+            line-height: 1.5;
+            color: var(--color-text-primary);
+            background-color: var(--color-bg-primary);
+            padding-bottom: 5rem;
+            overflow-x: hidden;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ========================================
+           Layout Components
+           ======================================== */
+        .container {
+            max-width: 28rem;
+            margin: 0 auto;
+            padding: var(--space-md);
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: var(--z-nav);
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            padding: var(--space-md);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header__content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .header__title {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .header__subtitle {
+            font-size: var(--font-size-xs);
+            color: rgb(191 219 254);
+            margin-top: var(--space-xs);
+        }
+
+        .header__badge {
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            background-color: #fbbf24;
+            color: #1e3a8a;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            white-space: nowrap;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: var(--z-nav);
+            background-color: var(--color-bg-secondary);
+            border-top: 1px solid var(--color-border);
+            box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .nav__list {
+            display: flex;
+            list-style: none;
+            max-width: 28rem;
+            margin: 0 auto;
+            height: 4rem;
+        }
+
+        .nav__item {
+            flex: 1;
+        }
+
+        .nav__button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            color: var(--color-text-tertiary);
+            transition: color var(--transition-fast);
+            padding: var(--space-sm);
+        }
+
+        .nav__button:hover,
+        .nav__button:focus-visible {
+            color: var(--color-accent-light);
+            outline: 2px solid var(--color-accent-light);
+            outline-offset: -2px;
+        }
+
+        .nav__button[aria-pressed="true"] {
+            color: var(--color-accent-light);
+            font-weight: 600;
+        }
+
+        .nav__icon {
+            font-size: 1.25rem;
+            margin-bottom: var(--space-xs);
+        }
+
+        .nav__label {
+            font-size: 0.625rem;
+            font-weight: 600;
+        }
+
+        /* Tab Content */
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel[aria-hidden="false"] {
+            display: block;
+            animation: fadeInUp var(--transition-base);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(0.625rem);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========================================
+           Card Components
+           ======================================== */
+        .card {
+            background-color: var(--color-bg-secondary);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            margin-bottom: var(--space-md);
+        }
+
+        .card__header {
+            padding: var(--space-md);
+            font-weight: 600;
+            font-size: var(--font-size-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .card__header--primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .card__body {
+            padding: var(--space-md);
+        }
+
+        .card--bordered {
+            border-left: 4px solid var(--border-color);
+        }
+
+        .card--taiwan {
+            --border-color: var(--color-taiwan);
+        }
+
+        .card--malaysia {
+            --border-color: var(--color-malaysia);
+        }
+
+        .card--emergency {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .card--emergency {
+                background-color: #450a0a;
+                border-color: #7f1d1d;
+            }
+        }
+
+        /* Flight Info */
+        .flight-list {
+            list-style: none;
+        }
+
+        .flight-item {
+            padding: var(--space-md) 0;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--font-size-sm);
+        }
+
+        .flight-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .flight-item:first-child {
+            padding-top: 0;
+        }
+
+        .flight-item__label {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-secondary);
+            display: block;
+            margin-bottom: var(--space-xs);
+        }
+
+        .flight-item__code {
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        .flight-item__route {
+            text-align: right;
+            font-size: var(--font-size-sm);
+        }
+
+        .flight-item__arrow {
+            color: var(--color-text-tertiary);
+            margin: 0 var(--space-xs);
+        }
+
+        /* Hotel Info */
+        .hotel__title {
+            font-weight: 700;
+            font-size: var(--font-size-base);
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .hotel__subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .hotel__dates {
+            font-size: var(--font-size-xs);
+            background-color: var(--color-bg-tertiary);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            white-space: nowrap;
+        }
+
+        .hotel__address {
+            position: relative;
+            background-color: var(--color-bg-tertiary);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-xs);
+            color: var(--color-text-secondary);
+            word-break: break-all;
+            margin-bottom: var(--space-sm);
+        }
+
+        .hotel__copy-btn {
+            position: absolute;
+            top: var(--space-xs);
+            right: var(--space-xs);
+            color: var(--color-accent-light);
+            padding: var(--space-xs);
+            border-radius: var(--radius-sm);
+            transition: background-color var(--transition-fast);
+        }
+
+        .hotel__copy-btn:hover,
+        .hotel__copy-btn:focus-visible {
+            background-color: var(--color-bg-primary);
+            outline: 2px solid var(--color-accent-light);
+        }
+
+        .hotel__phone {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: var(--font-size-sm);
+            color: var(--color-accent-light);
+            font-weight: 700;
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            transition: background-color var(--transition-fast);
+        }
+
+        .hotel__phone:hover,
+        .hotel__phone:focus-visible {
+            background-color: var(--color-bg-tertiary);
+        }
+
+        /* Emergency Contacts */
+        .emergency__title {
+            font-weight: 700;
+            color: #991b1b;
+            font-size: var(--font-size-sm);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .emergency__title {
+                color: #fca5a5;
+            }
+        }
+
+        .emergency-list {
+            list-style: none;
+        }
+
+        .emergency-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid #fecaca;
+            font-size: var(--font-size-sm);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .emergency-item {
+                border-bottom-color: #7f1d1d;
+            }
+        }
+
+        .emergency-item:last-child {
+            border-bottom: none;
+        }
+
+        .emergency-item__link {
+            color: #dc2626;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            transition: background-color var(--transition-fast);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .emergency-item__link {
+                color: #fca5a5;
+            }
+        }
+
+        .emergency-item__link:hover,
+        .emergency-item__link:focus-visible {
+            background-color: #fee2e2;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .emergency-item__link:hover,
+            .emergency-item__link:focus-visible {
+                background-color: #7f1d1d;
+            }
+        }
+
+        /* ========================================
+           Timeline Components (Detail Tab)
+           ======================================== */
+        .timeline {
+            list-style: none;
+            position: relative;
+            padding-left: var(--space-sm);
+        }
+
+        .timeline__date-header {
+            position: sticky;
+            top: 0;
+            z-index: var(--z-sticky);
+            padding: var(--space-md) 0 var(--space-sm);
+            background-color: var(--color-bg-primary);
+        }
+
+        .timeline__date-badge {
+            display: inline-block;
+            font-size: var(--font-size-xs);
+            font-weight: 700;
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-full);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .timeline__date-badge--travel {
+            background-color: #1e40af;
+            color: white;
+        }
+
+        .timeline__date-badge--work {
+            background-color: #0d9488;
+            color: white;
+        }
+
+        .timeline__date-badge--holiday {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .timeline__date-badge--rest {
+            background-color: #a855f7;
+            color: white;
+        }
+
+        .timeline__date-badge--return {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .timeline__date-badge--today {
+            box-shadow: 0 0 0 3px #fbbf24;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 3px #fbbf24;
+            }
+            50% {
+                box-shadow: 0 0 0 6px rgba(251, 191, 36, 0.5);
+            }
+        }
+
+        .timeline__item {
+            position: relative;
+            z-index: var(--z-base);
+            padding-bottom: var(--space-md);
+            margin-left: var(--space-lg);
+        }
+
+        .timeline__item::before {
+            content: '';
+            position: absolute;
+            left: calc(-1 * var(--space-lg) + 0.5rem);
+            top: 2.5rem;
+            bottom: 0;
+            width: 2px;
+            background-color: var(--color-border);
+            z-index: -1;
+        }
+
+        .timeline__item:last-child::before {
+            display: none;
+        }
+
+        .timeline__events {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .timeline-event {
+            background-color: var(--color-bg-secondary);
+            padding: var(--space-md);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid var(--event-color);
+        }
+
+        .timeline-event--general {
+            --event-color: #9ca3af;
+        }
+
+        .timeline-event--transport {
+            --event-color: #3b82f6;
+        }
+
+        .timeline-event--flight {
+            --event-color: #1e40af;
+        }
+
+        .timeline-event--work {
+            --event-color: #f59e0b;
+        }
+
+        .timeline-event--meal {
+            --event-color: #fb923c;
+        }
+
+        .timeline-event--alert {
+            background-color: #fef2f2;
+            border-left-color: #ef4444;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .timeline-event--alert {
+                background-color: #450a0a;
+            }
+        }
+
+        .timeline-event--info {
+            background-color: #eff6ff;
+            border-left-color: #3b82f6;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .timeline-event--info {
+                background-color: #172554;
+            }
+        }
+
+        .timeline-event__time {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .timeline-event__title {
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .timeline-event__description {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        .timeline-event__detail {
+            margin-top: var(--space-sm);
+            padding: var(--space-sm);
+            background-color: var(--color-bg-tertiary);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-xs);
+        }
+
+        .timeline-event__flight {
+            margin-top: var(--space-sm);
+            padding: var(--space-sm);
+            background-color: #dbeafe;
+            border: 1px solid #93c5fd;
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            font-weight: 700;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .timeline-event__flight {
+                background-color: #172554;
+                border-color: #1e3a8a;
+            }
+        }
+
+        /* ========================================
+           Table (Family Tab)
+           ======================================== */
+        .info-box {
+            background-color: #fef3c7;
+            border: 1px solid #fde047;
+            padding: var(--space-md);
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-md);
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .info-box {
+                background-color: #422006;
+                border-color: #713f12;
+            }
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: var(--font-size-sm);
+            background-color: var(--color-bg-secondary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .schedule-table thead {
+            background-color: var(--color-bg-tertiary);
+            font-size: var(--font-size-xs);
+            text-transform: uppercase;
+            color: var(--color-text-secondary);
+        }
+
+        .schedule-table th,
+        .schedule-table td {
+            padding: var(--space-sm) var(--space-md);
+            text-align: left;
+        }
+
+        .schedule-table tbody tr {
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .schedule-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .schedule-table__date {
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .schedule-table__contact {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        /* ========================================
+           Checklist (Tips Tab)
+           ======================================== */
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist__item {
+            margin-bottom: var(--space-sm);
+        }
+
+        .checklist__label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .checklist__input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .checklist__box {
+            flex: 1;
+            padding: var(--space-md);
+            background-color: var(--color-bg-tertiary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            transition: all var(--transition-base);
+        }
+
+        .checklist__input:checked + .checklist__box {
+            background-color: var(--color-success);
+            border-color: var(--color-success);
+            color: white;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .checklist__label:hover .checklist__box {
+            border-color: var(--color-accent-light);
+        }
+
+        /* Immigration Info */
+        .immigration-card {
+            background-color: #fef2f2;
+            border: 1px solid #fecaca;
+            border-left: 4px solid #ef4444;
+            padding: var(--space-md);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--space-md);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .immigration-card {
+                background-color: #450a0a;
+                border-color: #7f1d1d;
+            }
+        }
+
+        .immigration-card__title {
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-sm);
+            font-size: var(--font-size-base);
+        }
+
+        .immigration-card__warning {
+            background-color: #fee2e2;
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-md);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .immigration-card__warning {
+                background-color: #7f1d1d;
+            }
+        }
+
+        .immigration-card__warning-title {
+            font-weight: 700;
+            color: #991b1b;
+            margin-bottom: var(--space-xs);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .immigration-card__warning-title {
+                color: #fca5a5;
+            }
+        }
+
+        .immigration-card__warning-text {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-sm);
+        }
+
+        .immigration-card__qa {
+            margin-bottom: var(--space-md);
+        }
+
+        .immigration-card__question {
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--space-xs);
+            font-size: var(--font-size-sm);
+        }
+
+        .immigration-card__answer {
+            color: var(--color-text-secondary);
+            padding-left: var(--space-sm);
+            font-size: var(--font-size-sm);
+            list-style: disc;
+            margin-left: var(--space-md);
+        }
+
+        /* MDAC Link */
+        .mdac-card {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: var(--space-md);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--space-md);
+        }
+
+        .mdac-card__title {
+            font-weight: 700;
+            margin-bottom: var(--space-sm);
+            font-size: var(--font-size-base);
+        }
+
+        .mdac-card__description {
+            font-size: var(--font-size-xs);
+            color: rgb(191 219 254);
+            margin-bottom: var(--space-md);
+            line-height: 1.6;
+        }
+
+        .mdac-card__button {
+            display: block;
+            background-color: white;
+            color: #1e40af;
+            font-weight: 700;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-sm);
+            transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .mdac-card__button:hover,
+        .mdac-card__button:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* ========================================
+           Toast Notification
+           ======================================== */
+        .toast {
+            position: fixed;
+            bottom: 5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-sm);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+            pointer-events: none;
+            z-index: var(--z-toast);
+            max-width: 80%;
+            text-align: center;
+        }
+
+        .toast--visible {
+            opacity: 1;
+        }
+
+        .toast--error {
+            background: rgba(239, 68, 68, 0.9);
+        }
+
+        /* ========================================
+           Utility Classes
+           ======================================== */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .gap-sm {
+            gap: var(--space-sm);
+        }
+
+        .gap-md {
+            gap: var(--space-md);
+        }
+
+        .mb-sm {
+            margin-bottom: var(--space-sm);
+        }
+
+        .mb-md {
+            margin-bottom: var(--space-md);
+        }
+
+        /* ========================================
+           Print Styles
+           ======================================== */
+        @media print {
+            .header,
+            .nav,
+            .toast {
+                display: none;
+            }
+
+            body {
+                background: white;
+                color: black;
+                padding: 0;
+            }
+
+            .tab-panel {
+                display: block !important;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="header__content">
+            <div>
+                <h1 class="header__title">海外出張旅程表 2026</h1>
+                <p class="header__subtitle">台湾 & マレーシア (4/28 - 5/7)</p>
+            </div>
+            <div>
+                <span class="header__badge" role="status" aria-label="JAL会員ステータス">JAL Sapphire</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main role="main">
+
+        <!-- TAB 1: SUMMARY -->
+        <div id="tab-summary" class="tab-panel container" role="tabpanel" aria-labelledby="nav-summary" aria-hidden="false">
+
+            <!-- Flight Card -->
+            <section class="card" aria-label="フライト情報">
+                <div class="card__header card__header--primary">
+                    <i class="fas fa-plane" aria-hidden="true"></i>
+                    <span>フライト情報</span>
+                </div>
+                <div class="card__body">
+                    <ul class="flight-list">
+                        <li class="flight-item">
+                            <div>
+                                <span class="flight-item__label">4/28 往路</span>
+                                <span class="flight-item__code">CX565</span>
+                            </div>
+                            <div class="flight-item__route">
+                                KIX 16:20<span class="flight-item__arrow">→</span>TPE 18:15
+                            </div>
+                        </li>
+                        <li class="flight-item">
+                            <div>
+                                <span class="flight-item__label">5/02 移動</span>
+                                <span class="flight-item__code">MH367</span>
+                            </div>
+                            <div class="flight-item__route">
+                                TPE 15:10<span class="flight-item__arrow">→</span>KUL 20:05
+                            </div>
+                        </li>
+                        <li class="flight-item">
+                            <div>
+                                <span class="flight-item__label">5/06 復路</span>
+                                <span class="flight-item__code">MH052</span>
+                            </div>
+                            <div class="flight-item__route">
+                                KUL 22:25<span class="flight-item__arrow">→</span>KIX 05:40<small>+1</small>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Hotel Card Taipei -->
+            <section class="card card--bordered card--taiwan" aria-label="台北ホテル情報">
+                <div class="card__body">
+                    <div class="flex-between mb-sm">
+                        <h3 class="hotel__title">🏨 台北: K Hotel Dunnan</h3>
+                        <span class="hotel__dates">4/28-5/2</span>
+                    </div>
+                    <p class="hotel__subtitle">柯達大飯店 台北敦南</p>
+                    <div class="hotel__address">
+                        No. 238, Section 2, Dunhua S Rd, Da'an District, Taipei
+                        <button
+                            class="hotel__copy-btn"
+                            onclick="copyToClipboard('No. 238, Section 2, Dunhua S Rd, Da\'an District, Taipei')"
+                            aria-label="住所をコピー">
+                            <i class="far fa-copy" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <a href="tel:+886227323333" class="hotel__phone">
+                        <i class="fas fa-phone-alt" aria-hidden="true"></i>
+                        +886-2-2732-3333
+                    </a>
+                </div>
+            </section>
+
+            <!-- Hotel Card KL -->
+            <section class="card card--bordered card--malaysia" aria-label="クアラルンプールホテル情報">
+                <div class="card__body">
+                    <div class="flex-between mb-sm">
+                        <h3 class="hotel__title">🏨 KL: Holiday Inn Express KLCC</h3>
+                        <span class="hotel__dates">5/2-5/6</span>
+                    </div>
+                    <div class="hotel__address">
+                        84, Jalan Raja Chulan, 50200 Kuala Lumpur
+                        <button
+                            class="hotel__copy-btn"
+                            onclick="copyToClipboard('84, Jalan Raja Chulan, 50200 Kuala Lumpur')"
+                            aria-label="住所をコピー">
+                            <i class="far fa-copy" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <a href="tel:+60321611111" class="hotel__phone">
+                        <i class="fas fa-phone-alt" aria-hidden="true"></i>
+                        +60-3-2161-1111
+                    </a>
+                </div>
+            </section>
+
+            <!-- Emergency Contacts -->
+            <section class="card card--emergency" aria-label="緊急連絡先">
+                <div class="card__body">
+                    <h3 class="emergency__title">
+                        <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                        緊急連絡先
+                    </h3>
+                    <ul class="emergency-list">
+                        <li class="emergency-item">
+                            <span>会社緊急連絡先</span>
+                            <a href="tel:0300000000" class="emergency-item__link">
+                                <i class="fas fa-phone" aria-hidden="true"></i>
+                                発信
+                            </a>
+                        </li>
+                        <li class="emergency-item">
+                            <span>台湾 日本窓口 (交流協会)</span>
+                            <a href="tel:+886227138000" class="emergency-item__link">
+                                <i class="fas fa-phone" aria-hidden="true"></i>
+                                +886-2-2713-8000
+                            </a>
+                        </li>
+                        <li class="emergency-item">
+                            <span>マレーシア日本国大使館</span>
+                            <a href="tel:+60321772600" class="emergency-item__link">
+                                <i class="fas fa-phone" aria-hidden="true"></i>
+                                +60-3-2177-2600
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- TAB 2: DETAIL -->
+        <div id="tab-detail" class="tab-panel container" role="tabpanel" aria-labelledby="nav-detail" aria-hidden="true">
+            <ul class="timeline">
+
+                <!-- Day 1: 4/28 -->
+                <li>
+                    <div class="timeline__date-header">
+                        <span class="timeline__date-badge timeline__date-badge--travel" data-date="4/28">
+                            4/28 (火) 移動日 (JP → TW)
+                        </span>
+                    </div>
+
+                    <div class="timeline__item">
+                        <div class="timeline__events">
+                            <article class="timeline-event timeline-event--general">
+                                <div class="timeline-event__time">09:00 - 12:00</div>
+                                <h3 class="timeline-event__title">WEB会議 (自宅)</h3>
+                                <p class="timeline-event__description">中書島自宅にて。昼食は駅で購入推奨。</p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--transport">
+                                <div class="timeline-event__time">12:30 発</div>
+                                <h3 class="timeline-event__title">自宅出発 → 京都駅</h3>
+                                <p class="timeline-event__description">MKタクシーまたは近鉄+京阪</p>
+                                <div class="timeline-event__detail">
+                                    <i class="fas fa-train" aria-hidden="true"></i>
+                                    <strong>13:00 京都駅発 はるか</strong> (チケットレス手配)
+                                </div>
+                            </article>
+
+                            <article class="timeline-event timeline-event--flight">
+                                <div class="timeline-event__time">14:20 着 / 16:20 発</div>
+                                <h3 class="timeline-event__title">関西国際空港 (KIX)</h3>
+                                <ul class="timeline-event__description">
+                                    <li>CXカウンターでJALステータス提示</li>
+                                    <li><strong>JALサクララウンジ</strong>で夕食(カレー等)推奨</li>
+                                </ul>
+                                <div class="timeline-event__flight">
+                                    ✈️ CX565 (Cathay) → 台北 (18:15着)
+                                </div>
+                            </article>
+
+                            <article class="timeline-event timeline-event--transport">
+                                <div class="timeline-event__time">18:15 (現地時間)</div>
+                                <h3 class="timeline-event__title">台北桃園空港 (TPE) 到着</h3>
+                                <p class="timeline-event__description">
+                                    1. 入国審査 (事前Web登録済ならe-Gateへ)<br>
+                                    2. RevolutでATM両替 (TWD)<br>
+                                    3. eSIMローミングON
+                                </p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--general">
+                                <div class="timeline-event__time">20:00頃</div>
+                                <h3 class="timeline-event__title">K Hotel Dunnan チェックイン</h3>
+                                <p class="timeline-event__description">
+                                    <strong>移動: Uber推奨</strong> (またはタクシー)<br>
+                                    所要約50分 / 1,200-1,400 TWD目安
+                                </p>
+                            </article>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Day 2: 4/29 -->
+                <li>
+                    <div class="timeline__date-header">
+                        <span class="timeline__date-badge timeline__date-badge--work" data-date="4/29">
+                            4/29 (水) 実験 Day1 🎌
+                        </span>
+                    </div>
+
+                    <div class="timeline__item">
+                        <div class="timeline__events">
+                            <article class="timeline-event timeline-event--transport">
+                                <div class="timeline-event__time">08:30 発</div>
+                                <h3 class="timeline-event__title">ホテル出発</h3>
+                                <p class="timeline-event__description"><strong>Uber手配</strong>。機材搬入確認。</p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--work">
+                                <div class="timeline-event__time">09:00 - 18:00</div>
+                                <h3 class="timeline-event__title">【業務】技術実験</h3>
+                                <p class="timeline-event__description">終日対応。昼食は施設近隣。</p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--meal">
+                                <div class="timeline-event__time">18:00 -</div>
+                                <h3 class="timeline-event__title">夕食 / 現地会食</h3>
+                                <p class="timeline-event__description">現地スタッフと会食の可能性あり</p>
+                            </article>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Day 3: 4/30 -->
+                <li>
+                    <div class="timeline__date-header">
+                        <span class="timeline__date-badge timeline__date-badge--work" data-date="4/30">
+                            4/30 (木) 実験 Day2
+                        </span>
+                    </div>
+
+                    <div class="timeline__item">
+                        <div class="timeline__events">
+                            <article class="timeline-event timeline-event--work">
+                                <div class="timeline-event__time">09:00 - 18:00</div>
+                                <h3 class="timeline-event__title">【業務】技術実験</h3>
+                                <p class="timeline-event__description">終日対応。実験終了・撤収。</p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--meal">
+                                <div class="timeline-event__time">19:00 -</div>
+                                <h3 class="timeline-event__title">夕食 (台北市内)</h3>
+                                <p class="timeline-event__description">大安区周辺 または 夜市(通化街)など</p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--alert">
+                                <h3 class="timeline-event__title">
+                                    <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+                                    MDAC登録期間開始
+                                </h3>
+                                <p class="timeline-event__description" style="color: #991b1b;">
+                                    マレーシア入国のための登録が可能になります。本日中に済ませるのが安全です。
+                                </p>
+                            </article>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Day 4: 5/1 -->
+                <li>
+                    <div class="timeline__date-header">
+                        <span class="timeline__date-badge timeline__date-badge--holiday" data-date="5/01">
+                            5/01 (金) WEB会議 (祝日)
+                        </span>
+                    </div>
+
+                    <div class="timeline__item">
+                        <div class="timeline__events">
+                            <article class="timeline-event timeline-event--work">
+                                <div class="timeline-event__time" style="color: #ef4444; font-weight: 700;">
+                                    ⚠️時差注意: 日本09:00開始
+                                </div>
+                                <h3 class="timeline-event__title">【業務】WEB会議 (終日)</h3>
+                                <div class="timeline-event__detail" style="background-color: #fef2f2;">
+                                    <div style="font-weight: 700; color: #dc2626; font-size: 1.125rem;">現地時間 08:00 開始</div>
+                                    <div style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">
+                                        ※背景設定・マイク確認
+                                    </div>
+                                </div>
+                                <p class="timeline-event__description">
+                                    <i class="fas fa-utensils" aria-hidden="true"></i>
+                                    昼食: メーデー(祝日)のためUber Eatsかコンビニ推奨
+                                </p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--info">
+                                <h3 class="timeline-event__title">
+                                    <i class="fas fa-check-double" aria-hidden="true"></i>
+                                    TODO: パッキング & MDAC最終確認
+                                </h3>
+                                <p class="timeline-event__description" style="color: #1e40af;">
+                                    明日の移動に備え、週末の為替手数料回避のためRevolut両替推奨
+                                </p>
+                            </article>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Day 5: 5/2 -->
+                <li>
+                    <div class="timeline__date-header">
+                        <span class="timeline__date-badge timeline__date-badge--travel" data-date="5/02">
+                            5/02 (土) 移動 (TW → MY)
+                        </span>
+                    </div>
+
+                    <div class="timeline__item">
+                        <div class="timeline__events">
+                            <article class="timeline-event timeline-event--general">
+                                <div class="timeline-event__time">11:30 発</div>
+                                <h3 class="timeline-event__title">ホテルチェックアウト</h3>
+                                <p class="timeline-event__description">タクシーで桃園空港(TPE)へ (約50分)</p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--flight">
+                                <div class="timeline-event__time">13:00 (空港)</div>
+                                <h3 class="timeline-event__title">チェックイン & ラウンジ</h3>
+                                <p class="timeline-event__description">Cathay Lounge (ヌードルバーで昼食推奨)</p>
+                                <div class="timeline-event__flight">
+                                    ✈️ MH367 (15:10発) → KL (20:05着)
+                                </div>
+                            </article>
+
+                            <article class="timeline-event timeline-event--transport">
+                                <div class="timeline-event__time">20:05 着 (KLIA)</div>
+                                <h3 class="timeline-event__title">マレーシア入国</h3>
+                                <p class="timeline-event__description">
+                                    <span style="color: #dc2626; font-weight: 700;">MDAC提示必須</span><br>
+                                    入国後、<strong>Grabで市内へ</strong> (Door 3/4付近)
+                                </p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--general">
+                                <div class="timeline-event__time">22:00頃</div>
+                                <h3 class="timeline-event__title">Holiday Inn Express KLCC</h3>
+                                <p class="timeline-event__description">※チェックイン時デポジット(Amex等)必要</p>
+                            </article>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Day 6: 5/3 -->
+                <li>
+                    <div class="timeline__date-header">
+                        <span class="timeline__date-badge timeline__date-badge--rest" data-date="5/03">
+                            5/03 (日) 予備日・休息
+                        </span>
+                    </div>
+
+                    <div class="timeline__item">
+                        <div class="timeline__events">
+                            <article class="timeline-event timeline-event--general">
+                                <h3 class="timeline-event__title">終日フリー・休息</h3>
+                                <p class="timeline-event__description">
+                                    ・洗濯、メール処理<br>
+                                    ・近隣散策 (Pavilion KL / KLCC公園)<br>
+                                    ・立地が良いので徒歩圏内で完了可能
+                                </p>
+                            </article>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Day 7: 5/4 -->
+                <li>
+                    <div class="timeline__date-header">
+                        <span class="timeline__date-badge timeline__date-badge--work" data-date="5/04">
+                            5/04 (月) 市場視察
+                        </span>
+                    </div>
+
+                    <div class="timeline__item">
+                        <div class="timeline__events">
+                            <article class="timeline-event timeline-event--work">
+                                <div class="timeline-event__time">10:00 -</div>
+                                <h3 class="timeline-event__title">視察① The Exchange TRX</h3>
+                                <p class="timeline-event__description">
+                                    ホテルから<strong>Grab約10分</strong>。最新モールの物流動線確認。
+                                </p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--work">
+                                <div class="timeline-event__time">14:00 -</div>
+                                <h3 class="timeline-event__title">視察② Pavilion KL</h3>
+                                <p class="timeline-event__description">徒歩圏内。小売店舗の省人化確認。</p>
+                            </article>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Day 8: 5/5 -->
+                <li>
+                    <div class="timeline__date-header">
+                        <span class="timeline__date-badge timeline__date-badge--work" data-date="5/05">
+                            5/05 (火) SEMICON Day1
+                        </span>
+                    </div>
+
+                    <div class="timeline__item">
+                        <div class="timeline__events">
+                            <article class="timeline-event timeline-event--transport">
+                                <div class="timeline-event__time">08:30 発</div>
+                                <h3 class="timeline-event__title">ホテル出発 (Grab)</h3>
+                                <p class="timeline-event__description">
+                                    <span style="color: #dc2626; font-weight: 700;">
+                                        ⚠️朝の渋滞注意 (通常20分→40分想定)
+                                    </span><br>
+                                    会場: MITECへ
+                                </p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--work">
+                                <div class="timeline-event__time">10:00 - 18:00</div>
+                                <h3 class="timeline-event__title">SEMICON SEA 参加</h3>
+                                <p class="timeline-event__description">入場パス(QR)準備。名刺・レポート用メモ。</p>
+                            </article>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Day 9: 5/6 -->
+                <li>
+                    <div class="timeline__date-header">
+                        <span class="timeline__date-badge timeline__date-badge--return" data-date="5/06">
+                            5/06 (水) 帰国日
+                        </span>
+                    </div>
+
+                    <div class="timeline__item">
+                        <div class="timeline__events">
+                            <article class="timeline-event timeline-event--general">
+                                <div class="timeline-event__time">08:00</div>
+                                <h3 class="timeline-event__title">チェックアウト</h3>
+                                <p class="timeline-event__description">荷物をホテルへ預けて会場へ</p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--work">
+                                <div class="timeline-event__time">09:30 - 16:00</div>
+                                <h3 class="timeline-event__title">SEMICON SEA 2日目</h3>
+                                <p class="timeline-event__description">16:00撤収。ホテルへ荷物ピック。</p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--transport">
+                                <div class="timeline-event__time">17:30 移動</div>
+                                <h3 class="timeline-event__title">空港へ移動</h3>
+                                <p class="timeline-event__description">
+                                    夕方の豪雨・渋滞リスクあり。<br>
+                                    確実性重視ならKL SentralからKLIA Express。
+                                </p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--flight">
+                                <div class="timeline-event__time">20:00 (空港)</div>
+                                <h3 class="timeline-event__title">MAS Golden Lounge</h3>
+                                <p class="timeline-event__description" style="color: #1e40af; font-weight: 700;">
+                                    🚿 ここでシャワーを浴びて着替える
+                                </p>
+                                <div class="timeline-event__flight">
+                                    ✈️ MH052 (22:25発) → KIX (翌05:40着)
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Day 10: 5/7 -->
+                <li>
+                    <div class="timeline__date-header">
+                        <span class="timeline__date-badge timeline__date-badge--return" data-date="5/07">
+                            5/07 (木) 帰国完了
+                        </span>
+                    </div>
+
+                    <div class="timeline__item">
+                        <div class="timeline__events">
+                            <article class="timeline-event timeline-event--transport">
+                                <div class="timeline-event__time">05:40 着</div>
+                                <h3 class="timeline-event__title">関西国際空港 (KIX) 到着</h3>
+                                <p class="timeline-event__description">
+                                    お帰りなさいませ。<br>
+                                    自動化ゲートでスムーズに入国。
+                                </p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--transport">
+                                <div class="timeline-event__time">06:30 頃発</div>
+                                <h3 class="timeline-event__title">自宅へ移動</h3>
+                                <p class="timeline-event__description">
+                                    <i class="fas fa-train" aria-hidden="true"></i>
+                                    はるか / リムジンバス / MK<br>
+                                    朝のラッシュに注意して帰宅。
+                                </p>
+                            </article>
+
+                            <article class="timeline-event timeline-event--general" style="border-left-color: #10b981;">
+                                <div class="timeline-event__time">08:00 頃着</div>
+                                <h3 class="timeline-event__title">京都 (自宅/職場) 到着</h3>
+                                <p class="timeline-event__description" style="color: #059669; font-weight: 700;">
+                                    🏁 出張完了、お疲れ様でした!
+                                </p>
+                            </article>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+
+        <!-- TAB 3: FAMILY -->
+        <div id="tab-family" class="tab-panel container" role="tabpanel" aria-labelledby="nav-family" aria-hidden="true">
+            <div class="card">
+                <div class="card__body">
+                    <div class="info-box">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i>
+                        <p>
+                            ご家族へ：今回の出張は台湾とマレーシアの2カ国です。5/1は台湾のホテルで一日会議をしています。
+                        </p>
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">日付</th>
+                                    <th scope="col">場所</th>
+                                    <th scope="col">連絡推奨(JP)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="schedule-table__date">4/28 (火)</td>
+                                    <td>京都 → 台湾</td>
+                                    <td class="schedule-table__contact">21時以降</td>
+                                </tr>
+                                <tr>
+                                    <td class="schedule-table__date">4/29 (水)</td>
+                                    <td>台湾 (実験)</td>
+                                    <td class="schedule-table__contact">21時以降</td>
+                                </tr>
+                                <tr>
+                                    <td class="schedule-table__date">4/30 (木)</td>
+                                    <td>台湾 (実験)</td>
+                                    <td class="schedule-table__contact">21時以降</td>
+                                </tr>
+                                <tr>
+                                    <td class="schedule-table__date">5/01 (金)</td>
+                                    <td>台湾 (WEB会議)</td>
+                                    <td class="schedule-table__contact">19時以降</td>
+                                </tr>
+                                <tr>
+                                    <td class="schedule-table__date">5/02 (土)</td>
+                                    <td>台湾 → マレーシア</td>
+                                    <td class="schedule-table__contact">23時以降</td>
+                                </tr>
+                                <tr>
+                                    <td class="schedule-table__date">5/03 (日)</td>
+                                    <td>マレーシア(休日)</td>
+                                    <td class="schedule-table__contact">終日可</td>
+                                </tr>
+                                <tr>
+                                    <td class="schedule-table__date">5/04 (月)</td>
+                                    <td>マレーシア(視察)</td>
+                                    <td class="schedule-table__contact">20時以降</td>
+                                </tr>
+                                <tr>
+                                    <td class="schedule-table__date">5/05 (火)</td>
+                                    <td>マレーシア(展示会)</td>
+                                    <td class="schedule-table__contact">20時以降</td>
+                                </tr>
+                                <tr>
+                                    <td class="schedule-table__date">5/06 (水)</td>
+                                    <td>マレーシア→機内</td>
+                                    <td class="schedule-table__contact">18時頃まで</td>
+                                </tr>
+                                <tr>
+                                    <td class="schedule-table__date">5/07 (木)</td>
+                                    <td>朝8時に帰宅予定</td>
+                                    <td class="schedule-table__contact">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: TIPS -->
+        <div id="tab-tips" class="tab-panel container" role="tabpanel" aria-labelledby="nav-tips" aria-hidden="true">
+
+            <!-- Checklist -->
+            <section class="card" aria-label="準備チェックリスト">
+                <div class="card__body">
+                    <h3 class="card__header" style="padding: 0 0 var(--space-md) 0;">
+                        <i class="fas fa-clipboard-check" aria-hidden="true"></i>
+                        準備・携行品チェックリスト
+                    </h3>
+                    <ul class="checklist">
+                        <li class="checklist__item">
+                            <label class="checklist__label">
+                                <input type="checkbox" class="checklist__input" onchange="saveCheck(this, 'c1')">
+                                <div class="checklist__box">🇹🇼 台湾 入国カード (オンライン)</div>
+                            </label>
+                        </li>
+                        <li class="checklist__item">
+                            <label class="checklist__label">
+                                <input type="checkbox" class="checklist__input" onchange="saveCheck(this, 'c2')">
+                                <div class="checklist__box">🇲🇾 マレーシア MDAC (到着3日前〜)</div>
+                            </label>
+                        </li>
+                        <li class="checklist__item">
+                            <label class="checklist__label">
+                                <input type="checkbox" class="checklist__input" onchange="saveCheck(this, 'c3')">
+                                <div class="checklist__box">💳 Revolut 残高チャージ</div>
+                            </label>
+                        </li>
+                        <li class="checklist__item">
+                            <label class="checklist__label">
+                                <input type="checkbox" class="checklist__input" onchange="saveCheck(this, 'c4')">
+                                <div class="checklist__box">📱 配車アプリ: 台湾はUber / マレーシアはGrab</div>
+                            </label>
+                        </li>
+                        <li class="checklist__item">
+                            <label class="checklist__label">
+                                <input type="checkbox" class="checklist__input" onchange="saveCheck(this, 'c5')">
+                                <div class="checklist__box">📄 E-Ticket控え / ホテル予約確認書</div>
+                            </label>
+                        </li>
+                        <li class="checklist__item">
+                            <label class="checklist__label">
+                                <input type="checkbox" class="checklist__input" onchange="saveCheck(this, 'c6')">
+                                <div class="checklist__box">🔌 変換プラグ (マレーシアはBFタイプ)</div>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Immigration Info -->
+            <section class="immigration-card" aria-label="入国審査対策">
+                <h3 class="immigration-card__title">👮‍♂️ 入国審査対策 (Business)</h3>
+
+                <div class="immigration-card__warning">
+                    <p class="immigration-card__warning-title">NGワード: "Work"</p>
+                    <p class="immigration-card__warning-text">就労(お金を稼ぐ)と誤解されトラブルの元です。</p>
+                </div>
+
+                <div class="immigration-card__qa">
+                    <p class="immigration-card__question">Q: Purpose? (目的)</p>
+                    <ul class="immigration-card__answer">
+                        <li>🇹🇼 "Technical meeting"</li>
+                        <li>🇲🇾 "Attending SEMICON SEA conference"</li>
+                    </ul>
+                </div>
+
+                <div class="immigration-card__qa">
+                    <p class="immigration-card__question">Q: How long? (期間)</p>
+                    <p class="immigration-card__answer" style="list-style: none; margin-left: var(--space-sm);">
+                        "5 days." (Return on May 6th)
+                    </p>
+                </div>
+            </section>
+
+            <!-- MDAC Link -->
+            <section class="mdac-card" aria-label="MDAC登録">
+                <h3 class="mdac-card__title">🇲🇾 MDAC登録 (必須)</h3>
+                <p class="mdac-card__description">
+                    到着3日前(4/30以降)に必ず登録してください。<br>
+                    登録後、最初の入国でもAutogate利用可能です。
+                </p>
+                <a href="https://imigresen-online.imi.gov.my/mdac/main" target="_blank" rel="noopener noreferrer" class="mdac-card__button">
+                    登録サイトを開く (.gov.my)
+                    <i class="fas fa-external-link-alt" aria-hidden="true" style="margin-left: var(--space-xs);"></i>
+                </a>
+            </section>
+
+        </div>
+
+    </main>
+
+    <!-- Navigation -->
+    <nav class="nav" role="navigation" aria-label="メインナビゲーション">
+        <ul class="nav__list">
+            <li class="nav__item">
+                <button
+                    id="nav-summary"
+                    class="nav__button"
+                    onclick="switchTab('summary')"
+                    aria-controls="tab-summary"
+                    aria-pressed="true">
+                    <i class="fas fa-passport nav__icon" aria-hidden="true"></i>
+                    <span class="nav__label">サマリー</span>
+                </button>
+            </li>
+            <li class="nav__item">
+                <button
+                    id="nav-detail"
+                    class="nav__button"
+                    onclick="switchTab('detail')"
+                    aria-controls="tab-detail"
+                    aria-pressed="false">
+                    <i class="fas fa-list-ul nav__icon" aria-hidden="true"></i>
+                    <span class="nav__label">詳細旅程</span>
+                </button>
+            </li>
+            <li class="nav__item">
+                <button
+                    id="nav-family"
+                    class="nav__button"
+                    onclick="switchTab('family')"
+                    aria-controls="tab-family"
+                    aria-pressed="false">
+                    <i class="fas fa-users nav__icon" aria-hidden="true"></i>
+                    <span class="nav__label">家族共有</span>
+                </button>
+            </li>
+            <li class="nav__item">
+                <button
+                    id="nav-tips"
+                    class="nav__button"
+                    onclick="switchTab('tips')"
+                    aria-controls="tab-tips"
+                    aria-pressed="false">
+                    <i class="fas fa-info-circle nav__icon" aria-hidden="true"></i>
+                    <span class="nav__label">入国Tips</span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true">コピーしました</div>
+
+    <!-- Font Awesome (Deferred Loading) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossorigin="anonymous"
+          media="print"
+          onload="this.media='all'">
+
+    <script>
+        'use strict';
+
+        // ========================================
+        // State Management
+        // ========================================
+        const AppState = {
+            currentTab: 'summary',
+            checkboxStates: new Map()
+        };
+
+        // ========================================
+        // Tab Management
+        // ========================================
+        function switchTab(tabId) {
+            // Update state
+            AppState.currentTab = tabId;
+
+            // Update tab panels
+            document.querySelectorAll('[role="tabpanel"]').forEach(panel => {
+                const isActive = panel.id === `tab-${tabId}`;
+                panel.setAttribute('aria-hidden', !isActive);
+            });
+
+            // Update nav buttons
+            document.querySelectorAll('.nav__button').forEach(btn => {
+                const btnTabId = btn.getAttribute('aria-controls').replace('tab-', '');
+                const isPressed = btnTabId === tabId;
+                btn.setAttribute('aria-pressed', isPressed);
+            });
+
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Announce to screen readers
+            announceToScreenReader(`${getTabLabel(tabId)}タブを表示しています`);
+        }
+
+        function getTabLabel(tabId) {
+            const labels = {
+                summary: 'サマリー',
+                detail: '詳細旅程',
+                family: '家族共有',
+                tips: '入国Tips'
+            };
+            return labels[tabId] || tabId;
+        }
+
+        // ========================================
+        // Keyboard Navigation
+        // ========================================
+        document.addEventListener('keydown', (e) => {
+            // Alt + Number for quick tab switching
+            if (e.altKey && !e.ctrlKey && !e.shiftKey) {
+                const tabs = ['summary', 'detail', 'family', 'tips'];
+                const key = e.key;
+
+                if (key >= '1' && key <= '4') {
+                    e.preventDefault();
+                    switchTab(tabs[parseInt(key) - 1]);
+                }
+            }
+
+            // Arrow keys for tab navigation when focused on nav
+            if (document.activeElement.classList.contains('nav__button')) {
+                const navButtons = Array.from(document.querySelectorAll('.nav__button'));
+                const currentIndex = navButtons.indexOf(document.activeElement);
+
+                if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                    e.preventDefault();
+                    navButtons[currentIndex - 1].focus();
+                    navButtons[currentIndex - 1].click();
+                } else if (e.key === 'ArrowRight' && currentIndex < navButtons.length - 1) {
+                    e.preventDefault();
+                    navButtons[currentIndex + 1].focus();
+                    navButtons[currentIndex + 1].click();
+                }
+            }
+        });
+
+        // ========================================
+        // Today Highlighting
+        // ========================================
+        function highlightToday() {
+            const today = new Date();
+            const month = today.getMonth() + 1;
+            const date = today.getDate();
+
+            // Check if within trip dates (4/28 - 5/7)
+            const isInTripPeriod = (month === 4 && date >= 28) || (month === 5 && date <= 7);
+
+            if (isInTripPeriod) {
+                const dateStr = `${month}/${String(date).padStart(2, '0')}`;
+
+                document.querySelectorAll('[data-date]').forEach(badge => {
+                    const badgeDate = badge.getAttribute('data-date');
+                    if (badgeDate === dateStr) {
+                        badge.classList.add('timeline__date-badge--today');
+                        badge.setAttribute('aria-label', `本日の予定: ${badge.textContent}`);
+
+                        // Announce today's schedule
+                        announceToScreenReader(`本日は${badge.textContent}です`);
+                    }
+                });
+            }
+        }
+
+        // ========================================
+        // Clipboard Operations
+        // ========================================
+        async function copyToClipboard(text) {
+            try {
+                // Modern Clipboard API (with fallback)
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(text);
+                } else {
+                    // Fallback for older browsers or non-secure contexts
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    textarea.style.position = 'absolute';
+                    textarea.style.left = '-9999px';
+                    textarea.style.top = '0';
+                    textarea.setAttribute('readonly', '');
+
+                    document.body.appendChild(textarea);
+
+                    // iOS compatibility
+                    const range = document.createRange();
+                    range.selectNodeContents(textarea);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                    textarea.setSelectionRange(0, textarea.value.length);
+
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                }
+
+                showToast('コピーしました');
+                announceToScreenReader('住所をコピーしました');
+
+            } catch (err) {
+                console.error('コピーに失敗しました:', err);
+                showToast('コピーに失敗しました', true);
+                announceToScreenReader('コピーに失敗しました');
+            }
+        }
+
+        // ========================================
+        // Toast Notifications
+        // ========================================
+        let toastTimeout = null;
+
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+
+            // Clear existing timeout
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+            }
+
+            // Update toast
+            toast.textContent = message;
+            toast.classList.toggle('toast--error', isError);
+            toast.classList.add('toast--visible');
+
+            // Auto-hide after 2 seconds
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('toast--visible');
+            }, 2000);
+        }
+
+        // ========================================
+        // Checklist (LocalStorage)
+        // ========================================
+        function saveCheck(checkbox, id) {
+            try {
+                const checked = checkbox.checked;
+                localStorage.setItem(`checklist_${id}`, checked);
+                AppState.checkboxStates.set(id, checked);
+
+                if (checked) {
+                    announceToScreenReader('チェック完了');
+                }
+            } catch (e) {
+                console.warn('LocalStorageへの保存に失敗しました:', e);
+            }
+        }
+
+        function loadChecks() {
+            const checkIds = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
+
+            checkIds.forEach(id => {
+                try {
+                    const checked = localStorage.getItem(`checklist_${id}`) === 'true';
+                    AppState.checkboxStates.set(id, checked);
+
+                    const inputs = document.querySelectorAll(`input[onchange*="${id}"]`);
+                    inputs.forEach(input => {
+                        input.checked = checked;
+                    });
+                } catch (e) {
+                    console.warn('LocalStorageからの読み込みに失敗しました:', e);
+                }
+            });
+        }
+
+        // ========================================
+        // Screen Reader Announcements
+        // ========================================
+        let announcementElement = null;
+
+        function announceToScreenReader(message) {
+            if (!announcementElement) {
+                announcementElement = document.createElement('div');
+                announcementElement.setAttribute('role', 'status');
+                announcementElement.setAttribute('aria-live', 'polite');
+                announcementElement.classList.add('visually-hidden');
+                document.body.appendChild(announcementElement);
+            }
+
+            // Clear and update
+            announcementElement.textContent = '';
+            setTimeout(() => {
+                announcementElement.textContent = message;
+            }, 100);
+        }
+
+        // ========================================
+        // Performance Monitoring
+        // ========================================
+        if ('PerformanceObserver' in window) {
+            try {
+                const observer = new PerformanceObserver((list) => {
+                    for (const entry of list.getEntries()) {
+                        if (entry.duration > 100) {
+                            console.warn('Long task detected:', entry.duration, 'ms');
+                        }
+                    }
+                });
+                observer.observe({ entryTypes: ['longtask'] });
+            } catch (e) {
+                // Browser doesn't support longtask
+            }
+        }
+
+        // ========================================
+        // Initialization
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize app
+            switchTab('summary');
+            loadChecks();
+            highlightToday();
+
+            // Log initialization
+            console.log('✈️ 旅程表アプリ初期化完了');
+            console.log('📱 キーボードショートカット: Alt+1〜4 でタブ切り替え');
+        });
+
+        // ========================================
+        // Service Worker (Optional - for offline support)
+        // ========================================
+        if ('serviceWorker' in navigator) {
+            // Uncomment to enable offline support
+            // navigator.serviceWorker.register('/sw.js').catch(err => {
+            //     console.log('Service Worker registration failed:', err);
+            // });
+        }
+    </script>
+</body>
+</html>

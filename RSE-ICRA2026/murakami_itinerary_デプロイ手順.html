@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>村上旅程表 GASデプロイ手順</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 text-slate-800 p-6 max-w-3xl mx-auto">
+
+<h1 class="text-2xl font-bold mb-1 flex items-center gap-2">
+  <i class="fas fa-rocket text-blue-600"></i> 村上旅程表 GASデプロイ手順
+</h1>
+<p class="text-slate-500 text-sm mb-8">murakami_itinerary_gas.gs を使って Google Apps Script ウェブアプリとして公開する手順</p>
+
+<!-- 概要 -->
+<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 text-sm">
+  <div class="font-bold text-blue-800 mb-1">📌 仕組み</div>
+  <div class="text-blue-700">
+    Google ドライブに置いた <code class="bg-blue-100 px-1 rounded">murakami_itinerary_spreadsheet_clean.html</code> を
+    GAS (Apps Script) が読み込んでウェブアプリとして配信します。<br>
+    <strong>HTMLを更新したい場合はドライブのファイルを差し替えるだけ。GASの再デプロイは不要です。</strong>
+  </div>
+</div>
+
+<!-- ステップ一覧 -->
+<div class="space-y-5">
+
+  <!-- Step 1 -->
+  <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="bg-slate-700 text-white px-5 py-3 font-bold flex items-center gap-2">
+      <span class="bg-white text-slate-700 rounded-full w-6 h-6 flex items-center justify-center text-sm font-black">1</span>
+      HTMLファイルをGoogleドライブにアップロード
+    </div>
+    <div class="p-5 space-y-3 text-sm">
+      <div class="flex items-start gap-3">
+        <i class="fas fa-upload text-slate-400 mt-1 w-5"></i>
+        <div>
+          <a href="https://drive.google.com" target="_blank" class="text-blue-600 underline font-medium">drive.google.com</a>
+          を開き、以下のファイルをアップロード
+          <div class="mt-2 bg-slate-50 border border-slate-200 rounded px-3 py-2 font-mono text-xs">
+            📄 murakami_itinerary_spreadsheet_clean.html
+          </div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <i class="fas fa-share-alt text-slate-400 mt-1 w-5"></i>
+        <div>
+          アップロードしたファイルを右クリック →「共有」→「リンクを知っている全員が<strong>閲覧者</strong>」に変更して「完了」
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <i class="fas fa-copy text-slate-400 mt-1 w-5"></i>
+        <div>
+          ファイルを右クリック →「リンクをコピー」または URLバーから <strong>ファイルID</strong> をコピー
+          <div class="mt-2 bg-yellow-50 border border-yellow-300 rounded px-3 py-2 text-xs">
+            URLの形式: <code>https://drive.google.com/file/d/<strong class="text-red-600">【ここがファイルID】</strong>/view</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="bg-slate-700 text-white px-5 py-3 font-bold flex items-center gap-2">
+      <span class="bg-white text-slate-700 rounded-full w-6 h-6 flex items-center justify-center text-sm font-black">2</span>
+      GASプロジェクトを作成してコードを貼り付け
+    </div>
+    <div class="p-5 space-y-3 text-sm">
+      <div class="flex items-start gap-3">
+        <i class="fas fa-external-link-alt text-slate-400 mt-1 w-5"></i>
+        <div>
+          <a href="https://script.google.com" target="_blank" class="text-blue-600 underline font-medium">script.google.com</a>
+          を開き、「新しいプロジェクト」をクリック
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <i class="fas fa-paste text-slate-400 mt-1 w-5"></i>
+        <div>
+          デフォルトの <code class="bg-slate-100 px-1 rounded">コード.gs</code> の中身をすべて削除して、
+          <code class="bg-slate-100 px-1 rounded">murakami_itinerary_gas.gs</code> の内容を貼り付け
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <i class="fas fa-edit text-orange-500 mt-1 w-5"></i>
+        <div>
+          <strong class="text-orange-600">★重要</strong>: 3行目の <code class="bg-orange-50 border border-orange-200 px-1 rounded">HTML_FILE_ID</code> をStep 1でコピーしたIDに変更
+          <div class="mt-2 bg-orange-50 border border-orange-200 rounded px-3 py-2 font-mono text-xs">
+            var HTML_FILE_ID = '<strong class="text-red-600">ここにファイルIDを貼り付け</strong>';
+          </div>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <i class="fas fa-save text-slate-400 mt-1 w-5"></i>
+        <div>Ctrl+S（Mac: ⌘+S）で保存。プロジェクト名を「村上旅程表2026」など任意の名前に変更</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="bg-slate-700 text-white px-5 py-3 font-bold flex items-center gap-2">
+      <span class="bg-white text-slate-700 rounded-full w-6 h-6 flex items-center justify-center text-sm font-black">3</span>
+      ウェブアプリとしてデプロイ
+    </div>
+    <div class="p-5 space-y-3 text-sm">
+      <div class="flex items-start gap-3">
+        <i class="fas fa-cloud-upload-alt text-slate-400 mt-1 w-5"></i>
+        <div>右上の「<strong>デプロイ</strong>」ボタン →「<strong>新しいデプロイ</strong>」をクリック</div>
+      </div>
+      <div class="flex items-start gap-3">
+        <i class="fas fa-cog text-slate-400 mt-1 w-5"></i>
+        <div>
+          種類の選択（⚙ アイコン）→「<strong>ウェブアプリ</strong>」を選択
+          <table class="mt-2 w-full text-xs border border-slate-200 rounded">
+            <tr class="bg-slate-50">
+              <th class="px-3 py-2 text-left border-b">設定項目</th>
+              <th class="px-3 py-2 text-left border-b">値</th>
+            </tr>
+            <tr>
+              <td class="px-3 py-2 border-b">説明</td>
+              <td class="px-3 py-2 border-b">村上 ICRA2026 旅程表（任意）</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2 border-b">次のユーザーとして実行</td>
+              <td class="px-3 py-2 border-b font-semibold">自分</td>
+            </tr>
+            <tr>
+              <td class="px-3 py-2">アクセスできるユーザー</td>
+              <td class="px-3 py-2 font-semibold text-green-700">全員（匿名ユーザーを含む）<br><span class="text-slate-500 font-normal">※組織内限定にしたい場合は「組織内全員」</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="flex items-start gap-3">
+        <i class="fas fa-check-circle text-green-500 mt-1 w-5"></i>
+        <div>「<strong>デプロイ</strong>」をクリック → 承認が求められたら「アクセスを承認」→ Googleアカウントを選択 → 「詳細」→「プロジェクト名（安全でない）に移動」→「許可」</div>
+      </div>
+      <div class="flex items-start gap-3">
+        <i class="fas fa-link text-blue-500 mt-1 w-5"></i>
+        <div>
+          表示された「<strong>ウェブアプリのURL</strong>」をコピーして保存
+          <div class="mt-2 bg-green-50 border border-green-300 rounded px-3 py-2 text-xs">
+            例: <code>https://script.google.com/macros/s/【デプロイID】/exec</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="bg-green-700 text-white px-5 py-3 font-bold flex items-center gap-2">
+      <span class="bg-white text-green-700 rounded-full w-6 h-6 flex items-center justify-center text-sm font-black">4</span>
+      動作確認 &amp; ホーム画面に追加
+    </div>
+    <div class="p-5 space-y-3 text-sm">
+      <div class="flex items-start gap-3">
+        <i class="fas fa-mobile-alt text-slate-400 mt-1 w-5"></i>
+        <div>デプロイURLをスマホのブラウザで開いて旅程表が表示されることを確認</div>
+      </div>
+      <div class="flex items-start gap-3">
+        <i class="fas fa-star text-yellow-500 mt-1 w-5"></i>
+        <div>
+          iPhoneの場合: Safari で開く → 共有ボタン → 「ホーム画面に追加」<br>
+          Androidの場合: Chrome で開く → メニュー(⋮) → 「ホーム画面に追加」
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HTMLを更新したい場合 -->
+  <div class="bg-white rounded-xl border border-blue-200 shadow-sm overflow-hidden">
+    <div class="bg-blue-600 text-white px-5 py-3 font-bold flex items-center gap-2">
+      <i class="fas fa-sync-alt"></i> HTMLを更新したい場合（再デプロイ不要）
+    </div>
+    <div class="p-5 space-y-2 text-sm">
+      <div class="flex items-start gap-3">
+        <i class="fas fa-check text-blue-500 mt-1 w-5"></i>
+        <div>更新した <code class="bg-slate-100 px-1 rounded">murakami_itinerary_spreadsheet_clean.html</code> をGoogleドライブで<strong>同じファイルに上書き</strong></div>
+      </div>
+      <div class="flex items-start gap-3">
+        <i class="fas fa-check text-blue-500 mt-1 w-5"></i>
+        <div>ドライブのファイルを右クリック →「バージョンを管理」→「新しいバージョンをアップロード」で上書き</div>
+      </div>
+      <div class="flex items-start gap-3">
+        <i class="fas fa-check text-blue-500 mt-1 w-5"></i>
+        <div>ウェブアプリのURLを再読み込みするだけで最新内容が表示されます（GASの再デプロイ不要）</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ファイル一覧 -->
+<div class="mt-8 bg-slate-100 rounded-xl p-4 text-xs text-slate-600">
+  <div class="font-bold text-slate-700 mb-2">📁 関連ファイル一覧</div>
+  <table class="w-full">
+    <tr><td class="py-1 pr-4 font-mono">murakami_itinerary_spreadsheet_clean.html</td><td>→ Driveにアップするページ本体</td></tr>
+    <tr><td class="py-1 pr-4 font-mono">murakami_itinerary_gas.gs</td><td>→ GAS Code.gsに貼り付けるコード（本ファイル）</td></tr>
+    <tr><td class="py-1 pr-4 font-mono">murakami_itinerary.ics</td><td>→ Outlook等へのカレンダーインポート用</td></tr>
+    <tr><td class="py-1 pr-4 font-mono">murakami_itinerary_デプロイ手順.html</td><td>→ この手順書</td></tr>
+  </table>
+</div>
+
+</body>
+</html>

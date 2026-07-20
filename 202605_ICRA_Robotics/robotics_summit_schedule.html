@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotics Summit &amp; Expo 2026 — 参加計画ガイド</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --card2: #1c2128;
+            --border: #30363d;
+            --tp: #e6edf3;
+            --ts: #8b949e;
+            --tm: #6e7681;
+            --ai: #3b82f6;
+            --ai-bg: rgba(59, 130, 246, .12);
+            --lo: #10b981;
+            --lo-bg: rgba(16, 185, 129, .12);
+            --he: #f59e0b;
+            --he-bg: rgba(245, 158, 11, .12);
+            --de: #a855f7;
+            --de-bg: rgba(168, 85, 247, .12);
+            --te: #ef4444;
+            --te-bg: rgba(239, 68, 68, .12);
+            --kn: #f8961e;
+            --kn-bg: rgba(248, 150, 30, .18);
+            --hl: #fbbf24;
+            --mu: #38bdf8;
+            --mi: #4ade80;
+            --sa: #fb923c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--tp);
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            padding: 24px 16px
+        }
+
+        /* Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 32px
+        }
+
+        .event-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, .2), rgba(168, 85, 247, .2));
+            border: 1px solid rgba(59, 130, 246, .4);
+            border-radius: 100px;
+            padding: 6px 18px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--ai);
+            margin-bottom: 12px
+        }
+
+        .event-badge::before {
+            content: "🤖";
+            font-size: 14px
+        }
+
+        h1 {
+            font-size: clamp(20px, 4vw, 32px);
+            font-weight: 800;
+            background: linear-gradient(135deg, #e6edf3, #8b949e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            margin-bottom: 6px
+        }
+
+        .subtitle {
+            color: var(--ts);
+            font-size: 13px;
+            margin-bottom: 4px
+        }
+
+        .loc {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--tm);
+            font-size: 12px
+        }
+
+        .loc::before {
+            content: "📍"
+        }
+
+        /* Alert */
+        .alert-box {
+            background: linear-gradient(135deg, rgba(251, 191, 36, .1), rgba(248, 150, 30, .08));
+            border: 1px solid rgba(251, 191, 36, .3);
+            border-left: 4px solid var(--hl);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto
+        }
+
+        .alert-box .icon {
+            font-size: 18px;
+            flex-shrink: 0
+        }
+
+        .alert-box p {
+            color: var(--ts);
+            font-size: 12.5px;
+            line-height: 1.6
+        }
+
+        .alert-box strong {
+            color: var(--hl)
+        }
+
+        /* Legend */
+        .legend-wrap {
+            max-width: 1100px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: flex-start
+        }
+
+        .legend-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center
+        }
+
+        .legend-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--tm);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-right: 2px
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11.5px;
+            color: var(--ts)
+        }
+
+        .ldot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%
+        }
+
+        /* Chips */
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            margin-top: 6px
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 9.5px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 100px;
+            letter-spacing: .02em;
+            white-space: nowrap
+        }
+
+        .mu {
+            background: rgba(56, 189, 248, .18);
+            border: 1px solid rgba(56, 189, 248, .45);
+            color: var(--mu)
+        }
+
+        .mi {
+            background: rgba(74, 222, 128, .15);
+            border: 1px solid rgba(74, 222, 128, .4);
+            color: var(--mi)
+        }
+
+        .sa {
+            background: rgba(251, 146, 60, .15);
+            border: 1px solid rgba(251, 146, 60, .4);
+            color: var(--sa)
+        }
+
+        .den {
+            background: rgba(52, 211, 153, .15);
+            border: 1px solid rgba(52, 211, 153, .4);
+            color: #34d399
+        }
+
+        .oka {
+            background: rgba(232, 121, 249, .15);
+            border: 1px solid rgba(232, 121, 249, .4);
+            color: #e879f9
+        }
+        .al {
+            background: rgba(255, 255, 255, .07);
+            border: 1px solid rgba(255, 255, 255, .18);
+            color: var(--ts)
+        }
+
+        .no {
+            background: rgba(110, 118, 129, .1);
+            border: 1px solid rgba(110, 118, 129, .25);
+            color: var(--tm);
+            font-style: italic;
+            font-weight: 400
+        }
+
+        /* Day section */
+        .day-section {
+            max-width: 1100px;
+            margin: 0 auto 44px auto
+        }
+
+        .day-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px
+        }
+
+        .day-label {
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 18px
+        }
+
+        .day-num {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .day-wd {
+            font-size: 10px;
+            color: var(--tm);
+            text-transform: uppercase;
+            letter-spacing: .1em
+        }
+
+        .day-info h2 {
+            font-size: 17px;
+            font-weight: 700
+        }
+
+        .day-info p {
+            color: var(--ts);
+            font-size: 12px;
+            margin-top: 2px
+        }
+
+        .cbadge {
+            margin-left: auto;
+            background: rgba(239, 68, 68, .15);
+            border: 1px solid rgba(239, 68, 68, .3);
+            color: #f87171;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 5px
+        }
+
+        .cbadge::before {
+            content: "⚡"
+        }
+
+        /* Grid */
+        .schedule-grid {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden
+        }
+
+        .grid-header {
+            display: grid;
+            grid-template-columns: 82px repeat(5, 1fr);
+            background: var(--card2);
+            border-bottom: 1px solid var(--border)
+        }
+
+        .ch {
+            padding: 11px 8px;
+            text-align: center;
+            border-right: 1px solid var(--border);
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: .04em
+        }
+
+        .ch:last-child {
+            border-right: none
+        }
+
+        .ch .room {
+            color: var(--tm);
+            font-weight: 400;
+            font-size: 9.5px;
+            display: block;
+            margin-top: 2px
+        }
+
+        .c-ai {
+            color: var(--ai)
+        }
+
+        .c-lo {
+            color: var(--lo)
+        }
+
+        .c-he {
+            color: var(--he)
+        }
+
+        .c-de {
+            color: var(--de)
+        }
+
+        .c-te {
+            color: var(--te)
+        }
+
+        .c-tm {
+            color: var(--tm)
+        }
+
+        .trow {
+            display: grid;
+            grid-template-columns: 82px repeat(5, 1fr);
+            border-bottom: 1px solid rgba(48, 54, 61, .5);
+            align-items: stretch;
+            min-height: 98px
+        }
+
+        .trow:last-child {
+            border-bottom: none
+        }
+
+        .trow.brow {
+            min-height: 50px;
+            background: rgba(110, 118, 129, .04)
+        }
+
+        .trow.krow {
+            min-height: 82px;
+            background: rgba(248, 150, 30, .04)
+        }
+
+        .trow.crow {
+            background: rgba(239, 68, 68, .04)
+        }
+
+        .tcell {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 11px 5px;
+            border-right: 1px solid var(--border);
+            background: var(--card2)
+        }
+
+        .tcell .t {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--tp);
+            font-variant-numeric: tabular-nums
+        }
+
+        .tcell .d {
+            font-size: 9px;
+            color: var(--tm);
+            margin-top: 3px
+        }
+
+        .tcell.hot {
+            background: rgba(239, 68, 68, .08)
+        }
+
+        .tcell .ci {
+            font-size: 14px;
+            margin-top: 4px
+        }
+
+        .tkcell {
+            padding: 9px 8px;
+            border-right: 1px solid rgba(48, 54, 61, .5);
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .tkcell:last-child {
+            border-right: none
+        }
+
+        .tkcell.empty {
+            background: rgba(255, 255, 255, .01)
+        }
+
+        .span-all {
+            grid-column: 2/7;
+            padding: 9px 13px;
+            display: flex;
+            align-items: center
+        }
+
+        /* Cards */
+        .sc {
+            border-radius: 8px;
+            padding: 9px 10px;
+            width: 100%;
+            cursor: default;
+            transition: transform .15s, box-shadow .15s
+        }
+
+        .sc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .4)
+        }
+
+        .sc .sp {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .02em;
+            margin-bottom: 1px
+        }
+
+        .sc .af {
+            font-size: 9.5px;
+            color: var(--tm);
+            margin-bottom: 4px
+        }
+
+        .sc .ti {
+            font-size: 11px;
+            color: rgba(230, 237, 243, .85);
+            line-height: 1.4
+        }
+
+        .sc .tg {
+            display: inline-block;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 5px;
+            letter-spacing: .05em;
+            text-transform: uppercase
+        }
+
+        .cai {
+            background: var(--ai-bg);
+            border: 1px solid rgba(59, 130, 246, .25)
+        }
+
+        .cai .sp {
+            color: var(--ai)
+        }
+
+        .cai .tg {
+            background: rgba(59, 130, 246, .2);
+            color: var(--ai)
+        }
+
+        .clo {
+            background: var(--lo-bg);
+            border: 1px solid rgba(16, 185, 129, .25)
+        }
+
+        .clo .sp {
+            color: var(--lo)
+        }
+
+        .clo .tg {
+            background: rgba(16, 185, 129, .2);
+            color: var(--lo)
+        }
+
+        .che {
+            background: var(--he-bg);
+            border: 1px solid rgba(245, 158, 11, .25)
+        }
+
+        .che .sp {
+            color: var(--he)
+        }
+
+        .che .tg {
+            background: rgba(245, 158, 11, .2);
+            color: var(--he)
+        }
+
+        .cde {
+            background: var(--de-bg);
+            border: 1px solid rgba(168, 85, 247, .25)
+        }
+
+        .cde .sp {
+            color: var(--de)
+        }
+
+        .cde .tg {
+            background: rgba(168, 85, 247, .2);
+            color: var(--de)
+        }
+
+        .cte {
+            background: var(--te-bg);
+            border: 1px solid rgba(239, 68, 68, .25)
+        }
+
+        .cte .sp {
+            color: var(--te)
+        }
+
+        .cte .tg {
+            background: rgba(239, 68, 68, .2);
+            color: var(--te)
+        }
+
+        .ckn {
+            background: var(--kn-bg);
+            border: 1px solid rgba(248, 150, 30, .35);
+            border-left: 3px solid var(--kn)
+        }
+
+        .ckn .sp {
+            color: var(--kn);
+            font-size: 12px
+        }
+
+        .ckn .tg {
+            background: rgba(248, 150, 30, .25);
+            color: var(--kn)
+        }
+
+        .cbk {
+            background: rgba(110, 118, 129, .08);
+            border: 1px dashed rgba(110, 118, 129, .3)
+        }
+
+        .cbk .sp {
+            color: var(--tm);
+            font-size: 11px
+        }
+
+        .cwn {
+            background: rgba(251, 191, 36, .08);
+            border: 1px dashed rgba(251, 191, 36, .45)
+        }
+
+        .cwn .sp {
+            color: var(--hl)
+        }
+
+        .cwn .tg {
+            background: rgba(251, 191, 36, .2);
+            color: var(--hl)
+        }
+
+        .glow-mu {
+            border-color: rgba(56, 189, 248, .55) !important;
+            box-shadow: 0 0 13px rgba(56, 189, 248, .15)
+        }
+
+        .glow-mi {
+            border-color: rgba(74, 222, 128, .55) !important;
+            box-shadow: 0 0 13px rgba(74, 222, 128, .15)
+        }
+
+        .glow-sa {
+            border-color: rgba(251, 146, 60, .55) !important;
+            box-shadow: 0 0 12px rgba(251, 146, 60, .14)
+        }
+
+        .empty-txt {
+            color: var(--tm);
+            font-size: 10px;
+            text-align: center;
+            opacity: .35;
+            font-style: italic
+        }
+
+        /* Warning strip */
+        .warn {
+            max-width: 1100px;
+            margin: 0 auto 28px auto;
+            background: rgba(251, 191, 36, .07);
+            border: 1px solid rgba(251, 191, 36, .25);
+            border-left: 3px solid var(--hl);
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--ts);
+            line-height: 1.6
+        }
+
+        .warn .icon {
+            font-size: 17px;
+            flex-shrink: 0
+        }
+
+        .warn strong {
+            color: #fbbf24
+        }
+
+        /* Priority section */
+        .pri-sec {
+            max-width: 1100px;
+            margin: 0 auto 36px auto
+        }
+
+        .pri-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .pri-title::before {
+            content: "🎯"
+        }
+
+        .pri-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 12px
+        }
+
+        .pri-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px
+        }
+
+        .pri-card .tb {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--tm);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: 8px
+        }
+
+        .pri-card h3 {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--ts);
+            margin-bottom: 8px
+        }
+
+        .popt {
+            display: flex;
+            gap: 9px;
+            align-items: flex-start;
+            margin-bottom: 7px;
+            padding: 8px 11px;
+            border-radius: 8px;
+            background: var(--card2);
+            border: 1px solid var(--border)
+        }
+
+        .popt .rt {
+            font-size: 10.5px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 5px;
+            white-space: nowrap;
+            align-self: flex-start
+        }
+
+        .popt .ct p {
+            font-size: 11.5px;
+            color: var(--tp);
+            font-weight: 600
+        }
+
+        .popt .ct span {
+            font-size: 10.5px;
+            color: var(--ts)
+        }
+
+        .popt .chips {
+            margin-top: 4px
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: var(--tm);
+            font-size: 11px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border);
+            max-width: 1100px;
+            margin: 0 auto
+        }
+
+        @media(max-width:768px) {
+
+            .grid-header,
+            .trow {
+                grid-template-columns: 58px repeat(5, 1fr)
+            }
+
+            .sc .ti {
+                display: none
+            }
+
+            .sc .sp {
+                font-size: 9.5px
+            }
+        }
+
+        /* ─── Modal ─── */
+        .sc {
+            cursor: pointer
+        }
+
+        .sc:hover .ti {
+            text-decoration: underline;
+            text-decoration-color: rgba(255, 255, 255, .2)
+        }
+
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .72);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        #modal-overlay.open {
+            display: flex
+        }
+
+        #modal-box {
+            background: #1c2128;
+            border: 1px solid #30363d;
+            border-radius: 18px;
+            max-width: 680px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, .7);
+            animation: modalIn .2s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(.94) translateY(10px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        #modal-box .mhead {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 22px 24px 16px;
+            border-bottom: 1px solid #30363d;
+        }
+
+        #modal-box .mhead-left {
+            flex: 1
+        }
+
+        #modal-box .mtag {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        #modal-box .mspeaker {
+            font-size: 18px;
+            font-weight: 800;
+            color: #e6edf3;
+            margin-bottom: 4px;
+        }
+
+        #modal-box .maffil {
+            font-size: 12px;
+            color: #6e7681;
+        }
+
+        #modal-close {
+            background: rgba(255, 255, 255, .07);
+            border: 1px solid #30363d;
+            color: #8b949e;
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background .15s;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+
+        #modal-close:hover {
+            background: rgba(255, 255, 255, .14);
+            color: #e6edf3
+        }
+
+        #modal-box .mbody {
+            padding: 20px 24px 24px
+        }
+
+        #modal-box .mtitle {
+            font-size: 14px;
+            font-weight: 700;
+            color: #e6edf3;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        #modal-box .mabstract {
+            font-size: 13px;
+            color: #8b949e;
+            line-height: 1.75;
+            white-space: pre-wrap;
+        }
+
+        #modal-box .mmeta {
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid #30363d;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        #modal-box .mmeta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #6e7681;
+        }
+
+        #modal-box .mmeta-item strong {
+            color: #8b949e;
+            font-weight: 600
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="page-header">
+        <div class="event-badge">Robotics Summit &amp; Expo 2026</div>
+        <h1>Robotics Summit &amp; Expo 2026 — 参加計画ガイド</h1>
+        <p class="subtitle">Boston Convention and Exhibition Center · Day 1–2 · May 27–28, 2026</p>
+        <span class="loc">415 Summer St, Boston, MA 02210</span>
+    </header>
+
+    <div class="alert-box">
+        <span class="icon">📋</span>
+        <p>公式アジェンダ（登壇者・セッション名・部屋番号）をもとに作成。担当者：<span class="chip mu" style="display:inline-flex">🔵 村上</span> <span
+                class="chip mi" style="display:inline-flex">🟢 三浦</span> <span class="chip sa"
+                style="display:inline-flex">🟠 佐藤</span>。⚡ 激戦区は赤背景。カードのグロー枠色は担当者を示す。</p>
+    </div>
+
+    <a href="icra2026_schedule.html"
+        style="display:flex;align-items:center;gap:8px;width:fit-content;margin:0 auto 20px auto;font-size:12px;font-weight:600;color:#a78bfa;text-decoration:none;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);padding:8px 18px;border-radius:8px;transition:border-color .15s"
+        onmouseover="this.style.borderColor='#a78bfa'" onmouseout="this.style.borderColor='rgba(168,85,247,.3)'">📋 ICRA
+        2026 参加計画ガイドへ →</a>
+
+    <!-- ========= CONFERENCE OVERVIEW ========= -->
+    <div style="max-width:1100px;margin:0 auto 22px auto;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+
+        <!-- Robotics Summit card -->
+        <div style="background:#1c2128;border:1px solid #30363d;border-radius:14px;padding:16px 20px;">
+            <div
+                style="font-size:10px;font-weight:700;color:#6e7681;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">
+                📍 Boston · May 27–28, 2026</div>
+            <div style="font-size:15px;font-weight:800;color:#e6edf3;margin-bottom:10px;">Robotics Summit &amp; Expo
+                2026</div>
+            <div style="font-size:11px;color:#8b949e;margin-bottom:8px;">参加者</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <span class="chip mu">🔵 村上</span>
+                <span class="chip mi">🟢 三浦</span>
+                <span class="chip sa">🟠 佐藤</span>
+            </div>
+        </div>
+
+        <!-- ICRA card -->
+        <div
+            style="background:#1c2128;border:1px solid #30363d;border-radius:14px;padding:16px 20px;border-left:3px solid #a78bfa;">
+            <div
+                style="font-size:10px;font-weight:700;color:#6e7681;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">
+                📍 Vienna, Austria · Jun 1–5, 2026</div>
+            <div style="font-size:15px;font-weight:800;color:#e6edf3;margin-bottom:10px;">ICRA 2026 <span
+                    style="font-size:11px;color:#8b949e;font-weight:400;">IEEE International Conference on Robotics and
+                    Automation</span></div>
+            <div style="font-size:11px;color:#8b949e;margin-bottom:8px;">参加者（4名）</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+                <span class="chip mu">🔵 村上</span>
+                <span class="chip sa">🟠 佐藤</span>
+                <span
+                    style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.4);color:#34d399;white-space:nowrap">🟢
+                    傳田</span>
+                <span
+                    style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;background:rgba(232,121,249,.15);border:1px solid rgba(232,121,249,.4);color:#e879f9;white-space:nowrap">🟣
+                    岡部</span>
+                <span style="font-size:10px;color:#6e7681;align-self:center;">（傳田・岡部は本会議のみ · 三浦は不参加）</span>
+                <a href="icra2026_schedule.html"
+                    style="margin-left:auto;font-size:11px;font-weight:600;color:#a78bfa;text-decoration:none;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);padding:3px 10px;border-radius:6px;">📋
+                    ICRA参加ガイド →</a>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="legend-wrap">
+        <div class="legend-group">
+            <span class="legend-label">Track</span>
+            <div class="legend-item">
+                <div class="ldot" style="background:var(--ai)"></div>AI / 254A
+            </div>
+            <div class="legend-item">
+                <div class="ldot" style="background:var(--lo)"></div>Logistics / 254B
+            </div>
+            <div class="legend-item">
+                <div class="ldot" style="background:var(--he)"></div>Healthcare / 255
+            </div>
+            <div class="legend-item">
+                <div class="ldot" style="background:var(--de)"></div>Development / 253
+            </div>
+            <div class="legend-item">
+                <div class="ldot" style="background:var(--te)"></div>Technologies / 251
+            </div>
+        </div>
+        <div class="legend-group">
+            <span class="legend-label">担当者</span>
+            <span class="chip mu">🔵 村上（モデルベース制御）</span>
+            <span class="chip mi">🟢 三浦（メカ）</span>
+            <span class="chip sa">🟠 佐藤（組み込みSW）</span>
+            <span class="chip al">👥 全員</span>
+            <span class="chip no">カバー外</span>
+        </div>
+    </div>
+
+
+    <!-- ==================== DAY 1 ==================== -->
+    <section class="day-section">
+        <div class="day-header">
+            <div class="day-label">
+                <div class="day-num">27</div>
+                <div class="day-wd">Wed · May</div>
+            </div>
+            <div class="day-info">
+                <h2>Day 1 — 5月27日（水）</h2>
+                <p>Opening Keynote: Russ Tedrake (Toyota Research Institute) ／ 1:45 PM に5並行</p>
+            </div>
+            <div class="cbadge">激戦区 2か所</div>
+        </div>
+
+        <div class="schedule-grid">
+            <div class="grid-header">
+                <div class="ch c-tm" style="font-size:9.5px;">時間</div>
+                <div class="ch c-ai">AI<span class="room">254 A</span></div>
+                <div class="ch c-lo">Logistics<span class="room">254 B</span></div>
+                <div class="ch c-he">Healthcare<span class="room">255</span></div>
+                <div class="ch c-de">Development<span class="room">253 ABC</span></div>
+                <div class="ch c-te">Technologies<span class="room">251</span></div>
+            </div>
+
+            <!-- 9:00 Welcome -->
+            <div class="trow brow">
+                <div class="tcell"><span class="t">9:00</span><span class="d">5min</span></div>
+                <div class="span-all">
+                    <div class="sc cbk" style="max-width:460px">
+                        <div class="sp">🎙️ Welcome Remarks — Steve Crowe</div>
+                        <div class="af">Executive Editor, The Robot Report / WTWH Media</div>
+                        <div class="chips"><span class="chip al">👥 全員</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9:05 Opening Keynote -->
+            <div class="trow krow">
+                <div class="tcell"><span class="t">9:05</span><span class="d">45min</span></div>
+                <div class="span-all">
+                    <div class="sc ckn" style="max-width:780px">
+                        <div class="sp">⭐ Opening Keynote — Russ Tedrake</div>
+                        <div class="af">Senior Vice President, Large Behavior Models | Toyota Research Institute</div>
+                        <div class="ti">（全体基調講演 — Physical AI・大規模行動モデルの最前線）</div>
+                        <span class="tg">OPENING KEYNOTE</span>
+                        <div class="chips"><span class="chip mu">🔵 村上</span><span class="chip mi">🟢 三浦</span><span
+                                class="chip sa">🟠 佐藤</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10:45 Break -->
+            <div class="trow brow">
+                <div class="tcell"><span class="t">10:45</span><span class="d">45min</span></div>
+                <div class="span-all">
+                    <div class="sc cbk" style="max-width:360px">
+                        <div class="sp">☕ Exhibit Hall &amp; Networking Break</div>
+                        <div class="chips"><span class="chip al">👥 展示ホール巡回</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11:30 -->
+            <div class="trow">
+                <div class="tcell"><span class="t">11:30</span><span class="d">45min</span></div>
+                <div class="tkcell">
+                    <div class="sc cai">
+                        <div class="sp">Kavitha Velusamy</div>
+                        <div class="af">SVP Software &amp; AI | Brain Corp</div>
+                        <div class="ti">Building Scalable Robot Systems That Learn, Adapt, and Earn Trust</div>
+                        <span class="tg">AI</span>
+                        <div class="chips"><span class="chip sa">🟠 佐藤</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc clo">
+                        <div class="sp">Anthony Jules</div>
+                        <div class="af">Co-Founder &amp; CEO | Robust AI</div>
+                        <div class="ti">Building Warehouse Robots People Actually Want to Work With</div>
+                        <span class="tg">Logistics</span>
+                        <div class="chips"><span class="chip mi">🟢 三浦</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc che">
+                        <div class="sp">Conor Walsh</div>
+                        <div class="af">Maeder Prof. | Harvard SEAS</div>
+                        <div class="ti">Scaling Soft Wearable Robots from the Lab to the Market</div>
+                        <span class="tg">Healthcare</span>
+                        <div class="chips"><span class="chip mu">🔵 村上</span></div>
+                    </div>
+                </div>
+                <div class="tkcell empty">
+                    <div class="empty-txt">— なし —</div>
+                </div>
+                <div class="tkcell empty">
+                    <div class="empty-txt">— なし —</div>
+                </div>
+            </div>
+
+            <!-- 12:15 Lunch -->
+            <div class="trow brow">
+                <div class="tcell"><span class="t">12:15</span><span class="d">90min</span></div>
+                <div class="span-all">
+                    <div class="sc cbk" style="max-width:380px">
+                        <div class="sp">🍽️ Exhibit Hall &amp; Networking Lunch</div>
+                        <div class="chips"><span class="chip al">👥 展示ホール巡回 &amp; 昼食</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1:45 ⚡ -->
+            <div class="trow crow">
+                <div class="tcell hot"><span class="t">1:45</span><span class="d">45min</span><span class="ci">⚡</span>
+                </div>
+                <div class="tkcell">
+                    <div class="sc cai glow-mu">
+                        <div class="sp">🎙️ Panel: Data Flywheel for AI-Native Robots</div>
+                        <div class="af">Barash (Roboto AI), Niday (Bonsai), Vivian Chu + others</div>
+                        <div class="ti">Building the Data Flywheel for AI-Native Robots</div>
+                        <span class="tg">AI · PANEL</span>
+                        <div class="chips"><span class="chip mu">🔵 村上</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc clo glow-sa">
+                        <div class="sp">Chris Morgan</div>
+                        <div class="af">Sr. Director R&amp;D | Bastian Solutions</div>
+                        <div class="ti">Where AI Delivers in Material Handling</div>
+                        <span class="tg">Logistics</span>
+                        <div class="chips"><span class="chip sa">🟠 佐藤</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc che">
+                        <div class="sp">Robert Brooks</div>
+                        <div class="af">CEO | ForceN</div>
+                        <div class="ti">Best Practices for Force-Torque Sensing in Surgical Robotics</div>
+                        <span class="tg">Healthcare</span>
+                        <div class="chips"><span class="chip no">カバー外</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc cde">
+                        <div class="sp">Gavin Kenneally</div>
+                        <div class="af">Co-Founder &amp; CEO | Ghost Robotics</div>
+                        <div class="ti">From Prototype to Perimeter: 10 Years of Legged Robotics</div>
+                        <span class="tg">Development</span>
+                        <div class="chips"><span class="chip no">カバー外</span></div>
+                    </div>
+                </div>
+                <div class="tkcell" style="flex-direction:column;gap:6px;">
+                    <div class="sc cte glow-mi">
+                        <div class="sp">Ben Hallworth (maxon)</div>
+                        <div class="af">Systems Engineer, Robotic Drive Systems | maxon</div>
+                        <div class="ti" style="font-size:10px">Building from Both Sides: Actuator-Based Solutions for Bridging the Sim2Real Gap</div>
+                        <span class="tg">Tech ﾂｷ Room 251</span>
+                        <div class="chips"><span class="chip mi">泙 荳画ｵｦ</span></div>
+                    </div>
+                    <div class="sc cwn">
+                        <div class="sp">笞・・Rohit John Varghese (Contoro)</div>
+                        <div class="af" style="color:rgba(251,191,36,.7)">Director of Systems Engineering | Contoro Robotics</div>
+                        <div class="ti" style="font-size:10px"><b style="color:#fbbf24">蜷悟ｮ､蜷梧凾蛻ｻ・亥・蠑冗｢ｺ隱肴ｸ茨ｼ・</b> The Robot MCP Ecosystem: Building an Open Bridge Between AI and Robotics</div>
+                        <span class="tg">Tech ﾂｷ 笞・・蜷悟ｮ､遒ｺ隱・/span>
+                        <div class="chips"><span class="chip mi">泙 荳画ｵｦ</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2:45 -->
+            <div class="trow">
+                <div class="tcell"><span class="t">2:45</span><span class="d">45min</span></div>
+                <div class="tkcell">
+                    <div class="sc cai glow-sa">
+                        <div class="sp">Chris Matthieu</div>
+                        <div class="af">VP Developer Ecosystem | RealSense (Intel)</div>
+                        <div class="ti">Let's Build an Embodied AI Robot Together <span
+                                style="color:var(--tm);font-size:9px">（ライブデモ）</span></div>
+                        <span class="tg">AI</span>
+                        <div class="chips"><span class="chip sa">🟠 佐藤</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc clo glow-mi">
+                        <div class="sp">Jan Zizka</div>
+                        <div class="af">Co-Founder &amp; CEO | Brightpick</div>
+                        <div class="ti">When Robots Don't Sleep: The Path Toward Lights-Out Warehouses</div>
+                        <span class="tg">Logistics</span>
+                        <div class="chips"><span class="chip mi">🟢 三浦</span></div>
+                    </div>
+                </div>
+                <div class="tkcell empty">
+                    <div class="empty-txt">— なし —</div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc cde glow-mu">
+                        <div class="sp">Ted Larson</div>
+                        <div class="af">Co-Founder &amp; CEO | OLogic</div>
+                        <div class="ti">Building Better Robots: Balancing Hardware and Software for Real-World Success
+                        </div>
+                        <span class="tg">Development</span>
+                        <div class="chips"><span class="chip mu">🔵 村上</span></div>
+                    </div>
+                </div>
+                <div class="tkcell empty">
+                    <div class="empty-txt">— なし —</div>
+                </div>
+            </div>
+
+            <!-- 3:30 Break -->
+            <div class="trow brow">
+                <div class="tcell"><span class="t">3:30</span><span class="d">45min</span></div>
+                <div class="span-all">
+                    <div class="sc cbk" style="max-width:360px">
+                        <div class="sp">☕ Exhibit Hall &amp; Networking</div>
+                        <div class="chips"><span class="chip al">👥 展示ホール巡回</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4:15 -->
+            <div class="trow">
+                <div class="tcell"><span class="t">4:15</span><span class="d">45min</span></div>
+                <div class="tkcell empty">
+                    <div class="empty-txt">— なし —</div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc clo glow-mu">
+                        <div class="sp">現場導入パネル</div>
+                        <div class="af">（登壇者 公式サイトで要確認）</div>
+                        <div class="ti">Lessons from Taking Robots Out of the Lab and Into the Field</div>
+                        <span class="tg">Logistics · PANEL</span>
+                        <div class="chips"><span class="chip mu">🔵 村上</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc che">
+                        <div class="sp">Hospital Logistics Panel</div>
+                        <div class="af">Krause (SKA) · Seiff (Aethon) · Crabb (Rovex)</div>
+                        <div class="ti">How to Successfully Design and Scale Hospital Logistics Robots</div>
+                        <span class="tg">Healthcare · PANEL</span>
+                        <div class="chips"><span class="chip no">カバー外</span></div>
+                    </div>
+                </div>
+                <div class="tkcell empty">
+                    <div class="empty-txt">— なし —</div>
+                </div>
+                <div class="tkcell empty">
+                    <div class="empty-txt">— なし —</div>
+                </div>
+            </div>
+
+            <!-- 5:00 Reception -->
+            <div class="trow brow">
+                <div class="tcell"><span class="t">5:00</span><span class="d">60min</span></div>
+                <div class="span-all">
+                    <div class="sc cbk" style="max-width:480px">
+                        <div class="sp">🥂 Mix &amp; Mingle Networking Reception</div>
+                        <div class="chips"><span class="chip al">👥 全員参加推奨（名刺交換・登壇者へのアプローチ）</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6:00 Awards -->
+            <div class="trow brow">
+                <div class="tcell"><span class="t">6:00</span><span class="d">120min</span></div>
+                <div class="span-all">
+                    <div class="sc cbk" style="max-width:480px">
+                        <div class="sp">🏆 RBR50 Awards Dinner</div>
+                        <div class="chips"><span class="chip al">&#x1F465; &#x5168;&#x54E1;</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ==================== DAY 2 ==================== -->
+    <section class="day-section">
+        <div class="day-header">
+            <div class="day-label">
+                <div class="day-num">28</div>
+                <div class="day-wd">Thu · May</div>
+            </div>
+            <div class="day-info">
+                <h2>Day 2 — 5月28日（木）</h2>
+                <p>Keynote: Mikell Taylor (GM) ／ 11:30 &amp; 1:45 PM が最大の激戦区</p>
+            </div>
+            <div class="cbadge">激戦区 2か所</div>
+        </div>
+
+        <div class="schedule-grid">
+            <div class="grid-header">
+                <div class="ch c-tm" style="font-size:9.5px;">時間</div>
+                <div class="ch c-ai">AI<span class="room">254 A</span></div>
+                <div class="ch c-lo">Logistics<span class="room">254 B</span></div>
+                <div class="ch c-he">Healthcare<span class="room">255</span></div>
+                <div class="ch c-de">Development<span class="room">253 ABC</span></div>
+                <div class="ch c-te">Technologies<span class="room">251</span></div>
+            </div>
+
+            <!-- 8:00 Women in Robotics -->
+            <div class="trow brow">
+                <div class="tcell"><span class="t">8:00</span><span class="d">60min</span></div>
+                <div class="span-all">
+                    <div class="sc cbk" style="max-width:560px">
+                        <div class="sp">👩‍🔬 Women in Robotics Breakfast</div>
+                        <div class="af">Mikell Taylor (GM) · Joyce Sidopoulos (MassRobotics)</div>
+                        <div class="chips"><span class="chip no">任意参加</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10:00 Keynote Day2 -->
+            <div class="trow krow">
+                <div class="tcell"><span class="t">10:00</span><span class="d">45min</span></div>
+                <div class="span-all">
+                    <div class="sc ckn" style="max-width:780px">
+                        <div class="sp">⭐ Day 2 Keynote — Mikell Taylor</div>
+                        <div class="af">Director, Robotics Strategy | General Motors</div>
+                        <div class="ti">What Makes a Robot Worthy? — 信頼・安全・採用の3条件 （Room 253 ABC）</div>
+                        <span class="tg">KEYNOTE</span>
+                        <div class="chips"><span class="chip mu">🔵 村上</span><span class="chip mi">🟢 三浦</span><span
+                                class="chip sa">🟠 佐藤</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10:45 Break -->
+            <div class="trow brow">
+                <div class="tcell"><span class="t">10:45</span><span class="d">45min</span></div>
+                <div class="span-all">
+                    <div class="sc cbk" style="max-width:360px">
+                        <div class="sp">☕ Exhibit Hall &amp; Networking Break</div>
+                        <div class="chips"><span class="chip al">👥 展示ホール巡回</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11:30 ⚡ -->
+            <div class="trow crow">
+                <div class="tcell hot"><span class="t">11:30</span><span class="d">45min</span><span class="ci">⚡</span>
+                </div>
+                <div class="tkcell">
+                    <div class="sc cai glow-mu">
+                        <div class="sp">YJ Lim ★</div>
+                        <div class="af">Principal Technical Product Lead | MathWorks</div>
+                        <div class="ti">Accelerating Industrial Robotics Applications with AI（VLA・RL・Simulink）</div>
+                        <span class="tg">AI ★ 最優先</span>
+                        <div class="chips"><span class="chip mu">🔵 村上 ★</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc clo glow-sa">
+                        <div class="sp">AMR統合セッション</div>
+                        <div class="af">（登壇者未記載）</div>
+                        <div class="ti">Integrating AMRs with Supporting Software Systems for Efficient Packing</div>
+                        <span class="tg">Logistics</span>
+                        <div class="chips"><span class="chip sa">🟠 佐藤</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc che">
+                        <div class="sp">Darren Porras</div>
+                        <div class="af">Market Dev. Manager | RTI (Real-Time Innovations)</div>
+                        <div class="ti">The Sub-Millisecond Scalpel: Bridging the Latency Gap in Telesurgery</div>
+                        <span class="tg">Healthcare</span>
+                        <div class="chips"><span class="chip no">カバー外</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc cde glow-mi">
+                        <div class="sp">⭐ State of Humanoids Panel</div>
+                        <div class="af">Pras Velagapudi CTO (Agility) · Aaron Prather (ASTM)</div>
+                        <div class="ti">ヒューマノイドの現在：locomotion・manipulation・AI・安全・初期パイロットの教訓</div>
+                        <span class="tg">Dev ★ 注目</span>
+                        <div class="chips"><span class="chip mi">🟢 三浦 ★</span></div>
+                    </div>
+                </div>
+                <div class="tkcell empty">
+                    <div class="empty-txt">— なし —</div>
+                </div>
+            </div>
+
+            <!-- 12:15 Lunch -->
+            <div class="trow brow">
+                <div class="tcell"><span class="t">12:15</span><span class="d">90min</span></div>
+                <div class="span-all">
+                    <div class="sc cbk" style="max-width:380px">
+                        <div class="sp">🍽️ Exhibit Hall &amp; Networking Lunch</div>
+                        <div class="chips"><span class="chip al">👥 展示ホール巡回 &amp; 昼食</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1:45 ⚡ -->
+            <div class="trow crow">
+                <div class="tcell hot"><span class="t">1:45</span><span class="d">45min</span><span class="ci">⚡</span>
+                </div>
+                <div class="tkcell">
+                    <div class="sc cai">
+                        <div class="sp">Andrew Stout</div>
+                        <div class="af">Roboticist &amp; ML Engineer | The AI Institute</div>
+                        <div class="ti">Rebuilding the Robotics Developer Experience（Bazel×ROS2、モノレポ戦略）</div>
+                        <span class="tg">AI</span>
+                        <div class="chips"><span class="chip mi">🟢 三浦</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc clo">
+                        <div class="sp">Omar Asali</div>
+                        <div class="af">Chairman &amp; CEO | Ranpak</div>
+                        <div class="ti">How Physical AI Is Driving Profitable, Scalable Sustainability in Warehouses
+                        </div>
+                        <span class="tg">Logistics</span>
+                        <div class="chips"><span class="chip no">カバー外</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc che">
+                        <div class="sp">Joyce Sidopoulos</div>
+                        <div class="af">Co-Founder &amp; COO | MassRobotics</div>
+                        <div class="ti">MassRobotics Healthcare Startup Showcase（5社ピッチ）</div>
+                        <span class="tg">Healthcare</span>
+                        <div class="chips"><span class="chip no">カバー外</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc cde glow-sa">
+                        <div class="sp">⭐ Joshua Joseph</div>
+                        <div class="af">AMR Deployment Engineer | Tesla</div>
+                        <div class="ti">Tesla's Roadmap for Scaling AMRs in Legacy U.S. Factories</div>
+                        <span class="tg">Dev ★ 必見</span>
+                        <div class="chips"><span class="chip sa">🟠 佐藤 ★</span></div>
+                    </div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc cte glow-mu">
+                        <div class="sp">⭐ Jacob Perrin</div>
+                        <div class="af">Engineering Manager | dSPACE</div>
+                        <div class="ti">ROS-in-the-Loop: Integrating Open-Source Robotics with Industrial Validation
+                            Tools（HIL/SIL/MIL）</div>
+                        <span class="tg">Tech ★★ 最優先</span>
+                        <div class="chips"><span class="chip mu">🔵 村上 ★★</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2:30 -->
+            <div class="trow">
+                <div class="tcell"><span class="t">2:30</span><span class="d">45min</span></div>
+                <div class="tkcell empty">
+                    <div class="empty-txt">— なし —</div>
+                </div>
+                <div class="tkcell empty">
+                    <div class="empty-txt">— なし —</div>
+                </div>
+                <div class="tkcell empty">
+                    <div class="empty-txt">— なし —</div>
+                </div>
+                <div class="tkcell empty">
+                    <div class="empty-txt">— なし —</div>
+                </div>
+                <div class="tkcell">
+                    <div class="sc cte glow-sa">
+                        <div class="sp">⭐ Giovanni Campanella</div>
+                        <div class="af">GM, Industrial Automation &amp; Robotics | Texas Instruments</div>
+                        <div class="ti">Building Humanoids That Scale: A Systems and Semiconductor
+                            Perspective（エッジAI・モータ制御・電力）</div>
+                        <span class="tg">Tech ★ 注目</span>
+                        <div class="chips"><span class="chip sa">🟠 佐藤 ★</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ==================== ENGINEERING THEATER ==================== -->
+    <section class="pri-sec" style="margin-bottom:28px;">
+        <div class="pri-title" style="margin-bottom:12px;">鹿 Engineering Theater ・・豕ｨ逶ｮ逋ｻ螢・・ｼ医い繧ｸ繧ｧ繝ｳ繝譛ｪ謗ｲ霈・/ 繧ｹ繝斐・繧ｫ繝ｼ繝ｪ繧ｹ繝育｢ｺ隱榊・・・/div>
+        <div style="background:#161b22;border:1px solid #30363d;border-radius:14px;padding:16px 20px;">
+            <p style="font-size:11.5px;color:#8b949e;margin-bottom:12px;line-height:1.6;">莉･荳九・蜈ｬ蠑上せ繝斐・繧ｫ繝ｼ繝ｪ繧ｹ繝医↓謗ｲ霈画ｸ医∩縺縺後√ヶ繝ｬ繝ｼ繧ｯ繧｢繧ｦ繝医い繧ｸ繧ｧ繝ｳ繝縺ｫ縺ｯ譛ｪ逋ｻ骭ｲ縺ｮ逋ｻ螢・・ｼ・026-02-22譎らせ・峨・ngineering Theater繧ｻ繝・す繝ｧ繝ｳ繝ｻ蝓ｺ隱ｿ繧､繝ｳ繧ｿ繝薙Η繝ｼ繝ｻ霑ｽ蜉繝代ロ繝ｫ縺ｨ縺励※逋ｺ陦ｨ縺輔ｌ繧句庄閭ｽ諤ｧ縺碁ｫ倥＞縲・/p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;">
+                <div style="background:#1c2128;border:1px solid rgba(248,150,30,.4);border-radius:10px;padding:12px;">
+                    <div style="font-size:12px;font-weight:700;color:#f8961e;margin-bottom:4px;">箝・Noland Arbaugh</div>
+                    <div style="font-size:10.5px;color:#6e7681;margin-bottom:6px;">World's First Neuralink User</div>
+                    <div style="font-size:11px;color:#8b949e;">閼ｳ-繧ｳ繝ｳ繝斐Η繝ｼ繧ｿ繧､繝ｳ繧ｿ繝ｼ繝輔ぉ繝ｼ繧ｹ・・CI・牙ｮ滉ｽ馴ｨ薙う繝ｳ繧ｿ繝薙Η繝ｼ縲ゅΟ繝懊ユ繧｣繧ｯ繧ｹﾃ礼･樒ｵ悟ｷ･蟄ｦ縺ｮ莠､蟾ｮ轤ｹ縲ょ渕隱ｿ繧､繝ｳ繧ｿ繝薙Η繝ｼ縺ｨ縺励※逋ｺ陦ｨ莠亥ｮ壹・/div>
+                    <div style="margin-top:6px;"><span class="chip al">則 蜈ｨ蜩｡</span></div>
+                </div>
+                <div style="background:#1c2128;border:1px solid rgba(168,85,247,.4);border-radius:10px;padding:12px;">
+                    <div style="font-size:12px;font-weight:700;color:#a855f7;margin-bottom:4px;">箝・Alberto Rodriguez</div>
+                    <div style="font-size:10.5px;color:#6e7681;margin-bottom:6px;">Director of Robot Behavior, Atlas | Boston Dynamics</div>
+                    <div style="font-size:11px;color:#8b949e;">Atlas繝偵Η繝ｼ繝槭ヮ繧､繝峨・陦悟虚蛻ｶ蠕｡繝ｻAI邨ｱ蜷医・oston Dynamics縺ｨ縺励※譛豕ｨ逶ｮ逋ｻ螢・・・/div>
+                    <div style="margin-top:6px;"><span class="chip mi">泙 荳画ｵｦ 笘・/span></div>
+                </div>
+                <div style="background:#1c2128;border:1px solid rgba(59,130,246,.4);border-radius:10px;padding:12px;">
+                    <div style="font-size:12px;font-weight:700;color:#3b82f6;margin-bottom:4px;">箝・John Wall</div>
+                    <div style="font-size:10.5px;color:#6e7681;margin-bottom:6px;">President | QNX (BlackBerry)</div>
+                    <div style="font-size:11px;color:#8b949e;">Building Reliable Robots at Scale 窶・Safety, Determinism, Real-Time Performance縲２NXﾃ礼肇讌ｭ繝ｭ繝懊ャ繝井ｿ｡鬆ｼ諤ｧ菫晁ｨｼ縲ゅΜ繧｢繝ｫ繧ｿ繧､繝OS隕也せ縺ｮ螳牙・險ｭ險医・/div>
+                    <div style="margin-top:6px;"><span class="chip mu">鳩 譚台ｸ・/span><span class="chip sa" style="margin-left:4px;">泛 菴占陸</span></div>
+                </div>
+                <div style="background:#1c2128;border:1px solid rgba(16,185,129,.4);border-radius:10px;padding:12px;">
+                    <div style="font-size:12px;font-weight:700;color:#10b981;margin-bottom:4px;">Brian Gerkey</div>
+                    <div style="font-size:10.5px;color:#6e7681;margin-bottom:6px;">CTO | Intrinsic (Google DeepMind)</div>
+                    <div style="font-size:11px;color:#8b949e;">繝ｭ繝懊ユ繧｣繧ｯ繧ｹOSS繝ｻROS2繧ｨ繧ｳ繧ｷ繧ｹ繝・Β蜑ｵ蟋玖・・荳莠ｺ縲・oogle DeepMind繝ｭ繝懊ユ繧｣繧ｯ繧ｹ驛ｨ髢縺ｮ譛蜑咲ｷ壽橿陦薙・/div>
+                    <div style="margin-top:6px;"><span class="chip mu">鳩 譚台ｸ・/span></div>
+                </div>
+                <div style="background:#1c2128;border:1px solid rgba(251,146,60,.4);border-radius:10px;padding:12px;">
+                    <div style="font-size:12px;font-weight:700;color:#fb923c;margin-bottom:4px;">Dave Coleman</div>
+                    <div style="font-size:10.5px;color:#6e7681;margin-bottom:6px;">Founder &amp; CPO | PickNik Robotics</div>
+                    <div style="font-size:11px;color:#8b949e;">MoveIt2繝ｻROS2繧｢繝ｼ繝繝励Λ繝ｳ繝九Φ繧ｰ縲ゅが繝ｼ繝励Φ繧ｽ繝ｼ繧ｹﾃ礼肇讌ｭ繝ｭ繝懊ャ繝医い繝ｼ繝險育判縺ｮ隨ｬ荳莠ｺ閠・・/div>
+                    <div style="margin-top:6px;"><span class="chip mu">鳩 譚台ｸ・/span></div>
+                </div>
+                <div style="background:#1c2128;border:1px solid rgba(52,211,153,.4);border-radius:10px;padding:12px;">
+                    <div style="font-size:12px;font-weight:700;color:#34d399;margin-bottom:4px;">Anders Beck</div>
+                    <div style="font-size:10.5px;color:#6e7681;margin-bottom:6px;">VP, AI Robotics Products | Universal Robots</div>
+                    <div style="font-size:11px;color:#8b949e;">蜊碑ｪｿ繝ｭ繝懊ャ繝茨ｼ医さ繝懊ャ繝茨ｼ嘉輸I陬ｽ蜩√６R繧ｷ繝ｪ繝ｼ繧ｺ谺｡荳紋ｻ｣髢狗匱縺ｨAI驕ｩ逕ｨ縺ｮ逕｣讌ｭ螻暮幕縲・/div>
+                    <div style="margin-top:6px;"><span class="chip mi">泙 荳画ｵｦ</span></div>
+                </div>
+                <div style="background:#1c2128;border:1px solid rgba(239,68,68,.4);border-radius:10px;padding:12px;">
+                    <div style="font-size:12px;font-weight:700;color:#ef4444;margin-bottom:4px;">Andy Lonsberry</div>
+                    <div style="font-size:10.5px;color:#6e7681;margin-bottom:6px;">CEO | Path Robotics</div>
+                    <div style="font-size:11px;color:#8b949e;">AI貅ｶ謗･繝ｭ繝懊ャ繝医ょｭｦ鄙貞梛繝槭ル繝斐Η繝ｬ繝ｼ繧ｷ繝ｧ繝ｳ縺ｮ驥冗肇蛹悶り｣ｽ騾讌ｭﾃ励Ο繝懊ャ繝・I縺ｮ螳溯ｨｼ萓九・/div>
+                    <div style="margin-top:6px;"><span class="chip sa">泛 菴占陸</span></div>
+                </div>
+                <div style="background:#1c2128;border:1px solid rgba(245,158,11,.4);border-radius:10px;padding:12px;">
+                    <div style="font-size:12px;font-weight:700;color:#f59e0b;margin-bottom:4px;">John Black</div>
+                    <div style="font-size:10.5px;color:#6e7681;margin-bottom:6px;">CTO | Brain Corp</div>
+                    <div style="font-size:11px;color:#8b949e;">Kavitha Velusamy (SVP)縺ｨ蜈ｱ縺ｫBrain Corp謚陦馴劵縲・MR繝輔Μ繝ｼ繝・荳・床縺ｮ謚陦薙い繝ｼ繧ｭ繝・け繝√Ε雋ｬ莉ｻ閠・・/div>
+                    <div style="margin-top:6px;"><span class="chip sa">泛 菴占陸</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WARNING -->
+    <div class="warn">
+        <span class="icon">⚠️</span>
+        <div>
+            <strong>【確定情報】Contoro vs maxon — Room 251 同室同時刻</strong><br>
+            1:45 PM Day1、Room 251 に maxon（Ben Hallworth）と Contoro Robotics（Rohit
+            Varghese）が<strong>同時刻・同部屋</strong>でスケジュールされ、Contoro の説明文はmaxonのコピー。Contoro の実テーマは「Robot MCP
+            Ecosystem」。三浦担当、当日アナウンスを最優先で確認。
+        </div>
+    </div>
+
+
+    <!-- PRIORITY SECTION -->
+    <section class="pri-sec">
+        <div class="pri-title">激戦区 担当割り振りサマリ（全4コマ）</div>
+        <div class="pri-grid">
+
+            <!-- Day1 11:30 -->
+            <div class="pri-card">
+                <div class="tb">Day1 · 11:30 — 3名分散</div>
+                <h3>3トラック同時</h3>
+                <div class="popt">
+                    <span class="rt" style="background:rgba(59,130,246,.2);color:var(--ai)">254A</span>
+                    <div class="ct">
+                        <p>Brain Corp — Kavitha Velusamy</p><span>AMRスケーリング・学習型自律制御</span>
+                        <div class="chips"><span class="chip sa">🟠 佐藤</span></div>
+                    </div>
+                </div>
+                <div class="popt">
+                    <span class="rt" style="background:rgba(16,185,129,.2);color:var(--lo)">254B</span>
+                    <div class="ct">
+                        <p>Robust AI — Anthony Jules</p><span>倉庫ロボット設計の現実</span>
+                        <div class="chips"><span class="chip mi">🟢 三浦</span></div>
+                    </div>
+                </div>
+                <div class="popt">
+                    <span class="rt" style="background:rgba(245,158,11,.2);color:var(--he)">255</span>
+                    <div class="ct">
+                        <p>Harvard — Conor Walsh</p><span>ウェアラブルロボット × 制御・商用化</span>
+                        <div class="chips"><span class="chip mu">🔵 村上</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day1 1:45 -->
+            <div class="pri-card">
+                <div class="tb">Day1 · 1:45 PM ⚡ — 5並行（3名＋2カバー外）</div>
+                <h3>Room 251 の二重割り当て問題あり</h3>
+                <div class="popt">
+                    <span class="rt" style="background:rgba(59,130,246,.2);color:var(--ai)">254A</span>
+                    <div class="ct">
+                        <p>Data Flywheel Panel</p><span>AI-Native Robots のデータ戦略</span>
+                        <div class="chips"><span class="chip mu">🔵 村上</span></div>
+                    </div>
+                </div>
+                <div class="popt">
+                    <span class="rt" style="background:rgba(16,185,129,.2);color:var(--lo)">254B</span>
+                    <div class="ct">
+                        <p>Bastian — Chris Morgan</p><span>AI × マテリアルハンドリング実例</span>
+                        <div class="chips"><span class="chip sa">🟠 佐藤</span></div>
+                    </div>
+                </div>
+                <div class="popt">
+                    <span class="rt" style="background:rgba(239,68,68,.2);color:var(--te)">251 ⚠️</span>
+                    <div class="ct">
+                        <p>maxon（+ Contoro 要確認）</p><span>Sim2Real Gap × アクチュエータ設計</span>
+                        <div class="chips"><span class="chip mi">🟢 三浦</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day2 11:30 -->
+            <div class="pri-card">
+                <div class="tb">Day2 · 11:30 ⚡ — 3名分散</div>
+                <h3>MathWorks / ヒューマノイド / AMR統合</h3>
+                <div class="popt">
+                    <span class="rt" style="background:rgba(59,130,246,.2);color:var(--ai)">254A</span>
+                    <div class="ct">
+                        <p>MathWorks — YJ Lim ★ 最優先</p><span>AI×Simulink×ROS2 — モデルベース開発の核心</span>
+                        <div class="chips"><span class="chip mu">🔵 村上 ★</span></div>
+                    </div>
+                </div>
+                <div class="popt">
+                    <span class="rt" style="background:rgba(168,85,247,.2);color:var(--de)">253</span>
+                    <div class="ct">
+                        <p>State of Humanoids Panel ★</p><span>Agility Robotics — 量産・機構・AI課題</span>
+                        <div class="chips"><span class="chip mi">🟢 三浦 ★</span></div>
+                    </div>
+                </div>
+                <div class="popt">
+                    <span class="rt" style="background:rgba(16,185,129,.2);color:var(--lo)">254B</span>
+                    <div class="ct">
+                        <p>AMR統合（フリートソフト）</p><span>異メーカー混在環境の統合設計</span>
+                        <div class="chips"><span class="chip sa">🟠 佐藤</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day2 1:45 -->
+            <div class="pri-card">
+                <div class="tb">Day2 · 1:45 PM ⚡ — 3名分散（＋2カバー外）</div>
+                <h3>dSPACE / Tesla / AI Institute</h3>
+                <div class="popt">
+                    <span class="rt" style="background:rgba(239,68,68,.2);color:var(--te)">251</span>
+                    <div class="ct">
+                        <p>dSPACE — Jacob Perrin ★★ 最優先</p><span>ROS2 × HIL/SIL/MIL — モデルベース検証の核心</span>
+                        <div class="chips"><span class="chip mu">🔵 村上 ★★</span></div>
+                    </div>
+                </div>
+                <div class="popt">
+                    <span class="rt" style="background:rgba(168,85,247,.2);color:var(--de)">253</span>
+                    <div class="ct">
+                        <p>Tesla — Joshua Joseph ★</p><span>工場AMR大規模展開の組み込みSW課題</span>
+                        <div class="chips"><span class="chip sa">🟠 佐藤 ★</span></div>
+                    </div>
+                </div>
+                <div class="popt">
+                    <span class="rt" style="background:rgba(59,130,246,.2);color:var(--ai)">254A</span>
+                    <div class="ct">
+                        <p>AI Institute — Andrew Stout</p><span>Bazel×ROS2、開発組織のスケール戦略</span>
+                        <div class="chips"><span class="chip mi">🟢 三浦</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        Robotics Summit &amp; Expo 2026 | Boston Convention and Exhibition Center | May 27–28, 2026<br>
+        <span style="margin-top:4px;display:block">公式アジェンダ（2026-02-22
+            取得）に基づく。担当：村上（モデルベース制御）・三浦（メカ）・佐藤（組み込みSW）｜セッション内容・発表者は変更になる場合があります。</span>
+    </footer>
+
+    <!-- ========= MODAL ========= -->
+    <div id="modal-overlay" role="dialog" aria-modal="true">
+        <div id="modal-box">
+            <div class="mhead">
+                <div class="mhead-left">
+                    <div class="mtag" id="m-tag"></div>
+                    <div class="mspeaker" id="m-speaker"></div>
+                    <div class="maffil" id="m-affil"></div>
+                </div>
+                <button id="modal-close" aria-label="閉じる">✕</button>
+            </div>
+            <div class="mbody">
+                <div class="mtitle" id="m-title"></div>
+                <div class="mabstract" id="m-abstract"></div>
+                <div class="mmeta" id="m-meta"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── Session data store (keyed by speaker name text) ──────────────────────────
+        const SESSIONS = {
+            // DAY 1
+            "🎙️ Welcome Remarks — Steve Crowe": {
+                tag: "Opening", tagColor: "rgba(110,118,129,.25)", tagText: "#8b949e",
+                speaker: "Steve Crowe", affil: "Executive Editor | The Robot Report / WTWH Media",
+                title: "Welcome Remarks",
+                abstract: "イベント冒頭の開会挨拶。The Robot Reportの編集責任者が2日間の見どころと業界の注目ポイントを紹介します。",
+                room: "", time: "9:00 AM · Day 1"
+            },
+            "⭐ Opening Keynote — Russ Tedrake": {
+                tag: "Opening Keynote", tagColor: "rgba(248,150,30,.25)", tagText: "#f8961e",
+                speaker: "Russ Tedrake", affil: "Senior Vice President, Large Behavior Models | Toyota Research Institute",
+                title: "（全体基調講演 — Physical AI・大規模行動モデルの最前線）",
+                abstract: "Toyota Research Instituteでロボット工学・AI研究を率いるRuss Tedrakeが、物理環境で動作する大規模行動モデル（Large Behavior Models）の現状と可能性を語る。\n\nMITやTRIでの研究成果をベースに、ロボットがより複雑な現実世界タスクをどのように学習・実行できるかを解説。Physical AIの設計哲学から実装上の課題まで網羅した、本イベント最大の注目基調講演。",
+                room: "", time: "9:05 AM · Day 1"
+            },
+            "Kavitha Velusamy": {
+                tag: "AI", tagColor: "rgba(59,130,246,.2)", tagText: "#3b82f6",
+                speaker: "Kavitha Velusamy", affil: "Senior Vice President of Software and AI | Brain Corp.",
+                title: "Building Scalable Robot Systems That Learn, Adapt, and Earn Trust",
+                abstract: "ロボティクスがタスク自動化から知的自律へとシフトする中で、最大の課題はロボットを動かすことではなく、 スケールで学習・適応し、信頼を獲得するシステムを設計することです。\n\nBrain Corpがいかに世界40,000台以上のロボットフリートを展開しているかを基に、知覚・データ統合・継続学習の新アプローチが現実世界での自律性をどう再定義しているかを解説。\n\n▶ シミュレーションから展開へのギャップを埋める方法\n▶ 安全・プライバシー by デザインの設計哲学\n▶ エッジ〜クラウドのデータフロー最適化\n▶ ユーザーと規制当局の信頼を維持する方法",
+                room: "Room 254 A", time: "11:30 AM · Day 1"
+            },
+            "Anthony Jules": {
+                tag: "Logistics", tagColor: "rgba(16,185,129,.2)", tagText: "#10b981",
+                speaker: "Anthony Jules", affil: "Co-Founder and CEO | Robust AI",
+                title: "Building Warehouse Robots People Actually Want to Work With",
+                abstract: "倉庫自動化の議論は技術に偏りがちですが、実際に機能させるには予測不可能な環境・レガシーシステム・変化する人間のワークフローへの対応が不可欠です。\n\nRobust AIのAnthony JulesがCEOとして、複雑な倉庫環境への自動化導入を成功させるために必要なものを、現場の実践的知見から語ります。\n\n▶ 協調ロボットをサポートする設計判断\n▶ 採用に必要な組織変革\n▶ 自動化の本当の障壁\n▶ 「代替」ではなく「パートナー」としての自動化思考",
+                room: "Room 254 B", time: "11:30 AM · Day 1"
+            },
+            "Conor Walsh": {
+                tag: "Healthcare", tagColor: "rgba(245,158,11,.2)", tagText: "#f59e0b",
+                speaker: "Conor Walsh", affil: "Paul A. Maeder Professor of Engineering and Applied Sciences | Harvard SEAS",
+                title: "Scaling Soft Wearable Robots from the Lab to the Market",
+                abstract: "ソフトウェアラブルロボットは、人々の移動・作業・回復方法を変革しています。本講演では次世代ソフトロボットの工学的革新（新機能性アパレル・アクチュエーション戦略・知的制御・ヒューマン・マシン協調適応）と、その実世界インパクトへの展開を探ります。\n\n実例：\n▶ Verve Motion — 産業用傷害予防エキソスーツ\n▶ ReWalk の ReStore — 脳卒中リハビリ向け\n▶ Imago Rehab — デジタル療法プラットフォーム\n\n学術研究が、ユーザー中心設計・臨床検証・戦略的パートナーシップを通じていかに急速に商用化に移行できるかを解説します。",
+                room: "Room 255", time: "11:30 AM · Day 1"
+            },
+            "🎙️ Panel: Data Flywheel for AI-Native Robots": {
+                tag: "AI · Panel", tagColor: "rgba(59,130,246,.2)", tagText: "#3b82f6",
+                speaker: "Benji Barash / Tyler Niday / Vivian Chu ほか",
+                affil: "Roboto AI · Bonsai Robotics · The Robot Report · Bison Ventures",
+                title: "Building the Data Flywheel for AI-Native Robots",
+                abstract: "ロボットは偶然賢くなるのではなく、意図的なデータフライホイールを通じて改善されます。このパネルでは、実世界のロボットデータをいかに収集・キュレーション・活用して知覚・自律性・システム性能に活かすかを探ります。\n\n現場展開済みロボットの実例をもとに：\n▶ Day 1からデータフライホイールを設計する方法\n▶ パイロットをスケーラブルな現場対応プラットフォームに転換する戦略\n▶ 量産環境で継続的に学習・改善するシステムの作り方",
+                room: "Room 254 A", time: "1:45 PM · Day 1"
+            },
+            "Chris Morgan": {
+                tag: "Logistics", tagColor: "rgba(16,185,129,.2)", tagText: "#10b981",
+                speaker: "Chris Morgan", affil: "Senior Director of R&D | Bastian Solutions",
+                title: "Where AI Delivers in Material Handling",
+                abstract: "AIはモダンなマテリアルハンドリングシステムの中核イネーブラーとなり、OEMとインテグレーターが固定された自動化から適応型・スケーラブルなソリューションへ移行できるようにしています。\n\n本セッションでカバーする領域：\n▶ ロボットピッキング：AI駆動の知覚と適応把持、多様なアイテムの信頼性ある処理\n▶ AMRナビゲーション：動的・人員混在環境での安全運行とリアルタイム経路最適化\n▶ 予知保全：AIが故障を操業停止前に特定するシステムレベル分析\n\n生産マテリアルハンドリングでAIが実際に価値をもたらす場所、スケール展開のための実践的インサイトを提供します。",
+                room: "Room 254 B", time: "1:45 PM · Day 1"
+            },
+            "Robert Brooks": {
+                tag: "Healthcare", tagColor: "rgba(245,158,11,.2)", tagText: "#f59e0b",
+                speaker: "Robert Brooks", affil: "CEO | ForceN",
+                title: "Best Practices for Force-Torque Sensing in Surgical Robotics",
+                abstract: "触覚は多くの外科処置における重要な感覚モダリティです。手術ロボティクスで外科医の触覚を再現・増強するには、コンパクトで高信頼性・スケーラブルな力覚センシング技術の革新が求められます。\n\nカバーする内容：\n▶ 手術ロボティクスにおける力・トルクセンシングの役割\n  （器具先端感覚、トロカール遠隔操作中心点/組織接触、外科医との協調）\n▶ 力覚センシング技術の最先端仕様と実装のベストプラクティス\n▶ 外科ロボットへの力覚モダリティ統合の実践ガイド",
+                room: "Room 255", time: "1:45 PM · Day 1"
+            },
+            "Gavin Kenneally": {
+                tag: "Development", tagColor: "rgba(168,85,247,.2)", tagText: "#a855f7",
+                speaker: "Gavin Kenneally", affil: "Co-Founder and CEO | Ghost Robotics",
+                title: "From Prototype to Perimeter: 10 Years of Legged Robotics in Action",
+                abstract: "Ghost Roboticsは10年以上にわたり、防衛・セキュリティ・産業環境でミッションクリティカルな用途に脚式ロボットを展開してきました。\n\nCEOのGavin Kenneally氏が10年間の現場展開から学んだ教訓を共有します。\n\n▶ 防衛・セキュリティ・産業環境での実世界ケーススタディ\n▶ ソフトウェアの進歩が新たな能力をいかに解放するか\n▶ 脚式ロボティクスの次の5年間の展望（官民双方）",
+                room: "Room 253 ABC", time: "1:45 PM · Day 1"
+            },
+            "⚠️ maxon &amp; Contoro — 同室": {
+                tag: "Technologies ⚠️", tagColor: "rgba(251,191,36,.2)", tagText: "#fbbf24",
+            "Ben Hallworth (maxon)": {
+                tag: "Technologies", tagColor: "rgba(239,68,68,.2)", tagText: "#ef4444",
+                speaker: "Ben Hallworth", affil: "Systems Engineer, Robotic Drive Systems | maxon",
+                title: "Building from Both Sides: Actuator-Based Solutions for Bridging the Sim2Real Gap",
+                abstract: "AI/RL\u99c6\u52d5\u5236\u5fa1\u306b\u3088\u308a\u81ea\u5f8b\u30ed\u30dc\u30c3\u30c8\u306e\u80fd\u529b\u306f\u5411\u4e0a\u3059\u308b\u304c\u3001Sim2Real\u30ae\u30e3\u30c3\u30d7\u306b\u3088\u308a\u73fe\u5b9f\u5c55\u958b\u306f\u56f0\u96e3\u3002maxon\u306f\u30cf\u30fc\u30c9\u30a6\u30a7\u30a2\u30d5\u30a1\u30fc\u30b9\u30c8\u30a2\u30d7\u30ed\u30fc\u30c1\u3092\u63d0\u793a\u3002\n\n\u5c02\u7528FW\u30fb\u30c9\u30e9\u30a4\u30d6\u529b\u5b66\u306e\u6df1\u3044\u7406\u89e3\u306b\u3088\u308a\u3001\u975e\u7dda\u5f62\u6027\u3092\u767a\u751f\u6e90\u304b\u3089\u9664\u53bb\u3002\n\u2192\u305d\u306e\u7d50\u679c\u3001Sim\u6574\u5408\u3057\u305f\u4e88\u6e2c\u53ef\u80fd\u306a\u52d5\u4f5c\u3092\u5b9f\u73fe\u3002\n\n\u30b1\u30fc\u30b9\u30b9\u30bf\u30c7\u30a3\u3067\u5805\u7262\u6027\u5411\u4e0a\u30fb\u5c55\u958b\u52a0\u901f\u30fb\u5b9f\u4e16\u754c\u6027\u80fd\u5411\u4e0a\u3092\u8a3c\u660e\u3002",
+                room: "Room 251", time: "1:45 PM \u00b7 Day 1"
+            },
+            "\u26a0\ufe0f Rohit John Varghese (Contoro)": {
+                tag: "Technologies \u26a0\ufe0f \u540c\u5ba4", tagColor: "rgba(251,191,36,.2)", tagText: "#fbbf24",
+                speaker: "Rohit John Varghese", affil: "Director of Systems Engineering | Contoro Robotics",
+                title: "The Robot MCP Ecosystem: Building an Open Bridge Between AI and Robotics",
+                abstract: "\u26a0\ufe0f \u516c\u5f0f\u30a2\u30b8\u30a7\u30f3\u30c0\u306e\u8aac\u660e\u6587\u306fmaxon\u3068\u540c\u4e00\u30c6\u30ad\u30b9\u30c8\uff08\u8aa4\u63b2\u8f09\uff09\u3002\u30bf\u30a4\u30c8\u30eb\u306f\u516c\u5f0f\u30b9\u30d4\u30fc\u30ab\u30fc\u30da\u30fc\u30b8\u3067\u78ba\u8a8d\u6e08\u307f\u3002\n\nMCP\uff08Model Context Protocol\uff09\u3092\u6d3b\u7528\u3057\u305f\u30ed\u30dc\u30c6\u30a3\u30af\u30b9\u00d7AI\u7d71\u5408\u30a8\u30b3\u30b7\u30b9\u30c6\u30e0\u306e\u69cb\u7bc9\u3002LLM\u30fbAI\u30c4\u30fc\u30eb\u3068\u30ed\u30dc\u30c3\u30c8HW\u3092\u3064\u306a\u3050\u30aa\u30fc\u30d7\u30f3\u30d6\u30ea\u30c3\u30b8\u306e\u8a2d\u8a08\u601d\u60f3\u3002\n\n\u25b6 Room 251\u30011:45 PM Day1\u306bmaxon\u3068\u540c\u5ba4\u540c\u6642\u523b\n\u25b6 \u5f53\u65e5\u306e\u516c\u5f0f\u30a2\u30ca\u30a6\u30f3\u30b9\u3092\u5fc5\u305a\u78ba\u8a8d\u3057\u3066\u304b\u3089\u5165\u5ba4\u5148\u3092\u6c7a\u5b9a",
+                room: "Room 251 \u26a0\ufe0f \u540c\u5ba4", time: "1:45 PM \u00b7 Day 1"
+            },
+            "Jan Zizka": {
+                tag: "Logistics", tagColor: "rgba(16,185,129,.2)", tagText: "#10b981",
+                speaker: "Jan Zizka", affil: "Co-Founder and CEO | Brightpick",
+                title: "When Robots Don't Sleep: The Path Toward Lights-Out Warehouses",
+                abstract: "完全自動化「ライツアウト（無人）」倉庫は長年の夢でしたが、ロボティクスとAIの最近の進歩でついに特定のワークフローで実現可能になりました。\n\n現実的なアプローチ：人間とロボットのハイブリッド\n→ ロボットが反復作業の大半を担い、例外処理のみ人間が介入\n→ 夜間シフトを無人で運用しながら、日中のピーク需要と例外処理は人間が対応\n\n経済的課題：最後の10〜20%（エッジケース・判断を要する処理）の自動化は複雑度・コストが不釣り合いに高い。\n\n▶ 今日どこでライツアウトが機能するか\n▶ 安全かつ収益的に拡張する方法\n▶ 完全ライツアウトに必要な条件は何か",
+                room: "Room 254 B", time: "2:45 PM · Day 1"
+            },
+            "Ted Larson": {
+                tag: "Development", tagColor: "rgba(168,85,247,.2)", tagText: "#a855f7",
+                speaker: "Ted Larson", affil: "Co-Founder and CEO | OLogic",
+                title: "Building Better Robots: Balancing Hardware and Software for Real-World Success",
+                abstract: "ソフトウェアが見出しを飾る時代でも、ロボティクスはハードウェアが本当に重要な数少ない産業の一つです。20年以上にわたるスタートアップからFortune 500企業まで支援してきた経験に基づき、優れたロボティクス企業を作る要素と、プロトタイプ段階を超えて成功するロボットの条件を共有します。\n\n▶ 最高のロボティクス企業が設計・協働・製造性をDay 1から考える理由\n▶ 有望なプロジェクトを脱線させる一般的な設計ミスの回避法\n▶ 信頼できるロボティクス開発パートナーに求めるべき資質\n\n実世界の事例と実践的教訓を交え、ラボで動くだけでなく現実世界で活躍するロボットを作るためのロードマップを提示します。",
+                room: "Room 253 ABC", time: "2:45 PM · Day 1"
+            },
+            "現場導入パネル": {
+                tag: "Logistics · Panel", tagColor: "rgba(16,185,129,.2)", tagText: "#10b981",
+                speaker: "現場導入パネル", affil: "（登壇者は公式サイトで要確認）",
+                title: "Lessons from Taking Robots Out of the Lab and Into the Field",
+                abstract: "ロボットを制御されたラボ環境から、ライブの顧客環境へ移行させる際に初めて露わになる課題やストレスがあります。\n\n▶ 倉庫ロボットを信頼性高く、商業的にも実行可能にするための実学\n▶ ハードウェアの耐久性から自律性のエッジケース、顧客統合まで\n▶ シフトを越えて日々稼働し続けるロボットを展開するための「本当のコスト」",
+                room: "Room 254 B", time: "4:15 PM · Day 1"
+            },
+            "Hospital Logistics Panel": {
+                tag: "Healthcare · Panel", tagColor: "rgba(245,158,11,.2)", tagText: "#f59e0b",
+                speaker: "Spencer Krause / Peter Seiff / David Crabb",
+                affil: "SKA Robotics · ST Engineering Aethon · Rovex Technologies",
+                title: "How to Successfully Design and Scale Hospital Logistics Robots",
+                abstract: "病院ロボットは手術・リハビリから物流まで浸透しています。手術ロボットは広く知られていますが、病院を効率よく動かす縁の下の力持ちとして物流ロボットも同様に重要です。\n\n▶ Aethon — 食事・薬・リネンを20年以上届け続けてきた搬送ロボット\n▶ Rovex — 院内患者搬送（高い傷害率の肉体労働を代替）\n\n病院物流ロボット展開の課題：\n▶ 患者プライバシー・責任問題\n▶ システム統合と保守的市場への参入戦略\n▶ 既存ベンダーが支配する市場でのポジショニング",
+                room: "Room 255", time: "4:15 PM · Day 1"
+            },
+            // DAY 2
+            "⭐ Day 2 Keynote — Mikell Taylor": {
+                tag: "Day 2 Keynote", tagColor: "rgba(248,150,30,.25)", tagText: "#f8961e",
+                speaker: "Mikell Taylor", affil: "Director, Robotics Strategy | General Motors",
+                title: "What Makes a Robot Worthy?",
+                abstract: "ロボティクス産業は成長の変曲点にあります。しかし継続的な成長は、先進技術への新規性や興奮だけには依存できません。\n\n真のインパクトは、安全性・稼働率・パフォーマンス・成果に対して非常に高い基準が求められる環境でロボットが「信頼に値する」ことにかかっています。\n\nMikell Taylorがスタートアップ・GM・Amazonなどのリーダーシップ経験を基に、業界が集中すべき領域（指数関数的成長を解放しながら「パイロット煉獄」への陥落を避けるもの）を訴えます。",
+                room: "Room 253 ABC", time: "10:00 AM · Day 2"
+            },
+            "YJ Lim ★": {
+                tag: "AI ★ 最優先", tagColor: "rgba(59,130,246,.2)", tagText: "#3b82f6",
+                speaker: "YJ Lim", affil: "Principal Technical Product Lead | MathWorks",
+                title: "Accelerating Industrial Robotics Applications with AI",
+                abstract: "AIのロボティクスへの統合は、知的ビンピッキングから現代工場での協調タスクまで、ロボットと自律システムが知覚・学習・行動する方法を変革しました。生成AIの台頭により、ロボティクスシステムの構築・訓練・展開の基本的転換が起きています。\n\n本講演でカバーする内容：\n▶ 従来のAIアプローチと最新ロボティクス基盤モデルを組み合わせた知的ロボットシステム開発手法\n▶ 深層学習・強化学習・Transformer型VLA（Vision-Language-Action）モデルを単一シミュレーション駆動プラットフォームで統合したエンドツーエンドワークフロー\n▶ 少ない人間の監督でのAI駆動ビンピッキングと動作計画\n▶ 物体検出・姿勢推定の自動データラベリングと学習\n▶ ゼロショットテキスト条件付きモデルによる物体検出\n▶ 視覚基盤モデルによる画像・動画全体のセグメンテーション",
+                room: "Room 254 A", time: "11:30 AM · Day 2"
+            },
+            "AMR統合セッション": {
+                tag: "Logistics", tagColor: "rgba(16,185,129,.2)", tagText: "#10b981",
+                speaker: "（登壇者未記載）", affil: "— 公式サイトで要確認 —",
+                title: "Integrating AMRs with Supporting Software Systems for Efficient Packing in Warehouses",
+                abstract: "AMRは効率・精度・安全性を高めようとする倉庫リーダーにとって不可欠なツールになっています。成功した実装はロボット単体ではなく、ハードウェア・ソフトウェア・人間の要素を既存業務にシームレスに統合するホリスティックなアプローチが必要です。\n\n適切なインテグレーターを選ぶ際のポイント：\n▶ AMRを効率よく実装するだけでなく、ピーク性能に最適化する包括的スコープ\n▶ 独自の運用目標に合わせたカスタム化されたソリューション\n▶ システム設計・プロセス統合・変革管理の専門知識\n\nAMR技術の完全なポテンシャルを引き出し、将来の課題にも対応できる柔軟なインフラを構築する方法を解説します。",
+                room: "Room 254 B", time: "11:30 AM · Day 2"
+            },
+            "Darren Porras": {
+                tag: "Healthcare", tagColor: "rgba(245,158,11,.2)", tagText: "#f59e0b",
+                speaker: "Darren Porras", affil: "Market Development Manager, Healthcare | Real-Time Innovations (RTI)",
+                title: "The Sub-Millisecond Scalpel: Bridging the Latency Gap in Telesurgery",
+                abstract: "遠隔手術は、遠隔地・医療過疎地域に高品質で一貫した医療処置を届ける次のフロンティアを表します。\n\nテクニカルチャレンジ：レイテンシーが臨床精度に直結するため、サブミリ秒の制御が必要。\n\n本講演では「データ中心性（Data Centricity）」という新アーキテクチャアプローチを提示：\n▶ DDS（Data Distribution Service）標準の活用\n▶ 従来のメッセージパッシングモデルから「概念的グローバルデータスペース」へ\n▶ 外科医コンソール・患者側ロボット・画像センサー・モニタリング機器が非同期にデータをpublish/subscribeする仕組み\n▶ QoS（Quality of Service）ポリシーで予測可能性と超低レイテンシを保証\n\n次世代の臨床実用テレサージェリーシステムに向けた設計アーキテクチャを学べます。",
+                room: "Room 255", time: "11:30 AM · Day 2"
+            },
+            "⭐ State of Humanoids Panel": {
+                tag: "Development ★", tagColor: "rgba(168,85,247,.2)", tagText: "#a855f7",
+                speaker: "Pras Velagapudi / Mike Oitzman / Aaron Prather",
+                affil: "Agility Robotics CTO · The Robot Report · ASTM International",
+                title: "State of Humanoids Panel",
+                abstract: "ヒューマノイドロボットの開発・展開に関する技術要件を探るパネルディスカッション。\n\n議論のカバー範囲：\n▶ 歩行（Locomotion）の現状と課題\n▶ 巧みな操作（Dexterous Manipulation）の技術的限界\n▶ AI・自律性の統合\n▶ 安全性の確保と規制対応\n▶ 初期パイロット・実世界展開から得られた主要教訓\n\n登壇者の一人であるPras Velagapudi（Agility Robotics CTO）は、Digit（ヒューマノイドロボット）の商用展開を主導した実績を持つ。ASTM InternationalのAaron PratherはロボットAI・自律システムの標準化プログラムを率いる。",
+                room: "Room 253 ABC", time: "11:30 AM · Day 2"
+            },
+            "Andrew Stout": {
+                tag: "AI", tagColor: "rgba(59,130,246,.2)", tagText: "#3b82f6",
+                speaker: "Andrew Stout", affil: "Roboticist and Machine Learning Engineer | The AI Institute (Robotics and AI Institute)",
+                title: "Rebuilding the Robotics Developer Experience",
+                abstract: "ロボティクスソフトウェア開発組織がスケールするにつれ、開発者体験はより重要になる一方で整備が困難になっていきます。非効率なビルドシステムは、遅いイテレーション・開発者の不満・リソース浪費として代償を払わせます。\n\nRobotics and AI InstituteでのDevExpとビルドシステム大改革からの知見を共有：\n▶ リポジトリ組織（モノレポ vs マルチレポ？）\n▶ キャッシュとリモートビルド実行を備えたポリグロットビルドシステム\n▶ ROS統合\n▶ 競合する依存関係の管理\n▶ ランタイムツール・デプロイメント・マイグレーション — 多様なニーズを持つ多くのロボティクス研究・エンジニアリングチームのための取り組み\n\n具体的な成果：\n✅ 1日あたり164 CPU時間を節約\n✅ BazelとROSを連携させる方法\n（そして完全失敗寸前からユーザーを魅了するまでの話）",
+                room: "Room 254 A", time: "1:45 PM · Day 2"
+            },
+            "Omar Asali": {
+                tag: "Logistics", tagColor: "rgba(16,185,129,.2)", tagText: "#10b981",
+                speaker: "Omar Asali", affil: "Chairman and CEO | Ranpak",
+                title: "How Physical AI Is Driving Profitable, Scalable Sustainability in Warehouses",
+                abstract: "倉庫がスピード・コスト・従業員エンゲージメントを犠牲にせずにサステナビリティを改善する圧力に直面する中、次世代のロボティクスと自動化は知的かつ人間中心でなければなりません。\n\n実際の成果：\n▶ 梱包材（コルゲート）使用量を最大25%削減\n▶ 箱のSKU数を最大75%削減\n▶ スループットを4〜5倍向上\n\n本セッションの内容：\n▶ スマート自動化がいかに従業員を代替せず「力を与える」か\n▶ 自動化パイロットの実践的フレームワーク\n▶ ROIの定量化と持続可能性目標を運用KPIと整合させる方法\n▶ 将来対応可能な倉庫運営構築のための実行可能なインサイト",
+                room: "Room 254 B", time: "1:45 PM · Day 2"
+            },
+            "Joyce Sidopoulos": {
+                tag: "Healthcare", tagColor: "rgba(245,158,11,.2)", tagText: "#f59e0b",
+                speaker: "Joyce Sidopoulos", affil: "Co-Founder and Chief of Operations | MassRobotics",
+                title: "MassRobotics Healthcare Startup Showcase",
+                abstract: "MassRoboticsが第5回年次Healthcare Robotics Startup Catalystを開催。ヘルスケアロボティクス企業が成長・成功するために必要なコネクション・指導・リソースを提供することが目標です。\n\n本セッションでは、プログラム参加中のヘルスケアロボティクススタートアップのピッチを聞くことができます。各スタートアップは革新的な精神とヘルスケア産業をユニークなロボットソリューションで変革するポテンシャルを体現しています。",
+                room: "Room 255", time: "1:45 PM · Day 2"
+            },
+            "⭐ Joshua Joseph": {
+                tag: "Development ★", tagColor: "rgba(168,85,247,.2)", tagText: "#a855f7",
+                speaker: "Joshua Joseph", affil: "AMR Deployment Engineer | Tesla",
+                title: "Tesla's Roadmap for Scaling AMRs in Legacy U.S. Factories",
+                abstract: "米国の工場の大半は自動化が実現可能になる以前に建設されましたが、米国製造業の大部分を担っています。これは自律移動ロボット（AMR）にとって課題とチャンスの両方を生み出します。\n\nTeslaの高生産量EV工場での実証とスケール展開に裏打ちされた、レガシー製造環境へのAMR展開ロードマップ：\n\n▶ AMRを独立したツールとしてではなく「インフラ」として捉える視点\n（生産・物流・労働力実行をつなぐ接続レイヤー）\n▶ 高摩擦な材料フローの特定方法\n▶ 測定可能なパフォーマンス指標の定義\n▶ フリート管理ソフト・倉庫システム・PLC制御機器・リアルタイム分析ダッシュボードとの統合\n\n現場で自動化を停滞させる一般的な落とし穴：\n▶ 運用ROIモデリング\n▶ 相互運用性の確保\n▶ 作業員の採用と複数生産エリアへのスケーリング戦略",
+                room: "Room 253 ABC", time: "1:45 PM · Day 2"
+            },
+            "⭐ Jacob Perrin": {
+                tag: "Technologies ★★", tagColor: "rgba(239,68,68,.2)", tagText: "#ef4444",
+                speaker: "Jacob Perrin", affil: "Engineering Manager | dSPACE",
+                title: "ROS-in-the-Loop: Integrating Open-Source Robotics with Industrial Validation Tools",
+                abstract: "ROS 2はモダンロボティクス開発のデファクトフレームワークとして確立されており、モジュール性・リアルタイム能力・幅広いコミュニティサポートを提供しています。しかし、ROSベースのシステムをHIL（Hardware-in-the-Loop）・SIL（Software-in-the-Loop）・MIL（Model-in-the-Loop）などの厳密な検証ワークフローに統合することは、タイミング・決定性・相互運用性において独自の課題をもたらします。\n\n本講演の技術的内容：\n▶ ROSノードをクローズドループのテスト環境に組み込む方法論\n▶ ROSコミュニケーションとリアルタイムシステムの同期\n▶ 制御・知覚アルゴリズムの決定論的実行\n▶ Gazebo・RViz・FMI準拠モデルなどのシミュレーションプラットフォームとのインターフェース\n▶ MCAヲ使用したスケーラブルなデータロギングと分析\n▶ 高忠実度データリプレイテストの課題と知見\n\n実践的な例とアーキテクチャパターンを通じて、オープンソース開発と産業グレードテストの橋渡しをする戦略を提供します。",
+                room: "Room 251", time: "1:45 PM · Day 2"
+            },
+            "⭐ Giovanni Campanella": {
+                tag: "Technologies ★", tagColor: "rgba(239,68,68,.2)", tagText: "#ef4444",
+                speaker: "Giovanni Campanella", affil: "General Manager, Industrial Automation and Robotics | Texas Instruments",
+                title: "Building Humanoids That Scale: A Systems and Semiconductor Perspective",
+                abstract: "ヒューマノイドが研究ラボから現実環境へ移行するにつれ、知性・敏捷性・エネルギー効率を達成するには、感知・処理・電力・接続性にわたるシステムレベルの革新が必要です。\n\n本セッションの技術的ロードマップ：\n▶ 高帯域センサーフュージョン\n▶ リアルタイムエッジAI処理\n▶ 精密モータ制御\n▶ 分散サブシステム間の信頼性の高い通信\n\n実世界の設計例とリファレンスアーキテクチャをもとに：\n▶ 組み込みプロセッシングの進歩がシステムレイテンシをどう削減するか\n▶ アナログ信号チェーンによるエネルギー効率向上\n▶ 電力管理でヒューマノイドの信頼性を高める方法\n\nすべてヒューマノイドの性能と安全性に直結するクリティカルな設計因子です。",
+                room: "Room 251", time: "2:30 PM · Day 2"
+            }
+        };
+
+        // ── Modal logic ────────────────────────────────────────────────────────────
+        const overlay = document.getElementById('modal-overlay');
+        const box = document.getElementById('modal-box');
+
+        function openModal(key) {
+            const s = SESSIONS[key];
+            if (!s) return;
+            document.getElementById('m-tag').textContent = s.tag;
+            document.getElementById('m-tag').style.background = s.tagColor;
+            document.getElementById('m-tag').style.color = s.tagText;
+            document.getElementById('m-speaker').textContent = s.speaker;
+            document.getElementById('m-affil').textContent = s.affil;
+            document.getElementById('m-title').textContent = s.title;
+            document.getElementById('m-abstract').textContent = s.abstract;
+
+            // meta row
+            const meta = document.getElementById('m-meta');
+            meta.innerHTML = '';
+            if (s.room) meta.innerHTML += `<div class="mmeta-item">📍 <strong>${s.room}</strong></div>`;
+            if (s.time) meta.innerHTML += `<div class="mmeta-item">🕐 <strong>${s.time}</strong></div>`;
+
+            overlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            overlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('modal-close').addEventListener('click', closeModal);
+        overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+        // Attach click to all session cards
+        document.querySelectorAll('.sc').forEach(card => {
+            // Find the speaker text (.sp element)
+            const spEl = card.querySelector('.sp');
+            if (!spEl) return;
+            const key = spEl.textContent.trim();
+            if (SESSIONS[key]) {
+                card.addEventListener('click', () => openModal(key));
+                card.title = 'クリックして詳細を確認';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>村上様 旅程表 (スプレッドシート形式)</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --header-bg: #1e40af;
+            --border: #cbd5e1;
+            --bg-alt: #f8fafc;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            margin: 20px;
+            color: #1e293b;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #0f172a;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th {
+            background-color: var(--header-bg);
+            color: white;
+            font-weight: 600;
+            text-align: left;
+            padding: 10px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            font-size: 0.85rem;
+            vertical-align: top;
+            outline: none;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--bg-alt);
+        }
+
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        [contenteditable="true"]:focus {
+            background-color: #fff9db;
+            box-shadow: inset 0 0 0 2px var(--primary);
+        }
+
+        .date-col {
+            width: 100px;
+        }
+
+        .day-col {
+            width: 50px;
+            text-align: center;
+        }
+
+        .time-col {
+            width: 120px;
+            font-family: monospace;
+        }
+
+        .utc-col {
+            width: 60px;
+            color: #64748b;
+        }
+
+        .trans-col {
+            width: 150px;
+        }
+
+        .hotel-col {
+            width: 200px;
+        }
+
+        .no-print {
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+            }
+
+            th {
+                background-color: #1e40af !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="no-print">
+        <h1>村上様 2026年 米国・欧州出張 旅程表</h1>
+        <button class="btn" onclick="window.print()">🖨️ PDF/印刷用表示</button>
+        <p style="font-size: 0.8rem; color: #64748b; margin-top: 10px;">
+            ※セルをクリックして直接編集できます。<br>
+            ※右端の＋－ボタンでいつでも行の追加・削除が可能です。
+        </p>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th class="date-col">年月日</th>
+                    <th class="day-col">曜日</th>
+                    <th class="time-col">時間</th>
+                    <th class="utc-col">UTC</th>
+                    <th>内容</th>
+                    <th class="trans-col">移動手段 (便名)</th>
+                    <th class="hotel-col">宿泊先</th>
+                    <th>備考</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 5/25 Mon -->
+                <tr>
+                    <td rowspan="7" contenteditable="true">2026/05/25</td>
+                    <td rowspan="7" contenteditable="true">月</td>
+                    <td contenteditable="true">10:00 - 11:30</td>
+                    <td contenteditable="true">UTC+9</td>
+                    <td contenteditable="true">自宅（中書島）～伊丹空港</td>
+                    <td contenteditable="true">移動</td>
+                    <td rowspan="7" contenteditable="true">ボストン<br>Hampton Inn Boston Logan Airport</td>
+                    <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">11:30 - 13:00</td>
+                    <td contenteditable="true">UTC+9</td>
+                    <td contenteditable="true">伊丹空港にて集合・昼食</td>
+                    <td contenteditable="true">-</td>
+                    <td contenteditable="true">Airport Winery</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">13:05</td>
+                    <td contenteditable="true">UTC+9</td>
+                    <td contenteditable="true">空港チェックイン</td>
+                    <td contenteditable="true">-</td>
+                    <td contenteditable="true">伊丹</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">14:35 - 16:00</td>
+                    <td contenteditable="true">UTC+9</td>
+                    <td contenteditable="true">伊丹空港 ～ 成田空港</td>
+                    <td contenteditable="true">JL3006</td>
+                    <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">16:00 - 18:20</td>
+                    <td contenteditable="true">UTC+9</td>
+                    <td contenteditable="true">成田空港にて乗継・待機</td>
+                    <td contenteditable="true">-</td>
+                    <td contenteditable="true">ラウンジ利用可</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">18:20 - (翌)07:10</td>
+                    <td contenteditable="true">UTC+9</td>
+                    <td contenteditable="true">成田空港 ～ ボストン空港</td>
+                    <td contenteditable="true">JL8</td>
+                    <td contenteditable="true">機内泊</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">18:15 (現地)</td>
+                    <td contenteditable="true">UTC-4</td>
+                    <td contenteditable="true">ボストン空港着 ～ ホテルへ</td>
+                    <td contenteditable="true">タクシー/Uber</td>
+                    <td contenteditable="true"></td>
+                </tr>
+
+                <!-- 5/26 Tue -->
+                <tr>
+                    <td rowspan="2" contenteditable="true">2026/05/26</td>
+                    <td rowspan="2" contenteditable="true">火</td>
+                    <td contenteditable="true">09:00 - 17:00</td>
+                    <td contenteditable="true">UTC-4</td>
+                    <td contenteditable="true">ボストン市内技術視察</td>
+                    <td contenteditable="true">徒歩/公共交通</td>
+                    <td rowspan="2" contenteditable="true">ボストン<br>Hampton Inn Boston Seaport</td>
+                    <td contenteditable="true">MassRobotics / MIT</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">19:00 -</td>
+                    <td contenteditable="true">UTC-4</td>
+                    <td contenteditable="true">夕食</td>
+                    <td contenteditable="true">-</td>
+                    <td contenteditable="true"></td>
+                </tr>
+
+                <!-- 5/27 Wed -->
+                <tr>
+                    <td rowspan="2" contenteditable="true">2026/05/27</td>
+                    <td rowspan="2" contenteditable="true">水</td>
+                    <td contenteditable="true">09:00 - 17:00</td>
+                    <td contenteditable="true">UTC-4</td>
+                    <td contenteditable="true">Robotics Summit & Expo Day 1</td>
+                    <td contenteditable="true">-</td>
+                    <td rowspan="2" contenteditable="true">ボストン<br>Hampton Inn Boston Seaport</td>
+                    <td contenteditable="true">BCEC</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">18:00 - 20:00</td>
+                    <td contenteditable="true">UTC-4</td>
+                    <td contenteditable="true">RBR50 Awards Dinner</td>
+                    <td contenteditable="true">-</td>
+                    <td contenteditable="true">全員出席</td>
+                </tr>
+
+                <!-- 5/28 Thu -->
+                <tr>
+                    <td rowspan="2" contenteditable="true">2026/05/28</td>
+                    <td rowspan="2" contenteditable="true">木</td>
+                    <td contenteditable="true">09:00 - 17:00</td>
+                    <td contenteditable="true">UTC-4</td>
+                    <td contenteditable="true">Robotics Summit & Expo Day 2</td>
+                    <td contenteditable="true">-</td>
+                    <td rowspan="2" contenteditable="true">ボストン<br>Hampton Inn Boston Seaport</td>
+                    <td contenteditable="true">BCEC</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">19:00 -</td>
+                    <td contenteditable="true">UTC-4</td>
+                    <td contenteditable="true">夕食</td>
+                    <td contenteditable="true">-</td>
+                    <td contenteditable="true"></td>
+                </tr>
+
+                <!-- 5/29 Fri -->
+                <tr>
+                    <td rowspan="2" contenteditable="true">2026/05/29</td>
+                    <td rowspan="2" contenteditable="true">金</td>
+                    <td contenteditable="true">09:00 - 12:00</td>
+                    <td contenteditable="true">UTC-4</td>
+                    <td contenteditable="true">技術視察 / ホテル内勤務</td>
+                    <td contenteditable="true">-</td>
+                    <td rowspan="2" contenteditable="true">機内</td>
+                    <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">17:40 - (翌)</td>
+                    <td contenteditable="true">UTC-4</td>
+                    <td contenteditable="true">ボストン ～ マドリード経由 ～ ウィーン</td>
+                    <td contenteditable="true">IB348 / IB791</td>
+                    <td contenteditable="true">深夜移動</td>
+                </tr>
+
+                <!-- 5/30 Sat -->
+                <tr>
+                    <td rowspan="2" contenteditable="true">2026/05/30</td>
+                    <td rowspan="2" contenteditable="true">土</td>
+                    <td contenteditable="true">11:40</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">ウィーン空港着 ～ ホテルへ</td>
+                    <td contenteditable="true">空港バス</td>
+                    <td rowspan="2" contenteditable="true">ウィーン<br>Mercure Wien Westbahnhof</td>
+                    <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">15:00 -</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">ホテルチェックイン・散策</td>
+                    <td contenteditable="true">-</td>
+                    <td contenteditable="true"></td>
+                </tr>
+
+                <!-- 5/31 Sun -->
+                <tr>
+                    <td contenteditable="true">2026/05/31</td>
+                    <td contenteditable="true">日</td>
+                    <td contenteditable="true">終日</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">自由行動 / 会場登録</td>
+                    <td contenteditable="true">-</td>
+                    <td contenteditable="true">ウィーン<br>Mercure Wien Westbahnhof</td>
+                    <td contenteditable="true">15:00〜 会場登録可</td>
+                </tr>
+
+                <!-- 6/1 Mon -->
+                <tr>
+                    <td rowspan="2" contenteditable="true">2026/06/01</td>
+                    <td rowspan="2" contenteditable="true">月</td>
+                    <td contenteditable="true">09:00 - 17:00</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">ICRA 2026 Day 1 (Workshops)</td>
+                    <td contenteditable="true">-</td>
+                    <td rowspan="2" contenteditable="true">ウィーン<br>Mercure Wien Westbahnhof</td>
+                    <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">18:00 - 20:00</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">Welcome Reception</td>
+                    <td contenteditable="true">-</td>
+                    <td contenteditable="true">Exhibition Hall</td>
+                </tr>
+
+                <!-- 6/2 Tue -->
+                <tr>
+                    <td rowspan="2" contenteditable="true">2026/06/02</td>
+                    <td rowspan="2" contenteditable="true">火</td>
+                    <td contenteditable="true">09:00 - 17:00</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">ICRA 2026 Day 2 (Main Conf)</td>
+                    <td contenteditable="true">-</td>
+                    <td rowspan="2" contenteditable="true">ウィーン<br>Mercure Wien Westbahnhof</td>
+                    <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">19:00 -</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">VIP Dinner (招待制)</td>
+                    <td contenteditable="true">-</td>
+                    <td contenteditable="true"></td>
+                </tr>
+
+                <!-- 6/3 Wed -->
+                <tr>
+                    <td rowspan="2" contenteditable="true">2026/06/03</td>
+                    <td rowspan="2" contenteditable="true">水</td>
+                    <td contenteditable="true">09:00 - 17:00</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">ICRA 2026 Day 3</td>
+                    <td contenteditable="true">-</td>
+                    <td rowspan="2" contenteditable="true">ウィーン<br>Mercure Wien Westbahnhof</td>
+                    <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">19:00 -</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">Imperial Night</td>
+                    <td contenteditable="true">-</td>
+                    <td contenteditable="true">要チケット</td>
+                </tr>
+
+                <!-- 6/4 Thu -->
+                <tr>
+                    <td rowspan="2" contenteditable="true">2026/06/04</td>
+                    <td rowspan="2" contenteditable="true">木</td>
+                    <td contenteditable="true">09:00 - 17:00</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">ICRA 2026 Day 4</td>
+                    <td contenteditable="true">-</td>
+                    <td rowspan="2" contenteditable="true">ウィーン<br>Mercure Wien Westbahnhof</td>
+                    <td contenteditable="true"></td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">12:30 - 14:00</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">Award Lunch</td>
+                    <td contenteditable="true">-</td>
+                    <td contenteditable="true">Best Paper授賞式</td>
+                </tr>
+
+                <!-- 6/5 Fri -->
+                <tr>
+                    <td rowspan="2" contenteditable="true">2026/06/05</td>
+                    <td rowspan="2" contenteditable="true">金</td>
+                    <td contenteditable="true">09:00 - 15:00</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">ICRA 2026 Day 5</td>
+                    <td contenteditable="true">-</td>
+                    <td rowspan="2" contenteditable="true">機内</td>
+                    <td contenteditable="true">最終日</td>
+                </tr>
+                <tr>
+                    <td contenteditable="true">16:55 - (翌)</td>
+                    <td contenteditable="true">UTC+2</td>
+                    <td contenteditable="true">ウィーン ～ ドーハ経由 ～ 関空</td>
+                    <td contenteditable="true">QR184 / QR802</td>
+                    <td contenteditable="true">深夜移動</td>
+                </tr>
+
+                <!-- 6/7 Sun -->
+                <tr>
+                    <td contenteditable="true">2026/06/07</td>
+                    <td contenteditable="true">日</td>
+                    <td contenteditable="true">17:25</td>
+                    <td contenteditable="true">UTC+9</td>
+                    <td contenteditable="true">関西国際空港着 ～ 帰宅</td>
+                    <td contenteditable="true">移動</td>
+                    <td contenteditable="true">自宅</td>
+                    <td contenteditable="true">お疲れ様でした。</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initTable();
+            updateMerges();
+        });
+
+        function initTable() {
+            const table = document.querySelector('table');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            // ヘッダーに操作列を追加
+            const theadTr = table.querySelector('thead tr');
+            if (!theadTr.querySelector('.op-col')) {
+                const th = document.createElement('th');
+                th.className = 'op-col no-print';
+                th.style.width = '100px';
+                th.textContent = '操作';
+                theadTr.appendChild(th);
+            }
+
+            // rowspanを全て展開して1セルずつにする（平坦化）
+            const grid = [];
+            for (let r = 0; r < rows.length; r++) {
+                if (!grid[r]) grid[r] = [];
+                let cells = Array.from(rows[r].querySelectorAll('td'));
+                let c = 0;
+                for (let td of cells) {
+                    if (td.classList.contains('no-print')) continue;
+                    while (grid[r][c]) c++;
+                    const rs = parseInt(td.getAttribute('rowspan') || 1);
+                    const cs = parseInt(td.getAttribute('colspan') || 1);
+                    const html = td.innerHTML;
+                    for (let i = 0; i < rs; i++) {
+                        for (let j = 0; j < cs; j++) {
+                            if (!grid[r + i]) grid[r + i] = [];
+                            grid[r + i][c + j] = { html: html };
+                        }
+                    }
+                }
+            }
+
+            // 平坦化したテーブルを再描画
+            tbody.innerHTML = '';
+            for (let r = 0; r < grid.length; r++) {
+                const tr = document.createElement('tr');
+                for (let c = 0; c < 8; c++) {
+                    const td = document.createElement('td');
+                    td.contentEditable = 'true';
+                    if (grid[r] && grid[r][c]) {
+                        td.innerHTML = grid[r][c].html;
+                    }
+                    // テキストが変更され、フォーカスが外れたら再計算
+                    td.addEventListener('blur', updateMerges);
+                    tr.appendChild(td);
+                }
+                const tdOp = document.createElement('td');
+                tdOp.className = 'no-print op-cell';
+                tdOp.style.whiteSpace = 'nowrap';
+                tdOp.innerHTML = '<button class="btn" onclick="addRow(this)" title="下に行を追加" style="padding:4px 8px; margin-right:4px;">＋</button><button class="btn" onclick="deleteRow(this)" title="行を削除" style="padding:4px 8px; background-color:#ef4444;">－</button>';
+                tdOp.contentEditable = 'false';
+                tr.appendChild(tdOp);
+                tbody.appendChild(tr);
+            }
+        }
+
+        // 実際のrowspanとdisplay:noneを使ってセルを結合
+        function updateMerges() {
+            const tbody = document.querySelector('table tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const mergeCols = [0, 1, 6]; // 年月日, 曜日, 宿泊先
+
+            // 一旦すべての結合をリセット
+            rows.forEach(r => {
+                mergeCols.forEach(c => {
+                    if (r.cells[c]) {
+                        r.cells[c].style.display = '';
+                        r.cells[c].removeAttribute('rowspan');
+                    }
+                });
+            });
+
+            for (let col of mergeCols) {
+                let startRow = 0;
+                while (startRow < rows.length) {
+                    let rs = 1;
+                    const cellA = rows[startRow].cells[col];
+                    if (!cellA) {
+                        startRow++;
+                        continue;
+                    }
+                    const textA = cellA.innerHTML.trim();
+                    for (let r = startRow + 1; r < rows.length; r++) {
+                        const cellB = rows[r].cells[col];
+                        if (!cellB) break;
+                        const textB = cellB.innerHTML.trim();
+                        // 編集中のセル（フォーカスが当たっているセル）は結合で隠さない
+                        const isFocused = document.activeElement === cellB;
+                        if (textA === textB && textA !== "" && !isFocused) {
+                            rs++;
+                            cellB.style.display = 'none';
+                        } else {
+                            break;
+                        }
+                    }
+                    if (rs > 1) {
+                        cellA.setAttribute('rowspan', rs);
+                    }
+                    startRow += rs;
+                }
+            }
+        }
+
+        function addRow(btn) {
+            const tr = btn.closest('tr');
+            const newTr = tr.cloneNode(true);
+
+            // 新規行のセルにもイベントリスナーを登録
+            Array.from(newTr.querySelectorAll('td[contenteditable="true"]')).forEach(td => {
+                td.addEventListener('blur', updateMerges);
+            });
+
+            // 時間(2), UTC(3), 内容(4), 移動手段(5), 備考(7) をクリア
+            const clearCols = [2, 3, 4, 5, 7];
+            for (let colIndex of clearCols) {
+                if (newTr.cells[colIndex]) {
+                    newTr.cells[colIndex].innerHTML = '';
+                    newTr.cells[colIndex].style.display = '';
+                }
+            }
+            tr.after(newTr);
+            updateMerges();
+        }
+
+        function deleteRow(btn) {
+            const tbody = btn.closest('tbody');
+            if (tbody.querySelectorAll('tr').length <= 1) return;
+            btn.closest('tr').remove();
+            updateMerges();
+        }
+    </script>
+</body>
+
+</html>

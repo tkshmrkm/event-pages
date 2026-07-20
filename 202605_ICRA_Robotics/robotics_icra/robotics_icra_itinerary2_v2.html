@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年 米国・欧州出張 マスタースケジュール</title>
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --border-color: #e2e8f0;
+            --header-bg: #f1f5f9;
+
+            /* Timezone colors */
+            --tz-jst: #3b82f6;
+            --tz-edt: #10b981;
+            --tz-cest: #f59e0b;
+
+            /* Date row color - unified */
+            --date-row: #dbeafe;
+
+            /* Action colors */
+            --hotel-checkin: #6366f1;
+            --hotel-checkout: #94a3b8;
+            --airport-checkin: #8b5cf6;
+            --flight-color: #1e40af;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            line-height: 1.5;
+            background-color: #f0f2f5;
+            color: #1e293b;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1850px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .subtitle {
+            opacity: 0.9;
+            font-size: 0.95rem;
+            margin-top: 5px;
+        }
+
+        .schedule-wrapper {
+            overflow-x: auto;
+            position: relative;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1750px;
+            table-layout: fixed;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 10px 8px;
+            font-size: 0.82rem;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background: var(--header-bg);
+            z-index: 10;
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .col-time {
+            width: 240px;
+            background: #fafafa;
+        }
+
+        .col-member {
+            width: 13%;
+        }
+
+        .col-remarks {
+            width: 14%;
+            background: #fffcf0;
+        }
+
+        .date-row {
+            font-weight: bold;
+            background-color: var(--date-row) !important;
+        }
+
+        .date-row td {
+            padding: 12px 15px;
+            color: var(--primary-blue);
+            font-size: 1.05rem;
+            vertical-align: middle;
+        }
+
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stay-box {
+            font-size: 0.78rem;
+            font-weight: bold;
+            color: #475569;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 5px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            text-align: right;
+            line-height: 1.3;
+        }
+
+        .m-murakami {
+            border-top: 4px solid #3b82f6;
+        }
+
+        .m-sato {
+            border-top: 4px solid #ef4444;
+        }
+
+        .m-miura {
+            border-top: 4px solid #10b981;
+        }
+
+        .m-denda {
+            border-top: 4px solid #f59e0b;
+        }
+
+        .m-okabe {
+            border-top: 4px solid #8b5cf6;
+        }
+
+        .time-label {
+            font-size: 0.65rem;
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-right: 4px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .time-label.tz-jst {
+            background-color: var(--tz-jst);
+        }
+
+        .time-label.tz-edt {
+            background-color: var(--tz-edt);
+        }
+
+        .time-label.tz-cest {
+            background-color: var(--tz-cest);
+        }
+
+        .time-value {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--primary-blue);
+        }
+
+        .time-arrow {
+            color: #94a3b8;
+            margin: 0 4px;
+        }
+
+        .bg-flight {
+            background: #eff6ff;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .bg-checkin {
+            background: #f5f3ff;
+            border-left: 3px solid var(--airport-checkin);
+        }
+
+        .bg-hotel-act {
+            background: #fffbeb;
+            border-left: 3px solid var(--hotel-checkin);
+        }
+
+        .bg-conference {
+            background: #f0fdf4;
+            border-left: 3px solid #10b981;
+        }
+
+        .bg-move {
+            background: #f8fafc;
+            border-left: 3px solid #94a3b8;
+        }
+
+        .bg-off {
+            background: #fefce8;
+            border-left: 3px solid #eab308;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-bottom: 2px;
+            margin-right: 3px;
+        }
+
+        .badge-flight {
+            background: var(--flight-color);
+            color: white;
+        }
+
+        .badge-hotel-in {
+            background: var(--hotel-checkin);
+            color: white;
+        }
+
+        .badge-hotel-out {
+            background: var(--hotel-checkout);
+            color: white;
+        }
+
+        .badge-airport {
+            background: var(--airport-checkin);
+            color: white;
+        }
+
+        .info-main {
+            font-weight: bold;
+            display: block;
+            color: #1e3a8a;
+            font-size: 0.85rem;
+        }
+
+        .duration {
+            font-size: 0.7rem;
+            color: #64748b;
+            font-weight: normal;
+            margin-left: 4px;
+        }
+
+        .returned {
+            background-color: #f8fafc;
+            color: #94a3b8;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 0.75rem;
+            border-left: 3px solid #cbd5e1 !important;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>2026年 米国・欧州出張 全員統合マスタースケジュール</h1>
+            <div class="subtitle">村上・佐藤・三浦・傳田・若手（全行程・全接続便 詳細網羅版）</div>
+        </header>
+
+        <div class="schedule-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-time">時刻</th>
+                        <th class="col-member m-murakami">村上<br><small>(ITM着)</small></th>
+                        <th class="col-member m-sato">佐藤<br><small>(NGO着)</small></th>
+                        <th class="col-member m-miura">三浦<br><small>(ITM着)</small></th>
+                        <th class="col-member m-denda">傳田<br><small>(KIX着)</small></th>
+                        <th class="col-member m-okabe">若手<br><small>(KIX着)</small></th>
+                        <th class="col-remarks">フライト・移動詳細</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 5/25 -->
+                    <tr class="date-row">
+                        <td colspan="7">
+                            <div class="header-flex">
+                                <span>5月25日 (月) 【日本出発 ▷ ボストン移動】</span>
+                                <div class="stay-box">🛌 宿泊 ▷ 村上・佐藤・三浦：Hampton Inn Boston Logan Airport Chelsea</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-jst">JST</span><span class="time-value">09:00 - 12:00</span></td>
+                        <td class="bg-move">中書島 出発</td>
+                        <td class="bg-move"><strong>犬山 出発</strong><br>伊丹へ移動</td>
+                        <td class="bg-move">京都 出発</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>伊丹集合</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-jst">JST</span><span class="time-value">13:30</span></td>
+                        <td class="bg-checkin" colspan="3"><span class="badge badge-airport">✈️ 空港</span> 伊丹(ITM) チェックイン
+                        </td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>JL3006出発前</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-jst">JST</span><span class="time-value">14:35</span><span
+                                class="time-arrow">→</span><span class="time-value">16:00</span></td>
+                        <td class="bg-flight" colspan="3"><span class="badge badge-flight">🛫 出発</span>
+                            <strong>JL3006</strong> 伊丹 ▷ 成田 <span class="duration">(1:25)</span>
+                        </td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>JST 16:00 成田着</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-jst">JST</span><span class="time-value">18:25</span><span
+                                class="time-arrow">→</span><span class="time-label tz-edt">EDT</span><span
+                                class="time-value">19:10</span></td>
+                        <td class="bg-flight" colspan="3"><span class="badge badge-flight">🛫 出発</span>
+                            <strong>JL8</strong> 成田 ▷ ボストン <span class="duration">(12:45)</span>
+                        </td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>EDT 19:10 BOS着</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-edt">EDT</span><span class="time-value">20:00頃</span></td>
+                        <td class="bg-hotel-act" colspan="3"><span class="badge badge-hotel-in">🏨 IN</span>
+                            <strong>Hampton Inn Boston Logan Airport Chelsea</strong></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>BOS 1泊目</td>
+                    </tr>
+
+                    <!-- 5/26 -->
+                    <tr class="date-row">
+                        <td colspan="7">
+                            <div class="header-flex">
+                                <span>5月26日 (火) 【ボストン：技術視察 ＆ レセプション】</span>
+                                <div class="stay-box">🛌 宿泊 ▷ 村上・佐藤・三浦：Hampton Inn Boston Logan Airport Chelsea</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-edt">EDT</span><span class="time-value">午前〜午後</span></td>
+                        <td class="bg-move" colspan="3"><span class="info-main">ボストン市内 技術視察 (MIT CSAIL 等)</span></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>技術視察日</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-edt">EDT</span><span class="time-value">17:00</span></td>
+                        <td class="bg-conference" colspan="3"><span class="info-main">Welcome Reception</span> (会場:
+                            BCEC)</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>BOS 2泊目</td>
+                    </tr>
+
+                    <!-- 5/27-28 -->
+                    <tr class="date-row">
+                        <td colspan="7">
+                            <div class="header-flex">
+                                <span>5月27-28日 (水-木) 【Robotics Summit & Expo】</span>
+                                <div class="stay-box">🛌 宿泊 ▷ 村上・佐藤・三浦：Hampton Inn Boston Logan Airport Chelsea</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>終日</td>
+                        <td class="bg-conference" colspan="3">展示会・セッション参加 (BCEC)</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>BOS 3,4泊目</td>
+                    </tr>
+
+                    <!-- 5/29 -->
+                    <tr class="date-row">
+                        <td colspan="7">
+                            <div class="header-flex">
+                                <span>5月29日 (金) 【三浦：帰国 / 村上・佐藤：欧州移動】</span>
+                                <div class="stay-box">🛌 宿泊 ▷ 村上・佐藤：機中泊</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-edt">EDT</span><span class="time-value">09:00</span></td>
+                        <td class="bg-hotel-act" colspan="3"><span class="badge badge-hotel-out">🚪 OUT</span>
+                            <strong>Hampton Inn Boston Logan Airport Chelsea チェックアウト</strong></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>荷物預け</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-edt">EDT</span><span class="time-value">11:30</span></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="bg-checkin"><span class="badge badge-airport">✈️ 空港</span> <strong>BOS空港
+                                チェックイン</strong></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>三浦 check-in</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-edt">EDT</span><span class="time-value">13:35</span><span
+                                class="time-arrow">→</span><span class="time-label tz-jst">JST</span><span
+                                class="time-value">16:25+1</span></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="bg-flight"><span class="badge badge-flight">🛫 出発</span> <strong>JL7</strong> BOS ▷
+                            成田 <span class="duration">(13:50)</span>
+                        </td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>三浦 帰路 (翌16:25 NRT着)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-edt">EDT</span><span class="time-value">15:30</span></td>
+                        <td class="bg-checkin" colspan="2"><span class="badge badge-airport">✈️ 空港</span> <strong>BOS空港
+                                チェックイン</strong></td>
+                        <td class="returned">機内</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>IB348 2h前</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-edt">EDT</span><span class="time-value">17:40</span><span
+                                class="time-arrow">→</span><span class="time-label tz-cest">CEST</span><span
+                                class="time-value">07:30+1</span></td>
+                        <td class="bg-flight" colspan="2"><span class="badge badge-flight">🛫 出発</span>
+                            <strong>IB348</strong> BOS ▷ マドリード <span class="duration">(6:50)</span>
+                        </td>
+                        <td class="returned">機内</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>機中泊 (翌07:30 MAD着)</td>
+                    </tr>
+
+                    <!-- 5/30 -->
+                    <tr class="date-row">
+                        <td colspan="7">
+                            <div class="header-flex">
+                                <span>5月30日 (土) 【三浦：ITM帰着 / 村上・佐藤：ウィーン到着 / 傳田・若手：日本発】</span>
+                                <div class="stay-box">🛌 宿泊 ▷ 村上・佐藤：Hotel Mercure Wien Westbahnhof / 傳田・若手：機中泊</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-cest">CEST</span><span class="time-value">08:35</span><span
+                                class="time-arrow">→</span><span class="time-value">11:40</span></td>
+                        <td class="bg-flight" colspan="2"><span class="badge badge-flight">🛫 出発</span>
+                            <strong>IB791</strong> マドリード ▷ ウィーン <span class="duration">(3:05)</span>
+                        </td>
+                        <td class="bg-move"><span class="time-label tz-jst">JST</span><span
+                                class="time-value">18:25</span> ITM着</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>CEST 11:40 VIE着</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-cest">CEST</span><span class="time-value">15:00頃</span></td>
+                        <td class="bg-hotel-act" colspan="2"><span class="badge badge-hotel-in">🏨 IN</span>
+                            <strong>Hotel Mercure Wien Westbahnhof</strong></td>
+                        <td class="returned">帰宅</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>VIE 1泊目</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-jst">JST</span><span class="time-value">21:30</span></td>
+                        <td class="bg-move" colspan="2">ウィーン滞在</td>
+                        <td class="returned">-</td>
+                        <td class="bg-checkin" colspan="2"><span class="badge badge-airport">✈️ 空港</span>
+                            <strong>関空(KIX) チェックイン</strong></td>
+                        <td>AY078 2h前</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-jst">JST</span><span class="time-value">23:25</span><span
+                                class="time-arrow">→</span><span class="time-label tz-cest">CEST</span><span
+                                class="time-value">06:20+1</span></td>
+                        <td class="bg-move" colspan="2">ウィーン滞在</td>
+                        <td class="returned">-</td>
+                        <td class="bg-flight" colspan="2"><span class="badge badge-flight">🛫 出発</span>
+                            <strong>AY078</strong> 関空 ▷ HEL <span class="duration">(13:05)</span>
+                        </td>
+                        <td>傳田・若手出発 (翌06:20 HEL着)</td>
+                    </tr>
+
+                    <!-- 5/31 -->
+                    <tr class="date-row">
+                        <td colspan="7">
+                            <div class="header-flex">
+                                <span>5月31日 (日) 【完全 OFF (日曜)】</span>
+                                <div class="stay-box">🛌 宿泊 ▷ 全員：Hotel Mercure Wien Westbahnhof</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-cest">CEST</span><span class="time-value">午前</span></td>
+                        <td class="bg-off" colspan="2">ウィーン 休日 (完全OFF)</td>
+                        <td class="returned">-</td>
+                        <td class="bg-move" colspan="2">HEL乗り継ぎ ▷ ウィーン到着・移動</td>
+                        <td>日曜 OFF</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-cest">CEST</span><span class="time-value">11:30頃</span></td>
+                        <td class="bg-off" colspan="2">市内散策</td>
+                        <td class="returned">-</td>
+                        <td class="bg-hotel-act" colspan="2"><span class="badge badge-hotel-in">🏨 IN</span> VIE
+                            10:55着/AY1471</td>
+                        <td>全員VIE集結</td>
+                    </tr>
+
+                    <!-- 6/1-4 -->
+                    <tr class="date-row">
+                        <td colspan="7">
+                            <div class="header-flex"><span>6月1-4日 (月-木) 【ICRA 2026 会期】</span>
+                                <div class="stay-box">🛌 宿泊 ▷ 村上・佐藤・傳田・若手：Hotel Mercure Wien Westbahnhof</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>終日</td>
+                        <td class="bg-conference" colspan="2">ICRA 2026 参加 (Messe Wien)</td>
+                        <td class="returned">-</td>
+                        <td class="bg-conference" colspan="2">ICRA 2026 参加 (Messe Wien)</td>
+                        <td>展示会視察</td>
+                    </tr>
+
+                    <!-- 6/5 -->
+                    <tr class="date-row">
+                        <td colspan="7">
+                            <div class="header-flex">
+                                <span>6月5日 (金) 【ICRA 最終日 / 村上：帰国開始】</span>
+                                <div class="stay-box">🛌 宿泊 ▷ 村上：機中泊 / 佐藤・傳田・若手：Hotel Mercure Wien Westbahnhof (延泊)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-cest">CEST</span><span class="time-value">11:00</span></td>
+                        <td class="bg-hotel-act"><span class="badge badge-hotel-out">🚪 OUT</span> <strong>Hotel Mercure
+                                Wien Westbahnhof チェックアウト</strong></td>
+                        <td class="bg-conference">セッション参加</td>
+                        <td class="returned">-</td>
+                        <td class="bg-conference" colspan="2">セッション参加</td>
+                        <td>村上 先行帰路</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-cest">CEST</span><span class="time-value">14:30頃</span></td>
+                        <td class="bg-checkin"><span class="badge badge-airport">✈️ 空港</span> <strong>VIE空港
+                                チェックイン</strong></td>
+                        <td class="bg-conference">セッション参加</td>
+                        <td class="returned">-</td>
+                        <td class="bg-conference" colspan="2">セッション参加</td>
+                        <td>BA725 2h前</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-cest">CEST</span><span class="time-value">16:30</span><span
+                                class="time-arrow">→</span><span class="time-value">18:00</span></td>
+                        <td class="bg-flight"><span class="badge badge-flight">🛫 出発</span> <strong>BA725</strong> VIE ▷
+                            ロンドン <span class="duration">(2:30)</span></td>
+                        <td class="bg-conference" colspan="4">セッション ▷ 夕食・パッキング</td>
+                        <td>村上 1便目 (18:00 LHR着)</td>
+                    </tr>
+
+                    <!-- 6/6 -->
+                    <tr class="date-row">
+                        <td colspan="7">
+                            <div class="header-flex">
+                                <span>6月6日 (土) 【村上：ITM帰着 / 他：帰国開始】</span>
+                                <div class="stay-box">🛌 宿泊 ▷ 佐藤・傳田・若手：機中泊</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-cest">CEST</span><span class="time-value">11:00</span></td>
+                        <td class="returned">機内</td>
+                        <td class="bg-hotel-act" colspan="2"><span class="badge badge-hotel-out">🚪 OUT</span>
+                            <strong>Hotel Mercure Wien Westbahnhof 全員チェックアウト</strong></td>
+                        <td class="bg-hotel-act" colspan="2"><span class="badge badge-hotel-out">🚪 OUT</span>
+                            <strong>Hotel Mercure Wien Westbahnhof 全員チェックアウト</strong></td>
+                        <td>佐藤・京都組帰国</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-cest">CEST</span><span class="time-value">14:30 / 17:00</span>
+                        </td>
+                        <td class="returned">機内</td>
+                        <td class="bg-checkin"><span class="badge badge-airport">✈️ 空港</span> <strong>VIE空港
+                                チェックイン</strong></td>
+                        <td class="returned">-</td>
+                        <td class="bg-checkin" colspan="2"><span class="badge badge-airport">✈️ 空港</span> <strong>VIE空港
+                                チェックイン</strong></td>
+                        <td>帰路手続き</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-cest">CEST</span><span class="time-value">16:30 / 19:15</span>
+                        </td>
+                        <td class="returned">機内</td>
+                        <td class="bg-flight"><span class="badge badge-flight">🛫 出発</span> <strong>BA725</strong>
+                            (ロンドン経由)</td>
+                        <td class="returned">-</td>
+                        <td class="bg-flight" colspan="2"><span class="badge badge-flight">🛫 出発</span>
+                            <strong>AY1476</strong> (HEL経由)
+                        </td>
+                        <td>帰路分岐開始</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-jst">JST</span><span class="time-value">18:50</span><span
+                                class="time-arrow">→</span><span class="time-value">20:10</span></td>
+                        <td class="bg-flight"><span class="badge badge-flight">🛫 出発</span> <strong>JL3009</strong> NRT
+                            ▷
+                            伊丹 <span class="duration">(1:20)</span></td>
+                        <td class="returned">機内</td>
+                        <td class="returned">-</td>
+                        <td class="returned">機内</td>
+                        <td class="returned">機内</td>
+                        <td>村上 最終区間 (20:10 ITM着)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-jst">JST</span><span class="time-value">20:10〜</span></td>
+                        <td class="bg-move"><span class="info-main">伊丹(ITM) 到着 ▷ 帰宅</span></td>
+                        <td class="returned">機内</td>
+                        <td class="returned">-</td>
+                        <td class="returned">機内</td>
+                        <td class="returned">機内</td>
+                        <td>村上 帰着完了</td>
+                    </tr>
+
+                    <!-- 6/7 -->
+                    <tr class="date-row">
+                        <td colspan="7">
+                            <div class="header-flex">
+                                <span>6月7日 (日) 【最終帰着 ▷ 全員帰宅】</span>
+                                <div class="stay-box">🏠 全員自宅到着</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-jst">JST</span><span class="time-value">18:35 / 20:55</span></td>
+                        <td class="returned">-</td>
+                        <td class="bg-move"><span class="info-main">20:55 中部(NGO)到着</span> (BA/JL接続)</td>
+                        <td class="returned">-</td>
+                        <td class="bg-move" colspan="2"><span class="info-main">18:35 関西(KIX)到着</span> (AY077)</td>
+                        <td>全員帰着</td>
+                    </tr>
+                    <tr>
+                        <td><span class="time-label tz-jst">JST</span><span class="time-value">夜</span></td>
+                        <td class="returned">-</td>
+                        <td class="bg-move">犬山へ移動</td>
+                        <td class="returned">-</td>
+                        <td class="bg-move" colspan="2"><span class="info-main">特急はるか ▷ 京都へ</span></td>
+                        <td>出張全行程終了</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 視察ガイド -->
+        <div class="guide-section" style="padding: 15px; background: #f8fafc; border-top: 1px solid #e2e8f0;">
+            <h2
+                style="font-size: 1rem; color: var(--primary-blue); border-left: 5px solid var(--secondary-blue); padding-left: 10px; margin-bottom: 10px;">
+                ボストン市内 技術視察候補 (5/26)</h2>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <strong style="color: var(--secondary-blue);">MIT CSAIL (ケンブリッジ)</strong>
+                    <p style="font-size: 0.75rem; margin: 4px 0;">AI・ロボット研究の世界的聖地。ゲーリー設計の独創的構造は振動・構造解析の観点からも必見。</p>
+                </div>
+                <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <strong style="color: var(--secondary-blue);">USS Constitution</strong>
+                    <p style="font-size: 0.75rem; margin: 4px 0;">世界最古の現役木造帆船。極めて高い剛性を誇る船体構造と保存技術を見学可能。</p>
+                </div>
+                <div style="background: white; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <strong style="color: var(--secondary-blue);">シーポート再開発エリア</strong>
+                    <p style="font-size: 0.75rem; margin: 4px 0;">Boston Dynamics等のロボティクス企業が集積する最新の都市計画エリア。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

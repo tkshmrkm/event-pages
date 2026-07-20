@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年 米国・欧州出張 マスタースケジュール v3.6</title>
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --border-color: #e2e8f0;
+            --header-bg: #f1f5f9;
+
+            /* Timezone colors */
+            --tz-jst: #3b82f6;
+            --tz-edt: #10b981;
+            --tz-cest: #f59e0b;
+
+            /* Date row color */
+            --date-row: #dbeafe;
+
+            /* Action colors */
+            --hotel-in: #6366f1;
+            --hotel-out: #94a3b8;
+            --airport-in: #8b5cf6;
+            --flight-bg: #1e40af;
+            
+            /* Icon colors */
+            --icon-food: #f59e0b;
+            --icon-move: #64748b;
+            --icon-flight: #3b82f6;
+            --icon-hotel: #8b5cf6;
+            --icon-lounge: #d97706;
+            
+            /* Work color */
+            --work-bg: #fff7ed;
+            --work-border: #fdba74;
+            --work-text: #c2410c;
+        }
+
+        /* フォント設定を全要素に適用して不統一を防ぐ */
+        body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, span, div {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+        }
+
+        body {
+            line-height: 1.5;
+            background-color: #f0f2f5;
+            color: #1e293b;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1850px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .subtitle {
+            opacity: 0.9;
+            font-size: 0.95rem;
+            margin-top: 5px;
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .filter-btn.active {
+            background: white;
+            color: var(--primary-blue);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .schedule-wrapper {
+            overflow: auto; 
+            max-height: 85vh;
+            position: relative;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1650px;
+            table-layout: fixed;
+        }
+
+        th,
+        td {
+            border: 1px solid var(--border-color);
+            padding: 10px 8px;
+            font-size: 0.82rem;
+            vertical-align: top;
+            word-wrap: break-word;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Opacity classes for filtering */
+        .dimmed {
+            opacity: 0.1;
+            filter: grayscale(100%);
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background: var(--header-bg);
+            z-index: 20;
+            box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .col-time {
+            width: 75px;
+            background: #fafafa;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
+
+        /* タイムゾーン色付き時刻セル */
+        .tz-jst {
+            background: rgba(59, 130, 246, 0.12);
+            border-left: 4px solid var(--tz-jst);
+        }
+
+        .tz-edt {
+            background: rgba(16, 185, 129, 0.12);
+            border-left: 4px solid var(--tz-edt);
+        }
+
+        .tz-cest {
+            background: rgba(245, 158, 11, 0.12);
+            border-left: 4px solid var(--tz-cest);
+        }
+
+        /* バッジスタイル */
+        .bar {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: white;
+            white-space: nowrap;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        .bar-flight {
+            background: var(--flight-bg);
+            color: white;
+            font-size: 0.8rem;
+            padding: 4px 10px;
+        }
+
+        .bar-checkin {
+            background: var(--airport-in);
+        }
+
+        .bar-hotel-in {
+            background: var(--hotel-in);
+        }
+
+        .bar-hotel-out {
+            background: var(--hotel-out);
+        }
+
+        .bar-conf {
+            background: #059669;
+        }
+
+        .bar-move {
+            background: #475569;
+        }
+        
+        .bar-work {
+            background: var(--work-bg);
+            color: var(--work-text);
+            border: 1px solid var(--work-border);
+        }
+        
+        /* アイコンの色付け */
+        .ic-food { color: var(--icon-food); font-size: 1.1em; }
+        .ic-move { color: var(--icon-move); }
+        .ic-flight { color: var(--icon-flight); }
+        .ic-hotel { color: var(--icon-hotel); }
+        .ic-lounge { color: var(--icon-lounge); font-weight: bold; }
+        .ic-work { color: var(--work-text); }
+
+        .flight-detail {
+            font-size: 0.75rem;
+            color: #334155;
+            margin-top: 4px;
+            line-height: 1.4;
+            display: block;
+        }
+
+        .flight-route {
+            font-weight: 700;
+            color: #1e3a8a;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .flight-time {
+            color: #1e40af;
+            font-size: 0.85rem;
+            font-weight: 700;
+            background: #eff6ff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .flight-duration {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-left: 5px;
+            font-weight: 500;
+        }
+        
+        .flight-meal {
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 0.7rem;
+            color: #d97706;
+            background: #fef3c7;
+            padding: 1px 5px;
+            border-radius: 3px;
+            border: 1px solid #fcd34d;
+        }
+
+        .empty {
+            color: #cbd5e1;
+            text-align: center;
+        }
+
+        .inflight {
+            background: #f1f5f9;
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #64748b;
+            vertical-align: middle;
+        }
+        
+        /* 継続状態を示すスタイル */
+        .continued {
+            color: #94a3b8;
+            text-align: center;
+            vertical-align: middle;
+            font-weight: bold;
+            font-size: 1.2rem;
+            background-color: #fafafa;
+        }
+
+        .col-member {
+            width: 15%;
+        }
+
+        .col-remarks {
+            width: 16%;
+            background: #fffcf0;
+            font-size: 0.75rem;
+        }
+
+        .lounge-info {
+            display: block;
+            margin-top: 4px;
+            padding-top: 4px;
+            border-top: 1px dashed #e2e8f0;
+            color: #4b5563;
+        }
+        .tag-pp {
+            background: #111827;
+            color: #fbbf24;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            margin-right: 3px;
+        }
+        .tag-jg {
+            background: #dc2626;
+            color: white;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            margin-right: 3px;
+        }
+
+        .date-row {
+            font-weight: bold;
+            background-color: var(--date-row) !important;
+        }
+
+        .date-row td {
+            padding: 12px 15px;
+            color: var(--primary-blue);
+            font-size: 1.05rem;
+            vertical-align: middle;
+        }
+
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stay-box {
+            font-size: 0.78rem;
+            font-weight: bold;
+            color: #475569;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 5px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            text-align: right;
+            line-height: 1.3;
+        }
+
+        .m-murakami { border-top: 4px solid #3b82f6; }
+        .m-sato { border-top: 4px solid #ef4444; }
+        .m-miura { border-top: 4px solid #10b981; }
+        .m-kyoto { border-top: 4px solid #8b5cf6; }
+
+        .returned {
+            background-color: #f8fafc;
+            color: #cbd5e1; /* 薄くする */
+            text-align: center;
+            vertical-align: middle;
+            font-size: 1.2rem;
+            border-left: 3px solid #cbd5e1 !important;
+        }
+        
+        /* Summary & Guide Styles */
+        .summary-section, .guide-section {
+            padding: 20px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+        }
+        .guide-section {
+            background: #fffcf0;
+        }
+        .section-title {
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+            border-left: 5px solid var(--secondary-blue);
+            padding-left: 10px;
+            margin: 0 0 15px 0;
+        }
+        .summary-grid, .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        .person-card, .guide-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            transition: opacity 0.3s;
+        }
+        .person-name {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid;
+        }
+        .p-murakami { color: #1e3a8a; border-color: #3b82f6; }
+        .p-sato { color: #b91c1c; border-color: #ef4444; }
+        .p-miura { color: #047857; border-color: #10b981; }
+        .p-denda { color: #6d28d9; border-color: #8b5cf6; }
+        
+        .p-item {
+            font-size: 0.75rem;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+        .p-label {
+            font-weight: 700;
+            color: #64748b;
+            display: block;
+            font-size: 0.7rem;
+        }
+        
+        /* Bus Guide Specific */
+        .bus-guide-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .bus-step {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .bus-title {
+            font-weight: bold;
+            color: #d97706;
+            margin-bottom: 10px;
+            display: block;
+            border-bottom: 1px dashed #e2e8f0;
+            padding-bottom: 5px;
+        }
+        .bus-desc {
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: #334155;
+        }
+        .bus-highlight {
+            color: #b91c1c;
+            font-weight: bold;
+        }
+        
+        .guide-title {
+            color: var(--secondary-blue);
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .guide-text {
+            font-size: 0.75rem;
+            margin: 0;
+            color: #334155;
+        }
+        
+        .action-needed {
+            color: #b91c1c;
+            font-weight: bold;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: block;
+        }
+
+        @media (max-width: 1024px) {
+            .summary-grid { grid-template-columns: 1fr 1fr; }
+            .guide-grid { grid-template-columns: 1fr 1fr; }
+            .bus-guide-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .summary-grid, .guide-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+    <script>
+        function filterMember(memberId) {
+            // Reset all opacity
+            const allElements = document.querySelectorAll('th, td, .person-card');
+            allElements.forEach(el => el.classList.remove('dimmed'));
+
+            // Update button states
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + memberId).classList.add('active');
+
+            if (memberId === 'all') return;
+
+            // Definition of columns for each member
+            // m=Murakami, s=Sato, mi=Miura, k=Denda
+            
+            // Logic: Iterate over all cells with data-u attribute.
+            // If the cell's data-u does NOT include the memberId, dim it.
+            
+            const targets = document.querySelectorAll('[data-u]');
+            targets.forEach(el => {
+                const users = el.getAttribute('data-u').split(' ');
+                if (!users.includes(memberId)) {
+                    el.classList.add('dimmed');
+                }
+            });
+            
+            // Handle person cards in summary
+            const cards = document.querySelectorAll('.person-card');
+            cards.forEach(card => {
+                if (!card.classList.contains('p-' + (memberId === 'k' ? 'denda' : (memberId === 'mi' ? 'miura' : memberId === 'm' ? 'murakami' : 'sato')))) {
+                    card.classList.add('dimmed');
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>2026年 米国・欧州出張 全員統合マスタースケジュール</h1>
+            <div class="subtitle">村上・佐藤・三浦・傳田 (v3.6：時刻順序修正版)</div>
+            
+            <div class="filter-controls">
+                <button id="btn-all" class="filter-btn active" onclick="filterMember('all')">全員表示</button>
+                <button id="btn-m" class="filter-btn" onclick="filterMember('m')">村上のみ</button>
+                <button id="btn-s" class="filter-btn" onclick="filterMember('s')">佐藤のみ</button>
+                <button id="btn-mi" class="filter-btn" onclick="filterMember('mi')">三浦のみ</button>
+                <button id="btn-k" class="filter-btn" onclick="filterMember('k')">傳田のみ</button>
+            </div>
+        </header>
+
+        <div class="schedule-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-time">時刻</th>
+                        <th class="col-member m-murakami" data-u="m">村上<br><small>(ITM着)</small></th>
+                        <th class="col-member m-sato" data-u="s">佐藤<br><small>(NGO着)</small></th>
+                        <th class="col-member m-miura" data-u="mi">三浦<br><small>(ITM着)</small></th>
+                        <th class="col-member m-kyoto" data-u="k">傳田<br><small>(KIX着)</small></th>
+                        <th class="col-remarks">備考</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 5/25 -->
+                    <tr class="date-row">
+                        <td colspan="6">
+                            <div class="header-flex">
+                                <span>5月25日 (月) 【日本出発 → ボストン移動】</span>
+                                <div class="stay-box"><span class="ic-hotel">🛌</span> 宿泊 ▷ 村上・佐藤・三浦：Hampton Inn Boston Logan Airport</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">09:00</td>
+                        <td class="returned" data-u="m">-</td>
+                        <td data-u="s"><span class="bar bar-move"><span class="ic-move">🏠</span></span> 犬山 出発</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>佐藤: 早めに出発 (所要2.5h)</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">10:00</td>
+                        <td data-u="m"><span class="bar bar-move"><span class="ic-move">🏠</span></span> 中書島 出発</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td data-u="mi"><span class="bar bar-move"><span class="ic-move">🏠</span></span> 京都 出発</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>各地出発</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">11:30</td>
+                        <td colspan="3" data-u="m s mi">伊丹 (ITM) 到着</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>移動: 中書島1.5h/犬山2.5h/京都1h</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">12:00</td>
+                        <td colspan="3" data-u="m s mi"><span class="ic-food">🍴</span> 昼食 ＠伊丹空港</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>
+                            <div class="lounge-info">
+                                <span class="tag-pp">PP</span> Osaka Airport Winery<br>
+                                <span style="font-size:0.7em; color:#b91c1c;">(※レストラン特典付帯カード必須)</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">13:05</td>
+                        <td colspan="3" data-u="m s mi"><span class="bar bar-checkin">✈️ IN</span> 伊丹 (ITM)</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>
+                            <div class="lounge-info"><span class="tag-jg">JGC</span> サクララウンジ</div>
+                            国内線: 出発1.5時間前
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">14:35</td>
+                        <td colspan="3" data-u="m s mi">
+                            <span class="bar bar-flight">JL3006</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">伊丹 (ITM) → 成田 (NRT)</span>
+                                <span class="flight-time">14:35発 → 16:00着</span>
+                                <span class="flight-duration">⏱️1h25m</span>
+                            </span>
+                        </td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>🛬 成田着 16:00</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">16:00</td>
+                        <td colspan="3" data-u="m s mi">成田 (NRT) 到着</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>
+                             <div class="lounge-info">
+                                 <span class="tag-jg">JGC</span> サクララウンジ<br>
+                                 <span class="tag-pp">PP</span> I.A.S.S Superior
+                             </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">18:20</td>
+                        <td colspan="3" data-u="m s mi">
+                            <span class="bar bar-flight">JL8</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">成田 (NRT) → ボストン (BOS)</span>
+                                <span class="flight-time">18:20発 → 18:10着</span>
+                                <span class="flight-duration">⏱️12h50m</span>
+                                <span class="flight-meal"><span class="ic-food">🍴</span> 機内食</span>
+                            </span>
+                        </td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>🛬 BOS着 EDT 18:10</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-edt">18:10</td>
+                        <td colspan="3" data-u="m s mi">ボストン (BOS) 到着</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-edt">20:00</td>
+                        <td colspan="3" data-u="m s mi"><span class="bar bar-hotel-in"><span class="ic-hotel">🏨</span> IN</span> Hampton Inn Boston Logan Airport</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>BOS 1泊目 (移動: 無料シャトル/Uber)</td>
+                    </tr>
+
+                    <!-- 5/26 -->
+                    <tr class="date-row">
+                        <td colspan="6">
+                            <div class="header-flex">
+                                <span>5月26日 (火) 【ボストン：技術視察 ＆ レセプション】</span>
+                                <div class="stay-box"><span class="ic-hotel">🛌</span> 宿泊 ▷ 村上・佐藤・三浦：Hampton Inn Boston Logan Airport</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-edt">午前〜</td>
+                        <td colspan="3" data-u="m s mi"><span class="bar bar-move"><span class="ic-move">🔬</span></span> ボストン技術視察 (MassRobotics等)</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>技術視察日 (候補は下部参照)</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-edt">17:00</td>
+                        <td colspan="3" data-u="m s mi"><span class="bar bar-conf">📍</span> Welcome Reception (BCEC)</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>BOS 2泊目</td>
+                    </tr>
+
+                    <!-- 5/27 -->
+                    <tr class="date-row">
+                        <td colspan="6">
+                            <div class="header-flex">
+                                <span>5月27日 (水) 【Robotics Summit & Expo 1日目】</span>
+                                <div class="stay-box"><span class="ic-hotel">🛌</span> 宿泊 ▷ 村上・佐藤・三浦：Hampton Inn Boston Logan Airport</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-edt">終日</td>
+                        <td colspan="3" data-u="m s mi"><span class="bar bar-conf">🎪</span> 展示会・セッション参加</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>BOS 3泊目 (昼食各自)</td>
+                    </tr>
+
+                    <!-- 5/28 -->
+                    <tr class="date-row">
+                        <td colspan="6">
+                            <div class="header-flex">
+                                <span>5月28日 (木) 【Robotics Summit & Expo 2日目】</span>
+                                <div class="stay-box"><span class="ic-hotel">🛌</span> 宿泊 ▷ 村上・佐藤・三浦：Hampton Inn Boston Logan Airport</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-edt">終日</td>
+                        <td colspan="3" data-u="m s mi"><span class="bar bar-conf">🎪</span> 展示会・セッション参加</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>BOS 4泊目 (昼食各自)</td>
+                    </tr>
+
+                    <!-- 5/29 -->
+                    <tr class="date-row">
+                        <td colspan="6">
+                            <div class="header-flex">
+                                <span>5月29日 (金) 【三浦：帰国 / 村上・佐藤：欧州移動】</span>
+                                <div class="stay-box"><span class="ic-hotel">🛌</span> 宿泊 ▷ 村上・佐藤：機中泊</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-edt">09:00</td>
+                        <td colspan="2" class="continued" data-u="m s"><span class="bar bar-work"><span class="ic-work">💻</span></span> ホテル内勤務 (~11:30)</td>
+                        <td data-u="mi"><span class="bar bar-hotel-out"><span class="ic-hotel">🚪</span> OUT</span> Hampton Inn</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>三浦: 先に出発</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-edt">10:35</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td data-u="mi"><span class="bar bar-checkin">✈️ IN</span> ボストン (BOS)</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>
+                            <div class="lounge-info">
+                                <span class="tag-jg">JGC</span> BA Lounge (T-E)<br>
+                                <span class="tag-pp">PP</span> The Lounge (T-C/E)
+                            </div>
+                            三浦: 国際線3時間前
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-edt">11:30</td>
+                        <td colspan="2" data-u="m s"><span class="bar bar-hotel-out"><span class="ic-hotel">🚪</span> OUT</span> Hampton Inn</td>
+                        <td class="continued" data-u="mi">↓</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>村上・佐藤: チェックアウト・移動</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-edt">13:35</td>
+                        <td colspan="2" data-u="m s">ボストン (BOS) 到着</td>
+                        <td data-u="mi">
+                            <span class="bar bar-flight">JL7</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">BOS → NRT</span>
+                                <span class="flight-time">13:35発 → 16:10着</span>
+                                <span class="flight-duration">⏱️13h35m</span>
+                                <span class="flight-meal"><span class="ic-food">🍴</span> 機内食</span>
+                            </span>
+                        </td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>三浦 帰路 (翌16:10着)</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-edt">14:40</td>
+                        <td colspan="2" data-u="m s"><span class="bar bar-checkin">✈️ IN</span> ボストン (BOS)</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>
+                             <div class="lounge-info">
+                                 <span class="tag-jg">JGC</span> BA Lounge (T-E)<br>
+                                 <span class="tag-pp">PP</span> Sapphire Lounge (T-B/C)
+                             </div>
+                             村上・佐藤: チェックイン
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-edt">17:40</td>
+                        <td colspan="2" data-u="m s">
+                            <span class="bar bar-flight">IB348</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">BOS → MAD</span>
+                                <span class="flight-time">17:40発 → 06:50着</span>
+                                <span class="flight-duration">⏱️7h10m</span>
+                                <span class="flight-meal"><span class="ic-food">🍴</span> 機内食</span>
+                            </span>
+                        </td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>翌06:50 MAD着 (ラウンジ推奨)</td>
+                    </tr>
+
+                    <!-- 5/30 -->
+                    <tr class="date-row">
+                        <td colspan="6">
+                            <div class="header-flex">
+                                <span>5月30日 (土) 【三浦：ITM帰着 / 村上・佐藤：ウィーン到着 / 傳田：日本発】</span>
+                                <div class="stay-box"><span class="ic-hotel">🛌</span> 宿泊 ▷ 村上・佐藤：Mercure Wien Westbahnhof / 傳田：機中泊</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">06:50</td>
+                        <td colspan="2" data-u="m s">マドリード (MAD) 到着</td>
+                        <td class="continued" data-u="mi">↓</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>
+                             <div class="lounge-info">
+                                 <span class="tag-jg">JGC</span> Dali/Velazquez<br>
+                                 <span class="tag-pp">PP</span> Sala VIP
+                             </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">08:40</td>
+                        <td colspan="2" data-u="m s">
+                            <span class="bar bar-flight">IB791</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">MAD → VIE</span>
+                                <span class="flight-time">08:40発 → 11:40着</span>
+                                <span class="flight-duration">⏱️3h00m</span>
+                            </span>
+                        </td>
+                        <td class="continued" data-u="mi">↓</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>村上・佐藤 ウィーンへ</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">11:40</td>
+                        <td colspan="2" data-u="m s">ウィーン (VIE) 到着</td>
+                        <td class="continued" data-u="mi">↓</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>村上/佐藤 移動: 空港バス(VAL1) ※乗り方は下部ガイド参照</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">14:00</td>
+                        <td colspan="2" data-u="m s"><span class="bar bar-hotel-in"><span class="ic-hotel">🏨</span> IN</span> Mercure Wien Westbahnhof</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>ウィーン 1泊目 (チェックアウト標準12:00)</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">16:10</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td data-u="mi">成田 (NRT) 到着</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>三浦 帰国</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">18:25</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td data-u="mi">
+                            <span class="bar bar-flight">JL3009</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">NRT → ITM</span>
+                                <span class="flight-time">18:25発 → 19:45着</span>
+                                <span class="flight-duration">⏱️1h20m</span>
+                            </span>
+                        </td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>三浦 乗り継ぎ</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">19:15</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td class="continued" data-u="mi">↓</td>
+                        <td data-u="k"><span class="bar bar-checkin">✈️ IN</span> 関西 (KIX)</td>
+                        <td>傳田: KIX到着 (国際線3時間前)</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">19:45</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td data-u="mi"><span class="bar bar-move"><span class="ic-move">🏠</span></span> 伊丹着 → 帰宅</td>
+                        <td class="continued" data-u="k">↓</td>
+                        <td>三浦 帰着完了</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">21:00</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td class="returned" data-u="mi">自宅へ帰宅完了</td>
+                        <td class="continued" data-u="k">↓</td>
+                        <td>三浦 全行程終了</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">22:15</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k">
+                            <span class="bar bar-flight">AY68</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">KIX → HEL</span>
+                                <span class="flight-time">22:15発 → 05:20着</span>
+                                <span class="flight-duration">⏱️13h05m</span>
+                                <span class="flight-meal"><span class="ic-food">🍴</span> 機内食</span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="lounge-info"><span class="tag-pp">PP</span> NODOKA/ANA</div>
+                        </td>
+                    </tr>
+
+                    <!-- 5/31 -->
+                    <tr class="date-row">
+                        <td colspan="6">
+                            <div class="header-flex">
+                                <span>5月31日 (日) 【完全 OFF (日曜)】</span>
+                                <div class="stay-box"><span class="ic-hotel">🛌</span> 宿泊 ▷ 全員：Mercure Wien Westbahnhof</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">05:20</td>
+                        <td colspan="2" data-u="m s">ウィーン 休日 (完全OFF)</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k">ヘルシンキ (HEL) 到着</td>
+                        <td>
+                            <div class="lounge-info">
+                                <span class="tag-jg">JGC</span> Finnair Biz<br>
+                                <span class="tag-pp">PP</span> Aspire Lounge
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">09:25</td>
+                        <td colspan="2" data-u="m s">市内散策</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k">
+                            <span class="bar bar-flight">AY1471</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">HEL → VIE</span>
+                                <span class="flight-time">09:25発 → 10:50着</span>
+                                <span class="flight-duration">⏱️2h25m</span>
+                            </span>
+                        </td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">13:00</td>
+                        <td colspan="2" class="empty" data-u="m s">-</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k"><span class="bar bar-hotel-in"><span class="ic-hotel">🏨</span> IN</span> Mercure Wien Westbahnhof</td>
+                        <td>傳田: 移動 空港バス(VAL1) ※乗り方は下部ガイド参照</td>
+                    </tr>
+
+                    <!-- 6/1 〜 6/4 -->
+                    <tr class="date-row">
+                        <td colspan="6">
+                            <div class="header-flex"><span>6月1日 (月) 〜 6月4日 (木) 【ICRA 2026】</span>
+                                <div class="stay-box"><span class="ic-hotel">🛌</span> 宿泊 ▷ 全員：Mercure Wien Westbahnhof</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">終日</td>
+                        <td colspan="4" data-u="m s mi k"><span class="bar bar-conf">🎪</span> ICRA 2026 参加 (Messe Wien)</td>
+                        <td>国際学会 参加</td>
+                    </tr>
+
+                    <!-- 6/5 -->
+                    <tr class="date-row">
+                        <td colspan="6">
+                            <div class="header-flex">
+                                <span>6月5日 (金) 【ICRA 最終日 / 村上：帰国開始】</span>
+                                <div class="stay-box"><span class="ic-hotel">🛌</span> 宿泊 ▷ 村上：機中泊 / 佐藤・傳田：Mercure Wien Westbahnhof</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">11:00</td>
+                        <td data-u="m"><span class="bar bar-hotel-out"><span class="ic-hotel">🚪</span> OUT</span> Mercure Wien Westbahnhof</td>
+                        <td data-u="s"><span class="bar bar-conf">🎪</span> 国際学会 聴講</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k"><span class="bar bar-conf">🎪</span> 国際学会 聴講</td>
+                        <td>村上 先行帰路</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">13:25</td>
+                        <td data-u="m"><span class="bar bar-checkin">✈️ IN</span> ウィーン (VIE)</td>
+                        <td data-u="s"><span class="bar bar-conf">🎪</span> 国際学会 聴講</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k"><span class="bar bar-conf">🎪</span> 国際学会 聴講</td>
+                        <td>
+                            <div class="lounge-info">
+                                <span class="tag-jg">JGC</span> Austrian/Sky<br>
+                                <span class="tag-pp">PP</span> Vienna/Sky Lounge
+                            </div>
+                            国際線: 出発3時間前
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">16:25</td>
+                        <td data-u="m">
+                            <span class="bar bar-flight">BA725</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">VIE → LHR</span>
+                                <span class="flight-time">16:25発 → 17:45着</span>
+                                <span class="flight-duration">⏱️2h20m</span>
+                            </span>
+                        </td>
+                        <td data-u="s"><span class="bar bar-conf">🎪</span> 国際学会 聴講</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k"><span class="bar bar-conf">🎪</span> 国際学会 聴講</td>
+                        <td>村上 1便目</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">17:45</td>
+                        <td data-u="m">ロンドン (LHR) 到着</td>
+                        <td data-u="s">-</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k">-</td>
+                        <td>
+                            <div class="lounge-info">
+                                <span class="tag-jg">JGC</span> BA Galleries (T5/3)<br>
+                                <span class="tag-pp">PP</span> Plaza Premium/Aspire
+                            </div>
+                            ※ 移動: T5着ならバスでT3へ
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">19:20</td>
+                        <td data-u="m">
+                             <span class="bar bar-flight">JL44</span>
+                             <span class="flight-detail">
+                                 <span class="flight-route">LHR → HND</span>
+                                 <span class="flight-time">19:20発 → 翌17:20着</span>
+                                 <span class="flight-duration">⏱️14h00m</span>
+                                 <span class="flight-meal"><span class="ic-food">🍴</span> 機内食</span>
+                             </span>
+                        </td>
+                        <td data-u="s">-</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k">-</td>
+                        <td>村上 帰国便</td>
+                    </tr>
+
+                    <!-- 6/6 -->
+                    <tr class="date-row">
+                        <td colspan="6">
+                            <div class="header-flex">
+                                <span>6月6日 (土) 【村上：ITM帰着 / 他：帰国開始】</span>
+                                <div class="stay-box"><span class="ic-hotel">🛌</span> 宿泊 ▷ 佐藤・傳田：機中泊</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">07:40</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td data-u="s">-</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k"><span class="bar bar-hotel-out"><span class="ic-hotel">🚪</span> OUT</span> Mercure Wien Westbahnhof</td>
+                        <td>傳田: 早め出発(バス移動考慮)</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">08:30</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td data-u="s"><span class="bar bar-hotel-out"><span class="ic-hotel">🚪</span> OUT</span> Mercure Wien Westbahnhof</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="continued" data-u="k">↓</td>
+                        <td>佐藤: ホテルチェックアウト</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">08:35</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k"><span class="bar bar-checkin">✈️ IN</span> ウィーン (VIE)</td>
+                        <td>傳田: 国際線3時間前</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">11:35</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td data-u="s"><span class="bar bar-conf">観光/自由</span></td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k">
+                            <span class="bar bar-flight">AY1472</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">VIE → HEL</span>
+                                <span class="flight-time">11:35発 → 15:00着</span>
+                                <span class="flight-duration">⏱️2h25m</span>
+                            </span>
+                        </td>
+                        <td>HEL経由 (HND 17:20着済)</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">13:25</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td data-u="s"><span class="bar bar-checkin">✈️ IN</span> ウィーン (VIE)</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="continued" data-u="k">↓</td>
+                        <td>佐藤: 国際線3時間前</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">15:00</td>
+                        <td class="returned" data-u="m">-</td>
+                        <td data-u="s">搭乗待ち</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k">ヘルシンキ (HEL) 到着</td>
+                        <td>乗継待ち</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">16:25</td>
+                        <td class="returned" data-u="m">-</td>
+                        <td data-u="s">
+                            <span class="bar bar-flight">BA725</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">VIE → LHR</span>
+                                <span class="flight-time">16:25発 → 17:45着</span>
+                                <span class="flight-duration">⏱️2h20m</span>
+                            </span>
+                        </td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="continued" data-u="k">↓</td>
+                        <td>佐藤 帰路開始</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">17:20</td>
+                        <td data-u="m">羽田 (HND) 到着</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="continued" data-u="k">↓</td>
+                        <td>
+                             <div class="lounge-info">
+                                 <span class="tag-jg">JGC</span> サクララウンジ<br>
+                                 <span class="tag-pp">PP</span> Power Lounge(Landside)
+                             </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">17:45</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td data-u="s">ロンドン (LHR) 到着</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k">
+                            <span class="bar bar-flight">AY67</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">HEL → KIX</span>
+                                <span class="flight-time">17:45発 → 翌12:35着</span>
+                                <span class="flight-duration">⏱️12h50m</span>
+                                <span class="flight-meal"><span class="ic-food">🍴</span> 機内食</span>
+                            </span>
+                        </td>
+                        <td>佐藤 LHR T5着 (バス移動有)</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">18:45</td>
+                        <td data-u="m">
+                            <span class="bar bar-flight">JL137</span>
+                            <span class="flight-detail">
+                                <span class="flight-route">HND → ITM</span>
+                                <span class="flight-time">18:45発 → 19:55着</span>
+                                <span class="flight-duration">⏱️1h10m</span>
+                            </span>
+                        </td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="continued" data-u="k">↓</td>
+                        <td>村上 羽田乗継</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-cest">19:20</td>
+                        <td class="continued" data-u="m">↓</td>
+                        <td data-u="s">
+                             <span class="bar bar-flight">JL44</span>
+                             <span class="flight-detail">
+                                 <span class="flight-route">LHR → HND</span>
+                                 <span class="flight-time">19:20発 → 翌17:20着</span>
+                                 <span class="flight-duration">⏱️14h00m</span>
+                                 <span class="flight-meal"><span class="ic-food">🍴</span> 機内食</span>
+                             </span>
+                        </td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="continued" data-u="k">↓</td>
+                        <td>佐藤 LHR発 (羽田行)</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">19:55</td>
+                        <td data-u="m">伊丹 (ITM) 到着</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="continued" data-u="k">↓</td>
+                        <td>村上 到着</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">21:00</td>
+                        <td data-u="m"><span class="bar bar-move"><span class="ic-move">🏠</span></span> 中書島 帰宅完了</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="continued" data-u="k">↓</td>
+                        <td>村上 全行程終了</td>
+                    </tr>
+                    
+                    <!-- 6/7 -->
+                    <tr class="date-row">
+                        <td colspan="6">
+                            <div class="header-flex">
+                                <span>6月7日 (日) 【最終帰着 ▷ 全員帰宅】</span>
+                                <div class="stay-box">🏠 全員自宅到着</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">12:35</td>
+                        <td class="returned" data-u="m">-</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k">関西 (KIX) 到着</td>
+                        <td>傳田 帰着</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">14:00</td>
+                        <td class="returned" data-u="m">-</td>
+                        <td class="continued" data-u="s">↓</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td data-u="k"><span class="bar bar-move"><span class="ic-move">🏠</span></span> 京都へ帰宅完了</td>
+                        <td>傳田 完了</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">17:20</td>
+                        <td class="returned" data-u="m">-</td>
+                        <td data-u="s">羽田 (HND) 到着</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>佐藤 帰国</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">19:55</td>
+                        <td class="returned" data-u="m">-</td>
+                        <td data-u="s">
+                             <span class="bar bar-flight">JL209</span>
+                             <span class="flight-detail">
+                                 <span class="flight-route">HND → NGO</span>
+                                 <span class="flight-time">19:55発 → 21:00着</span>
+                                 <span class="flight-duration">⏱️1h05m</span>
+                             </span>
+                        </td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>佐藤 羽田乗継</td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">21:00</td>
+                        <td class="returned" data-u="m">-</td>
+                        <td data-u="s">中部 (NGO) 到着</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>
+                            <div class="lounge-info"><span class="tag-pp">PP</span> Plaza Premium/Centrair</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tz-jst">22:45</td>
+                        <td class="returned" data-u="m">-</td>
+                        <td data-u="s"><span class="bar bar-move"><span class="ic-move">🏠</span></span> 犬山 帰宅完了</td>
+                        <td class="returned" data-u="mi">-</td>
+                        <td class="returned" data-u="k">-</td>
+                        <td>出張全行程終了(予測)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 個人別要約セクション -->
+        <div class="summary-section">
+            <h2 class="section-title">個人別フライト・ホテル要約</h2>
+            <div class="summary-grid">
+                <div class="person-card p-murakami">
+                    <div class="person-name">村上</div>
+                    <div class="p-item">
+                        <span class="p-label">往路 (5/25-26)</span>
+                        ITM 14:35 → NRT 16:00 (JL3006)<br>
+                        NRT 18:20 → BOS 18:10 (JL8)
+                    </div>
+                    <div class="p-item">
+                        <span class="p-label">欧州移動 (5/29-30)</span>
+                        BOS 17:40 → MAD 06:50 (IB348)<br>
+                        MAD 08:40 → VIE 11:40 (IB791)
+                    </div>
+                    <div class="p-item">
+                        <span class="p-label">帰路 (6/5-6)</span>
+                        VIE 16:25 → LHR 17:45 (BA725)<br>
+                        LHR 19:20 → HND 17:20+1 (JL44)<br>
+                        HND 18:45 → ITM 19:55 (JL137)
+                    </div>
+                    <div class="p-item">
+                        <span class="p-label">宿泊</span>
+                        Hampton Inn Boston (4泊)<br>
+                        Mercure Wien Westbahnhof (6泊)
+                    </div>
+                </div>
+
+                <div class="person-card p-sato">
+                    <div class="person-name">佐藤</div>
+                    <div class="p-item">
+                        <span class="p-label">往路 (5/25-26)</span>
+                        ITM 14:35 → NRT 16:00 (JL3006)<br>
+                        NRT 18:20 → BOS 18:10 (JL8)
+                    </div>
+                    <div class="p-item">
+                        <span class="p-label">欧州移動 (5/29-30)</span>
+                        BOS 17:40 → MAD 06:50 (IB348)<br>
+                        MAD 08:40 → VIE 11:40 (IB791)
+                    </div>
+                    <div class="p-item">
+                        <span class="p-label">帰路 (6/6-7)</span>
+                        VIE 16:25 → LHR 17:45 (BA725)<br>
+                        LHR 19:20 → HND 17:20+1 (JL44)<br>
+                        HND 19:55 → NGO 21:00 (JL209)
+                    </div>
+                    <div class="p-item">
+                        <span class="p-label">宿泊</span>
+                        Hampton Inn Boston (4泊)<br>
+                        Mercure Wien Westbahnhof (7泊)
+                    </div>
+                </div>
+
+                <div class="person-card p-miura">
+                    <div class="person-name">三浦</div>
+                    <div class="p-item">
+                        <span class="p-label">往路 (5/25-26)</span>
+                        ITM 14:35 → NRT 16:00 (JL3006)<br>
+                        NRT 18:20 → BOS 18:10 (JL8)
+                    </div>
+                    <div class="p-item">
+                        <span class="p-label">帰路 (5/29-30)</span>
+                        BOS 13:35 → NRT 16:10+1 (JL7)<br>
+                        NRT 18:25 → ITM 19:45 (JL3009)
+                    </div>
+                    <div class="p-item">
+                        <span class="p-label">宿泊</span>
+                        Hampton Inn Boston (4泊)
+                    </div>
+                </div>
+
+                <div class="person-card p-denda">
+                    <div class="person-name">傳田</div>
+                    <div class="p-item">
+                        <span class="p-label">往路 (5/30-31)</span>
+                        KIX 22:15 → HEL 05:20+1 (AY68)<br>
+                        HEL 09:25 → VIE 10:50 (AY1471)
+                    </div>
+                    <div class="p-item">
+                        <span class="p-label">帰路 (6/6-7)</span>
+                        VIE 11:35 → HEL 15:00 (AY1472)<br>
+                        HEL 17:45 → KIX 12:35+1 (AY67)
+                    </div>
+                    <div class="p-item">
+                        <span class="p-label">宿泊</span>
+                        Mercure Wien Westbahnhof (6泊)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ウィーン空港バス (VAL 1) 乗り方ガイド -->
+        <div class="guide-section">
+            <h2 class="section-title">ウィーン空港バス (VAL 1) 乗り方ガイド</h2>
+            <div class="bus-guide-grid">
+                <!-- 往路: 空港から西駅 -->
+                <div class="bus-step">
+                    <span class="bus-title">往路: 空港 (VIE) ⇒ 西駅 (Westbahnhof)</span>
+                    <div class="bus-desc">
+                        <span class="bus-highlight">乗り場:</span> 到着ロビーを出て正面のバスターミナル。<br>
+                        VAL 1系統 (Westbahnhof行き) の表示を確認。<br><br>
+                        <span class="bus-highlight">チケット購入:</span><br>
+                        1. 券売機 (到着ロビー内またはバス乗り場)<br>
+                        2. 運転手から直接購入 (現金/カード可)<br>
+                        ※ 片道 約10.5ユーロ (往復割引あり)<br><br>
+                        <span class="bus-highlight">所要時間:</span> 約40分 (直行)<br>
+                        <span class="bus-highlight">下車後:</span> 西駅前の「Europaplatz」に到着。ホテル(Mercure)は駅の北側すぐ。
+                    </div>
+                </div>
+                
+                <!-- 復路: 西駅から空港 -->
+                <div class="bus-step">
+                    <span class="bus-title">復路: 西駅 (Westbahnhof) ⇒ 空港 (VIE)</span>
+                    <div class="bus-desc">
+                        <span class="bus-highlight">乗り場:</span> 駅前広場「Europaplatz」のバスターミナル。<br>
+                        ホテル(Mercure)を出て駅のコンコースを通り抜け、正面出口を出たところ。<br><br>
+                        <span class="bus-highlight">運行間隔:</span> 日中は30分間隔で運行。<br>
+                        ※ 早朝・深夜便の場合は時刻表を要確認。<br><br>
+                        <span class="bus-highlight">注意点:</span> 渋滞を考慮し、余裕を持って乗車すること。<br>
+                        (空港到着後は、出発ロビーへエスカレーター/エレベーターで移動)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ボストン技術視察ガイド -->
+        <div class="guide-section" style="border-top: none;">
+            <h2 class="section-title">ボストン市内 技術視察候補 (5/26 - 振動・構造解析視点)</h2>
+            <div class="guide-grid">
+                <div class="guide-card">
+                    <span class="guide-title">MassRobotics (Seaport)</span>
+                    <p class="guide-text">世界最大級のロボット系スタートアップ集積拠点。アーム制御や自律移動の最新トレンドが集まる。</p>
+                    <span class="action-needed">※ 要事前Web予約 (有料ツアー有)</span>
+                </div>
+                <div class="guide-card">
+                    <span class="guide-title">MIT Museum (Kendall)</span>
+                    <p class="guide-text">「動く彫刻」アーサー・ガンソンの作品群は必見。リンク機構や振動を巧みに利用した機構学的アート。</p>
+                    <span class="action-needed">※ 予約不要</span>
+                </div>
+                <div class="guide-card">
+                    <span class="guide-title">Autodesk Technology Center</span>
+                    <p class="guide-text">ジェネレーティブデザイン(構造最適化)や積層造形の実証工房。製造プロセスの未来を体感できる。</p>
+                    <span class="action-needed">※ 業界関係者向けツアー要確認</span>
+                </div>
+                <div class="guide-card">
+                    <span class="guide-title">Boston Dynamics (Waltham)</span>
+                    <p class="guide-text">Spot/Atlasの本拠地。一般公開はしていないが、外観やイベント等での接点模索は価値あり。</p>
+                    <span class="action-needed">※ 見学は原則不可(要コネクション)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ウィーン技術視察ガイド -->
+        <div class="guide-section" style="border-top: 1px solid #e2e8f0;">
+            <h2 class="section-title">ウィーン市内 技術視察候補 (5/31 休日推奨)</h2>
+            <div class="guide-grid">
+                <div class="guide-card">
+                    <span class="guide-title">Technisches Museum Wien (技術博物館)</span>
+                    <p class="guide-text">オーストリアの産業史を網羅。重工業機械の振動対策や、歴史的な蒸気機関の構造など、機械工学的見地から非常に興味深い展示多数。</p>
+                </div>
+                <div class="guide-card">
+                    <span class="guide-title">Haus der Musik (音楽の家)</span>
+                    <p class="guide-text">音と振動の物理学を体験できる博物館。定在波の可視化や音響解析の展示があり、振動抑制制御の知見とリンクする内容。</p>
+                </div>
+                <div class="guide-card">
+                    <span class="guide-title">Pilotfabrik Industrie 4.0 (Seestadt)</span>
+                    <p class="guide-text">TUウィーンと企業群が連携するインダストリー4.0の実証工場。スマート生産やCPSの実験ラインが見学可能。</p>
+                    <span class="action-needed">※ 要アポイント (TU Wienへメール等)</span>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top:20px; font-size:0.8rem; color:#64748b; padding:0 20px 20px 20px;">
+            ※ <span class="tag-jg">JGC</span>: JAL/OneWorld Sapphire資格で利用可能 (本人+1名) | <span class="tag-pp">PP</span>: Priority Passで利用可能<br>
+            ※ ラウンジ情報は主要な候補です。ターミナル移動制限により利用できない場合があります。<br>
+            ※ Robotics Summitの昼食は登録料に含まれません（各自Concessions等で購入）。
+        </div>
+
+    </div>
+
+</body>
+
+</html>

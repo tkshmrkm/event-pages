@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robotics Summit 2026 — 出展者一覧</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --card2: #1c2128;
+            --border: #30363d;
+            --tp: #e6edf3;
+            --ts: #8b949e;
+            --tm: #6e7681;
+            --hl: #fbbf24;
+            --mo: #f472b6;
+            --hw: #ef4444;
+            --ai: #3b82f6;
+            --lo: #10b981;
+            --se: #06b6d4;
+            --el: #818cf8;
+            --mf: #f59e0b;
+            --de: #a78bfa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--tp);
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            padding: 20px 16px 40px
+        }
+
+        /* Header */
+        .ph {
+            text-align: center;
+            margin-bottom: 24px
+        }
+
+        .ev-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, .18), rgba(168, 85, 247, .18));
+            border: 1px solid rgba(59, 130, 246, .38);
+            border-radius: 100px;
+            padding: 5px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: #60a5fa;
+            margin-bottom: 10px
+        }
+
+        h1 {
+            font-size: clamp(18px, 3.5vw, 26px);
+            font-weight: 800;
+            background: linear-gradient(135deg, #e6edf3, #8b949e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px
+        }
+
+        .sub {
+            color: var(--ts);
+            font-size: 12px
+        }
+
+        /* Note */
+        .note {
+            max-width: 1100px;
+            margin: 0 auto 18px;
+            background: rgba(251, 191, 36, .055);
+            border: 1px solid rgba(251, 191, 36, .2);
+            border-left: 3px solid var(--hl);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 11px;
+            color: var(--ts)
+        }
+
+        .note strong {
+            color: var(--hl)
+        }
+
+        /* Highlight box */
+        .hl-box {
+            max-width: 1100px;
+            margin: 0 auto 18px;
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px
+        }
+
+        .hl-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--hl);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: 10px
+        }
+
+        .hl-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 8px
+        }
+
+        .hl-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 11px
+        }
+
+        .hl-booth {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 5px;
+            background: rgba(251, 191, 36, .12);
+            border: 1px solid rgba(251, 191, 36, .3);
+            color: var(--hl);
+            white-space: nowrap;
+            flex-shrink: 0
+        }
+
+        .hl-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--tp)
+        }
+
+        .hl-desc {
+            font-size: 10.5px;
+            color: var(--ts);
+            margin-top: 1px
+        }
+
+        /* Stats */
+        .stats {
+            max-width: 1100px;
+            margin: 0 auto 18px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .stat {
+            flex: 1;
+            min-width: 80px;
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 9px 12px;
+            text-align: center
+        }
+
+        .stat .n {
+            font-size: 18px;
+            font-weight: 800
+        }
+
+        .stat .l {
+            font-size: 9px;
+            color: var(--tm);
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            margin-top: 2px
+        }
+
+        /* Controls */
+        .ctrl {
+            max-width: 1100px;
+            margin: 0 auto 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .ctrl input {
+            width: 100%;
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 9px 14px;
+            color: var(--tp);
+            font-size: 12.5px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color .15s
+        }
+
+        .ctrl input:focus {
+            border-color: rgba(59, 130, 246, .5)
+        }
+
+        .ctrl input::placeholder {
+            color: var(--tm)
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center
+        }
+
+        .fl {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--tm);
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-right: 3px;
+            white-space: nowrap
+        }
+
+        .fb {
+            padding: 3px 11px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: var(--card2);
+            color: var(--ts);
+            font-size: 10.5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .13s;
+            white-space: nowrap
+        }
+
+        .fb:hover {
+            color: var(--tp);
+            border-color: rgba(255, 255, 255, .25)
+        }
+
+        .fb.on {
+            font-weight: 700
+        }
+
+        .fb[data-v="all"].on {
+            background: rgba(255, 255, 255, .06);
+            border-color: rgba(255, 255, 255, .22);
+            color: var(--tp)
+        }
+
+        .fb[data-v="mo"].on {
+            background: rgba(244, 114, 182, .1);
+            border-color: rgba(244, 114, 182, .45);
+            color: var(--mo)
+        }
+
+        .fb[data-v="hw"].on {
+            background: rgba(239, 68, 68, .1);
+            border-color: rgba(239, 68, 68, .45);
+            color: var(--hw)
+        }
+
+        .fb[data-v="ai"].on {
+            background: rgba(59, 130, 246, .1);
+            border-color: rgba(59, 130, 246, .45);
+            color: var(--ai)
+        }
+
+        .fb[data-v="lo"].on {
+            background: rgba(16, 185, 129, .1);
+            border-color: rgba(16, 185, 129, .45);
+            color: var(--lo)
+        }
+
+        .fb[data-v="se"].on {
+            background: rgba(6, 182, 212, .1);
+            border-color: rgba(6, 182, 212, .45);
+            color: var(--se)
+        }
+
+        .fb[data-v="el"].on {
+            background: rgba(129, 140, 248, .1);
+            border-color: rgba(129, 140, 248, .45);
+            color: var(--el)
+        }
+
+        .fb[data-v="mf"].on {
+            background: rgba(245, 158, 11, .1);
+            border-color: rgba(245, 158, 11, .45);
+            color: var(--mf)
+        }
+
+        .fb[data-v="de"].on {
+            background: rgba(167, 139, 250, .1);
+            border-color: rgba(167, 139, 250, .45);
+            color: var(--de)
+        }
+
+        .sb {
+            padding: 3px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--card2);
+            color: var(--ts);
+            font-size: 10.5px;
+            cursor: pointer;
+            transition: all .13s
+        }
+
+        .sb.on {
+            background: rgba(255, 255, 255, .06);
+            border-color: rgba(255, 255, 255, .2);
+            color: var(--tp)
+        }
+
+        /* Table */
+        .tw {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        thead tr {
+            background: var(--card2)
+        }
+
+        th {
+            padding: 9px 13px;
+            text-align: left;
+            font-size: 9.5px;
+            font-weight: 700;
+            color: var(--tm);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap
+        }
+
+        th.tc {
+            text-align: center
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(48, 54, 61, .45);
+            transition: background .1s
+        }
+
+        tbody tr:last-child {
+            border-bottom: none
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, .022)
+        }
+
+        tbody tr.h {
+            display: none
+        }
+
+        td {
+            padding: 10px 13px;
+            vertical-align: middle
+        }
+
+        .nm {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--tp)
+        }
+
+        .ds {
+            font-size: 11px;
+            color: var(--ts);
+            margin-top: 2px;
+            line-height: 1.4
+        }
+
+        .bc {
+            text-align: center
+        }
+
+        .bn {
+            display: inline-block;
+            padding: 2px 9px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, .055);
+            border: 1px solid var(--border);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--ts);
+            font-variant-numeric: tabular-nums
+        }
+
+        .bn.pick {
+            background: rgba(251, 191, 36, .1);
+            border-color: rgba(251, 191, 36, .35);
+            color: var(--hl)
+        }
+
+        .cat {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 8px;
+            border-radius: 100px;
+            font-size: 9.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+            white-space: nowrap
+        }
+
+        .c-mo {
+            background: rgba(244, 114, 182, .1);
+            border: 1px solid rgba(244, 114, 182, .3);
+            color: var(--mo)
+        }
+
+        .c-hw {
+            background: rgba(239, 68, 68, .1);
+            border: 1px solid rgba(239, 68, 68, .3);
+            color: var(--hw)
+        }
+
+        .c-ai {
+            background: rgba(59, 130, 246, .1);
+            border: 1px solid rgba(59, 130, 246, .3);
+            color: var(--ai)
+        }
+
+        .c-lo {
+            background: rgba(16, 185, 129, .1);
+            border: 1px solid rgba(16, 185, 129, .3);
+            color: var(--lo)
+        }
+
+        .c-se {
+            background: rgba(6, 182, 212, .1);
+            border: 1px solid rgba(6, 182, 212, .3);
+            color: var(--se)
+        }
+
+        .c-el {
+            background: rgba(129, 140, 248, .1);
+            border: 1px solid rgba(129, 140, 248, .3);
+            color: var(--el)
+        }
+
+        .c-mf {
+            background: rgba(245, 158, 11, .1);
+            border: 1px solid rgba(245, 158, 11, .3);
+            color: var(--mf)
+        }
+
+        .c-de {
+            background: rgba(167, 139, 250, .1);
+            border: 1px solid rgba(167, 139, 250, .3);
+            color: var(--de)
+        }
+
+        .stars {
+            display: flex;
+            gap: 1px;
+            justify-content: center
+        }
+
+        .s {
+            font-size: 10px;
+            color: var(--hl);
+            opacity: .15
+        }
+
+        .s.on {
+            opacity: 1
+        }
+
+        .note-cell {
+            font-size: 10.5px;
+            color: var(--ts)
+        }
+
+        .nr {
+            text-align: center;
+            padding: 36px;
+            color: var(--tm);
+            font-size: 13px;
+            display: none
+        }
+
+        footer {
+            max-width: 1100px;
+            margin: 24px auto 0;
+            text-align: center;
+            color: var(--tm);
+            font-size: 10.5px;
+            padding-top: 13px;
+            border-top: 1px solid var(--border)
+        }
+
+        footer a {
+            color: var(--ai);
+            text-decoration: none
+        }
+
+        @media(max-width:700px) {
+
+            .ds,
+            .col-cat,
+            .col-note {
+                display: none
+            }
+        }
+
+        /* ── Modal ── */
+        .mov {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .78);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px
+        }
+
+        .mov.off {
+            display: none
+        }
+
+        .mbox {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 14px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 88vh;
+            overflow-y: auto;
+            padding: 22px;
+            position: relative
+        }
+
+        .m-hd {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px
+        }
+
+        .m-nm {
+            font-size: 15px;
+            font-weight: 800;
+            color: #e6edf3;
+            line-height: 1.3;
+            flex: 1
+        }
+
+        .m-cl {
+            background: none;
+            border: none;
+            color: #6e7681;
+            font-size: 24px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 2px;
+            flex-shrink: 0
+        }
+
+        .m-cl:hover {
+            color: #e6edf3
+        }
+
+        .m-meta {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 14px
+        }
+
+        .m-div {
+            height: 1px;
+            background: #21262d;
+            margin: 12px 0
+        }
+
+        .m-lb {
+            font-size: 9px;
+            font-weight: 700;
+            color: #6e7681;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-bottom: 4px
+        }
+
+        .m-tx {
+            font-size: 12.5px;
+            color: #8b949e;
+            line-height: 1.65
+        }
+
+        .m-grid {
+            display: grid;
+            grid-template-columns: 64px 1fr;
+            gap: 5px 10px;
+            margin-top: 6px
+        }
+
+        .m-key {
+            font-size: 10px;
+            font-weight: 700;
+            color: #fbbf24;
+            padding-top: 2px
+        }
+
+        .m-val {
+            font-size: 12px;
+            color: #8b949e;
+            line-height: 1.55
+        }
+
+        .m-tip {
+            font-size: 11.5px;
+            background: rgba(59, 130, 246, .07);
+            border: 1px solid rgba(59, 130, 246, .22);
+            border-left: 3px solid #3b82f6;
+            border-radius: 6px;
+            padding: 9px 12px;
+            color: #93c5fd;
+            margin-top: 10px;
+            line-height: 1.6
+        }
+
+        tbody tr {
+            cursor: pointer
+        }
+
+        tbody tr:hover td .nm {
+            color: #60a5fa
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ph">
+        <div class="ev-badge">🤖 Robotics Summit &amp; Expo 2026</div>
+        <h1>出展者一覧 — 全ブース番号付き</h1>
+        <p class="sub">May 27–28, 2026 · Boston Convention &amp; Exhibition Center (BCEC)</p>
+    </div>
+
+    <div class="note">
+        <strong>データソース:</strong> mapyourshow.com 公式出展者リスト（2026年2月確認）· <strong>太字ブース番号</strong> = 特に注目企業
+    </div>
+
+    <!-- Highlight picks -->
+    <div class="hl-box">
+        <div class="hl-title">⭐ 特に注目の出展企業（Physical AI / 制御・駆動関連）</div>
+        <div class="hl-grid" id="hl-grid"></div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+        <div class="stat">
+            <div class="n" id="vis-n">—</div>
+            <div class="l">表示中</div>
+        </div>
+        <div class="stat">
+            <div class="n" id="tot-n">—</div>
+            <div class="l">登録済</div>
+        </div>
+        <div class="stat">
+            <div class="n">200+</div>
+            <div class="l">総出展者数</div>
+        </div>
+        <div class="stat">
+            <div class="n">May 27–28</div>
+            <div class="l">開催日</div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="ctrl">
+        <input type="text" id="q" placeholder="🔍  会社名・製品・キーワード・ブース番号で検索..." oninput="render()">
+        <div class="row">
+            <span class="fl">カテゴリ</span>
+            <button class="fb on" data-g="cat" data-v="all">すべて</button>
+            <button class="fb" data-g="cat" data-v="mo">🦾 モーション・駆動</button>
+            <button class="fb" data-g="cat" data-v="hw">🤖 ロボット本体</button>
+            <button class="fb" data-g="cat" data-v="ai">🧠 AI・ソフト</button>
+            <button class="fb" data-g="cat" data-v="lo">📦 物流・自動化</button>
+            <button class="fb" data-g="cat" data-v="se">📡 センサー・カメラ</button>
+            <button class="fb" data-g="cat" data-v="el">⚡ 電気・配線</button>
+            <button class="fb" data-g="cat" data-v="mf">🏭 製造・素材</button>
+            <button class="fb" data-g="cat" data-v="de">🔬 その他</button>
+        </div>
+        <div class="row">
+            <span class="fl">村田関連度</span>
+            <button class="fb on" data-g="rel" data-v="0">すべて</button>
+            <button class="fb" data-g="rel" data-v="5">★★★★★のみ</button>
+            <button class="fb" data-g="rel" data-v="4">★★★★以上</button>
+            <button class="fb" data-g="rel" data-v="3">★★★以上</button>
+        </div>
+        <div class="row">
+            <span class="fl">並順</span>
+            <button class="sb on" data-sort="alpha">社名順</button>
+            <button class="sb" data-sort="booth">ブース番号順</button>
+            <button class="sb" data-sort="rel">関連度順</button>
+            <button class="sb" data-sort="cat">カテゴリ順</button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="tw">
+        <table>
+            <thead>
+                <tr>
+                    <th>会社名 / 特徴</th>
+                    <th class="tc">Booth</th>
+                    <th class="tc col-cat">カテゴリ</th>
+                    <th class="tc">村田<br>関連度</th>
+                    <th class="col-note">備考・製品</th>
+                </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+        </table>
+        <div class="nr" id="nr">該当する出展者が見つかりません</div>
+    </div>
+
+    <footer>
+        <p>データ出典: <a href="https://www.mapyourshow.com/" target="_blank">mapyourshow.com</a> · <a
+                href="https://www.roboticssummit.com/" target="_blank">roboticssummit.com</a> · 2026年2月時点</p>
+    </footer>
+
+    <script>
+        // ─── カテゴリ定義 ───
+        const CAT = {
+            mo: { label: '🦾 モーション・駆動', css: 'c-mo' },
+            hw: { label: '🤖 ロボット本体', css: 'c-hw' },
+            ai: { label: '🧠 AI・ソフト', css: 'c-ai' },
+            lo: { label: '📦 物流・自動化', css: 'c-lo' },
+            se: { label: '📡 センサー・カメラ', css: 'c-se' },
+            el: { label: '⚡ 電気・配線', css: 'c-el' },
+            mf: { label: '🏭 製造・素材', css: 'c-mf' },
+            de: { label: '🔬 その他', css: 'c-de' },
+        };
+
+        // ─── 出展者データ ───
+        // cat: mo=モーション駆動, hw=ロボット本体, ai=AIソフト, lo=物流自動化, se=センサーカメラ, el=電気配線, mf=製造素材, de=その他
+        // rel: 村田機械関連度 1-5   pick: 特注目フラグ
+        const EX = [
+            // A
+            { name: 'Abatek Americas Inc.', booth: 617, cat: 'mf', rel: 2, note: '精密スプリング・精密コンポーネント' },
+            { name: 'ABCorp 3D Inc.', booth: 426, cat: 'mf', rel: 2, note: '大型3Dプリンティングサービス' },
+            { name: 'Acme Monaco', booth: 822, cat: 'mf', rel: 2, note: '精密ばね・スタンピング部品' },
+            { name: 'ADVANCED Motion Controls', booth: 507, cat: 'mo', rel: 5, note: 'サーボドライブ・アンプ。ロボット・AGV向け' },
+            { name: 'Advanced Robotics for Manufacturing (ARM)', booth: 229, cat: 'hw', rel: 4, note: '製造現場向け協働ロボットコンソーシアム・システム' },
+            { name: 'agilityIRL', booth: 916, cat: 'hw', rel: 3, note: 'アジリティ・ロボットモーション展示' },
+            { name: 'Allied Motion (Allient)', booth: 222, cat: 'mo', rel: 4, note: '産業用モーター・ドライブ・コントローラー総合メーカー' },
+            { name: 'Amphenol Communications Solutions', booth: 238, cat: 'el', rel: 3, note: 'ロボティクス・産業向け高信頼コネクター' },
+            { name: 'Aptyx', booth: 713, cat: 'hw', rel: 3, note: 'ロボットシステム・インテグレーション' },
+            // B
+            { name: 'Bal Seal Engineering', booth: 337, cat: 'el', rel: 2, note: '精密シール・コネクター・スプリング部品' },
+            { name: 'Barrett Technology', booth: 445, cat: 'hw', rel: 4, note: 'WAMアーム・BHand。高性能研究用ロボットアーム' },
+            { name: 'BizLink elocab Ltd.', booth: 706, cat: 'el', rel: 3, note: 'ロボット・自動化向けフレキシブルケーブルアセンブリ' },
+            { name: 'Bogen Magnetics, USA, LLC', booth: 219, cat: 'se', rel: 3, note: '精密マグネット・磁気エンコーダ用コンポーネント' },
+            { name: 'Boston Dynamics', booth: 758, cat: 'hw', rel: 4, note: 'Spot四足歩行・Atlasヒューマノイドのデモ。産業点検・物流実用例', pick: true },
+            { name: 'Bota Systems AG', booth: 338, cat: 'se', rel: 5, note: '高精度力覚・トルクF/Tセンサ。協働ロボット・精密マニピュレーション向け', pick: false },
+            // C
+            { name: 'Cambridge Polymer Group', booth: 723, cat: 'mf', rel: 2, note: '医療・産業向け高性能ポリマー材料' },
+            { name: 'Canon USA - Motion Control', booth: 523, cat: 'mo', rel: 4, note: 'コンパクトサーボモーター・エンコーダーシステム。高精度ロボット関節向け' },
+            { name: 'Cavist Manufacturing', booth: 901, cat: 'mf', rel: 2, note: '精密CNC加工・製造サービス' },
+            { name: 'CCTY', booth: 423, cat: 'se', rel: 2, note: 'ベアリング・産業用計測機器' },
+            { name: 'CGI, Inc.', booth: 313, cat: 'mo', rel: 4, note: '小型精密ギアヘッド・ロボット関節アクチュエータ' },
+            { name: 'CGR International', booth: 722, cat: 'mf', rel: 2, note: '特殊ロボット部品・カスタムエンジニアリング' },
+            { name: 'Charles River Analytics / Kinova', booth: 638, cat: 'hw', rel: 4, note: 'Kinovaロボットアーム+自律制御AI。軽量・安全な医療・研究向けマニピュレーター' },
+            { name: 'Cirexx International, Inc.', booth: 231, cat: 'mf', rel: 2, note: '高密度フレキシブルPCB・リジッドフレックス基板' },
+            { name: 'Cirtronics', booth: 513, cat: 'mf', rel: 2, note: '電子機器コントラクト製造（EMS）' },
+            { name: 'Coast IPC', booth: 344, cat: 'el', rel: 2, note: '産業用PC・エンベデッドコンピューティング' },
+            { name: 'Cofactr', booth: 623, cat: 'ai', rel: 3, note: 'AI搭載電子部品調達・サプライチェーン管理SaaS' },
+            { name: 'Commonlands Cameras & Optics', booth: 124, cat: 'se', rel: 3, note: '産業用カメラ・光学機器・マシンビジョン部品' },
+            { name: 'Cone Drive Gearing Solutions', booth: 328, cat: 'mo', rel: 5, note: 'ウォームギア・精密減速機。ロボット旋回・関節向けギアリング' },
+            { name: 'Contactile', booth: 228, cat: 'se', rel: 4, note: '触覚センサー。ロボットグリッパ向け高分解能触覚フィードバック' },
+            { name: 'Copley Controls', booth: 512, cat: 'mo', rel: 5, note: '高性能デジタルサーボアンプ・モーションコントローラー' },
+            { name: 'CubeMars', booth: 237, cat: 'mo', rel: 5, note: 'コンパクトアウトランナーモーターモジュール。ヒューマノイド・四足向け高トルク密度', pick: false },
+            // D
+            { name: 'Designatronics / Stock Drive Products', booth: 327, cat: 'mo', rel: 4, note: 'ベルト・プーリー・ギア・リードスクリュー等、動力伝達コンポーネント専門' },
+            // E
+            { name: 'East Coast Automation Sales', booth: 522, cat: 'lo', rel: 3, note: '自動化機器・ロボットシステムの販売・インテグレーション' },
+            { name: 'Electrocraft', booth: 412, cat: 'mo', rel: 4, note: 'ブラシレスDC・ステッパーモーター。産業・医療向けコンパクト設計（Regal Rexnord子会社）' },
+            { name: 'Elmo Motion Control, Inc.', booth: 312, cat: 'mo', rel: 5, note: '高性能小型サーボドライブ。世界最高出力密度クラスのモーションコントローラー', pick: false },
+            { name: 'EMAG LLC', booth: 528, cat: 'mf', rel: 2, note: '精密CNC工作機械・製造システム（独）' },
+            // F
+            { name: 'FAULHABER MICROMO', booth: 436, cat: 'mo', rel: 5, note: '超精密マイクロDCモーター・ギアヘッド。医療・精密ロボット向け世界標準ブランド' },
+            { name: 'Fictiv', booth: 329, cat: 'mf', rel: 2, note: 'オンデマンド精密製造プラットフォーム（3D印刷・CNC・射出成形）' },
+            { name: 'ForceN, Inc.', booth: 417, cat: 'se', rel: 3, note: '小型力センサー・触覚センサーモジュール' },
+            { name: 'Franka Robotics', booth: 207, cat: 'hw', rel: 4, note: 'Panda/FR3：力制御感度の高い協働ロボットアーム。研究・精密組立向け', pick: true },
+            { name: 'Freeman Schwabe Machinery', booth: 719, cat: 'mf', rel: 1, note: '工業用プレス機械' },
+            { name: 'Fresco Design', booth: 343, cat: 'de', rel: 2, note: '製品デザイン・エンジニアリングコンサル' },
+            { name: 'FUTEK', booth: 444, cat: 'se', rel: 4, note: 'ロードセル・トルクセンサ・圧力センサ。ロボット力制御・試験計測向け' },
+            { name: 'FYELABS', booth: 718, cat: 'de', rel: 2, note: 'ロボティクス関連スタートアップ' },
+            // G
+            { name: 'General Foundry Service', booth: 612, cat: 'mf', rel: 1, note: '精密鋳造・金属部品製造' },
+            { name: 'Goddard Technologies, Inc.', booth: 519, cat: 'de', rel: 2, note: 'ロボティクス向け特殊エンジニアリング' },
+            { name: 'GTR Manufacturing', booth: 437, cat: 'mf', rel: 2, note: '精密機械部品・CNC製造サービス' },
+            // H
+            { name: 'Haply', booth: 516, cat: 'hw', rel: 3, note: 'ハプティクスデバイス・触覚フィードバックデバイス。遠隔操作・VR向け' },
+            { name: 'Haption Corp.', booth: 345, cat: 'hw', rel: 3, note: '6自由度ハプティクスアーム。遠隔操作・シミュレーション向け' },
+            { name: 'Harmonic Drive', booth: 301, cat: 'mo', rel: 5, note: '波動歯車減速機の世界標準。ロボット関節・精密位置決めに必須部品', pick: true },
+            { name: 'Hawk Ridge Systems', booth: 216, cat: 'ai', rel: 2, note: 'SolidWorks・CAD/CAEソリューション・シミュレーション（Dassault系）' },
+            { name: 'HBK North America', booth: 545, cat: 'se', rel: 4, note: '振動・音響・動力計測・試験システム（Brüel&Kjær+HBM統合ブランド）' },
+            { name: 'Howland Technology', booth: 230, cat: 'mf', rel: 2, note: '精密エンジニアリングサービス' },
+            // I
+            { name: 'igus Inc.', booth: 213, cat: 'mo', rel: 4, note: 'セルフ潤滑樹脂製ベアリング・エネルギーチェーン・ロボット関節。コスト優位' },
+            { name: 'IMSystems', booth: 317, cat: 'mo', rel: 5, note: 'Archax：革新的コンプライアント歯車伝達機構。バックドライバビリティと高剛性を両立' },
+            { name: 'Indro Robotics', booth: 240, cat: 'hw', rel: 3, note: '遠隔操作型点検ドローン・ロボットシステム' },
+            { name: 'Infor', booth: 701, cat: 'lo', rel: 2, note: '製造・物流向けERPシステム' },
+            { name: 'Infranor', booth: 438, cat: 'mo', rel: 4, note: '高性能サーボコントローラ・ドライブ（スイス）。精密位置決め制御' },
+            { name: 'Innodisk', booth: 614, cat: 'el', rel: 2, note: '産業用SSD・エンベデッドメモリ・IoTストレージ' },
+            { name: 'Insperity', booth: 738, cat: 'de', rel: 1, note: '人事・HR管理サービス' },
+            { name: 'Isometric Micro Molding', booth: 801, cat: 'mf', rel: 2, note: '超精密マイクロ射出成形（医療・ロボット向け）' },
+            // J
+            { name: 'JF Shaw', booth: 143, cat: 'de', rel: 1, note: '産業機器販売・代理店' },
+            { name: 'John Evans Sons, Inc.', booth: 330, cat: 'mf', rel: 2, note: '精密バランスシャフト・クランクシャフト' },
+            // K
+            { name: 'Kablooe Design', booth: 800, cat: 'de', rel: 2, note: '製品デザイン・プロトタイプ開発' },
+            { name: 'KHK USA Inc.', booth: 336, cat: 'mo', rel: 4, note: '標準歯車（平歯車・かさ歯車・ウォームギア等）。設計自由度の高い標準品' },
+            { name: 'Kolektor Mobility', booth: 127, cat: 'mo', rel: 3, note: '電動モビリティ向けモーター・電動パワートレイン部品' },
+            { name: 'KUKA Robotics Corporation', booth: 607, cat: 'hw', rel: 4, note: '産業用多関節ロボット・コボット。自動車・電子・物流分野でのシステム実績' },
+            // L
+            { name: 'Leuze Electronic', booth: 131, cat: 'se', rel: 3, note: '光電センサー・セーフティセンサー・バーコードリーダー。産業オートメーション向け' },
+            { name: 'LINAK U.S.', booth: 430, cat: 'mo', rel: 3, note: '電動リニアアクチュエータ。医療・農業・産業向け' },
+            { name: 'Looking Glass Services, Inc.', booth: 644, cat: 'de', rel: 1, note: 'エンジニアリングサービス・コンサルティング' },
+            // M
+            { name: 'Mabuchi Motor America Corp.', booth: 606, cat: 'mo', rel: 3, note: '小型DCモーター。民生から産業まで幅広い用途・大量供給実績' },
+            { name: 'MassRobotics Form & Function', booth: 354, cat: 'hw', rel: 3, note: 'MassRobotics出展ゾーン（エンジニアリング系）' },
+            { name: 'MassRobotics Healthcare Robotics', booth: 154, cat: 'hw', rel: 3, note: 'MassRobotics出展ゾーン（医療ロボット系スタートアップ）' },
+            { name: 'MassRobotics Physical AI Accelerator', booth: 454, cat: 'ai', rel: 4, note: 'Physical AI特化のアクセラレーター。具現化AIの最前線スタートアップが集結', pick: true },
+            { name: 'MassRobotics Start-Up Alley', booth: 254, cat: 'hw', rel: 3, note: 'MassRobotics出展ゾーン（スタートアップ各社）' },
+            { name: 'Mathworks', booth: 922, cat: 'ai', rel: 5, note: 'MATLAB/Simulink。モデルベース制御設計・シミュレーション・コード生成の業界標準', pick: true },
+            { name: 'maxon', booth: 419, cat: 'mo', rel: 5, note: '高精度DCモーター・BLDCモーター・ギアヘッド。医療・宇宙・ロボット向け世界最高品質', pick: true },
+            { name: 'MeKo Manufacturing e.K.', booth: 918, cat: 'mf', rel: 2, note: '精密金属加工・コンポーネント製造（独）' },
+            { name: 'MICRO', booth: 619, cat: 'mo', rel: 3, note: 'マイクロモーター・精密小型アクチュエータ' },
+            { name: 'MinebeaMitsumi', booth: 123, cat: 'mo', rel: 5, note: '小型精密モーター・ボールベアリング。miniature bearing世界シェアトップクラス（日本）' },
+            // N
+            { name: 'Nabtesco Motion Control', booth: 225, cat: 'mo', rel: 5, note: 'RV減速機（サイクロ減速機）。産業ロボット関節のデファクトスタンダード（ナブテスコ）', pick: true },
+            { name: 'NanoSen GmbH', booth: 340, cat: 'se', rel: 3, note: 'ナノスケール精密センサー・計測システム（独）' },
+            { name: 'NdotLight', booth: 141, cat: 'se', rel: 2, note: 'LED照明・産業用光源' },
+            { name: 'Netzer Precision Position Sensors', booth: 223, cat: 'se', rel: 4, note: '非接触絶対角度エンコーダー。ロボット関節・精密位置計測向け' },
+            { name: 'New England Wire Technologies', booth: 322, cat: 'el', rel: 2, note: '特殊被覆電線・ロボット用フレキシブルケーブル' },
+            { name: 'Nidec Drive Technology Corporation', booth: 413, cat: 'mo', rel: 5, note: '精密ギアボックス・減速機（旧Avtron・Nidec系列）。ロボット関節向け高精度ギア技術', pick: true },
+            { name: 'Nidec Motor Company', booth: 431, cat: 'mo', rel: 4, note: '産業用モーター・ACモーター（Nidec系列）' },
+            { name: 'Novanta', booth: 100, cat: 'se', rel: 4, note: 'レーザー・スキャニング・精密位置検出・マシンビジョン（医療・産業）' },
+            { name: 'NXP USA, Inc.', booth: 636, cat: 'el', rel: 3, note: 'マイコン・組み込みプロセッサ・ロボット向け半導体（i.MX等）' },
+            // O
+            { name: 'Orbbec Inc.', booth: 245, cat: 'se', rel: 4, note: '3Dデプスカメラ（ToF・構造光）。ロボット知覚・ピッキング向け' },
+            { name: 'Orbex Group', booth: 227, cat: 'de', rel: 2, note: 'ロボティクス関連' },
+            { name: 'Oriental Motor USA', booth: 316, cat: 'mo', rel: 4, note: 'ステッピングモーター・ACサーボ・リニアアクチュエータ。標準品豊富' },
+            { name: 'OYMotion', booth: 339, cat: 'se', rel: 3, note: '生体信号制御（筋電・EMG）センサー。義手・ウェアラブルロボット向け' },
+            // P
+            { name: 'Path Robotics', booth: 120, cat: 'hw', rel: 3, note: 'AI搭載溶接ロボット。自律センシングによるアダプティブ溶接システム' },
+            { name: 'PHD Inc.', booth: 117, cat: 'mo', rel: 3, note: '空圧・電動グリッパ・アクチュエータ。ピッキング・組立向け' },
+            { name: 'PickNik Robotics', booth: 536, cat: 'ai', rel: 4, note: 'MoveIt Pro（ROS2マニピュレーション制御フレームワーク）。ロボット腕制御の業界標準' },
+            { name: 'Polygon Company', booth: 631, cat: 'mf', rel: 2, note: '精密ポリゴンシャフト・コンポーネント' },
+            { name: 'PPM (Shenzhen) Inc.', booth: 139, cat: 'mo', rel: 3, note: '精密モーター・ギアモジュール（中国）' },
+            { name: 'PSN Labs', booth: 812, cat: 'se', rel: 2, note: '専門センサー・計測ラボ' },
+            // Q
+            { name: 'QNX', booth: 307, cat: 'ai', rel: 4, note: 'リアルタイムOS（RTOS）。安全重要システム向け（BlackBerry QNX）。自動車・ロボット向け' },
+            { name: 'Quabbin Wire & Cable Co.', booth: 538, cat: 'el', rel: 2, note: '産業・医療向けカスタム電線・ケーブル' },
+            { name: 'Quanten Technologies', booth: 122, cat: 'de', rel: 2, note: '量子センシング・位置計測技術' },
+            { name: 'Quantum Devices, Inc.', booth: 530, cat: 'se', rel: 4, note: '高分解能光学エンコーダー。サーボモーター・ロボット関節位置計測向け' },
+            { name: 'Quarter20', booth: 736, cat: 'de', rel: 2, note: 'ロボティクス関連' },
+            // R
+            { name: 'R+W America L.P.', booth: 217, cat: 'mo', rel: 4, note: '精密カップリング・ベローズカップリング・リミットトルク（独）。ロボット伝達系向け' },
+            { name: 'RBC Bearings', booth: 517, cat: 'mo', rel: 3, note: '精密ベアリング・リニアアクチュエータ。航空宇宙・産業向け' },
+            { name: 'Real-Time Innovations (RTI)', booth: 601, cat: 'ai', rel: 4, note: 'DDS通信ミドルウェア（RTI Connext）。ROS2基盤・ロボット分散システム向け' },
+            { name: 'Realhand', booth: 407, cat: 'hw', rel: 3, note: '先進的ロボットハンド・義手技術' },
+            { name: 'Regal Rexnord', booth: 542, cat: 'mo', rel: 4, note: 'ACモーター・サーボ・減速機・クラッチ/ブレーキの総合動力伝達メーカー' },
+            { name: 'Renishaw, Inc.', booth: 324, cat: 'se', rel: 5, note: '精密位置エンコーダー・プローブ・計測システム。サブミクロン級高精度計測の世界標準' },
+            { name: 'Resense GmbH', booth: 624, cat: 'se', rel: 3, note: 'センサーフュージョン・レーダーシステム' },
+            { name: 'RRC Power Solutions', booth: 341, cat: 'el', rel: 3, note: 'スマートバッテリーパック・充電システム（産業・医療）' },
+            { name: 'Rugged Science / Vecow', booth: 323, cat: 'el', rel: 3, note: '産業用ラギッドPC・エッジコンピューティングシステム' },
+            { name: 'Ruland Manufacturing', booth: 113, cat: 'mo', rel: 3, note: '精密シャフトカップリング・コレットクランプ（米国製）' },
+            // S
+            { name: 'Sager Electronics', booth: 401, cat: 'el', rel: 2, note: '電子部品・産業用電源の専門商社' },
+            { name: 'SEW-EURODRIVE, Inc.', booth: 422, cat: 'mo', rel: 5, note: 'モーター・ギアモーター・インバータ・AMR駆動ユニット。物流・AGV向け実績多数' },
+            { name: 'Seyond', booth: 104, cat: 'se', rel: 4, note: '高精度固体LiDAR。ロボット・自律走行向け長距離3D点群認識' },
+            { name: 'Skyline Innovation Co., Limited', booth: 944, cat: 'de', rel: 2, note: 'ロボティクス・自動化関連' },
+            { name: 'Stratasys Direct', booth: 912, cat: 'mf', rel: 2, note: '産業用3Dプリンティングサービス（FDM・PolyJet等）' },
+            { name: 'Stueken North America', booth: 712, cat: 'mf', rel: 2, note: '精密金属深絞り・スタンピング部品（独）' },
+            { name: 'Sumitomo Machinery Corp.', booth: 416, cat: 'mo', rel: 5, note: 'サイクロ減速機・ギアモーター。産業ロボット・AGV向け高精度動力伝達' },
+            { name: 'Sun-Wa Technos America', booth: 441, cat: 'de', rel: 2, note: '電子・機械部品の商社（日本系）' },
+            { name: 'Symage by GSI', booth: 244, cat: 'se', rel: 3, note: 'レーザー部品・光学エンコーダーシステム（GSIグループ）' },
+            { name: 'Synapticon', booth: 239, cat: 'mo', rel: 5, note: '関節一体型サーボドライブ（SOMANET）。ロボット関節の分散制御・EtherCAT対応' },
+            // T
+            { name: 'TBI Motion', booth: 637, cat: 'mo', rel: 4, note: 'ボールスクリュー・リニアガイド（台湾）。AGV・ロボット直動案内部品' },
+            { name: 'TDK Corporation', booth: 206, cat: 'se', rel: 4, note: '磁気センサー・圧電素子・受動部品・EMCフィルター（TDK日本）' },
+            { name: 'Tecan', booth: 613, cat: 'mf', rel: 2, note: 'ラボオートメーション・液体ハンドリングロボット（医療・ライフサイエンス）' },
+            { name: 'Tesollo', booth: 427, cat: 'hw', rel: 4, note: '多指ロボットハンド。高自由度・力制御対応グリッパ' },
+            { name: 'TG0', booth: 744, cat: 'se', rel: 3, note: 'タッチセンシング・インターフェース技術' },
+            { name: 'Tianhe Magnetics Technology', booth: 428, cat: 'mf', rel: 3, note: '高性能ネオジム磁石・モーター用マグネット（中国）' },
+            { name: 'Times Microwave Systems', booth: 236, cat: 'el', rel: 2, note: '高周波同軸ケーブル・RF接続システム' },
+            { name: 'TQ-Systems USA INC.', booth: 326, cat: 'ai', rel: 3, note: '組み込みシステム・モーターコントローラー・ロボット向けモジュール（独）' },
+            { name: 'TransCOR Information Technology', booth: 114, cat: 'lo', rel: 2, note: '物流・情報システムインテグレーション' },
+            { name: 'Transense', booth: 526, cat: 'se', rel: 3, note: '非接触トルク・温度センサー（SAW技術）' },
+            { name: 'TransPak', booth: 819, cat: 'de', rel: 1, note: '精密機器向け梱包・輸送ソリューション' },
+            // U
+            { name: 'Uber AI', booth: 129, cat: 'ai', rel: 3, note: '機械学習・AIプラットフォーム研究。ロボット知覚・意思決定への応用' },
+            { name: 'Ubicept', booth: 243, cat: 'se', rel: 3, note: 'イベントカメラ・超高速ビジョンセンサー' },
+            { name: 'UFP MedTech', booth: 537, cat: 'mf', rel: 2, note: '医療機器向けフォーム・パッケージング材料' },
+            // V
+            { name: 'Vantedge Medical', booth: 823, cat: 'mf', rel: 2, note: '医療機器製造サービス' },
+            { name: 'VARTA AG', booth: 331, cat: 'el', rel: 3, note: '高性能小型バッテリー・ロボット向けリチウムイオンセル（独）' },
+            { name: 'Vaxor Motor', booth: 439, cat: 'mo', rel: 3, note: 'ロボティクス向け新興モーターメーカー' },
+            { name: 'Vulcan Spring & Mfg. Co.', booth: 137, cat: 'mf', rel: 2, note: '精密ばね・スタンパー部品製造' },
+            // W
+            { name: 'Wiferion', booth: 226, cat: 'el', rel: 4, note: 'AGV/AMR向けワイヤレス充電システム（独）。大電力非接触給電' },
+            { name: 'Wittenstein', booth: 622, cat: 'mo', rel: 5, note: '高精度サイクロイド減速機・サーボアクチュエータ（独）。バックラッシュゼロ・高剛性' },
+            { name: 'wolfSSL', booth: 539, cat: 'ai', rel: 2, note: '組み込みシステム向けSSL/TLSセキュリティライブラリ' },
+            { name: 'WPG Americas', booth: 501, cat: 'el', rel: 2, note: '電子コンポーネント専門商社（台湾系）' },
+            // X
+            { name: 'XJCsensor', booth: 429, cat: 'se', rel: 3, note: 'ロボット・産業向けセンサーモジュール（中国）' },
+            { name: 'Xsens', booth: 342, cat: 'se', rel: 5, note: '高精度IMU・慣性計測ユニット・モーションキャプチャ。ロボット・AGVの姿勢推定に必須' },
+        ];
+
+        // Pick list (highlighted)
+        const PICKS = EX.filter(e => e.pick);
+
+        // Render highlight box
+        const hlGrid = document.getElementById('hl-grid');
+        PICKS.forEach(e => {
+            const d = document.createElement('div');
+            d.className = 'hl-item';
+            d.innerHTML = `<span class="hl-booth">${e.booth}</span><div><div class="hl-name">${e.name}</div><div class="hl-desc">${e.note}</div></div>`;
+            hlGrid.appendChild(d);
+        });
+
+        // Also add user-specified picks that aren't already marked
+        const extraPicks = ['Harmonic Drive', 'Nabtesco Motion Control', 'maxon', 'Boston Dynamics', 'Mathworks', 'MassRobotics Physical AI Accelerator', 'Franka Robotics', 'Nidec Drive Technology Corporation'];
+        extraPicks.forEach(n => {
+            const e = EX.find(x => x.name.startsWith(n.split(' ')[0]) && x.name.includes(n.split(' ')[1] || ''));
+            if (e && !e.pick) {
+                const d = document.createElement('div');
+                d.className = 'hl-item';
+                d.innerHTML = `<span class="hl-booth">${e.booth}</span><div><div class="hl-name">${e.name}</div><div class="hl-desc">${e.note || ''}</div></div>`;
+                hlGrid.prepend(d);
+            }
+        });
+
+        let sortKey = 'alpha';
+        let minRel = 0;
+        document.getElementById('tot-n').textContent = EX.length;
+
+        function stars(n) {
+            return Array.from({ length: 5 }, (_, i) => `<span class="s${i < n ? ' on' : ''}"">★</span>`).join('');
+        }
+
+        function render() {
+            const q = document.getElementById('q').value.toLowerCase().trim();
+            const cat = document.querySelector('.fb[data-g="cat"].on')?.dataset.v || 'all';
+            let data = EX.filter(e => {
+                const cOk = cat === 'all' || e.cat === cat;
+                const rOk = e.rel >= minRel;
+                const s = (e.name + ' ' + (e.note || '') + ' ' + e.booth).toLowerCase();
+                const qOk = !q || s.includes(q);
+                return cOk && rOk && qOk;
+            });
+            if (sortKey === 'alpha') data.sort((a, b) => a.name.localeCompare(b.name));
+            else if (sortKey === 'booth') data.sort((a, b) => a.booth - b.booth);
+            else if (sortKey === 'rel') data.sort((a, b) => b.rel - a.rel || a.name.localeCompare(b.name));
+            else if (sortKey === 'cat') data.sort((a, b) => a.cat.localeCompare(b.cat) || a.name.localeCompare(b.name));
+
+            const tbody = document.getElementById('tbody');
+            tbody.innerHTML = '';
+            data.forEach(e => {
+                const c = CAT[e.cat];
+                const isHigh = e.rel >= 4;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+      <td><div class="nm">${e.name}</div></td>
+      <td class="bc"><span class="bn${isHigh ? ' pick' : ''}">${e.booth}</span></td>
+      <td class="bc col-cat"><span class="cat ${c.css}">${c.label}</span></td>
+      <td class="bc"><div class="stars">${stars(e.rel)}</div></td>
+      <td class="note-cell col-note">${e.note || ''}</td>
+    `;
+                tr.onclick = () => openModal(e);
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('vis-n').textContent = data.length;
+            document.getElementById('nr').style.display = data.length === 0 ? 'block' : 'none';
+        }
+
+        // Filter buttons (cat)
+        document.querySelectorAll('.fb[data-g="cat"]').forEach(b => {
+            b.addEventListener('click', () => {
+                document.querySelectorAll('.fb[data-g="cat"]').forEach(x => x.classList.remove('on'));
+                b.classList.add('on'); render();
+            });
+        });
+        // Filter buttons (rel)
+        document.querySelectorAll('.fb[data-g="rel"]').forEach(b => {
+            b.addEventListener('click', () => {
+                document.querySelectorAll('.fb[data-g="rel"]').forEach(x => x.classList.remove('on'));
+                b.classList.add('on'); minRel = parseInt(b.dataset.v); render();
+            });
+        });
+        // Sort buttons
+        document.querySelectorAll('.sb').forEach(b => {
+            b.addEventListener('click', () => {
+                document.querySelectorAll('.sb').forEach(x => x.classList.remove('on'));
+                b.classList.add('on'); sortKey = b.dataset.sort; render();
+            });
+        });
+
+        // ─── ★4+ 詳細データ (booth番号 → {p:製品, t:技術特徴, m:村田機械視点}) ───
+        const D = {
+            507: { p: 'B30A8/BD15A8 デジタルサーボドライブ', t: 'EtherCAT・CANopen・SPI対応。10A〜200A。ブラシ・BLDCモーター両対応。アナログ/デジタルフィードバック対応', m: 'AGV・搬送ロボット各軸のサーボドライブ直接採用候補。電流制御帯域幅が高く多軸協調制御に優れる' },
+            301: { p: 'CSG-2UH・SHF・HPGシリーズ 波動歯車（ハーモニックドライブ）', t: '減速比30〜320:1。ゼロバックラッシュ。重複噛み合い構造で高剛性・コンパクト。高い繰り返し精度', m: '搬送ロボット・マニピュレータ関節の核心部品。現行ロボット関節との比較・採用評価' },
+            225: { p: 'RV-Eシリーズ サイクロイド（RV）減速機', t: '産業ロボット関節世界シェア約60%。高剛性・長寿命・衝撃耐性。振動吸収特性が高い', m: 'AGVアーム・重負荷搬送ロボット関節採用候補。Nabtesco国内販売ルートとの比較検討' },
+            419: { p: 'DCX・ECXモーター、GPXギアヘッド、ESCONドライブ', t: '効率90%超。火星探査機Curiosity/Perseverance採用実績。-40〜+150℃対応。超小型カタログ品多数', m: '精密位置決め・医療系ロボット向けモーター選定基準。高品質・信頼性の参照ブランド' },
+            123: { p: 'ミニチュアボールベアリング（NMB）、DCモーター、ステッパーモーター', t: 'ベアリング世界シェアトップクラス。厚さ0.6mmの超薄型も対応。日本本社（浜松）', m: '搬送ロボット車輪・関節のベアリング、および小型モーター部品の定番選定対象' },
+            312: { p: 'Gold Whistle・Platinum Whistle・SimplIQ サーボドライブ', t: '2.5kW超小型（マッチ箱サイズ）。EtherCAT対応。世界最高クラスの出力密度2.5kW/kg超', m: 'ロボット関節内蔵型ドライブの最有力候補。極小スペースへの高性能ドライブ搭載を実現' },
+            622: { p: 'alpha LS遊星ギア・SP+サーボプラネタリ・galaxieドライブ', t: 'galaxie: ゼロバックラッシュの歯面接触伝達。高剛性・高速：RoboDriveとの比較対象', m: '精密ロボット関節・高速ピックアンドプレイス向け。バックラッシュゼロが必要な軸に最適' },
+            239: { p: 'SOMANET Circulo（Arm/Leg）・Servo 54/110', t: '関節内蔵型EtherCATドライブ。Axis of Motion™技術。分散モーション制御アーキテクチャ', m: 'ロボット関節一体化設計の参考事例。次世代AMR・ヒューマノイド向け分散制御の参考に' },
+            237: { p: 'AK80-9・RMD-X10・GL90 アウトランナーモーター', t: '準直接駆動型。高バックドライバビリティ。MIT Cheetahに採用実績。透過型トルク制御対応', m: 'ヒューマノイド・四足設計の最先端アクチュエータ技術。力制御ロボット設計の参考' },
+            436: { p: '1524SR〜4460シリーズ 超小型モーター、DE系ギアヘッド', t: '直径6mm〜43mm。超小型高出力設計。一体型エンコーダー&ギアヘッドラインナップが充実', m: '精密グリッパー・指関節・カメラ雲台・小型機構向けモーター選定。医療機器実績あり' },
+            512: { p: 'Accelnet Plus・Xenus Plus・Stepnet サーボアンプ', t: 'EtherCAT・CANopen・Ethernet/IP対応。業界標準品で信頼性・導入実績が豊富', m: '搬送ロボット・マニピュレータ制御基板の選定候補。豊富な実績で採用リスク低い' },
+            317: { p: 'Archax コンプライアント歯車伝達機構（ケーブル＆プーリー型）', t: 'バックドライバビリティと高剛性の両立を独自機構で解決。次世代ロボット関節の注目技術', m: '次世代柔軟関節設計の参考技術。MIT系スタートアップとして要確認の革新的メカ' },
+            416: { p: 'CYCLO BBBシリーズ サイクロ減速機', t: '過負荷耐性高（定格の500%まで）。衝撃・振動に強い独自歯形設計。長寿命', m: '重負荷・衝撃荷重のある搬送ロボット向け減速機。Nabtesco RVとの性能・コスト比較' },
+            422: { p: 'MOVIMOT・MOVIDRIVE・MOVI-C、DR系ギアモーター', t: 'AGV向けMOVIGEAR（モーター+ギア+インバータ一体型）。CAN通信・EtherCAT対応', m: 'AGV駆動ユニット・インバータの主要比較対象。物流施設・工場への豊富な導入実績' },
+            324: { p: 'RESOLUTE絶対エンコーダー、ATOM、TONiC、QUANTiC', t: 'サブミクロン精度（±1nm分解能）。光学エンコーダーの世界標準ブランド。多軸同期対応', m: '高精度位置フィードバック・キャリブレーション基準。搬送ロボットの精度向上に直結' },
+            342: { p: 'MTi-680G・MTi-100シリーズ IMU', t: '9軸+GNSS融合。ドリフト<0.1°/h。ROS2対応SDK付属。IP67防水。堅牢設計', m: 'AGV自律走行・機体スタビライゼーション向け姿勢推定センサー。高精度自律走行に必須' },
+            338: { p: 'SensONE 6軸F/Tセンサ、BFT-Nanoシリーズ', t: 'IP65/IP68防水。ROS2対応。高サンプリングレート（最大16kHz）。ロボット先端取り付け型', m: '力制御・接触検知が必要なマニピュレータ・グリッパ向け。協働ロボットの標準部品として' },
+            328: { p: 'DC系ウォームギア・エンクロードドライブ・旋回ドライブ', t: '中大型ロボット旋回軸向け。耐荷重設計が優れる。バックドライバビリティは低め', m: '重負荷旋回搬送ロボット・大型旋回軸向け。設計要件次第でHarmonic/RVとの比較対象' },
+            413: { p: 'Ovoid Gear・Spiroid歯車系 精密ウォームギア', t: '非球面歯形により接触面積拡大。高トルク密度・コンパクト。精密減速機の専業メーカー', m: 'ロボット関節・精密駆動機構の設計参考。波動歯車・RV減速機との比較対象' },
+            758: { p: 'Spot（四足歩行）・Atlas（ヒューマノイド）実機デモ展示', t: 'Spot: 産業点検・物流の実用化最前線。Atlas: 全身協調動作・人的環境適応の研究最前線', m: '次世代搬送・点検ロボットの競合ベンチマーク。自動化ユースケース収集の好機' },
+            207: { p: 'Franka Research 3 (FR3) 7自由度協働ロボット', t: '全関節に力覚センサー内蔵。感度±0.05N。ROS2/MoveIt対応。研究APIが充実', m: '協働・精密組立ロボットの力制御設計参考。柔軟接触作業・安全共存への応用可能性を検討' },
+            922: { p: 'MATLAB/Simulink・Robotics System Toolbox・ROS Toolbox・強化学習ツール', t: 'モデルベース制御設計とコード自動生成が業界標準。Physical AI・強化学習対応も強化中', m: '制御設計・シミュレーション・HILのデファクト標準。研究機関との親和性も高く連携に有利' },
+            454: { p: 'Physical AI特化スタートアップ15社以上が集結するアクセラレーター展示', t: 'Physical AI＝ロボットが物理世界を学習・行動するAI。Embodied AIの最前線技術', m: '次世代ロボット知覚・行動AI企業との接触機会。共同研究・技術導入可能性を探る絶好の場' },
+            245: { p: 'Astra+・Gemini2・FemtoMega 3Dデプスカメラ', t: 'ToF+RGB-D技術。ROS2対応SDK。6cmから検出可能。屋内外対応。低コスト高性能', m: 'ロボットビン・ピッキング・障害物検知向け3Dビジョン。AGV前方認識への適用を検討' },
+            545: { p: 'Brüel＆Kjær NVH計測＋HBMひずみ/力計測（統合ブランド）', t: '振動・音響・動力・ひずみ計測のトップブランドが統合。nCode・DIAdem解析環境完備', m: 'ロボット機構の振動・騒音評価試験。モーター・減速機のNVH特性評価・比較に活用できる' },
+            104: { p: 'Falcon Ultra・Robin 固体LiDAR', t: '最大300mレンジ。0.03°解像度。IP67防水。固体型で振動・温度変化に強い長期安定性', m: 'AGV長距離障害物検知・高速自律走行向け。セーフティスキャナの補完技術として検討' },
+            223: { p: 'NA25・NA58 非接触絶対角度エンコーダー（誘導型）', t: '磁気・光学不要の誘導型センシング。汚染環境でも動作。20ビット絶対値出力', m: 'ロボット関節絶対位置フィードバック向け。過酷環境下での信頼性が高く採用事例多数' },
+            530: { p: 'QR145・QR077 高分解能光学インクリメンタルエンコーダー', t: '1万〜10万cpr。A/B/Z出力対応。コンパクト設計。米国製で品質信頼性が高い', m: 'サーボモーターフィードバック・高精度位置検出向け。モーター内蔵型エンコーダーの比較対象' },
+            601: { p: 'RTI Connext DDS 通信ミドルウェア', t: 'ROS2のrmwデフォルト実装。QoS管理・リアルタイム確定的通信。医療・防衛グレード信頼性', m: 'ROS2基盤ロボットシステムの分散通信設計。複数AMR協調制御・セーフティシステムに' },
+            536: { p: 'MoveIt Pro（ROS2マニピュレーション制御フレームワーク）', t: 'Behavior Tree管理。知覚から動作計画まで統合。商用サポートと定期アップデート付き', m: '搬送ロボットへのROS2腕制御導入の参考。PickNikのコンサルティングサービスも活用可能' },
+            307: { p: 'QNX Neutrino RTOS（リアルタイムOS）', t: 'IEC 61508 SIL 3・ISO 26262 ASIL D認証取得。マイクロカーネル設計で決定論的応答', m: '安全重要ロボットシステム向けOS。AMRの機能安全設計・認証取得の参考として検討' },
+            226: { p: 'etaLINK 1000・3000 AGV向けワイヤレス充電システム', t: 'IPX5防水。24V〜72V対応。電磁誘導方式。位置ずれ±50mmまで許容。プラグイン不要', m: 'AGV/AMRの自動ワイヤレス充電システム導入検討。人手による充電作業の完全自動化に' },
+            100: { p: 'Cambridge Technology ガルバノスキャナー・Precision Motion製品群', t: 'レーザースキャニング・精密位置検出・光学制御コンポーネントの専業（医療・産業）', m: '精密スキャニング・光学機器制御向け。将来の光学検査・レーザー加工ロボット設計参考' },
+            213: { p: 'iglide樹脂ベアリング・triflex Rエネルギーチェーン・ReBeL cobotジョイント', t: 'セルフ潤滑で潤滑油不要。食品・クリーンルーム対応。100万回超の動作保証', m: 'AGV関節・ケーブルガイドの低コスト化。金属ベアリング代替で定期メンテナンスを削減' },
+            206: { p: 'InvenSense IMU・霍尔素子・圧電振動センサー・EMCフィルター', t: 'TDK傘下の多分野センサーメーカー。MEMS技術で世界標準製品多数。国内調達容易', m: 'ロボット姿勢・振動・近接検知のセンサー部品。TDK国内調達ルートとの連携も検討' },
+            637: { p: 'SBR/SFSボールスクリュー、GX系リニアガイド', t: '台湾製。精度グレードC3〜C7。高コスパで産業機械への採用実績多数。即納対応', m: '直動搬送軸・ガントリーロボット向け直動部品の主要調達候補。THK等との比較対象' },
+            444: { p: 'LSBシリーズロードセル、TRD305トルクセンサー、圧力センサー', t: '精度±0.02%FS。USB・SPI出力。小型・軽量設計。FDA対応品も有', m: 'ロボット関節トルク・グリッパー把持力の精密計測。試験装置・製品内蔵向け両対応' },
+            427: { p: 'TG-5多指ロボットハンド（5指15自由度）', t: '触覚センサー内蔵。力制御対応。協働ロボット先端取り付けアダプター対応', m: '高自由度把持・精密組立ロボット向けエンドエフェクタ。次世代グリッパーの設計参考' },
+            316: { p: 'αSTEP・BLVDシリーズ（5万種以上の標準品ラインナップ）', t: 'ステッパー・ブラシレスDC・AC速度制御モーター。短納期・日本語技術サポートが充実', m: '搬送ロボット補助軸・コンベア駆動の標準品調達先。日本語サポートで導入・維持しやすい' },
+            222: { p: 'ブラシ・ブラシレス・ステッパー・サーボモーター統合ラインナップ', t: 'Allient傘下の統合モーションブランド。特定用途向けカスタム設計にも対応', m: '搬送ロボット駆動モーター選定の比較対象。中・大型AMR向け製品が充実' },
+            217: { p: 'BK・EKベローズカップリング、SKシャーピン安全カップリング', t: '高精度トルク伝達。バックラッシュゼロ。シャーピン型は過負荷時に機械的に保護', m: 'サーボ軸トルク伝達・過負荷保護カップリングの選定。軸間精度要求に応じた選定支援' },
+            327: { p: 'HTDタイミングベルト・プーリー、精密リードスクリュー、標準ギア', t: '標準品が幅広く即納対応。Sterling Instrumentの精密機器向け品揃え。設計ツール充実', m: '搬送ロボット動力伝達設計の標準部品調達先。試作〜量産まで一貫して調達可能' },
+            542: { p: 'Marathon ACモーター・Dodge減速機・Warner Electricクラッチ/ブレーキ', t: '動力伝達の総合メーカー（Regal+Rexnord統合）。AGVから産業ラインまで幅広い実績', m: '大型搬送ライン・重量AGVの駆動システム比較対象。ブレーキ付き統合ユニットも検討可' },
+            228: { p: 'PapillArray 触覚センサーアレイ', t: '振動・粗さ・滑り・法線/剪断力を最大30kHzで計測。小型・高分解能設計', m: 'グリッパー滑り検知・把持制御向け。ロボットハンドへの組み込みで把持安定性が向上' },
+            638: { p: 'Kinova Gen3 Ultra Lightweight Arm 6/7自由度', t: '可搬4kg時の本体8.2kg。協働安全規格準拠。ROS2/Python API。Charles River AIと連携', m: '軽量マニピュレータ・移動ロボット搭載アーム向け。Charles River AIとの自律制御展示も要注目' },
+            607: { p: 'KR Agilus・LBR iisy cobotシリーズ', t: 'iiQKA.OS新制御システム。EtherCAT対応。産業・協働の幅広いラインナップ完備', m: '産業ロボット統合の参考・比較対象。自動車・電子・物流分野への豊富な導入実績' },
+            431: { p: 'US Motors・Leroy Somer系 ACモーター・精密サーボモーター', t: '三相ACモーター・精密サーボ。IEC/NEMA両規格対応。Nidecグループの大型モーター', m: '大型AGV・搬送ライン向けメインドライブの検討対象。Nidec DTC（413番）と合わせて確認' },
+            412: { p: 'CompletePower Plus BLDCモーター+ドライブセット', t: 'モーター+ドライブをセットで最適化設計。医療・産業向けラインナップ。Regal Rexnord子会社', m: '中小型AGV駆動モーターの一体型ドライブ採用候補。評価用キット入手が容易' },
+            438: { p: 'XtrapulsDSPサーボコントローラー（スイス製）', t: 'CANopen・EtherCAT対応。高精度同期制御。医療・測定機器での豊富な実績', m: '精密AGV・ロボット制御軸向けサーボドライブ。高精度用途での選定比較候補' },
+            336: { p: 'JIS規格モジュール0.5〜10、平・かさ・ウォーム・ラック等標準歯車', t: '即納標準品が充実。設計ツール・CADデータ無料提供。品種は13,000点超', m: '試作・プロトタイプ段階の標準歯車調達先。設計の早期段階から活用でき工数削減' },
+            445: { p: 'WAM Arm 4/7DOF・BHand（Barrett Hand）多指ロボットハンド', t: 'バックドライバブル・ケーブル駆動。BHand: 320以上の把持姿勢対応。研究最高品位', m: '高品位マニピュレーション技術の参考基準。力制御・コンプライアント制御の学術参考' },
+            680: { p: 'Designatronics（Stock Drive Products / Sterling Instrument）', t: 'HTDタイミングベルト・プーリー・精密リードスクリュー・標準ギアの専業商社', m: '搬送ロボット動力伝達設計の標準部品調達先。試作段階からカタログ品で迅速開発' },
+        };
+
+        function openModal(e) {
+            document.getElementById('m-name').textContent = e.name;
+            const c = CAT[e.cat];
+            const isHigh = e.rel >= 4;
+            document.getElementById('m-meta').innerHTML =
+                `<span class="bn${isHigh ? ' pick' : ''}">${e.booth}</span>` +
+                `<span class="cat ${c.css}">${c.label}</span>` +
+                `<div class="stars" style="justify-content:flex-start;gap:2px">${stars(e.rel)}</div>`;
+            document.getElementById('m-note').textContent = e.note || '';
+            const dw = document.getElementById('m-detail-wrap');
+            const d = D[e.booth];
+            if (d) {
+                dw.innerHTML = `<div class="m-div"></div>
+              <div class="m-lb">製品・技術</div>
+              <div class="m-grid">
+                <div class="m-key">製品</div><div class="m-val">${d.p}</div>
+                <div class="m-key">技術特徴</div><div class="m-val">${d.t}</div>
+              </div>
+              <div class="m-tip">🏭 村田機械 視点：${d.m}</div>`;
+            } else {
+                dw.innerHTML = '';
+            }
+            document.getElementById('modal').classList.remove('off');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal() {
+            document.getElementById('modal').classList.add('off');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal() });
+
+        render();
+    </script>
+    <!-- Modal -->
+    <div class="mov off" id="modal" onclick="if(event.target===this)closeModal()">
+        <div class="mbox">
+            <div class="m-hd">
+                <div class="m-nm" id="m-name"></div>
+                <button class="m-cl" onclick="closeModal()">✕</button>
+            </div>
+            <div class="m-meta" id="m-meta"></div>
+            <div class="m-lb">概要</div>
+            <div class="m-tx" id="m-note"></div>
+            <div id="m-detail-wrap"></div>
+        </div>
+    </div>
+</body>
+
+</html>

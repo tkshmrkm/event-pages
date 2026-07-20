@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="海外視察・出張におけるコンディション管理の完全ガイド。村上流のノウハウを体系化。">
+    <title>海外視察・出張コンディショニングガイド（村上流）</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1',
+                            400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155',
+                            800: '#1e293b', 900: '#0f172a', 950: '#020617'
+                        },
+                        brand: {
+                            50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd',
+                            400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8',
+                            800: '#1e40af', 900: '#1e3a8a'
+                        },
+                        accent: {
+                            50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7',
+                            400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', '"Helvetica Neue"', 'Arial', '"Hiragino Kaku Gothic ProN"', '"Hiragino Sans"', 'Meiryo', 'sans-serif'],
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideIn: {
+                            '0%': { opacity: '0', transform: 'translateX(-20px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
+                        },
+                        pulse: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.5' }
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.4s ease-out',
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            max-height: 400px;
+        }
+
+        /* Seat Visualization */
+        .seat {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 700;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .seat:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (min-width: 640px) {
+            .seat {
+                width: 36px;
+                height: 36px;
+                font-size: 11px;
+            }
+        }
+
+        /* Tab Active State */
+        .tab-active {
+            border-color: #2563eb;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            color: #1e293b;
+        }
+
+        /* Gradient Background */
+        .bg-gradient-brand {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        /* Card Hover Effects */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Glass Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="glass sticky top-0 z-50 border-b border-slate-200/50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="bg-gradient-brand text-white p-2.5 rounded-xl shadow-lg">
+                        <i class="ph-fill ph-airplane-tilt text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-black text-slate-900 leading-tight tracking-tight">
+                            海外視察コンディショニングガイド</h1>
+                        <p class="text-[10px] sm:text-xs text-slate-500 font-semibold tracking-wide">村上流・パフォーマンス最大化の全技術
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <div
+                        class="hidden md:flex items-center gap-2 text-sm text-slate-700 bg-white/80 px-4 py-2 rounded-full shadow-sm border border-slate-200">
+                        <i class="ph-fill ph-check-circle text-brand-600 text-lg"></i>
+                        <span id="progress-text" class="font-bold">完了: 0/0</span>
+                    </div>
+                    <button id="toggle-checklist-mode"
+                        class="flex items-center gap-2 bg-white border-2 border-slate-300 text-slate-700 px-4 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-50 hover:border-brand-400 transition-all shadow-sm">
+                        <i class="ph-fill ph-list-checks text-lg"></i>
+                        <span class="hidden sm:inline">チェックリスト</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+
+        <!-- Left Column: Navigation -->
+        <aside class="lg:col-span-3 lg:sticky lg:top-28 h-fit space-y-6 animate-slide-in">
+            <nav class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+                <div class="p-5 bg-gradient-to-br from-slate-50 to-slate-100 border-b border-slate-200">
+                    <h3 class="text-xs font-black uppercase text-slate-500 tracking-widest">出張のライフサイクル</h3>
+                </div>
+                <div class="flex flex-col p-2" id="phase-nav"></div>
+            </nav>
+
+            <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-6 hidden lg:block">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="ph-fill ph-chart-line text-brand-600 text-xl"></i>
+                    <h3 class="text-sm font-black text-slate-800">コンディション予測</h3>
+                </div>
+                <p class="text-[10px] text-slate-600 mb-5 leading-relaxed">「村上流」を適用した場合の疲労回復とパフォーマンスの推移予測。</p>
+                <div class="chart-container" style="height: 180px;">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+                <div class="mt-5 grid grid-cols-2 gap-3">
+                    <div class="text-[10px] font-semibold flex items-center gap-2">
+                        <span class="w-3 h-3 bg-accent-500 rounded-full shadow-sm"></span>
+                        <span>村上流</span>
+                    </div>
+                    <div class="text-[10px] font-semibold flex items-center gap-2">
+                        <span class="w-3 h-3 bg-slate-300 rounded-full shadow-sm"></span>
+                        <span>一般的</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Column: Content -->
+        <div class="lg:col-span-9 space-y-6 animate-fade-in">
+
+            <!-- Phase Intro -->
+            <section id="phase-header"
+                class="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 sm:p-10 relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="flex items-start justify-between mb-5">
+                        <div class="flex-grow">
+                            <span id="phase-badge"
+                                class="inline-block px-4 py-1.5 rounded-full text-[10px] font-black bg-brand-100 text-brand-700 mb-4 uppercase tracking-widest shadow-sm"></span>
+                            <h2 id="phase-title"
+                                class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-3"></h2>
+                            <p id="phase-desc"
+                                class="text-slate-600 leading-relaxed text-base sm:text-lg font-medium max-w-3xl"></p>
+                        </div>
+                        <div id="phase-icon-container"
+                            class="hidden sm:block bg-gradient-to-br from-slate-50 to-slate-100 p-5 rounded-2xl border border-slate-200 shadow-inner">
+                            <i id="phase-icon" class="text-5xl text-brand-600"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute -bottom-16 -right-16 opacity-[0.03] pointer-events-none">
+                    <i id="phase-bg-icon" class="text-[14rem]"></i>
+                </div>
+            </section>
+
+            <!-- Content Area -->
+            <div id="content-area" class="space-y-5"></div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-16 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-4">
+                    <div
+                        class="bg-gradient-to-br from-slate-800 to-slate-900 text-white w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl shadow-lg">
+                        M</div>
+                    <div>
+                        <div class="text-sm font-black text-slate-900">村上流 海外視察ガイドライン</div>
+                        <div class="text-xs text-slate-500 font-medium">2026 Perfect Edition / 全データ網羅版</div>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-400 text-center md:text-right leading-relaxed">
+                    <div class="font-semibold">最終更新: 2026年1月1日</div>
+                    <div>監修: 村上 (Murakami)</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Templates -->
+
+    <!-- Seat Map Template -->
+    <template id="tmpl-seat-map">
+        <div
+            class="bg-gradient-to-br from-slate-50 to-white rounded-2xl p-6 sm:p-10 border-2 border-slate-200 shadow-2xl">
+            <div class="flex items-center gap-3 mb-8 text-slate-900">
+                <div class="bg-brand-100 p-2 rounded-lg">
+                    <i class="ph-fill ph-info font-bold text-brand-700 text-xl"></i>
+                </div>
+                <h4 class="font-black text-lg">大型機（3-4-3配列）における「睡眠死守」戦略</h4>
+            </div>
+
+            <div class="overflow-x-auto pb-4">
+                <div class="min-w-[500px] flex flex-col items-center gap-8">
+                    <div class="flex gap-3 items-start">
+                        <!-- Left (A-C) -->
+                        <div class="flex flex-col items-center">
+                            <div class="flex gap-2">
+                                <div class="seat bg-slate-200 text-slate-500" title="窓側">A</div>
+                                <div class="seat bg-slate-200 text-slate-500">B</div>
+                                <div class="seat border-3 border-red-500 bg-red-100 text-red-700"
+                                    title="要注意：二人バラバラに動くリスク">C</div>
+                            </div>
+                            <div class="mt-3 text-[9px] text-slate-500 font-black uppercase tracking-wide">窓 | 中央 | 通路
+                            </div>
+                        </div>
+
+                        <!-- Aisle -->
+                        <div class="w-10 h-14 flex items-center justify-center">
+                            <div class="h-full w-0.5 bg-slate-300 border-dashed"></div>
+                        </div>
+
+                        <!-- Center (D-G) -->
+                        <div class="flex flex-col items-center">
+                            <div class="flex gap-2">
+                                <div class="seat bg-slate-200 text-slate-500" title="通路側">D</div>
+                                <div class="seat bg-slate-200 text-slate-500">E</div>
+                                <div class="seat bg-slate-200 text-slate-500">F</div>
+                                <div class="seat bg-gradient-brand text-white ring-4 ring-brand-300 font-black shadow-2xl transform scale-125"
+                                    title="★村上推奨★：右通路側G。右利きの空間確保＋睡眠中断リスク低">G</div>
+                            </div>
+                            <div class="mt-3 text-[9px] text-brand-700 font-black uppercase tracking-wide">通路 | 中央 | 中央
+                                | ★通路★</div>
+                        </div>
+
+                        <!-- Aisle -->
+                        <div class="w-10 h-14 flex items-center justify-center">
+                            <div class="h-full w-0.5 bg-slate-300 border-dashed"></div>
+                        </div>
+
+                        <!-- Right (H-K) -->
+                        <div class="flex flex-col items-center">
+                            <div class="flex gap-2">
+                                <div class="seat bg-slate-200 text-slate-500" title="通路側">H</div>
+                                <div class="seat bg-slate-200 text-slate-500">J</div>
+                                <div class="seat bg-slate-200 text-slate-500" title="窓側">K</div>
+                            </div>
+                            <div class="mt-3 text-[9px] text-slate-500 font-black uppercase tracking-wide">通路 | 中央 | 窓
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10 space-y-4">
+                <div class="flex gap-4 bg-red-50 p-5 rounded-2xl border-2 border-red-200 shadow-sm">
+                    <i class="ph-fill ph-warning-circle text-red-600 text-2xl flex-shrink-0"></i>
+                    <div class="text-xs text-red-900 leading-relaxed">
+                        <strong class="font-black tracking-tight">C席の罠:</strong>
+                        窓側の通路側（C席）は、奥の2人がバラバラに動く可能性があるため、最悪の場合「2倍」起こされるリスクがあります。欧州便などの長距離フライトでは致命的です。
+                    </div>
+                </div>
+                <div class="flex gap-4 bg-brand-50 p-5 rounded-2xl border-2 border-brand-200 shadow-sm">
+                    <i class="ph-fill ph-crown text-brand-700 text-2xl flex-shrink-0"></i>
+                    <div class="text-xs text-brand-900 leading-relaxed">
+                        <strong class="font-black tracking-tight">G席の黄金律:</strong>
+                        中央4列の右端（G席）は、奥の2人が反対側の通路（D席）から出る可能性もあり、睡眠を邪魔される頻度が下がります。右利きの方にとって肘掛けの使い勝手も最適です。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- App Ecosystem Template -->
+    <template id="tmpl-app-eco">
+        <div class="space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Main Hub -->
+                <div
+                    class="lg:col-span-1 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-8 text-white shadow-2xl relative overflow-hidden group">
+                    <div class="relative z-10 h-full flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-3 mb-5">
+                                <div
+                                    class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center shadow-lg">
+                                    <i class="ph-fill ph-bank font-bold text-xl"></i>
+                                </div>
+                                <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Global
+                                    Hub</span>
+                            </div>
+                            <h3
+                                class="text-4xl font-black mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300">
+                                Revolut</h3>
+                            <p class="text-sm text-slate-300 leading-relaxed font-medium">
+                                全ての決済・送金・両替の中心。JALカード(Master)等からのチャージと現金チャージを使い分ける。
+                            </p>
+                        </div>
+                        <div class="mt-8 flex flex-wrap gap-2">
+                            <span
+                                class="text-[9px] px-3 py-1.5 bg-slate-800/80 rounded-lg font-bold border border-slate-700">Apple
+                                Pay連携</span>
+                            <span
+                                class="text-[9px] px-3 py-1.5 bg-slate-800/80 rounded-lg font-bold border border-slate-700">ATM引出</span>
+                            <span
+                                class="text-[9px] px-3 py-1.5 bg-slate-800/80 rounded-lg font-bold border border-slate-700">割勘機能</span>
+                        </div>
+                    </div>
+                    <i
+                        class="ph-fill ph-arrows-clockwise text-[12rem] absolute -bottom-12 -right-12 opacity-5 group-hover:rotate-45 transition-transform duration-1000 ease-in-out"></i>
+                </div>
+
+                <!-- Satellites -->
+                <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div
+                        class="bg-white border-2 border-slate-200 p-5 rounded-2xl hover:border-brand-400 hover:shadow-xl transition-all card-hover">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-blue-50 text-blue-600 p-3 rounded-xl shadow-sm">
+                                <i class="ph-fill ph-train font-bold text-xl"></i>
+                            </div>
+                            <span class="font-black text-slate-900 text-base">DB Navigator</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed font-medium">
+                            ドイツ鉄道必須。「時間は守られない」前提で、秒単位の遅延・ホーム変更をアプリで追う。</p>
+                    </div>
+                    <div
+                        class="bg-white border-2 border-slate-200 p-5 rounded-2xl hover:border-brand-400 hover:shadow-xl transition-all card-hover">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-sky-50 text-sky-600 p-3 rounded-xl shadow-sm">
+                                <i class="ph-fill ph-qr-code font-bold text-xl"></i>
+                            </div>
+                            <span class="font-black text-slate-900 text-base">Alipay / WeChat</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed font-medium">
+                            中国決済。Revolutカードを紐付けることでキャッシュレス社会に対応。</p>
+                    </div>
+                    <div
+                        class="bg-white border-2 border-slate-200 p-5 rounded-2xl hover:border-brand-400 hover:shadow-xl transition-all card-hover">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-green-50 text-green-600 p-3 rounded-xl shadow-sm">
+                                <i class="ph-fill ph-broadcast font-bold text-xl"></i>
+                            </div>
+                            <span class="font-black text-slate-900 text-base">Airalo (eSIM)</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed font-medium">
+                            通信基盤。テザリングでPC会議をするなら1日1GBでも足りない場合を想定。</p>
+                    </div>
+                    <div
+                        class="bg-white border-2 border-slate-200 p-5 rounded-2xl hover:border-brand-400 hover:shadow-xl transition-all card-hover">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-orange-50 text-orange-600 p-3 rounded-xl shadow-sm">
+                                <i class="ph-fill ph-translate font-bold text-xl"></i>
+                            </div>
+                            <span class="font-black text-slate-900 text-base">MS Translator / Plaud</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed font-medium">
+                            現場ツール。展示会での記録・要約に加え、欠航・遅延時の代替案をAIに練らせる。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        // ============================================================
+        // DATA STRUCTURE
+        // ============================================================
+        const murakamiData = {
+            phases: [
+                {
+                    id: 'preparation',
+                    title: '準備・戦略',
+                    icon: 'ph-suitcase',
+                    badge: 'Step 01: Preparation',
+                    desc: '情報の「川上」を整え、インフラの不確実性を織り込んだ旅程を組むフェーズ。',
+                    items: [
+                        {
+                            title: 'レンタルスーツケースの合理的選択',
+                            tag: 'Logistics',
+                            content: '年に数回の海外なら、最新・高品質モデルをレンタル。家のスペース確保と合理性を両立。',
+                            check: false
+                        },
+                        {
+                            title: '充電インフラの2拠点展開',
+                            tag: 'Efficiency',
+                            content: '変換プラグは必ず2個持参。「デスク用」と「ベッドサイド用」に配置し、動線を完全に分離する。',
+                            check: false
+                        },
+                        {
+                            title: 'アナログ・バックアップ（SSOT）',
+                            tag: 'Security',
+                            content: '旅程表、イミグレ応答、パスポートコピーは全て印刷。「スマホが死んでも、欠航しても、これだけで生き残れる」状態を作る。',
+                            check: false,
+                            highlight: true
+                        },
+                        {
+                            title: '旅程表のICS同期と「遊び」の設定',
+                            tag: 'Planning',
+                            content: 'GeminiでICS作成。ドイツ鉄道(DB)の遅延やフライト欠航は「稀ではない」ため、乗換には十分なバッファを設ける。',
+                            check: false
+                        },
+                        {
+                            title: 'KIX-ITMカードの常備',
+                            tag: 'Kansai Tip',
+                            content: '関空での食事割引。無料で作成でき、関西拠点なら必須のアイテム。',
+                            check: false
+                        }
+                    ]
+                },
+                {
+                    id: 'airport_security',
+                    title: '空港・保安検査',
+                    icon: 'ph-airplane-takeoff',
+                    badge: 'Step 02: Transit',
+                    desc: '摩擦ゼロの突破術。欠航リスクに備え、出国前に手続きを済ませる。',
+                    items: [
+                        {
+                            title: 'ベルトレス・ポリシー',
+                            tag: 'Speed',
+                            content: '検査場での着脱の手間を省くため、移動日は最初からベルトを着用しない。',
+                            check: false
+                        },
+                        {
+                            title: 'ポケットの完全クリア化',
+                            tag: 'Speed',
+                            content: 'スマホや小銭はすべて上着のポケットに入れておき、上着を脱ぐだけで検査を完了させる。',
+                            check: false,
+                            highlight: true
+                        },
+                        {
+                            title: '入国準備：Visit Japan Web',
+                            tag: 'Efficiency',
+                            content: '出国前など、ネット環境が良い早い段階で入力を済ませる。現地での欠航・遅延で余裕がなくなる前に。',
+                            check: false
+                        },
+                        {
+                            title: '給水サバイバル',
+                            tag: 'Health',
+                            content: '保安検査通過後、空のボトルに給水。機内の乾燥から喉を保護。CAを呼ぶ回数を減らす。',
+                            check: false
+                        }
+                    ]
+                },
+                {
+                    id: 'inflight',
+                    title: '究極のフライト',
+                    icon: 'ph-moon-stars',
+                    badge: 'Step 03: Recovery',
+                    desc: '24時間を「移動」ではなく「回復時間」へ。睡眠を妨げるリスクを排除する。',
+                    visual: 'tmpl-seat-map',
+                    items: [
+                        {
+                            title: '座席戦略：「中央列の右通路側(G席)」',
+                            tag: 'Logic',
+                            content: '3-4-3配列のG席を死守。窓側通路(C)は奥の2人がバラバラに出るため、睡眠を何度も遮断される。',
+                            check: false,
+                            highlight: true
+                        },
+                        {
+                            title: 'サバイバル・四種の神器',
+                            tag: 'Essentials',
+                            content: 'のど飴、厚手アイマスク、スリッパ、そして胃薬。これらを離陸前に手元に揃える。',
+                            check: false
+                        },
+                        {
+                            title: '24時間移動のリフレッシュ',
+                            tag: 'Sanitation',
+                            content: '長時間移動の途中で靴下を履き替える。足元の不快感を解消し、メンタルをリセット。',
+                            check: false
+                        }
+                    ]
+                },
+                {
+                    id: 'digital_infra',
+                    title: 'デジタル・インフラ',
+                    icon: 'ph-device-mobile',
+                    badge: 'Step 04: Operation',
+                    desc: 'インフラの「不条理」をアプリで攻略。DBの遅延は秒単位で追う。',
+                    visual: 'tmpl-app-eco',
+                    items: [
+                        {
+                            title: '決済ハブ：Revolut',
+                            tag: 'Money',
+                            content: '割り勘、現地ATM、ドイツDB、中国Alipay。JALカード等からのチャージと現金を使い分ける。',
+                            check: false,
+                            highlight: true
+                        },
+                        {
+                            title: '通信：Airalo (eSIM)',
+                            tag: 'Network',
+                            content: '日本国内でアクティベートまで完了させる。着陸の瞬間にネットが繋がる状態を作る。',
+                            check: false
+                        },
+                        {
+                            title: '不確実性への対応：DB Navigator',
+                            tag: 'Mobility',
+                            content: 'ドイツ鉄道は時間通りに来ない。アプリをRevolutに紐付け、リアルタイムで代替ルートを確保。',
+                            check: false
+                        }
+                    ]
+                },
+                {
+                    id: 'local_return',
+                    title: '現地・宿泊・帰宅',
+                    icon: 'ph-house-line',
+                    badge: 'Step 05: Mission Complete',
+                    desc: '安全に「ただいま」を言うまでが仕事。',
+                    items: [
+                        {
+                            title: 'ホテル戦略：公式サイト＋事前チェックイン',
+                            tag: 'Stay',
+                            content: 'Accor ＞ IHG ＞ Hiltonの順。予算2.5万円目安。事前チェックインで現地での待ち時間を削る。',
+                            check: false
+                        },
+                        {
+                            title: 'お土産のマイルール',
+                            tag: 'Family',
+                            content: '基本は現地スーパー。リクエスト（アンペルマン等）は空港等で確実に確保。',
+                            check: false
+                        },
+                        {
+                            title: '帰路のリカバリー',
+                            tag: 'Recovery',
+                            content: 'はるか京都駅から中書島まではタクシー。体力を温存し無事に「ただいま」を言う。',
+                            check: false,
+                            highlight: true
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // ============================================================
+        // STATE MANAGEMENT
+        // ============================================================
+        let currentPhaseIndex = 0;
+        let checklistMode = false;
+
+        // ============================================================
+        // DOM ELEMENTS
+        // ============================================================
+        const navContainer = document.getElementById('phase-nav');
+        const contentArea = document.getElementById('content-area');
+        const phaseTitle = document.getElementById('phase-title');
+        const phaseBadge = document.getElementById('phase-badge');
+        const phaseDesc = document.getElementById('phase-desc');
+        const phaseIcon = document.getElementById('phase-icon');
+        const phaseBgIcon = document.getElementById('phase-bg-icon');
+        const toggleBtn = document.getElementById('toggle-checklist-mode');
+        const progressText = document.getElementById('progress-text');
+
+        // ============================================================
+        // INITIALIZATION
+        // ============================================================
+        function init() {
+            renderNav();
+            renderContent(0);
+            renderCharts();
+            updateProgress();
+
+            // Toggle checklist mode
+            toggleBtn.addEventListener('click', toggleChecklistMode);
+        }
+
+        // ============================================================
+        // NAVIGATION RENDERING
+        // ============================================================
+        function renderNav() {
+            navContainer.innerHTML = murakamiData.phases.map((phase, index) => `
+                <button onclick="switchPhase(${index})" 
+                    class="nav-item w-full text-left px-5 py-4 border-l-4 transition-all hover:bg-slate-50 flex items-center gap-4 rounded-lg my-1
+                    ${index === currentPhaseIndex ? 'tab-active font-black' : 'border-transparent text-slate-600 hover:text-slate-900'}">
+                    <div class="flex-shrink-0 text-2xl">
+                        <i class="ph-fill ${phase.icon} ${index === currentPhaseIndex ? 'text-brand-600' : 'text-slate-400'}"></i>
+                    </div>
+                    <div class="text-sm font-bold">${phase.title}</div>
+                </button>
+            `).join('');
+        }
+
+        // ============================================================
+        // PHASE SWITCHING
+        // ============================================================
+        window.switchPhase = (index) => {
+            currentPhaseIndex = index;
+            renderNav();
+            renderContent(index);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // ============================================================
+        // CONTENT RENDERING
+        // ============================================================
+        function renderContent(index) {
+            const phase = murakamiData.phases[index];
+
+            // Update header
+            phaseTitle.textContent = phase.title;
+            phaseBadge.textContent = phase.badge;
+            phaseDesc.textContent = phase.desc;
+            phaseIcon.className = `ph-fill ${phase.icon} text-5xl text-brand-600`;
+            phaseBgIcon.className = `ph-fill ${phase.icon}`;
+
+            let html = '';
+
+            // Add visual if present and not in checklist mode
+            if (phase.visual && !checklistMode) {
+                html += `<div class="animate-fade-in mb-6">${document.getElementById(phase.visual).innerHTML}</div>`;
+            }
+
+            // Render items
+            html += phase.items.map((item, i) => `
+                <div class="group bg-white rounded-2xl border-2 ${item.highlight ? 'border-accent-300 shadow-lg shadow-accent-100' : 'border-slate-200'} p-6 sm:p-8 hover:shadow-2xl transition-all duration-300 animate-fade-in cursor-pointer relative overflow-hidden card-hover" 
+                     onclick="toggleCheck('${phase.id}', ${i})"
+                     style="animation-delay: ${i * 0.05}s">
+                    
+                    ${item.highlight ? '<div class="absolute top-0 right-0 bg-gradient-to-r from-accent-500 to-accent-600 text-white px-4 py-1.5 text-[9px] font-black uppercase tracking-wider rounded-bl-xl shadow-lg">Essential</div>' : ''}
+                    
+                    <div class="flex items-start gap-5">
+                        <div class="mt-1 flex-shrink-0">
+                            ${checklistMode ? `
+                                <div class="w-9 h-9 rounded-xl border-3 flex items-center justify-center transition-all duration-300 shadow-sm ${item.check ? 'bg-gradient-brand border-brand-600' : 'border-slate-300 group-hover:border-brand-400'}">
+                                    ${item.check ? '<i class="ph-fill ph-check text-white text-lg font-bold"></i>' : ''}
+                                </div>
+                            ` : `
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-600 font-black text-sm group-hover:from-brand-500 group-hover:to-brand-600 group-hover:text-white transition-all duration-300 shadow-sm">
+                                    ${(i + 1).toString().padStart(2, '0')}
+                                </div>
+                            `}
+                        </div>
+                        <div class="flex-grow">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg bg-slate-100 text-slate-600 shadow-sm">${item.tag}</span>
+                            </div>
+                            <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-3 tracking-tight ${item.check && checklistMode ? 'line-through text-slate-400' : ''}">
+                                ${item.title}
+                            </h3>
+                            <p class="text-slate-600 text-sm sm:text-base leading-relaxed font-medium ${item.check && checklistMode ? 'text-slate-400' : ''}">
+                                ${item.content}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            contentArea.innerHTML = html;
+        }
+
+        // ============================================================
+        // CHECKLIST TOGGLE
+        // ============================================================
+        function toggleChecklistMode() {
+            checklistMode = !checklistMode;
+
+            // Update button appearance
+            toggleBtn.classList.toggle('bg-brand-100');
+            toggleBtn.classList.toggle('border-brand-500');
+            toggleBtn.classList.toggle('text-brand-700');
+
+            // Update icon and text
+            const icon = toggleBtn.querySelector('i');
+            const text = toggleBtn.querySelector('span');
+
+            if (checklistMode) {
+                icon.className = 'ph-fill ph-book-open-text text-lg';
+                text.textContent = 'ガイドモード';
+            } else {
+                icon.className = 'ph-fill ph-list-checks text-lg';
+                text.textContent = 'チェックリスト';
+            }
+
+            renderContent(currentPhaseIndex);
+        }
+
+        // ============================================================
+        // ITEM CHECK TOGGLE
+        // ============================================================
+        window.toggleCheck = (phaseId, itemIndex) => {
+            const phase = murakamiData.phases.find(p => p.id === phaseId);
+            if (phase) {
+                phase.items[itemIndex].check = !phase.items[itemIndex].check;
+                updateProgress();
+                if (checklistMode) {
+                    renderContent(currentPhaseIndex);
+                }
+            }
+        };
+
+        // ============================================================
+        // PROGRESS UPDATE
+        // ============================================================
+        function updateProgress() {
+            let total = 0;
+            let completed = 0;
+
+            murakamiData.phases.forEach(phase => {
+                total += phase.items.length;
+                completed += phase.items.filter(item => item.check).length;
+            });
+
+            progressText.textContent = `完了: ${completed}/${total}`;
+        }
+
+        // ============================================================
+        // CHART RENDERING
+        // ============================================================
+        function renderCharts() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['出発', '空港', '機内1', '機内2', '到着', '現地', '帰宅'],
+                    datasets: [
+                        {
+                            label: '村上流',
+                            data: [100, 95, 90, 85, 80, 90, 95],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            pointBackgroundColor: '#10b981',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2
+                        },
+                        {
+                            label: '一般',
+                            data: [90, 70, 50, 30, 20, 40, 30],
+                            borderColor: '#cbd5e1',
+                            backgroundColor: 'rgba(203, 213, 225, 0.05)',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 3,
+                            pointHoverRadius: 5,
+                            pointBackgroundColor: '#cbd5e1',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 12,
+                            titleFont: {
+                                size: 13,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 12
+                            },
+                            borderColor: 'rgba(255, 255, 255, 0.1)',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        y: {
+                            display: true,
+                            min: 0,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 10
+                                },
+                                color: '#64748b',
+                                callback: function (value) {
+                                    return value + '%';
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 9,
+                                    weight: '600'
+                                },
+                                color: '#475569'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    }
+                }
+            });
+        }
+
+        // ============================================================
+        // START APPLICATION
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>

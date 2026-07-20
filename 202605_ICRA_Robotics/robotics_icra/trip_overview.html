@@ -1,0 +1,1233 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年 米国・欧州出張 旅程概観</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --card2: #1c2128;
+            --border: #30363d;
+            --tp: #e6edf3;
+            --ts: #8b949e;
+            --tm: #6e7681;
+            /* member colors */
+            --mu: #38bdf8;
+            --mi: #4ade80;
+            --sa: #fb923c;
+            --den: #34d399;
+            --oka: #e879f9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--tp);
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            padding: 24px 16px 48px;
+        }
+
+        /* ─── Header ─── */
+        .page-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .event-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(56, 189, 248, .2), rgba(168, 85, 247, .2));
+            border: 1px solid rgba(56, 189, 248, .4);
+            border-radius: 100px;
+            padding: 6px 18px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--mu);
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: clamp(18px, 4vw, 28px);
+            font-weight: 800;
+            background: linear-gradient(135deg, #e6edf3, #8b949e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: var(--ts);
+            font-size: 13px;
+        }
+
+        /* ─── Member legend ─── */
+        .legend-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            max-width: 900px;
+            margin: 0 auto 28px auto;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 100px;
+        }
+
+        .mu {
+            background: rgba(56, 189, 248, .18);
+            border: 1px solid rgba(56, 189, 248, .45);
+            color: var(--mu);
+        }
+
+        .mi {
+            background: rgba(74, 222, 128, .18);
+            border: 1px solid rgba(74, 222, 128, .45);
+            color: var(--mi);
+        }
+
+        .sa {
+            background: rgba(251, 146, 60, .15);
+            border: 1px solid rgba(251, 146, 60, .4);
+            color: var(--sa);
+        }
+
+        .den {
+            background: rgba(52, 211, 153, .15);
+            border: 1px solid rgba(52, 211, 153, .4);
+            color: var(--den);
+        }
+
+        .oka {
+            background: rgba(232, 121, 249, .15);
+            border: 1px solid rgba(232, 121, 249, .4);
+            color: var(--oka);
+        }
+
+        /* ─── Timeline table ─── */
+        .timeline-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        /* Column header */
+        thead th {
+            padding: 10px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            background: var(--card2);
+            border: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th.th-date {
+            color: var(--ts);
+            width: 108px;
+        }
+
+        th.th-mu {
+            color: var(--mu);
+        }
+
+        th.th-mi {
+            color: var(--mi);
+        }
+
+        th.th-sa {
+            color: var(--sa);
+        }
+
+        th.th-den {
+            color: var(--den);
+        }
+
+        th.th-oka {
+            color: var(--oka);
+        }
+
+        /* Rows */
+        tr.phase-row td {
+            padding: 0;
+            border: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        /* Phase separator */
+        tr.separator td {
+            background: rgba(255, 255, 255, .03);
+            border-top: 2px solid rgba(255, 255, 255, .12);
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--tm);
+            text-align: center;
+            border-left: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+        }
+
+        /* Date cell */
+        .date-cell {
+            padding: 10px 10px;
+            background: var(--card2);
+            border-right: 2px solid var(--border);
+            min-width: 108px;
+        }
+
+        .date-main {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--tp);
+            line-height: 1;
+        }
+
+        .date-wd {
+            font-size: 10px;
+            color: var(--tm);
+            margin-top: 2px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .date-loc {
+            font-size: 9px;
+            color: var(--ts);
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        /* Event cell */
+        .ev-cell {
+            padding: 8px 8px;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .ev-cell.absent {
+            background: rgba(255, 255, 255, .015);
+        }
+
+        .ev-cell.absent::after {
+            content: '—';
+            color: rgba(110, 118, 129, .3);
+            font-size: 13px;
+            display: flex;
+            justify-content: center;
+            padding-top: 6px;
+        }
+
+        /* Event entry inside a cell */
+        .ev {
+            border-radius: 6px;
+            padding: 5px 8px;
+            margin-bottom: 5px;
+            font-size: 11px;
+            line-height: 1.4;
+            border-left: 3px solid;
+        }
+
+        .ev:last-child {
+            margin-bottom: 0;
+        }
+
+        .ev .ev-icon {
+            margin-right: 3px;
+        }
+
+        .ev .ev-label {
+            font-weight: 600;
+        }
+
+        .ev .ev-note {
+            font-size: 10px;
+            color: var(--ts);
+            margin-top: 2px;
+        }
+
+        /* Event type colors */
+        .ev-flight {
+            background: rgba(59, 130, 246, .12);
+            border-color: #3b82f6;
+            color: #93c5fd;
+        }
+
+        .ev-conf {
+            background: rgba(52, 211, 153, .10);
+            border-color: #34d399;
+            color: #86efac;
+        }
+
+        .ev-hotel {
+            background: rgba(110, 118, 129, .10);
+            border-color: #6e7681;
+            color: var(--ts);
+        }
+
+        .ev-move {
+            background: rgba(148, 163, 184, .08);
+            border-color: #94a3b8;
+            color: #94a3b8;
+        }
+
+        .ev-depart {
+            background: rgba(248, 150, 30, .12);
+            border-color: #f8961e;
+            color: #fcd34d;
+        }
+
+        .ev-arrive {
+            background: rgba(56, 189, 248, .12);
+            border-color: #38bdf8;
+            color: #7dd3fc;
+        }
+
+        .ev-free {
+            background: rgba(168, 85, 247, .10);
+            border-color: #a855f7;
+            color: #d8b4fe;
+        }
+
+        .ev-event {
+            background: rgba(251, 191, 36, .10);
+            border-color: #fbbf24;
+            color: #fde68a;
+        }
+
+        /* Phase phase banner */
+        .phase-banner {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            font-size: 10px;
+            color: var(--ts);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: var(--tm);
+            font-size: 11px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            max-width: 960px;
+            margin: 32px auto 0;
+        }
+
+        .link-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--ts);
+            text-decoration: none;
+            font-size: 12px;
+            padding: 7px 14px;
+            border-radius: 8px;
+            margin: 4px;
+            transition: border-color .15s;
+        }
+
+        .link-nav:hover {
+            border-color: var(--ts);
+            color: var(--tp);
+        }
+
+        .links-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="page-header">
+        <div class="event-badge">2026年 米国・欧州出張</div>
+        <h1>旅程概観 — 人物別スケジュール</h1>
+        <p class="subtitle">Robotics Summit &amp; Expo (Boston) ／ ICRA 2026 (Vienna) · May 25 – Jun 7, 2026</p>
+    </header>
+
+    <!-- Member legend -->
+    <div class="legend-bar">
+        <span
+            style="font-size:10px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.08em;align-self:center;">参加者</span>
+        <span class="chip mu">🔵 村上（モデルベース制御）</span>
+        <span class="chip sa">🟠 佐藤（組み込みSW）</span>
+        <span class="chip mi">🟢 三浦（メカ）</span>
+        <span class="chip den">🟡 傳田（経路計画/SLAM）</span>
+        <span class="chip oka">🟣 岡部（IsaacSIM/SLAM）</span>
+    </div>
+
+    <!-- Navigation links -->
+    <div class="links-row">
+        <a class="link-nav" href="robotics_summit_schedule.html">📋 Robotics Summit スケジュール</a>
+        <a class="link-nav" href="icra2026_schedule.html">📋 ICRA 2026 スケジュール</a>
+        <a class="link-nav" href="robotics_icra_itinerary4.html">⏱ 詳細タイムライン</a>
+    </div>
+
+    <div class="timeline-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th class="th-date">日付</th>
+                    <th class="th-mu">🔵 村上</th>
+                    <th class="th-sa">🟠 佐藤</th>
+                    <th class="th-mi">🟢 三浦</th>
+                    <th class="th-den">🟡 傳田</th>
+                    <th class="th-oka">🟣 岡部</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- ===== PHASE 1: 出発 ===== -->
+                <tr class="separator">
+                    <td colspan="6"><span class="phase-banner">✈ PHASE 1 — 出発・移動（ボストンへ）</span></td>
+                </tr>
+
+                <!-- 5/25 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">5/25</div>
+                            <div class="date-wd">Mon</div>
+                            <div class="date-loc">日本 → ボストン</div>
+                        </div>
+                    </td>
+                    <!-- 村上 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-move"><span class="ev-icon">🏠</span><span class="ev-label">中書島 →
+                                    伊丹</span></div>
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">JL3006
+                                    ITM→NRT</span>
+                                <div class="ev-note">14:35発 → NRT 16:00着</div>
+                            </div>
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">JL8
+                                    NRT→BOS</span>
+                                <div class="ev-note">18:25発（12h50m）</div>
+                            </div>
+                            <div class="ev ev-arrive"><span class="ev-icon">🛬</span><span class="ev-label">BOS着 18:15
+                                   </span>
+                                <div class="ev-note">Terminal E · Hampton Inn チェックイン</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-move"><span class="ev-icon">🏠</span><span class="ev-label">犬山 → 伊丹</span>
+                            </div>
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">JL3006
+                                    ITM→NRT</span>
+                                <div class="ev-note">14:35発 → NRT 16:00着</div>
+                            </div>
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">JL8
+                                    NRT→BOS</span>
+                                <div class="ev-note">18:25発（12h50m）</div>
+                            </div>
+                            <div class="ev ev-arrive"><span class="ev-icon">🛬</span><span class="ev-label">BOS着 18:15
+                                   </span>
+                                <div class="ev-note">Terminal E · Hampton Inn チェックイン</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-move"><span class="ev-icon">🏠</span><span class="ev-label">京都 → 伊丹</span>
+                            </div>
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">JL3006
+                                    ITM→NRT</span>
+                                <div class="ev-note">14:35発 → NRT 16:00着</div>
+                            </div>
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">JL8
+                                    NRT→BOS</span>
+                                <div class="ev-note">18:25発（12h50m）</div>
+                            </div>
+                            <div class="ev ev-arrive"><span class="ev-icon">🛬</span><span class="ev-label">BOS着 18:15
+                                   </span>
+                                <div class="ev-note">Terminal E · Hampton Inn チェックイン</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 傳田 -->
+                    <td>
+                        <div class="ev-cell absent"></div>
+                    </td>
+                    <!-- 岡部 -->
+                    <td>
+                        <div class="ev-cell absent"></div>
+                    </td>
+                </tr>
+
+                <!-- 5/26 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">5/26</div>
+                            <div class="date-wd">Tue</div>
+                            <div class="date-loc">🇺🇸 ボストン 技術視察</div>
+                        </div>
+                    </td>
+                    <!-- 村上 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-free"><span class="ev-icon">🏛</span><span
+                                    class="ev-label">ボストン市内技術視察</span>
+                                <div class="ev-note">MassRobotics / MIT エリア</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-free"><span class="ev-icon">🏛</span><span
+                                    class="ev-label">ボストン市内技術視察</span>
+                                <div class="ev-note">MassRobotics / MIT エリア</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-free"><span class="ev-icon">🏛</span><span
+                                    class="ev-label">ボストン市内技術視察</span>
+                                <div class="ev-note">MassRobotics / MIT エリア</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell absent"></div>
+                    </td>
+                    <td>
+                        <div class="ev-cell absent"></div>
+                    </td>
+                </tr>
+
+                <!-- ===== PHASE 2: Robotics Summit ===== -->
+                <tr class="separator">
+                    <td colspan="6"><span class="phase-banner">🤖 PHASE 2 — Robotics Summit &amp; Expo（ボストン）</span></td>
+                </tr>
+
+                <!-- 5/27 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">5/27</div>
+                            <div class="date-wd">Wed</div>
+                            <div class="date-loc">🏛 Robotics Summit Day 1</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🤖</span><span class="ev-label">Robotics
+                                    Summit Day 1</span>
+                                <div class="ev-note">09:00–17:00 · BCEC</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🤖</span><span class="ev-label">Robotics
+                                    Summit Day 1</span>
+                                <div class="ev-note">09:00–17:00 · BCEC</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🤖</span><span class="ev-label">Robotics
+                                    Summit Day 1</span>
+                                <div class="ev-note">09:00–17:00 · BCEC</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell absent"></div>
+                    </td>
+                    <td>
+                        <div class="ev-cell absent"></div>
+                    </td>
+                </tr>
+
+                <!-- 5/28 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">5/28</div>
+                            <div class="date-wd">Thu</div>
+                            <div class="date-loc">🏛 Robotics Summit Day 2</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🤖</span><span class="ev-label">Robotics
+                                    Summit Day 2</span>
+                                <div class="ev-note">09:00–17:00 · BCEC</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🤖</span><span class="ev-label">Robotics
+                                    Summit Day 2</span>
+                                <div class="ev-note">09:00–17:00 · BCEC</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🤖</span><span class="ev-label">Robotics
+                                    Summit Day 2</span>
+                                <div class="ev-note">09:00–17:00 · BCEC</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell absent"></div>
+                    </td>
+                    <td>
+                        <div class="ev-cell absent"></div>
+                    </td>
+                </tr>
+
+                <!-- ===== PHASE 3: 分岐 ===== -->
+                <tr class="separator">
+                    <td colspan="6"><span class="phase-banner">✈ PHASE 3 — ボストン → 各地（分岐）</span></td>
+                </tr>
+
+                <!-- 5/29 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">5/29</div>
+                            <div class="date-wd">Fri</div>
+                            <div class="date-loc">出発 / BOS→VIE</div>
+                        </div>
+                    </td>
+                    <!-- 村上 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">IB348
+                                    BOS→MAD</span>
+                                <div class="ev-note">17:40発 (Terminal E) · 7h10m</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">IB348
+                                    BOS→MAD</span>
+                                <div class="ev-note">17:40発 (Terminal E) · 7h10m</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">JL7
+                                    BOS→NRT</span>
+                                <div class="ev-note">23:35 発（帰国）</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell absent"></div>
+                    </td>
+                    <td>
+                        <div class="ev-cell absent"></div>
+                    </td>
+                </tr>
+
+                <!-- 5/30 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">5/30</div>
+                            <div class="date-wd">Sat</div>
+                            <div class="date-loc">移動日 / 三浦帰国</div>
+                        </div>
+                    </td>
+                    <!-- 村上 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">IB791
+                                    MAD→VIE</span>
+                                <div class="ev-note">MAD 08:40発 (1h50m乗継) · 3h</div>
+                            </div>
+                            <div class="ev ev-arrive"><span class="ev-icon">🛬</span><span class="ev-label">VIE着 11:40
+                                   </span>
+                                <div class="ev-note">Terminal 3 · Mercure Wien チェックイン</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">IB791
+                                    MAD→VIE</span>
+                                <div class="ev-note">MAD 08:40発 (1h50m乗継) · 3h</div>
+                            </div>
+                            <div class="ev ev-arrive"><span class="ev-icon">🛬</span><span class="ev-label">VIE着 11:40
+                                   </span>
+                                <div class="ev-note">Terminal 3 · Mercure Wien チェックイン</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-arrive"><span class="ev-icon">🛬</span><span
+                                    class="ev-label">NRT着（帰国）</span>
+                                <div class="ev-note">JL7 着後 → JL3009 → ITM 着</div>
+                            </div>
+                            <div class="ev ev-move"><span class="ev-icon">🏠</span><span class="ev-label">帰宅</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell absent"></div>
+                    </td>
+                    <td>
+                        <div class="ev-cell absent"></div>
+                    </td>
+                </tr>
+
+                <!-- 5/31 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">5/31</div>
+                            <div class="date-wd">Sun</div>
+                            <div class="date-loc">🇦🇹 ウィーン</div>
+                        </div>
+                    </td>
+                    <!-- 村上 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-hotel"><span class="ev-icon">🏨</span><span class="ev-label">休日</span>
+                                <div class="ev-note">Registration Day 15:00〜 Foyer A</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-hotel"><span class="ev-icon">🏨</span><span class="ev-label">休日</span>
+                                <div class="ev-note">Registration Day 15:00〜 Foyer A</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-hotel"><span class="ev-icon">🏠</span><span class="ev-label">帰国済</span>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 傳田 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span
+                                    class="ev-label">KIX→HEL→VIE</span>
+                                <div class="ev-note">KIX 22:15 発（機内泊）</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 岡部 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span
+                                    class="ev-label">KIX→HEL→VIE</span>
+                                <div class="ev-note">KIX 22:15 発（機内泊）</div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- ===== PHASE 4: ICRA ===== -->
+                <tr class="separator">
+                    <td colspan="6"><span class="phase-banner">🤖 PHASE 4 — ICRA 2026（ウィーン）</span></td>
+                </tr>
+
+                <!-- 6/1 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">6/1</div>
+                            <div class="date-wd">Mon</div>
+                            <div class="date-loc">🛠 Workshop Day A</div>
+                        </div>
+                    </td>
+                    <!-- 村上 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🔧</span><span class="ev-label">Workshop Day
+                                    A</span>
+                                <div class="ev-note">09:00–18:00 · Messe Wien</div>
+                            </div>
+                            <div class="ev ev-event"><span class="ev-icon">🥂</span><span class="ev-label">Welcome
+                                    Reception</span>
+                                <div class="ev-note">18:00–20:00 · Exhibition Hall</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🔧</span><span class="ev-label">Workshop Day
+                                    A</span>
+                                <div class="ev-note">09:00–18:00 · Messe Wien</div>
+                            </div>
+                            <div class="ev ev-event"><span class="ev-icon">🥂</span><span class="ev-label">Welcome
+                                    Reception</span>
+                                <div class="ev-note">18:00–20:00 · Exhibition Hall</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-hotel"><span class="ev-icon">🏠</span><span class="ev-label">帰国済</span>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 傳田 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-arrive"><span class="ev-icon">🛬</span><span class="ev-label">VIE着 10:50
+                                   </span>
+                                <div class="ev-note">Mercure Wien チェックイン・休養</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 岡部 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-arrive"><span class="ev-icon">🛬</span><span class="ev-label">VIE着 10:50
+                                   </span>
+                                <div class="ev-note">Mercure Wien チェックイン・休養</div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- 6/2 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">6/2</div>
+                            <div class="date-wd">Tue</div>
+                            <div class="date-loc">📋 本会議 Day 1</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🎤</span><span class="ev-label">ICRA 本会議 Day
+                                    1</span>
+                                <div class="ev-note">Keynote / Panel / 5 Tracks</div>
+                            </div>
+                            <div class="ev ev-event"><span class="ev-icon">🍽</span><span class="ev-label">VIP
+                                    Dinner</span>
+                                <div class="ev-note">19:00〜</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🎤</span><span class="ev-label">ICRA 本会議 Day
+                                    1</span>
+                                <div class="ev-note">Keynote / Panel / 5 Tracks</div>
+                            </div>
+                            <div class="ev ev-event"><span class="ev-icon">🍽</span><span class="ev-label">VIP
+                                    Dinner</span>
+                                <div class="ev-note">19:00〜</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-hotel"><span class="ev-label">🏠 帰国済</span></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🎤</span><span class="ev-label">ICRA 本会議 Day
+                                    1</span>
+                                <div class="ev-note">Keynote / Panel / 5 Tracks</div>
+                            </div>
+                            <div class="ev ev-event"><span class="ev-icon">🍽</span><span class="ev-label">VIP
+                                    Dinner</span>
+                                <div class="ev-note">19:00〜</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🎤</span><span class="ev-label">ICRA 本会議 Day
+                                    1</span>
+                                <div class="ev-note">Keynote / Panel / 5 Tracks</div>
+                            </div>
+                            <div class="ev ev-event"><span class="ev-icon">🍽</span><span class="ev-label">VIP
+                                    Dinner</span>
+                                <div class="ev-note">19:00〜</div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- 6/3 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">6/3</div>
+                            <div class="date-wd">Wed</div>
+                            <div class="date-loc">📋 本会議 Day 2</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🎤</span><span class="ev-label">ICRA 本会議 Day
+                                    2</span>
+                                <div class="ev-note">Keynote / Panel / 5 Tracks</div>
+                            </div>
+                            <div class="ev ev-event"><span class="ev-icon">🏰</span><span class="ev-label">Imperial
+                                    Night</span>
+                                <div class="ev-note">19:00〜 · Imperial Palace（要チケット）</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🎤</span><span class="ev-label">ICRA 本会議 Day
+                                    2</span>
+                                <div class="ev-note">Keynote / Panel / 5 Tracks</div>
+                            </div>
+                            <div class="ev ev-event"><span class="ev-icon">🏰</span><span class="ev-label">Imperial
+                                    Night</span>
+                                <div class="ev-note">19:00〜 · Imperial Palace（要チケット）</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-hotel"><span class="ev-label">🏠 帰国済</span></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🎤</span><span class="ev-label">ICRA 本会議 Day
+                                    2</span>
+                                <div class="ev-note">Keynote / Panel / 5 Tracks</div>
+                            </div>
+                            <div class="ev ev-event"><span class="ev-icon">🏰</span><span class="ev-label">Imperial
+                                    Night</span>
+                                <div class="ev-note">19:00〜 · Imperial Palace</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🎤</span><span class="ev-label">ICRA 本会議 Day
+                                    2</span>
+                                <div class="ev-note">Keynote / Panel / 5 Tracks</div>
+                            </div>
+                            <div class="ev ev-event"><span class="ev-icon">🏰</span><span class="ev-label">Imperial
+                                    Night</span>
+                                <div class="ev-note">19:00〜 · Imperial Palace</div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- 6/4 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">6/4</div>
+                            <div class="date-wd">Thu</div>
+                            <div class="date-loc">📋 本会議 Day 3</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🎤</span><span class="ev-label">ICRA 本会議 Day
+                                    3</span>
+                                <div class="ev-note">5 Tracks · Award Lunch (12:30〜)</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🎤</span><span class="ev-label">ICRA 本会議 Day
+                                    3</span>
+                                <div class="ev-note">5 Tracks · Award Lunch (12:30〜)</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-hotel"><span class="ev-label">🏠 帰国済</span></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🎤</span><span class="ev-label">ICRA 本会議 Day
+                                    3</span>
+                                <div class="ev-note">5 Tracks · Award Lunch (12:30〜)</div>
+                            </div>
+                            <div class="ev ev-depart" style="margin-top:4px"><span class="ev-icon">ℹ️</span><span
+                                    class="ev-label" style="font-size:10px">翌日 Jun 5 早朝 VIE 発</span></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🎤</span><span class="ev-label">ICRA 本会議 Day
+                                    3</span>
+                                <div class="ev-note">5 Tracks · Award Lunch (12:30〜)</div>
+                            </div>
+                            <div class="ev ev-depart" style="margin-top:4px"><span class="ev-icon">ℹ️</span><span
+                                    class="ev-label" style="font-size:10px">翌日 Jun 5 早朝 VIE 発</span></div>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- 6/5 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">6/5</div>
+                            <div class="date-wd">Fri</div>
+                            <div class="date-loc">🛠 Workshop Day B / 帰国</div>
+                        </div>
+                    </td>
+                    <!-- 村上 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🔧</span><span class="ev-label">Workshop Day B
+                                    ✓</span>
+                                <div class="ev-note">09:00–17:30 · Messe Wien</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-conf"><span class="ev-icon">🔧</span><span class="ev-label">Workshop Day
+                                    B</span>
+                                <div class="ev-note">09:00–17:30 · Messe Wien</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-hotel"><span class="ev-label">🏠 帰国済</span></div>
+                        </div>
+                    </td>
+                    <!-- 傳田 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">AY1472
+                                    VIE→HEL</span>
+                                <div class="ev-note">11:35発 → HEL乗継</div>
+                            </div>
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">AY67
+                                    HEL→KIX</span>
+                                <div class="ev-note">16:50 発（機内泊）</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 岡部 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">AY1472
+                                    VIE→HEL</span>
+                                <div class="ev-note">11:35発 → HEL乗継</div>
+                            </div>
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">AY67
+                                    HEL→KIX</span>
+                                <div class="ev-note">16:50 発（機内泊）</div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- ===== PHASE 5: 帰国 ===== -->
+                <tr class="separator">
+                    <td colspan="6"><span class="phase-banner">🏠 PHASE 5 — 帰国</span></td>
+                </tr>
+
+                <!-- 6/6 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">6/6</div>
+                            <div class="date-wd">Sat</div>
+                            <div class="date-loc">帰国（傳田・岡部）</div>
+                        </div>
+                    </td>
+                    <!-- 村上 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">QR184
+                                    VIE→DOH</span>
+                                <div class="ev-note">16:55発 → DOH乗継</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">BA725
+                                    VIE→LHR→HND</span>
+                                <div class="ev-note">15:25 → LHR乗継</div>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-hotel"><span class="ev-label">🏠 帰国済（5/30）</span></div>
+                        </div>
+                    </td>
+                    <!-- 傳田 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-arrive"><span class="ev-icon">🛬</span><span class="ev-label">KIX着 12:35
+                                   </span></div>
+                            <div class="ev ev-move"><span class="ev-icon">🏠</span><span class="ev-label">帰宅</span>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 岡部 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-arrive"><span class="ev-icon">🛬</span><span class="ev-label">KIX着 12:35
+                                   </span></div>
+                            <div class="ev ev-move"><span class="ev-icon">🏠</span><span class="ev-label">帰宅</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- 6/7 -->
+                <tr class="phase-row">
+                    <td>
+                        <div class="date-cell">
+                            <div class="date-main">6/7</div>
+                            <div class="date-wd">Sun</div>
+                            <div class="date-loc">帰国（村上・佐藤）</div>
+                        </div>
+                    </td>
+                    <!-- 村上 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">QR802
+                                    DOH→KIX</span>
+                                <div class="ev-note">01:40 AST発</div>
+                            </div>
+                            <div class="ev ev-arrive"><span class="ev-icon">🛬</span><span class="ev-label">KIX着 17:25
+                                   </span></div>
+                            <div class="ev ev-move"><span class="ev-icon">🏠</span><span class="ev-label">帰宅</span>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 佐藤 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-depart"><span class="ev-icon">✈</span><span class="ev-label">JL44
+                                    LHR→HND</span>
+                                <div class="ev-note">03:20 発</div>
+                            </div>
+                            <div class="ev ev-arrive"><span class="ev-icon">🛬</span><span class="ev-label">HND着 17:20
+                                    →JL209 NGO</span></div>
+                            <div class="ev ev-move"><span class="ev-icon">🏠</span><span class="ev-label">帰宅（名古屋）</span>
+                            </div>
+                        </div>
+                    </td>
+                    <!-- 三浦 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-hotel"><span class="ev-label">🏠 帰国済（5/30）</span></div>
+                        </div>
+                    </td>
+                    <!-- 傳田 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-hotel"><span class="ev-label">🏠 帰国済（6/6）</span></div>
+                        </div>
+                    </td>
+                    <!-- 岡部 -->
+                    <td>
+                        <div class="ev-cell">
+                            <div class="ev ev-hotel"><span class="ev-label">🏠 帰国済（6/6）</span></div>
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>データは <code>members.js</code>・<code>robotics_icra_itinerary4.html</code> と同期。詳細は各スケジュールページを参照。</p>
+    </footer>
+
+</body>
+
+</html>

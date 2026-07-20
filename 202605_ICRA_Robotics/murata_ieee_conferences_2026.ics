@@ -1,0 +1,309 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Murata Machinery//IEEE Conferences 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:村田機械 IEEE学会 2026
+X-WR-TIMEZONE:UTC
+X-WR-CALDESC:村田機械研究開発本部向け2026年IEEE学会カレンダー（Top 20）
+
+BEGIN:VEVENT
+UID:icra2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260601T080000Z
+DTEND:20260605T180000Z
+SUMMARY:IEEE ICRA 2026 (95点) - Vienna
+LOCATION:VIECON Vienna Congress & Convention Center, Vienna, Austria
+DESCRIPTION:IEEE International Conference on Robotics & Automation\n評価: 95/100点（ロボティクス・オートメーション最高峰）\n\n形式: オンサイト開催のみ\n\n推奨理由: 物流システム・産業用ロボットに直結する世界最高峰学会。AMR、協働ロボット、ピッキング技術の最新研究\n\nURL: https://ieee-icra.org
+CATEGORIES:ロボティクス,最優先参加
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:cvpr2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260603T080000Z
+DTEND:20260607T180000Z
+SUMMARY:IEEE CVPR 2026 (96点) - Denver
+LOCATION:Denver Convention Center, Denver, Colorado, USA
+DESCRIPTION:IEEE/CVF Computer Vision and Pattern Recognition\n評価: 96/100点（コンピュータビジョン世界最高峰）\n\n論文締切: 2025年11月13日（過ぎています）\n\n推奨理由: ロボットビジョン、3D認識、ピッキング技術など知能化に不可欠。産業応用トラック充実\n\n注意: 論文締切済み、参加のみ\n\nURL: https://thecvf.com
+CATEGORIES:コンピュータビジョン,AI,最優先参加
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:icca2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260616T080000Z
+DTEND:20260619T180000Z
+SUMMARY:IEEE ICCA 2026 (80点) - Almaty
+LOCATION:Almaty, Kazakhstan
+DESCRIPTION:IEEE International Conference on Control & Automation\n評価: 80/100点（第20回）\n\n推奨理由: 制御システムと自動化の最新研究。工作機械、FAシステムの高度制御技術開発に貢献\n\nURL: https://hkclr.hk
+CATEGORIES:制御理論,制御・自動化
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:aim2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260707T080000Z
+DTEND:20260710T180000Z
+SUMMARY:IEEE AIM 2026 (81点) - Genova
+LOCATION:Università degli Studi di Genova, Genova, Italy
+DESCRIPTION:IEEE/ASME Advanced Intelligent Mechatronics\n評価: 81/100点（IEEE/ASME共催）\n\n論文締切: 2026年2月23日（過ぎています）\n\n推奨理由: 人間ロボット協働、産業応用、故障診断など実用的トピック。IEEE Xplore掲載、TMECH共同投稿可\n\nURL: https://aim2026.com
+CATEGORIES:メカトロニクス,高優先度
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:indin2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260726T080000Z
+DTEND:20260729T180000Z
+SUMMARY:IEEE INDIN 2026 (88点) - Melbourne
+LOCATION:Melbourne, Australia
+DESCRIPTION:IEEE Industrial Informatics (第24回)\n評価: 88/100点（IEEE IES主催）\n\n論文締切: 2026年2月28日\n\n推奨理由: 産業AI、サイバーフィジカルシステム、産業クラウド/エッジコンピューティングなどスマートファクトリー実現技術\n\nURL: https://ieee-ies.org
+CATEGORIES:産業情報技術,最優先参加
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:icma2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260802T080000Z
+DTEND:20260805T180000Z
+SUMMARY:IEEE ICMA 2026 (75点) - Changchun
+LOCATION:Changchun, Jilin, China
+DESCRIPTION:IEEE International Conference on Mechatronics and Automation\n評価: 75/100点\n\n推奨理由: メカトロニクスと自動化の統合技術。機械システム開発に有用な制御・駆動技術\n\nURL: https://ieee-icma.org
+CATEGORIES:メカトロニクス
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:icamal2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260812T080000Z
+DTEND:20260814T180000Z
+SUMMARY:IEEE iCaMaL 2026 (87点) - Hangzhou
+LOCATION:Hangzhou, China
+DESCRIPTION:IEEE Automation in Manufacturing, Transportation and Logistics\n評価: 87/100点\n\n推奨理由: 物流自動化、サプライチェーン、在庫最適化など物流システム事業に直接関連。IEEE Xplore掲載\n\nURL: https://icamal2026.com
+CATEGORIES:物流自動化,高優先度
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:case2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260817T080000Z
+DTEND:20260821T180000Z
+SUMMARY:IEEE CASE 2026 (92点) - Shenyang
+LOCATION:Shenyang, China
+DESCRIPTION:IEEE Conference on Automation Science and Engineering (第22回)\n評価: 92/100点（IEEE RAS flagship）\n\nテーマ: Smart Industry\n形式: ハイブリッド（現地+バーチャル）\n論文締切: 2026年3月1日\n\n推奨理由: スマート産業に特化。製造自動化、物流最適化、デジタルツイン。ハイブリッド参加可\n\nURL: https://aconf.org
+CATEGORIES:スマート製造,最優先参加,ハイブリッド
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:roman2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260824T080000Z
+DTEND:20260828T180000Z
+SUMMARY:IEEE RO-MAN 2026 (79点) - 北九州 🇯🇵
+LOCATION:北九州国際会議場, 北九州市, 福岡県, Japan
+DESCRIPTION:IEEE Robot and Human Interactive Communication (第35回)\n評価: 79/100点\n\n⭐ 日本開催！\n論文締切: 2026年3月15日\n\n推奨理由: 人間中心のロボット設計、協働ロボット、サービスロボット。国内参加で移動負担少ない\n\nURL: https://ro-man2026.org
+CATEGORIES:人間ロボット協働,日本開催
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:etfa2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260908T080000Z
+DTEND:20260911T180000Z
+SUMMARY:IEEE ETFA 2026 (72点) - Västerås
+LOCATION:Västerås, Sweden
+DESCRIPTION:IEEE Emerging Technologies and Factory Automation (第31回)\n評価: 72/100点（IEEE IES主催）\n\n論文締切: 2026年4月19日\n\n推奨理由: 先進的な工場自動化技術。適応制御、自律ロボット、機械学習、産業応用\n\nURL: https://etfa2026.ieee-ies.org
+CATEGORIES:工場自動化
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:itsc2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260915T080000Z
+DTEND:20260918T180000Z
+SUMMARY:IEEE ITSC 2026 (66点) - Naples
+LOCATION:Convention Bureau Stazione Marittima, Naples, Italy
+DESCRIPTION:IEEE Intelligent Transportation Systems Conference (第29回)\n評価: 66/100点（IEEE ITSS flagship）\n\n論文締切: 2026年3月1日\n形式: 対面開催\n\n推奨理由: 自動運転、交通システム、物流への応用。IEEE Xplore掲載\n\nURL: https://ieee-itsc.org
+CATEGORIES:交通システム
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:iros2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260927T080000Z
+DTEND:20261001T180000Z
+SUMMARY:IEEE IROS 2026 (90点) - Pittsburgh
+LOCATION:David L. Lawrence Convention Center, Pittsburgh, Pennsylvania, USA
+DESCRIPTION:IEEE/RSJ Intelligent Robots and Systems\n評価: 90/100点（ロボティクス最高峰）\n\n推奨理由: 知能化されたロボットシステム。自律移動、環境認識、人間協働など次世代技術開発に重要\n\nURL: https://iros2026.org
+CATEGORIES:ロボティクス,最優先参加
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:smc2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20261004T080000Z
+DTEND:20261007T180000Z
+SUMMARY:IEEE SMC 2026 (74点) - Bellevue
+LOCATION:Bellevue, Washington, USA
+DESCRIPTION:IEEE Systems, Man, and Cybernetics\n評価: 74/100点（IEEE SMC flagship）\n\nテーマ: Human-Centric Intelligence: Shaping the Digital Future\n形式: オンライン参加オプションあり\n\n推奨理由: 人間中心の知能システム設計。人間機械インタラクション、自律システム、サイバーセキュリティ\n\nURL: https://ieeesmc2026.org
+CATEGORIES:サイバネティクス,ハイブリッド
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:iecon2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20261018T080000Z
+DTEND:20261021T180000Z
+SUMMARY:IEEE IECON 2026 (85点) - Doha
+LOCATION:Doha, Qatar
+DESCRIPTION:IEEE Industrial Electronics Conference (第52回)\n評価: 85/100点\n\nテーマ: Industry 5.0、ロボティクス・メカトロニクス\n\n推奨理由: Industry 5.0（人間中心の製造）とロボティクスの融合。次世代ファクトリービジョン構築\n\nURL: https://iecon2026.org
+CATEGORIES:Industry 5.0,高優先度
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:sensors2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20261025T080000Z
+DTEND:20261028T180000Z
+SUMMARY:IEEE Sensors 2026 (76点) - Rotterdam
+LOCATION:Postillion Hotel & Convention Centre WTC Rotterdam, Rotterdam, Netherlands
+DESCRIPTION:IEEE Sensors Conference\n評価: 76/100点\n\n推奨理由: 産業実装におけるセンサー技術、センサーデータ処理とAI統合。スマートファクトリー基盤技術\n\nURL: https://ieee-sensors.org
+CATEGORIES:センサー技術
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:mecc2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20261025T080000Z
+DTEND:20261028T180000Z
+SUMMARY:MECC 2026 (69点) - Phoenix
+LOCATION:Tempe Mission Palms Hotel, Phoenix, Arizona, USA
+DESCRIPTION:Modeling, Estimation and Control Conference\n評価: 69/100点（AACC/IFAC共催）\n\n論文締切: 2026年3月14日（Joint）、4月6日（Conference-only）\n\n推奨理由: 機械システムの制御理論。IFAC-PapersOnLineオープンアクセス出版（EI、Scopus、WoS索引）\n\nURL: https://a2c2.org
+CATEGORIES:制御理論
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:wfiot2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20261026T080000Z
+DTEND:20261029T180000Z
+SUMMARY:IEEE WF-IoT 2026 (82点) - Abu Dhabi
+LOCATION:Abu Dhabi, United Arab Emirates
+DESCRIPTION:IEEE World Forum on Internet of Things (第12回)\n評価: 82/100点\n\n論文締切: 2026年3月31日\n\n推奨理由: 次世代ネットワーク、インテリジェントセンシング、スマートエネルギー。IoT活用による工場・物流デジタル化\n\nURL: https://ieee.org
+CATEGORIES:IoT,高優先度
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:corl2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20261109T080000Z
+DTEND:20261112T180000Z
+SUMMARY:CoRL 2026 (84点) - Austin
+LOCATION:JW Marriott Austin, Austin, Texas, USA
+DESCRIPTION:Conference on Robot Learning\n評価: 84/100点（IEEE協賛）\n\nワークショップ: 11/9、本会議: 11/10-12\n\n推奨理由: 深層強化学習、模倣学習など次世代適応型ロボット。自律移動ロボットの知能化に直結\n\nURL: https://corl.org
+CATEGORIES:ロボット学習,AI,高優先度
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:humanoids2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20261206T080000Z
+DTEND:20261209T180000Z
+SUMMARY:IEEE Humanoids 2026 (71点) - Santa Clara
+LOCATION:Santa Clara, San Jose, California, USA
+DESCRIPTION:IEEE-RAS Humanoid Robots (第25回)\n評価: 71/100点（IEEE-RAS主催）\n\n構成: 1日目ワークショップ/チュートリアル、2-3日目本会議\n\n推奨理由: 二足歩行ロボット、全身制御、人間型ロボット。将来的なサービスロボット、協働作業への応用\n\nURL: https://humanoids2026.org
+CATEGORIES:ヒューマノイド
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:cdc2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20261215T080000Z
+DTEND:20261218T180000Z
+SUMMARY:IEEE CDC 2026 (67点) - Honolulu
+LOCATION:Hilton Hawaiian Village Waikiki Beach Resort, Honolulu, Hawaii, USA
+DESCRIPTION:IEEE Conference on Decision and Control (第65回)\n評価: 67/100点（IEEE CSS flagship）\n\nワークショップ: 12/14、本会議: 12/15-18\n\n推奨理由: 決定・制御理論の最高峰。ロボティクス、製造システム、ネットワーク制御\n\nURL: https://ieeecss.org
+CATEGORIES:制御理論
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:aiita2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260410T080000Z
+DTEND:20260412T180000Z
+SUMMARY:IEEE AIITA 2026 (78点) - Chongqing
+LOCATION:Chongqing, China
+DESCRIPTION:IEEE AI and Industrial Technology Applications (第6回)\n評価: 78/100点\n\n推奨理由: AI技術の産業応用に特化。機械学習による品質管理、予知保全、工程最適化など直接的応用事例\n\nURL: https://industryevents.com
+CATEGORIES:産業AI
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:cai2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260508T080000Z
+DTEND:20260510T180000Z
+SUMMARY:IEEE CAI 2026 (73点) - Granada
+LOCATION:Granada, Spain
+DESCRIPTION:IEEE Conference on Artificial Intelligence\n評価: 73/100点\n\n推奨理由: 最新AI研究と産業ブレークスルー。IoT技術との連携、スマート製造への応用\n\nURL: https://ieeecai2026.org
+CATEGORIES:AI
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+BEGIN:VEVENT
+UID:acc2026@murata.com
+DTSTAMP:20260129T150000Z
+DTSTART:20260526T080000Z
+DTEND:20260529T180000Z
+SUMMARY:IEEE ACC 2026 (77点) - New Orleans
+LOCATION:Hilton New Orleans Riverside, New Orleans, Louisiana, USA
+DESCRIPTION:American Control Conference\n評価: 77/100点（AACC/IEEE CSS共催）\n\n推奨理由: 自動制御の理論と応用。ロボティクス、製造システム、ネットワーク制御など幅広いトピック\n\nURL: https://a2c2.org
+CATEGORIES:制御理論
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+
+END:VCALENDAR

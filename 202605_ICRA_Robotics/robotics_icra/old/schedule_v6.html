@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年 米国・欧州出張 マスタースケジュール</title>
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-blue: #3b82f6;
+            --tz-jst: #3b82f6;
+            --tz-edt: #10b981;
+            --tz-cest: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+        }
+
+        h1 { font-size: 1.4rem; margin-bottom: 5px; }
+        .subtitle { opacity: 0.9; font-size: 0.8rem; }
+
+        .schedule-wrapper { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 8px 10px;
+            font-size: 0.78rem;
+            vertical-align: middle;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background: #f8fafc;
+            z-index: 10;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .col-time { width: 75px; background: #fafafa; text-align: center; font-weight: 600; }
+        .col-member { width: 23%; }
+
+        .m-murakami { border-top: 4px solid #3b82f6; }
+        .m-sato { border-top: 4px solid #ef4444; }
+        .m-miura { border-top: 4px solid #10b981; }
+        .m-denda-wakate { border-top: 4px solid #f59e0b; }
+
+        /* 日付行 */
+        .date-row { background: #dbeafe !important; }
+        .date-row td {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--primary-blue);
+            padding: 12px 15px;
+        }
+        .date-row .event-tag {
+            display: inline-block;
+            background: #059669;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-left: 10px;
+            font-weight: 600;
+        }
+        .date-row .stay-info {
+            font-size: 0.72rem;
+            font-weight: normal;
+            color: #475569;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* タイムゾーン色付き時刻セル */
+        .tz-jst { background: rgba(59, 130, 246, 0.12); border-left: 4px solid var(--tz-jst); }
+        .tz-edt { background: rgba(16, 185, 129, 0.12); border-left: 4px solid var(--tz-edt); }
+        .tz-cest { background: rgba(245, 158, 11, 0.12); border-left: 4px solid var(--tz-cest); }
+
+        /* バー */
+        .bar {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: white;
+            white-space: nowrap;
+            margin-right: 5px;
+        }
+
+        .bar-flight { background: #1e40af; }
+        .bar-checkin { background: #7c3aed; }
+        .bar-hotel-in { background: #6366f1; }
+        .bar-hotel-out { background: #64748b; }
+        .bar-conf { background: #059669; }
+        .bar-move { background: #475569; }
+        .bar-off { background: #fbbf24; color: #1e293b; }
+
+        .flight-detail {
+            font-size: 0.72rem;
+            color: #334155;
+            margin-top: 2px;
+            line-height: 1.4;
+        }
+
+        .flight-route {
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .flight-time {
+            color: #64748b;
+            font-size: 0.68rem;
+        }
+
+        .empty { color: #cbd5e1; text-align: center; }
+        
+        /* 機内セル - 強調版 */
+        .inflight {
+            background: #1e40af;
+            text-align: center;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .inflight::before {
+            content: "✈️ ";
+        }
+        
+        .inflight-subtle {
+            background: #3b82f6;
+            text-align: center;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: white;
+        }
+        .inflight-subtle::before {
+            content: "✈️ ";
+        }
+
+        .returned { background: #f8fafc; color: #94a3b8; text-align: center; font-size: 0.72rem; }
+
+        /* 凡例 */
+        .legend {
+            display: flex;
+            gap: 25px;
+            padding: 15px 20px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+            font-size: 0.72rem;
+            justify-content: center;
+        }
+
+        .legend-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .legend-title {
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tz-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+        .tz-box.jst { background: var(--tz-jst); }
+        .tz-box.edt { background: var(--tz-edt); }
+        .tz-box.cest { background: var(--tz-cest); }
+        
+        .inflight-box {
+            width: 30px;
+            height: 16px;
+            border-radius: 3px;
+            background: #1e40af;
+        }
+
+        /* 予約情報セクション */
+        .booking-section {
+            padding: 20px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .booking-section h2 {
+            font-size: 1rem;
+            color: var(--primary-blue);
+            margin-bottom: 15px;
+            border-left: 4px solid var(--secondary-blue);
+            padding-left: 10px;
+        }
+
+        .booking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .booking-card h3 {
+            font-size: 0.85rem;
+            color: #334155;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .booking-card .icon { font-size: 1.1rem; }
+
+        .booking-card p {
+            font-size: 0.72rem;
+            color: #64748b;
+            margin: 3px 0;
+        }
+
+        .booking-card .conf-number {
+            font-family: monospace;
+            background: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+        }
+
+        /* 印刷対応 */
+        @media print {
+            body { background: white; padding: 10px; }
+            .container { box-shadow: none; }
+            thead th { position: static; }
+            .tz-jst, .tz-edt, .tz-cest, .date-row, .bar, header, .booking-card, .inflight, .inflight-subtle {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            @page { margin: 10mm; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>2026年 米国・欧州出張 マスタースケジュール</h1>
+        <div class="subtitle">Robotics Summit & Expo (Boston) → ICRA 2026 (Vienna) ｜ 5月25日〜6月7日</div>
+    </header>
+
+    <div class="schedule-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-time">時刻</th>
+                    <th class="col-member m-murakami">村上<br><small>帰着: ITM</small></th>
+                    <th class="col-member m-sato">佐藤<br><small>帰着: NGO</small></th>
+                    <th class="col-member m-miura">三浦<br><small>帰着: ITM</small></th>
+                    <th class="col-member m-denda-wakate">傳田・若手<br><small>帰着: KIX</small></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- ========== 5/25 ========== -->
+                <tr class="date-row">
+                    <td colspan="5">
+                        5月25日（月）　日本出発 → ボストン移動
+                        <span class="stay-info">🛌 村上・佐藤・三浦：Hampton Inn Boston Logan Airport（確認番号: 97321273）</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">11:30</td>
+                    <td><span class="bar bar-move">🏠</span>中書島 出発</td>
+                    <td><span class="bar bar-move">🏠</span>犬山 出発</td>
+                    <td><span class="bar bar-move">🏠</span>京都 出発</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">13:00</td>
+                    <td colspan="3"><span class="bar bar-checkin">✈️ チェックイン</span>伊丹空港（ITM）</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">14:35</td>
+                    <td colspan="3">
+                        <span class="bar bar-flight">JL3006</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">伊丹（ITM）→ 成田（NRT）</span>
+                            <span class="flight-time">｜ 14:35発 → 16:00着（1時間25分）</span>
+                        </span>
+                    </td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">16:00</td>
+                    <td colspan="3">成田到着 ─ 乗継（2時間25分）</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">18:25</td>
+                    <td colspan="3">
+                        <span class="bar bar-flight">JL8</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">成田（NRT）→ ボストン（BOS）</span>
+                            <span class="flight-time">｜ 18:25発 → 18:10着 同日EDT（12時間45分）</span>
+                        </span>
+                    </td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-edt">18:10</td>
+                    <td colspan="3">ボストン・ローガン空港（BOS）到着</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-edt">19:30</td>
+                    <td colspan="3"><span class="bar bar-hotel-in">🏨 チェックイン</span>Hampton Inn Boston Logan Airport Chelsea</td>
+                    <td class="empty">—</td>
+                </tr>
+
+                <!-- ========== 5/26 ========== -->
+                <tr class="date-row">
+                    <td colspan="5">
+                        5月26日（火）　ボストン技術視察 ＆ Welcome Reception
+                        <span class="stay-info">🛌 村上・佐藤・三浦：Hampton Inn Boston Logan Airport</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-edt">午前〜午後</td>
+                    <td colspan="3"><span class="bar bar-move">🔬</span>ボストン市内 技術視察（MIT CSAIL 等）</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-edt">17:00</td>
+                    <td colspan="3"><span class="bar bar-conf">📍</span>Robotics Summit Welcome Reception（BCEC）</td>
+                    <td class="empty">—</td>
+                </tr>
+
+                <!-- ========== 5/27-28 ========== -->
+                <tr class="date-row">
+                    <td colspan="5">
+                        5月27〜28日（水〜木）<span class="event-tag">Robotics Summit & Expo</span>
+                        <span class="stay-info">🛌 村上・佐藤・三浦：Hampton Inn Boston Logan Airport</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-edt">終日</td>
+                    <td colspan="3"><span class="bar bar-conf">🎪</span>Robotics Summit & Expo 展示会・セッション参加（BCEC）</td>
+                    <td class="empty">—</td>
+                </tr>
+
+                <!-- ========== 5/29 ========== -->
+                <tr class="date-row">
+                    <td colspan="5">
+                        5月29日（金）　三浦：日本帰国 ／ 村上・佐藤：欧州移動
+                        <span class="stay-info">🛌 全員：機中泊</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-edt">09:00</td>
+                    <td colspan="3"><span class="bar bar-hotel-out">🚪 チェックアウト</span>Hampton Inn Boston Logan Airport</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-edt">11:30</td>
+                    <td colspan="2" class="empty">—</td>
+                    <td><span class="bar bar-checkin">✈️ チェックイン</span>BOS空港</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-edt">13:35</td>
+                    <td colspan="2" class="empty">—</td>
+                    <td>
+                        <span class="bar bar-flight">JL7</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">ボストン（BOS）→ 成田（NRT）</span>
+                            <span class="flight-time">｜ 13:35発 → 16:25着 翌日JST（13時間50分）</span>
+                        </span>
+                    </td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-edt">15:30</td>
+                    <td colspan="2"><span class="bar bar-checkin">✈️ チェックイン</span>BOS空港</td>
+                    <td class="inflight">機内 JL7</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-edt">17:40</td>
+                    <td colspan="2">
+                        <span class="bar bar-flight">IB348</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">ボストン（BOS）→ マドリード（MAD）</span>
+                            <span class="flight-time">｜ 17:40発 → 07:30着 翌日CEST（6時間50分）</span>
+                        </span>
+                    </td>
+                    <td class="inflight">機内 JL7</td>
+                    <td class="empty">—</td>
+                </tr>
+
+                <!-- ========== 5/30 ========== -->
+                <tr class="date-row">
+                    <td colspan="5">
+                        5月30日（土）　三浦：帰宅 ／ 村上・佐藤：ウィーン到着 ／ 傳田・若手：日本出発
+                        <span class="stay-info">🛌 村上・佐藤：Mercure Wien Westbahnhof（予約番号: PWSDBNMF）／ 傳田・若手：機中泊</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">07:30</td>
+                    <td colspan="2">マドリード・バラハス空港（MAD）到着</td>
+                    <td class="inflight">機内 JL7</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">08:35</td>
+                    <td colspan="2">
+                        <span class="bar bar-flight">IB791</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">マドリード（MAD）→ ウィーン（VIE）</span>
+                            <span class="flight-time">｜ 08:35発 → 11:40着（3時間05分）</span>
+                        </span>
+                    </td>
+                    <td class="inflight">機内 JL7</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">11:40</td>
+                    <td colspan="2">ウィーン国際空港（VIE）到着</td>
+                    <td class="inflight">機内 JL7</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">14:00</td>
+                    <td colspan="2"><span class="bar bar-hotel-in">🏨 チェックイン</span>Mercure Wien Westbahnhof</td>
+                    <td class="inflight">機内 JL7</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">16:25</td>
+                    <td colspan="2" class="empty">—</td>
+                    <td>成田空港（NRT）到着</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">19:50</td>
+                    <td colspan="2" class="empty">—</td>
+                    <td><span class="bar bar-move">🏠</span>伊丹着 → 帰宅</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">20:15</td>
+                    <td colspan="2" class="empty">—</td>
+                    <td class="returned">帰宅完了</td>
+                    <td><span class="bar bar-checkin">✈️ チェックイン</span>関西国際空港（KIX）</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">22:15</td>
+                    <td colspan="2" class="empty">—</td>
+                    <td class="returned">—</td>
+                    <td>
+                        <span class="bar bar-flight">AY78</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">関空（KIX）→ ヘルシンキ（HEL）</span>
+                            <span class="flight-time">｜ 22:15発 → 05:50着 翌日CEST（10時間35分）</span>
+                        </span>
+                    </td>
+                </tr>
+
+                <!-- ========== 5/31 ========== -->
+                <tr class="date-row">
+                    <td colspan="5">
+                        5月31日（日）　完全OFF（日曜日）／ 傳田・若手：ウィーン到着
+                        <span class="stay-info">🛌 全員：Mercure Wien Westbahnhof</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">05:50</td>
+                    <td colspan="2"><span class="bar bar-off">🛌</span>ウィーン 休日</td>
+                    <td class="returned">—</td>
+                    <td>ヘルシンキ・ヴァンター空港（HEL）到着 ─ 乗継（4時間05分）</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">09:55</td>
+                    <td colspan="2"><span class="bar bar-off">🚶</span>ウィーン市内散策</td>
+                    <td class="returned">—</td>
+                    <td>
+                        <span class="bar bar-flight">AY1471</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">ヘルシンキ（HEL）→ ウィーン（VIE）</span>
+                            <span class="flight-time">｜ 09:55発 → 11:50着（1時間55分）</span>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">10:50</td>
+                    <td colspan="2" class="empty">—</td>
+                    <td class="returned">—</td>
+                    <td>ウィーン国際空港（VIE）到着</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">13:00</td>
+                    <td colspan="2" class="empty">—</td>
+                    <td class="returned">—</td>
+                    <td><span class="bar bar-hotel-in">🏨 チェックイン</span>Mercure Wien Westbahnhof</td>
+                </tr>
+
+                <!-- ========== 6/1-4 ========== -->
+                <tr class="date-row">
+                    <td colspan="5">
+                        6月1〜4日（月〜木）<span class="event-tag">ICRA 2026</span>
+                        <span class="stay-info">🛌 村上・佐藤・傳田・若手：Mercure Wien Westbahnhof</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">終日</td>
+                    <td colspan="2"><span class="bar bar-conf">🎪</span>ICRA 2026 参加（Messe Wien）</td>
+                    <td class="returned">—</td>
+                    <td><span class="bar bar-conf">🎪</span>ICRA 2026 参加（Messe Wien）</td>
+                </tr>
+
+                <!-- ========== 6/5 ========== -->
+                <tr class="date-row">
+                    <td colspan="5">
+                        6月5日（金）　ICRA最終日 ／ 村上：帰国開始
+                        <span class="stay-info">🛌 村上：機中泊 ／ 佐藤・傳田・若手：Mercure Wien Westbahnhof（延泊）</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">11:00</td>
+                    <td><span class="bar bar-hotel-out">🚪 チェックアウト</span>Mercure</td>
+                    <td><span class="bar bar-conf">🎪</span>ICRA セッション</td>
+                    <td class="returned">—</td>
+                    <td><span class="bar bar-conf">🎪</span>ICRA セッション</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">14:30</td>
+                    <td><span class="bar bar-checkin">✈️ チェックイン</span>VIE空港</td>
+                    <td><span class="bar bar-conf">🎪</span>ICRA セッション</td>
+                    <td class="returned">—</td>
+                    <td><span class="bar bar-conf">🎪</span>ICRA セッション</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">16:30</td>
+                    <td>
+                        <span class="bar bar-flight">BA725</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">VIE → LHR</span>
+                            <span class="flight-time">｜ 16:30発 → 18:00着</span>
+                        </span>
+                    </td>
+                    <td>ICRA → 夕食</td>
+                    <td class="returned">—</td>
+                    <td>ICRA → 夕食</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">18:00</td>
+                    <td>ロンドン（LHR）到着 ─ 乗継</td>
+                    <td class="empty">—</td>
+                    <td class="returned">—</td>
+                    <td class="empty">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">20:00</td>
+                    <td>
+                        <span class="bar bar-flight">JL44</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">LHR → NRT</span>
+                            <span class="flight-time">｜ 20:00発 → 16:20着 翌日</span>
+                        </span>
+                    </td>
+                    <td class="empty">—</td>
+                    <td class="returned">—</td>
+                    <td class="empty">—</td>
+                </tr>
+
+                <!-- ========== 6/6 ========== -->
+                <tr class="date-row">
+                    <td colspan="5">
+                        6月6日（土）　村上：日本帰着 ／ 佐藤・傳田・若手：帰国開始
+                        <span class="stay-info">🛌 佐藤・傳田・若手：機中泊</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">09:00</td>
+                    <td class="inflight">機内 JL44</td>
+                    <td><span class="bar bar-hotel-out">🚪 チェックアウト</span>Mercure</td>
+                    <td class="returned">—</td>
+                    <td><span class="bar bar-hotel-out">🚪 チェックアウト</span>Mercure</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">09:30</td>
+                    <td class="inflight">機内 JL44</td>
+                    <td><span class="bar bar-checkin">✈️ チェックイン</span>VIE空港</td>
+                    <td class="returned">—</td>
+                    <td><span class="bar bar-checkin">✈️ チェックイン</span>VIE空港</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">11:35</td>
+                    <td class="inflight">機内 JL44</td>
+                    <td class="empty">—</td>
+                    <td class="returned">—</td>
+                    <td>
+                        <span class="bar bar-flight">AY1476</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">VIE → HEL</span>
+                            <span class="flight-time">｜ 11:35発 → 15:20着</span>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">15:20</td>
+                    <td class="inflight">機内 JL44</td>
+                    <td class="empty">—</td>
+                    <td class="returned">—</td>
+                    <td>ヘルシンキ（HEL）到着 ─ 乗継</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">16:20</td>
+                    <td class="inflight">機内 JL44</td>
+                    <td class="empty">—</td>
+                    <td class="returned">—</td>
+                    <td>
+                        <span class="bar bar-flight">AY77</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">HEL → KIX</span>
+                            <span class="flight-time">｜ 16:20発 → 12:35着 翌日</span>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">16:20</td>
+                    <td>成田空港（NRT）到着</td>
+                    <td class="inflight">機内 JL44</td>
+                    <td class="returned">—</td>
+                    <td class="inflight">機内 AY77</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">16:30</td>
+                    <td class="empty">—</td>
+                    <td>
+                        <span class="bar bar-flight">BA725</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">VIE → LHR</span>
+                            <span class="flight-time">｜ 16:30発 → 18:00着</span>
+                        </span>
+                    </td>
+                    <td class="returned">—</td>
+                    <td class="inflight">機内 AY77</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">18:35</td>
+                    <td>
+                        <span class="bar bar-flight">JL137</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">NRT → ITM</span>
+                            <span class="flight-time">｜ 18:35発 → 19:55着</span>
+                        </span>
+                    </td>
+                    <td class="inflight">機内 BA725</td>
+                    <td class="returned">—</td>
+                    <td class="inflight">機内 AY77</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">19:55</td>
+                    <td><span class="bar bar-move">🏠</span>伊丹着 → 中書島へ</td>
+                    <td class="inflight">機内 BA725</td>
+                    <td class="returned">—</td>
+                    <td class="inflight">機内 AY77</td>
+                </tr>
+                <tr>
+                    <td class="tz-cest">20:00</td>
+                    <td class="returned">帰宅完了</td>
+                    <td>
+                        <span class="bar bar-flight">JL44</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">LHR → NRT</span>
+                            <span class="flight-time">｜ 20:00発 → 16:20着 翌日</span>
+                        </span>
+                    </td>
+                    <td class="returned">—</td>
+                    <td class="inflight">機内 AY77</td>
+                </tr>
+
+                <!-- ========== 6/7 ========== -->
+                <tr class="date-row">
+                    <td colspan="5">
+                        6月7日（日）　佐藤・傳田・若手：日本帰着　→　全員帰宅完了
+                        <span class="stay-info">🏠 全員自宅到着</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">12:35</td>
+                    <td class="returned">—</td>
+                    <td class="inflight">機内 JL44</td>
+                    <td class="returned">—</td>
+                    <td><span class="bar bar-move">🏠</span>関空（KIX）到着</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">14:00</td>
+                    <td class="returned">—</td>
+                    <td class="inflight">機内 JL44</td>
+                    <td class="returned">—</td>
+                    <td>特急はるか → 京都へ帰宅</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">16:20</td>
+                    <td class="returned">—</td>
+                    <td>成田空港（NRT）到着</td>
+                    <td class="returned">—</td>
+                    <td class="returned">帰宅完了</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">18:35</td>
+                    <td class="returned">—</td>
+                    <td>
+                        <span class="bar bar-flight">JL209</span>
+                        <span class="flight-detail">
+                            <span class="flight-route">NRT → NGO</span>
+                            <span class="flight-time">｜ 18:35発 → 20:55着</span>
+                        </span>
+                    </td>
+                    <td class="returned">—</td>
+                    <td class="returned">—</td>
+                </tr>
+                <tr>
+                    <td class="tz-jst">20:55</td>
+                    <td class="returned">—</td>
+                    <td><span class="bar bar-move">🏠</span>中部着 → 犬山へ</td>
+                    <td class="returned">—</td>
+                    <td class="returned">—</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 凡例 -->
+    <div class="legend">
+        <div class="legend-group">
+            <span class="legend-title">タイムゾーン：</span>
+            <div class="legend-item"><div class="tz-box jst"></div>JST（日本）</div>
+            <div class="legend-item"><div class="tz-box edt"></div>EDT（米国東部）</div>
+            <div class="legend-item"><div class="tz-box cest"></div>CEST（中央欧州夏時間）</div>
+        </div>
+        <div class="legend-group">
+            <span class="legend-title">搭乗中：</span>
+            <div class="legend-item"><div class="inflight-box"></div>機内</div>
+        </div>
+    </div>
+
+    <!-- 予約情報 -->
+    <div class="booking-section">
+        <h2>📋 予約情報</h2>
+        <div class="booking-grid">
+            <div class="booking-card">
+                <h3><span class="icon">🏨</span>Hampton Inn Boston Logan Airport Chelsea</h3>
+                <p>確認番号：<span class="conf-number">97321273</span></p>
+                <p>期間：5月25日（月）〜 5月29日（金）4泊</p>
+                <p>部屋：キングスタディ 禁煙 × 3室</p>
+                <p>利用者：村上・佐藤・三浦</p>
+            </div>
+            <div class="booking-card">
+                <h3><span class="icon">🏨</span>Mercure Wien Westbahnhof ★★★★</h3>
+                <p>予約番号：<span class="conf-number">PWSDBNMF</span></p>
+                <p>期間：5月30日（土）〜 6月5日（金）6泊 ※延泊あり</p>
+                <p>料金：€639.00</p>
+                <p>ポイント：+1,726 RP / +1,392 SP</p>
+            </div>
+            <div class="booking-card">
+                <h3><span class="icon">✈️</span>村上 フライト</h3>
+                <p>往路：JL3006 → JL8（ITM 14:35 → BOS 18:10）</p>
+                <p>欧州：IB348 → IB791（BOS 17:40 → VIE 11:40+1）</p>
+                <p>復路：BA725 → JL44 → JL137</p>
+                <p>　　　（VIE 6/5 16:30 → ITM 6/6 19:55）</p>
+            </div>
+            <div class="booking-card">
+                <h3><span class="icon">✈️</span>佐藤 フライト</h3>
+                <p>往路：JL3006 → JL8（ITM 14:35 → BOS 18:10）</p>
+                <p>欧州：IB348 → IB791（BOS 17:40 → VIE 11:40+1）</p>
+                <p>復路：BA725 → JL44 → JL209</p>
+                <p>　　　（VIE 6/6 16:30 → NGO 6/7 20:55）</p>
+            </div>
+            <div class="booking-card">
+                <h3><span class="icon">✈️</span>三浦 フライト（￥298,120）</h3>
+                <p>往路：JL3006 → JL8（ITM 14:35 → BOS 18:10）</p>
+                <p>復路：JL7（BOS 5/29 13:35 → ITM 5/30 19:50）</p>
+            </div>
+            <div class="booking-card">
+                <h3><span class="icon">✈️</span>傳田・若手 フライト（￥215,307）</h3>
+                <p>往路：AY78 → AY1471（KIX 5/30 22:15 → VIE 5/31 10:50）</p>
+                <p>復路：AY1476 → AY77（VIE 6/6 11:35 → KIX 6/7 12:35）</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

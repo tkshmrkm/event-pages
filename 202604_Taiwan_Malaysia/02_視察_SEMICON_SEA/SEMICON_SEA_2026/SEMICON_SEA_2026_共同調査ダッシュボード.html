@@ -1,0 +1,4902 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEMICON Southeast Asia 2026 共同調査ダッシュボード</title>
+  <style>
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+  
+  :root {
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-hover: #f1f5f9;
+    --border: #e2e8f0;
+    --border-hover: #cbd5e1;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --accent: #2563eb;
+    --success: #10b981;
+    --target: #8b5cf6;
+  }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Noto Sans JP', sans-serif;
+    background: var(--bg-main); color: var(--text-main);
+    min-height: 100vh; padding: 32px; -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 1400px; margin: 0 auto;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  }
+
+  .header { padding: 32px 40px; border-bottom: 1px solid var(--border); background: var(--bg-card); }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .header h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; color: var(--text-main); margin-bottom: 8px; }
+  .header .subtitle { font-size: 14px; color: var(--text-muted); }
+  
+  .header-actions { display: flex; gap: 12px; }
+  .button {
+    padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s; border: 1px solid var(--border);
+    background: var(--bg-card); color: var(--text-main);
+  }
+  .button:hover { background: var(--bg-hover); border-color: var(--border-hover); }
+  .button-primary { background: var(--text-main); color: #fff; border-color: var(--text-main); }
+  .button-primary:hover { background: #334155; }
+  .button-success { background: transparent; }
+  
+  .stats { display: flex; gap: 16px; margin-top: 24px; }
+  .stat-card { border: 1px solid var(--border); padding: 16px 24px; border-radius: 8px; min-width: 120px; background: var(--bg-main); }
+  .stat-number { font-size: 28px; font-weight: 600; color: var(--text-main); }
+  .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 8px; letter-spacing: 0.02em; text-transform: uppercase; font-weight: 500;}
+  
+  .controls { padding: 24px 40px; background: var(--bg-card); border-bottom: 1px solid var(--border); }
+  .control-row { display: flex; gap: 16px; margin-bottom: 16px; align-items: center; }
+  .control-row:last-child { margin-bottom: 0; }
+  
+  .search-box { flex: 1; min-width: 300px; }
+  .search-box input, select {
+    width: 100%; padding: 10px 16px; background: var(--bg-card); border: 1px solid var(--border);
+    color: var(--text-main); border-radius: 6px; font-size: 14px; outline: none; transition: all 0.2s;
+  }
+  .search-box input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+  
+  .checkbox-label {
+    display: flex; align-items: center; gap: 8px; padding: 10px 16px;
+    border: 1px solid var(--border); border-radius: 6px; cursor: pointer;
+    font-size: 13px; color: var(--text-main); transition: all 0.2s; font-weight: 500;
+    background: var(--bg-card);
+  }
+  .checkbox-label:hover { background: var(--bg-hover); border-color: var(--border-hover); }
+  .checkbox-label input { accent-color: var(--accent); cursor: pointer; }
+  
+  .alphabet-filter { display: flex; gap: 6px; flex-wrap: wrap; }
+  .alphabet-btn {
+    padding: 6px 12px; background: transparent; border: 1px solid transparent;
+    border-radius: 6px; font-size: 13px; color: var(--text-muted); cursor: pointer; font-weight: 500;
+  }
+  .alphabet-btn:hover { color: var(--text-main); background: var(--bg-hover); }
+  .alphabet-btn.active { color: var(--accent); background: #eff6ff; border-color: #bfdbfe; }
+  
+  .table-container { overflow-x: auto; max-height: calc(100vh - 350px); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead { position: sticky; top: 0; z-index: 10; background: var(--bg-card); box-shadow: 0 1px 0 var(--border); }
+  th { padding: 16px 20px; text-align: left; font-weight: 600; color: var(--text-main); cursor: pointer; background: var(--bg-main); }
+  th:hover { color: var(--accent); }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.2s; cursor: pointer; }
+  tbody tr:hover { background: var(--bg-hover); }
+  tbody tr.visited { background: #f0fdf4; }
+  tbody tr.visited:hover { background: #dcfce7; }
+  
+  td { padding: 16px 20px; color: var(--text-muted); }
+  .company-name { font-weight: 600; color: var(--text-main); }
+  .booth { font-family: 'Courier New', monospace; font-size: 13px; background: var(--bg-main); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); }
+  .status-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 8px; border: 1px solid transparent; font-weight: 600; }
+  .status-visited { background: #dcfce7; color: #166534; border-color: #bbf7d0; }
+  .rating { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; background: var(--bg-main); border: 1px solid var(--border); font-weight: 600; }
+  
+  .no-results { text-align: center; padding: 60px; color: var(--text-muted); }
+  
+  /* Modal */
+  .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); }
+  .modal-content { background: var(--bg-card); border: 1px solid var(--border); margin: 40px auto; width: 90%; max-width: 800px; border-radius: 12px; box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); overflow: hidden; }
+  .modal-header { padding: 24px 32px; background: var(--bg-main); border-bottom: 1px solid var(--border); }
+  .modal-header h2 { font-size: 20px; font-weight: 600; color: var(--text-main); margin-bottom: 4px;}
+  .close { float: right; font-size: 24px; color: var(--text-muted); cursor: pointer; }
+  .close:hover { color: var(--text-main); }
+  .modal-body { padding: 32px; max-height: calc(100vh - 200px); overflow-y: auto; }
+  .info-section { background: var(--bg-main); border: 1px solid var(--border); padding: 20px; border-radius: 8px; margin-bottom: 24px; }
+  .info-row { display: flex; margin-bottom: 12px; align-items: flex-start;}
+  .info-label { width: 120px; color: var(--text-muted); font-size: 14px; font-weight: 500;}
+  .info-value { flex: 1; font-size: 14px; color: var(--text-main); line-height: 1.5; }
+  .form-section h3 { font-size: 13px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; font-weight: 600;}
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-main); font-weight: 500;}
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 14px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); border-radius: 6px; font-size: 14px; outline: none; transition: border-color 0.2s;}
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,0.1);}
+  .file-upload { border: 2px dashed var(--border); border-radius: 8px; padding: 24px; text-align: center; cursor: pointer; color: var(--text-muted); font-size: 14px; background: var(--bg-main); transition: all 0.2s;}
+  .file-upload:hover { border-color: var(--accent); color: var(--accent); background: #eff6ff;}
+  .modal-footer { padding: 16px 32px; background: var(--bg-main); border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 12px; }
+  .image-preview { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+  .image-preview-item { position: relative; width: 100px; height: 100px; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; }
+  .image-preview-item img { width: 100%; height: 100%; object-fit: cover; }
+  .remove-btn { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 4px; padding: 2px 6px; cursor: pointer; font-size: 12px; backdrop-filter: blur(2px);}
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-top">
+        <div class="header-title">
+          <h1>🏭 SEMICON Southeast Asia 2026 共同調査ダッシュボード</h1>
+          <div class="subtitle">2026年5月5-7日 @ MITEC, Kuala Lumpur, Malaysia - 複数人調査対応版</div>
+        </div>
+        <div class="header-actions">
+          <button class="button button-primary button-small" onclick="exportData()">📥 エクスポート</button>
+          <button class="button button-success button-small" onclick="document.getElementById('importFile').click()">📤
+            インポート</button>
+          <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalCount">605</div>
+          <div class="stat-label">全出展企業数</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="visitedCount">0</div>
+          <div class="stat-label">訪問済み</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="ratedCount">0</div>
+          <div class="stat-label">評価済み</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="notableCount">51</div>
+          <div class="stat-label">注目企業 🌟</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="displayCount">605</div>
+          <div class="stat-label">表示中</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="control-row" style="justify-content: flex-start;">
+        <div class="alphabet-filter" id="alphabetFilter">
+          <span style="font-size: 12px; color: #6c757d; margin-right: 5px;">A-Z:</span>
+        </div>
+      </div>
+      <div class="control-row">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="🔍 企業名、ブース番号、概要で検索...">
+        </div>
+        <label class="checkbox-label" style="border-color: #667eea; background: rgba(102,126,234,0.1);">
+          <input type="checkbox" id="filterAITarget">
+          <span style="font-weight:bold; color: #2563eb;">🎯 最優先のみ</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="filterStar">
+          <span>🌟 注目企業のみ</span>
+        </label>
+        <label class="checkbox-label">
+          <input type="checkbox" id="filterVisited">
+          <span>✅ 訪問済みのみ</span>
+        </label>
+        <select id="filterRating">
+          <option value="">評価: すべて</option>
+          <option value="S">評価: S</option>
+          <option value="A">評価: A</option>
+          <option value="B">評価: B</option>
+          <option value="C">評価: C</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table id="exhibitorTable">
+        <thead>
+          <tr>
+            <th style="width: 50px;">状態</th>
+            <th class="sortable" data-sort="company" style="width: 280px;">企業名</th>
+            <th class="sortable" data-sort="booth" style="width: 100px;">ブース</th>
+            <th style="width: 50px;">注目</th>
+            <th style="width: 70px;">評価</th>
+            <th style="width: 100px;">訪問者</th>
+            <th>概要</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+      </table>
+      <div id="noResults" class="no-results" style="display: none;">
+        <div style="font-size: 48px; margin-bottom: 15px;">🔍</div>
+        <div>該当する企業が見つかりませんでした</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="detailModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalCompanyName"></h2>
+        <div id="modalBoothInfo"></div>
+      </div>
+      <div class="modal-body">
+        <div class="info-section">
+          <div class="info-row">
+            <div class="info-label">企業名:</div>
+            <div class="info-value" id="modalCompany"></div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">ブース番号:</div>
+            <div class="info-value" id="modalBooth"></div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">概要:</div>
+            <div class="info-value" id="modalDescription"></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>📝 調査記録</h3>
+
+          <div class="form-group">
+            <label>訪問日時</label>
+            <input type="datetime-local" id="visitDate">
+          </div>
+
+          <div class="form-group">
+            <label>訪問者名</label>
+            <input type="text" id="visitorName" placeholder="例: 村上 武">
+          </div>
+
+          <div class="form-group">
+            <label>総合評価</label>
+            <select id="rating">
+              <option value="">未評価</option>
+              <option value="S">S - 最優先・必須フォロー</option>
+              <option value="A">A - 重要・フォロー推奨</option>
+              <option value="B">B - 有望・検討価値あり</option>
+              <option value="C">C - 参考程度</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>訪問メモ・所感</label>
+            <textarea id="comments" placeholder="技術内容、製品特徴、担当者情報、商談内容など"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>商談状況</label>
+            <select id="status">
+              <option value="">未定</option>
+              <option value="follow">要フォローアップ</option>
+              <option value="meeting">商談予定あり</option>
+              <option value="quoted">見積依頼済み</option>
+              <option value="no">対象外</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>名刺・ブース写真</label>
+            <div class="file-upload" onclick="document.getElementById('imageUpload').click()">
+              <div style="font-size: 48px; margin-bottom: 10px;">📷</div>
+              <div>クリックして画像を追加</div>
+              <div style="font-size: 12px; color: #6c757d; margin-top: 5px;">複数選択可能</div>
+            </div>
+            <input type="file" id="imageUpload" accept="image/*" multiple onchange="handleImageUpload(event)">
+            <div class="image-preview" id="imagePreview"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="button button-secondary" onclick="closeModal()">キャンセル</button>
+        <button class="button button-primary" onclick="saveRecord()">💾 保存</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const exhibitors = [
+      {
+        "id": 0,
+        "company": "3M",
+        "booth": "A2742",
+        "star": false,
+        "description": "化学・電気素材の巨人。CMPパッドコンディショナ、フッ素系不活性液体（Novec等）、ウェーハサポートシステムなど、独自技術の製品多数。"
+      },
+      {
+        "id": 1,
+        "company": "3M Malaysia Sdn Bhd",
+        "booth": "A2742",
+        "star": true,
+        "description": "半導体製造プロセス向けの高機能材料。CMPパッドコンディショナ、フッ素系不活性液体（Novec/Fluorinert：冷却・洗浄用）、ウェーハ搬送用テープなど、前工程から後工程まで幅広く展開。"
+      },
+      {
+        "id": 2,
+        "company": "A*Star",
+        "booth": "1472",
+        "star": false,
+        "description": "シンガポールの科学技術研究庁。IME（マイクロエレクトロニクス研究所）などを通じ、企業と連携して先端パッケージングや新素材の研究開発を行うハブ。"
+      },
+      {
+        "id": 3,
+        "company": "Aalloy Engineering Pte Ltd",
+        "booth": "A2735",
+        "star": false,
+        "description": "クリーンルーム建設用部材（パーティション、天井）、およびUHP（超高純度）ガス・薬液配管システム、バルブ、継手の製造・施工。"
+      },
+      {
+        "id": 4,
+        "company": "ACA Integration Sdn Bhd",
+        "booth": "2521",
+        "star": false,
+        "description": "AOI（自動光学検査）システムおよびマシンビジョンソリューション。半導体パッケージや電子部品の欠陥検査自動化を支援。"
+      },
+      {
+        "id": 5,
+        "company": "Accordance System (M) Sdn Bhd",
+        "booth": "2590",
+        "star": false,
+        "description": "産業用PCおよびRAIDストレージシステム（ARAIDシリーズ）。製造装置や制御PCのデータ保護、ディスクミラーリングソリューション。"
+      },
+      {
+        "id": 6,
+        "company": "AccoTest Technology (Malaysia) Sdn Bhd",
+        "booth": "1613",
+        "star": false,
+        "description": "北京に本社を置くATEメーカー。アナログ、パワーマネジメントIC、ディスクリートデバイス向けの高コストパフォーマンスなテストシステムを提供。"
+      },
+      {
+        "id": 7,
+        "company": "Ace Star Industries Sdn Bhd",
+        "booth": "2280",
+        "star": false,
+        "description": "クリーンルーム消耗品（フェイスマスク、ワイパー、手袋、衣類）およびESD（静電気放電）制御製品の製造・供給。"
+      },
+      {
+        "id": 8,
+        "company": "ACM Research",
+        "booth": "1684",
+        "star": false,
+        "description": "独自のSAPS（メガソニック）技術による洗浄装置や、先進パッケージング向け銅めっき装置で急成長中のメーカー。"
+      },
+      {
+        "id": 9,
+        "company": "ACM Research Inc.",
+        "booth": "1684",
+        "star": true,
+        "description": "洗浄装置の技術リーダー。独自のSAPS（メガソニック）およびTEBO技術を用いた枚葉式洗浄装置、銅配線用ECP（電気めっき）装置、先進パッケージング向けウェットプロセス装置。"
+      },
+      {
+        "id": 10,
+        "company": "ACS HOLDINGS",
+        "booth": "1616",
+        "star": false,
+        "description": "ハイテク産業向けの建設エンジニアリング、計装工事、制御システム統合サービス。"
+      },
+      {
+        "id": 11,
+        "company": "Adaptsys Group",
+        "booth": "1340",
+        "star": false,
+        "description": "デバイスプログラミング（書き込み）システム、テーピングマシン、キャリアテープ成形技術。少量多品種から量産まで対応。"
+      },
+      {
+        "id": 12,
+        "company": "Advanced AssemblyTech Sdn Bhd",
+        "booth": "1143",
+        "star": false,
+        "description": "精密流体制御技術。ディスペンシングシステム（接着剤・封止材塗布）、ジェットバルブ、および関連する検査・計測ソリューション（旧SSI）。"
+      },
+      {
+        "id": 13,
+        "company": "Advanced Material Engineering Sdn Bhd",
+        "booth": "1590",
+        "star": false,
+        "description": "半導体・LED製造装置向けの石英ガラス、セラミック、シリコンパーツの精密加工および洗浄・再生サービス。"
+      },
+      {
+        "id": 14,
+        "company": "Advanced Packaging Interlink Holding Pte Ltd",
+        "booth": "2381",
+        "star": false,
+        "description": "半導体後工程（パッケージング）に特化したソリューション。リードフレーム、ボンディングワイヤ等の材料および関連機器。"
+      },
+      {
+        "id": 15,
+        "company": "Advantech",
+        "booth": "2637",
+        "star": false,
+        "description": "産業用PCの世界トップシェア。装置組み込み用コントローラから工場全体のデータ収集・可視化システムまで、IoT化を推進。"
+      },
+      {
+        "id": 16,
+        "company": "Advantech Co. Malaysia Sdn Bhd",
+        "booth": "2637",
+        "star": true,
+        "description": "産業用コンピュータ（IPC）の世界トップシェア。IoTエッジデバイス、自動化コントローラ、AI推論システムなど、スマートファクトリーの基盤を提供。"
+      },
+      {
+        "id": 17,
+        "company": "Advantest",
+        "booth": "1512",
+        "star": false,
+        "description": "ATE（自動試験装置）世界トップ。SoCテスタ「V93000」やメモリテスタで業界標準の地位を確立。システムレベルテスト（SLT）などの新領域も強化中。"
+      },
+      {
+        "id": 18,
+        "company": "Advantest Corporation",
+        "booth": "1512",
+        "star": true,
+        "description": "半導体試験装置（ATE）の世界トップメーカー。SoCテスタ「V93000」、メモリテスタ「T5800」シリーズ、およびテストハンドラ、システムレベルテスト（SLT）を展開。"
+      },
+      {
+        "id": 19,
+        "company": "Aerotech, Inc.",
+        "booth": "A1731",
+        "star": false,
+        "description": "超精密モーションコントロール。ナノメートルレベルの位置決めが可能なエアベアリングステージ、ピエゾステージ、ガントリーシステム。露光・検査装置向け。"
+      },
+      {
+        "id": 20,
+        "company": "AGC Asia Pacific",
+        "booth": "A2748",
+        "star": true,
+        "description": "AGCグループ。半導体プロセス用SiC部材（炉心管等）、EUV露光用フォトマスクブランクス、合成石英ガラス、CMPスラリー用研磨材、フッ素樹脂製品。"
+      },
+      {
+        "id": 21,
+        "company": "AGC Asia Pacific",
+        "booth": "A2748",
+        "star": false,
+        "description": "ガラス・化学の世界的メーカー。半導体プロセス用SiC部材、EUVマスクブランクス、CMPスラリー用研磨材など、サプライチェーン上流の重要素材を供給。"
+      },
+      {
+        "id": 22,
+        "company": "Agency for Science, Technology and Research (A*Star)",
+        "booth": "1472",
+        "star": true,
+        "description": "シンガポール通産省傘下の科学技術研究庁。IME（マイクロエレクトロニクス研究所）などを擁し、先端パッケージングやSiC/GaNデバイスの共同研究を行う。"
+      },
+      {
+        "id": 23,
+        "company": "Agile Reliability Technology Pte Ltd",
+        "booth": "2466",
+        "star": false,
+        "description": "信頼性試験受託サービス。環境試験、寿命試験、故障解析、および信頼性工学のコンサルティング。"
+      },
+      {
+        "id": 24,
+        "company": "AI Technology, Inc.",
+        "booth": "1313",
+        "star": false,
+        "description": "電子パッケージング材料。ダイアタッチフィルム/ペースト（導電性・絶縁性）、熱伝導シート（TIM）、EMIシールドコーティング材。"
+      },
+      {
+        "id": 25,
+        "company": "AISHENGKE (JIANGSU) CHEMICAL TECHNOLOGY CO., LTD.",
+        "booth": "2217",
+        "star": false,
+        "description": "化学プロセスエンジニアリング。高純度電子材料の製造に使用される蒸留・抽出・反応装置システム。"
+      },
+      {
+        "id": 26,
+        "company": "AKABANE SANGYO CORPORATION",
+        "booth": "2684",
+        "star": false,
+        "description": "赤羽産業。PCBおよび半導体製造装置、副資材の専門商社。日本製品の輸出入販売および技術サポート。"
+      },
+      {
+        "id": 27,
+        "company": "Akros Trading Malaysia Sdn Bhd",
+        "booth": "A2747",
+        "star": false,
+        "description": "化学品専門商社。電子部品用樹脂、封止材、洗浄剤、半導体関連部材の取り扱い。"
+      },
+      {
+        "id": 28,
+        "company": "alimex ACP Asia Sdn Bhd",
+        "booth": "1556",
+        "star": false,
+        "description": "ドイツ発祥のアルミニウムキャストプレートメーカー。半導体・液晶製造装置の真空チャンバーやステージに使われる高精度・低歪みアルミ素材。"
+      },
+      {
+        "id": 29,
+        "company": "ALIRAN TENAGA TECHNOLOGY SDN BHD",
+        "booth": "3101",
+        "star": false,
+        "description": "特殊重量物輸送・据付（Machine Moving）。クリーンルーム内での精密機器の搬入・移設、および電気・機械エンジニアリング。"
+      },
+      {
+        "id": 30,
+        "company": "Allied Vision Technologies Asia Pte Ltd",
+        "booth": "1557",
+        "star": false,
+        "description": "ドイツの産業用カメラメーカー。マシンビジョン、検査装置、医療用画像処理向けの高性能デジタルカメラ。"
+      },
+      {
+        "id": 31,
+        "company": "Alpha X Technology PTE. LTD.",
+        "booth": "1468",
+        "star": false,
+        "description": "インダストリー4.0ソリューション。AIを活用した製造データ分析、自動化システム統合、予知保全システム。"
+      },
+      {
+        "id": 32,
+        "company": "Ametek Singapore Pte. Ltd.",
+        "booth": "2185",
+        "star": true,
+        "description": "グローバルな電子計測機器メーカー。Zygo（光学干渉計）、Cameca（原子レベル分析）、Taylor Hobson（表面性状測定）など、著名な計測ブランドを多数保有。"
+      },
+      {
+        "id": 33,
+        "company": "AMFLO Fluid Systems & Components Co., Ltd.",
+        "booth": "2465",
+        "star": false,
+        "description": "高純度ガス供給系コンポーネント。UHPダイヤフラムバルブ、ベローズバルブ、VCR互換継手など。"
+      },
+      {
+        "id": 34,
+        "company": "Anhui Minch Technology Co., Ltd.",
+        "booth": "2342",
+        "star": false,
+        "description": "中国・安徽省の企業。半導体ディスクリートデバイス（ダイオード、整流器等）または関連材料の製造。"
+      },
+      {
+        "id": 35,
+        "company": "Anhui Xuteng Microelectronics Equipment Co., Ltd",
+        "booth": "B2767",
+        "star": false,
+        "description": "半導体前工程・後工程向けの熱処理装置（ベーキング炉、アニール炉、真空オーブン）および洗浄装置。"
+      },
+      {
+        "id": 36,
+        "company": "Anires Tech Sdn Bhd",
+        "booth": "2558",
+        "star": false,
+        "description": "計測機器販売。日立ハイテクサイエンス製の蛍光X線分析装置（XRF）やリークテスターなどを取り扱う代理店。"
+      },
+      {
+        "id": 37,
+        "company": "Apex Equipment Pte Ltd",
+        "booth": "A2754",
+        "star": false,
+        "description": "中古半導体製造装置の売買およびリファービッシュ（再生）。レガシープロセスの装置調達支援。"
+      },
+      {
+        "id": 38,
+        "company": "APP Co., Ltd",
+        "booth": "1305",
+        "star": false,
+        "description": "韓国の大気圧プラズマ装置メーカー。ArF/KrFフォトレジストの除去、ボンディング前の表面洗浄・改質ソリューション。"
+      },
+      {
+        "id": 39,
+        "company": "APP SYSTEMS SERVICES PTE, LTD",
+        "booth": "2399",
+        "star": false,
+        "description": "ハイテク工場向けファシリティ管理、真空ポンプ・除害装置のメンテナンス、スペアパーツ販売。"
+      },
+      {
+        "id": 40,
+        "company": "Applied Precision Pte Ltd",
+        "booth": "2680",
+        "star": false,
+        "description": "精密測定ソリューション。プローブカード用部品、半導体テスト用治具、および測定機器の校正・販売。"
+      },
+      {
+        "id": 41,
+        "company": "Applied Seals Co., Ltd. (Taiwan)",
+        "booth": "1144",
+        "star": false,
+        "description": "シーリングソリューション。半導体製造装置（エッチング、CVD等）の過酷環境に耐えるパーフロロエラストマー（FFKM）Oリング等を製造。"
+      },
+      {
+        "id": 42,
+        "company": "Applied Total Control Treatment Pte Ltd",
+        "booth": "2403",
+        "star": false,
+        "description": "表面処理サービス。半導体装置部品の精密洗浄、アルマイト処理、無電解ニッケルめっき、部品再生。"
+      },
+      {
+        "id": 43,
+        "company": "APULSAR TECHNOLOGIES SDN BHD",
+        "booth": "2219",
+        "star": false,
+        "description": "産業用ITインフラ。無停電電源装置（UPS）、精密空調、データセンター構築、IIoTモニタリング。"
+      },
+      {
+        "id": 44,
+        "company": "Arcadia Engineering Services Pte Ltd",
+        "booth": "B2773",
+        "star": false,
+        "description": "建設コンサルティング。半導体工場、クリーンルーム、データセンターの設計・プロジェクト管理（EPCM）。"
+      },
+      {
+        "id": 45,
+        "company": "Asahi Diamond Industrial Malaysia Sdn. Bhd.",
+        "booth": "A1729",
+        "star": false,
+        "description": "旭ダイヤモンド工業。シリコンウェーハ加工用のダイヤモンドホイール、CMPコンディショナ、精密切断工具。"
+      },
+      {
+        "id": 46,
+        "company": "ASE Inc",
+        "booth": "1598",
+        "star": true,
+        "description": "台湾に本社を置く世界最大のOSAT（受託組立・検査）。SiP、Fan-out (FOCoS)、2.5D/3D IC実装など、最先端パッケージ技術をリード。"
+      },
+      {
+        "id": 47,
+        "company": "ASE Inc.",
+        "booth": "1598",
+        "star": false,
+        "description": "世界最大のOSAT。組立・検査の受託最大手として、SiP、Fan-out、2.5D/3D実装など、ムーアの法則を超えるパッケージ技術を牽引。"
+      },
+      {
+        "id": 48,
+        "company": "Asec Tech Sdn Bhd",
+        "booth": "2554",
+        "star": false,
+        "description": "工場自動化（FA）システムインテグレーター。ロボットハンドリング、コンベアシステム、自動化ラインの設計・構築。"
+      },
+      {
+        "id": 49,
+        "company": "ASEPTEC Sdn. Bhd.",
+        "booth": "2101",
+        "star": false,
+        "description": "衛生プロセス工学。バイオ・製薬および半導体純水ライン向けのサニタリーバルブ、ポンプ、熱交換器。"
+      },
+      {
+        "id": 50,
+        "company": "Asia Industrial Gases Pte Ltd",
+        "booth": "2428",
+        "star": false,
+        "description": "産業ガスサプライヤー。酸素、窒素、アルゴン、水素および特殊ガスの製造・供給とガス配管工事。"
+      },
+      {
+        "id": 51,
+        "company": "ASMPT",
+        "booth": "1164",
+        "star": true,
+        "description": "半導体製造装置（後工程）の世界的リーダー。ダイボンダー、ワイヤボンダー、モールディング装置から、表面実装（SMT）マウンタまでトータルソリューションを提供。"
+      },
+      {
+        "id": 52,
+        "company": "ASMPT",
+        "booth": "1164",
+        "star": false,
+        "description": "後工程装置の世界最大手。ダイボンディング、ワイヤボンディング、封止、切断からSMT実装ラインまで、後工程の全領域をワンストップで提供できる稀有な存在。"
+      },
+      {
+        "id": 53,
+        "company": "Atomic Solutions Sdn Bhd",
+        "booth": "B2780",
+        "star": false,
+        "description": "理科学機器商社。Thermo Fisher Scientific等の電子顕微鏡、AFM、分析装置の販売および技術サポート。"
+      },
+      {
+        "id": 54,
+        "company": "Autowell (Malaysia) Sdn. Bhd.",
+        "booth": "2561",
+        "star": false,
+        "description": "中国の自動化装置メーカー。太陽光パネル製造装置の大手だが、半導体向け単結晶炉やウェーハ加工機、ボンドテスターも展開。"
+      },
+      {
+        "id": 55,
+        "company": "Axis Tec Pte Ltd",
+        "booth": "2114",
+        "star": false,
+        "description": "テストオートメーション。ICテストハンドラ、テスト治具、および顧客仕様の自動組立・検査システムの設計製造。"
+      },
+      {
+        "id": 56,
+        "company": "Backer Cellnergy Pte Ltd",
+        "booth": "2503",
+        "star": false,
+        "description": "工業用加熱ヒーター技術。半導体プロセス（CVD/PVD/エッチング）で使用される高精度ペデスタルヒーターや加熱ジャケット。"
+      },
+      {
+        "id": 57,
+        "company": "Beckhoff Automation Sdn. Bhd.",
+        "booth": "2171",
+        "star": false,
+        "description": "PCベース制御技術のパイオニア。産業用PC、EtherCATフィールドバス、ドライブ技術により、高速・高精度な装置制御を実現。"
+      },
+      {
+        "id": 58,
+        "company": "Beijing CGB Technology Co., Ltd",
+        "booth": "2311",
+        "star": false,
+        "description": "真空・電子ビーム技術。IC製造用真空チャンバー、溶接ベローズ、または関連コンポーネント。"
+      },
+      {
+        "id": 59,
+        "company": "Beijing NAURA",
+        "booth": "1178",
+        "star": false,
+        "description": "中国最大の製造装置メーカー。エッチング、CVD、洗浄、ファーネスなど幅広いラインナップを持ち、中国国産化の筆頭格。"
+      },
+      {
+        "id": 60,
+        "company": "Beijing NAURA Microelectronics Equipment Co.,Ltd.",
+        "booth": "1178",
+        "star": true,
+        "description": "中国最大の半導体製造装置メーカー。エッチング、CVD/PVD、洗浄、酸化・拡散炉など、前工程の主要装置を幅広くラインナップ。"
+      },
+      {
+        "id": 61,
+        "company": "Bestac Advanced Material Co., Ltd",
+        "booth": "1117",
+        "star": false,
+        "description": "台湾のクリーニング材料メーカー。プローブカードやテストソケットの清掃に使用するクリーニングシート、ダミーウェーハ。"
+      },
+      {
+        "id": 62,
+        "company": "BETTER PURO MATERIAL CO.,LTD",
+        "booth": "2365",
+        "star": false,
+        "description": "高純度材料メーカー。半導体・LED用発光材料や蒸着材料などの化学品（詳細要確認）。"
+      },
+      {
+        "id": 63,
+        "company": "BizLink Technology (S.E.A) Sdn. Bhd.",
+        "booth": "2673",
+        "star": false,
+        "description": "インターコネクトソリューション。半導体装置内のケーブルハーネス、産業用コネクタ、高速伝送ケーブル。"
+      },
+      {
+        "id": 64,
+        "company": "Blum Production Metrology Pte Ltd",
+        "booth": "1401",
+        "star": false,
+        "description": "ドイツの測定機器メーカー。工作機械内でのレーザー測定システム、タッチプローブなど、加工部品の機上計測技術。"
+      },
+      {
+        "id": 65,
+        "company": "BMI Precision Industrial (Malaysia) Sdn Bhd",
+        "booth": "1585",
+        "star": false,
+        "description": "精密金属加工。半導体装置、ハードディスクドライブ、医療機器向けのCNC加工部品、精密ツーリング。"
+      },
+      {
+        "id": 66,
+        "company": "BMT Co., Ltd.",
+        "booth": "1484",
+        "star": false,
+        "description": "韓国の工業用継手・バルブメーカー。「SUPERLOK」ブランドの計装用バルブ、UHP（超高純度）配管部材。"
+      },
+      {
+        "id": 67,
+        "company": "Bokopt Sdn Bhd",
+        "booth": "2556",
+        "star": false,
+        "description": "光学検査機器、顕微鏡、または関連部品の取り扱い（詳細な製品群は現地確認推奨）。"
+      },
+      {
+        "id": 68,
+        "company": "Bosch Rexroth Sdn Bhd",
+        "booth": "1422",
+        "star": false,
+        "description": "ドライブ＆コントロール技術のグローバル企業。リニアガイド、電動アクチュエータ、ウェーハ搬送モジュールなどのモーション制御製品。"
+      },
+      {
+        "id": 69,
+        "company": "Boschman Advanced Packaging Technology",
+        "booth": "B2771",
+        "star": false,
+        "description": "オランダのパッケージング装置メーカー。パワー半導体向けの銀焼結（シンタリング）接合装置やフィルムアシスト成形技術に強み。"
+      },
+      {
+        "id": 70,
+        "company": "BPE SYNERGY ENGINEERING SDN BHD",
+        "booth": "2481",
+        "star": false,
+        "description": "電気計装エンジニアリング。プラント・工場の電気設備、制御盤設計、SCADAシステム構築。"
+      },
+      {
+        "id": 71,
+        "company": "Brallent International Inc.",
+        "booth": "1277",
+        "star": false,
+        "description": "半導体製造装置用スペアパーツ、消耗品（Oリング、シール、クォーツ等）の供給（推定）。"
+      },
+      {
+        "id": 72,
+        "company": "Brazil - Embassy of Brazil in Kuala Lumpur",
+        "booth": "2140",
+        "star": false,
+        "description": "ブラジル大使館。ブラジルの半導体エコシステムおよび投資機会の紹介。"
+      },
+      {
+        "id": 73,
+        "company": "Bright Sheland International Co., Ltd.",
+        "booth": "2683",
+        "star": false,
+        "description": "クリーンルーム用品メーカー。クリーンルーム用ワイパー、手袋、文具、スティッキーマットなどの消耗品全般。"
+      },
+      {
+        "id": 74,
+        "company": "Bruker",
+        "booth": "A1734",
+        "star": false,
+        "description": "分析機器大手。X線回折（XRD）による結晶構造解析、AFMによる表面形状測定など、プロセス管理のための高度な計測ソリューション。"
+      },
+      {
+        "id": 75,
+        "company": "Bruker Singapore Pte Ltd",
+        "booth": "A1734",
+        "star": true,
+        "description": "分析機器の大手。X線回折装置（XRD）、蛍光X線（XRF）、原子間力顕微鏡（AFM）、白色干渉計など、先端材料評価・プロセス管理ソリューション。"
+      },
+      {
+        "id": 76,
+        "company": "Bueno Technology Co., Ltd.",
+        "booth": "2110",
+        "star": false,
+        "description": "耐食性流体制御製品。PFA（フッ素樹脂）ライニングバルブ、継手、パイプなど、薬液供給ライン向け製品。"
+      },
+      {
+        "id": 77,
+        "company": "Burkert Singapore Pte Ltd",
+        "booth": "2387",
+        "star": false,
+        "description": "流体制御システムの専門メーカー。マスフローコントローラ（MFC）、電磁弁、流量計など、ガス・液体制御の高度なソリューション。"
+      },
+      {
+        "id": 78,
+        "company": "C Sun Mfg Ltd.",
+        "booth": "2349",
+        "star": true,
+        "description": "台湾の熱処理装置メーカー。リソグラフィ用オーブン、PIキュアオーブン、モールド硬化炉など、熱プロセス全般。"
+      },
+      {
+        "id": 79,
+        "company": "C.C.P. CONTACT PROBES CO., LTD.",
+        "booth": "2501",
+        "star": false,
+        "description": "台湾のポゴピン（コンタクトプローブ）最大手。ICテストソケット用プローブ、バッテリーコネクタ、大電流コネクタ。"
+      },
+      {
+        "id": 80,
+        "company": "C.T. STABIL SDN. BHD.",
+        "booth": "2654",
+        "star": false,
+        "description": "エレクトロニクス製造用ツール、消耗品、帯電防止製品のサプライヤー。"
+      },
+      {
+        "id": 81,
+        "company": "Cambridge Vacuum Engineering Ltd.",
+        "booth": "3117",
+        "star": false,
+        "description": "英国の真空溶接技術。電子ビーム溶接（EBW）およびレーザー溶接システム。"
+      },
+      {
+        "id": 82,
+        "company": "camLine Sdn Bhd",
+        "booth": "1595",
+        "star": false,
+        "description": "製造業向けITソリューション。半導体前工程・後工程向けのMES（製造実行システム）、品質管理（YMS/SPC）ソフトウェア。"
+      },
+      {
+        "id": 83,
+        "company": "Canon Singapore Pte Ltd",
+        "booth": "1119",
+        "star": true,
+        "description": "キヤノン。半導体露光装置（i線、KrF、ナノインプリント技術）、FPD露光装置。高解像度と高生産性を両立。"
+      },
+      {
+        "id": 84,
+        "company": "CanTops Co., Ltd.",
+        "booth": "2530",
+        "star": false,
+        "description": "韓国のファクトリーオートメーション企業。装置制御ソフトウェア、ハードウェアシミュレータ、無線通信モジュール。"
+      },
+      {
+        "id": 85,
+        "company": "Castec Singapore Pte. Ltd.",
+        "booth": "1246",
+        "star": false,
+        "description": "台湾の搬送システムメーカー。EFEM（Equipment Front End Module）、ウェーハ搬送ロボット、AGV/AMR、真空移載機。"
+      },
+      {
+        "id": 86,
+        "company": "Changzhou Tonghui Electronic Co. Ltd.",
+        "booth": "2344",
+        "star": false,
+        "description": "電子計測器メーカー。LCRメーター、インピーダンスアナライザ、トランス試験機など。"
+      },
+      {
+        "id": 87,
+        "company": "Chart Automation System Co., Ltd",
+        "booth": "2376",
+        "star": false,
+        "description": "自動化システム関連。詳細確認中だが、搬送または組立自動化の可能性。"
+      },
+      {
+        "id": 88,
+        "company": "Chengdu Yeheng Electronic Co., Ltd",
+        "booth": "1683",
+        "star": false,
+        "description": "ワイヤボンディング消耗品。セラミックキャピラリ、ボンディングウェッジなどの精密ツール。"
+      },
+      {
+        "id": 89,
+        "company": "China Electronics System Engineering No.2 Construction Co.,Ltd",
+        "booth": "2535",
+        "star": false,
+        "description": "CESEC。中国の大手ハイテク施設建設会社。クリーンルーム設計・施工、ユーティリティ設備工事。"
+      },
+      {
+        "id": 90,
+        "company": "Chip Shine Electronics Technology Co.,Ltd",
+        "booth": "1681",
+        "star": false,
+        "description": "ICテストソケットメーカー。バーンインソケット、テストコンタクター等の設計製造。"
+      },
+      {
+        "id": 91,
+        "company": "Chung King Enterprise Co.,Ltd",
+        "booth": "2325",
+        "star": false,
+        "description": "台湾の精密加工業者。半導体装置用金属部品、真空チャンバー部品の加工。"
+      },
+      {
+        "id": 92,
+        "company": "CHYI DING Technologies Co., Ltd.",
+        "booth": "1102",
+        "star": false,
+        "description": "クリーン環境制御。EFEM、ロードポート、ファンフィルターユニット（FFU）、ケミカルフィルター。"
+      },
+      {
+        "id": 93,
+        "company": "Chyi Lee Industry Co., Ltd.",
+        "booth": "2709",
+        "star": false,
+        "description": "精密板金加工、フレーム製造。"
+      },
+      {
+        "id": 94,
+        "company": "Circuit Image Sdn Bhd",
+        "booth": "2144",
+        "star": false,
+        "description": "PCB製造関連、またはイメージング技術。"
+      },
+      {
+        "id": 95,
+        "company": "CIS Corporation",
+        "booth": "1283",
+        "star": false,
+        "description": "高解像度カメラ、画像処理技術。"
+      },
+      {
+        "id": 96,
+        "company": "CKD",
+        "booth": "1386",
+        "star": false,
+        "description": "流体制御のエキスパート。半導体製造用の高耐久薬液バルブ、プロセスガス制御システムなど、工場の安定稼働を支えるコンポーネント。"
+      },
+      {
+        "id": 97,
+        "company": "CKD Corporation",
+        "booth": "1386",
+        "star": true,
+        "description": "日本のFA機器メーカー。半導体製造装置向けの薬液バルブ、プロセスガス制御機器、真空制御機器で高いシェアを持つ。"
+      },
+      {
+        "id": 98,
+        "company": "Clean Systems Technology (S) PTE Ltd.",
+        "booth": "1372",
+        "star": false,
+        "description": "環境・搬送ソリューション。排ガス処理装置（スクラバー）およびクリーン搬送システム。"
+      },
+      {
+        "id": 99,
+        "company": "CNW - Courier NetWork",
+        "booth": "1649",
+        "star": false,
+        "description": "緊急輸送ロジスティクス。半導体工場のラインストップを防ぐための緊急パーツ配送（NFO）に特化。"
+      },
+      {
+        "id": 100,
+        "company": "Cognex",
+        "booth": "2484",
+        "star": false,
+        "description": "マシンビジョン専業大手。ウェーハID読み取りやアライメント、ディープラーニングを用いた欠陥検査ソリューションを提供。"
+      },
+      {
+        "id": 101,
+        "company": "Cognex Malaysia Sdn Bhd",
+        "booth": "2484",
+        "star": true,
+        "description": "マシンビジョンの世界的リーダー。ウェーハID読み取り、アライメント、欠陥検査、トレーサビリティ用バーコードリーダ。"
+      },
+      {
+        "id": 102,
+        "company": "Component Technology Pte Ltd",
+        "booth": "1423",
+        "star": false,
+        "description": "シンガポールの検査装置メーカー。ワイヤボンド検査（3D AOI）、X線検査装置、自動外観検査装置。"
+      },
+      {
+        "id": 103,
+        "company": "CONG TY TNHH CONG NGHE TU DO HOA NNT",
+        "booth": "2237",
+        "star": false,
+        "description": "ベトナムの自動化技術会社。"
+      },
+      {
+        "id": 104,
+        "company": "CONPROFE TECHNOLOGY GROUP CO., LTD.",
+        "booth": "2161",
+        "star": false,
+        "description": "超音波加工技術。硬脆材料（セラミックス、ガラス、サファイア）向けの超音波マシニングセンタ、精密工具。"
+      },
+      {
+        "id": 105,
+        "company": "Contech Solutions, Incorporated",
+        "booth": "2223",
+        "star": false,
+        "description": "半導体製造装置用消耗品（シール、Oリング、クォーツ等）の供給。"
+      },
+      {
+        "id": 106,
+        "company": "CORTEX ROBOTICS SDN BHD",
+        "booth": "A1735",
+        "star": false,
+        "description": "産業用ロボットソリューション。マレーシアのシステムインテグレーター。"
+      },
+      {
+        "id": 107,
+        "company": "Cosmos Innovation Pte Ltd",
+        "booth": "1374",
+        "star": false,
+        "description": "AIを活用した次世代ソーラー・半導体プロセス開発。実験計画の最適化など。"
+      },
+      {
+        "id": 108,
+        "company": "Crest Systems (M) Sdn Bhd",
+        "booth": "1140",
+        "star": false,
+        "description": "超音波洗浄の専門メーカー。精密部品洗浄装置、超音波発振器、自動洗浄ライン。"
+      },
+      {
+        "id": 109,
+        "company": "Cryogenic Specialty Manufacturing Sdn. Bhd.",
+        "booth": "1110",
+        "star": false,
+        "description": "極低温・真空技術。液体窒素供給システム、真空断熱配管（VIP）、クライオジェニックバルブ。"
+      },
+      {
+        "id": 110,
+        "company": "CSA Group Test and Certification Singapore Pte Ltd",
+        "booth": "2593",
+        "star": false,
+        "description": "試験・認証機関。半導体製造装置の安全規格（SEMI S2/S8等）適合性評価、製品認証サービス。"
+      },
+      {
+        "id": 111,
+        "company": "CTCI Group",
+        "booth": "3103",
+        "star": false,
+        "description": "台湾最大のエンジニアリング会社。半導体工場の設計・調達・建設（EPC）、インテリジェントソリューション。"
+      },
+      {
+        "id": 112,
+        "company": "cts GmbH",
+        "booth": "2619",
+        "star": false,
+        "description": "ドイツの自動化企業。半導体工場向けAMR（自律走行搬送ロボット）、スマート倉庫、ソフトウェアソリューション。"
+      },
+      {
+        "id": 113,
+        "company": "CXsemi Company Limited",
+        "booth": "2685",
+        "star": false,
+        "description": "半導体製造装置または関連部品（詳細確認中）。"
+      },
+      {
+        "id": 114,
+        "company": "Da-Chung Contact Probes Enterprises Co.Ltd.",
+        "booth": "1188",
+        "star": false,
+        "description": "台湾のプローブメーカー。インサーキットテスト（ICT）用スプリングプローブ、各種テストピン。"
+      },
+      {
+        "id": 115,
+        "company": "Daifuku",
+        "booth": "2289",
+        "star": false,
+        "description": "**搬送システム（OHT/Stocker）**の世界トップ。クリーンルーム内の天井を走行する自動搬送車により、工場の完全自動化を支える。"
+      },
+      {
+        "id": 116,
+        "company": "DAIFUKU CO, LTD.",
+        "booth": "2289",
+        "star": true,
+        "description": "マテリアルハンドリングの世界トップメーカー。半導体工場向け天井走行搬送車（OHT）、ストッカー、窒素パージシステムで圧倒的シェア。"
+      },
+      {
+        "id": 117,
+        "company": "Dalian High Purity Chemical Co., LTD",
+        "booth": "1676",
+        "star": false,
+        "description": "高純度特殊ガス。半導体プロセス用ガス（エッチング、クリーニング用など）。"
+      },
+      {
+        "id": 118,
+        "company": "Dalian Jafeng Automation Co.,Ltd",
+        "booth": "1679",
+        "star": false,
+        "description": "自動化機器メーカー。"
+      },
+      {
+        "id": 119,
+        "company": "DAS Environmental Experts",
+        "booth": "1174",
+        "star": false,
+        "description": "ドイツの環境装置メーカー。半導体製造排ガス処理（Point-of-Useスクラバー）および排水処理技術。"
+      },
+      {
+        "id": 120,
+        "company": "Dasemitek",
+        "booth": "2254",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 121,
+        "company": "DeepCtrls Technologies Pte. Ltd.",
+        "booth": "2252",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 122,
+        "company": "DEETOP M&I LTD",
+        "booth": "2705",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 123,
+        "company": "DELO Industrial Adhesives (Malaysia) SDN BHD",
+        "booth": "2268",
+        "star": false,
+        "description": "ドイツの工業用接着剤メーカー。ハイテク向けの光硬化型接着剤、封止材、およびUV硬化ランプ。"
+      },
+      {
+        "id": 124,
+        "company": "Delta Electronics Int'l (Singapore) Pte Ltd",
+        "booth": "2599",
+        "star": false,
+        "description": "電源・熱管理ソリューション大手。スマートマニュファクチャリング、産業用オートメーション機器、UPS。"
+      },
+      {
+        "id": 125,
+        "company": "Dimerco Express Group",
+        "booth": "2494",
+        "star": false,
+        "description": "台湾系の国際物流・フォワーダー。半導体・精密機器の輸送に強みを持つ。"
+      },
+      {
+        "id": 126,
+        "company": "Disco",
+        "booth": "1316",
+        "star": false,
+        "description": "「Kiru (切る)・Kezuru (削る)・Migaku (磨く)」。ダイシングソー（切断）、グラインダ（薄化）、ポリッシャで世界シェアトップ。パワー半導体（SiC）加工技術でもリード。"
+      },
+      {
+        "id": 127,
+        "company": "Disco Hi-Tec (Singapore) Pte Ltd.",
+        "booth": "1316",
+        "star": true,
+        "description": "「Kiru（切る）・Kezuru（削る）・Migaku（磨く）」技術の世界トップ。ダイシングソー、グラインダ、ポリッシャおよび加工ツール。"
+      },
+      {
+        "id": 128,
+        "company": "DKSH Singapore Pte Ltd",
+        "booth": "1364",
+        "star": false,
+        "description": "マーケットエクスパンションサービス（商社）。科学機器、分析装置、半導体関連資材の販売・サポート。"
+      },
+      {
+        "id": 129,
+        "company": "DNN Technology Co., Ltd",
+        "booth": "2655",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 130,
+        "company": "Dockweiler Asia Co., Ltd.",
+        "booth": "1152",
+        "star": false,
+        "description": "ドイツのステンレス配管メーカー。半導体・製薬向けの高品質ステンレスチューブ、継手。"
+      },
+      {
+        "id": 131,
+        "company": "Dongguan Allmerit Technology Co., Ltd.",
+        "booth": "A2752",
+        "star": false,
+        "description": "中国の自動化機器メーカー。"
+      },
+      {
+        "id": 132,
+        "company": "DongGuan Haye Semiconductor Technology Co., Ltd",
+        "booth": "A1757",
+        "star": false,
+        "description": "半導体製造装置関連。"
+      },
+      {
+        "id": 133,
+        "company": "Dongguan HEF Mechanical Electrical Equipment Co.,Ltd",
+        "booth": "1497",
+        "star": false,
+        "description": "精密機械、電気設備。"
+      },
+      {
+        "id": 134,
+        "company": "Dongguan Ritec Sealing Technology Co., Ltd",
+        "booth": "2244",
+        "star": false,
+        "description": "シール技術。Oリング、ガスケット等の製造。"
+      },
+      {
+        "id": 135,
+        "company": "Dou Yee Enterprises Pte Ltd",
+        "booth": "1376",
+        "star": false,
+        "description": "シンガポールのESD制御製品メーカー。静電気対策包装材、イオナイザー、クリーンルーム消耗品。"
+      },
+      {
+        "id": 136,
+        "company": "DR Laser Singapore Pte Ltd",
+        "booth": "1463",
+        "star": false,
+        "description": "中国のレーザー加工装置大手。太陽電池および半導体（SE、LID、アニール等）向けレーザーソリューション。"
+      },
+      {
+        "id": 137,
+        "company": "DSK Technologies Pte Ltd",
+        "booth": "2453",
+        "star": false,
+        "description": "分析機器ディストリビューター。粒子径分布測定、表面分析装置など。"
+      },
+      {
+        "id": 138,
+        "company": "Duco Robots Group (Malaysia) Sdn. Bhd.",
+        "booth": "2560",
+        "star": false,
+        "description": "協働ロボット（Cobot）メーカー。柔軟な自動化ライン構築に適したロボットアーム。"
+      },
+      {
+        "id": 139,
+        "company": "E & R Engineering Corporation",
+        "booth": "1452",
+        "star": false,
+        "description": "台湾の装置メーカー。レーザーマーカー、プラズマ洗浄機、成型機など、後工程向け自動化装置。"
+      },
+      {
+        "id": 140,
+        "company": "ECO ENERGEN Co. Ltd.",
+        "booth": "1301",
+        "star": false,
+        "description": "環境・エネルギー関連技術。"
+      },
+      {
+        "id": 141,
+        "company": "Ecosphere Clean Global Sdn Bhd",
+        "booth": "1123",
+        "star": false,
+        "description": "クリーン技術、環境ソリューション。"
+      },
+      {
+        "id": 142,
+        "company": "Edwards Vacuum",
+        "booth": "A1749",
+        "star": false,
+        "description": "真空ポンプ・除害装置の大手。EUV露光装置向けの一体型真空システムなど、最先端かつ過酷なプロセス環境に対応する技術力を持つ。"
+      },
+      {
+        "id": 143,
+        "company": "Edwards Vacuum (Vacuum Technique Singapore Pte Ltd)",
+        "booth": "A1749",
+        "star": true,
+        "description": "真空ポンプ・除害装置の世界的リーダー。ドライポンプ、ターボ分子ポンプ、排ガス処理装置で半導体プロセスを支える。"
+      },
+      {
+        "id": 144,
+        "company": "EFAB International Technology Co., Ltd.",
+        "booth": "2717",
+        "star": false,
+        "description": "半導体製造装置、部品関連。"
+      },
+      {
+        "id": 145,
+        "company": "EITec Environmental Technology Asia Sdn Bhd",
+        "booth": "2495",
+        "star": false,
+        "description": "環境技術、水処理関連。"
+      },
+      {
+        "id": 146,
+        "company": "Elecsoft Solution Sdn Bhd",
+        "booth": "1626",
+        "star": false,
+        "description": "試験・計測ソリューション、ソフトウェア開発。"
+      },
+      {
+        "id": 147,
+        "company": "ELECTRICVAC (SINGAPORE) PTE. LTD.",
+        "booth": "B2775",
+        "star": false,
+        "description": "真空機器関連。"
+      },
+      {
+        "id": 148,
+        "company": "element14 Sdn Bhd",
+        "booth": "2212",
+        "star": false,
+        "description": "電子部品、開発キット、メンテナンス用品（MRO）を扱う大手ディストリビューター（Farnell/Avnetグループ）。"
+      },
+      {
+        "id": 149,
+        "company": "ELTECH PRODUCTS AND SERVICES SDN BHD",
+        "booth": "2659",
+        "star": false,
+        "description": "エレクトロニクス関連製品の供給。"
+      },
+      {
+        "id": 150,
+        "company": "EM-Technik GmbH",
+        "booth": "2650",
+        "star": false,
+        "description": "特殊プラスチック製の高品質小型継手・バルブ。耐薬品性が求められるラインに最適。"
+      },
+      {
+        "id": 151,
+        "company": "EO Technics Singapore Pte Ltd",
+        "booth": "1671",
+        "star": false,
+        "description": "韓国のレーザー装置大手。レーザーマーカー、グルービング、アニール、ドリル装置など。"
+      },
+      {
+        "id": 152,
+        "company": "ePAK Resources",
+        "booth": "1704",
+        "star": false,
+        "description": "半導体搬送容器メーカー。ウェーハカセット、ICトレイ、テープ＆リール等の設計製造。"
+      },
+      {
+        "id": 153,
+        "company": "ESMO AG",
+        "booth": "2145",
+        "star": false,
+        "description": "ドイツのシステムインテグレーター。半導体バックエンドのハンドリング装置、マニピュレータ、ドッキングシステム。"
+      },
+      {
+        "id": 154,
+        "company": "ESTEK AUTOMATION SDN BHD",
+        "booth": "A1746",
+        "star": false,
+        "description": "自動化ソリューション。"
+      },
+      {
+        "id": 155,
+        "company": "EV Group",
+        "booth": "1126",
+        "star": true,
+        "description": "オーストリアの製造装置メーカー。ウェーハボンディング（接合）、ナノインプリントリソグラフィ、フォトレジスト塗布装置で世界をリード。"
+      },
+      {
+        "id": 156,
+        "company": "EV Group (EVG)",
+        "booth": "1126",
+        "star": false,
+        "description": "ウェーハボンディングのリーディングカンパニー。3D積層（ハイブリッドボンディング）や裏面照射型イメージセンサー製造のキーとなる接合技術を提供。"
+      },
+      {
+        "id": 157,
+        "company": "Evatec AG",
+        "booth": "A1755",
+        "star": false,
+        "description": "スイスの薄膜形成装置メーカー。アドバンストパッケージング、パワーデバイス、フォトニクス向けのスパッタ・蒸着装置。"
+      },
+      {
+        "id": 158,
+        "company": "Everfit Technology Co. Ltd",
+        "booth": "2627",
+        "star": false,
+        "description": "台湾のサニタリーおよび半導体用ステンレス継手、バルブメーカー。"
+      },
+      {
+        "id": 159,
+        "company": "Everlight Chemical Industrial Corporation",
+        "booth": "2681",
+        "star": false,
+        "description": "台湾の化学メーカー。半導体用フォトレジスト、現像液、スラリーなどの電子化学材料。"
+      },
+      {
+        "id": 160,
+        "company": "Exyte Group",
+        "booth": "1236",
+        "star": true,
+        "description": "ハイテク施設向けの設計・エンジニアリング・建設（EPC）のグローバルリーダー。ファブ建設、クリーンルーム技術。"
+      },
+      {
+        "id": 161,
+        "company": "F&K Delvotec Bondtechnik Singapore Pte Ltd",
+        "booth": "1343",
+        "star": false,
+        "description": "ワイヤボンディングのスペシャリスト。特にパワーエレクトロニクス向けの太線・リボンボンダーに強み。"
+      },
+      {
+        "id": 162,
+        "company": "FAITH SHINE SEMICONDUCTOR EQUIPMENT (M) SDN BHD",
+        "booth": "2195",
+        "star": false,
+        "description": "半導体製造装置関連。"
+      },
+      {
+        "id": 163,
+        "company": "Feinmetall Singapore Pte Ltd",
+        "booth": "1186",
+        "star": false,
+        "description": "ドイツのコンタクトプローブメーカー。ウェーハテスト用プローブカードおよび基板検査用コンタクトプローブ。"
+      },
+      {
+        "id": 164,
+        "company": "Festo Pte. Ltd.",
+        "booth": "2165",
+        "star": false,
+        "description": "ドイツの自動化技術大手。空気圧機器、電動アクチュエータ、バルブターミナルなど、製造ラインの自動化コンポーネント。"
+      },
+      {
+        "id": 165,
+        "company": "Fine Silicon Manufacturing (Shanghai) Ltd.",
+        "booth": "1219",
+        "star": false,
+        "description": "シリコン加工製品。"
+      },
+      {
+        "id": 166,
+        "company": "FITOK GmbH",
+        "booth": "1109",
+        "star": false,
+        "description": "計装用バルブ・継手メーカー。チューブフィッティング、高圧バルブ、レギュレーター。"
+      },
+      {
+        "id": 167,
+        "company": "Flowquipt Technology Sdn Bhd",
+        "booth": "2693",
+        "star": false,
+        "description": "流体制御機器の供給。"
+      },
+      {
+        "id": 168,
+        "company": "Fluor Daniel International (Malaysia) Sdn Bhd",
+        "booth": "1562",
+        "star": false,
+        "description": "米国の大手エンジニアリング・建設会社。大規模な産業プラント、半導体工場の建設管理。"
+      },
+      {
+        "id": 169,
+        "company": "Fluormicro (Shanghai) New Materials Co., LTD",
+        "booth": "2496",
+        "star": false,
+        "description": "フッ素樹脂材料。"
+      },
+      {
+        "id": 170,
+        "company": "FNS, Inc.",
+        "booth": "A1724",
+        "star": false,
+        "description": "装置・部品関連。"
+      },
+      {
+        "id": 171,
+        "company": "Forge Nano",
+        "booth": "2665",
+        "star": false,
+        "description": "原子層堆積（ALD）技術を用いたナノコーティングソリューション。粉体、粒子へのコーティングに強み。"
+      },
+      {
+        "id": 172,
+        "company": "Fountyl Technologies PTE Ltd",
+        "booth": "A1747",
+        "star": false,
+        "description": "半導体製造装置用セラミック部品。真空チャック、静電チャック、セラミックアームなど。"
+      },
+      {
+        "id": 173,
+        "company": "FT-Singapore Advanced Material Pte Ltd",
+        "booth": "2299",
+        "star": false,
+        "description": "先端材料。"
+      },
+      {
+        "id": 174,
+        "company": "FUCHS LUBRICANTS MALAYSIA SDN BHD",
+        "booth": "2191",
+        "star": false,
+        "description": "ドイツの潤滑油メーカー。真空ポンプ用オイル、クリーンルーム対応グリースなど。"
+      },
+      {
+        "id": 175,
+        "company": "Fujifilm",
+        "booth": "1122",
+        "star": false,
+        "description": "電子材料事業が成長の柱。先端リソグラフィ用フォトレジスト、現像液、CMPスラリー、イメージセンサー用カラーレジストなど幅広いポートフォリオ。"
+      },
+      {
+        "id": 176,
+        "company": "FUJIFILM Corporation",
+        "booth": "1122",
+        "star": true,
+        "description": "電子材料の大手。最先端フォトレジスト、現像液、CMPスラリー、イメージセンサー用カラーレジスト、ポリイミドなど。"
+      },
+      {
+        "id": 177,
+        "company": "Fushion Germany Business GmbH",
+        "booth": "2183, #2377",
+        "star": false,
+        "description": "ビジネスコンサルティング、またはドイツ製品の商社。"
+      },
+      {
+        "id": 178,
+        "company": "Futai Technologies Sdn Bhd",
+        "booth": "2526",
+        "star": false,
+        "description": "精密加工、部品製造。"
+      },
+      {
+        "id": 179,
+        "company": "Fuzhou Palead Electronics Technology Co., Ltd",
+        "booth": "B2766",
+        "star": false,
+        "description": "電子部品、材料関連。"
+      },
+      {
+        "id": 180,
+        "company": "Garlock Singapore Pte Ltd",
+        "booth": "2373",
+        "star": false,
+        "description": "工業用シールメーカー。高性能ガスケット、オイルシール、配管用シーリングソリューション。"
+      },
+      {
+        "id": 181,
+        "company": "Gastron Asia Pacific Pte. Ltd",
+        "booth": "1309",
+        "star": false,
+        "description": "ガス検知器メーカー。可燃性・毒性ガス検知器、炎検知器など、工場の安全管理システム。"
+      },
+      {
+        "id": 182,
+        "company": "Gauss Labs",
+        "booth": "1336",
+        "star": false,
+        "description": "SKグループ傘下の産業用AI企業。半導体製造データの分析による歩留まり改善、仮想計測（Metrology）ソリューション。"
+      },
+      {
+        "id": 183,
+        "company": "GD Precision Pte Ltd",
+        "booth": "2405",
+        "star": false,
+        "description": "精密機械加工サービス。"
+      },
+      {
+        "id": 184,
+        "company": "GENIC Co. Ltd.",
+        "booth": "2136",
+        "star": false,
+        "description": "韓国の搬送ロボットメーカー。半導体・FPD工場向けのAMR（自律移動ロボット）、ストッカーシステム。"
+      },
+      {
+        "id": 185,
+        "company": "Gentec (Shanghai) Corporation",
+        "booth": "1182",
+        "star": false,
+        "description": "ガスハンドリングシステム。ガス純化器、特殊ガス供給パネル。"
+      },
+      {
+        "id": 186,
+        "company": "GfG Gesellschaft für Gerätebau mbH",
+        "booth": "2617",
+        "star": false,
+        "description": "ドイツのガス検知システムメーカー。ポータブルおよび定置型ガス検知器。"
+      },
+      {
+        "id": 187,
+        "company": "Glint Materials Co. Ltd",
+        "booth": "1285",
+        "star": false,
+        "description": "台湾の材料メーカー。セラミック溶射、表面処理技術（詳細確認推奨）。"
+      },
+      {
+        "id": 188,
+        "company": "Global Standard Technology Co., Ltd.",
+        "booth": "2605",
+        "star": false,
+        "description": "韓国の環境装置メーカー。スクラバー（排ガス処理）およびチラー（温度制御装置）の製造。"
+      },
+      {
+        "id": 189,
+        "company": "GLOBAL TECHSOLUTIONS (S) PTE. LTD",
+        "booth": "1719",
+        "star": false,
+        "description": "技術ソリューションプロバイダー。"
+      },
+      {
+        "id": 190,
+        "company": "GlobalFoundries",
+        "booth": "1348",
+        "star": false,
+        "description": "世界有数の半導体ファウンドリ。シンガポールにギガファブを持ち、RF、パワー、アナログ、組み込みメモリなどの特定用途向けプロセスに強み。"
+      },
+      {
+        "id": 191,
+        "company": "GLOBALFOUNDRIES Singapore Pte Ltd",
+        "booth": "1348",
+        "star": true,
+        "description": "世界有数の半導体ファウンドリ。シンガポールに大規模な200mm/300mmウェーハ工場を有し、RF、パワー、アナログ半導体などを製造。"
+      },
+      {
+        "id": 192,
+        "company": "GLTECH Semiconductor Malaysia Sdn. Bhd.",
+        "booth": "1594",
+        "star": false,
+        "description": "ダイシングソー、グラインダーなどの切断・研削装置の製造・販売。"
+      },
+      {
+        "id": 193,
+        "company": "GnG InTech",
+        "booth": "3119",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 194,
+        "company": "Goldlink Tech Co.,Ltd",
+        "booth": "2157",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 195,
+        "company": "Grand Innosys (Malaysia) Sdn. Bhd.",
+        "booth": "2547",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 196,
+        "company": "GRAND REEM SDN. BHD.",
+        "booth": "B2762",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 197,
+        "company": "Grand Venture Technology Limited",
+        "booth": "1623",
+        "star": false,
+        "description": "シンガポールの製造サービス企業。精密工学、板金加工、メカトロニクス組立。"
+      },
+      {
+        "id": 198,
+        "company": "Grintimate Precision Industry Co., Ltd.",
+        "booth": "1191",
+        "star": false,
+        "description": "台湾の研削技術企業。静圧スピンドル技術を用いたシリコンウェーハ研削装置。"
+      },
+      {
+        "id": 199,
+        "company": "GST CO., LTD.",
+        "booth": "2658",
+        "star": false,
+        "description": "Global Standard Technologyの別ブースまたは関連企業。環境制御装置。"
+      },
+      {
+        "id": 200,
+        "company": "GTA MATERIAL CO., LTD.",
+        "booth": "1528",
+        "star": false,
+        "description": "材料関連。"
+      },
+      {
+        "id": 201,
+        "company": "Guangdong Taijin Semiconductor Technology Co.,Ltd",
+        "booth": "1690",
+        "star": false,
+        "description": "半導体関連技術。"
+      },
+      {
+        "id": 202,
+        "company": "Guardianmade (Vietnam) Co., Ltd.",
+        "booth": "2105",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 203,
+        "company": "GUH Circuit Industry (PG) Sdn. Bhd.",
+        "booth": "2594",
+        "star": false,
+        "description": "プリント基板（PCB）メーカー。片面、両面、多層基板の製造。"
+      },
+      {
+        "id": 204,
+        "company": "Gyrobot Systems Pte. Ltd.",
+        "booth": "1288",
+        "star": false,
+        "description": "ロボティクスソリューション。"
+      },
+      {
+        "id": 205,
+        "company": "HANBELL Vacuum Technology Co., Ltd.",
+        "booth": "2392",
+        "star": false,
+        "description": "台湾のポンプメーカー。半導体・太陽電池用ドライ真空ポンプ、スクリューコンプレッサー。"
+      },
+      {
+        "id": 206,
+        "company": "HangZhou Changchuan Technology Co.,Ltd",
+        "booth": "1668",
+        "star": false,
+        "description": "中国の半導体試験装置メーカー。テストハンドラ、ソーター、アナログ/パワーデバイス用テスタ。"
+      },
+      {
+        "id": 207,
+        "company": "Hangzhou Cobetter Filtration Equipment Co., Ltd.",
+        "booth": "1636",
+        "star": false,
+        "description": "フィルターメーカー。液体・気体ろ過用フィルターカートリッジ、膜技術。"
+      },
+      {
+        "id": 208,
+        "company": "Hangzhou Firstack Technology Co.,Ltd.",
+        "booth": "2368",
+        "star": false,
+        "description": "パワーエレクトロニクス関連（詳細確認中）。"
+      },
+      {
+        "id": 209,
+        "company": "HANMI Semiconductor",
+        "booth": "2317",
+        "star": true,
+        "description": "韓国の半導体後工程装置大手。「VISION PLACEMENT」装置、TCボンダー、レーザーマーキング装置で世界的に有名。"
+      },
+      {
+        "id": 210,
+        "company": "HANSUN ENGINEERING CO., LTD.",
+        "booth": "B1779",
+        "star": false,
+        "description": "韓国の継手・バルブメーカー。「S-LOK」ブランドの計装用ダブルフェルール継手。"
+      },
+      {
+        "id": 211,
+        "company": "HARTING INTERNATIONAL GMBH",
+        "booth": "2613",
+        "star": false,
+        "description": "ドイツの産業用接続技術大手。産業用コネクタ、イーサネット接続、エッジコンピューティング製品。"
+      },
+      {
+        "id": 212,
+        "company": "HEATWISE SDN BHD",
+        "booth": "2564",
+        "star": false,
+        "description": "熱管理ソリューション。"
+      },
+      {
+        "id": 213,
+        "company": "Hefei ImagEx Electronics Technology Co., Ltd.",
+        "booth": "A1733",
+        "star": false,
+        "description": "画像検査技術関連。"
+      },
+      {
+        "id": 214,
+        "company": "Hejin Group (Malaysia) Sdn Bhd",
+        "booth": "2551",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 215,
+        "company": "Hermes-Epitek Corporation Pte., Ltd.",
+        "booth": "1520",
+        "star": false,
+        "description": "台湾の大手半導体商社・エンジニアリング企業。最先端装置の販売・保守に加え、自社での装置開発も行う。"
+      },
+      {
+        "id": 216,
+        "company": "HERMOS RFID",
+        "booth": "B1776",
+        "star": false,
+        "description": "RFIDソリューション。半導体工場内のウェーハFOUP/カセット追跡用RFIDリーダー、システム。"
+      },
+      {
+        "id": 217,
+        "company": "Hesse Asia Limited",
+        "booth": "1356",
+        "star": false,
+        "description": "ドイツのワイヤボンダーメーカー。パワーエレクトロニクス、バッテリー向けの超音波ウェッジボンダー（太線・細線）。"
+      },
+      {
+        "id": 218,
+        "company": "HF Technology (Penang) Sdn Bhd",
+        "booth": "A2721",
+        "star": false,
+        "description": "自動化装置、治具。"
+      },
+      {
+        "id": 219,
+        "company": "Hibex Malaysia Sdn Bhd",
+        "booth": "2179",
+        "star": false,
+        "description": "製造用品の商社。はんだ付け機器、電動ドライバー、ディスペンサー、消耗品などのワンストップ供給。"
+      },
+      {
+        "id": 220,
+        "company": "Hightec Systems Corporation",
+        "booth": "A1752",
+        "star": false,
+        "description": "装置エンジニアリング。"
+      },
+      {
+        "id": 221,
+        "company": "HIIG Trinity (Anhui) Technology Co., LTD.",
+        "booth": "1524",
+        "star": false,
+        "description": "中国安徽省の技術企業。"
+      },
+      {
+        "id": 222,
+        "company": "HIKROBOT SINGAPORE PTE. LTD",
+        "booth": "2493",
+        "star": false,
+        "description": "マシンビジョンおよびモバイルロボット（AMR/AGV）。物流・製造現場の自動化ソリューション。"
+      },
+      {
+        "id": 223,
+        "company": "HIPURITY",
+        "booth": "1276",
+        "star": false,
+        "description": "高純度流体制御関連。"
+      },
+      {
+        "id": 224,
+        "company": "Hirata FA Engineering (S) Pte Ltd",
+        "booth": "B1766",
+        "star": false,
+        "description": "平田機工。EFEM、ウェーハ搬送ロボット、ロードポートなどの半導体製造装置向け搬送プラットフォーム。"
+      },
+      {
+        "id": 225,
+        "company": "HIROTAKU TECH INC.",
+        "booth": "2279",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 226,
+        "company": "Hiwin SIngapore Pte Ltd",
+        "booth": "1194",
+        "star": false,
+        "description": "台湾の直動機器大手。ボールねじ、リニアガイド、産業用ロボット（スカラ、多関節）、ダイレクトドライブモータ。"
+      },
+      {
+        "id": 227,
+        "company": "HON. PRECISION, INC.",
+        "booth": "1129",
+        "star": false,
+        "description": "台湾の装置メーカー。ICハンドラ、テストオートメーション装置。"
+      },
+      {
+        "id": 228,
+        "company": "Horiba Instruments",
+        "booth": "1680",
+        "star": false,
+        "description": "**マスフローコントローラ（MFC）**の大手。ガス流量の超精密制御技術に加え、薬液濃度モニタや異物検査装置も展開。"
+      },
+      {
+        "id": 229,
+        "company": "HORIBA Instruments Singapore Pte Ltd",
+        "booth": "1680",
+        "star": true,
+        "description": "堀場製作所。マスフローコントローラ（MFC）、薬液濃度モニタ、排ガス分析計など、流体計測・制御の世界的リーダー。"
+      },
+      {
+        "id": 230,
+        "company": "Hoson Technology Pte Ltd",
+        "booth": "2281",
+        "star": false,
+        "description": "中国のダイボンダーメーカー。高精度ICダイボンディング、フリップチップボンダーなど。"
+      },
+      {
+        "id": 231,
+        "company": "HPRAY (Changzhou) Clean System Technology Co.,Ltd",
+        "booth": "1708",
+        "star": false,
+        "description": "洗浄システム技術。"
+      },
+      {
+        "id": 232,
+        "company": "HPS Vigour Pte Ltd",
+        "booth": "2609",
+        "star": false,
+        "description": "配管・エンジニアリングサービス。"
+      },
+      {
+        "id": 233,
+        "company": "Huerner Funken Malaysia Sdn. Bhd.",
+        "booth": "2532",
+        "star": false,
+        "description": "耐食性プラスチックファン、換気システム。化学プラントや半導体工場の排気設備。"
+      },
+      {
+        "id": 234,
+        "company": "Hunan Zhihaohang Precision Technology Co., Ltd",
+        "booth": "2370",
+        "star": false,
+        "description": "精密技術関連。"
+      },
+      {
+        "id": 235,
+        "company": "Huzhou Zhongrui Cleaning Technology Co., Ltd.",
+        "booth": "2333",
+        "star": false,
+        "description": "精密洗浄技術。高純度ステンレスチューブの電解研磨（EP）など。"
+      },
+      {
+        "id": 236,
+        "company": "Hwa Shu Enterprise Co., Ltd.",
+        "booth": "1529",
+        "star": false,
+        "description": "台湾の搬送容器メーカー。エンボステープ、リール、ICトレイ、キャリアテープ。"
+      },
+      {
+        "id": 237,
+        "company": "Ideal Vision Integration Sdn Bhd",
+        "booth": "A1737",
+        "star": false,
+        "description": "マレーシアのマシンビジョンシステムインテグレーター。外観検査装置の開発。"
+      },
+      {
+        "id": 238,
+        "company": "IEWC Asia Pacific Pte Ltd",
+        "booth": "1211",
+        "star": false,
+        "description": "電線、ケーブル、ワイヤー管理製品のグローバルディストリビューター。"
+      },
+      {
+        "id": 239,
+        "company": "ifm electronic gmbh",
+        "booth": "B1764",
+        "star": false,
+        "description": "ドイツのセンサメーカー。ポジションセンサ、流体センサ、IO-Linkマスタなど、産業用オートメーション機器。"
+      },
+      {
+        "id": 240,
+        "company": "Inari Amertron",
+        "booth": "1481",
+        "star": false,
+        "description": "マレーシア最大のOSAT。特にRF（高周波）デバイスや光ファイバー・トランシーバーの製造受託に強く、大手スマホメーカーのサプライチェーンの一角。"
+      },
+      {
+        "id": 241,
+        "company": "Inari Amertron Berhad",
+        "booth": "1481",
+        "star": true,
+        "description": "マレーシア最大のOSAT企業。RF（無線周波数）デバイス、光トランシーバーの組立・テストに強みを持つ。"
+      },
+      {
+        "id": 242,
+        "company": "Indium Corporation",
+        "booth": "2269",
+        "star": false,
+        "description": "はんだ材料の世界的サプライヤー。はんだペースト、プリフォーム、フラックス、熱伝導材（TIM）、金属材料。"
+      },
+      {
+        "id": 243,
+        "company": "iNETest Malaysia Sdn.Bhd.",
+        "booth": "2579",
+        "star": false,
+        "description": "エレクトロニクス製造向けテストソリューション。インサーキットテスタ（ICT）、機能検査機の販売・サポート。"
+      },
+      {
+        "id": 244,
+        "company": "Infinity Vision Technology Corp. Ltd.",
+        "booth": "2253",
+        "star": false,
+        "description": "画像処理技術関連。"
+      },
+      {
+        "id": 245,
+        "company": "Innospectra (Asia) Pte Ltd",
+        "booth": "2464",
+        "star": false,
+        "description": "電子部品ディストリビューター。"
+      },
+      {
+        "id": 246,
+        "company": "Insphere Technology Pte Ltd",
+        "booth": "2407",
+        "star": false,
+        "description": "計測技術関連。"
+      },
+      {
+        "id": 247,
+        "company": "Inspiraz Technology Pte Ltd",
+        "booth": "1433",
+        "star": false,
+        "description": "シンガポールのマシンビジョン企業。画像処理ソフトウェア「Wizer」および検査ソリューション。"
+      },
+      {
+        "id": 248,
+        "company": "Integrated Service Technology",
+        "booth": "2714",
+        "star": false,
+        "description": "台湾の信頼性試験受託機関（iST）。故障解析、材料分析、信号品質テストなどのサービス。"
+      },
+      {
+        "id": 249,
+        "company": "Intifar Global Co., Ltd",
+        "booth": "A2746",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 250,
+        "company": "Intotest Sdn Bhd",
+        "booth": "1592",
+        "star": false,
+        "description": "テストインターフェースソリューション。テストソケット、プローブカードPCB、治具の設計製造。"
+      },
+      {
+        "id": 251,
+        "company": "INVENTEC Performance Chemicals SEA. Sdn. Bhd",
+        "booth": "1248",
+        "star": false,
+        "description": "化学品メーカー。はんだ付け用フラックス、精密洗浄剤、コンフォーマルコーティング剤。"
+      },
+      {
+        "id": 252,
+        "company": "ISOLITE CERAMIC FIBERS SDN BHD",
+        "booth": "1596",
+        "star": false,
+        "description": "イソライト工業。高温断熱材、セラミックファイバー製品。拡散炉などの断熱に使用。"
+      },
+      {
+        "id": 253,
+        "company": "ITEC B.V.",
+        "booth": "1643",
+        "star": false,
+        "description": "Nexperiaから独立した半導体製造装置メーカー。超高速ダイボンダー、テスター、外観検査装置。"
+      },
+      {
+        "id": 254,
+        "company": "Iwata & Co., Ltd.",
+        "booth": "2302",
+        "star": false,
+        "description": "化学品・産業機械商社（岩田商会）。"
+      },
+      {
+        "id": 255,
+        "company": "Iwatani",
+        "booth": "1488",
+        "star": true,
+        "description": "岩谷産業。産業ガス（水素、ヘリウム等）、ガス供給設備のエンジニアリング、半導体関連マテリアル。"
+      },
+      {
+        "id": 256,
+        "company": "Iwatani",
+        "booth": "1488",
+        "star": false,
+        "description": "総合エネルギー・産業ガス企業。半導体材料ガス、水素、ヘリウムの安定供給と、ガス供給設備の設計・施工。"
+      },
+      {
+        "id": 257,
+        "company": "Jade Micron Pte Ltd",
+        "booth": "2514",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 258,
+        "company": "JCS-Echigo Pte Ltd",
+        "booth": "1370",
+        "star": false,
+        "description": "精密洗浄サービス。半導体製造装置パーツの洗浄・再生。"
+      },
+      {
+        "id": 259,
+        "company": "JEOL (日本電子)",
+        "booth": "1495",
+        "star": false,
+        "description": "電子顕微鏡（SEM/TEM）の世界的ブランド。原子レベルの分解能を持つ顕微鏡技術で、半導体の研究開発・品質管理を支える。"
+      },
+      {
+        "id": 260,
+        "company": "JEOL Asia Pte Ltd",
+        "booth": "1495",
+        "star": true,
+        "description": "日本電子。透過電子顕微鏡（TEM）、走査電子顕微鏡（SEM）、FIBなどの理科学計測機器で世界トップクラス。"
+      },
+      {
+        "id": 261,
+        "company": "Jetway Technologies (Shanghai) Co.,Ltd",
+        "booth": "2578",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 262,
+        "company": "JF Microtechnology Sdn Bhd",
+        "booth": "1586",
+        "star": false,
+        "description": "マレーシアのテストソケットメーカー。テストコンタクター、カンチレバーテストソケットの設計・製造。"
+      },
+      {
+        "id": 263,
+        "company": "JHI CO., Ltd",
+        "booth": "1339",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 264,
+        "company": "JHT Semiconductor Sdn Bhd",
+        "booth": "1604",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 265,
+        "company": "Jiangsu Jinggong Semicon Equipment Co., Ltd",
+        "booth": "1373",
+        "star": false,
+        "description": "中国の装置メーカー。"
+      },
+      {
+        "id": 266,
+        "company": "JIANGSU TOTA INTELLIGENT TECHNOLOGY CO.,LTD.",
+        "booth": "2211",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 267,
+        "company": "Jipal Hi-Tech",
+        "booth": "1256",
+        "star": false,
+        "description": "台湾のディストリビューター。半導体材料、液晶関連部材の販売。"
+      },
+      {
+        "id": 268,
+        "company": "JKS Engineering (M) Sdn Bhd",
+        "booth": "1621",
+        "star": false,
+        "description": "機器メンテナンス、洗浄サービス、真空ポンプ修理などのエンジニアリング。"
+      },
+      {
+        "id": 269,
+        "company": "JSR",
+        "booth": "1448",
+        "star": false,
+        "description": "フォトレジストの世界的大手。特にEUVレジストなどの最先端領域に強く、半導体の微細化を材料面から支える。"
+      },
+      {
+        "id": 270,
+        "company": "JSR Electronic Materials Singapore Pte Ltd",
+        "booth": "1448",
+        "star": true,
+        "description": "JSRグループ。半導体用フォトレジスト（EUV/ArF/KrF）、多層材料、先端パッケージング材料のリーディングカンパニー。"
+      },
+      {
+        "id": 271,
+        "company": "JT Corp.",
+        "booth": "2473",
+        "star": false,
+        "description": "韓国のテストハンドラ、バーンインソーターのメーカー。"
+      },
+      {
+        "id": 272,
+        "company": "Jufone Fluid Systems Technologies (Shenzhen) Co.,Ltd",
+        "booth": "2345",
+        "star": false,
+        "description": "流体制御システム。"
+      },
+      {
+        "id": 273,
+        "company": "K2N CO., LTD.",
+        "booth": "2153",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 274,
+        "company": "Kanken Techno Co., Ltd.",
+        "booth": "A1753",
+        "star": false,
+        "description": "カンケンテクノ。排ガス処理装置（除害装置）、VOC処理装置、集塵機などの環境対策機器。"
+      },
+      {
+        "id": 275,
+        "company": "Kardex",
+        "booth": "1550",
+        "star": false,
+        "description": "自動倉庫・収納システムのグローバルサプライヤー。垂直リフトモジュール、在庫管理ソフトウェア。"
+      },
+      {
+        "id": 276,
+        "company": "KEHUA SINGAPORE PTE. LTD.",
+        "booth": "2468",
+        "star": false,
+        "description": "電源ソリューション。UPS（無停電電源装置）、電力分配ユニット。"
+      },
+      {
+        "id": 277,
+        "company": "Keteca Singapore Pte Ltd.",
+        "booth": "2307",
+        "star": false,
+        "description": "米国発の工業用洗浄剤メーカー。水系洗浄液、脱脂剤。"
+      },
+      {
+        "id": 278,
+        "company": "Keyence",
+        "booth": "A1739",
+        "star": false,
+        "description": "FA機器の巨人。超高精細な変位計、画像処理システム、コードリーダーなどを通じ、生産ラインの「目」となる役割を果たす。"
+      },
+      {
+        "id": 279,
+        "company": "Keyence (M) Sdn Bhd",
+        "booth": "A1739",
+        "star": true,
+        "description": "キーエンス。センサ、測定器、デジタルマイクロスコープ、レーザーマーカーなどのFA機器大手。"
+      },
+      {
+        "id": 280,
+        "company": "King Lai Hygienic Materials Co., Ltd.",
+        "booth": "1252",
+        "star": false,
+        "description": "台湾の継手メーカー（KingLai Group）。高真空用（Vacuum）およびサニタリー用バルブ・継手。"
+      },
+      {
+        "id": 281,
+        "company": "Kingpoint Technology Pte Ltd",
+        "booth": "2117",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 282,
+        "company": "KLA Corporation",
+        "booth": "1264",
+        "star": true,
+        "description": "プロセス制御・歩留まり管理の世界的リーダー。ウェーハ欠陥検査、レチクル検査、膜厚測定、オーバーレイ計測装置。"
+      },
+      {
+        "id": 283,
+        "company": "KLA Corporation",
+        "booth": "1264",
+        "star": false,
+        "description": "プロセス制御・検査の巨人。ウェーハ欠陥検査、レチクル検査、オーバーレイ計測などで圧倒的シェア。歩留まり向上のための「プロセス制御」に特化し、高い利益率を誇る。"
+      },
+      {
+        "id": 284,
+        "company": "KN Holdings",
+        "booth": "2141",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 285,
+        "company": "Knight Auto Precision Engineering Pte Ltd",
+        "booth": "1338",
+        "star": false,
+        "description": "精密部品製造。リードフレーム、コネクタ、半導体金型部品のスタンピング・加工。"
+      },
+      {
+        "id": 286,
+        "company": "Komico Technology Singapore Pte Ltd",
+        "booth": "2441",
+        "star": false,
+        "description": "韓国Komicoグループ。半導体装置部品の精密洗浄、コーティング（溶射）、再生サービス。"
+      },
+      {
+        "id": 287,
+        "company": "Kulicke & Soffa (K&S)",
+        "booth": "1380",
+        "star": false,
+        "description": "ワイヤボンダーのパイオニア。ボールボンダーで圧倒的シェアを持つほか、先進パッケージング（Fluxless TCB等）やミニLED実装装置にも注力。"
+      },
+      {
+        "id": 288,
+        "company": "Kulicke & Soffa Pte Ltd",
+        "booth": "1380",
+        "star": true,
+        "description": "ワイヤボンダーの世界トップシェアメーカー。ボールボンダー、ウェッジボンダー、先進パッケージング装置、消耗品。"
+      },
+      {
+        "id": 289,
+        "company": "Kumpulan Abex Sdn Bhd",
+        "booth": "2187",
+        "star": false,
+        "description": "マレーシアの技術商社。フォトニクス、センシング、測定機器の販売。"
+      },
+      {
+        "id": 290,
+        "company": "Kumpulan Logamweld Sdn Bhd",
+        "booth": "B2777",
+        "star": false,
+        "description": "溶接ソリューション。自動溶接機器、切断機。"
+      },
+      {
+        "id": 291,
+        "company": "LAB14",
+        "booth": "2641",
+        "star": false,
+        "description": "欧州の投資会社RSBG傘下のハイテク製造ソリューション・グループ。先進的な製造技術を持つ企業の集合体。"
+      },
+      {
+        "id": 292,
+        "company": "Lam Research",
+        "booth": "1566",
+        "star": true,
+        "description": "世界トップクラスの半導体製造装置メーカー。エッチング装置（導電膜/絶縁膜）、成膜装置（ECD/CVD/ALD）、洗浄装置。"
+      },
+      {
+        "id": 293,
+        "company": "Lam Research",
+        "booth": "1566",
+        "star": false,
+        "description": "世界トップ3の一角。エッチング装置（絶縁膜・導電膜）および成膜装置（ALD/CVD/ECD）で圧倒的なシェアを持つ米国メーカー。3D NANDやFinFETなどの微細化・積層化プロセスの実現に不可欠。"
+      },
+      {
+        "id": 294,
+        "company": "Lasertec",
+        "booth": "2118",
+        "star": false,
+        "description": "EUVマスク欠陥検査装置で市場を独占する検査装置メーカー。光応用技術をコアに、他社が参入困難なニッチトップ製品を展開。"
+      },
+      {
+        "id": 295,
+        "company": "Lasertec Singapore Pte. Ltd.",
+        "booth": "2118",
+        "star": true,
+        "description": "レーザーテック。EUVマスク欠陥検査装置、SiCウェーハ検査装置など、光応用検査技術で世界をリード。"
+      },
+      {
+        "id": 296,
+        "company": "LBSF Energy Solution Sdn Bhd",
+        "booth": "2586",
+        "star": false,
+        "description": "エネルギー関連ソリューション。"
+      },
+      {
+        "id": 297,
+        "company": "Leeno Industrial Inc.",
+        "booth": "1332",
+        "star": false,
+        "description": "韓国のテスト部品大手。ICテストソケット、リーノピン（コンタクトプローブ）。"
+      },
+      {
+        "id": 298,
+        "company": "Lian Ee Hydraulics Pte Ltd",
+        "booth": "B2776",
+        "star": false,
+        "description": "油圧システム、配管工事、エンジニアリング。"
+      },
+      {
+        "id": 299,
+        "company": "Lighthouse Worldwide Solutions (M) Sdn Bhd",
+        "booth": "3158",
+        "star": false,
+        "description": "汚染管理モニタリング。気中・液中パーティクルカウンタ、環境モニタリングシステム。"
+      },
+      {
+        "id": 300,
+        "company": "Lindenbridge Inc.",
+        "booth": "1700",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 301,
+        "company": "Linkwise Technology (Suzhou) Co, Ltd",
+        "booth": "2364",
+        "star": false,
+        "description": "漏水検知システム、環境監視ソリューション。"
+      },
+      {
+        "id": 302,
+        "company": "Lintec",
+        "booth": "1418",
+        "star": false,
+        "description": "粘着技術の応用。ウェーハダイシング用テープ、バックグラインド用保護テープ、およびそれらを貼付・剥離する装置のトータルソリューション。"
+      },
+      {
+        "id": 303,
+        "company": "LINTEC ADVANCED TECHNOLOGIES (SINGAPORE) PTE. LTD.",
+        "booth": "1418",
+        "star": true,
+        "description": "リンテック。半導体製造用テープ（ダイシングテープ、BGテープ）およびテープ貼付・剥離装置。"
+      },
+      {
+        "id": 304,
+        "company": "LINTEC Co., Ltd.",
+        "booth": "A1748",
+        "star": false,
+        "description": "同上。"
+      },
+      {
+        "id": 305,
+        "company": "LNEYA Thermo Refrigeration Co., Ltd.",
+        "booth": "1648",
+        "star": false,
+        "description": "中国の温度制御装置メーカー。精密チラー、加熱冷却サーキュレーター。"
+      },
+      {
+        "id": 306,
+        "company": "LOT Vacuum Co., Ltd.",
+        "booth": "2595",
+        "star": false,
+        "description": "韓国のドライ真空ポンプメーカー。半導体・FPD・太陽電池プロセス用。"
+      },
+      {
+        "id": 307,
+        "company": "Lync Semi LLC",
+        "booth": "2282",
+        "star": false,
+        "description": "半導体部品・消耗品のサプライヤー（詳細確認推奨）。"
+      },
+      {
+        "id": 308,
+        "company": "MacDermid Alpha Electronics Solutions",
+        "booth": "2423",
+        "star": false,
+        "description": "電子化学材料。はんだ付け材料、アセンブリ用ポリマー、回路基板用薬品、半導体接合材料。"
+      },
+      {
+        "id": 309,
+        "company": "Macrotest Semiconductor Technology Co., Ltd.",
+        "booth": "1656",
+        "star": false,
+        "description": "台湾のATEメーカー。ミックスドシグナル、パワーデバイス用テストシステム。"
+      },
+      {
+        "id": 310,
+        "company": "Magnox International Pte. Ltd.",
+        "booth": "1375",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 311,
+        "company": "Manz Taiwan Ltd.",
+        "booth": "1187",
+        "star": false,
+        "description": "ドイツManzの台湾拠点。ディスプレイ、半導体向けのウェットプロセス装置（RDL、Fan-out PLP等）。"
+      },
+      {
+        "id": 312,
+        "company": "Marketech International Corp.",
+        "booth": "1170",
+        "star": false,
+        "description": "台湾のMIC。ファシリティ工事（ガス・薬液供給）、装置代理店、および自社ブランドの製造装置。"
+      },
+      {
+        "id": 313,
+        "company": "MB AUTOMATION (MALAYSIA) SDN BHD",
+        "booth": "2303",
+        "star": false,
+        "description": "自動化ソリューション。"
+      },
+      {
+        "id": 314,
+        "company": "Mean Well Malaysia Sdn Bhd",
+        "booth": "2550",
+        "star": false,
+        "description": "台湾のスイッチング電源メーカー。標準電源ユニットの世界的大手。"
+      },
+      {
+        "id": 315,
+        "company": "mechatronic systemtechnik gmbh",
+        "booth": "2648",
+        "star": false,
+        "description": "オーストリアの搬送装置メーカー。薄ウェーハ、反りのあるウェーハの非接触搬送・ハンドリング技術。"
+      },
+      {
+        "id": 316,
+        "company": "Mega Valve & Fitting Pte Ltd.",
+        "booth": "1148",
+        "star": false,
+        "description": "各種バルブ、継手、配管材の供給。"
+      },
+      {
+        "id": 317,
+        "company": "MFSG Pte Ltd",
+        "booth": "1298",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 318,
+        "company": "Miandi Group Pte Ltd",
+        "booth": "A2741",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 319,
+        "company": "Micro Modular System Sdn. Bhd.",
+        "booth": "A2745",
+        "star": false,
+        "description": "マレーシアの自動化装置メーカー。テストハンドラ、ビジョン検査機、組立装置。"
+      },
+      {
+        "id": 320,
+        "company": "Micro Precision Calibration Sdn. Bhd.",
+        "booth": "A3213",
+        "star": false,
+        "description": "計測機器の校正、修理サービス。"
+      },
+      {
+        "id": 321,
+        "company": "Micron Technology",
+        "booth": "1504",
+        "star": false,
+        "description": "**メモリ（DRAM/NAND）**の世界的IDM。マレーシアとシンガポールに大規模な組立・テストおよびウェーハ製造拠点を有する。"
+      },
+      {
+        "id": 322,
+        "company": "Micron Technology, Inc.",
+        "booth": "1504",
+        "star": true,
+        "description": "世界的なメモリ半導体メーカー。DRAM、NANDフラッシュ、SSDなどを製造。マレーシアとシンガポールに主要工場を持つ。"
+      },
+      {
+        "id": 323,
+        "company": "Milkway International Chemical Supply Chain Sdn. Bhd.",
+        "booth": "2122",
+        "star": false,
+        "description": "中国の化学品物流大手。危険物輸送、倉庫保管、サプライチェーン管理。"
+      },
+      {
+        "id": 324,
+        "company": "Millice Sdn Bhd",
+        "booth": "1558",
+        "star": false,
+        "description": "東南アジアのディストリビューター。半導体装置、材料、消耗品の販売およびサービス。"
+      },
+      {
+        "id": 325,
+        "company": "MINGSEAL VIETNAM CO., LTD",
+        "booth": "2216",
+        "star": false,
+        "description": "ディスペンシング装置メーカー。"
+      },
+      {
+        "id": 326,
+        "company": "Minox Valves and Fittings Sdn Bhd",
+        "booth": "1190",
+        "star": false,
+        "description": "食品・製薬・半導体向けのサニタリーバルブ、継手、チューブ。"
+      },
+      {
+        "id": 327,
+        "company": "MINSEOA Advanced Materials Co.,LTD",
+        "booth": "1652",
+        "star": false,
+        "description": "先端材料関連。"
+      },
+      {
+        "id": 328,
+        "company": "Mipotech Co., Ltd",
+        "booth": "1307",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 329,
+        "company": "Mitutoyo Asia Pacific Pte Ltd",
+        "booth": "2133",
+        "star": false,
+        "description": "ミツトヨ。長さ計測の総合メーカー。三次元測定機、画像測定機、マイクロメータ。"
+      },
+      {
+        "id": 330,
+        "company": "Monitor ERP System Sdn Bhd",
+        "booth": "1612",
+        "star": false,
+        "description": "製造業向けERPソフトウェア。生産管理システム。"
+      },
+      {
+        "id": 331,
+        "company": "Morglory International Sdn Bhd",
+        "booth": "1591",
+        "star": false,
+        "description": "台湾・シンガポールの商社。半導体装置、中古装置、パーツの販売。"
+      },
+      {
+        "id": 332,
+        "company": "MRSI Mycronic",
+        "booth": "2119",
+        "star": false,
+        "description": "マイクロニックグループ。フォトニクス、光通信デバイス組立用の高精度ダイボンダー、ディスペンサー。"
+      },
+      {
+        "id": 333,
+        "company": "MSV Systems & Services Pte Ltd",
+        "booth": "2439",
+        "star": false,
+        "description": "真空ポンプの修理・オーバーホール、中古機器販売。"
+      },
+      {
+        "id": 334,
+        "company": "MTEK Technology Sdn. Bhd.",
+        "booth": "A2723",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 335,
+        "company": "MUEGGE GmbH",
+        "booth": "2113",
+        "star": false,
+        "description": "ドイツの産業用マイクロ波電源メーカー。プラズマ発生用電源、マイクロ波加熱技術。"
+      },
+      {
+        "id": 336,
+        "company": "MUSASHI ENGINEERING,INC.",
+        "booth": "2265",
+        "star": false,
+        "description": "武蔵エンジニアリング。ディスペンサー（液体精密塗布装置）の世界大手。半導体封装、電子部品接着に不可欠。"
+      },
+      {
+        "id": 337,
+        "company": "MW Components",
+        "booth": "1311",
+        "star": false,
+        "description": "米国の精密部品メーカー。ベローズ、スプリング、ファスナーなどの金属加工部品。"
+      },
+      {
+        "id": 338,
+        "company": "MYSES SDN BHD",
+        "booth": "B1782",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 339,
+        "company": "Nanofilm AM Germany GmbH",
+        "booth": "1455",
+        "star": false,
+        "description": "ナノコーティング技術。FCVA（フィルタード・カソーディック・バキューム・アーク）技術など。"
+      },
+      {
+        "id": 340,
+        "company": "NANOSYS CO., LTD.",
+        "booth": "1282",
+        "star": false,
+        "description": "詳細確認中（米国の量子ドット企業とは別法人の可能性あり）。"
+      },
+      {
+        "id": 341,
+        "company": "NDS",
+        "booth": "1640",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 342,
+        "company": "NEFAB (MALAYSIA) SDN. BHD.",
+        "booth": "1587",
+        "star": false,
+        "description": "工業用梱包ソリューション。精密機器輸送用の木箱、緩衝材設計。"
+      },
+      {
+        "id": 343,
+        "company": "Netherlands Pavilion",
+        "booth": "1542",
+        "star": false,
+        "description": "オランダパビリオン。オランダのハイテク企業群の展示。"
+      },
+      {
+        "id": 344,
+        "company": "New Energy Technology Co., Ltd",
+        "booth": "B2770",
+        "star": false,
+        "description": "エネルギー関連技術。"
+      },
+      {
+        "id": 345,
+        "company": "Nexensor Inc",
+        "booth": "1272",
+        "star": false,
+        "description": "韓国の光学検査システムメーカー。3D検査用モジュール、干渉計。"
+      },
+      {
+        "id": 346,
+        "company": "NexGen Wafer Systems Pte. Ltd",
+        "booth": "2395",
+        "star": false,
+        "description": "シンガポールの装置メーカー。ウェットエッチング、洗浄、無電解めっき装置。"
+      },
+      {
+        "id": 347,
+        "company": "Nextool Technology Co.,Ltd",
+        "booth": "1464",
+        "star": false,
+        "description": "中国の精密工具メーカー。半導体パッケージ切断用ブレード、ドリルなど。"
+      },
+      {
+        "id": 348,
+        "company": "Nexustest Pte. Ltd.",
+        "booth": "1436",
+        "star": false,
+        "description": "テストソリューション関連。"
+      },
+      {
+        "id": 349,
+        "company": "NIDEC ADVANCE TECHNOLOGY (THAILAND) CO., LTD.",
+        "booth": "2396",
+        "star": false,
+        "description": "ニデックアドバンステクノロジー（旧日本電産リード）。半導体パッケージ検査装置、プリント基板検査装置、プローブカード。"
+      },
+      {
+        "id": 350,
+        "company": "NIFLON CO., LTD.",
+        "booth": "2277",
+        "star": false,
+        "description": "フッ素樹脂製品の加工・販売。コーティング、ライニング。"
+      },
+      {
+        "id": 351,
+        "company": "NiKKi Fron Holdings Co., Ltd.",
+        "booth": "2107",
+        "star": false,
+        "description": "日本のフッ素樹脂加工メーカー。半導体装置用樹脂部品、自動車部品。"
+      },
+      {
+        "id": 352,
+        "company": "NIKKISO CO., LTD.",
+        "booth": "2306",
+        "star": false,
+        "description": "日機装。特殊ポンプ（キャンドモータポンプ）、流体制御機器、深紫外線LED。"
+      },
+      {
+        "id": 353,
+        "company": "NIngbo ShangJin Automation Technology Co., Ltd.",
+        "booth": "2341",
+        "star": false,
+        "description": "自動化技術関連。"
+      },
+      {
+        "id": 354,
+        "company": "Nippon Seisen Co., Ltd.",
+        "booth": "2485",
+        "star": false,
+        "description": "日本精線。高機能ガスフィルター「ナスロンフィルター」、ステンレス鋼線。"
+      },
+      {
+        "id": 355,
+        "company": "Nippon Thompson Co., Ltd.",
+        "booth": "2357",
+        "star": false,
+        "description": "IKOブランド。直動案内機器（リニアウェイ）、ニードルベアリング。"
+      },
+      {
+        "id": 356,
+        "company": "Nishimura Advanced Ceramics Co., LTD",
+        "booth": "2621",
+        "star": false,
+        "description": "西村陶業。高機能セラミックス製品の製造。半導体製造装置用部品など。"
+      },
+      {
+        "id": 357,
+        "company": "NK MEASURING INSTRUMENTS SDN BHD",
+        "booth": "2555",
+        "star": false,
+        "description": "計測機器販売。"
+      },
+      {
+        "id": 358,
+        "company": "Nordson Advanced Technology (International) Pte. Ltd.",
+        "booth": "1267",
+        "star": false,
+        "description": "ノードソン。精密ディスペンシング、表面処理、X線検査装置（Nordson DAGE/YESTECH）などを展開するコングロマリット。"
+      },
+      {
+        "id": 359,
+        "company": "NPI Solutions (Singapore) (Pte.) Ltd.",
+        "booth": "1400",
+        "star": false,
+        "description": "受託製造サービス。精密板金、フレーム溶接、電気機械組立。"
+      },
+      {
+        "id": 360,
+        "company": "NSW Automation Sdn Bhd",
+        "booth": "1582",
+        "star": false,
+        "description": "マレーシアの精密ディスペンシング装置メーカー。マイクロんだ、接着剤塗布。"
+      },
+      {
+        "id": 361,
+        "company": "Obang Technology Co., Ltd.",
+        "booth": "2528",
+        "star": false,
+        "description": "韓国のポンプ・送風機メーカー。再生ブロワー、真空ポンプ。"
+      },
+      {
+        "id": 362,
+        "company": "Odyssey Technical Solutions (S) Pte Ltd",
+        "booth": "2435",
+        "star": false,
+        "description": "RF電源（ジェネレータ）、マッチャー、直流電源の修理・再生・販売サービス。"
+      },
+      {
+        "id": 363,
+        "company": "Omni System, Inc.",
+        "booth": "2369",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 364,
+        "company": "Omron Electronics Sdn Bhd",
+        "booth": "A2726",
+        "star": false,
+        "description": "オムロン。産業用オートメーション機器。センサ、スイッチ、PLC、セーフティ機器。"
+      },
+      {
+        "id": 365,
+        "company": "Onto Innovation",
+        "booth": "1360",
+        "star": false,
+        "description": "光学的計測と検査の融合。旧RudolphとNanometricsが統合。膜厚、CD（寸法）、バンプ高さなどの高速計測と、マクロ欠陥検査を提供。"
+      },
+      {
+        "id": 366,
+        "company": "Onto Innovation Southeast Asia Pte. Limited",
+        "booth": "1360",
+        "star": true,
+        "description": "米国の大手計測・検査装置メーカー。光学的クリティカルディメンション（OCD）計測、マクロ欠陥検査、リソグラフィシステム。"
+      },
+      {
+        "id": 367,
+        "company": "Oxford Instruments",
+        "booth": "1430",
+        "star": false,
+        "description": "英国のハイテク機器メーカー。研究・産業用エッチング装置、成膜装置、極低温・磁場環境システム、分析機器。"
+      },
+      {
+        "id": 368,
+        "company": "Pacific Adhesive Systems (M) Sdn Bhd",
+        "booth": "A2756",
+        "star": false,
+        "description": "工業用接着剤およびディスペンサー機器の販売。"
+      },
+      {
+        "id": 369,
+        "company": "Pactumax International Pte., Ltd.",
+        "booth": "2462",
+        "star": false,
+        "description": "エンジニアリングプラスチック素材の販売。PEEK、Torlonなどの高性能樹脂。"
+      },
+      {
+        "id": 370,
+        "company": "Palomar Technologies",
+        "booth": "1371",
+        "star": false,
+        "description": "米国のボンダーメーカー。フォトニクス、RFデバイス向けの高精度ダイボンダー、ワイヤボンダー。"
+      },
+      {
+        "id": 371,
+        "company": "Park Systems Pte Ltd",
+        "booth": "2295",
+        "star": false,
+        "description": "原子間力顕微鏡（AFM）の技術リーダー。ナノメートルレベルの形状測定、欠陥解析。"
+      },
+      {
+        "id": 372,
+        "company": "PBA Systems Pte Ltd",
+        "booth": "1113",
+        "star": false,
+        "description": "モーションコントロール製品。ダイレクトドライブモータ、リニアモジュール、ステージ。"
+      },
+      {
+        "id": 373,
+        "company": "PEMTRON Corporation",
+        "booth": "1101",
+        "star": false,
+        "description": "韓国の検査装置メーカー。3D SPI（はんだ印刷検査）、3D AOI（実装基板検査）装置。"
+      },
+      {
+        "id": 374,
+        "company": "Pentamaster Technology (M) Sdn Bhd",
+        "booth": "1232",
+        "star": true,
+        "description": "マレーシアの自動化ソリューション大手。半導体テストハンドラ、ファクトリーオートメーション、医療機器組立装置。"
+      },
+      {
+        "id": 375,
+        "company": "Pepperl And Fuchs Pte Ltd",
+        "booth": "3154",
+        "star": false,
+        "description": "ドイツの産業用センサおよび防爆機器メーカー。近接センサ、光電センサなど。"
+      },
+      {
+        "id": 376,
+        "company": "Pfeiffer Vacuum",
+        "booth": "1718",
+        "star": false,
+        "description": "磁気軸受式ターボ分子ポンプなどを発明した真空技術の老舗。分析機器から半導体製造まで幅広い真空ニーズに対応。"
+      },
+      {
+        "id": 377,
+        "company": "Pfeiffer Vacuum Singapore Pte. Ltd.",
+        "booth": "1718",
+        "star": true,
+        "description": "真空技術の大手。ターボ分子ポンプ、ロータリーポンプ、リークディテクタ、真空計。"
+      },
+      {
+        "id": 378,
+        "company": "PHILI - ORIENT LOGISTICS (PENANG) SDN BHD",
+        "booth": "2492",
+        "star": false,
+        "description": "貨物輸送、ロジスティクスサービス。"
+      },
+      {
+        "id": 379,
+        "company": "Pilz Malaysia Sdn Bhd",
+        "booth": "2529",
+        "star": false,
+        "description": "安全オートメーション技術。セーフティリレー、安全PLC、安全センサ。"
+      },
+      {
+        "id": 380,
+        "company": "Planck Instruments PTE. LTD.",
+        "booth": "2649",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 381,
+        "company": "Posalux SA",
+        "booth": "1498",
+        "star": false,
+        "description": "スイスの工作機械メーカー。PCB用微細穴あけ機、マイクロマシニング装置。"
+      },
+      {
+        "id": 382,
+        "company": "PowerTech Co., Ltd.",
+        "booth": "1644",
+        "star": false,
+        "description": "電源技術または関連機器（詳細要確認）。"
+      },
+      {
+        "id": 383,
+        "company": "PPTC Technology Services Pte Ltd",
+        "booth": "2406",
+        "star": false,
+        "description": "半導体装置部品の洗浄、コーティング、表面処理、再生サービス。"
+      },
+      {
+        "id": 384,
+        "company": "Precitec 3D Metrology",
+        "booth": "A1736",
+        "star": false,
+        "description": "光学計測技術。共焦点センサ、干渉計を用いた厚み・形状測定。"
+      },
+      {
+        "id": 385,
+        "company": "Premtronic Sdn. Bhd.",
+        "booth": "2172",
+        "star": false,
+        "description": "エレクトロニクス製造サービス（EMS）関連。"
+      },
+      {
+        "id": 386,
+        "company": "Prestige Technology (S) Pte Ltd",
+        "booth": "2704",
+        "star": false,
+        "description": "半導体および関連産業向けの機器、部品販売、サービス。"
+      },
+      {
+        "id": 387,
+        "company": "PROBING GROUP",
+        "booth": "B1789",
+        "star": false,
+        "description": "プロービング技術関連。"
+      },
+      {
+        "id": 388,
+        "company": "Proterial Asia Pacific Pte Ltd",
+        "booth": "2106",
+        "star": false,
+        "description": "プロテリアル（旧日立金属）。リードフレーム材料、配管機器、磁性材料などの高機能材料。"
+      },
+      {
+        "id": 389,
+        "company": "PS Solutions & Services Pte Ltd",
+        "booth": "2432",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 390,
+        "company": "Pure T Pte. Ltd.",
+        "booth": "B2774",
+        "star": false,
+        "description": "水処理、純水システム関連（推定）。"
+      },
+      {
+        "id": 391,
+        "company": "PVA TePla AG",
+        "booth": "1459",
+        "star": false,
+        "description": "ドイツのシステムメーカー。結晶成長炉（Si/SiC）、超音波顕微鏡（SAM）、プラズマ装置。"
+      },
+      {
+        "id": 392,
+        "company": "QES (Asia-Pacific) Sdn Bhd",
+        "booth": "1224",
+        "star": false,
+        "description": "マレーシアのエンジニアリング企業。検査・計測機器の販売、および自社ブランドの自動化装置製造。"
+      },
+      {
+        "id": 393,
+        "company": "QIDE Sdn Bhd",
+        "booth": "A2750",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 394,
+        "company": "Quantel Global Sdb Bhd",
+        "booth": "2522",
+        "star": false,
+        "description": "レーザー技術（Lumibirdグループ）。固体レーザー、ファイバーレーザー。"
+      },
+      {
+        "id": 395,
+        "company": "Quarld Ltd. (Lianyungang)",
+        "booth": "1286",
+        "star": false,
+        "description": "中国の石英ガラス製品メーカー（推定）。"
+      },
+      {
+        "id": 396,
+        "company": "Quartztec Europe Ltd",
+        "booth": "2203",
+        "star": false,
+        "description": "英国の石英ガラス加工会社。半導体用石英パーツ、熱電対。"
+      },
+      {
+        "id": 397,
+        "company": "Quasi-S Pte Ltd",
+        "booth": "2438",
+        "star": false,
+        "description": "分析機器商社。電子顕微鏡、X線検査装置、試料作製装置の販売・保守。"
+      },
+      {
+        "id": 398,
+        "company": "Radysis Asia Sdn Bhd",
+        "booth": "3169",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 399,
+        "company": "Regional Business Network",
+        "booth": "2456",
+        "star": false,
+        "description": "ビジネスマッチング、コンサルティング。"
+      },
+      {
+        "id": 400,
+        "company": "Reid-Ashman Manufacturing, Inc.",
+        "booth": "A1745",
+        "star": false,
+        "description": "半導体テスト用マニピュレータ、ドッキングインターフェースの専門メーカー。"
+      },
+      {
+        "id": 401,
+        "company": "Renishaw (Singapore) Pte. Ltd.",
+        "booth": "2188",
+        "star": false,
+        "description": "英国の精密計測機器メーカー。位置決めエンコーダ、三次元測定機用プローブ、ラマン分光装置。"
+      },
+      {
+        "id": 402,
+        "company": "Rightleder (Shanghai) Technology Co.,Ltd",
+        "booth": "2513",
+        "star": false,
+        "description": "水処理技術。膜分離、純水・排水処理システム。"
+      },
+      {
+        "id": 403,
+        "company": "RIKEN KEIKI Co., Ltd.",
+        "booth": "A2730",
+        "star": false,
+        "description": "理研計器。産業用ガス検知警報器。半導体工場のガス漏洩監視に不可欠。"
+      },
+      {
+        "id": 404,
+        "company": "RION CO., LTD.",
+        "booth": "2115",
+        "star": false,
+        "description": "リオン。微粒子計測器。クリーンルーム内の気中パーティクルカウンタ、純水用液中パーティクルカウンタ。"
+      },
+      {
+        "id": 405,
+        "company": "Riverstone Resources Sdn Bhd",
+        "booth": "A3214",
+        "star": false,
+        "description": "クリーンルーム用ニトリルグローブ、指サック、消耗品の製造。"
+      },
+      {
+        "id": 406,
+        "company": "Rokko Systems Pte Ltd",
+        "booth": "1118",
+        "star": false,
+        "description": "半導体後工程用の精密金型、自動化装置、ツーリング。"
+      },
+      {
+        "id": 407,
+        "company": "ROOTS CO., LTD",
+        "booth": "1278",
+        "star": false,
+        "description": "ルーツ機械研究所。フィルム・シート加工機、ラミネーター等（推定）。"
+      },
+      {
+        "id": 408,
+        "company": "ROTAREX FAREAST PTE LTD",
+        "booth": "1525",
+        "star": false,
+        "description": "ルクセンブルクのバルブメーカー。超高純度ガス用シリンダーバルブ、ラインバルブ。"
+      },
+      {
+        "id": 409,
+        "company": "ROYMA USA INC.",
+        "booth": "2245",
+        "star": false,
+        "description": "切断工具、ソーブレード等（推定）。"
+      },
+      {
+        "id": 410,
+        "company": "S-TEAM Lab, spol. s.r.o.",
+        "booth": "3174",
+        "star": false,
+        "description": "スロバキアの企業。マイクロ波測定技術、プラズマプロセス監視センサ。"
+      },
+      {
+        "id": 411,
+        "company": "S.W. Solution Co., Ltd",
+        "booth": "2328",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 412,
+        "company": "Samco Inc.",
+        "booth": "2618",
+        "star": false,
+        "description": "サムコ。化合物半導体（SiC/GaN）向けCVD、エッチング、洗浄装置。京都の装置メーカー。"
+      },
+      {
+        "id": 413,
+        "company": "Samil Tech Co., LTD.",
+        "booth": "2656",
+        "star": false,
+        "description": "韓国の自動化装置メーカー。ウェーハ搬送システム、EFEM。"
+      },
+      {
+        "id": 414,
+        "company": "SanDisk Storage Malaysia Sdn. Bhd.",
+        "booth": "1534",
+        "star": false,
+        "description": "ウエスタンデジタル傘下のブランド。フラッシュメモリ製品の製造。"
+      },
+      {
+        "id": 415,
+        "company": "SandTek Semiconductor Technology (SHANGHAI) Co., Ltd.",
+        "booth": "A2739",
+        "star": false,
+        "description": "半導体関連技術。"
+      },
+      {
+        "id": 416,
+        "company": "SANWOOD TECHNOLOGY PTE. LTD.",
+        "booth": "2220",
+        "star": false,
+        "description": "環境試験器メーカー。恒温恒湿槽、熱衝撃試験機。"
+      },
+      {
+        "id": 417,
+        "company": "SANYO DENKI CO., LTD. Singapore Branch",
+        "booth": "2629",
+        "star": false,
+        "description": "山洋電気。冷却ファン（San Ace）、サーボモータ、UPS。"
+      },
+      {
+        "id": 418,
+        "company": "SBT Ultrasonic Technology (Germany) Gmbh",
+        "booth": "2152",
+        "star": false,
+        "description": "超音波技術。ワイヤボンディング、端子溶接、測定システム。"
+      },
+      {
+        "id": 419,
+        "company": "Scan Global Logistics PTE LTD",
+        "booth": "2463",
+        "star": false,
+        "description": "デンマーク系の国際物流企業。プロジェクト輸送、精密機器輸送。"
+      },
+      {
+        "id": 420,
+        "company": "SCP AUTOMATION (M) SDN BHD",
+        "booth": "A2736",
+        "star": false,
+        "description": "自動化ソリューション。"
+      },
+      {
+        "id": 421,
+        "company": "SCREEN SPE",
+        "booth": "1202",
+        "star": false,
+        "description": "洗浄装置トップ。枚葉式洗浄機「SUシリーズ」などで高い世界シェアを誇る。微細化に伴う洗浄工程の重要性増大により存在感を発揮。"
+      },
+      {
+        "id": 422,
+        "company": "SCREEN SPE Singapore Pte. Ltd.",
+        "booth": "1202",
+        "star": true,
+        "description": "SCREENセミコンダクターソリューションズ。ウェーハ洗浄装置の世界トップシェア。枚葉式（SUシリーズ）およびバッチ式洗浄機。"
+      },
+      {
+        "id": 423,
+        "company": "SDS TECH CO.,LTD",
+        "booth": "3163",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 424,
+        "company": "SEIWA OPTICAL CO,.LTD.",
+        "booth": "1647",
+        "star": false,
+        "description": "清和光学製作所。産業用光学機器、顕微鏡システム、露光装置用光学系。"
+      },
+      {
+        "id": 425,
+        "company": "SELAYANG SOLDER SDN BHD",
+        "booth": "2527",
+        "star": false,
+        "description": "マレーシアのはんだ製品メーカー。はんだワイヤー、バー、ペースト。"
+      },
+      {
+        "id": 426,
+        "company": "semi",
+        "booth": "B2765",
+        "star": false,
+        "description": "国際半導体製造装置材料協会（主催者）。"
+      },
+      {
+        "id": 427,
+        "company": "SEMI Integration (M) Sdn Bhd",
+        "booth": "2457",
+        "star": false,
+        "description": "自動化システム統合。"
+      },
+      {
+        "id": 428,
+        "company": "SEMI Southeast Asia Pte Ltd",
+        "booth": "3206",
+        "star": false,
+        "description": "主催者オフィス。"
+      },
+      {
+        "id": 429,
+        "company": "Semiconductor Technologies Singapore Pte Ltd",
+        "booth": "1431",
+        "star": false,
+        "description": "装置、スペアパーツの供給、技術サービス。"
+      },
+      {
+        "id": 430,
+        "company": "SEMILAB (S.E.A.)",
+        "booth": "2375",
+        "star": false,
+        "description": "ハンガリーの計測機器メーカー。電気特性、光学特性を用いた半導体材料・プロセス評価装置。"
+      },
+      {
+        "id": 431,
+        "company": "SEMTOS Inc.",
+        "booth": "2408",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 432,
+        "company": "SENKO Co., Ltd.",
+        "booth": "2249",
+        "star": false,
+        "description": "センコー（センコーアドバンス）。光ファイバーコネクタ、光通信部品。"
+      },
+      {
+        "id": 433,
+        "company": "Servo Dynamics Pte Ltd",
+        "booth": "2489",
+        "star": false,
+        "description": "モーションコントロール製品のディストリビューター。サーボモータ、ドライブ、制御機器。"
+      },
+      {
+        "id": 434,
+        "company": "SET CORPORATION SA",
+        "booth": "1432",
+        "star": false,
+        "description": "フランスのボンダーメーカー。高精度フリップチップボンダー（Device Bonding）によるチップ積層。"
+      },
+      {
+        "id": 435,
+        "company": "SGS (Malaysia) Sdn. Bhd.",
+        "booth": "3150",
+        "star": false,
+        "description": "世界的な検査・認証機関。信頼性試験、化学分析、ISO認証サービス。"
+      },
+      {
+        "id": 436,
+        "company": "Shaanxi Wisman High Voltage Power Supply Co., Ltd.",
+        "booth": "1501",
+        "star": false,
+        "description": "高電圧電源メーカー。X線装置、電子ビーム装置用電源。"
+      },
+      {
+        "id": 437,
+        "company": "Shanghai Dongxu Electronic Technology Co., Ltd",
+        "booth": "2215",
+        "star": false,
+        "description": "電子技術関連。"
+      },
+      {
+        "id": 438,
+        "company": "Shanghai Fortrend Technology Co. , Ltd",
+        "booth": "1622",
+        "star": false,
+        "description": "ウェーハハンドリング自動化。SMIF/FOUPオープナー、ソーター、EFEM。"
+      },
+      {
+        "id": 439,
+        "company": "Shanghai GND eTech Co.,Ltd",
+        "booth": "2502",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 440,
+        "company": "Shanghai Hiwave Precision Instrument Co.,Ltd.",
+        "booth": "2343",
+        "star": false,
+        "description": "精密計測機器。"
+      },
+      {
+        "id": 441,
+        "company": "Shanghai Jheat Technology Co., Ltd.",
+        "booth": "B1778",
+        "star": false,
+        "description": "加熱技術関連。"
+      },
+      {
+        "id": 442,
+        "company": "Shanghai Shengjian Technology Co., Ltd.",
+        "booth": "1467",
+        "star": false,
+        "description": "盛剣環境。半導体工場向けの排ガス処理システム、薬液供給システム。"
+      },
+      {
+        "id": 443,
+        "company": "Shanghai Simpure Gas Technology Co., Ltd.",
+        "booth": "1654",
+        "star": false,
+        "description": "ガス純化器（Purifier）。"
+      },
+      {
+        "id": 444,
+        "company": "Shanghai Sinyang Semiconductor Materials Co., Ltd",
+        "booth": "2240",
+        "star": false,
+        "description": "プロセス化学薬品。電気めっき液、洗浄液、パッケージング用材料。"
+      },
+      {
+        "id": 445,
+        "company": "Shanghai Yuwei Semiconductor Technology Co.,Ltd",
+        "booth": "2329",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 446,
+        "company": "Shenyang Heyan Technology Co.,Ltd",
+        "booth": "1620",
+        "star": false,
+        "description": "ダイシングソー（精密切断装置）および関連周辺機器。"
+      },
+      {
+        "id": 447,
+        "company": "Shenzhen Biaowang Industrial Equipment Co.,Ltd",
+        "booth": "1160",
+        "star": false,
+        "description": "精密洗浄装置。"
+      },
+      {
+        "id": 448,
+        "company": "Shenzhen Cronus Technology Co., Ltd.",
+        "booth": "2372",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 449,
+        "company": "Shenzhen Hanchi Technology Co.,LTD",
+        "booth": "1156",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 450,
+        "company": "Shenzhen Merry Precise Electronic Co.,Ltd",
+        "booth": "B1777",
+        "star": false,
+        "description": "精密電子部品。"
+      },
+      {
+        "id": 451,
+        "company": "Shenzhen Shenghe Precision Mould CO.,LTD.",
+        "booth": "B2768",
+        "star": false,
+        "description": "精密金型。"
+      },
+      {
+        "id": 452,
+        "company": "Shenzhen Tensun Precision Equipment Co., Ltd",
+        "booth": "1500",
+        "star": false,
+        "description": "ディスペンサー、コンフォーマルコーティング装置。"
+      },
+      {
+        "id": 453,
+        "company": "Shenzhen Tete Semiconductor Equipment Co.,Ltd.",
+        "booth": "2469",
+        "star": false,
+        "description": "半導体装置関連。"
+      },
+      {
+        "id": 454,
+        "company": "Shenzhen Therlicon Technology Co.,Ltd",
+        "booth": "2411",
+        "star": false,
+        "description": "熱管理技術関連。"
+      },
+      {
+        "id": 455,
+        "company": "Shenzhen Yaotong Technology Co., Ltd.",
+        "booth": "1651",
+        "star": false,
+        "description": "PCB製造装置（露光機など）。"
+      },
+      {
+        "id": 456,
+        "company": "Shenzhen Youibot Robotics Co., Ltd.",
+        "booth": "2449",
+        "star": false,
+        "description": "産業用モバイルロボット。クリーンルーム向け自律搬送ロボット。"
+      },
+      {
+        "id": 457,
+        "company": "Si Chuan Movelink Technology Co., Ltd.",
+        "booth": "2337",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 458,
+        "company": "SiCentury Semiconductor Technology (Suzhou) Co.,Ltd",
+        "booth": "1314",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 459,
+        "company": "Siconnex customized solutions GmbH",
+        "booth": "2111",
+        "star": false,
+        "description": "オーストリアの装置メーカー。バッチ式ウェットプロセス装置（BATCHSPRAY技術）。"
+      },
+      {
+        "id": 460,
+        "company": "Sidea Semiconductor Equipment (Shenzhen) Co.,Ltd",
+        "booth": "1653",
+        "star": false,
+        "description": "半導体装置関連。"
+      },
+      {
+        "id": 461,
+        "company": "Sika Kimia Sdn Bhd",
+        "booth": "2661",
+        "star": false,
+        "description": "スイスの化学企業Sika。建設用化学品、ESD対策床材、シーリング材。"
+      },
+      {
+        "id": 462,
+        "company": "Silicar Semiconductor Co.,Ltd",
+        "booth": "3189",
+        "star": false,
+        "description": "シリコンカーバイド（SiC）関連？（詳細要確認）。"
+      },
+      {
+        "id": 463,
+        "company": "Silicon Connection Pte Ltd",
+        "booth": "1403",
+        "star": false,
+        "description": "ディストリビューター。ウェーハカセット、ゲルパック、ピンセット等の半導体消耗品・ツール。"
+      },
+      {
+        "id": 464,
+        "company": "Silterra",
+        "booth": "1479",
+        "star": false,
+        "description": "マレーシアの国産ファウンドリ。CMOSロジックに加え、MEMS、シリコンフォトニクス、BCD（パワー）プロセスなどの多品種少量生産に対応。"
+      },
+      {
+        "id": 465,
+        "company": "Silterra Malaysia Sdn Bhd",
+        "booth": "1479",
+        "star": true,
+        "description": "マレーシアの半導体ファウンドリ。110nm-180nmプロセスのCMOS、MEMS、シリコンフォトニクス、パワーデバイスを製造。"
+      },
+      {
+        "id": 466,
+        "company": "Silver Basis (Vietnam) Co., Ltd.",
+        "booth": "2688",
+        "star": false,
+        "description": "精密金型、射出成形部品。"
+      },
+      {
+        "id": 467,
+        "company": "Sime Darby Property (Management Services) Sdn. Bhd.",
+        "booth": "2488",
+        "star": false,
+        "description": "マレーシアの大手デベロッパー。産業団地の開発・管理。"
+      },
+      {
+        "id": 468,
+        "company": "Sin Chew Woodpaq Pte Ltd",
+        "booth": "1405",
+        "star": false,
+        "description": "工業用梱包。木箱、パレット、真空梱包サービス。"
+      },
+      {
+        "id": 469,
+        "company": "SineTest Technologies Pte Ltd",
+        "booth": "2470",
+        "star": false,
+        "description": "テスト技術関連。"
+      },
+      {
+        "id": 470,
+        "company": "Singapore Epson Industrial Pte Ltd, Plating Division.",
+        "booth": "A1744",
+        "star": false,
+        "description": "エプソン。半導体ウェーハ（バンプ形成等）および電子部品への精密めっき加工サービス。"
+      },
+      {
+        "id": 471,
+        "company": "Singtest Technology Pte Ltd",
+        "booth": "1302",
+        "star": false,
+        "description": "テストソリューション。RFテスト機器、中古ATEの販売・買取・修理。"
+      },
+      {
+        "id": 472,
+        "company": "SINGWAY TECHNOLOGY CO.,LTD",
+        "booth": "2677",
+        "star": false,
+        "description": "タッチパネル、産業用ディスプレイ（推定）。"
+      },
+      {
+        "id": 473,
+        "company": "Sino-Platinum Metals (Singapore) Pte Ltd",
+        "booth": "2652",
+        "star": false,
+        "description": "貴金属材料。白金族金属の加工・販売。"
+      },
+      {
+        "id": 474,
+        "company": "SIP Hengyue Automation Technology Co., Ltd",
+        "booth": "A2733",
+        "star": false,
+        "description": "自動化技術関連。"
+      },
+      {
+        "id": 475,
+        "company": "SKL Tech Co., Ltd.",
+        "booth": "1341",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 476,
+        "company": "SKN Industrial Supplies Sdn Bhd",
+        "booth": "1279",
+        "star": false,
+        "description": "工業用消耗品サプライヤー。"
+      },
+      {
+        "id": 477,
+        "company": "SL Metals Pte Ltd",
+        "booth": "2433",
+        "star": false,
+        "description": "金属リサイクル。電子スクラップ、貴金属回収。"
+      },
+      {
+        "id": 478,
+        "company": "Small Precision Tools, Inc.",
+        "booth": "2620",
+        "star": false,
+        "description": "SPT。スイスの精密ツールメーカー。ワイヤボンディング用キャピラリ、ダイボンディングツール。"
+      },
+      {
+        "id": 479,
+        "company": "SMFL MIRAI Partners Company, Limited",
+        "booth": "B1761",
+        "star": false,
+        "description": "三井住友ファイナンス＆リースグループ。半導体製造設備のリース・ファイナンス、中古設備売買。"
+      },
+      {
+        "id": 480,
+        "company": "Smiths Interconnect",
+        "booth": "2332",
+        "star": false,
+        "description": "電気接続部品メーカー。半導体テストソケット、高信頼性コネクタ、シグナルインテグリティ製品。"
+      },
+      {
+        "id": 481,
+        "company": "SMTX TECHNOLOGIES SINGAPORE PTE. LTD.",
+        "booth": "2241",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 482,
+        "company": "Soda Vision Pte Ltd",
+        "booth": "A2737",
+        "star": false,
+        "description": "マシンビジョンコンポーネントの販売。カメラ、レンズ、照明、ソフトウェア。"
+      },
+      {
+        "id": 483,
+        "company": "SOLBERG Vacuum Filtration Solutions",
+        "booth": "2330",
+        "star": false,
+        "description": "真空フィルターメーカー。真空ポンプ保護用の吸気フィルター、オイルミストエリミネーター。"
+      },
+      {
+        "id": 484,
+        "company": "Specialty Coating Systems",
+        "booth": "A2757",
+        "star": false,
+        "description": "パリレンコーティングの世界的リーダー。コンフォーマルコーティング装置および受託加工サービス。"
+      },
+      {
+        "id": 485,
+        "company": "Specmax Technologies Pte Ltd",
+        "booth": "1429",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 486,
+        "company": "Spectron GCS Singapore Pte Ltd",
+        "booth": "2622",
+        "star": false,
+        "description": "ガス供給システム。ガスキャビネット、スクラバー、純化器の製造・エンジニアリング。"
+      },
+      {
+        "id": 487,
+        "company": "SPS-Asia Technology Pte Ltd",
+        "booth": "1434",
+        "star": false,
+        "description": "半導体関連商社。RTP（急速熱処理）装置、ウェーハソーター、スペアパーツ。"
+      },
+      {
+        "id": 488,
+        "company": "Standex Electronics",
+        "booth": "2176",
+        "star": false,
+        "description": "センサ・電子部品メーカー。リードスイッチ、リレー、磁気センサ。"
+      },
+      {
+        "id": 489,
+        "company": "STAr Technologies, Inc.",
+        "booth": "2623",
+        "star": false,
+        "description": "台湾のテストソリューション企業。パラメトリックテスタ、プローブカード、信頼性試験システム。"
+      },
+      {
+        "id": 490,
+        "company": "STT Solutions Sdn Bhd",
+        "booth": "2525",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 491,
+        "company": "Sumitomo Heavy Industries Ion Technology Co., Ltd.",
+        "booth": "B1785",
+        "star": true,
+        "description": "住友重機械イオンテクノロジー。半導体製造用イオン注入装置の専業メーカー。"
+      },
+      {
+        "id": 492,
+        "company": "Suntech Applied Materials (Heifei) Co., LTD",
+        "booth": "2313",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 493,
+        "company": "Supermag Japan Co., Ltd.",
+        "booth": "2499",
+        "star": false,
+        "description": "磁気技術関連（詳細要確認）。"
+      },
+      {
+        "id": 494,
+        "company": "SUPREME ABRASIVES PTE.LTD.",
+        "booth": "2402",
+        "star": false,
+        "description": "研磨材サプライヤー。"
+      },
+      {
+        "id": 495,
+        "company": "SurplusGLOBAL Asia Pte. Ltd.",
+        "booth": "1240",
+        "star": false,
+        "description": "韓国に本社を置く世界最大級の中古半導体製造装置ディーラー。買取・販売・リファービッシュ。"
+      },
+      {
+        "id": 496,
+        "company": "SUSS MicroTec Solutions GmbH & Co. KG",
+        "booth": "1426",
+        "star": true,
+        "description": "ドイツの装置メーカー。リソグラフィ（マスクアライナ）、ウェーハボンダー、フォトマスク洗浄機など、MEMS/先端パッケージ向けに強み。"
+      },
+      {
+        "id": 497,
+        "company": "Suzhou Baicon Sensor Technology Co.,LTD",
+        "booth": "1310",
+        "star": false,
+        "description": "センサー技術。"
+      },
+      {
+        "id": 498,
+        "company": "Suzhou Betpak New Material Technology Co., Ltd",
+        "booth": "1280",
+        "star": false,
+        "description": "梱包材料。防湿バッグ（MBB）、乾燥剤、湿度インジケーター。"
+      },
+      {
+        "id": 499,
+        "company": "Suzhou Eoulu System Integration Co.,Ltd.",
+        "booth": "B1791",
+        "star": false,
+        "description": "システムインテグレーション。"
+      },
+      {
+        "id": 500,
+        "company": "Suzhou MegaRobo Technologies Co., Ltd.",
+        "booth": "2419",
+        "star": false,
+        "description": "ロボティクス企業。ライフサイエンスおよび産業用自動化ロボット。"
+      },
+      {
+        "id": 501,
+        "company": "Suzhou MTS Technology Co., Ltd.",
+        "booth": "1685",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 502,
+        "company": "Suzhou Sail Science & Technology Co., Ltd.",
+        "booth": "1203",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 503,
+        "company": "Suzhou SLD Electronic Co., Ltd",
+        "booth": "1268",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 504,
+        "company": "Suzhou Star Union Technology Co., Ltd.",
+        "booth": "A1725",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 505,
+        "company": "Suzhou Xinhe Semiconductor Material Co.,Ltd",
+        "booth": "B2769",
+        "star": false,
+        "description": "半導体材料関連。"
+      },
+      {
+        "id": 506,
+        "company": "SVCS Process Innovation s.r.o.",
+        "booth": "1390",
+        "star": false,
+        "description": "チェコの装置メーカー。拡散炉、LPCVD装置。"
+      },
+      {
+        "id": 507,
+        "company": "SWCC Corporation",
+        "booth": "2308",
+        "star": false,
+        "description": "旧昭和電線ホールディングス。産業用ケーブル、ワイヤーハーネス。"
+      },
+      {
+        "id": 508,
+        "company": "SYMPHONY ENGINEERING SDN BHD",
+        "booth": "2517",
+        "star": false,
+        "description": "エンジニアリングサービス。"
+      },
+      {
+        "id": 509,
+        "company": "T+C Machine Tools Pte Ltd.",
+        "booth": "B1763",
+        "star": false,
+        "description": "工作機械、ツーリング。"
+      },
+      {
+        "id": 510,
+        "company": "T-Drill Oy",
+        "booth": "2697",
+        "star": false,
+        "description": "フィンランドの配管加工機械メーカー。T型分岐加工（バーリング）システム。"
+      },
+      {
+        "id": 511,
+        "company": "Taikisha (Singapore) Pte Ltd",
+        "booth": "B2760",
+        "star": false,
+        "description": "大気社。産業空調設備、クリーンルームの設計・施工。"
+      },
+      {
+        "id": 512,
+        "company": "TAIWAN CHELIC CO., LTD.",
+        "booth": "2708",
+        "star": false,
+        "description": "台湾の空圧機器メーカー。エアシリンダ、ソレノイドバルブ、真空エジェクタ。"
+      },
+      {
+        "id": 513,
+        "company": "TAIWAN GRACE INTERNATIONAL CORPORATION",
+        "booth": "2672",
+        "star": false,
+        "description": "ディストリビューター。半導体材料、化学品の販売。"
+      },
+      {
+        "id": 514,
+        "company": "Takai Precision Co., Ltd",
+        "booth": "1716",
+        "star": false,
+        "description": "精密加工関連。"
+      },
+      {
+        "id": 515,
+        "company": "TANAKA PRECIOUS METALS",
+        "booth": "1521",
+        "star": true,
+        "description": "田中貴金属グループ。ボンディングワイヤ、貴金属ペースト、めっき用化合物などの産業用貴金属製品。"
+      },
+      {
+        "id": 516,
+        "company": "Tanaka Precious Metals",
+        "booth": "1521",
+        "star": false,
+        "description": "ボンディングワイヤの世界トップシェア。金、銅、銀、アルミなど多様なワイヤに加え、装置用貴金属部品も展開。"
+      },
+      {
+        "id": 517,
+        "company": "TECHMAN ROBOT INC.",
+        "booth": "2391",
+        "star": false,
+        "description": "台湾の協働ロボット（Cobot）大手。ビジョンシステムを内蔵した使いやすいロボットアーム。"
+      },
+      {
+        "id": 518,
+        "company": "Technet Engineering Sdn. Bhd.",
+        "booth": "2214",
+        "star": false,
+        "description": "エンジニアリングサービス。"
+      },
+      {
+        "id": 519,
+        "company": "TECHNIC",
+        "booth": "2404",
+        "star": false,
+        "description": "米国のめっき技術企業。専用めっき装置およびめっき薬品（金、銀、錫など）。"
+      },
+      {
+        "id": 520,
+        "company": "TEGS ASIA INDUSTRIES SDN BHD",
+        "booth": "2625",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 521,
+        "company": "Teledyne FLIR Systems, Inc",
+        "booth": "2624",
+        "star": false,
+        "description": "赤外線カメラの世界的リーダー。熱画像検査、設備診断用サーモグラフィ。"
+      },
+      {
+        "id": 522,
+        "company": "Teltec Semiconductor Pacific Limited",
+        "booth": "1618",
+        "star": false,
+        "description": "アジア全域で活動する半導体装置・材料の販売・サービス商社。"
+      },
+      {
+        "id": 523,
+        "company": "TESEC (M) SDN. BHD.",
+        "booth": "1175",
+        "star": false,
+        "description": "テセック。ディスクリートデバイス（パワー半導体等）用のハンドラおよびテスタの大手。"
+      },
+      {
+        "id": 524,
+        "company": "Tessvida Technologies Pte Ltd",
+        "booth": "1369",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 525,
+        "company": "Test Research, Inc. (TRI)",
+        "booth": "2149",
+        "star": false,
+        "description": "台湾の検査装置メーカー。PCBA向けSPI、AOI、AXI、ICTなどのワンストップ検査ソリューション。"
+      },
+      {
+        "id": 526,
+        "company": "TEST Samantha",
+        "booth": "BW1958",
+        "star": false,
+        "description": "（テストエントリーの可能性あり）"
+      },
+      {
+        "id": 527,
+        "company": "Test Tooling Solutions (M) Sdn Bhd",
+        "booth": "1206",
+        "star": false,
+        "description": "テスト治具メーカー。テストソケット、ポゴピン、PCB設計。"
+      },
+      {
+        "id": 528,
+        "company": "TFE Inc.",
+        "booth": "1492",
+        "star": false,
+        "description": "韓国の環境装置メーカー。CO2バブラー、チラー、テストハンドラ用製品。"
+      },
+      {
+        "id": 529,
+        "company": "Thermo Fisher Scientific",
+        "booth": "1554",
+        "star": false,
+        "description": "科学機器のメガプレイヤー。透過電子顕微鏡（TEM）やFIB（集束イオンビーム）装置は、最先端デバイスの構造解析・故障解析に必須のツール。"
+      },
+      {
+        "id": 530,
+        "company": "Thermo Fisher Scientific Malaysia Sdn Bhd",
+        "booth": "1554",
+        "star": true,
+        "description": "世界最大の科学機器メーカー。電子顕微鏡（TEM/SEM）、FIB（集束イオンビーム）、各種分析装置による材料解析・故障解析。"
+      },
+      {
+        "id": 531,
+        "company": "Thermotron-CE Technology Pte Ltd",
+        "booth": "1406",
+        "star": false,
+        "description": "環境試験器メーカー。恒温恒湿槽、振動試験機、熱衝撃試験機。"
+      },
+      {
+        "id": 532,
+        "company": "THK",
+        "booth": "2505",
+        "star": false,
+        "description": "**直動案内機器（LMガイド）**のパイオニア。ナノメートル精度の位置決めが求められる露光装置や検査装置に不可欠な機械要素部品。"
+      },
+      {
+        "id": 533,
+        "company": "THK CO., LTD.",
+        "booth": "2505",
+        "star": true,
+        "description": "直動案内機器（LMガイド）のパイオニア。半導体製造装置の高精度な位置決め・搬送を支える重要部品。"
+      },
+      {
+        "id": 534,
+        "company": "Tinman Advanced System Technology Pte Ltd",
+        "booth": "2251",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 535,
+        "company": "TLG TECHNOLOGY PTE LTD",
+        "booth": "1399",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 536,
+        "company": "TMEIC Asia Pte Ltd",
+        "booth": "2575",
+        "star": false,
+        "description": "東芝三菱電機産業システム。工場用高圧モータ、ドライブ装置、UPS、PVインバータ。"
+      },
+      {
+        "id": 537,
+        "company": "Tokimeku Pte Ltd",
+        "booth": "1402",
+        "star": false,
+        "description": "ニコンなどの顕微鏡、測定機を扱う商社。"
+      },
+      {
+        "id": 538,
+        "company": "Tokyo Electron (TEL)",
+        "booth": "1294",
+        "star": false,
+        "description": "日本最大・世界トップ級。コータ/デベロッパ（塗布現像装置）で世界シェア9割弱を誇るほか、エッチング、成膜、洗浄、テストシステムまで幅広い工程をカバーする総合力が強み。"
+      },
+      {
+        "id": 539,
+        "company": "Tokyo Electron Singapore Pte Ltd",
+        "booth": "1294",
+        "star": true,
+        "description": "東京エレクトロン（TEL）。日本最大の半導体製造装置メーカー。コータ/デベロッパ、エッチング、成膜、洗浄装置など主要プロセスをカバー。"
+      },
+      {
+        "id": 540,
+        "company": "TOKYO SEIMITSU CO., LTD.",
+        "booth": "1132",
+        "star": true,
+        "description": "東京精密（ACCRETECH）。ウェーハプロービングマシン、ダイシングマシン、CMP装置、および精密測定機器。"
+      },
+      {
+        "id": 541,
+        "company": "Tongtai Machine Tool (SEA) Sdn. Bhd.",
+        "booth": "2109",
+        "star": false,
+        "description": "東台精機。台湾の工作機械メーカー。PCBドリル機、レーザー加工機。"
+      },
+      {
+        "id": 542,
+        "company": "Topco Scientific Co., Ltd.",
+        "booth": "2207",
+        "star": false,
+        "description": "崇越科技。台湾の大手半導体商社。信越化学のシリコンウェーハや関連材料、装置の販売。"
+      },
+      {
+        "id": 543,
+        "company": "Towa",
+        "booth": "2640",
+        "star": false,
+        "description": "**モールディング装置（樹脂封止）**の世界トップシェアメーカー。独自の「コンプレッションモールド技術」は、チップレットやFOWLPなどの先端パッケージに不可欠。"
+      },
+      {
+        "id": 544,
+        "company": "Towa Corporation",
+        "booth": "2640",
+        "star": true,
+        "description": "半導体モールディング装置（樹脂封止）の世界トップシェアメーカー。独自のコンプレッションモールド技術。"
+      },
+      {
+        "id": 545,
+        "company": "Toward Technologies, Inc.",
+        "booth": "1215",
+        "star": false,
+        "description": "台湾のリレーメーカー。半導体テスター（ATE）用リードリレー、フォトリレー。"
+      },
+      {
+        "id": 546,
+        "company": "Toyo Adtec Pte. Ltd.",
+        "booth": "2427",
+        "star": false,
+        "description": "東洋アドテック。真空機器販売、露光装置のメンテナンスサービス。"
+      },
+      {
+        "id": 547,
+        "company": "TQC PRECISION ENGINEERING PTE. LTD",
+        "booth": "1395",
+        "star": false,
+        "description": "精密加工部品の製造。"
+      },
+      {
+        "id": 548,
+        "company": "TRINITY CO., LTD",
+        "booth": "2273",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 549,
+        "company": "TRUMPF Hüttinger GmbH + Co. KG",
+        "booth": "A2755",
+        "star": false,
+        "description": "プラズマプロセス用電源（RFジェネレータ、DC電源）の世界的メーカー。"
+      },
+      {
+        "id": 550,
+        "company": "TT Vision Technologies SDN BHD",
+        "booth": "1480",
+        "star": false,
+        "description": "マレーシアのマシンビジョン検査装置メーカー。ワイヤボンド検査、ウェーハ検査など。"
+      },
+      {
+        "id": 551,
+        "company": "UBOT Incorporated Pte Ltd",
+        "booth": "A2744",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 552,
+        "company": "UHP GAS-SYS TECHNOLOGY PTE LTD",
+        "booth": "2121",
+        "star": false,
+        "description": "ガス供給システム。超高純度ガス配管の設計・施工。"
+      },
+      {
+        "id": 553,
+        "company": "UMC (United Microelectronics Corp.)",
+        "booth": "1440",
+        "star": false,
+        "description": "台湾の大手ファウンドリ。シンガポール拠点（Fab 12i）は同社の重要拠点で、22/28nmプロセスなどの量産を行っている。"
+      },
+      {
+        "id": 554,
+        "company": "United Industrial Technology Sdn Bhd",
+        "booth": "1589",
+        "star": false,
+        "description": "産業用機器・工具の供給。"
+      },
+      {
+        "id": 555,
+        "company": "United Microelectronics Corporation Singapore",
+        "booth": "1440",
+        "star": true,
+        "description": "UMC。台湾の大手ファウンドリ。シンガポールのFab12iで特殊プロセス（eHV、RF-SOI等）の生産を行っている。"
+      },
+      {
+        "id": 556,
+        "company": "Vacuum Barrier Corporation",
+        "booth": "2686",
+        "star": false,
+        "description": "液体窒素（LN2）用の真空断熱フレキシブル配管システム。"
+      },
+      {
+        "id": 557,
+        "company": "Vaisala",
+        "booth": "2361",
+        "star": false,
+        "description": "ヴァイサラ。フィンランドの計測機器メーカー。クリーンルーム監視用の高精度湿度計、露点計、温度計。"
+      },
+      {
+        "id": 558,
+        "company": "Valex Semiconductor Materials (zhejiang) Co.,Ltd",
+        "booth": "1531",
+        "star": false,
+        "description": "米国Valexの中国拠点。UHPステンレスチューブ、フィッティング。"
+      },
+      {
+        "id": 559,
+        "company": "Valtech Corporation",
+        "booth": "1625",
+        "star": false,
+        "description": "洗浄剤メーカー。半導体ウェーハ、HDD、FPD製造用の特殊洗浄剤。"
+      },
+      {
+        "id": 560,
+        "company": "VAT",
+        "booth": "1114",
+        "star": false,
+        "description": "真空バルブの世界シェアNo.1。パーティクル発生を抑えた高性能ゲートバルブなど、真空プロセス装置の「ドア」を担う重要企業。"
+      },
+      {
+        "id": 561,
+        "company": "VAT Vakuumventile AG",
+        "booth": "1114",
+        "star": true,
+        "description": "スイスの真空バルブメーカー。半導体製造装置向けのゲートバルブ、振り子バルブなどで世界シェアNo.1。"
+      },
+      {
+        "id": 562,
+        "company": "Vector Japan Co.,Ltd",
+        "booth": "1688",
+        "star": false,
+        "description": "ベクタジャパン。車載組込みソフトウェア開発ツール、または関連技術（詳細要確認）。"
+      },
+      {
+        "id": 563,
+        "company": "Veltop Singapore Pte Ltd",
+        "booth": "3105",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 564,
+        "company": "VERMES Microdispensing Sdn Bhd",
+        "booth": "B1774",
+        "star": false,
+        "description": "ドイツのディスペンシング技術。ピエゾ駆動方式の非接触マイクロディスペンシングシステム。"
+      },
+      {
+        "id": 565,
+        "company": "VEXANIS PTE LTD",
+        "booth": "1344",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 566,
+        "company": "Vietnam Cullinan Electric Company Limited",
+        "booth": "A3217",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 567,
+        "company": "VisionEdge Tech Pte Ltd",
+        "booth": "2400",
+        "star": false,
+        "description": "マシンビジョン関連技術。"
+      },
+      {
+        "id": 568,
+        "company": "ViTrox",
+        "booth": "1410",
+        "star": false,
+        "description": "マレーシアのハイテク代表格。3D AOI（光学検査）、3D AXI（X線検査）装置の大手。SMTラインや半導体後工程の品質検査で高いシェア。"
+      },
+      {
+        "id": 569,
+        "company": "ViTrox Technologies Sdn. Bhd.",
+        "booth": "1410",
+        "star": true,
+        "description": "マレーシアを代表するテクノロジー企業。3D AOI、3D AXI（X線）、アドバンスト3D光学的検査装置の大手。"
+      },
+      {
+        "id": 570,
+        "company": "VMS Solutions",
+        "booth": "3146",
+        "star": false,
+        "description": "韓国のソフトウェア企業。生産スケジューリング最適化システム「MOZART」。"
+      },
+      {
+        "id": 571,
+        "company": "WAFTECH SDN BHD",
+        "booth": "1324",
+        "star": false,
+        "description": "装置サービス企業。ウェーハハンドリングロボット、洗浄装置の修理・再生・販売。"
+      },
+      {
+        "id": 572,
+        "company": "WAGO Electronic Pte Ltd",
+        "booth": "1367",
+        "star": false,
+        "description": "ドイツの電気接続機器メーカー。プッシュイン式端子台、コネクタ、産業用インターフェース。"
+      },
+      {
+        "id": 573,
+        "company": "Wah Lee Tech (Singapore) PTE Ltd.",
+        "booth": "1235",
+        "star": false,
+        "description": "華立企業。台湾の大手ハイテク商社。半導体材料、エンジニアリングプラスチック、装置の販売。"
+      },
+      {
+        "id": 574,
+        "company": "Waters Analytical Instruments Sdn Bhd",
+        "booth": "2533",
+        "star": false,
+        "description": "分析機器メーカー。液体クロマトグラフィー（HPLC）、質量分析計。"
+      },
+      {
+        "id": 575,
+        "company": "Welflow Premium Sdn Bhd",
+        "booth": "2592",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 576,
+        "company": "WEO Corporation Pte Ltd",
+        "booth": "2103",
+        "star": false,
+        "description": "精密光学部品メーカー。レンズ、プリズム、光学フィルター。"
+      },
+      {
+        "id": 577,
+        "company": "WESOTECH DIGITAL SDN BHD",
+        "booth": "A2724",
+        "star": false,
+        "description": "デジタルソリューション関連。"
+      },
+      {
+        "id": 578,
+        "company": "WinWay Technology Co., Ltd.",
+        "booth": "1516",
+        "star": false,
+        "description": "台湾のテストソケット大手。高速・高周波デバイス用ICテストソケット。"
+      },
+      {
+        "id": 579,
+        "company": "WiseSorbent Technology Asia Sdn Bhd",
+        "booth": "2559",
+        "star": false,
+        "description": "防湿ソリューション。産業用乾燥剤、湿度インジケーターカード。"
+      },
+      {
+        "id": 580,
+        "company": "WISKIND (MALAYSIA) SDN BHD.",
+        "booth": "3148",
+        "star": false,
+        "description": "クリーンルーム用建築システム。モジュラーパネル、ドア、窓。"
+      },
+      {
+        "id": 581,
+        "company": "Witzenmann GmbH",
+        "booth": "2644",
+        "star": false,
+        "description": "ドイツのフレキシブル金属管メーカー。真空・ガス配管用のベローズ、伸縮継手。"
+      },
+      {
+        "id": 582,
+        "company": "WKK Distribution (Singapore) Pte Ltd",
+        "booth": "A1742",
+        "star": false,
+        "description": "電子機器製造装置の商社。Yamaha（マウンタ）等の代理店。"
+      },
+      {
+        "id": 583,
+        "company": "WORLD WIDE SEMI-CONDUCTOR EQUIPMENT COMPANY LIMITED",
+        "booth": "2340",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 584,
+        "company": "Wuxi Evergrand Electronic Scientific Technology Co.,Ltd",
+        "booth": "2445",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 585,
+        "company": "Wuxi G-chip Semiconductor Technology Co.,Ltd",
+        "booth": "B1787",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 586,
+        "company": "Wuxi KINGWIN(WEWIN) Electronic Equipment Co., Ltd.",
+        "booth": "B1781",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 587,
+        "company": "WUXI XIVI SCIENCE AND TECHNOLOGY CO.,LTD.",
+        "booth": "2374",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 588,
+        "company": "Xiamen Innovacera Advanced Materials Co., Ltd",
+        "booth": "2591",
+        "star": false,
+        "description": "精密セラミックスメーカー。半導体装置用アルミナ、窒化アルミニウム部品。"
+      },
+      {
+        "id": 589,
+        "company": "XYC TEK Intelligent Technology (Malaysia) Sdn. Bhd.",
+        "booth": "2587",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 590,
+        "company": "Yamaha Robotics Solutions Asia Pte Ltd",
+        "booth": "2669, #2701",
+        "star": false,
+        "description": "ヤマハ発動機。表面実装機（マウンタ）、産業用ロボット、半導体後工程組立装置。"
+      },
+      {
+        "id": 591,
+        "company": "YD Electron Ltd.",
+        "booth": "2645",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 592,
+        "company": "YJ STAINLESS CO., LTD.",
+        "booth": "2653",
+        "star": false,
+        "description": "台湾のステンレス製品メーカー。半導体用パイプ、継手。"
+      },
+      {
+        "id": 593,
+        "company": "Yokogawa Electric (Malaysia) Sdn Bhd",
+        "booth": "1496",
+        "star": false,
+        "description": "横河電機。産業オートメーション・制御（DCS）、計測機器。"
+      },
+      {
+        "id": 594,
+        "company": "YoungTek Electronics Corp.",
+        "booth": "1155",
+        "star": false,
+        "description": "台湾のバックエンドサービス企業。ウェーハテスト、ダイソーティング、および自社ブランドの装置製造。"
+      },
+      {
+        "id": 595,
+        "company": "Yuan Taifeng (SG) Optronics Pte Ltd",
+        "booth": "A2734",
+        "star": false,
+        "description": "光学部品関連。"
+      },
+      {
+        "id": 596,
+        "company": "Zap Asia Pte Ltd",
+        "booth": "1438",
+        "star": false,
+        "description": "静電気対策専門商社。イオナイザー、測定器の販売。"
+      },
+      {
+        "id": 597,
+        "company": "Zeal Clean Supplies",
+        "booth": "3107",
+        "star": false,
+        "description": "クリーンルーム消耗品。ワイパー、スワブ、手袋。"
+      },
+      {
+        "id": 598,
+        "company": "Zeroonetest Technology Pte. Ltd.",
+        "booth": "2567",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 599,
+        "company": "ZGS Electronics Technology Sdn Bhd",
+        "booth": "2497",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 600,
+        "company": "Zhejiang Hangke Instrument Co., Ltd.",
+        "booth": "2500",
+        "star": false,
+        "description": "電池検査装置メーカー。リチウムイオン電池の充放電試験機など。"
+      },
+      {
+        "id": 601,
+        "company": "Zhejiang Haoliang Clean Equipment Technology Co., Ltd.",
+        "booth": "2543",
+        "star": false,
+        "description": "クリーンルーム機器関連。"
+      },
+      {
+        "id": 602,
+        "company": "ZheJiang OPAL Quartz Tech Co.,Ltd",
+        "booth": "2246",
+        "star": false,
+        "description": "石英ガラス製品。拡散炉用チューブ、ボートなど。"
+      },
+      {
+        "id": 603,
+        "company": "Zi Lian (Malaysia) Sdn Bhd",
+        "booth": "2582",
+        "star": false,
+        "description": "詳細確認中。"
+      },
+      {
+        "id": 604,
+        "company": "ZMC Technologies (Singapore) Pte Ltd",
+        "booth": "1394",
+        "star": false,
+        "description": "半導体製造装置・材料の代理店。アドバンストパッケージング、MEMS関連のソリューションを提供。"
+      }
+    ];
+
+    const targetBooths = ["2637", "1410", "1232", "2484", "2317", "1598", "1264", "2118", "1360"];
+    exhibitors.forEach(ex => {
+      if (targetBooths.includes(ex.booth)) {
+        ex.ai_target = true;
+      }
+    });
+
+    let surveyData = {};
+    let currentExhibitorId = null;
+    let currentSort = { column: 'company', direction: 'asc' };
+    let selectedAlphabet = ''; // '' means show all
+    let filteredData = [...exhibitors];
+
+    // Load saved data from localStorage
+    function loadSurveyData() {
+      const saved = localStorage.getItem('semicon_sea_2026_survey');
+      if (saved) {
+        surveyData = JSON.parse(saved);
+      }
+      updateStats();
+    }
+
+    // Save data to localStorage
+    function saveSurveyData() {
+      localStorage.setItem('semicon_sea_2026_survey', JSON.stringify(surveyData));
+      updateStats();
+    }
+
+    // Update statistics
+    function updateStats() {
+      const visited = Object.values(surveyData).filter(d => d.visitDate).length;
+      const rated = Object.values(surveyData).filter(d => d.rating).length;
+
+      document.getElementById('visitedCount').textContent = visited;
+      document.getElementById('ratedCount').textContent = rated;
+    }
+
+    // Render table
+    function renderTable(data) {
+      const tbody = document.getElementById('tableBody');
+      const noResults = document.getElementById('noResults');
+
+      if (data.length === 0) {
+        tbody.innerHTML = '';
+        noResults.style.display = 'block';
+        document.getElementById('displayCount').textContent = '0';
+        return;
+      }
+
+      noResults.style.display = 'none';
+
+      tbody.innerHTML = data.map((ex) => {
+        const survey = surveyData[ex.id] || {};
+        const visited = survey.visitDate ? 'visited' : '';
+        const statusBadge = survey.visitDate ? '<span class="status-badge status-visited">訪問済</span>' : '';
+        const rating = survey.rating ? `<span class="rating rating-${survey.rating}">${survey.rating}</span>` : '';
+        const aiBadge = ex.ai_target ? '<span class="status-badge" style="background:#2563eb; color:white;">🎯 最優先</span>' : '';
+        const visitor = survey.visitorName || '';
+
+        return `
+                    <tr class="${visited}" onclick="openModal(${ex.id})">
+                        <td style="text-align: center;">${survey.visitDate ? '✅' : ''}</td>
+                        <td class="company-name">${ex.company}${aiBadge}${statusBadge}</td>
+                        <td><span class="booth">${ex.booth}</span></td>
+                        <td style="text-align: center;">${ex.star ? '<span class="star">🌟</span>' : ''}</td>
+                        <td>${rating}</td>
+                        <td style="font-size: 12px;">${visitor}</td>
+                        <td class="description" style="font-size: 13px;">${ex.description}</td>
+                    </tr>
+                `;
+      }).join('');
+
+      document.getElementById('displayCount').textContent = data.length;
+    }
+
+    // Filter data
+    function filterData() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const showStarOnly = document.getElementById('filterStar').checked;
+      const showVisitedOnly = document.getElementById('filterVisited').checked;
+      const ratingFilter = document.getElementById('filterRating').value;
+      const showAITarget = document.getElementById('filterAITarget').checked;
+
+      filteredData = exhibitors.filter(ex => {
+        const survey = surveyData[ex.id] || {};
+
+        const matchesSearch = !searchTerm ||
+          ex.company.toLowerCase().includes(searchTerm) ||
+          ex.booth.toLowerCase().includes(searchTerm) ||
+          ex.description.toLowerCase().includes(searchTerm) ||
+          (survey.visitorName && survey.visitorName.toLowerCase().includes(searchTerm)) ||
+          (survey.comments && survey.comments.toLowerCase().includes(searchTerm));
+
+        const matchesStar = !showStarOnly || ex.star;
+        const matchesVisited = !showVisitedOnly || survey.visitDate;
+        const matchesRating = !ratingFilter || survey.rating === ratingFilter;
+        const matchesAITarget = !showAITarget || ex.ai_target;
+
+        // Alphabet filter
+        const matchesAlphabet = !selectedAlphabet ||
+          ex.company.toUpperCase().startsWith(selectedAlphabet);
+
+        return matchesSearch && matchesStar && matchesVisited && matchesRating && matchesAlphabet && matchesAITarget;
+      });
+
+      sortData(currentSort.column, currentSort.direction, false);
+    }
+
+    // Sort data
+    function sortData(column, direction = null, toggle = true) {
+      if (toggle) {
+        if (currentSort.column === column) {
+          direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+          direction = 'asc';
+        }
+      } else {
+        direction = direction || currentSort.direction;
+      }
+
+      currentSort = { column, direction };
+
+      filteredData.sort((a, b) => {
+        let aVal = a[column];
+        let bVal = b[column];
+
+        if (typeof aVal === 'string') {
+          aVal = aVal.toLowerCase();
+          bVal = bVal.toLowerCase();
+        }
+
+        if (direction === 'asc') {
+          return aVal > bVal ? 1 : -1;
+        } else {
+          return aVal < bVal ? 1 : -1;
+        }
+      });
+
+      renderTable(filteredData);
+    }
+
+    // Open modal
+    function openModal(exhibitorId) {
+      currentExhibitorId = exhibitorId;
+      const ex = exhibitors.find(e => e.id === exhibitorId);
+      const survey = surveyData[exhibitorId] || {};
+
+      // Set basic info
+      document.getElementById('modalCompanyName').textContent = ex.company;
+      document.getElementById('modalBoothInfo').textContent = `ブース ${ex.booth}`;
+      document.getElementById('modalCompany').textContent = ex.company;
+      document.getElementById('modalBooth').textContent = ex.booth;
+      document.getElementById('modalDescription').textContent = ex.description;
+
+      // Set form values
+      document.getElementById('visitDate').value = survey.visitDate || '';
+      document.getElementById('visitorName').value = survey.visitorName || '';
+      document.getElementById('rating').value = survey.rating || '';
+      document.getElementById('comments').value = survey.comments || '';
+      document.getElementById('status').value = survey.status || '';
+
+      // Set images
+      const imagePreview = document.getElementById('imagePreview');
+      imagePreview.innerHTML = '';
+      if (survey.images && survey.images.length > 0) {
+        survey.images.forEach((imgData, idx) => {
+          const div = document.createElement('div');
+          div.className = 'image-preview-item';
+          div.innerHTML = `
+                        <img src="${imgData}" alt="Image ${idx + 1}">
+                        <button class="remove-btn" onclick="removeImage(${idx})">×</button>
+                    `;
+          imagePreview.appendChild(div);
+        });
+      }
+
+      document.getElementById('detailModal').style.display = 'block';
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('detailModal').style.display = 'none';
+      currentExhibitorId = null;
+    }
+
+    // Handle image upload
+    function handleImageUpload(event) {
+      const files = event.target.files;
+      const survey = surveyData[currentExhibitorId] || {};
+
+      if (!survey.images) {
+        survey.images = [];
+      }
+
+      Array.from(files).forEach(file => {
+        if (file.type.startsWith('image/')) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            survey.images.push(e.target.result);
+            surveyData[currentExhibitorId] = survey;
+
+            // Update preview
+            const imagePreview = document.getElementById('imagePreview');
+            const div = document.createElement('div');
+            div.className = 'image-preview-item';
+            div.innerHTML = `
+                            <img src="${e.target.result}" alt="Image">
+                            <button class="remove-btn" onclick="removeImage(${survey.images.length - 1})">×</button>
+                        `;
+            imagePreview.appendChild(div);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      event.target.value = '';
+    }
+
+    // Remove image
+    function removeImage(index) {
+      const survey = surveyData[currentExhibitorId];
+      if (survey && survey.images) {
+        survey.images.splice(index, 1);
+        openModal(currentExhibitorId); // Refresh modal
+      }
+    }
+
+    // Save record
+    function saveRecord() {
+      const survey = {
+        visitDate: document.getElementById('visitDate').value,
+        visitorName: document.getElementById('visitorName').value,
+        rating: document.getElementById('rating').value,
+        comments: document.getElementById('comments').value,
+        status: document.getElementById('status').value,
+        images: surveyData[currentExhibitorId]?.images || [],
+        lastUpdated: new Date().toISOString()
+      };
+
+      surveyData[currentExhibitorId] = survey;
+      saveSurveyData();
+
+      alert('💾 保存しました！');
+      closeModal();
+      filterData(); // Refresh table
+    }
+
+    // Export data
+    function exportData() {
+      const exportObj = {
+        version: '1.0',
+        exportDate: new Date().toISOString(),
+        exhibitorData: exhibitors,
+        surveyData: surveyData
+      };
+
+      const dataStr = JSON.stringify(exportObj, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `SEMICON_SEA_2026_調査データ_${new Date().toISOString().slice(0, 10)}.json`;
+      link.click();
+
+      URL.revokeObjectURL(url);
+      alert('📥 データをエクスポートしました！');
+    }
+
+    // Import data
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+
+          if (confirm('現在のデータに上書きしますか？（キャンセルでマージ）')) {
+            surveyData = imported.surveyData;
+          } else {
+            // Merge data
+            Object.assign(surveyData, imported.surveyData);
+          }
+
+          saveSurveyData();
+          filterData();
+          alert('📤 データをインポートしました！');
+        } catch (err) {
+          alert('❌ エラー: ファイルの読み込みに失敗しました');
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    // Event listeners
+    document.getElementById('searchInput').addEventListener('input', filterData);
+    document.getElementById('filterStar').addEventListener('change', filterData);
+    document.getElementById('filterVisited').addEventListener('change', filterData);
+    document.getElementById('filterRating').addEventListener('change', filterData);
+    document.getElementById('filterAITarget').addEventListener('change', filterData);
+
+    document.querySelectorAll('th.sortable').forEach(th => {
+      th.addEventListener('click', () => {
+        sortData(th.dataset.sort);
+      });
+    });
+
+    // Close modal on outside click
+    window.onclick = function (event) {
+      if (event.target == document.getElementById('detailModal')) {
+        closeModal();
+      }
+    }
+
+    // Initialize alphabet filter
+    function initAlphabetFilter() {
+      const container = document.getElementById('alphabetFilter');
+      const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+      // Add alphabet buttons
+      alphabet.forEach(letter => {
+        const btn = document.createElement('button');
+        btn.className = 'alphabet-btn';
+        btn.textContent = letter;
+        btn.onclick = () => {
+          if (selectedAlphabet === letter) {
+            // Toggle off
+            selectedAlphabet = '';
+            document.querySelectorAll('.alphabet-btn').forEach(b => b.classList.remove('active'));
+          } else {
+            // Toggle on
+            selectedAlphabet = letter;
+            document.querySelectorAll('.alphabet-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          }
+          filterData();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    // Initialize
+    initAlphabetFilter();
+    loadSurveyData();
+    filterData();
+  </script>
+</body>
+
+</html>

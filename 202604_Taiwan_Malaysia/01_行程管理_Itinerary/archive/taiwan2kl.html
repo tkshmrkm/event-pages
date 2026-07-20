@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="台湾・マレーシア出張旅程表 2026年4月28日-5月7日">
+    <meta name="theme-color" content="#1e3a8a" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1e293b" media="(prefers-color-scheme: dark)">
+    <title>海外出張旅程表 2026</title>
+    <script src="https://cdn.tailwindcss.com?v=3.4.1"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+        :root {
+            --bg-primary: #f3f4f6;
+            --bg-secondary: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --accent-color: #1e3a8a;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #0f172a;
+                --bg-secondary: #1e293b;
+                --text-primary: #f1f5f9;
+                --text-secondary: #94a3b8;
+                --border-color: #334155;
+                --accent-color: #3b82f6;
+            }
+            body { background-color: var(--bg-primary); color: var(--text-primary); }
+            .bg-gray-100 { background-color: var(--bg-primary) !important; }
+            .bg-white { background-color: var(--bg-secondary) !important; }
+            .text-gray-800 { color: var(--text-primary) !important; }
+            .text-gray-600 { color: var(--text-secondary) !important; }
+            .border-gray-200, .border-gray-100 { border-color: var(--border-color) !important; }
+            .bg-gray-50 { background-color: #334155 !important; }
+            .sticky-date { background: var(--bg-primary) !important; }
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .timeline-line { position: absolute; left: 1.25rem; top: 2.5rem; bottom: 0; width: 2px; background-color: var(--border-color); z-index: 0; }
+        .timeline-item:last-child .timeline-line { display: none; }
+        .check-box input:checked + div { background-color: #10B981; border-color: #10B981; color: white; text-decoration: line-through; opacity: 0.7; }
+        .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 50; }
+        .toast.show { opacity: 1; }
+        .sticky-date { position: sticky; top: 0; z-index: 20; padding-top: 1rem; padding-bottom: 0.5rem; background: var(--bg-primary); }
+        .today-highlight { box-shadow: 0 0 0 3px #fbbf24; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 3px #fbbf24; } 50% { box-shadow: 0 0 0 6px rgba(251, 191, 36, 0.5); } }
+        .upcoming-action { position: relative; }
+        .upcoming-action::before { content: '🔔'; position: absolute; top: -8px; right: -8px; font-size: 1.2rem; animation: ring 1s ease-in-out infinite; }
+        @keyframes ring { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(15deg); } 75% { transform: rotate(-15deg); } }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 pb-24">
+
+    <!-- Header -->
+    <header class="bg-blue-900 text-white p-4 sticky top-0 z-40 shadow-lg" role="banner">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-lg font-bold">海外出張旅程表 2026</h1>
+                <p class="text-xs text-blue-200">台湾 & マレーシア (4/28 - 5/7)</p>
+            </div>
+            <div class="text-right">
+                <span class="block text-xs font-bold bg-yellow-500 text-blue-900 px-2 py-1 rounded" role="status" aria-label="JAL会員ステータス">JAL Sapphire</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-md mx-auto p-4" role="main">
+
+        <!-- TAB 1: SUMMARY (携帯用サマリー) -->
+        <div id="tab-summary" class="tab-content active">
+            
+            <!-- Cards -->
+            <div class="space-y-4">
+                <!-- Flight Card -->
+                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                    <div class="bg-blue-800 text-white p-3 flex justify-between items-center">
+                        <h2 class="font-bold text-sm"><i class="fas fa-plane mr-2"></i>フライト情報</h2>
+                    </div>
+                    <div class="p-4 text-sm space-y-3">
+                        <div class="flex justify-between border-b pb-2">
+                            <div><span class="text-xs text-gray-500 block">4/28 往路</span><span class="font-bold">CX565</span></div>
+                            <div class="text-right">KIX 16:20 <i class="fas fa-arrow-right text-gray-400 mx-1"></i> TPE 18:15</div>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <div><span class="text-xs text-gray-500 block">5/02 移動</span><span class="font-bold">MH367</span></div>
+                            <div class="text-right">TPE 15:10 <i class="fas fa-arrow-right text-gray-400 mx-1"></i> KUL 20:05</div>
+                        </div>
+                        <div class="flex justify-between">
+                            <div><span class="text-xs text-gray-500 block">5/06 復路</span><span class="font-bold">MH052</span></div>
+                            <div class="text-right">KUL 22:25 <i class="fas fa-arrow-right text-gray-400 mx-1"></i> KIX 05:40<small>+1</small></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel Card Taipei -->
+                <div class="bg-white rounded-xl shadow-sm p-4 border-l-4 border-teal-500">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-gray-800">🏨 台北: K Hotel Dunnan</h3>
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded">4/28-5/2</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">柯達大飯店 台北敦南</p>
+                    <div class="bg-gray-50 p-2 rounded text-xs text-gray-600 mb-2 break-all relative group">
+                        No. 238, Section 2, Dunhua S Rd, Da'an District, Taipei
+                        <button onclick="copyToClipboard('No. 238, Section 2, Dunhua S Rd, Da\'an District, Taipei')" class="absolute top-1 right-1 text-blue-500 p-1" aria-label="住所をコピー"><i class="far fa-copy" aria-hidden="true"></i></button>
+                    </div>
+                    <a href="tel:+886227323333" class="inline-flex items-center text-sm text-blue-600 font-bold"><i class="fas fa-phone-alt mr-2"></i> +886-2-2732-3333</a>
+                </div>
+
+                <!-- Hotel Card KL -->
+                <div class="bg-white rounded-xl shadow-sm p-4 border-l-4 border-purple-500">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-gray-800">🏨 KL: Holiday Inn Express KLCC</h3>
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded">5/2-5/6</span>
+                    </div>
+                    <div class="bg-gray-50 p-2 rounded text-xs text-gray-600 mb-2 break-all relative">
+                        84, Jalan Raja Chulan, 50200 Kuala Lumpur
+                        <button onclick="copyToClipboard('84, Jalan Raja Chulan, 50200 Kuala Lumpur')" class="absolute top-1 right-1 text-blue-500 p-1" aria-label="住所をコピー"><i class="far fa-copy" aria-hidden="true"></i></button>
+                    </div>
+                    <a href="tel:+60321611111" class="inline-flex items-center text-sm text-blue-600 font-bold"><i class="fas fa-phone-alt mr-2"></i> +60-3-2161-1111</a>
+                </div>
+
+                <!-- Emergency Contacts -->
+                <div class="bg-red-50 rounded-xl p-4 border border-red-100">
+                    <h3 class="font-bold text-red-800 mb-3 text-sm"><i class="fas fa-exclamation-circle mr-2"></i>緊急連絡先</h3>
+                    <div class="grid grid-cols-1 gap-2 text-sm">
+                         <div class="flex justify-between items-center py-1 border-b border-red-100">
+                            <span>会社緊急連絡先</span>
+                            <a href="tel:0300000000" class="text-red-600 font-bold"><i class="fas fa-phone"></i> 発信</a>
+                        </div>
+                        <div class="flex justify-between items-center py-1 border-b border-red-100">
+                            <span>台湾 日本窓口 (交流協会)</span>
+                            <a href="tel:+886227138000" class="text-red-600 font-bold"><i class="fas fa-phone"></i> +886-2-2713-8000</a>
+                        </div>
+                        <div class="flex justify-between items-center py-1">
+                            <span>マレーシア日本国大使館</span>
+                            <a href="tel:+60321772600" class="text-red-600 font-bold"><i class="fas fa-phone"></i> +60-3-2177-2600</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 2: DETAIL (詳細旅程 - 実務用) -->
+        <div id="tab-detail" class="tab-content">
+            <div class="space-y-2 relative pl-2">
+                
+                <!-- Day 1: 4/28 -->
+                <div class="sticky-date">
+                    <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">4/28 (火) 移動日 (JP → TW)</span>
+                </div>
+                
+                <div class="timeline-item relative z-10 pb-4">
+                    <div class="timeline-line"></div>
+                    <div class="ml-8 space-y-3">
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-gray-400">
+                            <div class="text-xs text-gray-500">09:00 - 12:00</div>
+                            <div class="font-bold text-gray-800">WEB会議 (自宅)</div>
+                            <div class="text-sm text-gray-600">中書島自宅にて。昼食は駅で購入推奨。</div>
+                        </div>
+
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-400">
+                            <div class="text-xs text-gray-500">12:30 発</div>
+                            <div class="font-bold text-gray-800">自宅出発 → 京都駅</div>
+                            <div class="text-sm text-gray-600">MKタクシーまたは近鉄+京阪</div>
+                            <div class="mt-2 text-xs bg-gray-50 p-2 rounded">
+                                <i class="fas fa-train mr-1"></i><b>13:00 京都駅発 はるか</b> (チケットレス手配)
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500">
+                            <div class="text-xs text-gray-500">14:20 着 / 16:20 発</div>
+                            <div class="font-bold text-blue-700">関西国際空港 (KIX)</div>
+                            <ul class="list-disc list-inside text-sm text-gray-600 mt-1">
+                                <li>CXカウンターでJALステータス提示</li>
+                                <li><b>JALサクララウンジ</b>で夕食(カレー等)推奨</li>
+                            </ul>
+                            <div class="mt-2 bg-blue-50 p-2 rounded text-sm font-bold border border-blue-200">
+                                ✈️ CX565 (Cathay) → 台北 (18:15着)
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-teal-500">
+                            <div class="text-xs text-gray-500">18:15 (現地時間)</div>
+                            <div class="font-bold text-gray-800">台北桃園空港 (TPE) 到着</div>
+                            <div class="text-sm text-gray-600 mt-1">
+                                1. 入国審査 (事前Web登録済ならe-Gateへ)<br>
+                                2. RevolutでATM両替 (TWD)<br>
+                                3. eSIMローミングON
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-gray-500">
+                            <div class="text-xs text-gray-500">20:00頃</div>
+                            <div class="font-bold text-gray-800">K Hotel Dunnan チェックイン</div>
+                            <div class="text-sm text-gray-600">
+                                <b>移動: Uber推奨</b> (またはタクシー)<br>
+                                所要約50分 / 1,200-1,400 TWD目安
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2: 4/29 -->
+                <div class="sticky-date">
+                    <span class="bg-teal-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">4/29 (水) 実験 Day1 🎌</span>
+                </div>
+                
+                <div class="timeline-item relative z-10 pb-4">
+                    <div class="timeline-line"></div>
+                    <div class="ml-8 space-y-3">
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                            <div class="text-xs text-gray-500">08:30 発</div>
+                            <div class="font-bold text-gray-800">ホテル出発</div>
+                            <div class="text-sm text-gray-600"><b>Uber手配</b>。機材搬入確認。</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                            <div class="text-xs text-gray-500">09:00 - 18:00</div>
+                            <div class="font-bold text-gray-800">【業務】技術実験</div>
+                            <div class="text-sm text-gray-600">終日対応。昼食は施設近隣。</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-orange-400">
+                            <div class="text-xs text-gray-500">18:00 -</div>
+                            <div class="font-bold text-gray-800">夕食 / 現地会食</div>
+                            <div class="text-sm text-gray-600">現地スタッフと会食の可能性あり</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 3: 4/30 -->
+                <div class="sticky-date">
+                    <span class="bg-teal-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">4/30 (木) 実験 Day2</span>
+                </div>
+
+                <div class="timeline-item relative z-10 pb-4">
+                    <div class="timeline-line"></div>
+                    <div class="ml-8 space-y-3">
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                            <div class="text-xs text-gray-500">09:00 - 18:00</div>
+                            <div class="font-bold text-gray-800">【業務】技術実験</div>
+                            <div class="text-sm text-gray-600">終日対応。実験終了・撤収。</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-orange-400">
+                            <div class="text-xs text-gray-500">19:00 -</div>
+                            <div class="font-bold text-gray-800">夕食 (台北市内)</div>
+                            <div class="text-sm text-gray-600">大安区周辺 または 夜市(通化街)など</div>
+                        </div>
+                         <!-- Alert MDAC -->
+                         <div class="bg-red-50 p-3 rounded-lg border border-red-200">
+                            <div class="font-bold text-red-800 text-xs"><i class="fas fa-exclamation-circle mr-1"></i>MDAC登録期間開始</div>
+                            <div class="text-xs text-red-600">マレーシア入国のための登録が可能になります。本日中に済ませるのが安全です。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 4: 5/1 -->
+                <div class="sticky-date">
+                    <span class="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">5/01 (金) WEB会議 (祝日)</span>
+                </div>
+                
+                <div class="timeline-item relative z-10 pb-4">
+                    <div class="timeline-line"></div>
+                    <div class="ml-8 space-y-3">
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-red-500">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="text-xs text-red-500 font-bold">⚠️時差注意: 日本09:00開始</div>
+                                    <div class="font-bold text-gray-800">【業務】WEB会議 (終日)</div>
+                                </div>
+                                <i class="fas fa-video text-gray-300"></i>
+                            </div>
+                            <div class="mt-2 text-sm bg-gray-50 p-2 rounded border border-gray-100">
+                                <div class="font-bold text-red-600 text-lg">現地時間 08:00 開始</div>
+                                <div class="text-xs text-gray-500 mt-1">※背景設定・マイク確認</div>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-2">
+                                <i class="fas fa-utensils mr-1"></i>昼食: メーデー(祝日)のためUber Eatsかコンビニ推奨
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                            <div class="font-bold text-blue-800 text-xs"><i class="fas fa-check-double mr-1"></i>TODO: パッキング & MDAC最終確認</div>
+                            <div class="text-xs text-blue-600">明日の移動に備え、週末の為替手数料回避のためRevolut両替推奨</div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Day 5: 5/2 -->
+                 <div class="sticky-date">
+                    <span class="bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">5/02 (土) 移動 (TW → MY)</span>
+                </div>
+                
+                <div class="timeline-item relative z-10 pb-4">
+                    <div class="timeline-line"></div>
+                    <div class="ml-8 space-y-3">
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-gray-400">
+                            <div class="text-xs text-gray-500">11:30 発</div>
+                            <div class="font-bold text-gray-800">ホテルチェックアウト</div>
+                            <div class="text-sm text-gray-600">タクシーで桃園空港(TPE)へ (約50分)</div>
+                        </div>
+
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500">
+                            <div class="text-xs text-gray-500">13:00 (空港)</div>
+                            <div class="font-bold text-gray-800">チェックイン & ラウンジ</div>
+                            <div class="text-sm text-gray-600">Cathay Lounge (ヌードルバーで昼食推奨)</div>
+                            <div class="mt-2 bg-blue-50 p-2 rounded text-sm font-bold border border-blue-200">
+                                ✈️ MH367 (15:10発) → KL (20:05着)
+                            </div>
+                        </div>
+
+                         <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-purple-500">
+                            <div class="text-xs text-gray-500">20:05 着 (KLIA)</div>
+                            <div class="font-bold text-gray-800">マレーシア入国</div>
+                            <div class="text-sm text-gray-600">
+                                <span class="text-red-600 font-bold">MDAC提示必須</span><br>
+                                入国後、<b>Grabで市内へ</b> (Door 3/4付近)
+                            </div>
+                        </div>
+
+                         <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-purple-500">
+                            <div class="text-xs text-gray-500">22:00頃</div>
+                            <div class="font-bold text-gray-800">Holiday Inn Express KLCC</div>
+                            <div class="text-xs text-gray-500">※チェックイン時デポジット(Amex等)必要</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 6: 5/3 -->
+                <div class="sticky-date">
+                    <span class="bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">5/03 (日) 予備日・休息</span>
+                </div>
+                
+                <div class="timeline-item relative z-10 pb-4">
+                    <div class="timeline-line"></div>
+                    <div class="ml-8 space-y-3">
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-gray-300">
+                            <div class="font-bold text-gray-800">終日フリー・休息</div>
+                            <div class="text-sm text-gray-600">
+                                ・洗濯、メール処理<br>
+                                ・近隣散策 (Pavilion KL / KLCC公園)<br>
+                                ・立地が良いので徒歩圏内で完了可能
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 7: 5/4 -->
+                <div class="sticky-date">
+                    <span class="bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">5/04 (月) 市場視察</span>
+                </div>
+                
+                <div class="timeline-item relative z-10 pb-4">
+                    <div class="timeline-line"></div>
+                    <div class="ml-8 space-y-3">
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                            <div class="text-xs text-gray-500">10:00 -</div>
+                            <div class="font-bold text-gray-800">視察① The Exchange TRX</div>
+                            <div class="text-sm text-gray-600">ホテルから<b>Grab約10分</b>。最新モールの物流動線確認。</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                            <div class="text-xs text-gray-500">14:00 -</div>
+                            <div class="font-bold text-gray-800">視察② Pavilion KL</div>
+                            <div class="text-sm text-gray-600">徒歩圏内。小売店舗の省人化確認。</div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Day 8: 5/5 -->
+                 <div class="sticky-date">
+                    <span class="bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">5/05 (火) SEMICON Day1</span>
+                </div>
+                
+                <div class="timeline-item relative z-10 pb-4">
+                    <div class="timeline-line"></div>
+                    <div class="ml-8 space-y-3">
+                         <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                            <div class="text-xs text-gray-500">08:30 発</div>
+                            <div class="font-bold text-gray-800">ホテル出発 (Grab)</div>
+                            <div class="text-sm text-red-600 font-bold">⚠️朝の渋滞注意 (通常20分→40分想定)</div>
+                            <div class="text-sm text-gray-600">会場: MITECへ</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                            <div class="text-xs text-gray-500">10:00 - 18:00</div>
+                            <div class="font-bold text-gray-800">SEMICON SEA 参加</div>
+                            <div class="text-sm text-gray-600">入場パス(QR)準備。名刺・レポート用メモ。</div>
+                        </div>
+                    </div>
+                </div>
+                
+                 <!-- Day 9: 5/6 -->
+                 <div class="sticky-date">
+                    <span class="bg-gray-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">5/06 (水) 帰国日</span>
+                </div>
+                
+                <div class="timeline-item relative z-10 pb-4">
+                    <div class="timeline-line"></div>
+                    <div class="ml-8 space-y-3">
+                         <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-gray-400">
+                            <div class="text-xs text-gray-500">08:00</div>
+                            <div class="font-bold text-gray-800">チェックアウト</div>
+                            <div class="text-sm text-gray-600">荷物をホテルへ預けて会場へ</div>
+                        </div>
+                         <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-yellow-500">
+                            <div class="text-xs text-gray-500">09:30 - 16:00</div>
+                            <div class="font-bold text-gray-800">SEMICON SEA 2日目</div>
+                            <div class="text-sm text-gray-600">16:00撤収。ホテルへ荷物ピック。</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500">
+                            <div class="text-xs text-gray-500">17:30 移動</div>
+                            <div class="font-bold text-gray-800">空港へ移動</div>
+                            <div class="text-sm text-gray-600">夕方の豪雨・渋滞リスクあり。<br>確実性重視ならKL SentralからKLIA Express。</div>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500">
+                            <div class="text-xs text-gray-500">20:00 (空港)</div>
+                            <div class="font-bold text-gray-800">MAS Golden Lounge</div>
+                            <div class="text-sm text-gray-600 font-bold text-blue-600">🚿 ここでシャワーを浴びて着替える</div>
+                            <div class="mt-2 bg-blue-50 p-2 rounded text-sm font-bold border border-blue-200">
+                                ✈️ MH052 (22:25発) → KIX (翌05:40着)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 10: 5/7 -->
+                <div class="sticky-date">
+                    <span class="bg-gray-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">5/07 (木) 帰国完了</span>
+                </div>
+                
+                <div class="timeline-item relative z-10 pb-8">
+                    <div class="timeline-line"></div>
+                    <div class="ml-8 space-y-3">
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-teal-500">
+                            <div class="text-xs text-gray-500">05:40 着</div>
+                            <div class="font-bold text-gray-800">関西国際空港 (KIX) 到着</div>
+                            <div class="text-sm text-gray-600">お帰りなさいませ。<br>自動化ゲートでスムーズに入国。</div>
+                        </div>
+
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-400">
+                            <div class="text-xs text-gray-500">06:30 頃発</div>
+                            <div class="font-bold text-gray-800">自宅へ移動</div>
+                            <div class="text-sm text-gray-600">
+                                <i class="fas fa-train mr-1"></i>はるか / リムジンバス / MK<br>
+                                朝のラッシュに注意して帰宅。
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-green-500">
+                            <div class="text-xs text-gray-500">08:00 頃着</div>
+                            <div class="font-bold text-gray-800">京都 (自宅/職場) 到着</div>
+                            <div class="text-sm text-gray-600 font-bold text-green-700">🏁 出張完了、お疲れ様でした！</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 3: FAMILY (家族共有) -->
+        <div id="tab-family" class="tab-content">
+            <div class="bg-white rounded-xl shadow-sm p-4 mb-4">
+                <p class="text-sm text-gray-600 mb-4 bg-yellow-50 p-3 rounded border border-yellow-100">
+                    <i class="fas fa-info-circle mr-2"></i>ご家族へ：今回の出張は台湾とマレーシアの2カ国です。5/1は台湾のホテルで一日会議をしています。
+                </p>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-600">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-2 py-2">日付</th>
+                                <th scope="col" class="px-2 py-2">場所</th>
+                                <th scope="col" class="px-2 py-2">連絡推奨(JP)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="px-2 py-3 font-bold">4/28 (火)</td>
+                                <td class="px-2 py-3">京都 → 台湾</td>
+                                <td class="px-2 py-3 text-green-600">21時以降</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="px-2 py-3 font-bold">4/29 (水)</td>
+                                <td class="px-2 py-3">台湾 (実験)</td>
+                                <td class="px-2 py-3 text-green-600">21時以降</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="px-2 py-3 font-bold">4/30 (木)</td>
+                                <td class="px-2 py-3">台湾 (実験)</td>
+                                <td class="px-2 py-3 text-green-600">21時以降</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="px-2 py-3 font-bold">5/01 (金)</td>
+                                <td class="px-2 py-3">台湾 (WEB会議)</td>
+                                <td class="px-2 py-3 text-green-600">19時以降</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="px-2 py-3 font-bold">5/02 (土)</td>
+                                <td class="px-2 py-3">台湾 → マレーシア</td>
+                                <td class="px-2 py-3 text-green-600">23時以降</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="px-2 py-3 font-bold">5/03 (日)</td>
+                                <td class="px-2 py-3">マレーシア(休日)</td>
+                                <td class="px-2 py-3 text-green-600">終日可</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="px-2 py-3 font-bold">5/04 (月)</td>
+                                <td class="px-2 py-3">マレーシア(視察)</td>
+                                <td class="px-2 py-3 text-green-600">20時以降</td>
+                            </tr>
+                             <tr class="border-b">
+                                <td class="px-2 py-3 font-bold">5/05 (火)</td>
+                                <td class="px-2 py-3">マレーシア(展示会)</td>
+                                <td class="px-2 py-3 text-green-600">20時以降</td>
+                            </tr>
+                             <tr class="border-b">
+                                <td class="px-2 py-3 font-bold">5/06 (水)</td>
+                                <td class="px-2 py-3">マレーシア→機内</td>
+                                <td class="px-2 py-3 text-green-600">18時頃まで</td>
+                            </tr>
+                            <tr>
+                                <td class="px-2 py-3 font-bold">5/07 (木)</td>
+                                <td class="px-2 py-3">朝8時に帰宅予定</td>
+                                <td class="px-2 py-3 text-green-600">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: TIPS (入国・準備) -->
+        <div id="tab-tips" class="tab-content">
+            
+            <!-- Checklist -->
+            <div class="bg-white rounded-xl shadow-sm p-4 mb-4">
+                <h3 class="font-bold text-gray-800 mb-3"><i class="fas fa-clipboard-check mr-2"></i>準備・携行品チェックリスト</h3>
+                <div class="space-y-2">
+                    <label class="check-box flex cursor-pointer items-center">
+                        <input type="checkbox" class="hidden" onchange="saveCheck(this, 'c1')">
+                        <div class="w-full p-3 bg-gray-50 rounded border border-gray-200 text-sm transition-all duration-200">
+                            🇹🇼 台湾 入国カード (オンライン)
+                        </div>
+                    </label>
+                    <label class="check-box flex cursor-pointer items-center">
+                        <input type="checkbox" class="hidden" onchange="saveCheck(this, 'c2')">
+                        <div class="w-full p-3 bg-gray-50 rounded border border-gray-200 text-sm transition-all duration-200">
+                            🇲🇾 マレーシア MDAC (到着3日前〜)
+                        </div>
+                    </label>
+                    <label class="check-box flex cursor-pointer items-center">
+                        <input type="checkbox" class="hidden" onchange="saveCheck(this, 'c3')">
+                        <div class="w-full p-3 bg-gray-50 rounded border border-gray-200 text-sm transition-all duration-200">
+                            💳 Revolut 残高チャージ
+                        </div>
+                    </label>
+                    <label class="check-box flex cursor-pointer items-center">
+                        <input type="checkbox" class="hidden" onchange="saveCheck(this, 'c4')">
+                        <div class="w-full p-3 bg-gray-50 rounded border border-gray-200 text-sm transition-all duration-200">
+                            📱 配車アプリ: 台湾はUber / マレーシアはGrab
+                        </div>
+                    </label>
+                    <label class="check-box flex cursor-pointer items-center">
+                        <input type="checkbox" class="hidden" onchange="saveCheck(this, 'c5')">
+                        <div class="w-full p-3 bg-gray-50 rounded border border-gray-200 text-sm transition-all duration-200">
+                            📄 E-Ticket控え / ホテル予約確認書
+                        </div>
+                    </label>
+                     <label class="check-box flex cursor-pointer items-center">
+                        <input type="checkbox" class="hidden" onchange="saveCheck(this, 'c6')">
+                        <div class="w-full p-3 bg-gray-50 rounded border border-gray-200 text-sm transition-all duration-200">
+                            🔌 変換プラグ (マレーシアはBFタイプ)
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Immigration Info -->
+            <div class="bg-white rounded-xl shadow-sm p-4 mb-4 border-l-4 border-red-500">
+                <h3 class="font-bold text-gray-800 mb-2">👮‍♂️ 入国審査対策 (Business)</h3>
+                <div class="text-sm space-y-3">
+                    <div class="bg-red-50 p-3 rounded">
+                        <p class="font-bold text-red-700 mb-1">NGワード: "Work"</p>
+                        <p class="text-gray-700">就労(お金を稼ぐ)と誤解されトラブルの元です。</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-gray-700">Q: Purpose? (目的)</p>
+                        <ul class="list-disc list-inside text-gray-600 pl-2">
+                            <li>🇹🇼 "Technical meeting"</li>
+                            <li>🇲🇾 "Attending SEMICON SEA conference"</li>
+                        </ul>
+                    </div>
+                     <div>
+                        <p class="font-bold text-gray-700">Q: How long? (期間)</p>
+                        <p class="text-gray-600 pl-2">"5 days." (Return on May 6th)</p>
+                    </div>
+                </div>
+            </div>
+
+             <!-- MDAC Link -->
+             <div class="bg-blue-600 text-white rounded-xl shadow-sm p-4 mb-4 text-center">
+                <h3 class="font-bold mb-2">🇲🇾 MDAC登録 (必須)</h3>
+                <p class="text-xs mb-3 text-blue-100">
+                    到着3日前(4/30以降)に必ず登録してください。<br>
+                    登録後、最初の入国でもAutogate利用可能です。
+                </p>
+                <a href="https://imigresen-online.imi.gov.my/mdac/main" target="_blank" class="block bg-white text-blue-600 font-bold py-2 px-4 rounded-full text-sm">
+                    登録サイトを開く (.gov.my) <i class="fas fa-external-link-alt ml-1"></i>
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 pb-safe" role="navigation" aria-label="メインナビゲーション">
+        <div class="flex justify-around items-center h-16 max-w-md mx-auto">
+            <button onclick="switchTab('summary')" class="nav-btn active flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-blue-600 transition-colors" data-target="summary" aria-label="サマリータブ" aria-pressed="true">
+                <i class="fas fa-passport text-xl mb-1" aria-hidden="true"></i>
+                <span class="text-[10px] font-bold">サマリー</span>
+            </button>
+            <button onclick="switchTab('detail')" class="nav-btn flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-blue-600 transition-colors" data-target="detail" aria-label="詳細旅程タブ" aria-pressed="false">
+                <i class="fas fa-list-ul text-xl mb-1" aria-hidden="true"></i>
+                <span class="text-[10px] font-bold">詳細旅程</span>
+            </button>
+            <button onclick="switchTab('family')" class="nav-btn flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-blue-600 transition-colors" data-target="family" aria-label="家族共有タブ" aria-pressed="false">
+                <i class="fas fa-users text-xl mb-1" aria-hidden="true"></i>
+                <span class="text-[10px] font-bold">家族共有</span>
+            </button>
+            <button onclick="switchTab('tips')" class="nav-btn flex flex-col items-center justify-center w-full h-full text-gray-400 hover:text-blue-600 transition-colors" data-target="tips" aria-label="入国Tipsタブ" aria-pressed="false">
+                <i class="fas fa-info-circle text-xl mb-1" aria-hidden="true"></i>
+                <span class="text-[10px] font-bold">入国Tips</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" role="status" aria-live="polite">コピーしました</div>
+
+    <script>
+        // Tab Switching Logic with Keyboard Support
+        function switchTab(tabId) {
+            // Hide all contents
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            // Show selected content
+            document.getElementById('tab-' + tabId).classList.add('active');
+
+            // Update Nav Buttons and ARIA
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                const isActive = btn.dataset.target === tabId;
+                btn.setAttribute('aria-pressed', isActive);
+                if(isActive) {
+                    btn.classList.add('text-blue-600');
+                    btn.classList.remove('text-gray-400');
+                } else {
+                    btn.classList.remove('text-blue-600');
+                    btn.classList.add('text-gray-400');
+                }
+            });
+
+            // Scroll to top
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // Keyboard Navigation Support
+        document.addEventListener('keydown', (e) => {
+            if (e.altKey) {
+                const tabs = ['summary', 'detail', 'family', 'tips'];
+                const key = e.key;
+                if (key >= '1' && key <= '4') {
+                    e.preventDefault();
+                    switchTab(tabs[parseInt(key) - 1]);
+                }
+            }
+        });
+
+        // Initialize Tabs and Today Highlight
+        document.addEventListener('DOMContentLoaded', () => {
+            switchTab('summary');
+            loadChecks();
+            highlightToday();
+            highlightUpcomingActions();
+        });
+
+        // Highlight Today's Schedule
+        function highlightToday() {
+            const today = new Date();
+            const month = today.getMonth() + 1;
+            const date = today.getDate();
+
+            // 4/28 - 5/7の期間中かチェック
+            if ((month === 4 && date >= 28) || (month === 5 && date <= 7)) {
+                const dateLabels = document.querySelectorAll('.sticky-date span');
+                dateLabels.forEach(label => {
+                    const text = label.textContent;
+                    if (text.includes(`${month}/${String(date).padStart(2, '0')}`)) {
+                        label.classList.add('today-highlight');
+                        label.setAttribute('aria-label', '本日の予定');
+                    }
+                });
+            }
+        }
+
+        // Highlight Upcoming Actions (next 2 hours)
+        function highlightUpcomingActions() {
+            const now = new Date();
+            // この機能は必要に応じて時刻を解析して実装
+            // 簡易実装のため省略
+        }
+
+        // Copy to Clipboard (Modern Clipboard API with Fallback)
+        async function copyToClipboard(text) {
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(text);
+                    showToast('コピーしました');
+                } else {
+                    // Fallback for older browsers
+                    const el = document.createElement('textarea');
+                    el.value = text;
+                    el.style.position = 'absolute';
+                    el.style.left = '-9999px';
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+                    showToast('コピーしました');
+                }
+            } catch (err) {
+                console.error('コピーに失敗しました:', err);
+                showToast('コピーに失敗しました', true);
+            }
+        }
+
+        function showToast(message = 'コピーしました', isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            if (isError) {
+                toast.style.background = 'rgba(239, 68, 68, 0.9)';
+            } else {
+                toast.style.background = 'rgba(0, 0, 0, 0.8)';
+            }
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Checklist Logic (LocalStorage with Error Handling)
+        function saveCheck(checkbox, id) {
+            try {
+                localStorage.setItem(id, checkbox.checked);
+            } catch (e) {
+                console.warn('LocalStorageへの保存に失敗しました:', e);
+            }
+        }
+
+        function loadChecks() {
+            const checks = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
+            checks.forEach(id => {
+                try {
+                    const checked = localStorage.getItem(id) === 'true';
+                    const inputs = document.querySelectorAll(`input[onchange="saveCheck(this, '${id}')"]`);
+                    inputs.forEach(input => input.checked = checked);
+                } catch (e) {
+                    console.warn('LocalStorageからの読み込みに失敗しました:', e);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
