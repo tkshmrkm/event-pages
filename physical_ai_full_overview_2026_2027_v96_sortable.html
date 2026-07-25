@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Physical AI関連 国際会議・展示会 俯瞰資料 2026–2028 | v96 sortable</title>
+<style>
+:root {
+  --bg:#f6f8fb; --panel:#fff; --ink:#172033; --muted:#64748b; --line:#d8e0ec;
+  --blue:#1d4ed8; --green:#047857; --orange:#b45309; --purple:#6d28d9; --rose:#be123c;
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP","Yu Gothic",Meiryo,sans-serif; line-height:1.62; }
+.wrap { max-width:1680px; margin:0 auto; padding:30px 22px 56px; }
+header { background:linear-gradient(135deg,#0f172a,#1e3a8a); color:#fff; padding:32px 34px; border-radius:22px; margin-bottom:22px; box-shadow:0 12px 28px rgba(15,23,42,.18); }
+h1 { margin:0 0 8px; font-size:30px; letter-spacing:.02em; }
+.subtitle { margin:0; color:#dbeafe; font-size:15px; }
+.meta { margin-top:14px; color:#bfdbfe; font-size:13px; }
+.section { background:var(--panel); border:1px solid var(--line); border-radius:18px; box-shadow:0 6px 18px rgba(15,23,42,.05); padding:22px; margin-top:18px; }
+h2 { margin:0 0 14px; font-size:21px; }
+.message { border-left:5px solid var(--blue); background:#eff6ff; padding:14px 16px; border-radius:12px; margin:12px 0; }
+.note { border-left:5px solid var(--orange); background:#fffbeb; padding:14px 16px; border-radius:12px; margin:12px 0; }
+table { width:100%; border-collapse:separate; border-spacing:0; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:#fff; font-size:11.6px; }
+th { background:#f1f5f9; color:#334155; text-align:left; padding:10px; border-bottom:1px solid var(--line); white-space:nowrap; }
+td { padding:10px; border-bottom:1px solid var(--line); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+.group { display:inline-block; color:#fff; border-radius:999px; padding:3px 9px; font-weight:700; font-size:11.5px; white-space:nowrap; }
+.core { background:var(--blue); } .industry { background:var(--green); } .implementation { background:var(--orange); } .human { background:var(--purple); } .foresight { background:var(--rose); }
+.badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11.2px; font-weight:700; white-space:nowrap; }
+.plan { background:#dcfce7; color:#166534; } .done { background:#dbeafe; color:#1e40af; } .consider { background:#fef3c7; color:#92400e; } .no { background:#f1f5f9; color:#475569; } .track { background:#e0f2fe; color:#075985; } .neutral { background:#f1f5f9; color:#475569; }
+.small { color:var(--muted); font-size:11.2px; }
+.grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; margin-top:16px; }
+.card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:14px; }
+.card h3 { margin:0 0 6px; font-size:15px; } .card p { margin:0; color:var(--muted); font-size:12.5px; }
+.sort-controls { display:grid; grid-template-columns: 1.2fr .9fr .9fr 1fr 1fr 1fr; gap:10px; margin:14px 0 12px; }
+.sort-controls input, .sort-controls select { width:100%; border:1px solid var(--line); border-radius:10px; padding:9px 10px; font-size:13px; background:#fff; }
+.status-filter, .year-filter { grid-column:1 / -1; display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:0; padding:9px 12px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+.status-filter legend, .year-filter legend { padding:0 5px; color:#475569; font-size:12px; font-weight:700; }
+.status-options, .year-options { display:flex; flex-wrap:wrap; gap:7px 12px; }
+.status-check, .year-check { display:inline-flex; align-items:center; gap:5px; cursor:pointer; color:#334155; font-size:12px; white-space:nowrap; }
+.status-check input, .year-check input { width:15px; height:15px; margin:0; padding:0; accent-color:var(--blue); }
+.status-check:has(input:checked), .year-check:has(input:checked) { color:#0f172a; font-weight:700; }
+th.sortable { cursor:pointer; user-select:none; } th.sortable::after { content:" ⇅"; color:#94a3b8; font-size:10px; }
+.counter { color:var(--muted); font-size:12.5px; margin:6px 0 10px; }
+pre { background:#0f172a; color:#e2e8f0; border-radius:14px; padding:18px; white-space:pre-wrap; font-size:12.5px; line-height:1.55; }
+@media print { body { background:#fff; } .wrap { max-width:none; padding:10mm; } header,.section { box-shadow:none; } table { font-size:9.2px; } .sort-controls { display:none; } }
+@media (max-width:1050px) { .grid { grid-template-columns:1fr 1fr; } .sort-controls { grid-template-columns:1fr; } table { font-size:11px; } }
+
+.subsection { margin-top:18px; }
+.subsection h3 { margin:0 0 6px; font-size:17px; color:#0f172a; }
+.split-view { border-top:1px solid var(--line); padding-top:16px; }
+.split-table { margin-top:10px; }
+.split-table th, .split-table td { font-size:10.8px; }
+
+/* 3色分類: 学会・展示会・技術イベント */
+tr.row-conference td { background:#eff6ff; }
+tr.row-exhibition td { background:#ecfdf5; }
+tr.row-tech td { background:#fff7ed; }
+tr.row-conference:hover td { background:#dbeafe; }
+tr.row-exhibition:hover td { background:#d1fae5; }
+tr.row-tech:hover td { background:#ffedd5; }
+.legend { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 14px; }
+.legend-item { display:inline-block; border-radius:999px; padding:5px 11px; font-size:12px; font-weight:700; border:1px solid var(--line); }
+.legend-conference { background:#eff6ff; color:#1e40af; }
+.legend-exhibition { background:#ecfdf5; color:#047857; }
+.legend-tech { background:#fff7ed; color:#b45309; }
+
+/* 3色分類は行の背景色。参加状況バッジのグレーは不参加のステータス表示。 */
+tr.row-conference td { background:#eff6ff !important; }
+tr.row-exhibition td { background:#ecfdf5 !important; }
+tr.row-tech td { background:#fff7ed !important; }
+tr.row-conference:hover td { background:#dbeafe !important; }
+tr.row-exhibition:hover td { background:#d1fae5 !important; }
+tr.row-tech:hover td { background:#ffedd5 !important; }
+
+/* 3分類は行全体ではなく種別欄ラベルで表示 */
+tr.row-conference td, tr.row-exhibition td, tr.row-tech td,
+tr.row-conference:hover td, tr.row-exhibition:hover td, tr.row-tech:hover td {
+  background:inherit !important;
+}
+.type-pill {
+  display:inline-block;
+  border-radius:999px;
+  padding:3px 8px;
+  font-size:11px;
+  font-weight:700;
+  white-space:nowrap;
+  border:1px solid var(--line);
+}
+.type-conference { background:#eff6ff; color:#1e40af; border-color:#bfdbfe; }
+.type-exhibition { background:#ecfdf5; color:#047857; border-color:#bbf7d0; }
+.type-tech { background:#fff7ed; color:#b45309; border-color:#fed7aa; }
+
+/* 部門予算化候補アイコン */
+.budget-icon {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:18px;
+  height:18px;
+  margin-right:5px;
+  border-radius:999px;
+  background:#fef3c7;
+  color:#92400e;
+  font-size:12px;
+  font-weight:700;
+  vertical-align:middle;
+  border:1px solid #fcd34d;
+}
+.budget-legend {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+  margin:10px 0 12px;
+  padding:8px 10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fffbeb;
+  color:#78350f;
+  font-size:12px;
+}
+
+/* 参加状況バッジ色の統一 */
+.badge.done { background:#dcfce7 !important; color:#166534 !important; border:1px solid #86efac !important; }
+.badge.planned { background:#dbeafe !important; color:#1d4ed8 !important; border:1px solid #93c5fd !important; }
+.badge.consider { background:#fef3c7 !important; color:#92400e !important; border:1px solid #fcd34d !important; }
+.badge.candidate { background:#f5f3ff !important; color:#6d28d9 !important; border:1px solid #c4b5fd !important; }
+.badge.none { background:#f1f5f9 !important; color:#475569 !important; border:1px solid #cbd5e1 !important; }
+.badge.track { background:#e0f2fe !important; color:#0369a1 !important; border:1px solid #7dd3fc !important; }
+.badge.tbd { background:#f8fafc !important; color:#64748b !important; border:1px solid #cbd5e1 !important; }
+
+#confirmed-date-section table th, #confirmed-date-section table td { font-size:11px; }
+#confirmed-date-section .type-pill { white-space:nowrap; }
+
+.badge.info { background:#f3f4f6 !important; color:#374151 !important; border:1px solid #d1d5db !important; }
+
+/* 開催日が本日より前のイベントはグレーアウトして視認性を下げる */
+#timelineTable tbody tr.row-past { opacity:.45; filter:grayscale(60%); }
+#timelineTable tbody tr.row-past:hover { opacity:.85; filter:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>Physical AI関連 国際会議・展示会 俯瞰資料</h1>
+<p class="subtitle">カテゴリ、参加状況、担当、開催日、開催地を正規化した2026–2028年統合管理表</p>
+<div class="meta">更新日：2026年7月25日 / v96 sortable</div>
+</header>
+<div class="section">
+<h2>1. 全体方針</h2>
+<div class="message">
+Physical AIは、ロボティクス単体ではなく、認識、学習、制御、組込み・エッジ実装、設計最適化、シミュレーション、産業自動化、OR、HRI、国際展示会・見本市、技術探索・事業探索イベントまでを含む複合領域である。
+本資料は、参加可否を自動的に決めるものではなく、村上が判断するために、カテゴリ、開催日、開催地、参加状況、担当、重複を見える化するものである。
+</div>
+<div class="note">更新日：2026年7月25日。終了済みイベントは参加実績に基づき「参加済み」または「不参加」へ更新し、開催中・今後のイベントは「参加予定」「検討中」「候補」「参考情報」等で管理する。</div>
+</div>
+<div class="section">
+<h2>2. 注目カテゴリー</h2>
+<div class="grid">
+<div class="card"><h3>Physical AI中核</h3><p>ロボットが認識し、学習し、物理世界で動作するための中核技術。</p></div>
+<div class="card"><h3>産業適用</h3><p>製造・物流・市場・実機導入・最適運用へ接続する領域。</p></div>
+<div class="card"><h3>設計・実装基盤</h3><p>制御、組込み・エッジ実装、メカ設計、構造最適化、シミュレーションなど。</p></div>
+<div class="card"><h3>人・身体性</h3><p>人との協働、柔軟機構、触覚、接触作業など。</p></div>
+<div class="card"><h3>技術探索・事業探索</h3><p>事業機会、スタートアップ、外部連携、広域トレンド。</p></div>
+</div>
+</div>
+<div class="section" id="department-budget">
+<h2>3. 部門予算化候補</h2>
+<div class="note">
+部門として継続的に予算化する対象を、基幹枠・テーマ連動枠・戦略探索枠に分けて管理する。
+参加人数は確定派遣人数ではなく、年度計画時点の見込み・上限枠として扱う。
+<br/>5・6章では、部門予算化候補に該当するイベント名の前に 💰 アイコンを表示する。<br/>人数・担当は6章の2027年以降候補メモで管理し、3章では扱いのみを示す。</div>
+<h3>3-A. 部門基幹予算枠</h3>
+<table>
+<thead>
+<tr>
+<th>対象</th>
+<th>扱い</th>
+<th>主な目的</th>
+<th>次回開催（日程・場所）</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Hannover Messe</td><td>基幹枠</td><td>欧州製造業、FA、デジタル製造、産業DX</td><td>Hannover Messe 2027：4月5–8日、Hannover Exhibition Grounds, Hannover, Germany</td></tr>
+<tr><td>Automate</td><td>基幹枠</td><td>北米ロボット、自動化、実装動向</td><td>Automate 2027：5月10–13日、Las Vegas Convention Center, Las Vegas, NV, United States</td></tr>
+<tr><td>automatica</td><td>基幹枠</td><td>欧州ロボット、自動化、FA、実機動向</td><td>automatica 2027：6月22–25日、Messe München, Munich, Germany</td></tr>
+<tr><td>SPS</td><td>基幹枠</td><td>制御、PLC、FA、ドライブ、産業ネットワーク</td><td>SPS 2026：11月24–26日、Nuremberg, Germany</td></tr>
+<tr><td>LogiMAT</td><td>基幹枠</td><td>物流、自動倉庫、AGV/AMR、マテハン</td><td>LogiMAT 2027：3月16–18日、Messe Stuttgart, Stuttgart, Germany</td></tr>
+<tr><td>MODEX / ProMAT</td><td>基幹枠</td><td>北米物流自動化、倉庫自動化、サプライチェーン</td><td>ProMat 2027：4月19–21日、McCormick Place, Chicago, IL, United States</td></tr>
+<tr><td>IMTS / EMO</td><td>基幹枠</td><td>工作機械、加工、生産技術、スマートマニュファクチャリング</td><td>IMTS 2026：9月14–19日、McCormick Place, Chicago, IL, United States</td></tr>
+<tr><td>ITMA / ITMA Asia</td><td>基幹枠</td><td>繊維機械、産業機械、材料・工程技術</td><td>ITMA ASIA + CITME 2026：11月20–24日、National Exhibition and Convention Center, Shanghai, China</td></tr>
+<tr><td>GTC</td><td>基幹枠</td><td>Physical AI、AI基盤、Simulation、Omniverse、ロボティクス基盤</td><td>GTC 2027：3月14–18日（本会議15–18日）、San Jose McEnery Convention Center, San Jose, CA, United States</td></tr>
+<tr><td>CES</td><td>戦略探索枠</td><td>AI、ロボット、モビリティ、家電・サービス、将来市場</td><td>CES 2027：1月6–9日、Las Vegas, Nevada, United States</td></tr>
+<tr><td>World Robot Conference and Expo</td><td>戦略探索・予備枠</td><td>中国ロボット産業、ヒューマノイド、政策・標準化・社会実装を確認する戦略探索対象。人数はイベント固有ではなく、年度予算側で管理する。</td><td>World Robot Conference and Expo 2026：8月19–23日、Beijing, China</td></tr>
+</tbody>
+</table>
+<h3>3-B. テーマ連動予算枠</h3>
+<table>
+<thead>
+<tr>
+<th>対象</th>
+<th>扱い</th>
+<th>主な目的</th>
+<th>次回開催（日程・場所）</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>JEC World</td><td>テーマ連動枠</td><td>複合材、材料、軽量化、製造プロセス</td><td>JEC World 2027：3月2–4日、Paris Nord Villepinte, France</td></tr>
+<tr><td>Interclean</td><td>テーマ連動枠</td><td>清掃、衛生、サービスロボット、業界実装</td><td>Interclean Amsterdam 2028：4月4–7日、RAI Amsterdam, Amsterdam, Netherlands（隔年開催のため2027年は無し）</td></tr>
+<tr><td>SEMICON系</td><td>テーマ連動枠</td><td>半導体製造装置、クリーン搬送、精密自動化</td><td>直近はSEMICON Taiwan 2026：9月2–4日、TaiNEX 1&amp;2, Taipei, Taiwan（以降SEMICON West・Europa・Japanが年内に順次開催）</td></tr></tbody>
+</table>
+</div>
+<div class="section" id="tier1-conferences">
+<h2>4. 国際学会</h2>
+<h3>4-1. リスト</h3>
+<div class="note">
+分野を代表するトップティア（Tier1）の国際学会を一覧化する。4-2「判断」（ICRA / CoRL / CVPRのように分野トップティアかつ現地価値が高い会議は個別許可の判断材料として優先的に扱える）を判断する際の参照リストとして用いる。掲載は学会の格付けであり、部門としての参加要否とは別。
+</div>
+<table>
+<thead>
+<tr>
+<th>学会</th>
+<th>分野</th>
+<th>開催サイクル</th>
+<th>Tier1とする根拠</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>ICRA</td><td>Robotics / Physical AI本体</td><td>毎年</td><td>ロボティクス分野最大規模・最高峰の会議の一つ</td></tr>
+<tr><td>IROS</td><td>Robotics / Physical AI本体</td><td>毎年</td><td>ICRAと並ぶロボティクス分野最大級・最高峰の年次会議</td></tr>
+<tr><td>RSS</td><td>Robotics / Physical AI本体</td><td>毎年</td><td>厳選されたシングルトラック開催で、採択率・選考の厳しさで知られる会議</td></tr>
+<tr><td>CoRL</td><td>Robot Learning / AI基盤</td><td>毎年</td><td>4-2「判断」で例示される分野トップティア（Robot Learning）</td></tr>
+<tr><td>CVPR</td><td>Vision / 3D認識</td><td>毎年</td><td>4-2「判断」で例示される分野トップティア（Vision）</td></tr>
+<tr><td>ICCV</td><td>Vision / 3D認識</td><td>隔年・奇数年</td><td>CVPR・ECCVと並ぶComputer Visionの三大会議の一角</td></tr>
+<tr><td>ECCV</td><td>Vision / 3D認識</td><td>隔年・偶数年</td><td>CVPR・ICCVと並ぶComputer Visionの三大会議の一角</td></tr>
+<tr><td>NeurIPS</td><td>Robot Learning / AI基盤</td><td>毎年</td><td>ICML・ICLRと並ぶ機械学習三大会議の一つで、AI基盤分野で最大規模・最高峰</td></tr>
+<tr><td>ICML</td><td>Robot Learning / AI基盤</td><td>毎年</td><td>NeurIPS・ICLRと並ぶ機械学習三大会議の一つ</td></tr>
+<tr><td>ICLR</td><td>Robot Learning / AI基盤</td><td>毎年</td><td>NeurIPS・ICMLと並ぶ機械学習三大会議の一つ、深層学習領域の中核</td></tr>
+<tr><td>SIGGRAPH</td><td>Simulation / Digital Twin / CG</td><td>毎年</td><td>Computer Graphics分野の最高峰会議</td></tr>
+<tr><td>IFAC World Congress</td><td>Control / Motion / Systems</td><td>3年に1度</td><td>制御コミュニティの世界大会。規模・権威ともに最上位</td></tr>
+<tr><td>CDC</td><td>Control / Motion / Systems</td><td>毎年</td><td>ACCと並ぶ制御理論分野の二大フラッグシップ会議の一つ</td></tr>
+<tr><td>ACC</td><td>Control / Motion / Systems</td><td>毎年</td><td>CDCと並ぶ制御理論分野の二大フラッグシップ会議の一つ</td></tr>
+<tr><td>ASME IDETC/CIE</td><td>Mechanical Design / Structural &amp; Multidisciplinary Optimization</td><td>毎年</td><td>設計工学・Design Automation分野のASME最大のフラッグシップ会議</td></tr>
+</tbody>
+</table>
+<h3>4-2. 参加ルール</h3>
+<table>
+<thead><tr><th>項目</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td><strong>判断</strong></td><td>学会は部門予算化・人数配分の対象に含めず、原則「参考情報」として管理する。現地参加は4-1のTier1国際学会リストに掲載されている学会を原則とし、いずれも個別申請に基づき可否を判断する。リスト外の学会に参加する場合は、共同研究先の発表や、今後継続的な参加を検討すべき分野の見極めなど、参加する明確な理由を申請時に示す。理由を確認しない「適当なタイミングでの参加」は行わない。部門派遣としての現地参加は、同一カテゴリ（5章「カテゴリ」列基準）内で代表会議1件を基本とし、重点カテゴリでも代表会議とあわせて最大2件までとする（個人のR&amp;D探索枠としての参加はこの上限の対象外）。確定した参加は部門計画とは分けて実績情報を追記し、参加後は内容を部内で共有する。それ自体は部門予算化を意味しない。5章に掲載済みの学会参加（参加済み・参加予定）は、この基準に基づき取り組み内容を確認のうえリスト化されているものとする。</td></tr>
+<tr><td><strong>人数</strong></td><td>部門派遣における担当者は原則1〜2名とする。</td></tr>
+</tbody>
+</table>
+</div><div class="section" id="confirmed-date-section">
+<h2>5. 開催日確定リスト</h2>
+<div class="note">
+開催日が具体化しているイベントを、2026年と2027年以降をまとめて管理する。学会・展示会・技術カンファレンスの区分、部門予算化候補、参加状況、担当・人数をこの表で確認する。
+</div><div class="small">管理の正本は5章の開催日確定リストと6章の未確定・候補メモに一本化する。ツリー表示は更新漏れ防止のため削除。</div>
+<div class="budget-legend">
+<span class="budget-icon">💰</span> 部門予算化候補
+<span class="small">（確定派遣ではなく、年度計画で予算枠として管理する対象）</span>
+</div>
+<div class="legend">
+<span class="legend-item legend-conference">学会・専門会議</span>
+<span class="legend-item legend-exhibition">展示会・見本市</span>
+<span class="legend-item legend-tech">技術カンファレンス・サミット</span>
+</div><div class="small">参考情報は、派遣候補ではなく技術・市場動向の確認対象として残す。</div>
+<div class="sort-controls" aria-label="開催日確定リストの検索・絞り込み">
+<input id="timelineSearch" type="search" placeholder="イベント・担当・目的などを検索" aria-label="一覧をキーワード検索"/>
+<select id="importanceFilter" aria-label="AI×Robotics重要度で絞り込み"><option value="">重要度：すべて</option></select>
+<select id="businessFitFilter" aria-label="事業適合度で絞り込み"><option value="">事業適合度：すべて</option></select>
+<select id="categoryFilter" aria-label="カテゴリで絞り込み"><option value="">カテゴリ：すべて</option></select>
+<select id="typeFilter" aria-label="種別で絞り込み"><option value="">種別：すべて</option></select>
+<select id="locationFilter" aria-label="開催地で絞り込み"><option value="">開催地：すべて</option></select>
+<label class="status-check" style="grid-column:1 / -1;"><input id="upcomingOnly" type="checkbox"/><span>今後開催のみ表示（開催済みイベントを除く）</span></label>
+<fieldset id="yearFilter" class="year-filter">
+<legend>年（未選択＝すべて）</legend>
+<div id="yearOptions" class="year-options"></div>
+</fieldset>
+<fieldset id="statusFilter" class="status-filter">
+<legend>参加状況（未選択＝すべて）</legend>
+<div id="statusOptions" class="status-options"></div>
+</fieldset>
+</div>
+<div class="counter" id="timelineCounter" aria-live="polite"></div>
+<table id="timelineTable">
+<thead>
+<tr>
+<th class="sortable">年</th>
+<th class="sortable" data-type="date">開催日</th>
+<th class="sortable">イベント</th>
+<th class="sortable">AI×Robotics重要度</th>
+<th class="sortable">事業適合度</th>
+<th class="sortable">カテゴリ</th>
+<th class="sortable">種別</th>
+<th class="sortable">開催地</th>
+<th class="sortable">参加状況</th>
+<th class="sortable">担当・人数</th>
+<th class="sortable">目的・扱い</th>
+</tr>
+</thead>
+<tbody>
+<tr data-datekey="20260106"><td>2026</td><td>1月6–9日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> CES 2026</td><td>★★☆☆☆</td><td>★★☆☆☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Las Vegas, Nevada, United States</td><td><span class="badge done">参加済み</span></td><td>長澤・西田・傳田</td><td>技術探索・事業探索・スタートアップ探索枠</td></tr>
+<tr data-datekey="20260120"><td>2026</td><td>1月20–27日</td><td>AAAI 2026</td><td>★★☆☆☆</td><td>★☆☆☆☆</td><td>Robot Learning / AI基盤</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Singapore EXPO, Singapore</td><td><span class="badge none">不参加</span></td><td>—</td><td>AI全般の総合会議。推論、探索、計画、知識表現、機械学習応用などは含むが、ロボット実機、身体性AI、Sim2Real、ロボット学習が会議全体の主題ではない。AI×Robotics調査ではCoRL / ICRA / CVPR / GTCを優先するため、2026年は不参加。</td></tr>
+<tr data-datekey="20260211"><td>2026</td><td>2月11–13日</td><td>SEMICON Korea 2026</td><td>★★☆☆☆</td><td>★★★☆☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>COEX, Seoul, Republic of Korea</td><td><span class="badge none">不参加</span></td><td>—</td><td>半導体製造装置・材料・プロセス・先端パッケージング。基準日以前に開催済みのため不参加。</td></tr>
+<tr data-datekey="20260309"><td>2026</td><td>3月9–11日</td><td>AMC 2026</td><td>★★★☆☆</td><td>★★★★☆</td><td>Control / Motion / Systems</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Daegu, Republic of Korea</td><td><span class="badge done">参加済み</span></td><td>橋本・田端</td><td>Advanced Motion Control。制御・モーション基盤の補完実績。小規模専門会議として1名程度の参加で十分。</td></tr>
+<tr data-datekey="20260310"><td>2026</td><td>3月10–12日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> JEC World 2026</td><td>★★☆☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Paris-Nord Villepinte, France</td><td><span class="badge done">参加済み</span></td><td>仲西・谷川・渡辺</td><td>複合材料、軽量化、材料加工・産業応用</td></tr>
+<tr data-datekey="20260310"><td>2026</td><td>3月10–12日</td><td>embedded world Germany 2026</td><td>★★★☆☆</td><td>★★★★☆</td><td>Embedded / Edge / Real-time Systems</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Nuremberg, Germany</td><td><span class="badge none">不参加</span></td><td>—</td><td>組込み、エッジAI、リアルタイム、機能安全、産業用コンピューティングの実装基盤として重要。ただし2026年は不参加。</td></tr>
+<tr data-datekey="20260312"><td>2026</td><td>3月12–18日</td><td>SXSW 2026</td><td>★★☆☆☆</td><td>★☆☆☆☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Austin, Texas, United States</td><td><span class="badge done">参加済み</span></td><td>尾中</td><td>技術探索・事業探索・社会実装トレンド</td></tr>
+<tr data-datekey="20260316"><td>2026</td><td>3月16–19日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> GTC 2026</td><td>★★★★★</td><td>★★★★☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>San Jose McEnery Convention Center, San Jose, CA, United States</td><td><span class="badge none">不参加</span></td><td>—</td><td>NVIDIA GTC。Physical AI、AI基盤、GPU、ロボティクス基盤、シミュレーション、Omniverse、Edge AIの観点で極めて重要。ただし2026年は不参加。</td></tr>
+<tr data-datekey="20260316"><td>2026</td><td>3月16–19日</td><td>HRI 2026</td><td>★★☆☆☆</td><td>★★☆☆☆</td><td>HRI / Human Factors</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Edinburgh, United Kingdom</td><td><span class="badge none">不参加</span></td><td>—</td><td>人協働・受容性・Human-Robot Interaction。後追い対象</td></tr>
+<tr data-datekey="20260320"><td>2026</td><td>3月20–23日</td><td>3DV 2026</td><td>★★★☆☆</td><td>★★★☆☆</td><td>Vision / 3D認識</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Vancouver Convention Centre, Vancouver, BC, Canada</td><td><span class="badge none">不参加</span></td><td>—</td><td>3D Vision。3D認識・空間理解の補完候補だが、基準日以前に開催済みのため不参加。</td></tr>
+<tr data-datekey="20260324"><td>2026</td><td>3月24–26日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> LogiMAT 2026</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Messe Stuttgart, Stuttgart, Germany</td><td><span class="badge done">参加済み</span></td><td>榎・鉢木</td><td>欧州物流・倉庫自動化</td></tr>
+<tr data-datekey="20260325"><td>2026</td><td>3月25–27日</td><td>SEMICON China 2026</td><td>★★☆☆☆</td><td>★★★☆☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Shanghai New International Expo Centre, Shanghai, China</td><td><span class="badge none">不参加</span></td><td>—</td><td>中国半導体製造装置・材料・プロセス。基準日以前に開催済みのため不参加。</td></tr>
+<tr data-datekey="20260407"><td>2026</td><td>4月7–11日</td><td>RoboSoft 2026</td><td>★★★☆☆</td><td>★★★☆☆</td><td>Soft Robotics / Haptics</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>金沢, Japan</td><td><span class="badge done">参加済み</span></td><td>中島・高野</td><td>ソフトロボティクス、触覚、柔軟機構、接触作業。Soft Roboticsカテゴリの代表実績だが、AI×Robotics全体では補完領域。</td></tr>
+<tr data-datekey="20260413"><td>2026</td><td>4月13–16日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> MODEX 2026</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Georgia World Congress Center, Atlanta, GA, United States</td><td><span class="badge done">参加済み</span></td><td>北尾・山根</td><td>北米物流・マテハン・倉庫自動化</td></tr>
+<tr data-datekey="20260414"><td>2026</td><td>4月14–17日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> Interclean Amsterdam 2026</td><td>★★☆☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>RAI Amsterdam, Amsterdam, Netherlands</td><td><span class="badge done">参加済み</span></td><td>仲西・下本・酒井・田原</td><td>業務用清掃、施設管理、清掃ロボット、衛生・メンテナンス</td></tr>
+<tr data-datekey="20260420"><td>2026</td><td>4月20–24日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> Hannover Messe 2026</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Hannover Exhibition Grounds, Hannover, Germany</td><td><span class="badge done">参加済み</span></td><td>谷阪・保木・田中大・田原・仲西</td><td>総合産業・FA・スマート製造</td></tr>
+<tr data-datekey="20260423"><td>2026</td><td>4月23–27日</td><td>ICLR 2026</td><td>★★★★☆</td><td>★★☆☆☆</td><td>Robot Learning / AI基盤</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Riocentro Convention and Event Center, Rio de Janeiro, Brazil</td><td><span class="badge track">論文・発表追跡</span></td><td>—</td><td>AI基盤・表現学習。現地参加せず、Robot Learning / Embodied AI関連の論文・Workshopを追跡</td></tr>
+<tr data-datekey="20260504"><td>2026</td><td>5月4–7日</td><td>ACT Expo 2026</td><td>★★☆☆☆</td><td>★★★☆☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Las Vegas Convention Center, Las Vegas, NV, United States</td><td><span class="badge done">参加済み</span></td><td>仲西・谷川</td><td>EV、水素、Clean Fleet、充電・燃料インフラ、AI・自律システム</td></tr>
+<tr data-datekey="20260505"><td>2026</td><td>5月5–7日</td><td>SEMICON Southeast Asia 2026</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>MITEC, Kuala Lumpur, Malaysia</td><td><span class="badge done">参加済み</span></td><td>村上・大槻</td><td>東南アジアの半導体製造装置・材料・プロセス。参加内容を社内共有対象とする。</td></tr>
+<tr data-datekey="20260517"><td>2026</td><td>5月17–21日</td><td>ACSMO 2026</td><td>★★★☆☆</td><td>★★★★☆</td><td>Mechanical Design / Structural &amp; Multidisciplinary Optimization</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Busan, Republic of Korea</td><td><span class="badge done">参加済み</span></td><td>中島・松四</td><td>Busan。構造・形状・トポロジー・複合領域最適化。メカ設計最適化カテゴリの代表実績だが、AI×Robotics全体では補完領域。</td></tr>
+<tr data-datekey="20260526"><td>2026</td><td>5月26–29日</td><td>ACC 2026</td><td>★★★☆☆</td><td>★★★☆☆</td><td>Control / Motion / Systems</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Hilton New Orleans Riverside, New Orleans, LA, United States</td><td><span class="badge none">不参加</span></td><td>—</td><td>American Control Conference。IFAC World Congressを優先し、2026年は不参加</td></tr>
+<tr data-datekey="20260527"><td>2026</td><td>5月27–28日</td><td>Robotics Summit &amp; Expo (RSE) 2026</td><td>★★★★☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Boston Convention and Exhibition Center, Boston, MA, United States</td><td><span class="badge done">参加済み</span></td><td>村上・佐藤・三浦</td><td>ロボット開発、商用化、実装・事業化動向 参加済み。</td></tr>
+<tr data-datekey="20260528"><td>2026</td><td>5月28–29日</td><td>Humanoids Summit Tokyo 2026</td><td>★★★★☆</td><td>★★★★☆</td><td>Robotics / Physical AI本体</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Takanawa Gateway Convention Center, Tokyo, Japan</td><td><span class="badge none">不参加</span></td><td>—</td><td>国内開催。ヒューマノイド、Embodied AI、商用化、量産、投資・事業化動向を確認する候補。6月末時点で開催済みのため不参加扱い。</td></tr>
+<tr data-datekey="20260601"><td>2026</td><td>6月1–5日</td><td>ICRA 2026</td><td>★★★★★</td><td>★★★★☆</td><td>Robotics / Physical AI本体</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Vienna, Austria</td><td><span class="badge done">参加済み</span></td><td>村上・佐藤・傳田・岡部</td><td>Physical AI / Robotics全体動向の主軸 参加済み。</td></tr>
+<tr data-datekey="20260603"><td>2026</td><td>6月3–7日</td><td>CVPR 2026</td><td>★★★★★</td><td>★★★☆☆</td><td>Vision / 3D認識</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Denver, Colorado, United States</td><td><span class="badge done">参加済み</span></td><td>鉢木・田中昌</td><td>画像認識、3D認識、空間理解、視覚基盤モデル 参加済み。</td></tr>
+<tr data-datekey="20260608"><td>2026</td><td>6月8–12日</td><td>London Tech Week 2026</td><td>★★☆☆☆</td><td>★★☆☆☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Olympia London, London, United Kingdom</td><td><span class="badge none">不参加</span></td><td>—</td><td>欧州最大級の総合テックフェスティバル。来場者3万人超、エンタープライズAI・DXが主要テーマ。2026年は不参加。</td></tr>
+<tr data-datekey="20260615"><td>2026</td><td>6月15–18日</td><td>AWE USA 2026</td><td>★★★☆☆</td><td>★★☆☆☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Long Beach Convention Center, Long Beach, CA, United States</td><td><span class="badge none">不参加</span></td><td>—</td><td>XR、Spatial AI、AR/VR、ヒューマンインターフェース、空間コンピューティングの探索候補。6月末時点で開催済みのため不参加扱い。</td></tr>
+<tr data-datekey="20260617"><td>2026</td><td>6月17–20日</td><td>VivaTech 2026</td><td>★★☆☆☆</td><td>★★☆☆☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Paris Expo Porte de Versailles, Paris, France</td><td><span class="badge done">参加済み</span></td><td>北尾</td><td>欧州スタートアップ・事業探索 参加済み。</td></tr>
+<tr data-datekey="20260622"><td>2026</td><td>6月22–25日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> Automate 2026</td><td>★★★★★</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>McCormick Place, Chicago, IL, United States</td><td><span class="badge done">参加済み</span></td><td>熊谷・橋本翔・田原</td><td>北米ロボット・自動化・マシンビジョン・モーション 参加済み。</td></tr>
+<tr data-datekey="20260628"><td>2026</td><td>6月28日–7月1日</td><td>ROBOMECH 2026</td><td>★★☆☆☆</td><td>★★★☆☆</td><td>Robotics / Physical AI本体</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>福岡国際会議場, Fukuoka, Japan</td><td><span class="badge none">不参加</span></td><td>—</td><td>国内ロボティクス・メカトロニクス研究、若手発表・育成候補。6月末時点で開催済みのため不参加扱い。</td></tr>
+<tr data-datekey="20260706"><td>2026</td><td>7月6–11日</td><td>ICML 2026</td><td>★★★★☆</td><td>★★☆☆☆</td><td>Robot Learning / AI基盤</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Seoul, Republic of Korea</td><td><span class="badge none">不参加</span></td><td>—</td><td>機械学習本流。ICRA / CVPR / CoRLを優先し、2026年は不参加。</td></tr>
+<tr data-datekey="20260707"><td>2026</td><td>7月7–11日</td><td>AIM 2026</td><td>★★★☆☆</td><td>★★★★☆</td><td>Industrial Automation / Smart Factory</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Genova, Italy</td><td><span class="badge none">不参加</span></td><td>—</td><td>IEEE/ASME International Conference on Advanced Intelligent Mechatronics。2026年は不参加。</td></tr>
+<tr data-datekey="20260712"><td>2026</td><td>7月12–17日</td><td>IFORS 2026</td><td>★★★★☆</td><td>★★★★★</td><td>OR / Optimization / Decision Science</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Vienna, Austria</td><td><span class="badge done">参加済み</span></td><td>北村・熊谷</td><td>OR、最適化、物流、工程、スケジューリング。参加済み。</td></tr>
+<tr data-datekey="20260713"><td>2026</td><td>7月13–17日</td><td>RSS 2026</td><td>★★★★☆</td><td>★★★☆☆</td><td>Robotics / Physical AI本体</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Sydney, Australia</td><td><span class="badge done">参加済み</span></td><td>村上</td><td>ロボティクス分野トップ会議。ICRA参加後の追加深掘り枠として、本会議・Keynote・Workshopを含めて参加済み。部門派遣ではなく、R&amp;Dトップの単独探索枠。</td></tr>
+<tr data-datekey="20260719"><td>2026</td><td>7月19–23日</td><td>ISFA 2026</td><td>★★☆☆☆</td><td>★★★★☆</td><td>Industrial Automation / Smart Factory</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Okayama Convention Center, Okayama, Japan</td><td><span class="badge info">参考情報</span></td><td>—</td><td>Flexible Automation、製造システム、メカトロ、AI/IoT活用 参加判断対象ではなく、技術・市場動向の参考情報として扱う。</td></tr>
+<tr data-datekey="20260719"><td>2026</td><td>7月19–23日</td><td>SIGGRAPH 2026</td><td>★★★☆☆</td><td>★★★☆☆</td><td>Simulation / Digital Twin / CG</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Los Angeles Convention Center, Los Angeles, CA, United States</td><td><span class="badge planned">参加予定</span></td><td>深川</td><td>CG、Simulation、3D表現。SIGGRAPH Asiaとの差分確認 参加予定。</td></tr>
+<tr data-datekey="20260815"><td>2026</td><td>8月15–21日</td><td>IJCAI-ECAI 2026</td><td>★★☆☆☆</td><td>★☆☆☆☆</td><td>Robot Learning / AI基盤</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Bremen, Germany</td><td><span class="badge none">不参加</span></td><td>—</td><td>AI全般の総合会議。計画、推論、マルチエージェント、知識表現などは関連するが、ロボット実機、身体性AI、Sim2Real、ロボット学習が中心ではない。AI×Robotics調査ではCoRL / ICRA / CVPR / GTCを優先するため、2026年は不参加。</td></tr>
+<tr data-datekey="20260817"><td>2026</td><td>8月17–21日</td><td>CASE 2026</td><td>★★★★☆</td><td>★★★★★</td><td>Industrial Automation / Smart Factory</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Shenyang, China</td><td><span class="badge planned">参加予定</span></td><td>北村</td><td>産業自動化、Smart Factory、製造・物流システム</td></tr>
+<tr data-datekey="20260819"><td>2026</td><td>8月19–23日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> World Robot Conference and Expo 2026</td><td>★★★★☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Beijing, China</td><td><span class="badge planned">参加予定</span></td><td>保木・渡邊・古谷</td><td>中国ロボット産業、ヒューマノイド、政策・標準化・社会実装。2026年は保木・渡邊・古谷の3名参加予定。</td></tr>
+<tr data-datekey="20260823"><td>2026</td><td>8月23–28日</td><td>IFAC World Congress 2026</td><td>★★★★☆</td><td>★★★★★</td><td>Control / Motion / Systems</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Busan, Republic of Korea</td><td><span class="badge planned">参加予定</span></td><td>角口・小西</td><td>制御・モーション・システム基盤</td></tr>
+<tr data-datekey="20260823"><td>2026</td><td>8月23–26日</td><td>ASME IDETC/CIE 2026</td><td>★★☆☆☆</td><td>★★☆☆☆</td><td>Mechanical Design / Structural &amp; Multidisciplinary Optimization</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Hilton Americas-Houston, Houston, TX, United States</td><td><span class="badge info">参考情報</span></td><td>—</td><td>設計工学、Design Automation、CIE、メカ設計・最適化の参考情報</td></tr>
+<tr data-datekey="20260824"><td>2026</td><td>8月24–28日</td><td>RO-MAN 2026</td><td>★★★☆☆</td><td>★★★☆☆</td><td>HRI / Human Factors</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Kitakyushu, Japan</td><td><span class="badge planned">参加予定</span></td><td>尾中</td><td>国内開催。HRI、人協働、受容性、ロボットコミュニケーションを調査する。参加予定。</td></tr>
+<tr data-datekey="20260830"><td>2026</td><td>8月30日–9月2日</td><td>Dynamics and Design Conference 2026</td><td>★★☆☆☆</td><td>★★★★☆</td><td>Control / Motion / Systems</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>長良川国際会議場, Gifu, Japan</td><td><span class="badge info">参考情報</span></td><td>—</td><td>機械力学、計測制御、振動・ダイナミクス、モーション基盤の国内参考情報</td></tr>
+<tr data-datekey="20260902"><td>2026</td><td>9月2–4日</td><td>SEMICON Taiwan 2026</td><td>★★★☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>TaiNEX 1&amp;2, Taipei, Taiwan</td><td><span class="badge info">参考情報</span></td><td>—</td><td>台湾半導体製造装置・材料・プロセス・先端パッケージング 参加判断対象ではなく、技術・市場動向の参考情報として扱う。</td></tr>
+<tr data-datekey="20260908"><td>2026</td><td>9月8–12日</td><td>ECCV 2026</td><td>★★★☆☆</td><td>★★☆☆☆</td><td>Vision / 3D認識</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Malmö Arena and Malmömässan, Malmö, Sweden</td><td><span class="badge track">論文・発表追跡</span></td><td>—</td><td>欧州Computer Vision本流。CVPR参加を前提に、ロボットビジョン・3D・空間理解を追跡</td></tr>
+<tr data-datekey="20260909"><td>2026</td><td>9月9–11日</td><td>Humanoid Robotics Summit Europe 2026</td><td>★★★★☆</td><td>★★★★☆</td><td>Robotics / Physical AI本体</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Stuttgart, Germany</td><td><span class="badge planned">参加予定</span></td><td>村上・古谷</td><td>欧州のヒューマノイド、Physical AI、産業実装・企業動向。参加予定。</td></tr>
+<tr data-datekey="20260914"><td>2026</td><td>9月14–19日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> IMTS 2026</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>McCormick Place, Chicago, IL, United States</td><td><span class="badge planned">参加予定</span></td><td>廣瀬</td><td>工作機械、製造技術、デジタル製造。参加予定。</td></tr>
+<tr data-datekey="20260915"><td>2026</td><td>9月15–19日</td><td>AMB 2026</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Messe Stuttgart, Stuttgart, Germany</td><td><span class="badge planned">参加予定</span></td><td>廣瀬・池崎</td><td>金属加工、工作機械、生産技術。参加予定。 廣瀬・池崎が参加予定。</td></tr>
+<tr data-datekey="20260922"><td>2026</td><td>9月22–24日</td><td>ROSCon Global 2026</td><td>★★★☆☆</td><td>★★★★☆</td><td>Embedded / Edge / Real-time Systems</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Toronto, Canada</td><td><span class="badge info">参考情報</span></td><td>—</td><td>ROS開発者カンファレンス。ロボット実装基盤・OSS・開発者コミュニティの参考情報</td></tr>
+<tr data-datekey="20260927"><td>2026</td><td>9月27日–10月1日</td><td>IROS 2026</td><td>★★★★☆</td><td>★★★★☆</td><td>Robotics / Physical AI本体</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Pittsburgh, Pennsylvania, United States</td><td><span class="badge planned">参加予定</span></td><td>酒井・羽山</td><td>知能ロボット・ロボットシステムの分野トップ会議。酒井・羽山が参加し、内容をR&amp;D内で共有する予定。</td></tr>
+<tr data-datekey="20261004"><td>2026</td><td>10月4–7日</td><td>SMC 2026</td><td>★★★☆☆</td><td>★★★☆☆</td><td>HRI / Human Factors</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Bellevue, WA, United States</td><td><span class="badge info">参考情報</span></td><td>—</td><td>IEEE International Conference on Systems, Man, and Cybernetics。人間機械系、システム、サイバネティクスの参考情報</td></tr>
+<tr data-datekey="20261005"><td>2026</td><td>10月5–9日</td><td>World Summit AI 2026</td><td>★★☆☆☆</td><td>★☆☆☆☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Amsterdam, Netherlands</td><td><span class="badge info">参考情報</span></td><td>—</td><td>AI企業・政策・スタートアップ・社会実装トレンドの探索参考情報</td></tr>
+<tr data-datekey="20261006"><td>2026</td><td>10月6–8日</td><td>VISION 2026</td><td>★★★☆☆</td><td>★★★★☆</td><td>Vision / 3D認識</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Messe Stuttgart, Stuttgart, Germany</td><td><span class="badge planned">参加予定</span></td><td>橋本将</td><td>マシンビジョン、画像処理、産業用カメラ・検査の展示会参加予定。部門予算化候補には含めない。</td></tr>
+<tr data-datekey="20261013"><td>2026</td><td>10月13–15日</td><td>SEMICON West 2026</td><td>★★★☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Moscone Center, San Francisco, CA, United States</td><td><span class="badge info">参考情報</span></td><td>—</td><td>北米半導体製造装置・材料・プロセス・先端パッケージング 参加判断対象ではなく、技術・市場動向の参考情報として扱う。</td></tr>
+<tr data-datekey="20261018"><td>2026</td><td>10月18–21日</td><td>IECON 2026</td><td>★★☆☆☆</td><td>★★★☆☆</td><td>Industrial Automation / Smart Factory</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Doha, Qatar</td><td><span class="badge none">不参加</span></td><td>—</td><td>Industrial Electronics全般。2026年は不参加。</td></tr>
+<tr data-datekey="20261020"><td>2026</td><td>10月20–21日</td><td>TechEx Europe 2026</td><td>★★☆☆☆</td><td>★★☆☆☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>RAI Amsterdam, Amsterdam, Netherlands</td><td><span class="badge candidate">候補</span></td><td>TBD</td><td>IoT、AI、Edge、デジタル基盤</td></tr>
+<tr data-datekey="20261020"><td>2026</td><td>10月20–23日</td><td>EuroBLECH 2026</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Hanover Fairground, Hannover, Germany</td><td><span class="badge planned">参加予定</span></td><td>村上・金築・美馬</td><td>板金加工、レーザ、成形、加工自動化。参加予定。</td></tr>
+<tr data-datekey="20261025"><td>2026</td><td>10月25–28日</td><td>MECC 2026</td><td>★★★☆☆</td><td>★★★☆☆</td><td>Control / Motion / Systems</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Phoenix, AZ, United States</td><td><span class="badge info">参考情報</span></td><td>—</td><td>Modeling, Estimation and Control。動的システムのモデリング・推定・制御参考情報</td></tr>
+<tr data-datekey="20261026"><td>2026</td><td>10月26–31日</td><td>JIMTOF 2026</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Tokyo Big Sight, Tokyo, Japan</td><td><span class="badge info">参考情報</span></td><td>—</td><td>工作機械、加工、計測、製造技術の国内大型展示会参考情報</td></tr>
+<tr data-datekey="20261101"><td>2026</td><td>11月1–4日</td><td>INFORMS Annual Meeting 2026</td><td>★★☆☆☆</td><td>★★★☆☆</td><td>OR / Optimization / Decision Science</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>San Francisco, CA, United States</td><td><span class="badge none">不参加</span></td><td>—</td><td>OR/MS/Analytics。IFORS後に必要性判断</td></tr>
+<tr data-datekey="20261103"><td>2026</td><td>11月3–6日</td><td>CeMAT ASIA 2026</td><td>★★☆☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Shanghai New International Expo Centre, Shanghai, China</td><td><span class="badge candidate">候補</span></td><td>TBD</td><td>中国・アジアの物流・倉庫自動化市場</td></tr>
+<tr data-datekey="20261109"><td>2026</td><td>11月9–12日</td><td>CoRL 2026</td><td>★★★★★</td><td>★★★☆☆</td><td>Robot Learning / AI基盤</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Austin, Texas, United States</td><td><span class="badge planned">参加予定</span></td><td>熊谷・佐藤元</td><td>Robot Learning、VLA、Sim2Real、基盤モデル</td></tr>
+<tr data-datekey="20261110"><td>2026</td><td>11月10–13日</td><td>SEMICON Europa 2026</td><td>★★★☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Trade Fair Center Messe München, Munich, Germany</td><td><span class="badge candidate">候補</span></td><td>TBD</td><td>欧州半導体製造装置・材料・プロセス。electronica併催</td></tr>
+<tr data-datekey="20261110"><td>2026</td><td>11月10–13日</td><td>electronica 2026</td><td>★★☆☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Trade Fair Center Messe München, Munich, Germany</td><td><span class="badge planned">参加予定</span></td><td>宮崎・他1名</td><td>半導体、パッシブ部品、組込みシステム、パワーエレクトロニクス等、電子部品・技術全般を扱う世界最大級の電子部品展示会。SEMICON Europa 2026と同日程・同会場で併催。参加予定。</td></tr>
+<tr data-datekey="20261117"><td>2026</td><td>11月17–20日</td><td>Formnext 2026</td><td>★★★☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Frankfurt Fair &amp; Exhibition Centre, Frankfurt am Main, Germany</td><td><span class="badge info">参考情報</span></td><td>—</td><td>アディティブマニュファクチャリング、工業用3Dプリンティング、次世代製造技術の参考情報。</td></tr>
+<tr data-datekey="20261120"><td>2026</td><td>11月20–24日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> ITMA ASIA + CITME 2026</td><td>★★☆☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>National Exhibition and Convention Center, Shanghai, China</td><td><span class="badge candidate">候補</span></td><td>TBD</td><td>繊維機械・繊維製造技術</td></tr>
+<tr data-datekey="20261124"><td>2026</td><td>11月24–26日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> SPS 2026</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Nuremberg, Germany</td><td><span class="badge candidate">候補</span></td><td>TBD</td><td>Smart Production Solutions。FA、産業制御、産業通信、ドライブ、センサ等。AI×Robotics全体では補完領域の候補。</td></tr>
+<tr data-datekey="20261201"><td>2026</td><td>12月1–4日</td><td>SIGGRAPH Asia 2026</td><td>★★★★☆</td><td>★★★★☆</td><td>Simulation / Digital Twin / CG</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>KLCC, Kuala Lumpur, Malaysia</td><td><span class="badge planned">参加予定</span></td><td>村上</td><td>Digital Twin、Simulation、3D表現、生成表現</td></tr>
+<tr data-datekey="20261203"><td>2026</td><td>12月3–4日</td><td>ROS-Industrial Conference 2026</td><td>★★★☆☆</td><td>★★★★☆</td><td>Embedded / Edge / Real-time Systems</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Fraunhofer IPA, Stuttgart, Germany</td><td><span class="badge info">参考情報</span></td><td>—</td><td>ROS-Industrial。産業ロボット実装、OSS、システムインテグレーションの参考情報</td></tr>
+<tr data-datekey="20261206"><td>2026</td><td>12月6–9日</td><td>Humanoids 2026</td><td>★★★★☆</td><td>★★★☆☆</td><td>Robotics / Physical AI本体</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Santa Clara, California, United States</td><td><span class="badge info">参考情報</span></td><td>—</td><td>ヒューマノイド、全身制御、身体性AIの主要専門会議。AI×Robotics / Physical AI観点では重要だが、2026年の参加者はTBD。 参加判断対象ではなく、技術・市場動向の参考情報として扱う。</td></tr>
+<tr data-datekey="20261206"><td>2026</td><td>12月6–12日</td><td>NeurIPS 2026</td><td>★★★★☆</td><td>★★☆☆☆</td><td>Robot Learning / AI基盤</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Sydney / Atlanta / Paris</td><td><span class="badge info">参考情報</span></td><td>—</td><td>AI基盤のトップ会議。現地参加せず、Embodied AI / World Model / Robotics関連Workshopと論文を追跡 参加判断対象ではなく、技術・市場動向の参考情報として扱う。</td></tr>
+<tr data-datekey="20261207"><td>2026</td><td>12月7–11日</td><td>GITEX Global 2026</td><td>★★☆☆☆</td><td>★★☆☆☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Dubai Exhibition Centre, Expo City Dubai, UAE</td><td><span class="badge candidate">候補</span></td><td>TBD</td><td>AI、デジタル、スタートアップ、市場探索</td></tr>
+<tr data-datekey="20261209"><td>2026</td><td>12月9–11日</td><td>SEMICON Japan 2026</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Tokyo Big Sight, Tokyo, Japan</td><td><span class="badge candidate">候補</span></td><td>TBD</td><td>国内半導体製造装置・材料・先端パッケージング・検査計測</td></tr>
+<tr data-datekey="20261215"><td>2026</td><td>12月15–18日</td><td>CDC 2026</td><td>★★★☆☆</td><td>★★★☆☆</td><td>Control / Motion / Systems</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Hilton Hawaiian Village, Honolulu, HI, United States</td><td><span class="badge info">参考情報</span></td><td>—</td><td>IEEE Conference on Decision and Control。制御理論・意思決定・最適制御。2026年は不参加 参加判断対象ではなく、技術・市場動向の参考情報として扱う。</td></tr>
+<tr data-datekey="20270106"><td>2027</td><td>1月6–9日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> CES 2027</td><td>★★☆☆☆</td><td>★★☆☆☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Las Vegas, Nevada, United States</td><td><span class="badge tbd">2027計画</span></td><td>尾中・他1名</td><td>広域技術・事業探索</td></tr>
+<tr data-datekey="20270120"><td>2027</td><td>1月20–21日</td><td>Humanoid Evolution Summit 2027</td><td>★★★☆☆</td><td>★★★☆☆</td><td>Robotics / Physical AI本体</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Munich, Germany</td><td><span class="badge info">参考情報</span></td><td>—</td><td>欧州のヒューマノイド、Physical AI、Digital Twin、産業実装・事業化動向を部門で把握する参考情報。2027年が初開催のため、参加はプログラム・登壇企業・展示内容の具体化後に判断する。</td></tr>
+<tr data-datekey="20270209"><td>2027</td><td>2月9–11日</td><td>MD&amp;M West 2027（Automation Sector／旧ATX West）</td><td>★★☆☆☆</td><td>★★★☆☆</td><td>Industrial Automation / Smart Factory</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Anaheim Convention Center, Anaheim, CA, United States</td><td><span class="badge info">参考情報</span></td><td>—</td><td>Automation、ロボティクス、センサ、Motion Control、製造技術を扱うMD&amp;M West内の展示分野。Automate、ProMat等との重複を踏まえ、北米西海岸の製造・MedTech・包装分野を含む市場動向の参考情報として管理する。</td></tr>
+<tr data-datekey="20270301"><td>2027</td><td>3月1–4日</td><td>MWC 2027</td><td>★★☆☆☆</td><td>★★☆☆☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Fira Barcelona Gran Via, Barcelona, Spain</td><td><span class="badge info">参考情報</span></td><td>—</td><td>通信・エッジ・AI/IoT基盤。部門の参加・予算計画には含めず、関連する市場・技術動向の参考情報として管理する。</td></tr>
+<tr data-datekey="20270302"><td>2027</td><td>3月2–4日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> JEC World 2027</td><td>★★☆☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Paris Nord Villepinte, France</td><td><span class="badge tbd">2027計画</span></td><td>TBD</td><td>複合材料</td></tr><tr data-datekey="20270314"><td>2027</td><td>3月14–18日<br/><span class="small">本会議：15–18日</span></td><td><span class="budget-icon" title="部門予算化候補">💰</span> GTC 2027</td><td>★★★★★</td><td>★★★★☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>San Jose McEnery Convention Center and venues throughout San Jose, CA, United States</td><td><span class="badge tbd">2027計画</span></td><td>1名</td><td>Physical AI、AI/GPU、ロボティクス基盤、Omniverse、シミュレーション、Edge AIの最重要候補。NVIDIA公式FAQでは全日程を3月14–18日、公式トップ／イベント一覧では本会議を3月15–18日と案内。</td></tr>
+<tr data-datekey="20270316"><td>2027</td><td>3月16–18日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> LogiMAT 2027</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Messe Stuttgart, Stuttgart, Germany</td><td><span class="badge tbd">2027計画</span></td><td>～2名</td><td>物流・倉庫自動化</td></tr>
+<tr data-datekey="20270316"><td>2027</td><td>3月16–18日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> embedded world Germany 2027</td><td>★★★☆☆</td><td>★★★★☆</td><td>Embedded / Edge / Real-time Systems</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Exhibition Centre Nuremberg, Nuremberg, Germany</td><td><span class="badge tbd">2027計画</span></td><td>TBD</td><td>組込み、Edge AI、リアルタイム、機能安全、Embedded Vision。部門予算化計画。GTC 2027およびLogiMAT 2027と日程が重なるため別担当を前提に検討する。</td></tr>
+<tr data-datekey="20270405"><td>2027</td><td>4月5–8日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> Hannover Messe 2027</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Hannover Exhibition Grounds, Hannover, Germany</td><td><span class="badge tbd">2027計画</span></td><td>～2名</td><td>総合産業・FA</td></tr><tr data-datekey="20270419"><td>2027</td><td>4月19–21日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> ProMat 2027</td><td>★★★★☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>McCormick Place, Chicago, IL, United States</td><td><span class="badge tbd">2027計画</span></td><td>～2名</td><td>物流・マテハン・サプライチェーン</td></tr>
+<tr data-datekey="20270510"><td>2027</td><td>5月10–13日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> Automate 2027</td><td>★★★★★</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Las Vegas Convention Center, Las Vegas, NV, United States</td><td><span class="badge tbd">2027計画</span></td><td>2名</td><td>北米最大級のロボット・自動化展示会。2027年はLas Vegas開催。部門予算化候補。</td></tr>
+<tr data-datekey="20270524"><td>2027</td><td>5月24–28日</td><td>ICRA 2027</td><td>★★★★★</td><td>★★★★☆</td><td>Robotics / Physical AI本体</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>COEX, Seoul, Republic of Korea</td><td><span class="badge info">参考情報</span></td><td>—</td><td>Robotics代表会議。部門の参加・予算計画には含めず、論文・発表と個別参加判断の参考情報として管理する。</td></tr>
+<tr data-datekey="20270602"><td>2027</td><td>6月2–3日</td><td>Robotics Summit &amp; Expo (RSE) 2027</td><td>★★★★☆</td><td>★★★★☆</td><td>Robotics / Physical AI本体</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Boston, MA, United States</td><td><span class="badge tbd">2027計画</span></td><td>1名</td><td>商用ロボット開発・実装寄りの技術カンファレンス／Expo。2027年6月2–3日、Boston開催を公式サイトで確認済み。</td></tr>
+<tr data-datekey="20270607"><td>2027</td><td>6月7–11日</td><td>London Tech Week 2027</td><td>★★☆☆☆</td><td>★★☆☆☆</td><td>Technology Foresight / Innovation</td><td><span class="type-pill type-tech">技術カンファレンス・サミット</span></td><td>Olympia London, London, United Kingdom</td><td><span class="badge info">参考情報</span></td><td>—</td><td>欧州最大級の総合テックフェスティバル。エンタープライズAI・DX・スタートアップ動向の探索候補として参考情報で管理。</td></tr>
+<tr data-datekey="20270622"><td>2027</td><td>6月22–25日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> automatica 2027</td><td>★★★★☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Messe München, Munich, Germany</td><td><span class="badge tbd">2027計画</span></td><td>1名</td><td>スマートオートメーション・ロボティクス</td></tr>
+<tr data-datekey="20270706"><td>2027</td><td>7月6–11日</td><td>RSS 2027</td><td>★★★★☆</td><td>★★★☆☆</td><td>Robotics / Physical AI本体</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Athens, Greece</td><td><span class="badge info">参考情報</span></td><td>—</td><td>ロボティクス分野トップ会議。2027年7月6–11日、Athens開催。部門の参加・予算計画には含めず、論文・発表と個別参加判断の参考情報として管理する。</td></tr>
+<tr data-datekey="20270808"><td>2027</td><td>8月8–12日</td><td>SIGGRAPH 2027</td><td>★★★☆☆</td><td>★★★☆☆</td><td>Simulation / Digital Twin / CG</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Anaheim, California, United States</td><td><span class="badge info">参考情報</span></td><td>—</td><td>Computer Graphics、Simulation、Digital Twin、3D表現、生成表現、XR。部門予算化はせず、Physical AIのシミュレーション・デジタル環境側を把握する参考情報として管理する。</td></tr><tr data-datekey="20270916"><td>2027</td><td>9月16–22日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> ITMA 2027</td><td>★★☆☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Hannover Exhibition Center, Hannover, Germany</td><td><span class="badge tbd">2027計画</span></td><td>前半：～2名／後半：～2名</td><td>繊維機械・繊維製造。会期前半・後半で担当を分けて派遣する。</td></tr>
+<tr data-datekey="20270926"><td>2027</td><td>9月26日–10月1日</td><td>IROS 2027</td><td>★★★★★</td><td>★★★★☆</td><td>Robotics / Physical AI本体</td><td><span class="type-pill type-conference">学会・専門会議</span></td><td>Fortezza da Basso, Florence, Italy</td><td><span class="badge info">参考情報</span></td><td>—</td><td>知能ロボット・ロボットシステムの分野トップ会議。部門予算化はせず、論文・発表と個別参加判断の参考情報として管理する。</td></tr>
+<tr data-datekey="20271004"><td>2027</td><td>10月4–9日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> EMO Milano 2027</td><td>★★☆☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Fieramilano, Milan, Italy</td><td><span class="badge tbd">2027計画</span></td><td>～2名</td><td>工作機械・金属加工</td></tr>
+<tr data-datekey="20271026"><td>2027</td><td>10月26–29日</td><td>Formnext 2027</td><td>★★★☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Frankfurt Fair &amp; Exhibition Centre, Frankfurt am Main, Germany</td><td><span class="badge info">参考情報</span></td><td>—</td><td>アディティブマニュファクチャリング、工業用3Dプリンティング、材料、次世代製造技術。部門の参加・予算計画には含めず、関連テーマの参考情報として管理する。</td></tr>
+<tr data-datekey="20271116"><td>2027</td><td>11月16–19日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> SEMICON Europa 2027</td><td>★★☆☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Trade Fair Center Messe München, Munich, Germany</td><td><span class="badge tbd">2027計画</span></td><td>TBD</td><td>欧州半導体装置・材料・プロセス。部門予算化計画。</td></tr>
+<tr data-datekey="20271123"><td>2027</td><td>11月23–25日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> SPS 2027</td><td>★★★☆☆</td><td>★★★★★</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Exhibition Centre Nuremberg, Nuremberg, Germany</td><td><span class="badge tbd">2027計画</span></td><td>～2名</td><td>Smart Production Solutions。FA、PLC、産業制御、産業通信、ドライブ、センサ、Industrial AIを確認する基幹候補。</td></tr>
+<tr data-datekey="20280404"><td>2028</td><td>4月4–7日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> Interclean Amsterdam 2028</td><td>★★☆☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>RAI Amsterdam, Amsterdam, Netherlands</td><td><span class="badge tbd">2028計画</span></td><td>TBD</td><td>清掃・衛生・サービスロボット・施設管理の業界実装確認。Interclean Amsterdamの次回開催として管理。</td></tr>
+<tr data-datekey="20281018"><td>2028</td><td>10月18–25日</td><td>K Düsseldorf 2028</td><td>★★☆☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Messe Düsseldorf, Düsseldorf, Germany</td><td><span class="badge tbd">2028計画</span></td><td>TBD</td><td>プラスチック・ゴム、材料、成形加工、リサイクル、材料循環の大型展示会</td></tr>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h2>6. 未確定・候補メモ</h2><div class="budget-legend">
+<span class="budget-icon">💰</span> 部門予算化候補
+<span class="small">（確定派遣ではなく、年度計画で予算枠として管理する対象）</span>
+</div><div class="legend">
+<span class="legend-item legend-conference">学会・専門会議</span>
+<span class="legend-item legend-exhibition">展示会・見本市</span>
+<span class="legend-item legend-tech">技術カンファレンス・サミット</span>
+</div><div class="small color-note">3分類は行全体ではなく、種別欄の色付きラベルで示します。グレーの小さなバッジは「不参加」の参加状況です。</div>
+<div class="note">開催日が未確定、または候補段階のイベントを残す。開催日が確定したものは5章の開催日確定リストへ移す。</div>
+<table>
+<thead><tr><th>イベント</th><th>AI×Robotics重要度</th><th>事業適合度</th><th>カテゴリ</th><th>扱い・時期</th><th>担当・人数</th><th>想定開催地</th><th>目的・扱い</th></tr></thead>
+<tbody>
+<tr>
+<td><span class="budget-icon" title="部門予算化候補">💰</span> <strong>MODEX 2028</strong></td>
+<td>★★★☆☆</td>
+<td>★★★★★</td>
+<td>International Exhibition / Market &amp; Implementation</td>
+<td>2028候補：TBD</td><td>TBD</td>
+<td>Atlanta, Georgia, United States</td>
+<td>ProMat 2027と相互補完で見る物流・マテハン・サプライチェーン展示会</td>
+</tr>
+<tr>
+<td><strong>EuroBLECH 2028</strong></td>
+<td>★★★☆☆</td>
+<td>★★★★★</td>
+<td>International Exhibition / Market &amp; Implementation</td>
+<td>2028候補：TBD</td><td>TBD</td>
+<td>Hanover Fairground, Hannover, Germany（想定）</td>
+<td>板金加工、レーザ、成形、加工自動化。隔年開催のためEuroBLECHの次回開催として管理。</td>
+</tr>
+<tr>
+<td><strong>SEMICON Korea 2027</strong></td><td>★★☆☆☆</td><td>★★★☆☆</td>
+<td>International Exhibition / Market &amp; Implementation</td>
+<td>2027候補：TBD</td><td>TBD</td>
+<td>TBD</td>
+<td>半導体装置・材料・プロセス。日程・場所はTBD</td>
+</tr>
+<tr>
+<td><strong>SEMICON Southeast Asia 2027</strong></td><td>★★☆☆☆</td><td>★★★★☆</td>
+<td>International Exhibition / Market &amp; Implementation</td>
+<td>2027候補：TBD</td><td>TBD</td>
+<td>TBD</td>
+<td>東南アジア半導体装置・材料・プロセス。日程・場所はTBD</td>
+</tr>
+<tr>
+<td><strong>SEMICON West 2027</strong></td><td>★★☆☆☆</td><td>★★★★☆</td>
+<td>International Exhibition / Market &amp; Implementation</td>
+<td>2027候補：TBD</td><td>TBD</td>
+<td>Phoenix, Arizona, United States</td>
+<td>北米半導体装置・材料・プロセス。開催地はPhoenix予定、日程はTBD 参考情報として管理。</td>
+</tr>
+<tr>
+<td><strong>SEMICON Japan 2027</strong></td><td>★★☆☆☆</td><td>★★★★★</td>
+<td>International Exhibition / Market &amp; Implementation</td>
+<td>2027候補：TBD</td><td>TBD</td>
+<td>TBD</td>
+<td>国内半導体装置・材料・プロセス。日程・場所はTBD</td>
+</tr>
+<tr>
+<td><strong>CoRL 2027</strong></td><td>★★★★★</td><td>★★★☆☆</td>
+<td>Robot Learning / AI基盤</td>
+<td>2027候補：日程TBD</td><td>TBD</td>
+<td>TBD</td>
+<td>Robot Learning、VLA、Sim2Real、基盤モデルの中核会議。公式日程・開催地の発表後に5章へ移す。</td>
+</tr>
+<tr>
+<td><strong>CVPR 2027</strong></td><td>★★★★★</td><td>★★★☆☆</td>
+<td>Vision / 3D認識</td>
+<td>2027候補：日程TBD</td><td>TBD</td>
+<td>Seattle, Washington, United States</td>
+<td>画像認識、3D認識、空間理解、視覚基盤モデル。開催都市は公式発表済み、日程はTBD。</td>
+</tr>
+<tr>
+<td><strong>ICCV 2027</strong></td><td>★★★★★</td><td>★★★☆☆</td>
+<td>Vision / 3D認識</td>
+<td>2027候補：日程TBD</td><td>TBD</td>
+<td>TBD</td>
+<td>画像認識、3D認識、視覚基盤モデル。CVPR・ECCVと並ぶComputer Visionのトップティア会議（隔年・奇数年開催）。公式日程・開催地の発表後に5章へ移す。</td>
+</tr>
+<tr>
+<td><span class="budget-icon" title="部門予算化候補">💰</span> <strong>World Robot Conference and Expo 2027</strong></td><td>★★★★☆</td><td>★★★★☆</td>
+<td>International Exhibition / Market &amp; Implementation</td>
+<td>2027候補：日程TBD</td><td>TBD</td>
+<td>Beijing, China（想定）</td>
+<td>中国ロボット産業、ヒューマノイド、政策・標準化・社会実装。2027年公式情報の発表待ち。</td>
+</tr>
+<tr>
+<td><strong>Humanoid Robotics Summit Europe 2027</strong></td>
+<td>★★★★☆</td>
+<td>★★★★☆</td>
+<td>Robotics / Physical AI本体</td>
+<td>2027候補：日程TBD</td><td>TBD</td>
+<td>Stuttgart, Germany（想定）</td>
+<td>欧州のヒューマノイド、Physical AI、産業実装・企業動向。2026年参加実績を踏まえ、公式日程発表後に5章へ移す。</td>
+</tr>
+<tr>
+<td><strong>ROSCon Global 2027</strong></td><td>★★★☆☆</td><td>★★★★☆</td>
+<td>Embedded / Edge / Real-time Systems</td>
+<td>2027候補：日程TBD</td><td>TBD</td>
+<td>TBD</td>
+<td>ROS 2、ロボット実装基盤、OSS、開発ツール、シミュレーション連携。公式日程・開催地の発表待ち。</td>
+</tr>
+<tr>
+<td><strong>SIGGRAPH Asia 2027</strong></td><td>★★★★☆</td><td>★★★★☆</td>
+<td>Simulation / Digital Twin / CG</td>
+<td>2027候補：日程TBD</td><td>TBD</td>
+<td>TBD</td>
+<td>Digital Twin、Simulation、3D表現、生成表現。公式日程・開催地の発表待ち。</td>
+</tr>
+<tr>
+<td><strong>ICML 2027</strong></td><td>★★★★☆</td><td>★★☆☆☆</td>
+<td>Robot Learning / AI基盤</td>
+<td>2027論文・発表追跡：TBD</td><td>TBD</td>
+<td>TBD</td>
+<td>機械学習本流。現地参加よりEmbodied AI、World Model、Robotics関連の論文・Workshop追跡を基本とし、公式発表後に再評価する。</td>
+</tr>
+<tr>
+<td><strong>NeurIPS 2027</strong></td><td>★★★★☆</td><td>★★☆☆☆</td>
+<td>Robot Learning / AI基盤</td>
+<td>2027論文・発表追跡：TBD</td><td>TBD</td>
+<td>Europe</td>
+<td>AI基盤のトップ会議。Embodied AI、World Model、Robotics関連Workshopと論文を追跡する。公式発表は欧州開催まで。</td>
+</tr>
+<tr><td><span class="budget-icon" title="部門予算化候補">💰</span> 年間予算予備枠（部門）</td><td>—</td><td>—</td><td>部門予算枠</td><td>2027年度年間枠</td><td>予備枠10名分</td><td>—</td><td>特定イベントに紐づけない追加派遣・追加調査用の年間予算予備枠。WRC固有の人数ではない。</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<script>
+(function() {
+  const table = document.getElementById('timelineTable');
+  if (!table) return;
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+
+  // 同じステータス表示には常に同じバッジ色を適用する。
+  const badgeClassByStatus = {
+    '参加済み': 'done', '参加予定': 'planned', '検討中': 'consider',
+    '候補': 'candidate', '不参加': 'none', '論文・発表追跡': 'track',
+    '参考情報': 'info',
+    '2027計画': 'tbd', '2028計画': 'tbd'
+  };
+  rows.forEach(row => {
+    const badge = row.cells[8].querySelector('.badge');
+    const status = cleanText(row.cells[8]);
+    if (badge && badgeClassByStatus[status]) badge.className = `badge ${badgeClassByStatus[status]}`;
+  });
+
+  // 開催日（data-datekey）が本日より前の行をグレーアウトする
+  const todayKey = Number(
+    new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' }).replace(/-/g, '')
+  );
+  rows.forEach(row => {
+    const raw = row.getAttribute('data-datekey');
+    if (raw && parseInt(raw, 10) < todayKey) row.classList.add('row-past');
+  });
+
+  const search = document.getElementById('timelineSearch');
+  const importanceFilter = document.getElementById('importanceFilter');
+  const businessFitFilter = document.getElementById('businessFitFilter');
+  const categoryFilter = document.getElementById('categoryFilter');
+  const yearFilter = document.getElementById('yearFilter');
+  const yearOptions = document.getElementById('yearOptions');
+  const statusFilter = document.getElementById('statusFilter');
+  const statusOptions = document.getElementById('statusOptions');
+  const typeFilter = document.getElementById('typeFilter');
+  const locationFilter = document.getElementById('locationFilter');
+  const upcomingOnly = document.getElementById('upcomingOnly');
+  const counter = document.getElementById('timelineCounter');
+
+  function cleanText(el) { return (el.textContent || '').replace(/\s+/g, ' ').trim(); }
+  function uniqueValues(colIndex) {
+    return Array.from(new Set(rows.map(r => cleanText(r.cells[colIndex])).filter(Boolean))).sort((a,b) => b.length - a.length || a.localeCompare(b, 'ja'));
+  }
+  function fillSelect(select, values) {
+    values.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v; opt.textContent = v; select.appendChild(opt);
+    });
+  }
+  function fillStatusChecks(values) {
+    values.forEach((value, index) => {
+      const label = document.createElement('label');
+      label.className = 'status-check';
+      const input = document.createElement('input');
+      input.type = 'checkbox'; input.value = value; input.id = `statusCheck${index}`;
+      const text = document.createElement('span');
+      text.textContent = value;
+      label.append(input, text);
+      statusOptions.appendChild(label);
+    });
+  }
+  function fillYearChecks(values) {
+    values.forEach((value, index) => {
+      const label = document.createElement('label');
+      label.className = 'year-check';
+      const input = document.createElement('input');
+      input.type = 'checkbox'; input.value = value; input.id = `yearCheck${index}`;
+      const text = document.createElement('span');
+      text.textContent = value;
+      label.append(input, text);
+      yearOptions.appendChild(label);
+    });
+  }
+
+  fillSelect(importanceFilter, uniqueValues(3));
+  fillSelect(businessFitFilter, uniqueValues(4));
+  fillSelect(categoryFilter, uniqueValues(5));
+  fillSelect(typeFilter, uniqueValues(6));
+  fillSelect(locationFilter, uniqueValues(7));
+  fillYearChecks(uniqueValues(0).sort((a, b) => Number(a) - Number(b)));
+  const availableStatuses = new Set(uniqueValues(8));
+  const statusOrder = ['参加済み', '参加予定', '検討中', '候補', '不参加', '論文・発表追跡', '参考情報', '2027計画', '2028計画'];
+  fillStatusChecks(statusOrder.filter(status => availableStatuses.has(status)));
+
+  let sortState = { index: 1, dir: 1, type: 'date' };
+
+  function dateKey(row) {
+    const raw = row.getAttribute('data-datekey');
+    return raw ? parseInt(raw, 10) : 9999;
+  }
+
+  function apply() {
+    const q = (search.value || '').toLowerCase();
+    const imp = importanceFilter.value;
+    const biz = businessFitFilter.value;
+    const cat = categoryFilter.value;
+    const type = typeFilter.value;
+    const loc = locationFilter.value;
+    const selectedYears = new Set(Array.from(yearFilter.querySelectorAll('input:checked')).map(input => input.value));
+    const selectedStatuses = new Set(Array.from(statusFilter.querySelectorAll('input:checked')).map(input => input.value));
+
+    let visible = rows.filter(r => {
+      const all = cleanText(r).toLowerCase();
+      return (!q || all.includes(q)) &&
+             (!selectedYears.size || selectedYears.has(cleanText(r.cells[0]))) &&
+             (!imp || cleanText(r.cells[3]) === imp) &&
+             (!biz || cleanText(r.cells[4]) === biz) &&
+             (!cat || cleanText(r.cells[5]) === cat) &&
+             (!type || cleanText(r.cells[6]) === type) &&
+             (!loc || cleanText(r.cells[7]) === loc) &&
+             (!selectedStatuses.size || selectedStatuses.has(cleanText(r.cells[8]))) &&
+             (!upcomingOnly.checked || dateKey(r) >= todayKey);
+    });
+
+    visible.sort((a,b) => {
+      if (sortState.type === 'date') return (dateKey(a) - dateKey(b)) * sortState.dir;
+      const av = cleanText(a.cells[sortState.index]);
+      const bv = cleanText(b.cells[sortState.index]);
+      return av.localeCompare(bv, 'ja', { numeric:true }) * sortState.dir;
+    });
+
+    tbody.innerHTML = '';
+    visible.forEach(r => tbody.appendChild(r));
+    counter.textContent = `表示 ${visible.length} / 全 ${rows.length} 件`;
+  }
+
+  table.querySelectorAll('th.sortable').forEach((th, i) => {
+    th.addEventListener('click', () => {
+      if (sortState.index === i) sortState.dir *= -1;
+      else { sortState.index = i; sortState.dir = 1; sortState.type = th.dataset.type || 'text'; }
+      apply();
+    });
+  });
+
+  [search, importanceFilter, businessFitFilter, categoryFilter, typeFilter, locationFilter].forEach(el => el.addEventListener('input', apply));
+  yearFilter.addEventListener('change', apply);
+  statusFilter.addEventListener('change', apply);
+  upcomingOnly.addEventListener('change', apply);
+  apply();
+})();
+</script>
+</body>
+</html>
