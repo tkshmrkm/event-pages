@@ -5,6 +5,15 @@ static page keeps a local copy and sends the same `trip-field-records` payload
 to this Worker. The synchronization key is entered in the page at runtime and
 is never committed into public HTML.
 
+## Current deployment
+
+- Worker: `https://trip-field-sync.mrkn55.workers.dev`
+- KV binding: `TRIP_NOTES`
+- Authentication: Worker Secret `SYNC_TOKEN`
+- Allowed production origin: `https://tkshmrkm.github.io`
+
+The secret value is held by the user and is not stored in this repository.
+
 ## Deploy
 
 1. Install dependencies with `npm install`.
@@ -14,7 +23,7 @@ is never committed into public HTML.
    npx wrangler kv namespace create TRIP_NOTES
    ```
 
-3. Replace `REPLACE_WITH_KV_NAMESPACE_ID` in `wrangler.jsonc` with the returned ID.
+3. Put the returned namespace ID in `wrangler.jsonc`.
 4. Add a long random synchronization key as a Worker secret:
 
    ```powershell

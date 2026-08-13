@@ -95,3 +95,5 @@ Family mobile targets are iPhone 16, Pixel 7a, and Pixel 8a. On narrow screens t
 The venue section has no assignment control. Every listed session has two independently saved fields: `事前の狙い・質問` and `当日メモ`. Both use browser local storage and are included in Markdown and JSON exports. They persist across normal reloads in the same browser and origin, but do not sync to another device or a server.
 
 The page now conforms to the repository-wide `shared/trip-field` field-layout contract. Its existing HRS appearance is preserved, while storage uses the shared runtime and the generated stylesheet includes the shared core components for future compatibility.
+
+Cloudflare synchronization was deployed on 2026-08-13 at `https://trip-field-sync.mrkn55.workers.dev`. The synchronization key is stored only as a Worker Secret and by the user; it is not present in the page source or repository. A final GitHub Pages smartphone-to-PC round-trip test remains before declaring the cloud-enabled v3 workflow complete.

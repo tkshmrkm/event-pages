@@ -10,7 +10,7 @@ const sharedCoreCss = fs.readFileSync(path.join(sharedDir, 'core.css'), 'utf8');
 const sourceCssMatch = source.match(/<style>([\s\S]*?)<\/style>/);
 if (!sourceCssMatch) throw new Error('Source CSS not found');
 // Set this to the deployed trip-notes Worker URL. Never put SYNC_TOKEN here.
-const cloudEndpoint = '';
+const cloudEndpoint = 'https://trip-field-sync.mrkn55.workers.dev';
 
 function mustReplace(text, search, replacement, label) {
   if (typeof search === 'string' && !text.includes(search)) {

@@ -7,6 +7,9 @@
 HRS Europe 2026で作ったスマートフォン向け出張ページを、イベント固有の
 配色と構成を保ったまま、EUROBLECHなど今後の海外出張へ再利用できる基盤にする。
 
+今後作る展示会、講演会、カンファレンス、工場見学、企業訪問のメモは、
+原則としてこの形式を使う。
+
 このページは仮案から作り始め、候補比較、仮決め、確定、当日参照、現地メモ、
 PC保存までを一続きで支える。
 
@@ -41,22 +44,22 @@ git status --branch --short
 - HRS画面のCloudflare同期UI
 - 海外出張ページの総括文書
 
-## 未完了・未配備
+## 未完了
 
-### 1. Cloudflare実配備
+### 1. Cloudflare実地往復テスト
 
-コードは完成しているが、外部環境はまだ作っていない。
+2026-08-13に次を配備済み。
 
-- `cloudflare/trip-notes-worker/wrangler.jsonc` の
-  `REPLACE_WITH_KV_NAMESPACE_ID` を実IDへ置換する必要がある
-- Worker Secret `SYNC_TOKEN` の登録が必要
-- Workerのデプロイが必要
-- 配備URLを `202609_HumanoidSummitEurope/build_v3.mjs` の
-  `cloudEndpoint` へ設定する必要がある
-- 配備後、スマートフォン入力 → PC読込 → Markdown/JSON DLを実地確認する
+- 専用Workers KV
+- Worker Secret `SYNC_TOKEN`
+- `trip-field-sync` Worker
+- `https://trip-field-sync.mrkn55.workers.dev`
+- HRS `cloudEndpoint` の設定
+- キーなしアクセスが401になることの確認
 
-秘密情報をコミットしてはいけない。LSP管理ページの公開HTML内にあるキーを
-再利用しない。
+残作業は、GitHub Pagesへ反映後にスマートフォン相当でテストメモを保存し、
+PC相当でクラウドから読み込み、Markdown/JSONをダウンロードする実地確認。
+同期キーはユーザーが保持しており、リポジトリには保存しない。
 
 ### 2. 予定状態の共通部品
 
@@ -86,14 +89,11 @@ git status --branch --short
 
 ## 推奨する次の着手順
 
-1. ユーザーがCloudflareへの外部変更を許可した場合、Worker/KVを配備する
-2. HRSで実際のスマートフォン→PC同期を確認する
-3. 共通ランタイムに予定の5段階状態を追加する
-4. 共通ランタイムに任意の人別フォーカスを追加する
-5. EUROBLECHの既存内容を新基盤へ移す
-6. 393px、412px、PC、机上印刷を検証する
-
-Cloudflare配備の許可がない場合は、3と4を先に進めてよい。
+1. HRSで実際のスマートフォン→PC同期を確認する
+2. 共通ランタイムに予定の5段階状態を追加する
+3. 共通ランタイムに任意の人別フォーカスを追加する
+4. EUROBLECHの既存内容を新基盤へ移す
+5. 393px、412px、PC、机上印刷を検証する
 
 ## 重要ファイル
 

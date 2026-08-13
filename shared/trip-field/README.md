@@ -4,6 +4,11 @@ Reusable foundation for static overseas-business-trip pages in this repository.
 It standardizes field operation without forcing every event to share the same
 visual design.
 
+This is the default note format for future exhibitions, conferences, lectures,
+factory visits, and similar field-research trips. Event pages may differ
+visually, but should reuse the storage, synchronization, and final-download
+workflow unless there is a concrete reason not to.
+
 ## Stable interaction contract
 
 Every new trip page should have only three primary field sections:
@@ -35,6 +40,11 @@ Event-specific:
 - itinerary content and traveler lanes;
 - venue record type (session, exhibitor, factory visit, meeting, etc.);
 - family-facing wording and print content.
+
+The record unit may be a session, exhibitor/booth, factory visit, meeting, or
+other event-specific target. Each unit should normally provide `事前の狙い・質問`
+and `当日メモ`. Additional fields such as follow-up actions may be added without
+changing the three primary sections.
 
 ## Files
 

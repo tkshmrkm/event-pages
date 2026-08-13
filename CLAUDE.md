@@ -18,6 +18,11 @@
 イベントごとの配色と情報構造は維持し、操作、保存、スマートフォン対応、
 印刷時の役割だけを共通化する。
 
+この基盤は今後の展示会、講演会、カンファレンス、工場見学、企業訪問に
+原則適用する。記録単位は講演、出展社・ブース、訪問先、面談などへ変更して
+よいが、`事前の狙い・質問 / 当日メモ / PCでのMarkdown・JSON保存` は
+共通契約として維持する。
+
 ## 編集上の重要事項
 
 - HRS v3の生成物を直接編集しない。
@@ -40,9 +45,10 @@ Cloudflareコードは `cloudflare/trip-notes-worker` にある。
 
 - 同期キーをHTML、JavaScript、設定ファイル、コミットへ書かない。
 - Worker Secretの `SYNC_TOKEN` として登録する。
-- `wrangler.jsonc` のKV IDは現在プレースホルダーである。
-- HRSの `cloudEndpoint` は現在空文字で、同期UIは安全に無効化されている。
-- 実デプロイは外部状態を変更するため、ユーザーの確認を得てから行う。
+- Workers KV、Worker Secret、Workerは2026-08-13に配備済み。
+- Worker URLは `https://trip-field-sync.mrkn55.workers.dev`。
+- HRSの `cloudEndpoint` は配備URLへ設定済み。
+- 同期キーの値はユーザーのみが保持し、リポジトリには存在しない。
 - 現方式は1出張1スナップショットのlast-write-winsであり、複数人の同時編集用
   ではない。
 

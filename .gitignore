@@ -2,6 +2,9 @@
 **/.claude/
 **/.DS_Store
 **/Thumbs.db
+**/node_modules/
+**/.dev.vars*
+**/.env*
 
 # Private or non-public documents
 **/*.pdf

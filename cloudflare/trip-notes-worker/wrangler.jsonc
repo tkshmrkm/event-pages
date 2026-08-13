@@ -4,6 +4,7 @@
   "main": "src/index.js",
   "compatibility_date": "2026-08-13",
   "workers_dev": true,
+  "preview_urls": false,
   "vars": {
     "ALLOWED_ORIGINS": "https://tkshmrkm.github.io,http://localhost:5511,http://127.0.0.1:5511"
   },
@@ -13,7 +14,7 @@
   "kv_namespaces": [
     {
       "binding": "TRIP_NOTES",
-      "id": "REPLACE_WITH_KV_NAMESPACE_ID"
+      "id": "afe4f505d43747c7bf007aca038ecf78"
     }
   ]
 }
