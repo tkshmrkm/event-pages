@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HRS Europe 2026 v2 配色提案</title>
+<style>
+*{box-sizing:border-box}
+:root{font-family:'Meiryo','BIZ UDPGothic','Yu Gothic UI',system-ui,sans-serif;color:#202830;background:#e9edf1}
+body{margin:0;background:#e9edf1;line-height:1.55}
+.page{max-width:1240px;margin:auto;padding:28px 18px 44px}
+h1{margin:0;font-size:23px}.intro{margin:5px 0 22px;color:#56636f;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.proposal{min-width:0}.proposal-title{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:0 2px 8px;font-size:17px}
+.proposal-title small{color:#66737f;font-size:10px;font-weight:400;letter-spacing:.08em;text-transform:uppercase}
+.recommend{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;background:#202830;color:#fff;font-size:9px;vertical-align:2px}
+.mock{overflow:hidden;border:1px solid var(--line);border-radius:15px;background:var(--page);color:var(--text);box-shadow:0 8px 22px rgba(25,40,52,.09)}
+.header{padding:14px 15px 0;background:var(--card);border-bottom:1px solid var(--line)}
+.eyebrow{color:var(--label);font-size:9px;font-weight:700;letter-spacing:.15em}.header h2{margin:2px 0 0;font-size:16px}.subtitle{color:var(--muted);font-size:10px}
+.tabs{display:flex;margin-top:8px;overflow:hidden}.tabs span{padding:5px 9px 6px;color:var(--label);font-size:10px;font-weight:700;white-space:nowrap}.tabs .on{color:var(--text);border-bottom:2px solid var(--active)}
+.content{padding:13px}.section-label{margin-bottom:6px;color:var(--label);font-size:9px;font-weight:700;letter-spacing:.08em}
+.day{overflow:hidden;margin-bottom:7px;border:1px solid var(--line);border-radius:9px;background:var(--card)}
+.day-head{padding:8px 11px;background:var(--move);color:var(--move-text)}.day-head.conf{background:var(--conf);color:var(--conf-text)}.day-head.choose{background:var(--choose);color:var(--choose-text)}
+.day-head b{display:block;font-size:12px}.day-head span{display:block;font-size:10px;opacity:.86}
+.day-inside{display:grid;grid-template-columns:74px 1fr}.time{padding:8px;background:var(--surface-2);color:var(--secondary);font-size:10px;font-weight:700}.activity{padding:8px;background:var(--card);font-size:10px}.activity b{display:block;color:var(--text)}.activity span{color:var(--muted)}
+.people{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}.person{padding:2px 6px;border-radius:999px;font-size:9px;font-weight:700}.person.a{background:var(--person-a);color:var(--person-a-text)}.person.b{background:var(--person-b);color:var(--person-b-text)}
+.join{margin:7px 0;padding:6px 8px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface-2);color:var(--secondary);font-size:10px;font-weight:700}
+.join code{padding:1px 4px;border:1px solid var(--line);border-radius:4px;background:var(--card);font:inherit}
+.inside{padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--surface-1)}
+.inside-title{margin-bottom:5px;color:var(--label);font-size:9px;font-weight:700}.inside-row{padding:6px 7px;background:var(--card);border-top:1px solid var(--line);font-size:10px}.inside-row:first-of-type{border-top:0}.inside-row.alt{background:var(--surface-3)}
+.primary{display:block;color:var(--text);font-weight:700}.secondary{display:block;color:var(--secondary)}.muted{display:block;color:var(--muted);font-size:9px}.note{margin-top:5px;padding:5px 7px;border-left:3px solid var(--accent);background:var(--surface-0);color:var(--muted);font-size:9px}
+.warning{margin-top:7px;padding:6px 8px;border:1px solid var(--warn-line);border-radius:7px;background:var(--warn);color:var(--warn-text);font-size:10px}
+.palette{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:10px}.chip{min-width:0}.color{height:25px;border:1px solid rgba(25,35,45,.14);border-radius:5px;background:var(--c)}.chip b,.chip code{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.chip b{margin-top:2px;color:var(--secondary);font-size:8px}.chip code{color:var(--label);font-size:8px}
+.hierarchy{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}.scale{padding:7px;border:1px solid var(--line);border-radius:7px;background:var(--card)}.scale h3{margin:0 0 4px;color:var(--label);font-size:9px}.scale p{margin:2px 0;font-size:9px}.scale code{float:right;color:var(--label)}
+.p1{color:var(--text)}.p2{color:var(--secondary)}.p3{color:var(--muted)}.p4{color:var(--label)}
+.surface-row{display:flex;gap:3px}.surface{flex:1;height:34px;padding:4px;border:1px solid var(--line);border-radius:4px;color:var(--secondary);font-size:8px}.s0{background:var(--surface-0)}.s1{background:var(--card)}.s2{background:var(--surface-2)}.s3{background:var(--surface-3)}
+.reason{margin:7px 2px 0;color:#66737f;font-size:10px}
+.legend{margin-top:22px;padding:12px 14px;border:1px solid #d2d9df;border-radius:10px;background:#f7f9fb;color:#3f4c57;font-size:11px}.legend b{color:#202830}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.page{padding:19px 11px 30px}}
+@media(max-width:430px){.palette{grid-template-columns:repeat(3,1fr)}.hierarchy{grid-template-columns:1fr}}
+
+/* A — Industrial Signal */
+.a-industrial{
+ --page:#F1F5F6;--card:#FFFFFF;--surface-0:#F1F5F6;--surface-1:#E7EEF0;--surface-2:#DCE7EA;--surface-3:#F5F8F9;--line:#CFDADF;
+ --text:#182E35;--secondary:#304952;--muted:#5A6D74;--label:#71838A;--active:#176C73;--accent:#2D8D91;
+ --move:#BFE6E4;--move-text:#164B4A;--conf:#F7D1BD;--conf-text:#743118;--choose:#D9D7F2;--choose-text:#3F367B;
+ --warn:#FBE5A3;--warn-line:#DFC66F;--warn-text:#624900;--person-a:#D5E7F8;--person-a-text:#1C4F7A;--person-b:#D6EBDD;--person-b-text:#1E5935}
+/* B — Stuttgart Modern */
+.b-stuttgart{
+ --page:#F8F2E8;--card:#FFFDF8;--surface-0:#F8F2E8;--surface-1:#EFE6D8;--surface-2:#E7DCCB;--surface-3:#FBF7F0;--line:#D9CCBA;
+ --text:#27231F;--secondary:#493D33;--muted:#6B5C50;--label:#897868;--active:#255EA8;--accent:#D34B37;
+ --move:#C9DCF3;--move-text:#214F83;--conf:#F0B9AE;--conf-text:#78251C;--choose:#DED6B2;--choose-text:#554A14;
+ --warn:#FFD9A3;--warn-line:#DCA85A;--warn-text:#653B00;--person-a:#C9DCF3;--person-a-text:#214F83;--person-b:#D9E2BA;--person-b-text:#40551F}
+/* C — Executive Graphite */
+.c-executive{
+ --page:#EEF1F3;--card:#FFFFFF;--surface-0:#EEF1F3;--surface-1:#E4E8EB;--surface-2:#D9E0E4;--surface-3:#F4F6F7;--line:#CBD3D8;
+ --text:#20262C;--secondary:#3A444C;--muted:#626D75;--label:#7D8991;--active:#235A7B;--accent:#8A603B;
+ --move:#D1D9DE;--move-text:#33434D;--conf:#C8DFEF;--conf-text:#1D4F70;--choose:#E7D8C7;--choose-text:#67401F;
+ --warn:#F3D0D0;--warn-line:#D89D9D;--warn-text:#762727;--person-a:#C6DCEB;--person-a-text:#234F6B;--person-b:#D3E0D7;--person-b-text:#365442}
+/* D — Robotics Lab */
+.d-robotics{
+ --page:#F3F4FA;--card:#FFFFFF;--surface-0:#F3F4FA;--surface-1:#E9ECF5;--surface-2:#DFE3F0;--surface-3:#F7F8FC;--line:#D2D7E6;
+ --text:#1E2340;--secondary:#393F61;--muted:#606783;--label:#7D86A5;--active:#315FC5;--accent:#2F9D89;
+ --move:#C8EFE5;--move-text:#135E50;--conf:#CCE3FF;--conf-text:#1F4F87;--choose:#F0D7ED;--choose-text:#713064;
+ --warn:#FFE5AE;--warn-line:#E0BE70;--warn-text:#664800;--person-a:#D5ECFA;--person-a-text:#235774;--person-b:#E1F0D1;--person-b-text:#3D6420}
+</style>
+</head>
+<body>
+<main class="page">
+ <h1>HRS Europe 2026 — v2 配色提案</h1>
+ <p class="intro">現行色の微調整ではなく、印象の異なる4方向。各案とも、外側の背景・カード内部面・文字の4階層・意味色を一体で設計。</p>
+ <div class="grid">
+
+  <section class="proposal a-industrial">
+   <h2 class="proposal-title">A. Industrial Signal <span><em class="recommend">推奨</em><small>精密・産業・視認性</small></span></h2>
+   <div class="mock"><header class="header"><div class="eyebrow">HUMANOID ROBOT SUMMIT EUROPE</div><h2>HRS Europe 2026 出張ガイド</h2><div class="subtitle">Stuttgart · 9/8 — 9/14</div><nav class="tabs"><span class="on">旅程</span><span>準備</span><span>会場</span><span>記録</span><span>家族</span></nav></header>
+    <div class="content"><div class="section-label">日カード：種類を色相で分ける</div>
+     <div class="day"><div class="day-head"><b>9/8（火）</b><span>FRA着 → Stuttgart移動</span></div><div class="day-inside"><div class="time">10:51</div><div class="activity"><b>Frankfurt空港発 → Stuttgart Hbf</b><span>ICE・1時間20分</span><div class="people"><i class="person a">京都発</i><i class="person b">犬山発</i></div></div></div></div>
+     <div class="day"><div class="day-head conf"><b>9/9（水）</b><span>HRS Day 1 — Liederhalle</span></div></div>
+     <div class="day"><div class="day-head choose"><b>9/12（土）</b><span>プラン A / B / C / D を選択</span></div></div>
+     <div class="join"><code>9/7</code> 名古屋で合流 — 無彩の内部面</div>
+     <div class="inside"><div class="inside-title">カード内部：4段階の文字と面</div><div class="inside-row"><span class="primary">主情報：何をするか</span><span class="secondary">補助情報：手段・順序</span><span class="muted">注記：条件・補足・未確認事項</span></div><div class="inside-row alt"><span class="primary">補助面：時間欄・表見出し</span><span class="secondary">白い本文面と濃淡で区切る</span></div><div class="note">詳細メモは色相を増やさず、左罫線と地色だけで一段下げる。</div></div>
+     <div class="warning">⚠ 警告・要対応だけを黄で表示</div>
+     <div class="palette"><div class="chip"><div class="color" style="--c:var(--move)"></div><b>通常日</b><code>#BFE6E4</code></div><div class="chip"><div class="color" style="--c:var(--conf)"></div><b>HRS</b><code>#F7D1BD</code></div><div class="chip"><div class="color" style="--c:var(--choose)"></div><b>未確定</b><code>#D9D7F2</code></div><div class="chip"><div class="color" style="--c:var(--person-a)"></div><b>京都発</b><code>#D5E7F8</code></div><div class="chip"><div class="color" style="--c:var(--person-b)"></div><b>犬山発</b><code>#D6EBDD</code></div><div class="chip"><div class="color" style="--c:var(--warn)"></div><b>警告</b><code>#FBE5A3</code></div></div>
+     <div class="hierarchy"><div class="scale"><h3>文字</h3><p class="p1">主文字 <code>#182E35</code></p><p class="p2">補助見出し <code>#304952</code></p><p class="p3">注記 <code>#5A6D74</code></p><p class="p4">ラベル <code>#71838A</code></p></div><div class="scale"><h3>背景・内部面</h3><div class="surface-row"><div class="surface s0">地</div><div class="surface s1">白</div><div class="surface s2">時間</div><div class="surface s3">補助</div></div></div></div>
+    </div>
+   </div><p class="reason">青緑を基調に、HRSだけをコーラルで立たせる。産業技術イベントらしさと実用性のバランスが最も良い。</p>
+  </section>
+
+  <section class="proposal b-stuttgart">
+   <h2 class="proposal-title">B. Stuttgart Modern <small>欧州・建築・編集的</small></h2>
+   <div class="mock"><header class="header"><div class="eyebrow">HUMANOID ROBOT SUMMIT EUROPE</div><h2>HRS Europe 2026 出張ガイド</h2><div class="subtitle">Stuttgart · 9/8 — 9/14</div><nav class="tabs"><span class="on">旅程</span><span>準備</span><span>会場</span><span>記録</span><span>家族</span></nav></header>
+    <div class="content"><div class="section-label">日カード：青・赤・オーカー</div>
+     <div class="day"><div class="day-head"><b>9/8（火）</b><span>FRA着 → Stuttgart移動</span></div><div class="day-inside"><div class="time">10:51</div><div class="activity"><b>Frankfurt空港発 → Stuttgart Hbf</b><span>ICE・1時間20分</span><div class="people"><i class="person a">京都発</i><i class="person b">犬山発</i></div></div></div></div>
+     <div class="day"><div class="day-head conf"><b>9/9（水）</b><span>HRS Day 1 — Liederhalle</span></div></div><div class="day"><div class="day-head choose"><b>9/12（土）</b><span>プラン A / B / C / D を選択</span></div></div>
+     <div class="join"><code>9/7</code> 名古屋で合流 — ウォームグレー面</div>
+     <div class="inside"><div class="inside-title">カード内部：紙面のような温かい濃淡</div><div class="inside-row"><span class="primary">主情報：何をするか</span><span class="secondary">補助情報：手段・順序</span><span class="muted">注記：条件・補足・未確認事項</span></div><div class="inside-row alt"><span class="primary">補助面：時間欄・表見出し</span><span class="secondary">クリーム地と白面を使い分ける</span></div><div class="note">赤はHRS、青は移動、オーカーは選択。欧州の案内冊子に近い印象。</div></div>
+     <div class="warning">⚠ 警告は未確定のオーカーより橙寄り</div>
+     <div class="palette"><div class="chip"><div class="color" style="--c:var(--move)"></div><b>通常日</b><code>#C9DCF3</code></div><div class="chip"><div class="color" style="--c:var(--conf)"></div><b>HRS</b><code>#F0B9AE</code></div><div class="chip"><div class="color" style="--c:var(--choose)"></div><b>未確定</b><code>#DED6B2</code></div><div class="chip"><div class="color" style="--c:var(--person-a)"></div><b>京都発</b><code>#C9DCF3</code></div><div class="chip"><div class="color" style="--c:var(--person-b)"></div><b>犬山発</b><code>#D9E2BA</code></div><div class="chip"><div class="color" style="--c:var(--warn)"></div><b>警告</b><code>#FFD9A3</code></div></div>
+     <div class="hierarchy"><div class="scale"><h3>文字</h3><p class="p1">主文字 <code>#27231F</code></p><p class="p2">補助見出し <code>#493D33</code></p><p class="p3">注記 <code>#6B5C50</code></p><p class="p4">ラベル <code>#897868</code></p></div><div class="scale"><h3>背景・内部面</h3><div class="surface-row"><div class="surface s0">地</div><div class="surface s1">白</div><div class="surface s2">時間</div><div class="surface s3">補助</div></div></div></div>
+    </div>
+   </div><p class="reason">冷たいUI感を避け、Stuttgartの建築・工業デザインを連想させる編集的な案。印刷にもなじむ。</p>
+  </section>
+
+  <section class="proposal c-executive">
+   <h2 class="proposal-title">C. Executive Graphite <small>業務・静けさ・長時間閲覧</small></h2>
+   <div class="mock"><header class="header"><div class="eyebrow">HUMANOID ROBOT SUMMIT EUROPE</div><h2>HRS Europe 2026 出張ガイド</h2><div class="subtitle">Stuttgart · 9/8 — 9/14</div><nav class="tabs"><span class="on">旅程</span><span>準備</span><span>会場</span><span>記録</span><span>家族</span></nav></header>
+    <div class="content"><div class="section-label">日カード：低彩度で情報を主役に</div>
+     <div class="day"><div class="day-head"><b>9/8（火）</b><span>FRA着 → Stuttgart移動</span></div><div class="day-inside"><div class="time">10:51</div><div class="activity"><b>Frankfurt空港発 → Stuttgart Hbf</b><span>ICE・1時間20分</span><div class="people"><i class="person a">京都発</i><i class="person b">犬山発</i></div></div></div></div>
+     <div class="day"><div class="day-head conf"><b>9/9（水）</b><span>HRS Day 1 — Liederhalle</span></div></div><div class="day"><div class="day-head choose"><b>9/12（土）</b><span>プラン A / B / C / D を選択</span></div></div>
+     <div class="join"><code>9/7</code> 名古屋で合流 — グラファイト面</div>
+     <div class="inside"><div class="inside-title">カード内部：無彩色中心の階層</div><div class="inside-row"><span class="primary">主情報：何をするか</span><span class="secondary">補助情報：手段・順序</span><span class="muted">注記：条件・補足・未確認事項</span></div><div class="inside-row alt"><span class="primary">補助面：時間欄・表見出し</span><span class="secondary">色より明度差で構造を示す</span></div><div class="note">HRSだけ青、選択日はブロンズ。通常日はほぼ無彩色。</div></div>
+     <div class="warning">⚠ 警告は黄ではなく淡い赤</div>
+     <div class="palette"><div class="chip"><div class="color" style="--c:var(--move)"></div><b>通常日</b><code>#D1D9DE</code></div><div class="chip"><div class="color" style="--c:var(--conf)"></div><b>HRS</b><code>#C8DFEF</code></div><div class="chip"><div class="color" style="--c:var(--choose)"></div><b>未確定</b><code>#E7D8C7</code></div><div class="chip"><div class="color" style="--c:var(--person-a)"></div><b>京都発</b><code>#C6DCEB</code></div><div class="chip"><div class="color" style="--c:var(--person-b)"></div><b>犬山発</b><code>#D3E0D7</code></div><div class="chip"><div class="color" style="--c:var(--warn)"></div><b>警告</b><code>#F3D0D0</code></div></div>
+     <div class="hierarchy"><div class="scale"><h3>文字</h3><p class="p1">主文字 <code>#20262C</code></p><p class="p2">補助見出し <code>#3A444C</code></p><p class="p3">注記 <code>#626D75</code></p><p class="p4">ラベル <code>#7D8991</code></p></div><div class="scale"><h3>背景・内部面</h3><div class="surface-row"><div class="surface s0">地</div><div class="surface s1">白</div><div class="surface s2">時間</div><div class="surface s3">補助</div></div></div></div>
+    </div>
+   </div><p class="reason">彩度を抑えた業務資料寄り。情報量が多いページでも疲れにくく、会議中に目立ちすぎない。</p>
+  </section>
+
+  <section class="proposal d-robotics">
+   <h2 class="proposal-title">D. Robotics Lab <small>未来・研究・デジタル</small></h2>
+   <div class="mock"><header class="header"><div class="eyebrow">HUMANOID ROBOT SUMMIT EUROPE</div><h2>HRS Europe 2026 出張ガイド</h2><div class="subtitle">Stuttgart · 9/8 — 9/14</div><nav class="tabs"><span class="on">旅程</span><span>準備</span><span>会場</span><span>記録</span><span>家族</span></nav></header>
+    <div class="content"><div class="section-label">日カード：研究ツールらしい寒色基調</div>
+     <div class="day"><div class="day-head"><b>9/8（火）</b><span>FRA着 → Stuttgart移動</span></div><div class="day-inside"><div class="time">10:51</div><div class="activity"><b>Frankfurt空港発 → Stuttgart Hbf</b><span>ICE・1時間20分</span><div class="people"><i class="person a">京都発</i><i class="person b">犬山発</i></div></div></div></div>
+     <div class="day"><div class="day-head conf"><b>9/9（水）</b><span>HRS Day 1 — Liederhalle</span></div></div><div class="day"><div class="day-head choose"><b>9/12（土）</b><span>プラン A / B / C / D を選択</span></div></div>
+     <div class="join"><code>9/7</code> 名古屋で合流 — ブルーグレー面</div>
+     <div class="inside"><div class="inside-title">カード内部：青みのある面階層</div><div class="inside-row"><span class="primary">主情報：何をするか</span><span class="secondary">補助情報：手段・順序</span><span class="muted">注記：条件・補足・未確認事項</span></div><div class="inside-row alt"><span class="primary">補助面：時間欄・表見出し</span><span class="secondary">白と青みのグレーを交互に使う</span></div><div class="note">開催日は青、通常日はミント、選択日はマゼンタ。意味色が最も明瞭。</div></div>
+     <div class="warning">⚠ 警告だけを暖色にして視線を止める</div>
+     <div class="palette"><div class="chip"><div class="color" style="--c:var(--move)"></div><b>通常日</b><code>#C8EFE5</code></div><div class="chip"><div class="color" style="--c:var(--conf)"></div><b>HRS</b><code>#CCE3FF</code></div><div class="chip"><div class="color" style="--c:var(--choose)"></div><b>未確定</b><code>#F0D7ED</code></div><div class="chip"><div class="color" style="--c:var(--person-a)"></div><b>京都発</b><code>#D5ECFA</code></div><div class="chip"><div class="color" style="--c:var(--person-b)"></div><b>犬山発</b><code>#E1F0D1</code></div><div class="chip"><div class="color" style="--c:var(--warn)"></div><b>警告</b><code>#FFE5AE</code></div></div>
+     <div class="hierarchy"><div class="scale"><h3>文字</h3><p class="p1">主文字 <code>#1E2340</code></p><p class="p2">補助見出し <code>#393F61</code></p><p class="p3">注記 <code>#606783</code></p><p class="p4">ラベル <code>#7D86A5</code></p></div><div class="scale"><h3>背景・内部面</h3><div class="surface-row"><div class="surface s0">地</div><div class="surface s1">白</div><div class="surface s2">時間</div><div class="surface s3">補助</div></div></div></div>
+    </div>
+   </div><p class="reason">HRSらしさが最も強い案。識別性は高いが、長い旅程ページではAより少しデジタル感が前に出る。</p>
+  </section>
+ </div>
+ <div class="legend"><b>提案：</b>実用性重視ならA、欧州らしい編集感ならB、業務資料として静かに使うならC、HRSの未来感を強く出すならD。現時点の第一候補はA。</div>
+</main>
+</body>
+</html>

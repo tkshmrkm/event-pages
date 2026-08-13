@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HRS Europe 2026 v2 — 人フィルターなしサンプル</title>
+<style>
+:root{
+  font-family:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif;
+  --page:#EDF2F3;--card:#FFFFFF;--line:#AEBCC3;--line2:#D6E0E4;
+  --text:#101820;--text2:#263640;--muted:#46565F;--label:#5A6A73;
+  --move:#9FD7D8;--move-text:#0B3A3C;
+  --conf:#F0B49F;--conf-text:#5D200F;
+  --choose:#CFC7EA;--choose-text:#302568;
+  --kyoto:#B7D4F1;--kyoto-text:#153F68;
+  --inuyama:#BFDFC6;--inuyama-text:#17482A;
+  --neutral:#D8E2E6;--neutral-text:#263640;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#e9edf1;color:var(--text);font-family:inherit;font-size:16px;line-height:1.68;-webkit-font-smoothing:antialiased}
+.frame{max-width:480px;margin:22px auto;padding:0 10px}
+.caption{margin:0 0 9px;font-size:14px;color:#5d6973}
+.app{overflow:hidden;border:2px solid var(--line);border-radius:14px;background:var(--page);box-shadow:0 10px 30px rgba(24,46,53,.12)}
+.header{background:#FFFFFF;border-bottom:2px solid var(--line)}
+.navstick{position:sticky;top:0;z-index:10;background:#FFFFFF}
+.top{padding:11px 14px 8px}.eyebrow{font-size:11px;font-weight:700;letter-spacing:.11em;color:var(--label)}
+h1{margin:2px 0 0;font-size:19px;line-height:1.45}.subtitle{font-size:13px;color:var(--muted)}
+.tabs{display:flex;overflow-x:auto;padding:0 5px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tab{display:flex;flex:1;min-width:66px;min-height:48px;padding:6px 7px;align-items:center;justify-content:center;text-align:center;color:var(--label);font-size:14px;font-weight:700}.tab.on{color:var(--text);border-bottom:3px solid var(--text)}
+.datebar{display:flex;gap:6px;overflow-x:auto;padding:8px 10px;border-top:1px solid var(--line2);border-bottom:2px solid var(--line);scrollbar-width:none}.datebar::-webkit-scrollbar{display:none}
+.date{display:flex;flex:0 0 auto;min-width:48px;min-height:44px;padding:4px 10px;align-items:center;justify-content:center;border:2px solid var(--line);border-radius:999px;background:#fff;color:var(--text2);font-size:14px;font-weight:700}.date.on{background:var(--text);border-color:var(--text);color:#fff}
+.content{padding:13px 11px 20px}.section-title{margin:1px 2px 9px;color:var(--label);font-size:13px;font-weight:700;letter-spacing:.04em}
+.day{overflow:hidden;margin-bottom:11px;border:2px solid var(--line);border-radius:10px;background:var(--card)}
+.day-head{position:relative;padding:10px 72px 10px 12px;background:var(--move);color:var(--move-text)}
+.day-head.conf{background:var(--conf);color:var(--conf-text)}.day-head.choose{background:var(--choose);color:var(--choose-text)}
+.day-head b{display:block;font-size:17px;line-height:1.45}.day-head span{display:block;font-size:14px;opacity:.95}.badge{position:absolute;right:9px;top:11px;padding:2px 8px;border-radius:999px;background:rgba(0,0,0,.11);font-size:12px;font-weight:700;font-style:normal}
+.lanes{display:grid;grid-template-columns:1fr}.lane+.lane{border-top:2px solid var(--line)}
+.lane-title{padding:7px 10px;font-size:14px;font-weight:700}.lane.kyoto .lane-title{background:var(--kyoto);color:var(--kyoto-text)}.lane.inuyama .lane-title{background:var(--inuyama);color:var(--inuyama-text)}.lane.all .lane-title{background:var(--line2);color:var(--text2)}
+.row{display:grid;grid-template-columns:88px 1fr;border-top:1px solid var(--line2)}.row:first-of-type{border-top:0}.time{padding:10px;background:#E7EEF0;color:var(--text2);font-size:14px;font-weight:700}.what{padding:9px 10px;color:var(--text);font-size:15px}.what b{display:block;line-height:1.55}.sub{color:var(--muted);font-size:13px}
+.join{display:flex;gap:8px;align-items:center;padding:9px 11px;border-top:2px solid var(--line);border-bottom:2px solid var(--line);background:var(--neutral);color:var(--neutral-text);font-size:14px;font-weight:700}.join time{padding:2px 6px;border:1px solid var(--line);border-radius:4px;background:#fff}
+.single{border-top:1px solid var(--line2)}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:9px;background:#ECE9F6;border-bottom:2px solid #AFA7D0}.plan{display:flex;min-height:44px;padding:5px 8px;align-items:center;justify-content:center;border:2px solid #AFA7D0;border-radius:8px;background:#fff;color:var(--choose-text);font-size:13px;font-weight:700;text-align:center}.plan.on{background:var(--choose-text);border-color:var(--choose-text);color:#fff}
+.after{margin-top:14px;padding:9px;border:2px dashed var(--line);border-radius:10px;background:#f8fafb}.after-label{margin-bottom:7px;color:var(--label);font-size:13px;font-weight:700}.after .day{margin:0}.after-note{margin:7px 2px 0;color:var(--muted);font-size:13px}
+.rule{display:grid;grid-template-columns:1fr;gap:7px;margin-top:13px}.rule div{padding:10px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:13px;color:var(--muted)}.rule b{display:block;color:var(--text2);font-size:14px}
+@media(max-width:600px){.frame{margin:10px auto}.datebar{padding-inline:8px}}
+</style>
+</head>
+<body>
+<main class="frame">
+  <p class="caption">人フィルターを削除し、人物色を「別行動レーンだけ」に限定したサンプル</p>
+  <section class="app">
+    <header class="header">
+      <div class="top"><div class="eyebrow">HUMANOID ROBOT SUMMIT EUROPE</div><h1>HRS Europe 2026 出張ガイド</h1><div class="subtitle">Stuttgart · 2026年9月7日〜14日</div></div>
+    </header>
+    <div class="navstick"><nav class="tabs" aria-label="タブ"><div class="tab on">📅 旅程</div><div class="tab">✅ 準備</div><div class="tab">🤖 会場</div><div class="tab">📝 記録</div><div class="tab">🏠 家族</div></nav>
+    <nav class="datebar" aria-label="日付"><span class="date on">9/7</span><span class="date">9/8</span><span class="date">9/9</span><span class="date">9/10</span><span class="date">9/11</span><span class="date">9/12</span><span class="date">9/13</span><span class="date">9/14</span></nav></div>
+
+    <div class="content">
+      <div class="section-title">別行動 → 合流 → 全員</div>
+
+      <article class="day">
+        <div class="day-head"><b>9/7（月）</b><span>各地発 → 名古屋で合流 → NGO発</span></div>
+        <div class="lanes">
+          <section class="lane kyoto"><div class="lane-title">京都発</div><div class="row"><div class="time">18:10</div><div class="what"><b>京都駅発 → 名古屋駅</b><span class="sub">新幹線・約35分</span></div></div><div class="row"><div class="time">19:05</div><div class="what"><b>名古屋駅で合流</b></div></div></section>
+          <section class="lane inuyama"><div class="lane-title">犬山発</div><div class="row"><div class="time">18:20</div><div class="what"><b>犬山駅発 → 名鉄名古屋駅</b><span class="sub">名鉄・約30分</span></div></div><div class="row"><div class="time">19:05</div><div class="what"><b>名古屋駅で合流</b></div></div></section>
+        </div>
+        <div class="join"><time>19:05</time><span>合流 — ここから全員</span></div>
+        <section class="lane all single"><div class="lane-title">全員</div><div class="row"><div class="time">19:30</div><div class="what"><b>名古屋駅発 → 中部国際空港</b><span class="sub">名鉄ミュースカイ</span></div></div></section>
+      </article>
+
+      <article class="day">
+        <div class="day-head conf"><b>9/9（水）</b><span>HRS Day 1 — Liederhalle</span><em class="badge">HRS</em></div>
+        <section class="lane all"><div class="lane-title">全員</div><div class="row"><div class="time">8:50</div><div class="what"><b>ホテル発 → Liederhalle</b><span class="sub">徒歩約3分</span></div></div><div class="row"><div class="time">終日</div><div class="what"><b>講演・展示・ネットワーキング</b></div></div></section>
+      </article>
+
+      <article class="day">
+        <div class="day-head choose"><b>9/12（土）</b><span>過ごし方を比較中</span><em class="badge">検討中</em></div>
+        <div class="plans"><span class="plan on">A：Mainz観戦</span><span class="plan">B：ケルン</span><span class="plan">C：ポルシェ</span><span class="plan">D：両方</span></div>
+        <section class="lane all"><div class="lane-title">全員</div><div class="row"><div class="time">午前</div><div class="what"><b>選択したプランを表示</b><span class="sub">候補を見るだけでは確定扱いにしない</span></div></div></section>
+      </article>
+
+      <div class="after">
+        <div class="after-label">プラン確定後の見え方</div>
+        <article class="day"><div class="day-head"><b>9/12（土）</b><span>Stuttgart発 → Mainz観戦 → Frankfurt空港泊</span><em class="badge">確定</em></div><section class="lane all"><div class="lane-title">全員</div><div class="row"><div class="time">8:30</div><div class="what"><b>確定した旅程だけを表示</b><span class="sub">ラベンダーを外し、通常日の色へ戻す</span></div></div></section></article>
+        <div class="after-note">「候補を選択」と「旅程を確定」は別操作として扱う想定。</div>
+      </div>
+
+      <div class="rule"><div><b>ヘッダー</b>人物フィルターを置かず、タブと日付だけにする。</div><div><b>人物色</b>9/7・9/14など、実際に分かれるレーンの見出しだけに使う。</div><div><b>合流後</b>「全員」は無彩色。人物色を本文まで持ち込まない。</div></div>
+    </div>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HRS Europe 2026 v2 — 現行・従来提案・新提案</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#E7EBEF;color:#18222B;font-family:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif;line-height:1.65;-webkit-font-smoothing:antialiased}
+.page{max-width:1280px;margin:auto;padding:24px 14px 40px}
+.page>h1{margin:0;font-size:22px;line-height:1.45}.lead{margin:5px 0 18px;color:#4D5B66;font-size:14px}
+.jump{display:flex;gap:7px;margin:0 0 14px}.jump a{display:flex;flex:1;min-height:44px;padding:6px 10px;align-items:center;justify-content:center;border:2px solid #AAB6BE;border-radius:8px;background:#FFF;color:#263640;font-size:14px;font-weight:700;text-decoration:none}.jump a:last-child{background:#14222A;border-color:#14222A;color:#FFF}
+.comparison{display:grid;grid-template-columns:repeat(3,minmax(360px,1fr));gap:14px;align-items:start}
+.option{min-width:0}.option-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 2px 7px;font-size:16px}.option-title small{color:#5E6A74;font-size:11px;font-weight:400}.recommended{padding:2px 7px;border-radius:999px;background:#14222A;color:#fff;font-size:10px}
+.phone{overflow:hidden;border:2px solid var(--line);border-radius:14px;background:var(--page);color:var(--text);box-shadow:0 6px 18px rgba(25,37,45,.09);font-family:var(--family)}
+.hero{padding:10px 12px 7px;background:var(--card);border-bottom:1px solid var(--line)}.eyebrow{color:var(--label);font-size:var(--eyebrow);font-weight:700;letter-spacing:.1em}.hero h2{margin:2px 0 0;font-size:var(--title);line-height:1.42}.subtitle{color:var(--muted);font-size:var(--small)}
+.tabs{display:flex;overflow:hidden;background:var(--card)}.tab{display:flex;flex:1;min-width:0;min-height:var(--tab-h);align-items:center;justify-content:center;border-bottom:var(--tab-line) solid transparent;color:var(--label);font-size:var(--control);font-weight:700;white-space:nowrap}.tab.on{border-color:var(--text);color:var(--text)}
+.datebar,.people-filter{display:flex;gap:5px;overflow:hidden;padding:6px 8px;background:var(--card);border-bottom:1px solid var(--line)}
+.date,.filter{display:flex;flex:0 0 auto;min-width:var(--date-h);min-height:var(--date-h);padding:2px 8px;align-items:center;justify-content:center;border:var(--control-line) solid var(--line);border-radius:999px;background:var(--card);color:var(--text2);font-size:var(--control);font-weight:700}.date.on,.filter.on{background:var(--text);border-color:var(--text);color:#fff}
+.people-filter{padding-top:5px;padding-bottom:5px}.filter{min-height:var(--filter-h)}
+.content{padding:10px}.section-label{margin:0 2px 7px;color:var(--label);font-size:var(--small);font-weight:700}
+.day{overflow:hidden;margin-bottom:9px;border:var(--card-line) solid var(--line);border-radius:9px;background:var(--card)}.day-head{position:relative;padding:8px 62px 8px 10px;background:var(--move);color:var(--move-text)}.day-head.conf{background:var(--conf);color:var(--conf-text)}.day-head.choose{background:var(--choose);color:var(--choose-text)}.day-head b{display:block;font-size:var(--day-title)}.day-head span{display:block;font-size:var(--small);opacity:.94}.badge{position:absolute;right:8px;top:9px;padding:1px 6px;border-radius:999px;background:rgba(0,0,0,.1);font-size:var(--badge);font-style:normal;font-weight:700}
+.lanes{display:grid;grid-template-columns:1fr}.lane+.lane{border-top:1px solid var(--line)}.lane-title{padding:5px 9px;background:var(--surface);color:var(--text2);font-size:var(--small);font-weight:700}.lane.kyoto .lane-title{background:var(--kyoto);color:var(--kyoto-text)}.lane.inuyama .lane-title{background:var(--inuyama);color:var(--inuyama-text)}
+.row{display:grid;grid-template-columns:var(--time-w) 1fr;border-top:1px solid var(--line2)}.time{padding:7px 8px;background:var(--time);color:var(--text2);font-size:var(--small);font-weight:700}.what{padding:7px 8px;color:var(--text);font-size:var(--body)}.what b{display:block;line-height:1.5}.sub{display:block;color:var(--muted);font-size:var(--small)}
+.join{padding:7px 9px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface);color:var(--text2);font-size:var(--small);font-weight:700}.join time{margin-right:5px;padding:1px 4px;border:1px solid var(--line);border-radius:4px;background:var(--card)}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:7px;background:var(--choose-soft);border-bottom:1px solid var(--choose-line)}.plan{display:flex;min-height:var(--plan-h);align-items:center;justify-content:center;border:var(--control-line) solid var(--choose-line);border-radius:7px;background:var(--card);color:var(--choose-text);font-size:var(--control);font-weight:700;text-align:center}.plan.on{background:var(--choose-text);border-color:var(--choose-text);color:#fff}
+.spec{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}.spec div{padding:7px;border:1px solid var(--line);border-radius:7px;background:var(--card);color:var(--muted);font-size:11px}.spec b{display:block;color:var(--text2);font-size:12px}.verdict{margin:7px 2px 0;color:#53616C;font-size:12px}
+
+/* 1. Current v2 */
+.current{--family:'Meiryo','BIZ UDPGothic',system-ui,sans-serif;--page:#FBFCFD;--card:#FFF;--line:#E6EAEE;--line2:#F2F5F8;--surface:#DFE7EE;--time:#FAFCFD;--text:#2C3440;--text2:#3A4453;--muted:#626C7A;--label:#97A0AC;--move:#B5DFE8;--move-text:#17505C;--conf:#FBBFC9;--conf-text:#8C2740;--choose:#D5C9F5;--choose-text:#4A3388;--choose-soft:#EDE7FB;--choose-line:#C9B9F0;--kyoto:#BAD2F7;--kyoto-text:#21518F;--inuyama:#B6E4C4;--inuyama-text:#1A5C33;--title:15px;--body:14px;--small:11px;--control:11px;--day-title:15px;--eyebrow:10px;--badge:10px;--tab-h:38px;--date-h:31px;--filter-h:31px;--plan-h:33px;--time-w:76px;--tab-line:2px;--control-line:1px;--card-line:1px}
+/* 2. Previous proposal */
+.previous{--family:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif;--page:#F1F5F6;--card:#FFF;--line:#CFDADF;--line2:#E7EEF0;--surface:#DCE7EA;--time:#F5F8F9;--text:#182E35;--text2:#304952;--muted:#5A6D74;--label:#71838A;--move:#BFE6E4;--move-text:#164B4A;--conf:#F7D1BD;--conf-text:#743118;--choose:#D9D7F2;--choose-text:#3F367B;--choose-soft:#F0EEF9;--choose-line:#CBC7E4;--kyoto:#D5E7F8;--kyoto-text:#1C4F7A;--inuyama:#D6EBDD;--inuyama-text:#1E5935;--title:17px;--body:14px;--small:12px;--control:12px;--day-title:15px;--eyebrow:10px;--badge:10px;--tab-h:42px;--date-h:36px;--filter-h:0px;--plan-h:38px;--time-w:80px;--tab-line:2px;--control-line:1px;--card-line:1px}
+/* 3. New outdoor mobile proposal */
+.new{--family:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif;--page:#EDF2F3;--card:#FFF;--line:#AEBCC3;--line2:#D6E0E4;--surface:#D8E2E6;--time:#E7EEF0;--text:#101820;--text2:#263640;--muted:#46565F;--label:#5A6A73;--move:#9FD7D8;--move-text:#0B3A3C;--conf:#F0B49F;--conf-text:#5D200F;--choose:#CFC7EA;--choose-text:#302568;--choose-soft:#ECE9F6;--choose-line:#AFA7D0;--kyoto:#B7D4F1;--kyoto-text:#153F68;--inuyama:#BFDFC6;--inuyama-text:#17482A;--title:19px;--body:15px;--small:13px;--control:14px;--day-title:17px;--eyebrow:11px;--badge:12px;--tab-h:48px;--date-h:44px;--filter-h:0px;--plan-h:44px;--time-w:88px;--tab-line:3px;--control-line:2px;--card-line:2px}
+@media(max-width:1180px){.comparison{grid-template-columns:repeat(2,minmax(360px,1fr))}}
+@media(max-width:760px){.comparison{grid-template-columns:1fr}.page{padding:16px 9px 28px}.option-title{font-size:17px}.verdict{font-size:13px}}
+@media(max-width:380px){.page{padding-inline:5px}.tabs .tab{font-size:12px}.comparison{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<main class="page">
+ <h1>現行・これまでの提案・新提案</h1>
+ <p class="lead">同じ旅程を、同じ幅で比較。人物フィルター、文字密度、操作領域、直射日光下のコントラストの違いを見る。</p>
+ <nav class="jump" aria-label="比較案へ移動"><a href="#current">現行</a><a href="#previous">従来提案</a><a href="#new">新提案</a></nav>
+ <div class="comparison">
+
+  <section class="option current" id="current">
+   <h2 class="option-title">1. 現行v2 <small>現在の実装</small></h2>
+   <div class="phone">
+    <header class="hero"><div class="eyebrow">HUMANOID ROBOT SUMMIT EUROPE</div><h2>HRS Europe 2026 出張ガイド</h2><div class="subtitle">Stuttgart · 2026年9月7日〜14日</div></header>
+    <nav class="tabs"><span class="tab on">📅 旅程</span><span class="tab">✅ 準備</span><span class="tab">🤖 会場</span><span class="tab">📝 記録</span><span class="tab">🏠 家族</span></nav>
+    <div class="people-filter"><span class="filter on">👥 全員</span><span class="filter">👤 京都発</span><span class="filter">👤 犬山発</span></div>
+    <div class="datebar"><span class="date on">9/7</span><span class="date">9/8</span><span class="date">9/9</span><span class="date">9/10</span><span class="date">9/11</span></div>
+    <div class="content"><div class="section-label">人物フィルター＋日付ナビ</div>
+     <article class="day"><div class="day-head"><b>9/7（月）</b><span>各地発 → 名古屋で合流 → NGO発</span></div><div class="lanes"><section class="lane kyoto"><div class="lane-title">京都発</div><div class="row"><div class="time">18:10</div><div class="what"><b>京都駅発 → 名古屋駅</b><span class="sub">新幹線・約35分</span></div></div></section><section class="lane inuyama"><div class="lane-title">犬山発</div><div class="row"><div class="time">18:20</div><div class="what"><b>犬山駅発 → 名鉄名古屋駅</b><span class="sub">名鉄・約30分</span></div></div></section></div><div class="join"><time>19:05</time>合流 — ここから全員</div></article>
+     <article class="day"><div class="day-head conf"><b>9/9（水）</b><span>HRS Day 1 — Liederhalle</span><em class="badge">HRS</em></div></article>
+     <article class="day"><div class="day-head choose"><b>9/12（土）</b><span>過ごし方を比較中</span><em class="badge">検討中</em></div><div class="plans"><span class="plan on">A：Mainz</span><span class="plan">B：ケルン</span><span class="plan">C：ポルシェ</span><span class="plan">D：両方</span></div></article>
+     <div class="spec"><div><b>本文 14px</b>補助 10〜11px</div><div><b>操作 31〜38px</b>人物フィルターあり</div></div>
+    </div>
+   </div><p class="verdict">情報量は多く収まるが、屋外スマホでは補助文字と操作領域が小さい。</p>
+  </section>
+
+  <section class="option previous" id="previous">
+   <h2 class="option-title">2. これまでの提案 <small>Industrial Signal</small></h2>
+   <div class="phone">
+    <header class="hero"><div class="eyebrow">HUMANOID ROBOT SUMMIT EUROPE</div><h2>HRS Europe 2026 出張ガイド</h2><div class="subtitle">Stuttgart · 2026年9月7日〜14日</div></header>
+    <nav class="tabs"><span class="tab on">📅 旅程</span><span class="tab">✅ 準備</span><span class="tab">🤖 会場</span><span class="tab">📝 記録</span><span class="tab">🏠 家族</span></nav>
+    <div class="datebar"><span class="date on">9/7</span><span class="date">9/8</span><span class="date">9/9</span><span class="date">9/10</span><span class="date">9/11</span></div>
+    <div class="content"><div class="section-label">人物フィルターなし／淡い産業色</div>
+     <article class="day"><div class="day-head"><b>9/7（月）</b><span>各地発 → 名古屋で合流 → NGO発</span></div><div class="lanes"><section class="lane kyoto"><div class="lane-title">京都発</div><div class="row"><div class="time">18:10</div><div class="what"><b>京都駅発 → 名古屋駅</b><span class="sub">新幹線・約35分</span></div></div></section><section class="lane inuyama"><div class="lane-title">犬山発</div><div class="row"><div class="time">18:20</div><div class="what"><b>犬山駅発 → 名鉄名古屋駅</b><span class="sub">名鉄・約30分</span></div></div></section></div><div class="join"><time>19:05</time>合流 — ここから全員</div></article>
+     <article class="day"><div class="day-head conf"><b>9/9（水）</b><span>HRS Day 1 — Liederhalle</span><em class="badge">HRS</em></div></article>
+     <article class="day"><div class="day-head choose"><b>9/12（土）</b><span>過ごし方を比較中</span><em class="badge">検討中</em></div><div class="plans"><span class="plan on">A：Mainz</span><span class="plan">B：ケルン</span><span class="plan">C：ポルシェ</span><span class="plan">D：両方</span></div></article>
+     <div class="spec"><div><b>本文 14px</b>補助 12px</div><div><b>操作 36〜42px</b>人物色はレーンのみ</div></div>
+    </div>
+   </div><p class="verdict">構造は整理されたが、淡い罫線と36px操作が日中の現場利用にはまだ弱い。</p>
+  </section>
+
+  <section class="option new" id="new">
+   <h2 class="option-title">3. 新提案 <span class="recommended">推奨</span></h2>
+   <div class="phone">
+    <header class="hero"><div class="eyebrow">HUMANOID ROBOT SUMMIT EUROPE</div><h2>HRS Europe 2026 出張ガイド</h2><div class="subtitle">Stuttgart · 2026年9月7日〜14日</div></header>
+    <nav class="tabs"><span class="tab on">📅 旅程</span><span class="tab">✅ 準備</span><span class="tab">🤖 会場</span><span class="tab">📝 記録</span><span class="tab">🏠 家族</span></nav>
+    <div class="datebar"><span class="date on">9/7</span><span class="date">9/8</span><span class="date">9/9</span><span class="date">9/10</span><span class="date">9/11</span></div>
+    <div class="content"><div class="section-label">人物フィルターなし／屋外スマホ基準</div>
+     <article class="day"><div class="day-head"><b>9/7（月）</b><span>各地発 → 名古屋で合流 → NGO発</span></div><div class="lanes"><section class="lane kyoto"><div class="lane-title">京都発</div><div class="row"><div class="time">18:10</div><div class="what"><b>京都駅発 → 名古屋駅</b><span class="sub">新幹線・約35分</span></div></div></section><section class="lane inuyama"><div class="lane-title">犬山発</div><div class="row"><div class="time">18:20</div><div class="what"><b>犬山駅発 → 名鉄名古屋駅</b><span class="sub">名鉄・約30分</span></div></div></section></div><div class="join"><time>19:05</time>合流 — ここから全員</div></article>
+     <article class="day"><div class="day-head conf"><b>9/9（水）</b><span>HRS Day 1 — Liederhalle</span><em class="badge">HRS</em></div></article>
+     <article class="day"><div class="day-head choose"><b>9/12（土）</b><span>過ごし方を比較中</span><em class="badge">検討中</em></div><div class="plans"><span class="plan on">A：Mainz</span><span class="plan">B：ケルン</span><span class="plan">C：ポルシェ</span><span class="plan">D：両方</span></div></article>
+     <div class="spec"><div><b>本文 15〜17px</b>補助 13px以上</div><div><b>操作 44〜48px</b>濃い文字・太い境界</div></div>
+    </div>
+   </div><p class="verdict">直射日光下の判読と片手操作を優先。情報量は少し減るが、現場で最も迷いにくい。</p>
+  </section>
+ </div>
+</main>
+</body>
+</html>
