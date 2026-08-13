@@ -49,6 +49,7 @@ Cloudflareコードは `cloudflare/trip-notes-worker` にある。
 - Worker URLは `https://trip-field-sync.mrkn55.workers.dev`。
 - HRSの `cloudEndpoint` は配備URLへ設定済み。
 - 同期キーの値はユーザーのみが保持し、リポジトリには存在しない。
+- GitHub Pagesのスマートフォン・PC表示と認証付きPUT/GETは受入完了。
 - 現方式は1出張1スナップショットのlast-write-winsであり、複数人の同時編集用
   ではない。
 
