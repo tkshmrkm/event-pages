@@ -80,6 +80,19 @@
       <label class="trip-button" for="trip-import">JSONを読み込む</label>
       <input id="trip-import" type="file" accept="application/json,.json" data-trip-import-json hidden>
     </div>
+    <details class="trip-card trip-cloud trip-no-print" data-trip-cloud data-endpoint="">
+      <summary class="trip-card-title">☁ Cloudflare同期</summary>
+      <div class="trip-card-body">
+        <p class="trip-cloud-help">オンライン版の記録を端末間で同期します。同期キーは公開HTMLへ書かず、この画面で入力します。</p>
+        <label class="trip-cloud-key">同期キー<input type="password" autocomplete="current-password" data-trip-cloud-key></label>
+        <label class="trip-cloud-remember"><input type="checkbox" data-trip-cloud-remember> この端末に同期キーを保存</label>
+        <div class="trip-actions">
+          <button class="trip-button" type="button" data-trip-cloud-pull>クラウドから読込</button>
+          <button class="trip-button" type="button" data-trip-cloud-push>今すぐ保存</button>
+        </div>
+        <div class="trip-status" data-trip-cloud-status role="status" aria-live="polite"></div>
+      </div>
+    </details>
     <div class="trip-status" data-trip-status role="status" aria-live="polite"></div>
     <article class="trip-record">
       <h2 class="trip-card-title">出張全体</h2>

@@ -23,7 +23,7 @@ Shared:
 
 - three-section navigation and date rail;
 - 44 px or larger controls and 16 px input text;
-- local browser persistence;
+- immediate local browser persistence plus optional Cloudflare synchronization;
 - JSON export/import format;
 - an online smartphone page plus a self-contained desk-print backup;
 - responsive targets around iPhone 16 (393 px) and Pixel 7a/8a (412 px).
@@ -55,6 +55,9 @@ The generic runtime recognizes:
 - `[data-trip-export-json]` — download all values in the namespace.
 - `[data-trip-import-json]` — JSON file input.
 - `[data-trip-status]` — short live status message.
+- `[data-trip-cloud]` — optional Cloudflare synchronization panel.
+- `[data-trip-cloud-key]` — runtime-only synchronization key input.
+- `[data-trip-cloud-pull]` / `[data-trip-cloud-push]` — explicit cloud transfer controls.
 
 The shared JSON schema is `trip-field-records`, version `1`. Event-specific
 keys may vary, but should use readable prefixes such as `session:`,
@@ -75,6 +78,22 @@ node .\shared\trip-field\build-desk-print.mjs .\EVENT\index.html .\EVENT\desk_pr
 
 7. Validate the online page at 393 px and 412 px widths, then test reload persistence and JSON transfer.
 8. Print-preview the desk copy. It should contain itinerary, preparation, and venue reference content, but no interactive record form or family page.
+
+## Optional Cloudflare synchronization
+
+The online page always saves locally first. When a Cloudflare endpoint is
+configured, changes are also sent after a 2.2-second debounce. This keeps the
+page usable during a weak or interrupted venue connection and allows another
+phone or PC to load the same trip snapshot later.
+
+Deploy `cloudflare/trip-notes-worker`, then put its public Worker URL in the
+sync panel's `data-endpoint`. The shared synchronization key is entered by the
+user at runtime. Never put that key in committed HTML or JavaScript. The page
+can remember it in that device's browser when explicitly selected; it is kept
+outside the trip snapshot and JSON export.
+
+Cloud synchronization does not replace JSON backup. KV uses last-write-wins,
+so avoid editing the same trip simultaneously on multiple devices.
 
 ## Current adoption
 

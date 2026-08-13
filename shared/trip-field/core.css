@@ -88,6 +88,12 @@
 .trip-field textarea[data-trip-note=day]{min-height:84px}
 .trip-field textarea:focus,.trip-field input:focus,.trip-field select:focus{outline:3px solid rgba(23,107,117,.22);border-color:var(--trip-primary)}
 .trip-status{min-height:1.5em;color:var(--trip-muted);font-size:13px}
+.trip-cloud-help{margin:0 0 10px;color:var(--trip-muted);font-size:13px}
+.trip-cloud-key{display:grid;gap:5px;margin-bottom:8px;color:var(--trip-subtext);font-size:13px;font-weight:700}
+.trip-cloud-key input{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-text);font:16px/1.4 var(--trip-font)}
+.trip-cloud-remember{display:flex;gap:7px;align-items:flex-start;margin:8px 0 12px;color:var(--trip-subtext);font-size:13px}
+.trip-cloud-remember input{width:18px;height:18px;margin:1px 0 0}
+.trip-cloud .trip-actions{margin-bottom:8px}
 
 .trip-split{display:grid;grid-template-columns:1fr 1fr}
 .trip-split > * + *{border-left:1px solid var(--trip-border)}

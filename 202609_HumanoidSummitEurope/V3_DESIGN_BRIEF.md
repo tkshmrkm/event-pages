@@ -88,7 +88,7 @@ node .\202609_HumanoidSummitEurope\build_v3.mjs
 node .\202609_HumanoidSummitEurope\validate_v3.mjs
 ```
 
-The online page and family print page load `v3.css` as a normal shared asset. The desk-print page embeds the generated CSS so it remains a single self-contained file and contains no scripts. Records live only in the online version's browser storage. Back them up or transfer them with the JSON controls in `記録`; Markdown copy remains available for human-readable reporting.
+The online page and family print page load `v3.css` as a normal shared asset. The desk-print page embeds the generated CSS so it remains a single self-contained file and contains no scripts. Records are saved locally first. When the shared Cloudflare Worker URL is configured, they can also be synchronized between devices; the synchronization key is entered at runtime and is never embedded in public HTML. Back up or transfer records with the JSON controls in `記録`; Markdown copy remains available for human-readable reporting.
 
 Family mobile targets are iPhone 16, Pixel 7a, and Pixel 8a. On narrow screens the family itinerary changes from a three-column table to one card per day; print media restores the table layout.
 

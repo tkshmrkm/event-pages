@@ -52,6 +52,8 @@ assert(online.includes("key:'day', rows:3") && online.includes("store.get('ses:'
 assert(!online.includes('const OWNERS') && !online.includes('担当ボタン'), 'index_v3.html: obsolete assignment controls remain');
 assert(online.includes('data-trip-layout="field-v1"') && online.includes('<script src="../shared/trip-field/runtime.js"></script>'), 'index_v3.html: shared trip-field runtime missing');
 assert(online.includes('window.TripField.createStore(EVENT_KEY)'), 'index_v3.html: shared storage API not used');
+assert(online.includes('data-trip-cloud') && online.includes('TripField.createCloudSync'), 'index_v3.html: Cloudflare sync UI/runtime missing');
+assert(!/const\s+(?:API_KEY|SYNC_TOKEN)\s*=\s*["'][^"']+["']/.test(online), 'index_v3.html: synchronization secret must not be embedded');
 assert(online.includes('<link rel="stylesheet" href="v3.css">') && !online.includes('<style>'), 'index_v3.html: shared stylesheet link missing or CSS still embedded');
 assert(sharedCss.includes('--bg:#EDF2F3') && sharedCss.includes('.field-nav{position:sticky'), 'v3.css: v3 field styles missing');
 assert(sharedCss.includes('.family-page #fam-table tr') && sharedCss.includes("content:'場所'"), 'v3.css: family mobile-card styles missing');

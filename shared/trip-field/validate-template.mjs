@@ -17,6 +17,8 @@ assert((template.match(/data-trip-panel=/g) || []).length === 3, 'template: expe
 assert(template.includes('data-trip-store="venue:target-01:prep"'), 'template: venue preparation field missing');
 assert(template.includes('data-trip-store="venue:target-01:day"'), 'template: venue day-note field missing');
 assert(template.includes('data-trip-export-json') && template.includes('data-trip-import-json'), 'template: JSON transfer controls missing');
+assert(template.includes('data-trip-cloud') && template.includes('data-trip-cloud-key'), 'template: Cloudflare sync controls missing');
+assert(runtime.includes('createCloudSync') && runtime.includes('X-Trip-Sync-Key'), 'runtime: Cloudflare sync support missing');
 assert(core.includes('min-height:44px') && core.includes('font:16px/1.55'), 'core.css: touch/input sizing contract missing');
 
 const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-field-'));

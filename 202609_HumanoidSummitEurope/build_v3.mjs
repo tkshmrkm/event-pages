@@ -9,6 +9,8 @@ const source = fs.readFileSync(sourcePath, 'utf8');
 const sharedCoreCss = fs.readFileSync(path.join(sharedDir, 'core.css'), 'utf8');
 const sourceCssMatch = source.match(/<style>([\s\S]*?)<\/style>/);
 if (!sourceCssMatch) throw new Error('Source CSS not found');
+// Set this to the deployed trip-notes Worker URL. Never put SYNC_TOKEN here.
+const cloudEndpoint = '';
 
 function mustReplace(text, search, replacement, label) {
   if (typeof search === 'string' && !text.includes(search)) {
@@ -83,6 +85,15 @@ body{line-height:1.62;padding-bottom:24px}
 .secondary-entry .bd{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .secondary-entry .btn{text-decoration:none;display:inline-flex;align-items:center}
 .offline-mark{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:#101820;color:#fff;font-size:11px;vertical-align:2px}
+.cloud-sync summary{cursor:pointer;list-style:none}
+.cloud-sync summary::-webkit-details-marker{display:none}
+.cloud-sync p{margin:0 0 9px}
+.cloud-sync .cloud-key{display:grid;gap:5px;margin:8px 0;color:var(--mu2);font-size:var(--f3);font-weight:700}
+.cloud-sync input[type=password]{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--tx);font:16px/1.4 var(--font)}
+.cloud-sync .cloud-remember{display:flex;gap:7px;align-items:flex-start;margin:8px 0 12px;font-size:var(--f3)}
+.cloud-sync .cloud-remember input{width:18px;height:18px;margin:1px 0 0}
+.cloud-sync .cloud-actions{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:7px}
+.cloud-sync [data-trip-cloud-status]{min-height:1.5em;color:var(--mu);font-size:var(--f3)}
 @media(max-width:640px){
   .wrap{padding-left:10px;padding-right:10px}
   .hdr-top{gap:8px}
@@ -182,6 +193,22 @@ const transferControls = String.raw`
     <input id="import-json" type="file" accept="application/json,.json" hidden>
 `;
 
+const cloudPanel = String.raw`
+  <details class="card cloud-sync no-print" data-trip-cloud data-endpoint="${cloudEndpoint}">
+    <summary class="ttl">☁ Cloudflare同期</summary>
+    <div class="bd">
+      <p class="small muted">オンライン版のメモを端末間で同期します。同期キーは公開HTMLへ書かず、この画面で入力します。</p>
+      <label class="cloud-key">同期キー<input type="password" autocomplete="current-password" data-trip-cloud-key></label>
+      <label class="cloud-remember"><input type="checkbox" data-trip-cloud-remember> この端末に同期キーを保存</label>
+      <div class="cloud-actions">
+        <button class="btn" type="button" data-trip-cloud-pull>クラウドから読込</button>
+        <button class="btn" type="button" data-trip-cloud-push>今すぐ保存</button>
+      </div>
+      <div data-trip-cloud-status role="status" aria-live="polite"></div>
+    </div>
+  </details>
+`;
+
 const transferScript = String.raw`
   /* ---------- オンライン版／オフライン版の記録移送（JSON） ---------- */
   const jsonButton = document.getElementById('btn-export-json');
@@ -228,6 +255,12 @@ const transferScript = String.raw`
       }
     };
     reader.readAsText(file);
+  });
+  TripField.createCloudSync({
+    store,
+    endpoint: document.querySelector('[data-trip-cloud]')?.dataset.endpoint || '',
+    status: message => flash('☁ ' + message),
+    onRestore: () => setTimeout(() => location.reload(), 500)
   });
 
 `;
@@ -414,6 +447,7 @@ function buildMain({ offline = false } = {}) {
   html = mustReplace(html, '<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">', '<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">\n  <div class="no-print" style="margin-bottom:10px"><button class="btn" data-goto="plan">← 旅程へ戻る</button></div>', 'prep section');
 
   html = mustReplace(html, '<button class="btn" id="btn-export">📋 Markdownでコピー</button>', '<button class="btn" id="btn-export">📋 Markdownでコピー</button>\n' + transferControls, 'record buttons');
+  html = mustReplace(html, '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>', '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>\n' + cloudPanel, 'cloud sync panel');
   html = mustReplace(html, "  document.getElementById('btn-clear').addEventListener('click', () => {", transferScript + "  document.getElementById('btn-clear').addEventListener('click', () => {", 'JSON script insertion');
   html = mustReplace(html, '  /* ---------- ToDo ---------- */', confirmationScript + '  /* ---------- ToDo ---------- */', 'confirmation script insertion');
   html = mustReplace(

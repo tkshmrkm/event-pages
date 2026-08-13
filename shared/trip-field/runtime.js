@@ -7,6 +7,8 @@
   function createStore(eventKey){
     if (!eventKey) throw new Error('TripField requires an event key');
     const prefix = eventKey + ':';
+    const listeners = new Set();
+    const notify = (key, value) => listeners.forEach(listener => listener(key, value));
     return {
       eventKey,
       get(key, fallback){
@@ -16,7 +18,11 @@
         } catch(e) { return fallback; }
       },
       set(key, value){
-        try { localStorage.setItem(prefix + key, JSON.stringify(value)); return true; }
+        try {
+          localStorage.setItem(prefix + key, JSON.stringify(value));
+          notify(key, value);
+          return true;
+        }
         catch(e) { return false; }
       },
       del(key){
@@ -38,18 +44,130 @@
       restore(data){
         if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Invalid trip data');
         Object.entries(data).forEach(([key, value]) => this.set(key, value));
+      },
+      subscribe(listener){
+        listeners.add(listener);
+        return () => listeners.delete(listener);
       }
     };
   }
 
   function payload(store){
+    const data = store.snapshot();
+    Object.keys(data).forEach(key => {
+      if (key.startsWith('ui:')) delete data[key];
+    });
     return {
       schema: SCHEMA,
       version: VERSION,
       eventKey: store.eventKey,
       exportedAt: new Date().toISOString(),
-      data: store.snapshot()
+      data
     };
+  }
+
+  function createCloudSync(options){
+    const root = options && options.root || document;
+    const store = options && options.store;
+    if (!store) throw new Error('TripField cloud sync requires a store');
+    const eventKey = options.eventKey || store.eventKey;
+    const panel = options.panel || root.querySelector('[data-trip-cloud]');
+    if (!panel) return null;
+    const endpoint = String(options.endpoint || panel.dataset.endpoint || '').replace(/\/$/, '');
+    const tokenInput = panel.querySelector('[data-trip-cloud-key]');
+    const rememberInput = panel.querySelector('[data-trip-cloud-remember]');
+    const pullButton = panel.querySelector('[data-trip-cloud-pull]');
+    const pushButton = panel.querySelector('[data-trip-cloud-push]');
+    const cloudStatus = panel.querySelector('[data-trip-cloud-status]');
+    const tokenStorageKey = 'trip-field-cloud:' + eventKey + ':token';
+    let syncing = false;
+    let pushTimer = 0;
+
+    const say = message => {
+      if (cloudStatus) cloudStatus.textContent = message;
+      if (options.status) options.status(message);
+    };
+    const rememberedToken = (() => {
+      try { return localStorage.getItem(tokenStorageKey) || ''; }
+      catch(e) { return ''; }
+    })();
+    if (tokenInput) tokenInput.value = rememberedToken;
+    if (rememberInput) rememberInput.checked = Boolean(rememberedToken);
+
+    const token = () => tokenInput ? tokenInput.value.trim() : '';
+    const remember = () => {
+      try {
+        if (rememberInput && rememberInput.checked && token()) localStorage.setItem(tokenStorageKey, token());
+        else localStorage.removeItem(tokenStorageKey);
+      } catch(e) {}
+    };
+    const setDisabled = disabled => {
+      [tokenInput, rememberInput, pullButton, pushButton].forEach(control => { if (control) control.disabled = disabled; });
+    };
+    if (!endpoint) {
+      setDisabled(true);
+      say('Cloudflare同期先はまだ設定されていません');
+      return { configured:false };
+    }
+
+    const request = async (method, body) => {
+      if (!token()) throw new Error('同期キーを入力してください');
+      remember();
+      const response = await fetch(endpoint + '/v1/trips/' + encodeURIComponent(eventKey), {
+        method,
+        headers:{
+          'Content-Type':'application/json',
+          'X-Trip-Sync-Key':token()
+        },
+        body: body ? JSON.stringify(body) : undefined
+      });
+      if (response.status === 401 || response.status === 403) throw new Error('同期キーが違います');
+      if (response.status === 404 && method === 'GET') return null;
+      if (!response.ok) throw new Error('クラウド通信に失敗しました（' + response.status + '）');
+      return response.json();
+    };
+    const push = async ({ quiet = false } = {}) => {
+      if (syncing) return false;
+      syncing = true;
+      if (!quiet) say('クラウドへ保存中…');
+      try {
+        const result = await request('PUT', payload(store));
+        say('クラウド保存済み' + (result && result.updatedAt ? ' · ' + new Date(result.updatedAt).toLocaleString() : ''));
+        return true;
+      } catch(e) {
+        say(e.message || 'クラウドへ保存できませんでした');
+        return false;
+      } finally { syncing = false; }
+    };
+    const pull = async () => {
+      if (syncing) return false;
+      if (Object.keys(payload(store).data).length && !confirm('クラウド側の内容で、この端末の記録を更新します。続けますか？')) return false;
+      syncing = true;
+      say('クラウドから読込中…');
+      try {
+        const result = await request('GET');
+        if (!result) { say('クラウド側にこの出張の記録はまだありません'); return false; }
+        if (result.schema !== SCHEMA || result.version !== VERSION || result.eventKey !== eventKey || !result.data) throw new Error('クラウド側のデータ形式が違います');
+        store.restore(result.data);
+        say('クラウドから読み込みました');
+        if (options.onRestore) options.onRestore(result.data);
+        return true;
+      } catch(e) {
+        say(e.message || 'クラウドから読み込めませんでした');
+        return false;
+      } finally { syncing = false; }
+    };
+
+    if (pullButton) pullButton.addEventListener('click', pull);
+    if (pushButton) pushButton.addEventListener('click', () => push());
+    if (rememberInput) rememberInput.addEventListener('change', remember);
+    if (store.subscribe) store.subscribe(key => {
+      if (syncing || key.startsWith('ui:') || !token()) return;
+      clearTimeout(pushTimer);
+      pushTimer = setTimeout(() => push({ quiet:true }), 2200);
+    });
+    say(rememberedToken ? '同期キー保存済み · 入力後に自動保存します' : '同期キーを入力してください');
+    return { configured:true, pull, push };
   }
 
   function downloadJson(store, filename){
@@ -193,9 +311,19 @@
       );
     });
 
+    const cloud = createCloudSync({
+      root,
+      store,
+      endpoint:options && options.cloudEndpoint,
+      status,
+      onRestore(){
+        fields.forEach(field => setFieldValue(field, store.get(field.dataset.tripStore, field.type === 'checkbox' ? false : '')));
+      }
+    });
+
     const firstTab = root.querySelector('[data-trip-tab]');
     showTab(store.get('ui:tab', firstTab ? firstTab.dataset.tripTab : 'itinerary'));
-    return { store, showTab, status, fields };
+    return { store, showTab, status, fields, cloud };
   }
 
   global.TripField = {
@@ -207,6 +335,7 @@
     readJsonFile,
     fitTextarea,
     markdown,
+    createCloudSync,
     mount
   };
 })(window);

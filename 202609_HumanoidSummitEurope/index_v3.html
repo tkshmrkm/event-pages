@@ -691,6 +691,21 @@
     <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>
   </div>
 
+  <details class="card cloud-sync no-print" data-trip-cloud data-endpoint="">
+    <summary class="ttl">☁ Cloudflare同期</summary>
+    <div class="bd">
+      <p class="small muted">オンライン版のメモを端末間で同期します。同期キーは公開HTMLへ書かず、この画面で入力します。</p>
+      <label class="cloud-key">同期キー<input type="password" autocomplete="current-password" data-trip-cloud-key></label>
+      <label class="cloud-remember"><input type="checkbox" data-trip-cloud-remember> この端末に同期キーを保存</label>
+      <div class="cloud-actions">
+        <button class="btn" type="button" data-trip-cloud-pull>クラウドから読込</button>
+        <button class="btn" type="button" data-trip-cloud-push>今すぐ保存</button>
+      </div>
+      <div data-trip-cloud-status role="status" aria-live="polite"></div>
+    </div>
+  </details>
+
+
   <div class="card">
     <h2 class="ttl">🎯 出張全体の目的（この1件で何を持ち帰るか）</h2>
     <div class="bd" style="padding:0">
@@ -1262,6 +1277,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
     reader.readAsText(file);
+  });
+  TripField.createCloudSync({
+    store,
+    endpoint: document.querySelector('[data-trip-cloud]')?.dataset.endpoint || '',
+    status: message => flash('☁ ' + message),
+    onRestore: () => setTimeout(() => location.reload(), 500)
   });
 
   document.getElementById('btn-clear').addEventListener('click', () => {
