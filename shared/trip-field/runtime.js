@@ -171,15 +171,27 @@
   }
 
   function downloadJson(store, filename){
-    const blob = new Blob([JSON.stringify(payload(store), null, 2)], { type:'application/json' });
-    const url = URL.createObjectURL(blob);
+    downloadText(
+      JSON.stringify(payload(store), null, 2),
+      filename || store.eventKey + '-records-' + new Date().toISOString().slice(0,10) + '.json',
+      'application/json;charset=utf-8'
+    );
+  }
+
+  function downloadText(text, filename, mimeType){
+    const content = String(text);
+    const type = mimeType || 'text/plain;charset=utf-8';
+    const canUseBlobUrl = typeof URL !== 'undefined' && typeof URL.createObjectURL === 'function';
+    const url = canUseBlobUrl
+      ? URL.createObjectURL(new Blob([content], { type }))
+      : 'data:' + type + ',' + encodeURIComponent(content);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = filename || store.eventKey + '-records-' + new Date().toISOString().slice(0,10) + '.json';
+    anchor.download = filename || 'trip-notes.txt';
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    if (canUseBlobUrl) setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   function readJsonFile(file){
@@ -311,6 +323,13 @@
       );
     });
 
+    const markdownDownloadButton = root.querySelector('[data-trip-download-markdown]');
+    if (markdownDownloadButton) markdownDownloadButton.addEventListener('click', () => {
+      const filename = markdownDownloadButton.dataset.filename || store.eventKey + '-notes-' + new Date().toISOString().slice(0,10) + '.md';
+      downloadText(markdown(root, markdownDownloadButton.dataset.title), filename, 'text/markdown;charset=utf-8');
+      status('Markdownをダウンロードしました');
+    });
+
     const cloud = createCloudSync({
       root,
       store,
@@ -332,6 +351,7 @@
     createStore,
     payload,
     downloadJson,
+    downloadText,
     readJsonFile,
     fitTextarea,
     markdown,

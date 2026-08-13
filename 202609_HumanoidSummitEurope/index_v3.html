@@ -677,13 +677,14 @@
   <div class="banner b-info">
     <span class="i">📝</span>
     <div><strong>行く前に「狙い」、現地で「当日メモ」、帰ってから「所感」。</strong>
-    入力はこの端末・このブラウザ内に自動保存されます（サーバー送信・別端末同期なし）。下のボタンで全文を Markdown にしてコピーでき、そのまま出張報告や <code>CHANGELOG.md</code> の材料になります。</div>
+    入力はこの端末・このブラウザ内に自動保存されます（サーバー送信・別端末同期なし）。PCでクラウド側の記録を読み込んだ後、全文をMarkdownファイルとしてダウンロードできます。コピーは出張報告や <code>CHANGELOG.md</code> の下書きに使えます。</div>
   </div>
 
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" class="no-print">
     <button class="btn" id="btn-export">📋 Markdownでコピー</button>
 
-    <button class="btn" id="btn-export-json">⬇ JSONを書き出す</button>
+    <button class="btn" id="btn-download-md">⬇ メモをMarkdownでDL</button>
+    <button class="btn" id="btn-export-json">⬇ バックアップJSONをDL</button>
     <label class="btn" for="import-json" style="display:inline-flex;align-items:center">⬆ JSONを読み込む</label>
     <input id="import-json" type="file" accept="application/json,.json" hidden>
 
@@ -1172,7 +1173,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const msg = document.getElementById('export-msg');
   const flash = t => { msg.textContent = t; setTimeout(() => msg.textContent = '', 2600); };
 
-  document.getElementById('btn-export').addEventListener('click', () => {
+  const buildRecordMarkdown = () => {
     const v = k => store.get('rec:' + k, '').trim();
     const L = ['# HRS Europe 2026 出張記録', ''];
     const p0 = ['0912', '0913'].map(g => g.slice(0,2) + '/' + g.slice(2) + ' → ' + store.get('plan:' + g, 'all'));
@@ -1216,11 +1217,24 @@ document.addEventListener('DOMContentLoaded', () => {
       done.forEach(t => L.push('- [x] ' + t.querySelector('label').textContent.trim().replace(/\s+/g, ' ')));
       L.push('');
     }
-    const text = L.join('\n');
-    const done2 = () => flash('✅ コピーしました');
+    return L.join('\n');
+  };
+
+  document.getElementById('btn-export').addEventListener('click', () => {
+    const text = buildRecordMarkdown();
+    const done2 = () => flash('✅ Markdownをコピーしました');
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(done2, () => fallback(text, done2));
     } else fallback(text, done2);
+  });
+
+  document.getElementById('btn-download-md').addEventListener('click', () => {
+    TripField.downloadText(
+      buildRecordMarkdown(),
+      'hrs2026-trip-notes-' + new Date().toISOString().slice(0,10) + '.md',
+      'text/markdown;charset=utf-8'
+    );
+    flash('✅ Markdownをダウンロードしました');
   });
 
   function fallback(text, ok){

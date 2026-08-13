@@ -188,7 +188,8 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
 const compiledSharedCss = `${sourceCssMatch[1]}\n${sharedCoreCss}\n${outdoorCss}\n${familyCss}`.trim() + '\n';
 
 const transferControls = String.raw`
-    <button class="btn" id="btn-export-json">⬇ JSONを書き出す</button>
+    <button class="btn" id="btn-download-md">⬇ メモをMarkdownでDL</button>
+    <button class="btn" id="btn-export-json">⬇ バックアップJSONをDL</button>
     <label class="btn" for="import-json" style="display:inline-flex;align-items:center">⬆ JSONを読み込む</label>
     <input id="import-json" type="file" accept="application/json,.json" hidden>
 `;
@@ -361,6 +362,33 @@ const sessionMarkdownBlock = String.raw`    /* 会場タブに書いた講演ご
     });
     if (ses.length) L.push('## 講演別メモ', '', ...ses);`;
 
+const originalMarkdownTail = String.raw`    const text = L.join('\n');
+    const done2 = () => flash('✅ コピーしました');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done2, () => fallback(text, done2));
+    } else fallback(text, done2);
+  });`;
+
+const markdownDownloadHandlers = String.raw`    return L.join('\n');
+  };
+
+  document.getElementById('btn-export').addEventListener('click', () => {
+    const text = buildRecordMarkdown();
+    const done2 = () => flash('✅ Markdownをコピーしました');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done2, () => fallback(text, done2));
+    } else fallback(text, done2);
+  });
+
+  document.getElementById('btn-download-md').addEventListener('click', () => {
+    TripField.downloadText(
+      buildRecordMarkdown(),
+      'hrs2026-trip-notes-' + new Date().toISOString().slice(0,10) + '.md',
+      'text/markdown;charset=utf-8'
+    );
+    flash('✅ Markdownをダウンロードしました');
+  });`;
+
 function buildMain({ offline = false } = {}) {
   let html = source;
   html = mustReplace(html, '<title>HRS Europe 2026 出張ガイド（v2・標準形）</title>', `<title>HRS Europe 2026 フィールドガイド v3${offline ? '（机上用印刷版）' : ''}</title>`, 'title');
@@ -456,6 +484,8 @@ function buildMain({ offline = false } = {}) {
     sessionMarkdownBlock,
     'session Markdown export'
   );
+  html = mustReplace(html, "  document.getElementById('btn-export').addEventListener('click', () => {", '  const buildRecordMarkdown = () => {', 'Markdown builder start');
+  html = mustReplace(html, originalMarkdownTail, markdownDownloadHandlers, 'Markdown copy and download handlers');
   html = mustReplace(
     html,
     /  \/\* ---------- 会場タブ：セッションごとの「狙い」記入欄と「担当」ボタン ----------[\s\S]*?\n  \}\);\n\n  \/\* ---------- 家族タブ：毎日の予定/,
@@ -465,6 +495,7 @@ function buildMain({ offline = false } = {}) {
   html = html.replace('会場タブの「狙い・聞くこと」「担当」をすべて消します。', '会場タブの「事前の狙い・質問」「当日メモ」をすべて消します。');
   html = html.replace("    document.querySelectorAll('.ses .ow').forEach(bt => { bt.dataset.v = ''; bt.textContent = '—'; });\n", '');
   html = html.replace('入力はこの端末に自動保存されます（サーバー送信なし）。', '入力はこの端末・このブラウザ内に自動保存されます（サーバー送信・別端末同期なし）。');
+  html = html.replace('下のボタンで全文を Markdown にしてコピーでき、そのまま出張報告や <code>CHANGELOG.md</code> の材料になります。', 'PCでクラウド側の記録を読み込んだ後、全文をMarkdownファイルとしてダウンロードできます。コピーは出張報告や <code>CHANGELOG.md</code> の下書きに使えます。');
 
   html = html.replace('レイアウト v2（タブ × 日カード × レーン）', `レイアウト v3（屋外スマホ・連続旅程・3セクション）${offline ? '｜机上用印刷版' : ''}`);
   html = html.replace('更新日：2026年8月13日', '更新日：2026年8月13日（v3フィールド版）');

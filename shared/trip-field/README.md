@@ -10,7 +10,7 @@ Every new trip page should have only three primary field sections:
 
 1. `旅程` — continuous-scroll daily itinerary with a horizontally scrollable date rail.
 2. `会場` — event-specific targets and two-part notes: preparation plus same-day notes.
-3. `記録` — review, Markdown output, JSON backup, and JSON restore.
+3. `記録` — review, Markdown copy/download, JSON backup, and JSON restore.
 
 Preparation and documents are secondary content inside the itinerary or a
 separate pre-departure page. The family view is a separate responsive/print
@@ -54,6 +54,7 @@ The generic runtime recognizes:
 - `[data-trip-store="key"]` — autosaved input, textarea, select, or checkbox.
 - `[data-trip-export-json]` — download all values in the namespace.
 - `[data-trip-import-json]` — JSON file input.
+- `[data-trip-download-markdown]` — download a readable final memo on a PC.
 - `[data-trip-status]` — short live status message.
 - `[data-trip-cloud]` — optional Cloudflare synchronization panel.
 - `[data-trip-cloud-key]` — runtime-only synchronization key input.

@@ -1073,13 +1073,14 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
   <div class="banner b-info">
     <span class="i">📝</span>
     <div><strong>行く前に「狙い」、現地で「当日メモ」、帰ってから「所感」。</strong>
-    入力はこの端末・このブラウザ内に自動保存されます（サーバー送信・別端末同期なし）。下のボタンで全文を Markdown にしてコピーでき、そのまま出張報告や <code>CHANGELOG.md</code> の材料になります。</div>
+    入力はこの端末・このブラウザ内に自動保存されます（サーバー送信・別端末同期なし）。PCでクラウド側の記録を読み込んだ後、全文をMarkdownファイルとしてダウンロードできます。コピーは出張報告や <code>CHANGELOG.md</code> の下書きに使えます。</div>
   </div>
 
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" class="no-print">
     <button class="btn" id="btn-export">📋 Markdownでコピー</button>
 
-    <button class="btn" id="btn-export-json">⬇ JSONを書き出す</button>
+    <button class="btn" id="btn-download-md">⬇ メモをMarkdownでDL</button>
+    <button class="btn" id="btn-export-json">⬇ バックアップJSONをDL</button>
     <label class="btn" for="import-json" style="display:inline-flex;align-items:center">⬆ JSONを読み込む</label>
     <input id="import-json" type="file" accept="application/json,.json" hidden>
 

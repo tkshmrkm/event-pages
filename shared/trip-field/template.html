@@ -73,10 +73,11 @@
   </section>
 
   <section class="trip-panel" data-trip-panel="records" aria-label="記録">
-    <div class="trip-banner"><span>💾</span><div>入力はこのオンライン版のブラウザ内に残ります。JSONをバックアップと端末移行に使います。</div></div>
+    <div class="trip-banner"><span>💾</span><div>PCでクラウド側の記録を読み込み、最後にMarkdownをダウンロードできます。JSONは完全バックアップと端末移行に使います。</div></div>
     <div class="trip-actions trip-no-print">
       <button class="trip-button" type="button" data-trip-export-markdown>Markdownをコピー</button>
-      <button class="trip-button" type="button" data-trip-export-json>JSONを書き出す</button>
+      <button class="trip-button" type="button" data-trip-download-markdown>メモをMarkdownでDL</button>
+      <button class="trip-button" type="button" data-trip-export-json>バックアップJSONをDL</button>
       <label class="trip-button" for="trip-import">JSONを読み込む</label>
       <input id="trip-import" type="file" accept="application/json,.json" data-trip-import-json hidden>
     </div>

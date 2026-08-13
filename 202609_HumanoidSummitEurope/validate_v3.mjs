@@ -46,6 +46,7 @@ assert((online.match(/data-tab="(?:plan|venue|rec)"/g) || []).length === 3, 'ind
 assert((online.match(/<details class="day" open/g) || []).length === 8, 'index_v3.html: all eight days must start open');
 assert(!online.includes('data-tab="prep"') && !online.includes('data-tab="fam"'), 'index_v3.html: secondary content leaked into primary navigation');
 assert(online.includes('id="btn-export-json"') && online.includes('id="import-json"'), 'index_v3.html: JSON transfer controls missing');
+assert(online.includes('id="btn-download-md"') && online.includes('buildRecordMarkdown()') && online.includes('text/markdown;charset=utf-8'), 'index_v3.html: final Markdown download missing');
 assert(online.includes("plan-confirmed:"), 'index_v3.html: plan confirmation state missing');
 assert((online.match(/<th>事前の狙い・質問<\/th><th>当日メモ<\/th>/g) || []).length === 3, 'index_v3.html: session preparation/day-note columns missing');
 assert(online.includes("key:'day', rows:3") && online.includes("store.get('ses:' + tr.dataset.k + ':day'"), 'index_v3.html: per-session day-note persistence missing');
