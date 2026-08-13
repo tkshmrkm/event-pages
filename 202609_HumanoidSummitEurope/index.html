@@ -695,7 +695,8 @@
   <details class="card cloud-sync no-print" data-trip-cloud data-endpoint="https://trip-field-sync.mrkn55.workers.dev">
     <summary class="ttl">☁ Cloudflare同期</summary>
     <div class="bd">
-      <p class="small muted">オンライン版のメモを端末間で同期します。複数端末では、クラウドから読込→時刻付き追記→保存の順で使います。最後の保存が優先されます。</p>
+      <p class="small muted">二人の共同メモは1件ずつ追加保存され、同時に送っても上書きしません。旅程選択や自由編集欄は最後の保存が優先されます。</p>
+      <label class="cloud-key">記入者名<input type="text" autocomplete="name" data-trip-cloud-author placeholder="例：村上"></label>
       <label class="cloud-key">同期キー<input type="password" autocomplete="current-password" data-trip-cloud-key></label>
       <label class="cloud-remember"><input type="checkbox" data-trip-cloud-remember> この端末に同期キーを保存</label>
       <div class="cloud-actions">
@@ -1170,10 +1171,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  /* ---------- 当日メモ：既存内容を残した時刻付き追記 ---------- */
-  recAll
+  /* ---------- 当日メモ：二人で同じ欄へ名前・時刻付き追記 ---------- */
+  const mountSharedDayNotes = cloud => recAll
     .filter(ta => ta.dataset.rec.endsWith(':day'))
-    .forEach(ta => TripField.mountTimestampAppend(ta));
+    .forEach(ta => cloud.mountAppend(ta, 'rec:' + ta.dataset.rec));
 
   /* ---------- 記録の書き出し（Markdown） ---------- */
   const msg = document.getElementById('export-msg');
@@ -1191,11 +1192,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     days.forEach(d => {
       const a = v(d.id + ':aim'), b = v(d.id + ':day'), c = v(d.id + ':after');
-      if (!a && !b && !c) return;
+      const shared = cloud.entriesFor('rec:' + d.id + ':day');
+      if (!a && !b && !c && !shared.length) return;
       const rec = Array.from(recBox.children).find(x => x.querySelector('[data-rec^="' + d.id + ':"]'));
       L.push('## ' + (rec ? rec.dataset.title : d.dataset.label), '');
       if (a) L.push('- **狙い**：' + a);
       if (b) L.push('- **当日**：' + b);
+      shared.forEach(entry => L.push('- **共同メモ** ' + entry.clientTime + ' · ' + entry.author + '：' + entry.text));
       if (c) L.push('- **所感**：' + c);
       L.push('');
     });
@@ -1204,7 +1207,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.ses tr[data-k]').forEach(tr => {
       const prep = store.get('ses:' + tr.dataset.k + ':aim', '').trim();
       const day = store.get('ses:' + tr.dataset.k + ':day', '').trim();
-      if (!prep && !day) return;
+      const shared = cloud.entriesFor('ses:' + tr.dataset.k + ':day');
+      if (!prep && !day && !shared.length) return;
       const enEl = tr.querySelector('.en').cloneNode(true);
       const kind = enEl.querySelector('.kind');
       const kindTx = kind ? kind.textContent.trim() : '';
@@ -1213,6 +1217,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ses.push('### ' + en, '');
       if (prep) ses.push('- **事前の狙い・質問**：' + prep);
       if (day) ses.push('- **当日メモ**：' + day);
+      shared.forEach(entry => ses.push('- **共同メモ** ' + entry.clientTime + ' · ' + entry.author + '：' + entry.text));
       ses.push('');
     });
     if (ses.length) L.push('## 講演別メモ', '', ...ses);
@@ -1298,12 +1303,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     reader.readAsText(file);
   });
-  TripField.createCloudSync({
+  const cloud = TripField.createCloudSync({
     store,
     endpoint: document.querySelector('[data-trip-cloud]')?.dataset.endpoint || '',
     status: message => flash('☁ ' + message),
     onRestore: () => setTimeout(() => location.reload(), 500)
   });
+  mountSharedDayNotes(cloud);
 
   document.getElementById('btn-clear').addEventListener('click', () => {
     if (!confirm('この端末に保存した記録（狙い・当日メモ・所感）と、会場タブの「事前の狙い・質問」「当日メモ」をすべて消します。よろしいですか？')) return;
@@ -1343,7 +1349,7 @@ document.addEventListener('DOMContentLoaded', () => {
         grow();
       });
       td.append(caption, ta);
-      if (day) TripField.mountTimestampAppend(ta);
+      if (day) cloud.mountAppend(ta, 'ses:' + k + ':day');
       tr.appendChild(td);
     };
     addField({

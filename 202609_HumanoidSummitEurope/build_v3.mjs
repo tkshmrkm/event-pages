@@ -198,7 +198,8 @@ const cloudPanel = String.raw`
   <details class="card cloud-sync no-print" data-trip-cloud data-endpoint="${cloudEndpoint}">
     <summary class="ttl">☁ Cloudflare同期</summary>
     <div class="bd">
-      <p class="small muted">オンライン版のメモを端末間で同期します。複数端末では、クラウドから読込→時刻付き追記→保存の順で使います。最後の保存が優先されます。</p>
+      <p class="small muted">二人の共同メモは1件ずつ追加保存され、同時に送っても上書きしません。旅程選択や自由編集欄は最後の保存が優先されます。</p>
+      <label class="cloud-key">記入者名<input type="text" autocomplete="name" data-trip-cloud-author placeholder="例：村上"></label>
       <label class="cloud-key">同期キー<input type="password" autocomplete="current-password" data-trip-cloud-key></label>
       <label class="cloud-remember"><input type="checkbox" data-trip-cloud-remember> この端末に同期キーを保存</label>
       <div class="cloud-actions">
@@ -211,10 +212,10 @@ const cloudPanel = String.raw`
 `;
 
 const timestampAppendScript = String.raw`
-  /* ---------- 当日メモ：既存内容を残した時刻付き追記 ---------- */
-  recAll
+  /* ---------- 当日メモ：二人で同じ欄へ名前・時刻付き追記 ---------- */
+  const mountSharedDayNotes = cloud => recAll
     .filter(ta => ta.dataset.rec.endsWith(':day'))
-    .forEach(ta => TripField.mountTimestampAppend(ta));
+    .forEach(ta => cloud.mountAppend(ta, 'rec:' + ta.dataset.rec));
 
 `;
 
@@ -265,12 +266,13 @@ const transferScript = String.raw`
     };
     reader.readAsText(file);
   });
-  TripField.createCloudSync({
+  const cloud = TripField.createCloudSync({
     store,
     endpoint: document.querySelector('[data-trip-cloud]')?.dataset.endpoint || '',
     status: message => flash('☁ ' + message),
     onRestore: () => setTimeout(() => location.reload(), 500)
   });
+  mountSharedDayNotes(cloud);
 
 `;
 
@@ -334,7 +336,7 @@ const sessionFieldsScript = String.raw`
         grow();
       });
       td.append(caption, ta);
-      if (day) TripField.mountTimestampAppend(ta);
+      if (day) cloud.mountAppend(ta, 'ses:' + k + ':day');
       tr.appendChild(td);
     };
     addField({
@@ -358,7 +360,8 @@ const sessionMarkdownBlock = String.raw`    /* 会場タブに書いた講演ご
     document.querySelectorAll('.ses tr[data-k]').forEach(tr => {
       const prep = store.get('ses:' + tr.dataset.k + ':aim', '').trim();
       const day = store.get('ses:' + tr.dataset.k + ':day', '').trim();
-      if (!prep && !day) return;
+      const shared = cloud.entriesFor('ses:' + tr.dataset.k + ':day');
+      if (!prep && !day && !shared.length) return;
       const enEl = tr.querySelector('.en').cloneNode(true);
       const kind = enEl.querySelector('.kind');
       const kindTx = kind ? kind.textContent.trim() : '';
@@ -367,6 +370,7 @@ const sessionMarkdownBlock = String.raw`    /* 会場タブに書いた講演ご
       ses.push('### ' + en, '');
       if (prep) ses.push('- **事前の狙い・質問**：' + prep);
       if (day) ses.push('- **当日メモ**：' + day);
+      shared.forEach(entry => ses.push('- **共同メモ** ' + entry.clientTime + ' · ' + entry.author + '：' + entry.text));
       ses.push('');
     });
     if (ses.length) L.push('## 講演別メモ', '', ...ses);`;
@@ -495,6 +499,8 @@ function buildMain({ offline = false } = {}) {
     'session Markdown export'
   );
   html = mustReplace(html, "  document.getElementById('btn-export').addEventListener('click', () => {", '  const buildRecordMarkdown = () => {', 'Markdown builder start');
+  html = mustReplace(html, "      const a = v(d.id + ':aim'), b = v(d.id + ':day'), c = v(d.id + ':after');\n      if (!a && !b && !c) return;", "      const a = v(d.id + ':aim'), b = v(d.id + ':day'), c = v(d.id + ':after');\n      const shared = cloud.entriesFor('rec:' + d.id + ':day');\n      if (!a && !b && !c && !shared.length) return;", 'shared day Markdown condition');
+  html = mustReplace(html, "      if (b) L.push('- **当日**：' + b);", "      if (b) L.push('- **当日**：' + b);\n      shared.forEach(entry => L.push('- **共同メモ** ' + entry.clientTime + ' · ' + entry.author + '：' + entry.text));", 'shared day Markdown entries');
   html = mustReplace(html, originalMarkdownTail, markdownDownloadHandlers, 'Markdown copy and download handlers');
   html = mustReplace(
     html,

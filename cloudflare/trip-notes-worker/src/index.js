@@ -1,5 +1,7 @@
 const MAX_BODY_BYTES = 512 * 1024;
 const EVENT_KEY = /^[A-Za-z0-9._-]{1,80}$/;
+const ENTRY_ID = /^[A-Za-z0-9_-]{8,80}$/;
+const MAX_ENTRY_BYTES = 16 * 1024;
 
 function allowedOrigin(request, env) {
   const origin = request.headers.get('Origin') || '';
@@ -81,6 +83,57 @@ async function handleTrip(request, env, eventKey) {
   return json(request, env, { error:'method_not_allowed' }, 405);
 }
 
+function cleanEntry(value, eventKey, entryId) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('entry must be an object');
+  const fieldKey = String(value.fieldKey || '').trim();
+  const author = String(value.author || '').trim();
+  const text = String(value.text || '').trim();
+  const clientTime = String(value.clientTime || '').trim();
+  if (!fieldKey || fieldKey.length > 160 || /[\u0000-\u001f]/.test(fieldKey)) throw new Error('invalid field key');
+  if (!author || author.length > 60) throw new Error('invalid author');
+  if (!text || text.length > 8000) throw new Error('invalid text');
+  if (!clientTime || clientTime.length > 80) throw new Error('invalid client time');
+  return { id:entryId, eventKey, fieldKey, author, text, clientTime };
+}
+
+async function listEntries(env, eventKey) {
+  const prefix = 'entry:' + eventKey + ':';
+  const entries = [];
+  let cursor;
+  do {
+    const page = await env.TRIP_NOTES.list({ prefix, cursor });
+    const values = await Promise.all(page.keys.map(key => env.TRIP_NOTES.get(key.name, 'json')));
+    values.filter(Boolean).forEach(value => entries.push(value));
+    cursor = page.list_complete ? undefined : page.cursor;
+  } while (cursor);
+  entries.sort((left, right) => String(left.createdAt || '').localeCompare(String(right.createdAt || '')) || left.id.localeCompare(right.id));
+  return entries;
+}
+
+async function handleEntries(request, env, eventKey, entryId) {
+  if (!authorized(request, env)) return json(request, env, { error:'unauthorized' }, 401);
+  if (!EVENT_KEY.test(eventKey)) return json(request, env, { error:'invalid_event_key' }, 400);
+
+  if (request.method === 'GET' && !entryId) {
+    return json(request, env, { eventKey, entries:await listEntries(env, eventKey) });
+  }
+
+  if (request.method === 'PUT' && entryId) {
+    if (!ENTRY_ID.test(entryId)) return json(request, env, { error:'invalid_entry_id' }, 400);
+    const raw = await request.text();
+    if (new TextEncoder().encode(raw).byteLength > MAX_ENTRY_BYTES) return json(request, env, { error:'payload_too_large' }, 413);
+    let value;
+    try { value = cleanEntry(JSON.parse(raw), eventKey, entryId); }
+    catch(e) { return json(request, env, { error:'invalid_entry' }, 400); }
+    const createdAt = new Date().toISOString();
+    const stored = { ...value, createdAt };
+    await env.TRIP_NOTES.put('entry:' + eventKey + ':' + entryId, JSON.stringify(stored));
+    return json(request, env, { ok:true, entry:stored });
+  }
+
+  return json(request, env, { error:'method_not_allowed' }, 405);
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -88,8 +141,10 @@ export default {
       if (!allowedOrigin(request, env)) return json(request, env, { error:'origin_not_allowed' }, 403);
       return new Response(null, { status:204, headers:headers(request, env) });
     }
-    const match = url.pathname.match(/^\/v1\/trips\/([^/]+)$/);
-    if (!match) return json(request, env, { error:'not_found' }, 404);
-    return handleTrip(request, env, decodeURIComponent(match[1]));
+    const entryMatch = url.pathname.match(/^\/v1\/trips\/([^/]+)\/entries(?:\/([^/]+))?$/);
+    if (entryMatch) return handleEntries(request, env, decodeURIComponent(entryMatch[1]), entryMatch[2] && decodeURIComponent(entryMatch[2]));
+    const tripMatch = url.pathname.match(/^\/v1\/trips\/([^/]+)$/);
+    if (!tripMatch) return json(request, env, { error:'not_found' }, 404);
+    return handleTrip(request, env, decodeURIComponent(tripMatch[1]));
   }
 };

@@ -19,12 +19,13 @@ assert(template.includes('data-trip-store="venue:target-01:day"'), 'template: ve
 assert(template.includes('data-trip-append-timestamp'), 'template: timestamp append control marker missing');
 assert(template.includes('data-trip-export-json') && template.includes('data-trip-import-json'), 'template: JSON transfer controls missing');
 assert(template.includes('data-trip-download-markdown'), 'template: Markdown download control missing');
-assert(template.includes('data-trip-cloud') && template.includes('data-trip-cloud-key'), 'template: Cloudflare sync controls missing');
+assert(template.includes('data-trip-cloud') && template.includes('data-trip-cloud-key') && template.includes('data-trip-cloud-author'), 'template: Cloudflare sync controls missing');
 assert(runtime.includes('createCloudSync') && runtime.includes('X-Trip-Sync-Key'), 'runtime: Cloudflare sync support missing');
 assert(runtime.includes('downloadText') && runtime.includes('text/markdown;charset=utf-8'), 'runtime: Markdown download support missing');
-assert(runtime.includes('mountTimestampAppend') && runtime.includes('localTimestamp'), 'runtime: timestamp append support missing');
+assert(runtime.includes('mountAppend') && runtime.includes('appendEntry') && runtime.includes('localTimestamp'), 'runtime: shared append support missing');
+assert(runtime.includes("request('/entries'") && runtime.includes('data-trip-entry-id'), 'runtime: shared entry loading/export missing');
 assert(core.includes('min-height:44px') && core.includes('font:16px/1.55'), 'core.css: touch/input sizing contract missing');
-assert(core.includes('.trip-timestamp-button'), 'core.css: timestamp append control styles missing');
+assert(core.includes('.trip-timestamp-button') && core.includes('.trip-shared-entry'), 'core.css: shared append control styles missing');
 
 const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'trip-field-'));
 const offlinePath = path.join(tempDir, 'template_desk_print.html');

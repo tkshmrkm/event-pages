@@ -92,7 +92,7 @@ The online page and family print page load `v3.css` as a normal shared asset. Th
 
 Family mobile targets are iPhone 16, Pixel 7a, and Pixel 8a. On narrow screens the family itinerary changes from a three-column table to one card per day; print media restores the table layout.
 
-The venue section has no assignment control. Every listed session has two independently saved fields: `事前の狙い・質問` and `当日メモ`. Day and session notes provide a timestamped append control that preserves earlier text and records the device's local time plus UTC offset. All fields use browser local storage and are included in Markdown and JSON exports.
+The venue section has no assignment control. Every listed session has two independently saved fields: `事前の狙い・質問` and `当日メモ`. Day and session notes also provide named shared append entries with device-local time and UTC offset. Each shared entry uses its own Cloudflare KV key, so two travelers can append to the same field without overwriting one another. Existing free-edit fields remain compatible and shared entries are included in Markdown output after loading from the cloud.
 
 The page now conforms to the repository-wide `shared/trip-field` field-layout contract. Its existing HRS appearance is preserved, while storage uses the shared runtime and the generated stylesheet includes the shared core components for future compatibility.
 

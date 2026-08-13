@@ -42,11 +42,15 @@ this Worker deliberately does not reuse it.
 
 - `GET /v1/trips/:eventKey` loads one trip snapshot.
 - `PUT /v1/trips/:eventKey` stores one trip snapshot.
+- `GET /v1/trips/:eventKey/entries` lists named shared-note entries.
+- `PUT /v1/trips/:eventKey/entries/:entryId` stores one append entry under a unique key.
 - `X-Trip-Sync-Key` is required for both operations.
 - Only configured GitHub Pages and local-development origins receive CORS access.
 - UI-only keys are removed before cloud storage.
 - The client waits 2.2 seconds after editing before saving, which stays below
   Workers KV's one-write-per-second limit for a single key.
+- Shared-note entries do not update the trip snapshot key. Concurrent users
+  write different entry IDs, so one append does not overwrite the other.
 
 Run the dependency-free Worker checks with:
 
