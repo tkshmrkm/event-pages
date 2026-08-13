@@ -10,3 +10,6 @@ backup—while each event retains its own palette and content structure.
 
 See [`shared/trip-field/README.md`](shared/trip-field/README.md) for the layout
 contract and generation workflow.
+
+The current decisions, implemented scope, and next work are summarized in
+[`OVERSEAS_TRIP_LAYOUT_SUMMARY.md`](OVERSEAS_TRIP_LAYOUT_SUMMARY.md).
