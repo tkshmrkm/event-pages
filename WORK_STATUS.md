@@ -104,6 +104,8 @@ Cloudflare同期、PCダウンロードまで技術受入完了。同期キー�
 - `shared/trip-field/runtime.js`: 保存、DL、Cloudflare同期
 - `shared/trip-field/core.css`: 共通UI
 - `shared/trip-field/template.html`: 新規イベント用雛形
+- `202609_HumanoidSummitEurope/index.html`: HRS v3の正式公開入口
+- `202609_HumanoidSummitEurope/index_v1.html`: HRS旧版の退避ファイル
 - `202609_HumanoidSummitEurope/build_v3.mjs`: HRS v3の編集元
 - `202609_HumanoidSummitEurope/validate_v3.mjs`: HRS受入検証
 - `cloudflare/trip-notes-worker/src/index.js`: Worker本体

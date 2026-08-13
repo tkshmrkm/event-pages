@@ -154,7 +154,9 @@ Workers KVは同じ出張スナップショットを最後の保存で更新す�
 
 実装済みの主なファイル:
 
-- `202609_HumanoidSummitEurope/index_v3.html`: スマートフォン用オンライン版
+- `202609_HumanoidSummitEurope/index.html`: 正式なスマートフォン用オンライン版
+- `202609_HumanoidSummitEurope/index_v3.html`: 旧v3 URLから正式入口への転送
+- `202609_HumanoidSummitEurope/index_v1.html`: v3以前の旧オンライン版
 - `202609_HumanoidSummitEurope/index_v3_offline.html`: 机上用印刷版
 - `202609_HumanoidSummitEurope/family_print.html`: 家族向け予定表
 - `202609_HumanoidSummitEurope/v3.css`: オンライン版と家族版のCSS

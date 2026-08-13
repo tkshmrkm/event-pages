@@ -27,9 +27,10 @@
 
 - HRS v3の生成物を直接編集しない。
   `202609_HumanoidSummitEurope/build_v3.mjs` を変更して再生成する。
-- HRS v3の生成物は `index_v3.html`、`index_v3_offline.html`、
+- HRS v3の生成物は `index.html`、`index_v3_offline.html`、
   `family_print.html`、`v3.css`。
-- 元資料である `index.html` と `index_v2.html` は、移行元として保存する。
+- 旧版の `index_v1.html` と元資料の `index_v2.html` は、移行元として保存する。
+- `index_v3.html` は、以前の共有URLを `index.html` へ転送する互換ページ。
 - 共通機能は `shared/trip-field` に置き、HRS固有の外観はHRS側に残す。
 - 机上用印刷版は静的で、メモ欄、クラウド同期、実行スクリプトを含めない。
 - 飛行機アイコンは色付き絵文字ではなく、モノクロ文字の `✈︎` を使う。

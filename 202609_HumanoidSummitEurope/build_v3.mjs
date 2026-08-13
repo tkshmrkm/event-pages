@@ -547,7 +547,7 @@ function buildFamily() {
 
 const outputs = [
   ['v3.css', compiledSharedCss],
-  ['index_v3.html', buildMain()],
+  ['index.html', buildMain()],
   ['index_v3_offline.html', buildMain({ offline:true })],
   ['family_print.html', buildFamily()]
 ];

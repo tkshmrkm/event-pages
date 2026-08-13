@@ -1,606 +1,1480 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HRS Europe 2026 出張ガイド（フィンエアー NGO-FRA）</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
-  body { font-family:'Noto Sans JP','Yu Gothic','Meiryo',sans-serif; padding-bottom:20px; }
-  .chip { display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;border:1px solid;white-space:nowrap; }
-  .chip-tbd  { background:rgba(234,179,8,.15);border-color:rgba(234,179,8,.5);color:#78350f; }
-  .chip-pending { background:rgba(99,102,241,.12);border-color:rgba(99,102,241,.4);color:#3730a3; }
-  .chip-booked { background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.5);color:#14532d; }
-  .chip-skip { background:#f1f5f9;border-color:#cbd5e1;color:#64748b; }
-  .tbd-banner { background:repeating-linear-gradient(45deg,#fef9c3,#fef9c3 10px,#fefce8 10px,#fefce8 20px);border:1px dashed #ca8a04;border-radius:8px;padding:10px 14px;font-size:12px;color:#854d0e; }
+<title>HRS Europe 2026 フィールドガイド v3</title>
+<!--
+  ============================================================
+  HRS Europe 2026 出張ガイド — 標準形テンプレート v2
+  ============================================================
+  構造：タブ（役割）× 日カード（時間）× レーン（人）
 
-  .sp-table { border-collapse:collapse;width:100%; }
-  .sp-table th,.sp-table td { border:1px solid #e2e8f0;padding:6px 8px;vertical-align:top;font-size:12px; }
-  .sp-table thead th { background:#334155;color:#fff;font-weight:700;text-align:left; }
+    タブ    : 旅程 / 準備 / 会場 / 記録 / 家族
+    日カード: .day（1日 = 1カード）
+    レーン  : .lane[data-who]  … 全員一緒の日は1本、別行動の日はN本
+    合流/分岐: .joinbar[data-type="merge"|"split"]
 
-  /* 日程表：時刻｜イベント｜コメント */
-  .day-section .schedule-3col { table-layout:fixed; }
-  .day-section .schedule-3col td.schedule-time { width:96px;box-sizing:border-box;color:#475569;background:#fff;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-variant-numeric:tabular-nums;white-space:nowrap; }
-  .day-section .schedule-3col td.schedule-event { width:auto;line-height:1.55;color:#1e293b;overflow-wrap:anywhere; }
-  .day-section .schedule-3col td.schedule-note { width:32%;background:#f8fafc;color:#64748b;font-size:11px;line-height:1.55;border-left:2px solid #e2e8f0;overflow-wrap:anywhere; }
-  .day-section .schedule-3col td.schedule-note > .text-slate-500 { display:block;margin:0;color:inherit;font-size:inherit; }
-  .day-section .schedule-3col tr:hover td.schedule-event { background:#f8fafc; }
-  .day-section .schedule-3col tr:hover td.schedule-note { background:#f1f5f9; }
-  .tc { color:#64748b;font-size:11px;white-space:nowrap;font-weight:700; }
-  .etag { display:inline-block;padding:1px 6px;border-radius:999px;font-size:10px;font-weight:600;margin-bottom:2px; }
-  .t-fly  { background:#dbeafe;color:#1e40af; }
-  .t-conf { background:#ffe4e6;color:#9f1239; }
-  .t-move { background:#d1fae5;color:#065f46; }
-  .t-hotel{ background:#f1f5f9;color:#334155;border:1px solid #cbd5e1; }
-  .t-tbd  { background:#fef9c3;color:#854d0e;border:1px dashed #ca8a04; }
-  .t-food { background:#fef3c7;color:#92400e; }
+  メンバー定義は <script> 冒頭の MEMBERS 1か所だけ。
+  色・チップ・フィルタはすべてそこから生成する。
 
-  .todo-item { display:flex;align-items:flex-start;gap:10px;padding:8px 4px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .1s; }
-  .todo-item:hover { background:#f8fafc; }
-  .todo-item input { width:16px;height:16px;cursor:pointer;flex-shrink:0;margin-top:3px; }
-  .todo-item.done label { text-decoration:line-through;color:#94a3b8; }
-  .todo-item label { cursor:pointer;font-size:13px;line-height:1.5; }
-  .sub { font-size:11px;color:#64748b;display:block;margin-top:2px; }
-
-  .section-anchor,.day-section { scroll-margin-top:112px; }
-  .date-nav { display:flex;gap:6px;overflow-x:auto;white-space:nowrap;padding-top:8px;margin-top:8px;border-top:1px solid #e2e8f0;scrollbar-width:none;-webkit-overflow-scrolling:touch; }
-  .date-nav::-webkit-scrollbar { display:none; }
-  .date-nav a { flex:0 0 auto;padding:4px 10px;border:1px solid #cbd5e1;border-radius:999px;background:#fff;color:#475569;font-size:11px;font-weight:700;text-decoration:none;transition:background .15s,color .15s,border-color .15s; }
-  .date-nav a:hover,.date-nav a:focus-visible { background:#334155;border-color:#334155;color:#fff;outline:none; }
-  .back-to-date-nav { display:block;padding:7px 12px;text-align:right;border-top:1px solid #e2e8f0;background:#f8fafc;color:#475569;font-size:11px;text-decoration:none; }
-  .back-to-date-nav:hover { background:#f1f5f9;color:#0f172a; }
-
-  @media (max-width:640px) {
-    body { padding-bottom:12px; }
-    header .max-w-4xl { padding-left:12px;padding-right:12px; }
-    .date-nav { margin-left:-2px;margin-right:-2px; }
-    .day-section .sp-table,.day-section .sp-table tbody { display:block;width:100%; }
-    .day-section .sp-table tr { display:grid;grid-template-columns:92px minmax(0,1fr);border-bottom:1px solid #e2e8f0; }
-    .day-section .sp-table td { display:block;width:auto!important;min-width:0;border-width:0;padding:7px 8px; }
-    .day-section .sp-table td.schedule-time,.day-section .sp-table td.tc { grid-column:1;grid-row:1;white-space:normal;color:#475569;background:#f8fafc; }
-    .day-section .sp-table td.schedule-event,.day-section .sp-table td:nth-child(2) { grid-column:2;grid-row:1;line-height:1.5; }
-    .day-section .sp-table td.schedule-note { grid-column:2;grid-row:auto;margin:0 8px 7px;padding:5px 8px!important;border-left:3px solid #cbd5e1!important;border-radius:0 4px 4px 0;background:#f8fafc;color:#64748b;font-size:11px; }
-    .day-section .sp-table td.schedule-note:empty { display:none; }
-    .day-section .sp-table td[colspan] { grid-column:1/-1;grid-row:auto; }
-    .day-section .sp-table td.schedule-event.schedule-event-wide { grid-column:2;grid-row:1; }
-  }
-
-  @media print {
-    @page { size:A4;margin:10mm 12mm; }
-    .no-print { display:none!important; }
-    body { background:#fff!important;padding:0!important;font-size:9pt; }
-    header { position:static!important;box-shadow:none!important;background:#fff!important;border-bottom:1px solid #cbd5e1!important; }
-    header .max-w-4xl { max-width:none!important;padding:0 0 8px!important; }
-    .day-section { break-inside:avoid-page;page-break-inside:avoid;margin-bottom:8px!important; }
-    .day-section .sp-table tr { break-inside:avoid;page-break-inside:avoid; }
-    .sp-table th,.sp-table td { padding:4px 6px;font-size:8pt; }
-    a[href]::after { content:none!important; }
-  }
-</style>
+  外部リソースなし（CDN・Webフォント・アイコン font 不使用）。
+  機内・現地オフラインでもこのファイル単体で動く。
+  入力（ToDo・案の選択・メモ）は localStorage に保存。
+  ============================================================
+-->
+<link rel="stylesheet" href="v3.css">
 </head>
-<body class="bg-[#fcfcfc] text-slate-800 antialiased">
+<body data-trip-layout="field-v1" data-trip-key="hrs2026-v3">
 
-<header class="bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-  <div class="max-w-4xl mx-auto px-4 py-3">
-    <div class="flex items-center justify-between gap-3 flex-wrap">
+<!-- ==================== ヘッダー ==================== -->
+<header class="hdr">
+  <div class="wrap">
+    <div class="hdr-top">
       <div>
-        <h1 class="text-base font-bold leading-tight">🇩🇪 HRS Europe 2026 出張ガイド <span class="text-slate-500 font-normal">（フィンエアー NGO-FRA）</span></h1>
-        <p class="text-[11px] text-slate-500 mt-0.5">9/7発〜9/14着 ｜ Stuttgart（HRS）＋ 9/12-13の過ごし方は複数案検討中</p>
+        <div class="eyebrow">🇩🇪 HRS EUROPE 2026 · STUTTGART</div>
+        <h1>HRS Europe 2026 フィールドガイド</h1>
+        <div class="subtitle">9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA</div>
       </div>
-      <div class="flex gap-1 text-[11px] flex-wrap no-print">
-        <a href="#overview" class="px-2 py-1 rounded text-slate-600 hover:bg-slate-100">概要</a>
-        <a href="#schedule" class="px-2 py-1 rounded text-slate-600 hover:bg-slate-100">日程表</a>
-        <a href="#todo" class="px-2 py-1 rounded text-slate-600 hover:bg-slate-100">ToDo</a>
-        <button onclick="window.print()" class="px-2 py-1 bg-slate-700 text-white rounded" aria-label="印刷"><i class="fas fa-print"></i></button>
+      <div class="no-print" style="display:flex;gap:5px;flex-shrink:0">
+        <button class="btn" id="detail-tg" title="補足説明の表示を切り替え">＋詳細</button>
+        <button class="btn" onclick="window.print()" aria-label="印刷">🖨</button>
       </div>
     </div>
-    <nav id="date-nav" class="date-nav no-print" aria-label="日付ナビ"></nav>
   </div>
 </header>
+<div class="field-nav">
+  <div class="wrap">
+    <nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション">
+      <button data-tab="plan" class="on" role="tab" aria-controls="tab-plan" aria-selected="true"><span class="ic">📅</span>旅程</button>
+      <button data-tab="venue" role="tab" aria-controls="tab-venue" aria-selected="false"><span class="ic">🤖</span>会場</button>
+      <button data-tab="rec" role="tab" aria-controls="tab-rec" aria-selected="false"><span class="ic">📝</span>記録</button>
+    </nav>
+    <div class="subbar" id="subbar">
+      <div class="chips" id="who-chips" aria-hidden="true"></div>
+      <div class="chips" id="day-chips"><span class="lbl">日付</span></div>
+    </div>
+  </div>
+</div>
 
-<div class="max-w-4xl mx-auto px-4 py-4 space-y-4">
+<div class="wrap">
 
-  <!-- 機密注意 -->
-  <div class="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-3 flex items-start gap-2 text-xs text-amber-800">
-    <i class="fas fa-lock mt-0.5"></i>
-    <div><strong>公開用：</strong>個人情報および予約識別番号は除外しています。</div>
+<!-- ==================== タブ：旅程 ==================== -->
+<section class="tab on" id="tab-plan" role="tabpanel" aria-label="旅程">
+<div class="transfer-help"><strong>記録の正本はこのオンライン版です。</strong>入力はこの端末・ブラウザ内に保存されます。終了時はJSONを書き出してバックアップしてください。</div>
+
+  <div class="banner b-warn">
+    <span class="i">⚠️</span>
+    <div>未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方だけ。便とホテルは確定済み。</div>
   </div>
 
-  <!-- 現状ステータス -->
-  <div class="tbd-banner flex items-start gap-2">
-    <i class="fas fa-triangle-exclamation text-amber-500 mt-0.5 shrink-0"></i>
-    <div><span class="font-bold">利用便：Finnair NGO⇔FRA（HEL経由）｜宿泊：Maritim Stuttgart・Best Western Frankfurt Airport</span><br>
-    未確定は<strong>9/12（土）・9/13（日）の過ごし方</strong>。候補と選び方は <a href="#day-0912" class="underline">9/12</a>・<a href="#day-0913" class="underline">9/13</a> の各セクションに記載。</div>
+  <div class="card">
+    <h2 class="ttl">🧭 現地での方針</h2>
+    <div class="bd small" style="display:grid;gap:4px">
+      <div>🧳 荷物は常にホテルに預ける<span class="note">コインロッカーは使わない。</span></div>
+      <div>🚆 鉄道は事前購入せず DB Navigator で都度購入<span class="note">Stuttgart→Frankfurt空港、プランB・D・X選択時の Frankfurt⇔Köln を含む。</span></div>
+      <div>🏨 Stuttgart 4泊 → Frankfurt空港 1泊 <span class="st st-booked">予約済</span><span class="note">Maritim Stuttgart（9/8〜9/12・朝食付・会場まで徒歩約3分）／Best Western Hotel Airport Frankfurt（9/12〜9/13・朝食付）。詳細は準備タブ。</span></div>
+    </div>
+    <div class="foot" style="border-bottom:1px solid var(--line2)">🚉 <strong>Frankfurt空港には駅が2つある。</strong>長距離駅（Fernbf・ICE）と近郊駅（S-Bahn）は別の場所なので、乗る前にどちらか確認する。</div>
+    <div class="foot" style="border-bottom:1px solid var(--line2)">🏷 <strong>未確定の書き分け：</strong>「未発表」＝先方が出していない ／「要確認」＝調べれば分かる ／「要検討」＝こちらが決める</div>
+    <div class="foot legend">✈︎ 飛行機 ・ 🚆 鉄道 ・ 🚕 タクシー ・ 🛂 空港手続き ・ 🏨 宿 ・ 🍽 食事 ・ 🏛 観光 ・ ⚽ 観戦 ・ 🛋 ラウンジ ・ 🤖 HRS<span class="muted">｜印が無い行は徒歩か、その場での行動</span></div>
   </div>
 
-  <!-- 概要 -->
-  <section id="overview" class="section-anchor">
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 p-4">
-      <h2 class="font-bold text-sm mb-3"><i class="fas fa-users text-slate-400 mr-1"></i>出張概要</h2>
-      <div class="bg-purple-50 border border-purple-200 rounded-lg p-2.5 mb-3 text-xs text-purple-800 font-semibold">
-        <i class="fas fa-robot mr-1"></i>HRS Europe 2026：9/9〜9/11 参加（京都発・犬山発の2名）
-      </div>
-      <div class="grid grid-cols-2 gap-3 mb-3 text-xs">
-        <div class="border border-purple-200 rounded-lg p-3 bg-purple-50">
-          <span class="chip chip-pending">👤 京都発</span>
-          <div class="mt-2 space-y-0.5 text-slate-600">
-            <div>出発地：京都 ⇔ NGO（中部国際空港）</div>
-          </div>
-        </div>
-        <div class="border border-purple-200 rounded-lg p-3 bg-purple-50">
-          <span class="chip chip-pending">👤 犬山発</span>
-          <div class="mt-2 space-y-0.5 text-slate-600">
-            <div>出発地：犬山 ⇔ NGO（中部国際空港）</div>
-          </div>
-        </div>
-      </div>
-      <div class="bg-slate-50 rounded p-3 text-xs text-slate-600 space-y-1">
-        <div class="font-semibold text-slate-700">ホテル（2拠点）</div>
-        <div><i class="fas fa-hotel mr-1 text-teal-500"></i><strong>Maritim Stuttgart <a href="https://www.google.com/maps/search/?api=1&query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>（★★★★／Seidenstraße 34, 70174）：</strong>9/8〜9/12（4泊・朝食込） <span class="chip chip-booked ml-1">予約済</span><br><span class="text-emerald-700 font-semibold">✔ 会場 Liederhalle <a href="https://www.google.com/maps/search/?api=1&query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a> に隣接（徒歩約3分）。</span><br><span class="text-slate-500">クラシックダブル28㎡・禁煙・チェックイン15:00｜無料キャンセル 9/5 23:00(現地)まで｜TEL +49 711 9420</span></div>
-        <div><i class="fas fa-hotel mr-1 text-teal-500"></i><strong>Best Western Hotel Airport Frankfurt <a href="https://www.google.com/maps/search/?api=1&query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>：</strong>9/12〜9/13（1泊・朝食付） <span class="chip chip-booked ml-1">予約済</span></div>
-      </div>
-    </div>
-  </section>
+  <!-- ---------- 9/7 ---------- -->
+  <details class="day" open id="day-0907" data-label="9/7" data-dow="月" data-date="2026-09-07" data-kind="move">
+    <summary class="day-head"><span class="d">9/7（月）</span><span class="t">日本出発 — 京都／犬山から名古屋へ、合流してNGOへ</span></summary>
 
-
-  <!-- 利用フライト -->
-  <section class="section-anchor">
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <div class="bg-slate-700 text-white px-4 py-2.5 font-bold text-sm">
-        <i class="fas fa-plane mr-1"></i>利用フライト（NGO⇔FRA Finnair）
-      </div>
-      <div class="bg-emerald-50 border-b border-emerald-100 px-4 py-2 text-[11px] text-emerald-800">
-        <i class="fas fa-route mr-1"></i>NGO発着・HEL経由の往復エコノミー。<strong>前日入りができ、犬山からの空港アクセスが短い旅程。</strong>
-      </div>
-      <div class="p-4 text-xs space-y-3">
-        <!-- 往路 -->
-        <div class="border border-slate-200 rounded-lg overflow-hidden">
-          <div class="bg-blue-50 px-2 py-1 font-bold text-blue-800 flex justify-between"><span><span class="etag t-fly">✈往路</span> 9/7（月）〜9/8（火）</span><span class="text-slate-500 font-normal">総所要17時間30分</span></div>
-          <table class="sp-table text-[11px]">
-            <tr><td class="tc" style="width:96px">22:50</td><td><strong>NGO 中部</strong>発 <span class="text-slate-400">→ HEL</span></td><td class="text-slate-500">AY80｜A350｜13h05m<span class="text-slate-400">（深夜便）</span></td></tr>
-            <tr><td class="tc">9/8 5:55</td><td><strong>HEL ヘルシンキ</strong>着</td><td class="text-slate-500">乗継 <strong>1時間45分</strong></td></tr>
-            <tr><td class="tc">9/8 7:40</td><td><strong>HEL</strong>発 <span class="text-slate-400">→ FRA</span></td><td class="text-slate-500">AY1411｜A321｜2h40m｜食事なし（有料軽食あり／水・ブルーベリージュース無料）</td></tr>
-            <tr><td class="tc">9/8 9:20</td><td><strong>FRA フランクフルト</strong>着</td><td class="text-slate-500">フィンエアー・エコノミー｜CO₂e 約661kg</td></tr>
-          </table>
-        </div>
-        <!-- 復路 -->
-        <div class="border border-slate-200 rounded-lg overflow-hidden">
-          <div class="bg-cyan-50 px-2 py-1 font-bold text-cyan-800 flex justify-between"><span><span class="etag t-fly">✈復路</span> 9/13（日）〜9/14（月）</span><span class="text-slate-500 font-normal">総所要17時間15分</span></div>
-          <table class="sp-table text-[11px]">
-            <tr><td class="tc" style="width:96px">19:20</td><td><strong>FRA フランクフルト</strong>発 <span class="text-slate-400">→ HEL</span></td><td class="text-slate-500">AY1416｜A321｜2h25m</td></tr>
-            <tr><td class="tc">22:45</td><td><strong>HEL ヘルシンキ</strong>着</td><td class="text-slate-500">乗継 <strong>2時間</strong></td></tr>
-            <tr><td class="tc">9/14 0:45</td><td><strong>HEL</strong>発 <span class="text-slate-400">→ NGO</span></td><td class="text-slate-500">AY79｜A350｜12h50m<span class="text-slate-400">（深夜便）</span></td></tr>
-            <tr><td class="tc">9/14 19:35</td><td><strong>NGO 中部</strong>着</td><td class="text-slate-500">フィンエアー・エコノミー｜CO₂e 約658kg</td></tr>
-          </table>
-        </div>
-        <div class="bg-cyan-50 rounded p-2 text-cyan-800"><i class="fas fa-clock mr-1"></i>復路19:20発 → 国際線チェックインは出発<strong>3時間前目安</strong>で、<strong>16:20頃までにFRA空港到着</strong>を目標に、9/13日中の予定を組む。</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 日程表 -->
-  <section id="schedule" class="section-anchor">
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-3">
-      <div class="text-sm font-bold mb-1">📅 日程表（9/7〜9/14）</div>
-      <div class="flex flex-wrap gap-1.5 text-[10px]">
-        <span class="etag t-fly">✈ フライト</span><span class="etag t-conf">🤖 HRS</span><span class="etag t-move">🚆 移動</span><span class="etag t-hotel">🏨 宿泊</span><span class="etag t-food">🍽 食事</span><span class="etag t-tbd">要検討</span>
-      </div>
-      <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] text-slate-600">
-        <span class="font-semibold text-slate-500">日付色：</span>
-        <span><span class="inline-block w-2.5 h-2.5 rounded-sm bg-slate-600 mr-1"></span>移動日</span>
-        <span><span class="inline-block w-2.5 h-2.5 rounded-sm bg-green-700 mr-1"></span>現地入り</span>
-        <span><span class="inline-block w-2.5 h-2.5 rounded-sm bg-rose-600 mr-1"></span>HRS開催日</span>
-        <span><span class="inline-block w-2.5 h-2.5 rounded-sm bg-amber-500 mr-1"></span>選択中の日</span>
-        <span><span class="inline-block w-2.5 h-2.5 rounded-sm bg-cyan-700 mr-1"></span>帰国日</span>
-      </div>
-      <div class="mt-1 text-[11px] text-slate-500"><i class="fas fa-suitcase-rolling mr-1"></i>荷物方針：<strong>常にホテルに預ける</strong>（コインロッカーは使わない）。</div>
-      <div class="mt-1 text-[11px] text-slate-500"><i class="fas fa-mobile-screen-button mr-1"></i>鉄道チケット：<strong>事前購入せず、現地で乗車時にDB Navigatorから都度購入</strong>する。</div>
-    </div>
-  </section>
-
-  <!-- 9/7 -->
-  <div id="day-0907" data-date-label="9/7" class="day-section bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-    <div class="bg-slate-600 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/7（月）<span class="text-xs font-normal opacity-80">日本出発 — 京都／犬山から名古屋へ、合流してNGOへ</span></div>
-    <div class="grid grid-cols-1 md:grid-cols-2 md:divide-x divide-slate-200">
-      <div>
-        <div class="bg-purple-100 text-purple-800 px-3 py-1.5 font-bold text-xs">👤 京都発</div>
-        <table class="sp-table text-[11px]">
-          <tr><td class="tc" style="width:80px">18:00</td><td>自宅発 → 京都駅へ</td></tr>
-          <tr><td class="tc">18:30</td><td><span class="etag t-move">🚆</span> 京都駅発（新幹線）→ 名古屋（約35分）</td></tr>
-          <tr><td class="tc">19:05頃</td><td>JR名古屋着 → 名鉄名古屋駅へ移動（徒歩約10分）</td></tr>
+    <div class="lanes">
+      <div class="lane" data-who="kyoto">
+        <div class="lane-head">👤 京都発</div>
+        <table class="tl">
+          <tr><td class="t">18:00</td><td>自宅発 → 京都駅へ</td></tr>
+          <tr><td class="t">18:30</td><td><span class="et t-move">🚆</span>京都駅発（新幹線）→ 名古屋（約35分）</td></tr>
+          <tr><td class="t">19:05頃</td><td>JR名古屋着 → 名鉄名古屋駅へ移動（徒歩約10分）</td></tr>
         </table>
       </div>
-      <div>
-        <div class="bg-purple-100 text-purple-800 px-3 py-1.5 font-bold text-xs">👤 犬山発</div>
-        <table class="sp-table text-[11px]">
-          <tr><td class="tc" style="width:80px">18:10</td><td>自宅発 → 犬山駅へ</td></tr>
-          <tr><td class="tc">18:40頃</td><td><span class="etag t-move">🚆</span> 名鉄 犬山駅発 → 名鉄名古屋駅（約30分）</td></tr>
+      <div class="lane" data-who="inuyama">
+        <div class="lane-head">👤 犬山発</div>
+        <table class="tl">
+          <tr><td class="t">18:10</td><td>自宅発 → 犬山駅へ</td></tr>
+          <tr><td class="t">18:40頃</td><td><span class="et t-move">🚆</span>名鉄 犬山駅発 → 名鉄名古屋駅（約30分）</td></tr>
         </table>
       </div>
     </div>
-    <div class="px-3 py-1.5 text-[11px] text-slate-500 bg-slate-50 border-t border-slate-200">ℹ 京都発・犬山発とも、国内列車の便・乗換時刻は出発前に最終確認。表示時刻は目安。</div>
-    <table class="sp-table">
-      <tr><td class="tc" style="width:90px">19:20頃</td><td><strong>名鉄名古屋駅で二人合流</strong></td></tr>
-      <tr><td class="tc">19:30頃</td><td><span class="etag t-move">🚆</span> 名鉄名古屋駅発 ミュースカイ → セントレア（約28分・二人一緒）</td></tr>
-      <tr><td class="tc">20:00頃</td><td>セントレア着（出発約2時間50分前）→ チェックイン・保安検査・出国審査 → <i class="fas fa-couch mr-1"></i><strong>JAL サクララウンジ（国際線）</strong>へ（二人とも）</td></tr>
-      <tr><td class="tc">22:50発</td><td><span class="etag t-fly">✈</span> NGO発 → HEL（フィンエアー AY80／A350）<span class="text-slate-500">機内泊</span></td></tr>
-    </table>
-  </div>
+    <div class="lane-note dt">ℹ 京都発・犬山発とも、国内列車の便・乗換時刻は出発前に最終確認。表示時刻は目安。</div>
 
-  <!-- 9/8 -->
-  <div id="day-0908" data-date-label="9/8" class="day-section bg-white rounded-xl shadow-sm border border-green-200 overflow-hidden">
-    <div class="bg-green-700 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/8（火）<span class="text-xs font-normal opacity-80">FRA着 → Stuttgart移動（荷物は先にホテルへ）</span></div>
-    <table class="sp-table">
-      <tr><td class="tc" style="width:90px">5:55</td><td><span class="etag t-fly">✈</span> HEL着 → <strong>シェンゲン入域審査・乗継</strong>（1h45m）<div class="text-slate-500">ラウンジや買物は予定に入れず、入域審査と搭乗口確認を優先。朝食用のパン／サンドイッチはFRA到着後に購入する</div></td></tr>
-      <tr><td class="tc">7:40</td><td><span class="etag t-fly">✈</span> HEL発 → FRA（AY1411／A321・2h40m）<span class="text-slate-500">エコノミーは食事なし。<a href="https://www.finnair.com/fi-en/nordic-kitchen--onboard-meals-and-beverages/short-haul-meals" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Finnair公式</a>では水・ブルーベリージュースは無料、軽食・コーヒー等は有料。必要なら事前注文も可</span></td></tr>
-      <tr><td class="tc">9:20</td><td><span class="etag t-fly">✈着</span> FRA着・荷物受取・税関<span class="text-slate-500">入国審査はHELで完了。荷物受取・税関後、T3の<a href="https://www.frankfurt-airport.com/en/locations/b/bread-and-bite/bread-and-bite.html" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Bread &amp; Bite</a>（6:00〜22:00）などでICE車内用のパン／サンドイッチを購入してから長距離駅へ</span></td></tr>
-      <tr><td class="tc">10:51目安</td><td><span class="etag t-move">🚆</span> Frankfurt(M) Flughafen Fernbf発（<strong>ICE 515</strong>・直通）→ Stuttgart Hbf（1h20m）<span class="text-slate-500">9:20着から約90分あり、通常ならパン購入を含めて10:51発を目指せる。荷物受取等に時間がかかった場合は次の直通ICEに切り替える。乗換ありの便より直通を優先</span></td></tr>
-      <tr><td class="tc">12:11</td><td><span class="etag t-move">🚆</span> Stuttgart Hbf（中央駅）着 <a href="https://www.google.com/maps/search/?api=1&query=Stuttgart+Hauptbahnhof" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>。<strong>ホテルはHbfから約1.5km</strong>。<br><strong>① タクシー（第一候補）：</strong>駅構内の案内に従い、Arnulf-Klett-Platz側のタクシー乗り場 <a href="https://www.google.com/maps/search/?api=1&query=Taxi+Stuttgart+Hauptbahnhof+Arnulf-Klett-Platz" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a> → ホテルへ直行（€5〜10目安・短距離なので現金払いを基本）。<br><strong>② 公共交通：</strong>Hbf駅前から<strong>Stadtbahn U1またはU9</strong> → Berliner Platz (Liederhalle) <a href="https://www.google.com/maps/search/?api=1&query=Berliner+Platz+Liederhalle+Stuttgart" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>（約3分）→ ホテルへ徒歩数分<span class="text-slate-500">※1.5kmはHbfからホテルまでの距離。Berliner Platzから1.5kmではない。到着日は正式なタクシー乗り場から乗るのが最も簡単。€10札を含む€20程度を用意する。<br><strong>運転手へ：</strong>“Zum Maritim Hotel Stuttgart, bitte.” 必要なら住所<strong>Seidenstraße 34</strong>を見せる。<br>Uberは駅前で呼ぶ前提にせず、使う場合のみアプリ指定の乗車地点へ移動する。カードは現金不足時の予備として乗車前に利用可を確認。公共交通ならS-BahnではなくStadtbahn（U-Bahn）を使う</span></td></tr>
-      <tr><td class="tc">12:30頃</td><td><span class="etag t-hotel">🏨</span> <strong>Maritim Stuttgart</strong> <a href="https://www.google.com/maps/search/?api=1&query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a> 着・<strong>荷物を預ける</strong>（正式チェックインは15:00〜のため、フロントに荷物のみ預けて身軽に行動）</td></tr>
-      <tr><td class="tc">13:00〜14:00</td><td><span class="etag t-food">🍽</span> ランチ候補<span class="etag t-tbd ml-1">要検討</span><div class="text-slate-500">・Markthalle Stuttgart（食品市場内の軽食・惣菜／ホテルから徒歩圏）<br>・Bohnenviertel（旧市街の飲食街／シュヴァーベン料理のカジュアル店多数）<br>・Königstraße周辺のカフェ・ベーカリー</div></td></tr>
-      <tr><td class="tc">14:00〜</td><td><strong>時差調整を兼ねた午後観光</strong><br><strong>① Stuttgart市内：</strong>Schlossplatz <a href="https://www.google.com/maps/search/?api=1&query=Schlossplatz+Stuttgart" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>、Königstraße等を散策。<br><strong>② Ludwigsburg：</strong>S-Bahnで約15〜20分 → Residenzschloss＋Blühendes Barock庭園 <a href="https://www.google.com/maps/search/?api=1&query=Residenzschloss+Ludwigsburg" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（宮殿の地図）</a> → 旧市街Marktplatz周辺で早めのディナー<div class="text-slate-500">深夜便明けの体調を見て当日選択。疲れていればStuttgart市内、元気ならLudwigsburg。丸一日の遠出は9/12に温存する</div></td></tr>
-      <tr><td class="tc">夕方〜夜</td><td><span class="etag t-hotel">🏨</span> Maritim Stuttgart 正式チェックイン（15:00以降いつでも可）→ 夕食（市内 or Ludwigsburg）・休息</td></tr>
-    </table>
-  </div>
+    <div class="joinbar" data-type="merge"><span>🤝</span><span class="tm">19:20頃</span><span>名鉄名古屋駅で合流 — 以降は同一行動</span></div>
 
-  <!-- 9/9 HRS Day1 -->
-  <div id="day-0909" data-date-label="9/9" class="day-section bg-white rounded-xl shadow-sm border border-rose-200 overflow-hidden">
-    <div class="bg-rose-600 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/9（水）<span class="text-xs font-normal opacity-80">🤖 HRS Europe 2026 — Day 1</span></div>
-    <table class="sp-table">
-      <tr><td class="tc" style="width:90px">7:30</td><td><span class="etag t-food">🍽</span> ホテル朝食</td></tr>
-      <tr><td class="tc">8:50</td><td>ホテル → Liederhalle <a href="https://www.google.com/maps/search/?api=1&query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>（徒歩約3分）</td></tr>
-      <tr><td class="tc">9:00〜17:00</td><td><span class="etag t-conf">🤖 Day1</span> 政策・市場・量産・Embodied AI・モーター技術<div class="text-slate-500">公式アジェンダ（全11項目・humanoidrobotssummit.com確認）：①政策枠組み・市場アクセス基準・コンプライアンス／②量産時代の新パラダイム／③Embodied Intelligenceと大規模モデルの統合／④量産時代のアプリケーションソフトウェア／⑤〈パネル〉ジェネラリストロボティクスの新時代／⑥モーター技術の革新／⑦関節・動作制御技術／⑧〈パネル〉欧州ヒューマノイドロボティクスへの投資（VC視点）／⑨商用協働ロボット／⑩自動車産業の変革（EVからヒューマノイドへ）／⑪VIPディナー〈VIPパス対象〉<br>開場9:00・終了17:00頃を想定。9/9・9/10はLiederhalleでの講演＋展示（40+社出展）日</div></td></tr>
-      <tr><td class="tc">17:00〜18:00</td><td>Networking / 展示ブース（40+社）</td></tr>
-      <tr><td class="tc">夜</td><td><span class="etag t-food">🍽</span> 夕食 → <span class="etag t-hotel">🏨</span> Maritim Stuttgart泊</td></tr>
-    </table>
-  </div>
-
-  <!-- 9/10 HRS Day2 -->
-  <div id="day-0910" data-date-label="9/10" class="day-section bg-white rounded-xl shadow-sm border border-rose-200 overflow-hidden">
-    <div class="bg-rose-600 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/10（木）<span class="text-xs font-normal opacity-80">🤖 HRS Europe 2026 — Day 2</span></div>
-    <table class="sp-table">
-      <tr><td class="tc" style="width:90px">7:30</td><td><span class="etag t-food">🍽</span> ホテル朝食</td></tr>
-      <tr><td class="tc">8:50</td><td>ホテル → Liederhalle <a href="https://www.google.com/maps/search/?api=1&query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>（徒歩約3分）</td></tr>
-      <tr><td class="tc">9:00〜17:00</td><td><span class="etag t-conf">🤖 Day2</span> 医療応用・センサー・GDPR・フレキシブル生産ライン・展示ブース（40+社）<div class="text-slate-500">公式アジェンダ（全13項目・humanoidrobotssummit.com確認）：①ヒューマノイドロボット：AIアクセラレーター／②医療・ヘルスケア分野への応用／③力覚センサー：高精度センシングから知的判断へ／④〈対話〉投資家・エンジニア・倫理学者によるヒューマノイド構築入門／⑤高性能特殊エンジニアリングプラスチック（軽量化による歩行・操作精度向上）／⑥家庭用サービス環境向けプライバシー保護アーキテクチャ／⑦自動車産業向けフレキシブル生産ラインの実践と発展／⑧GDPR準拠エッジ・クラウド協調コンピューティング／⑨EUカーボンニュートラル目標下での低消費電力モーション制御アルゴリズム／⑩多次元触覚デクスタラスハンド／⑪倫理的ガバナンスと政策協調（越境データ流通規制等）／⑫産業シーンにおけるヒューマノイド浸透経路／⑬〈パネル〉欧州の医療・ヘルスケア分野におけるヒューマノイド産業ブレイクスルー<br>詳細タイムテーブルは公式プログラム確認</div></td></tr>
-      <tr><td class="tc">夜</td><td><span class="etag t-food">🍽</span> 夕食 → <span class="etag t-hotel">🏨</span> Maritim Stuttgart泊</td></tr>
-    </table>
-  </div>
-
-  <!-- 9/11 HRS Day3 -->
-  <div id="day-0911" data-date-label="9/11" class="day-section bg-white rounded-xl shadow-sm border border-rose-200 overflow-hidden">
-    <div class="bg-rose-600 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/11（金）<span class="text-xs font-normal opacity-80">🤖 HRS Europe 2026 — Day 3（企業訪問日）</span></div>
-    <table class="sp-table">
-      <tr><td class="tc" style="width:90px">7:30</td><td><span class="etag t-food">🍽</span> ホテル朝食</td></tr>
-      <tr><td class="tc">終日</td><td><span class="etag t-conf">🤖 Day3</span> 近郊のヒューマノイドロボット関連企業への訪問（Company Visits）<span class="etag t-tbd ml-1">要検討</span><div class="text-slate-500">公式サイトによれば、Day1・2（9/9・9/10）がLiederhalle会場での講演・展示（40+社出展）で、Day3（9/11）はStuttgart近郊の企業を巡るガイド付き訪問日という構成。訪問先企業リストは開催直前に公式発表予定で、現時点では未公開。集合時刻・場所（Liederhalle集合か、送迎の有無等）も公式未発表のため要確認</div></td></tr>
-      <tr><td class="tc">夜</td><td><span class="etag t-food">🍽</span> 夕食 → <span class="etag t-hotel">🏨</span> Maritim Stuttgart泊（最終泊）</td></tr>
-    </table>
-    <div class="bg-rose-50 border-t border-rose-100 px-4 py-2 text-[11px] text-rose-700">
-      <i class="fas fa-star text-amber-400 mr-1"></i>注目登壇（Day1・2）: Google DeepMind / NVIDIA / BMW Group / Boston Dynamics / Unitree Robotics / Siemens / Fraunhofer IPA｜参加登録済み
-    </div>
-  </div>
-
-  <!-- 9/9〜9/11 ディナー候補 -->
-  <details class="bg-white rounded-xl shadow-sm border border-amber-200 overflow-hidden">
-    <summary class="bg-amber-600 text-white px-4 py-2 font-bold text-sm flex items-center gap-2 cursor-pointer select-none"><i class="fas fa-utensils mr-1"></i>ディナー候補（9/9〜9/11・HRS期間中）<span class="text-xs font-normal opacity-80">ホテル・Königstraße周辺は店が密集。基本は当日ふらっとでOK</span><i class="fas fa-chevron-down ml-auto text-xs opacity-70"></i></summary>
-    <table class="sp-table text-[11px]">
-      <thead><tr><th style="width:150px">店名</th><th style="width:110px">種類</th><th>特徴・名物</th></tr></thead>
-      <tbody>
-        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Weinhaus+Stetter+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Weinhaus Stetter</a></td><td>シュヴァーベン</td><td>Bohnenviertelの気取らない老舗ワインシュトゥーベ。地ワイン豊富＋シュヴァーベン名物、良心価格。<span class="etag t-tbd ml-1">要予約</span></td></tr>
-        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Carls+Brauhaus+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Carl's Brauhaus</a></td><td>ビアレストラン</td><td>Schlossplatz正面で立地抜群。ビール＋シュヴァーベン名物、予約なしで気軽に。</td></tr>
-        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Gasthaus+Bären+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Gasthaus Bären</a></td><td>シュヴァーベン</td><td>「シュヴァーベン風タパス」で少量多品目。名物を色々試したい日に。</td></tr>
-        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Ciao+Bella+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Ciao Bella</a>／<a href="https://www.google.com/maps/search/?api=1&query=Terrazza+Stuttgart+Mitte" target="_blank" class="text-blue-600 hover:underline">Terrazza</a></td><td>イタリアン</td><td>中心部の気軽なイタリアン。自家製パスタ・薪窯ピザ。肉料理に飽きた日の口直しに。</td></tr>
-        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Takeshiis+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Takeshii's</a></td><td>ベトナム/アジア</td><td>Marienplatz近く。フォー等。地元人気の定番、リラックスして入れる。</td></tr>
-        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Ramen+8+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Ramen 8</a></td><td>日本/ラーメン</td><td>ラーメン。ドイツ料理が続いた時に恋しくなる和の一杯。</td></tr>
-        <tr><td class="font-bold"><a href="https://www.google.com/maps/search/?api=1&query=Beykebab+Stuttgart" target="_blank" class="text-blue-600 hover:underline">Beykebab</a></td><td>トルコ/ケバブ</td><td>ドネルケバブ。手早く安く済ませたい夜に。</td></tr>
-      </tbody>
-    </table>
-    <div class="bg-amber-50 border-t border-amber-100 px-4 py-2 text-[11px] text-amber-800">
-      <i class="fas fa-lightbulb mr-1"></i>方針：<strong>ホテル・Königstraße周辺は飲食店が密集</strong>。9月は屋外テラス席の店も多く、当日その場の雰囲気で決めて問題なし。<strong>上表は各ジャンル1〜2店の代表例</strong>で、イタリアンもビアレストランも実際は周辺に多数あるので、休み・満席でも近くに代わりはいくらでもある。シュヴァーベン名物（<strong>Maultaschen</strong>／<strong>Zwiebelrostbraten</strong>／<strong>Käsespätzle</strong>）だけは滞在中どこかで1〜2回押さえたい。金曜夜（9/11）や人気店を狙い撃ちする日だけ予約すれば十分。
+    <div class="lane" data-who="all">
+      <table class="tl">
+        <tr><td class="t">19:30頃</td><td><span class="et t-move">🚆</span>名鉄名古屋駅発 ミュースカイ → セントレア（約28分）</td></tr>
+        <tr><td class="t">20:00頃</td><td><strong>セントレア着</strong>
+          <div class="sub"><span class="et t-gate">🛂</span>チェックイン・保安検査・出国審査 → 🛋 JALサクララウンジ（国際線）</div>
+          <div class="note">出発の約2時間50分前に到着する想定。</div></td></tr>
+        <tr><td class="t">22:50発</td><td><span class="et t-fly">✈︎</span>NGO発 → HEL（Finnair AY80／A350・13時間5分）<span class="note">機内泊</span></td></tr>
+      </table>
     </div>
   </details>
 
-  <!-- 9/12 プラン比較 -->
-  <div id="day-0912" data-date-label="9/12" class="day-section bg-white rounded-xl shadow-sm border border-amber-200 overflow-hidden">
-    <div class="bg-amber-500 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/12（土）<span class="text-xs font-normal opacity-80">⚠ 過ごし方 検討中（A：Mainz観戦／B：ケルン観光／C：ポルシェ博物館）</span></div>
-    <div class="p-3 text-xs bg-amber-50 border-b border-amber-100 text-amber-800">
-      <i class="fas fa-comment-dots mr-1"></i><strong>Mainz観戦（プランA）が第一希望。チケットが取れなければ、プランB（ケルン観光）を有力案とし、ゆっくり過ごすならプランC（ポルシェ博物館）。</strong>対戦カードは<strong>Mainz 05対Eintracht Frankfurt</strong>、キックオフは<strong>15:30</strong>（<a href="https://www.bundesliga.com/de/bundesliga/news/ansetzungen-spieltage-termine-zeitgenau-dfl-24024" target="_blank" class="text-blue-600 hover:underline">Bundesliga公式・2026/7/15発表</a>）。
+  <!-- ---------- 9/8 ---------- -->
+  <details class="day" open id="day-0908" data-label="9/8" data-dow="火" data-date="2026-09-08" data-kind="move">
+    <summary class="day-head"><span class="d">9/8（火）</span><span class="t">FRA着 → Stuttgart移動（荷物は先にホテルへ）</span></summary>
+    <div class="lane" data-who="all">
+      <table class="tl">
+        <tr><td class="t">5:55</td><td><span class="et t-fly">✈︎</span><strong>HEL 着</strong>
+          <div class="sub">シェンゲン入域審査 → 搭乗口へ（乗継 1時間45分）</div><span class="note">ラウンジや買物は予定に入れず、入域審査と搭乗口確認を優先。朝食用のパン／サンドイッチはFRA到着後に購入する</span></td></tr>
+        <tr><td class="t">7:40</td><td><span class="et t-fly">✈︎</span>HEL発 → FRA（AY1411／A321・2時間40分）<span class="note">エコノミーは食事なし。<a href="https://www.finnair.com/fi-en/nordic-kitchen--onboard-meals-and-beverages/short-haul-meals" target="_blank" rel="noopener">Finnair公式</a>では水・ブルーベリージュースは無料、軽食・コーヒー等は有料。必要なら事前注文も可</span></td></tr>
+        <tr><td class="t">9:20</td><td><span class="et t-fly">✈︎</span><strong>FRA 着</strong>
+          <div class="sub">荷物受取・税関</div><span class="note">入国審査はHELで完了。荷物受取・税関後、T3の<a href="https://www.frankfurt-airport.com/en/locations/b/bread-and-bite/bread-and-bite.html" target="_blank" rel="noopener">Bread &amp; Bite</a>（6:00〜22:00）などでICE車内用のパン／サンドイッチを購入してから長距離駅へ</span></td></tr>
+        <tr><td class="t">10:51目安</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Stuttgart Hbf</strong>（1時間20分）
+          <div class="sub"><strong>ICE 515</strong>・直通</div><span class="note">9:20着から約90分あり、通常ならパン購入を含めて10:51発を目指せる。荷物受取等に時間がかかった場合は次の直通ICEに切り替える。乗換ありの便より直通を優先</span></td></tr>
+        <tr><td class="t">12:11</td><td><span class="et t-move">🚆</span><strong>Stuttgart Hbf 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Stuttgart+Hauptbahnhof" target="_blank" rel="noopener">地図</a>
+          <div class="sub"><span class="et t-taxi">🚕</span>タクシーでホテルへ（約1.5km・€5〜10・現金払い）</div>
+          <div class="note"><strong>① タクシー（第一候補）：</strong>駅構内の案内に従い Arnulf-Klett-Platz 側の乗り場 <a href="https://www.google.com/maps/search/?api=1&amp;query=Taxi+Stuttgart+Hauptbahnhof+Arnulf-Klett-Platz" target="_blank" rel="noopener">（地図）</a> から。運転手へ “Zum Maritim Hotel Stuttgart, bitte.” 必要なら住所 <strong>Seidenstraße 34</strong> を見せる。€10札を含む€20程度を用意。<br>
+          <strong>② 公共交通：</strong>Hbf駅前から <strong>Stadtbahn U1 または U9</strong> → Berliner Platz (Liederhalle) <a href="https://www.google.com/maps/search/?api=1&amp;query=Berliner+Platz+Liederhalle+Stuttgart" target="_blank" rel="noopener">（地図）</a>（約3分）→ 徒歩数分。S-Bahnではなく Stadtbahn を使う。<br>
+          ※1.5kmはHbfからホテルまでの距離（Berliner Platzからではない）。Uberは駅前で呼ぶ前提にせず、使う場合のみアプリ指定の乗車地点へ。カードは現金不足時の予備として乗車前に利用可を確認。</div></td></tr>
+        <tr><td class="t">12:30頃</td><td><span class="et t-hotel">🏨</span><strong>Maritim Stuttgart 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">地図</a>
+          <div class="sub">荷物を預けて身軽に行動</div>
+          <div class="note">正式チェックインは15:00〜。</div></td></tr>
+        <tr><td class="t">13:00〜14:00</td><td><span class="et t-food">🍽</span>ランチ候補 <span class="et t-tbd">要検討</span><span class="note">・Markthalle Stuttgart（食品市場内の軽食・惣菜／ホテルから徒歩圏）<br>・Bohnenviertel（旧市街の飲食街／シュヴァーベン料理のカジュアル店多数）<br>・Königstraße周辺のカフェ・ベーカリー</span></td></tr>
+        <tr><td class="t">14:00〜</td><td><span class="et t-see">🏛</span><strong>午後観光（時差調整を兼ねる）</strong>
+          <div class="opt"><b>① Stuttgart市内</b>Schlossplatz <a href="https://www.google.com/maps/search/?api=1&amp;query=Schlossplatz+Stuttgart" target="_blank" rel="noopener">地図</a>、Königstraße を散策</div>
+          <div class="opt"><b>② Ludwigsburg</b>S-Bahn 約15〜20分 → Residenzschloss＋Blühendes Barock庭園 <a href="https://www.google.com/maps/search/?api=1&amp;query=Residenzschloss+Ludwigsburg" target="_blank" rel="noopener">地図</a> → 旧市街 Marktplatz で早めのディナー</div>
+          <div class="note">深夜便明けの体調を見て当日選択。疲れていればStuttgart市内、元気ならLudwigsburg。丸一日の遠出は9/12に温存する。</div></td></tr>
+        <tr><td class="t">夕方〜夜</td><td><span class="et t-hotel">🏨</span><strong>Maritim Stuttgart チェックイン</strong>
+          <div class="sub">夕食（市内 or Ludwigsburg）→ 休息</div>
+          <div class="note">チェックインは15:00以降いつでも可。</div></td></tr>
+      </table>
+    </div>
+  </details>
+
+  <!-- ---------- 9/9 ---------- -->
+  <details class="day" open id="day-0909" data-label="9/9" data-dow="水" data-date="2026-09-09" data-kind="conf">
+    <summary class="day-head"><span class="d">9/9（水）</span><span class="t">🤖 HRS Europe 2026 — Day 1</span></summary>
+    <div class="lane" data-who="all">
+      <table class="tl">
+        <tr><td class="t">7:30</td><td><span class="et t-food">🍽</span>ホテル朝食</td></tr>
+        <tr><td class="t">8:50</td><td>ホテル → Liederhalle <a href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a>（徒歩約3分）</td></tr>
+        <tr><td class="t">9:00〜17:00</td><td><span class="et t-conf">🤖 Day 1</span>政策・市場・量産・Embodied AI・モーター技術<span class="note">セッション一覧（全11項目のうち、夜の VIP Dinner はVIPパス対象で不参加。実質10項目）と当日の狙いは <a href="#" data-goto="venue">会場タブ</a> に集約。開場9:00・終了17:00頃を想定</span></td></tr>
+        <tr><td class="t">17:00〜18:00</td><td>Networking／展示ブース（40+社）</td></tr>
+        <tr><td class="t">夜</td><td><span class="et t-food">🍽</span>夕食（<a href="#dinner">候補リスト</a>）→ <span class="et t-hotel">🏨</span>Maritim Stuttgart泊</td></tr>
+      </table>
+    </div>
+  </details>
+
+  <!-- ---------- 9/10 ---------- -->
+  <details class="day" open id="day-0910" data-label="9/10" data-dow="木" data-date="2026-09-10" data-kind="conf">
+    <summary class="day-head"><span class="d">9/10（木）</span><span class="t">🤖 HRS Europe 2026 — Day 2</span></summary>
+    <div class="lane" data-who="all">
+      <table class="tl">
+        <tr><td class="t">7:30</td><td><span class="et t-food">🍽</span>ホテル朝食</td></tr>
+        <tr><td class="t">8:50</td><td>ホテル → Liederhalle（徒歩約3分）</td></tr>
+        <tr><td class="t">9:00〜17:00</td><td><span class="et t-conf">🤖 Day 2</span>医療応用・センサー・GDPR・フレキシブル生産ライン・展示ブース（40+社）<span class="note">セッション一覧（全13項目）と当日の狙いは <a href="#" data-goto="venue">会場タブ</a> に集約。詳細タイムテーブルは公式プログラム確認</span></td></tr>
+        <tr><td class="t">夜</td><td><span class="et t-food">🍽</span>夕食（<a href="#dinner">候補リスト</a>）→ <span class="et t-hotel">🏨</span>Maritim Stuttgart泊</td></tr>
+      </table>
+    </div>
+  </details>
+
+  <!-- ---------- 9/11 ---------- -->
+  <details class="day" open id="day-0911" data-label="9/11" data-dow="金" data-date="2026-09-11" data-kind="conf">
+    <summary class="day-head"><span class="d">9/11（金）</span><span class="t">🤖 HRS Europe 2026 — Day 3（企業訪問日）</span></summary>
+    <div class="lane" data-who="all">
+      <table class="tl">
+        <tr><td class="t">7:30</td><td><span class="et t-food">🍽</span>ホテル朝食</td></tr>
+        <tr><td class="t">終日</td><td><span class="et t-conf">🤖 Day 3</span>近郊のヒューマノイドロボット関連企業への訪問（Company Visits）<span class="et t-tbd">未発表</span><span class="note">公式サイトによれば、Day 1・2（9/9・9/10）がLiederhalle会場での講演・展示（40+社出展）で、Day 3（9/11）はStuttgart近郊の企業を巡るガイド付き訪問日という構成。訪問先企業リストは開催直前に公式発表予定で、現時点では未公開。集合時刻・場所（Liederhalle集合か、送迎の有無等）も公式未発表のため要確認</span></td></tr>
+        <tr><td class="t">夜</td><td><span class="et t-food">🍽</span>夕食（<a href="#dinner">候補リスト</a>）→ <span class="et t-hotel">🏨</span>Maritim Stuttgart泊（最終泊）</td></tr>
+      </table>
+    </div>
+    <div class="lane-note">⭐ 注目登壇（Day 1・2）: Google DeepMind / NVIDIA / BMW Group / Boston Dynamics / Unitree Robotics / Siemens / Fraunhofer IPA ｜ 参加登録済み</div>
+  </details>
+
+  <!-- ---------- ディナー候補 ---------- -->
+  <details class="card" id="dinner">
+    <summary class="ttl" style="cursor:pointer;list-style:none"><h2 style="display:inline;font:inherit;margin:0">🍽 ディナー候補（9/9〜9/11・HRS期間中）</h2></summary>
+    <div class="scroll-x">
+      <table class="tb">
+        <thead><tr><th style="width:150px">店名</th><th style="width:110px">種類</th><th>特徴・名物</th></tr></thead>
+        <tbody>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&amp;query=Weinhaus+Stetter+Stuttgart" target="_blank" rel="noopener">Weinhaus Stetter</a></strong></td><td>シュヴァーベン</td><td>Bohnenviertelの気取らない老舗ワインシュトゥーベ。地ワイン豊富＋シュヴァーベン名物、良心価格。<span class="st st-tbd">要予約</span></td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&amp;query=Carls+Brauhaus+Stuttgart" target="_blank" rel="noopener">Carl's Brauhaus</a></strong></td><td>ビアレストラン</td><td>Schlossplatz正面で立地抜群。ビール＋シュヴァーベン名物、予約なしで気軽に。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&amp;query=Gasthaus+Bären+Stuttgart" target="_blank" rel="noopener">Gasthaus Bären</a></strong></td><td>シュヴァーベン</td><td>「シュヴァーベン風タパス」で少量多品目。名物を色々試したい日に。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&amp;query=Ciao+Bella+Stuttgart" target="_blank" rel="noopener">Ciao Bella</a>／<a href="https://www.google.com/maps/search/?api=1&amp;query=Terrazza+Stuttgart+Mitte" target="_blank" rel="noopener">Terrazza</a></strong></td><td>イタリアン</td><td>中心部の気軽なイタリアン。自家製パスタ・薪窯ピザ。肉料理に飽きた日の口直しに。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&amp;query=Takeshiis+Stuttgart" target="_blank" rel="noopener">Takeshii's</a></strong></td><td>ベトナム/アジア</td><td>Marienplatz近く。フォー等。地元人気の定番、リラックスして入れる。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&amp;query=Ramen+8+Stuttgart" target="_blank" rel="noopener">Ramen 8</a></strong></td><td>日本/ラーメン</td><td>ラーメン。ドイツ料理が続いた時に恋しくなる和の一杯。</td></tr>
+          <tr><td><strong><a href="https://www.google.com/maps/search/?api=1&amp;query=Beykebab+Stuttgart" target="_blank" rel="noopener">Beykebab</a></strong></td><td>トルコ/ケバブ</td><td>ドネルケバブ。手早く安く済ませたい夜に。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="foot">💡 <strong>ホテル・Königstraße周辺は飲食店が密集</strong>。9月は屋外テラス席の店も多く、当日その場の雰囲気で決めて問題なし。<strong>上表は各ジャンル1〜2店の代表例</strong>で、イタリアンもビアレストランも実際は周辺に多数あるので、休み・満席でも近くに代わりはいくらでもある。シュヴァーベン名物（<strong>Maultaschen</strong>／<strong>Zwiebelrostbraten</strong>／<strong>Käsespätzle</strong>）だけは滞在中どこかで1〜2回押さえたい。金曜夜（9/11）や人気店を狙い撃ちする日だけ予約すれば十分。</div>
+  </details>
+
+  <!-- ---------- 9/12 ---------- -->
+  <details class="day" open id="day-0912" data-label="9/12" data-dow="土" data-date="2026-09-12" data-kind="choose">
+    <summary class="day-head"><span class="d">9/12（土）</span><span class="t">⚠ 過ごし方 検討中 — Stuttgart発、夜はFrankfurt空港泊</span></summary>
+    <div class="plans" data-group="0912" data-default="A">
+      <span class="lbl">案</span>
+      <button class="chip" data-plan="A">A：Mainz観戦</button>
+      <button class="chip" data-plan="B">B：ケルン</button>
+      <button class="chip" data-plan="C">C：ポルシェ</button>
+      <button class="chip" data-plan="D">D：ポルシェ＋ケルン</button>
+      <button class="chip" data-plan="all">全部</button>
+    </div>
+    <div class="lane-note">💬 <strong>A（Mainz観戦）が第一希望</strong>。チケットが取れなければ B、ゆっくり過ごすなら C、両方まわるなら D（予備時間なし）。
+      <div class="note">対戦カードは Mainz 05 対 Eintracht Frankfurt、キックオフ 15:30（<a href="https://www.bundesliga.com/de/bundesliga/news/ansetzungen-spieltage-termine-zeitgenau-dfl-24024" target="_blank" rel="noopener">Bundesliga公式・2026/7/15発表</a>）。</div></div>
+
+    <div class="plan" data-group="0912" data-plan="A">
+      <div class="plan-head">⚽ プランA：Mainz 05 対 Eintracht Frankfurt 観戦（キックオフ 15:30）</div>
+      <table class="tl">
+        <tr><td class="t">8:45</td><td><span class="et t-food">🍽</span><strong>Maritim で朝食</strong>
+        <div class="sub">宿泊に朝食が付いている</div></td></tr>
+      <tr><td class="t">9:45</td><td><strong>Maritim チェックアウト</strong>（荷物持参）
+        <div class="sub">Berliner Platz (Liederhalle) へ徒歩 → <span class="et t-move">🚆</span><strong>Stadtbahn U1 / U9</strong> で Stuttgart Hbf（約3分）</div><span class="note">※ホテルからHbfは約1.5km。荷物が多ければUber／タクシーでHbfへ直行</span></td></tr>
+        <tr><td class="t">10:26</td><td><span class="et t-move">🚆</span><strong>Stuttgart Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（1時間12分）
+        <div class="sub"><strong>ICE 1010</strong>・直通</div>
+        <div class="note">この区間は便により約1時間12分〜1時間30分。ICE 1010 は直通で最短。</div></td></tr>
+        <tr><td class="t">11:38</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf） 着</strong></td></tr>
+        <tr><td class="t">11:50</td><td><span class="et t-hotel">🏨</span><strong>BestWestern 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">地図</a>
+        <div class="sub">荷物を預ける（アーリーチェックイン交渉）</div></td></tr>
+        <tr><td class="t">12:20</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港発 → Mainz Hbf</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Mainz+Hauptbahnhof" target="_blank" rel="noopener">地図</a>（約35〜40分）
+        <div class="note">長距離駅（Fernbf）と近郊駅（S-Bahn）のどちらから乗るかは、当日の便で決まる。ホームを取り違えないよう乗車前に確認する。</div></td></tr>
+        <tr><td class="t">13:00〜13:20</td><td><span class="et t-food">🍽</span><strong>Mainz Hbf周辺で軽食</strong></td></tr>
+        <tr><td class="t">13:20</td><td><span class="et t-move">🚆</span><strong>Mainz Hbf発 → MEWA ARENA</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=MEWA+ARENA+Mainz" target="_blank" rel="noopener">地図</a>
+        <div class="sub">手段と所要は未確認。試合日は臨時輸送が出ることが多いので、当日の案内に従う</div>
+        <div class="note">所要が読めないぶん、入場を25分後に置いて余裕を取っている。</div></td></tr>
+        <tr><td class="t">13:45</td><td><span class="et t-match">⚽</span><strong>MEWA ARENA 入場</strong></td></tr>
+        <tr><td class="t">15:30</td><td><span class="et t-match">⚽</span><strong>Mainz 05 対 Eintracht Frankfurt</strong> キックオフ
+        <div class="sub">試合 約1時間45分。17:15頃 終了の見込み</div></td></tr>
+        <tr><td class="t">17:45頃</td><td><span class="et t-move">🚆</span><strong>Mainz Hbf発 → Frankfurt空港</strong>（約35〜40分）
+        <div class="sub">終了から30分。退場と駅の混雑を見込む</div></td></tr>
+        <tr><td class="t">18:30頃</td><td><span class="et t-hotel">🏨</span><strong>BestWestern チェックイン</strong>
+        <div class="sub">夕食</div></td></tr>
+      </table>
+      <div class="lane-note dt">ℹ 観戦後はFrankfurt空港へ直行（翌日の帰国便もFRAのため移動なし）。観戦チケットは未購入のため、発売開始を確認して手配する。</div>
     </div>
 
-    <div class="bg-amber-100 text-amber-900 border-y border-amber-200 px-3 py-1.5 font-bold text-xs"><i class="fas fa-futbol mr-1"></i>プランA：Mainz 05対Eintracht Frankfurt観戦（キックオフ15:30）</div>
-    <table class="sp-table text-[11px]">
-      <tr><td class="tc" style="width:70px">9:45</td><td>Maritimチェックアウト（荷物持参）→ Berliner Platz (Liederhalle)へ徒歩 → <strong>Stadtbahn U1またはU9</strong>でStuttgart Hbfへ（乗車約3分）<span class="text-slate-500">※ホテルからHbfは約1.5km。荷物が多ければUber／タクシーでHbfへ直行</span></td></tr>
-      <tr><td class="tc">10:26</td><td><span class="etag t-move">🚆</span> Stuttgart Hbf発（<strong>ICE 1010</strong>・直通）→ Frankfurt空港（1h12m）</td></tr>
-      <tr><td class="tc">11:38</td><td><span class="etag t-move">🚆</span> Frankfurt(M) Flughafen Fernbf着</td></tr>
-      <tr><td class="tc">11:50</td><td><span class="etag t-hotel">🏨</span> BestWestern着 <a href="https://www.google.com/maps/search/?api=1&query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>・<strong>荷物を預ける</strong>（アーリーチェックイン交渉）</td></tr>
-      <tr><td class="tc">12:20</td><td><span class="etag t-move">🚆</span> Frankfurt空港駅発 → Mainz Hbf <a href="https://www.google.com/maps/search/?api=1&query=Mainz+Hauptbahnhof" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>（約35〜40分）</td></tr>
-      <tr><td class="tc">13:00〜13:30</td><td>Mainz Hbf周辺で軽食 → MEWA ARENAへ移動</td></tr>
-      <tr><td class="tc">13:30</td><td>MEWA ARENA <a href="https://www.google.com/maps/search/?api=1&query=MEWA+ARENA+Mainz" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a> 入場</td></tr>
-      <tr><td class="tc">15:30</td><td><span class="etag t-conf">⚽</span> <strong>Mainz 05対Eintracht Frankfurt</strong> キックオフ（試合約1h45m）</td></tr>
-      <tr><td class="tc">17:30頃</td><td><span class="etag t-move">🚆</span> Mainz Hbf発 → Frankfurt空港（約35〜40分）</td></tr>
-      <tr><td class="tc">18:15頃</td><td><span class="etag t-hotel">🏨</span> BestWestern本チェックイン・夕食</td></tr>
-    </table>
-    <div class="px-3 py-1.5 text-[11px] text-slate-500 bg-slate-50">ℹ 観戦後はFrankfurt空港へ直行（翌日の帰国便もFRAのため移動なし）。観戦チケットは未購入のため、発売開始を確認して手配する。</div>
-    <div class="bg-amber-100 text-amber-900 border-y border-amber-200 px-3 py-1.5 font-bold text-xs mt-2"><i class="fas fa-landmark mr-1"></i>プランB：ケルン観光（観戦なし・先にFrankfurtで荷物を預ける）</div>
-    <table class="sp-table text-[11px]">
-      <tr><td class="tc" style="width:70px">8:00頃</td><td>Maritimチェックアウト（荷物持参）→ Stuttgart Hbfへ</td></tr>
-      <tr><td class="tc">8:30頃</td><td><span class="etag t-move">🚆</span> Stuttgart Hbf発（ICE）→ Frankfurt空港（約1時間15分〜1時間30分）</td></tr>
-      <tr><td class="tc">10:00〜10:45</td><td><span class="etag t-hotel">🏨</span> BestWestern着 <a href="https://www.google.com/maps/search/?api=1&query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>・<strong>荷物を預ける</strong> → Frankfurt空港駅へ戻る</td></tr>
-      <tr><td class="tc">11:00頃</td><td><span class="etag t-move">🚆</span> Frankfurt(M) Flughafen Fernbf発 → Köln Hbf（直通ICE・約1時間）</td></tr>
-      <tr><td class="tc">12:00〜16:00</td><td>Kölner Dom <a href="https://www.google.com/maps/search/?api=1&query=Koelner+Dom" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>・旧市街・ライン川沿いを散策、昼食（約4時間）</td></tr>
-      <tr><td class="tc">16:15頃</td><td><span class="etag t-move">🚆</span> Köln Hbf発 → Frankfurt空港（直通ICE・約1時間）</td></tr>
-      <tr><td class="tc">18:00頃</td><td><span class="etag t-hotel">🏨</span> BestWesternチェックイン・夕食</td></tr>
-    </table>
-    <div class="px-3 py-1.5 text-[11px] text-slate-500 bg-slate-50">ℹ ケルンを帰国日前日に移すことで、ICEの遅延がフライトに直結しない。列車時刻は2026年9月のDBダイヤ確認後に確定する。</div>
-
-    <div class="bg-amber-100 text-amber-900 border-y border-amber-200 px-3 py-1.5 font-bold text-xs mt-2"><i class="fas fa-car mr-1"></i>プランC：ポルシェ博物館（観戦なし・Stuttgartに荷物預け）</div>
-    <table class="sp-table text-[11px]">
-      <tr><td class="tc" style="width:70px">9:00</td><td>Maritimチェックアウト・<strong>荷物はホテルに預ける</strong></td></tr>
-      <tr><td class="tc">9:30</td><td><span class="etag t-move">🚆</span> Feuerseeから S-Bahn（S6等）→ Neuwirtshaus (Porscheplatz)（約25分）<span class="text-slate-500">※MaritimからPorscheplatzはFeuersee経由が便利</span></td></tr>
-      <tr><td class="tc">10:00〜13:00</td><td>Porsche Museum <a href="https://www.google.com/maps/search/?api=1&query=Porsche+Museum+Stuttgart" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a> 見学（所要2〜3時間）</td></tr>
-      <tr><td class="tc">13:00</td><td><span class="etag t-move">🚆</span> Porscheplatz → Feuersee・Maritimで荷物回収</td></tr>
-      <tr><td class="tc">14:00</td><td><span class="etag t-food">🍽</span> Stuttgart市内で昼食</td></tr>
-      <tr><td class="tc">15:00</td><td><span class="etag t-move">🚆</span> Stuttgart Hbf発（ICE）→ Frankfurt空港（約1.5h）</td></tr>
-      <tr><td class="tc">16:30</td><td><span class="etag t-hotel">🏨</span> BestWesternチェックイン・夕食</td></tr>
-    </table>
-  </div>
-
-  <!-- 9/13 -->
-  <div id="day-0913" data-date-label="9/13" class="day-section bg-white rounded-xl shadow-sm border border-cyan-200 overflow-hidden">
-    <div class="bg-cyan-700 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/13（日）<span class="text-xs font-normal opacity-80">帰国日 — 条件付き3案（X：ケルン／Y：FFM市内／Z：Mainz）、夜は共通</span></div>
-    <div class="p-3 text-xs bg-cyan-50 border-b border-cyan-100 text-cyan-800">
-      <i class="fas fa-comment-dots mr-1"></i>朝チェックアウトし荷物はBestWesternに預けて観光。<strong>9/12にプランA（Mainz観戦）を選んだ場合は、X（ケルン）も候補</strong>。9/12にプランBでケルン観光済みならXは選ばず、<strong>Y（フランクフルト市内）</strong>または<strong>Z（Mainz）</strong>にする。Xは往復ICEの遅延がフライトに直結するため、Y・Zより余裕を多めに取る。
+    <div class="plan" data-group="0912" data-plan="B">
+      <div class="plan-head">🏛 プランB：ケルン観光（観戦なし・先にFrankfurtで荷物を預ける）</div>
+      <table class="tl">
+        <tr><td class="t">7:15</td><td><span class="et t-food">🍽</span><strong>Maritim で朝食</strong>
+        <div class="sub">宿泊に朝食が付いている</div></td></tr>
+      <tr><td class="t">8:00頃</td><td><strong>Maritim チェックアウト</strong>（荷物持参）
+        <div class="sub">Stuttgart Hbf へ</div></td></tr>
+        <tr><td class="t">8:30頃</td><td><span class="et t-move">🚆</span><strong>Stuttgart Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間12分〜1時間30分）
+        <div class="sub">ICE。便は当日決める</div></td></tr>
+        <tr><td class="t">10:00〜10:45</td><td><span class="et t-hotel">🏨</span><strong>BestWestern 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">地図</a>
+        <div class="sub">荷物を預ける → 長距離駅（Fernbf）へ戻る</div></td></tr>
+        <tr><td class="t">11:00頃</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Köln Hbf</strong>（約1時間）
+        <div class="sub">直通ICE</div></td></tr>
+        <tr><td class="t">12:00〜16:00</td><td><span class="et t-see">🏛</span><strong>ケルン大聖堂と旧市街</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Koelner+Dom" target="_blank" rel="noopener">地図</a>
+        <div class="sub">旧市街・ライン川沿いを散策、昼食（約4時間）</div></td></tr>
+        <tr><td class="t">16:15頃</td><td><span class="et t-move">🚆</span><strong>Köln Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間）
+        <div class="sub">直通ICE</div></td></tr>
+        <tr><td class="t">18:00頃</td><td><span class="et t-hotel">🏨</span><strong>BestWestern チェックイン</strong>
+        <div class="sub">夕食</div></td></tr>
+      </table>
+      <div class="lane-note dt">ℹ ケルンを帰国日前日に移すことで、ICEの遅延がフライトに直結しない。列車時刻は2026年9月のDBダイヤ確認後に確定する。</div>
     </div>
 
+    <div class="plan" data-group="0912" data-plan="C">
+      <div class="plan-head">🚗 プランC：ポルシェ博物館（観戦なし・Stuttgart に荷物を預ける）</div>
+      <table class="tl">
+        <tr><td class="t">8:00</td><td><span class="et t-food">🍽</span><strong>Maritim で朝食</strong>
+        <div class="sub">宿泊に朝食が付いている</div></td></tr>
+      <tr><td class="t">9:00</td><td><strong>Maritim チェックアウト</strong>
+        <div class="sub">荷物を預ける</div></td></tr>
+        <tr><td class="t">9:30</td><td><span class="et t-move">🚆</span><strong>Feuersee発 → Neuwirtshaus (Porscheplatz)</strong>（約25分）
+        <div class="sub">S-Bahn（S6等）。Porsche Museum の最寄り</div><span class="note">※MaritimからPorscheplatzはFeuersee経由が便利</span></td></tr>
+        <tr><td class="t">10:00〜13:00</td><td><span class="et t-see">🏛</span><strong>Porsche Museum 見学</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Porsche+Museum+Stuttgart" target="_blank" rel="noopener">地図</a>
+        <div class="sub">所要2〜3時間</div></td></tr>
+        <tr><td class="t">13:00</td><td><span class="et t-move">🚆</span><strong>Porscheplatz発 → Feuersee</strong>（約25分）
+        <div class="sub">Maritim で荷物を回収</div></td></tr>
+        <tr><td class="t">14:00</td><td><span class="et t-food">🍽</span>Stuttgart市内で昼食</td></tr>
+        <tr><td class="t">15:00</td><td><span class="et t-move">🚆</span><strong>Stuttgart Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間12分〜1時間30分）
+        <div class="sub">ICE。下の到着時刻は遅い側で置いている</div></td></tr>
+        <tr><td class="t">16:30</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf） 着</strong></td></tr>
+        <tr><td class="t">16:45</td><td><span class="et t-hotel">🏨</span><strong>BestWestern チェックイン</strong>
+        <div class="sub">荷物を回収 → 夕食</div></td></tr>
+      </table>
+    </div>
+    <div class="plan" data-group="0912" data-plan="D">
+      <div class="plan-head">🗺 プランD：ポルシェ博物館＋ケルン（B＋C の詰め込み）</div>
+      <table class="tl">
+        <tr><td class="t">8:00</td><td><span class="et t-food">🍽</span><strong>Maritim で朝食</strong>
+        <div class="sub">宿泊に朝食が付いている</div></td></tr>
+      <tr><td class="t">9:00</td><td><strong>Maritim チェックアウト</strong>
+          <div class="sub">荷物を預ける（昼に回収する）</div></td></tr>
+        <tr><td class="t">9:30</td><td><span class="et t-move">🚆</span><strong>Feuersee発 → Neuwirtshaus (Porscheplatz)</strong>（約25分）
+          <div class="sub">S-Bahn（S6等）</div></td></tr>
+        <tr><td class="t">10:00〜12:00</td><td><span class="et t-see">🏛</span><strong>Porsche Museum 見学</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Porsche+Museum+Stuttgart" target="_blank" rel="noopener">地図</a>
+          <div class="sub">C案の2〜3時間を <strong>2時間に短縮</strong>して切り上げる</div>
+          <div class="note">開館時刻は公式未確認。10:00 から回れない場合はこの案自体が成立しないので、事前に確認する。</div></td></tr>
+        <tr><td class="t">12:00</td><td><span class="et t-move">🚆</span><strong>Porscheplatz発 → Feuersee</strong>（約25分）
+          <div class="sub">Maritim で荷物を回収 → Stuttgart Hbf へ</div></td></tr>
+        <tr><td class="t">13:00頃</td><td><span class="et t-move">🚆</span><strong>Stuttgart Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間12分〜1時間30分）
+          <div class="sub">ICE。遅い側で見て14:30頃着</div></td></tr>
+        <tr><td class="t">14:30頃</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf） 着</strong></td></tr>
+        <tr><td class="t">14:45頃</td><td><span class="et t-hotel">🏨</span><strong>BestWestern 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">地図</a>
+          <div class="sub">荷物を預ける → 長距離駅（Fernbf）へ戻る</div></td></tr>
+        <tr><td class="t">15:15頃</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Köln Hbf</strong>（約1時間）
+          <div class="sub">直通ICE。16:15頃着の見込み</div></td></tr>
+        <tr><td class="t">16:15〜19:00</td><td><span class="et t-see">🏛</span><strong>ケルン大聖堂と旧市街</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Koelner+Dom" target="_blank" rel="noopener">地図</a>
+          <div class="sub">B案の約4時間を <strong>約2時間45分に短縮</strong>。夕食もケルンで</div>
+          <div class="note">大聖堂は駅の目の前なので、短い滞在でも外観と旧市街・ライン川沿いは回れる。ただし <strong>内部の拝観時間と周辺博物館の閉館時刻は未確認</strong>。中に入りたいなら B 案を選ぶ。</div></td></tr>
+        <tr><td class="t">19:00頃</td><td><span class="et t-move">🚆</span><strong>Köln Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間）
+          <div class="sub">直通ICE。20:00頃着の見込み</div></td></tr>
+        <tr><td class="t">20:00頃</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf） 着</strong></td></tr>
+        <tr><td class="t">20:15頃</td><td><span class="et t-hotel">🏨</span><strong>BestWestern チェックイン</strong>
+          <div class="sub">荷物を回収して休息</div></td></tr>
+      </table>
+      <div class="lane-note">⚠ <strong>予備時間がほぼ無い詰め込み案。</strong>荷物を Stuttgart で一度預けて回収し、Frankfurt で再び預ける。列車が1本遅れるとケルン滞在がその分削られる。
+        <div class="note">時刻はすべて目安。所要は Stuttgart→Frankfurt空港を約1時間30分（B・C案と同じ）、Frankfurt⇔Kölnを約1時間（B案と同じ）として置いている。プランAの ICE 1010 は1時間12分なので、便によってはこれより短くなる。実際のICEの便は 2026年9月のDBダイヤ確認後に確定する。帰国前日なので遅延しても翌日の便には影響しないが、夜が遅くなる。</div></div>
+    </div>
 
-    <div class="bg-cyan-100 text-cyan-900 border-y border-cyan-200 px-3 py-1.5 font-bold text-xs"><i class="fas fa-train mr-1"></i>プランX：ケルン日帰り（9/12に観戦し、ケルン未訪問の場合）</div>
-    <table class="sp-table text-[11px]">
-      <tr><td class="tc" style="width:70px">8:00</td><td>BestWesternチェックアウト・<strong>荷物はホテルフロントに預ける</strong></td></tr>
-      <tr><td class="tc">8:26</td><td><span class="etag t-move">🚆</span> Frankfurt(M) Flughafen Fernbf発（<strong>ICE 1612</strong>・直通）→ Köln Hbf（1時間6分）</td></tr>
-      <tr><td class="tc">9:32</td><td>Köln Hbf着（大聖堂の目の前）</td></tr>
-      <tr><td class="tc">9:32〜13:00</td><td>Kölner Dom <a href="https://www.google.com/maps/search/?api=1&query=Koelner+Dom" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>・旧市街・ライン川沿い散策・昼食（約3時間30分）</td></tr>
-      <tr><td class="tc">13:18</td><td><span class="etag t-move">🚆</span> Köln Hbf発（<strong>ICE 123</strong>・直通）→ Frankfurt空港（約55分）</td></tr>
-      <tr><td class="tc">14:13</td><td><span class="etag t-hotel">🏨</span> Frankfurt空港着・BestWesternで荷物回収</td></tr>
-    </table>
-    <div class="px-3 py-1.5 text-[11px] text-slate-500 bg-slate-50">ℹ 往復ICEの遅延が帰国便に影響するため、運行状況を確認し、遅延時はYまたはZへ切り替える。</div>
-    <div class="bg-cyan-100 text-cyan-900 border-y border-cyan-200 px-3 py-1.5 font-bold text-xs mt-2"><i class="fas fa-city mr-1"></i>プランY：フランクフルト市内（低リスク・当日ふらっと向き）</div>
-    <table class="sp-table text-[11px]">
-      <tr><td class="tc" style="width:70px">9:00</td><td>BestWesternチェックアウト・<strong>荷物はホテルフロントに預ける</strong></td></tr>
-      <tr><td class="tc">9:30</td><td><span class="etag t-move">🚆</span> Frankfurt空港駅発 S-Bahn（S8/S9）→ 中心部（Hauptwache/Hbf、約11〜15分）</td></tr>
-      <tr><td class="tc">10:00〜13:30</td><td>Römerberg <a href="https://www.google.com/maps/search/?api=1&query=Roemerberg+Frankfurt" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>（旧市街）・Kaiserdom（大聖堂）・Eiserner Steg（鉄橋）・Kleinmarkthalle <a href="https://www.google.com/maps/search/?api=1&query=Kleinmarkthalle+Frankfurt" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>（市場で昼食）・Museumsufer（博物館通り、1館）</td></tr>
-      <tr><td class="tc">13:30</td><td><span class="etag t-move">🚆</span> 中心部発 S-Bahn → Frankfurt空港（約15分）</td></tr>
-      <tr><td class="tc">14:00頃</td><td><span class="etag t-hotel">🏨</span> Frankfurt空港着・BestWesternで荷物回収</td></tr>
-    </table>
-    <div class="px-3 py-1.5 text-[11px] text-slate-500 bg-slate-50">ℹ 空港⇔市内はS-Bahn約15分でICE遅延リスクなし。RMVチケットで往復数ユーロ。徒歩ルート：Eiserner Steg→Römerberg→Dom-Römer旧市街→Kaiserdom→Kleinmarkthalle→Museumsufer。</div>
+  </details>
 
-    <div class="bg-cyan-100 text-cyan-900 border-y border-cyan-200 px-3 py-1.5 font-bold text-xs mt-2"><i class="fas fa-landmark mr-1"></i>プランZ：Mainz観光（9/12にMainzを観光していない場合）</div>
-    <table class="sp-table text-[11px]">
-      <tr><td class="tc" style="width:70px">9:00</td><td>BestWesternチェックアウト・<strong>荷物はホテルフロントに預ける</strong></td></tr>
-      <tr><td class="tc">9:30</td><td><span class="etag t-move">🚆</span> Frankfurt空港駅発 → Mainz Hbf <a href="https://www.google.com/maps/search/?api=1&query=Mainz+Hauptbahnhof" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>（約35〜40分）</td></tr>
-      <tr><td class="tc">10:15〜13:30</td><td>Gutenberg博物館 <a href="https://www.google.com/maps/search/?api=1&query=Gutenberg+Museum+Mainz" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>（活版印刷発祥）・Mainzer Dom <a href="https://www.google.com/maps/search/?api=1&query=Mainzer+Dom" target="_blank" rel="noopener" class="text-blue-600 hover:underline">（地図）</a>（大聖堂）・Marktplatz・旧市街・St.Stephan（シャガールの窓）・ライン川沿い</td></tr>
-      <tr><td class="tc">13:30</td><td><span class="etag t-move">🚆</span> Mainz Hbf発 → Frankfurt空港（約35〜40分）</td></tr>
-      <tr><td class="tc">14:15頃</td><td><span class="etag t-hotel">🏨</span> Frankfurt空港着・BestWesternで荷物回収</td></tr>
-    </table>
-    <div class="px-3 py-1.5 text-[11px] text-slate-500 bg-slate-50">ℹ 空港⇔Mainzは約35〜40分でケルンより近く低リスク。コンパクトで徒歩観光向き。徒歩ルート：Gutenberg博物館→Dom→旧市街→St.Stephan→ライン川。</div>
+  <!-- ---------- 9/13 ---------- -->
+  <details class="day" open id="day-0913" data-label="9/13" data-dow="日" data-date="2026-09-13" data-kind="choose">
+    <summary class="day-head"><span class="d">9/13（日）</span><span class="t">帰国日 — 日中は条件付き3案、夜は共通</span></summary>
+    <div class="plans" data-group="0913" data-default="X">
+      <span class="lbl">案</span>
+      <button class="chip" data-plan="X">X：ケルン</button>
+      <button class="chip" data-plan="Y">Y：市内</button>
+      <button class="chip" data-plan="Z">Z：Mainz</button>
+      <button class="chip" data-plan="all">全部</button>
+    </div>
+    <div class="lane-note">💬 荷物を預けて観光。<strong>9/12がAかCなら</strong>ケルン未訪問なので X を選べる。<strong>9/12がBかDなら</strong>ケルン訪問済みなので Y か Z。
+      <div class="note">Xは往復ICEの遅延がフライトに直結するため、Y・Zより余裕を多めに取る。</div></div>
 
-    <!-- 9/13 共通の夜（ラウンジ・フライト） -->
-    <div class="bg-slate-700 text-white px-3 py-1.5 font-bold text-xs mt-2"><i class="fas fa-plane-departure mr-1"></i>共通：夜（観光後・出発）</div>
-    <table class="sp-table text-[11px]">
-      <tr><td class="tc" style="width:70px">出発前</td><td><i class="fas fa-qrcode mr-1"></i><strong><a href="https://services.digital.go.jp/visit-japan-web/" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Visit Japan Web（デジタル庁公式）</a></strong>に9/14の帰国予定・税関申告を登録し、二次元コードを表示できることを確認<span class="text-slate-500">二人とも各自で対応。偽サイトを避け、公式ページから利用する</span></td></tr>
-      <tr><td class="tc" style="width:70px">14:00〜</td><td>荷物回収後、チェックイン（出発3時間前の16:20より前に空港着が目標）</td></tr>
-      <tr><td class="tc">17:00〜19:00</td><td><i class="fas fa-couch mr-1"></i><strong>ラウンジ</strong>（京都発・犬山発の二人とも）<span class="etag t-tbd ml-1">ラウンジ名は要確認</span><div class="text-slate-500">ワンワールド便。JAL/ワンワールドサファイア以上で利用資格あり。FRAのFinnair便は<strong>Terminal 3</strong>（<a href="https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html" target="_blank" rel="noopener" class="text-blue-600 hover:underline">空港公式</a>）。T3には<a href="https://www.frankfurt-airport.com/en/at-the-airport/facilities-services/priority-lounge.html" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Priority Lounge</a>があるが、公式提携航空会社一覧にFinnairの記載がなく、HEL行きでの利用可否・指定ラウンジ名は未確認。オンラインチェックイン時の搭乗券表示またはFinnairで確認する。</div></td></tr>
-      <tr><td class="tc">19:20発</td><td><span class="etag t-fly">✈</span> FRA発 → HEL（フィンエアー AY1416／A321、22:45着）</td></tr>
-      <tr><td class="tc">0:45発</td><td><span class="etag t-fly">✈</span> HEL発 → NGO（AY79／A350、翌9/14 19:35着）<span class="text-slate-500">乗継2h・機内泊</span></td></tr>
-    </table>
-  </div>
+    <div class="plan" data-group="0913" data-plan="X">
+      <div class="plan-head">🚄 プランX：ケルン日帰り（9/12に観戦し、ケルン未訪問の場合）</div>
+      <table class="tl">
+        <tr><td class="t">7:00</td><td><span class="et t-food">🍽</span><strong>BestWestern で朝食</strong>
+        <div class="sub">宿泊に朝食が付いている</div></td></tr>
+      <tr><td class="t">8:00</td><td><strong>BestWestern チェックアウト</strong>
+        <div class="sub">荷物を預ける</div></td></tr>
+        <tr><td class="t">8:26</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Köln Hbf</strong>（1時間6分）
+        <div class="sub"><strong>ICE 1612</strong>・直通</div></td></tr>
+        <tr><td class="t">9:32</td><td><span class="et t-move">🚆</span><strong>Köln Hbf 着</strong>
+        <div class="sub">大聖堂の目の前</div></td></tr>
+        <tr><td class="t">9:32〜13:00</td><td><span class="et t-see">🏛</span><strong>ケルン大聖堂と旧市街</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Koelner+Dom" target="_blank" rel="noopener">地図</a>
+        <div class="sub">旧市街・ライン川沿い散策・昼食（約3時間30分）</div></td></tr>
+        <tr><td class="t">13:18</td><td><span class="et t-move">🚆</span><strong>Köln Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（55分）
+        <div class="sub"><strong>ICE 123</strong>・直通</div></td></tr>
+        <tr><td class="t">14:13</td><td><span class="et t-hotel">🏨</span><strong>Frankfurt空港 着</strong>
+        <div class="sub">BestWestern で荷物を回収</div></td></tr>
+      </table>
+      <div class="lane-note dt">ℹ 往復ICEの遅延が帰国便に影響するため、運行状況を確認し、遅延時はYまたはZへ切り替える。</div>
+    </div>
 
-  <!-- 9/14 -->
-  <div id="day-0914" data-date-label="9/14" class="day-section bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-    <div class="bg-slate-600 text-white px-4 py-2 font-bold text-sm flex items-center gap-2">9/14（月）<span class="text-xs font-normal opacity-80">日本着 → 京都／犬山の自宅まで</span></div>
-    <table class="sp-table">
-      <tr><td class="tc" style="width:90px">19:35</td><td><span class="etag t-fly">✈着</span> 中部国際空港（セントレア）着（現地日付+1）</td></tr>
-      <tr><td class="tc">19:35〜20:15</td><td>入国審査・荷物受取・税関（<a href="https://services.digital.go.jp/visit-japan-web/" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Visit Japan Web</a>の二次元コードをすぐ表示できるよう準備）</td></tr>
-      <tr><td class="tc">20:20頃</td><td>到着口出発（二人一緒）</td></tr>
-      <tr><td class="tc">20:35頃</td><td><span class="etag t-move">🚆</span> セントレア発 ミュースカイ（二人一緒）→ 名鉄名古屋（約28分）｜名古屋で分岐</td></tr>
-    </table>
-    <div class="grid grid-cols-1 md:grid-cols-2 divide-x divide-slate-200">
-      <div>
-        <div class="bg-purple-100 text-purple-800 px-3 py-1.5 font-bold text-xs">👤 京都方面</div>
-        <table class="sp-table text-[11px]">
-          <tr><td class="tc" style="width:80px">21:05頃</td><td>名古屋（通過）→ JR名古屋へ乗換</td></tr>
-          <tr><td class="tc">21:15頃</td><td><span class="etag t-move">🚆</span> JR名古屋発（東海道新幹線）→ 京都駅（約35分）</td></tr>
-          <tr><td class="tc">21:50頃</td><td>京都駅着 → 自宅へ</td></tr>
+    <div class="plan" data-group="0913" data-plan="Y">
+      <div class="plan-head">🏙 プランY：フランクフルト市内（低リスク・当日ふらっと向き）</div>
+      <table class="tl">
+        <tr><td class="t">8:00</td><td><span class="et t-food">🍽</span><strong>BestWestern で朝食</strong>
+        <div class="sub">宿泊に朝食が付いている</div></td></tr>
+      <tr><td class="t">9:00</td><td><strong>BestWestern チェックアウト</strong>
+        <div class="sub">荷物を預ける</div></td></tr>
+        <tr><td class="t">9:30</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 近郊駅（S-Bahn）発 → Hauptwache / Hbf</strong>（約11〜15分）
+        <div class="sub">S-Bahn（S8/S9）。市内中心部</div></td></tr>
+        <tr><td class="t">10:00〜13:30</td><td><span class="et t-see">🏛</span><strong>フランクフルト旧市街を歩く</strong>
+        <div class="sub">Eiserner Steg（鉄橋）→ Römerberg <a href="https://www.google.com/maps/search/?api=1&amp;query=Roemerberg+Frankfurt" target="_blank" rel="noopener">地図</a> → Kaiserdom（大聖堂）<br>→ Kleinmarkthalle <a href="https://www.google.com/maps/search/?api=1&amp;query=Kleinmarkthalle+Frankfurt" target="_blank" rel="noopener">地図</a> で昼食 → Museumsufer（博物館1館）</div></td></tr>
+        <tr><td class="t">13:30</td><td><span class="et t-move">🚆</span><strong>Hauptwache / Hbf発 → Frankfurt空港 近郊駅（S-Bahn）</strong>（約15分）
+        <div class="sub">S-Bahn</div></td></tr>
+        <tr><td class="t">14:00頃</td><td><span class="et t-hotel">🏨</span><strong>Frankfurt空港 着</strong>
+        <div class="sub">BestWestern で荷物を回収</div></td></tr>
+      </table>
+      <div class="lane-note dt">ℹ 空港⇔市内はS-Bahn約15分でICE遅延リスクなし。RMVチケットで往復数ユーロ。徒歩ルート：Eiserner Steg→Römerberg→Dom-Römer旧市街→Kaiserdom→Kleinmarkthalle→Museumsufer。</div>
+    </div>
+
+    <div class="plan" data-group="0913" data-plan="Z">
+      <div class="plan-head">🏛 プランZ：Mainz観光（9/12にMainzを観光していない場合）</div>
+      <table class="tl">
+        <tr><td class="t">8:00</td><td><span class="et t-food">🍽</span><strong>BestWestern で朝食</strong>
+        <div class="sub">宿泊に朝食が付いている</div></td></tr>
+      <tr><td class="t">9:00</td><td><strong>BestWestern チェックアウト</strong>
+        <div class="sub">荷物を預ける</div></td></tr>
+        <tr><td class="t">9:30</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港発 → Mainz Hbf</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Mainz+Hauptbahnhof" target="_blank" rel="noopener">地図</a>（約35〜40分）
+        <div class="note">長距離駅（Fernbf）と近郊駅（S-Bahn）のどちらから乗るかは、当日の便で決まる。ホームを取り違えないよう乗車前に確認する。</div></td></tr>
+        <tr><td class="t">10:15〜13:30</td><td><span class="et t-see">🏛</span><strong>Mainz 旧市街を歩く</strong>
+        <div class="sub">Gutenberg博物館 <a href="https://www.google.com/maps/search/?api=1&amp;query=Gutenberg+Museum+Mainz" target="_blank" rel="noopener">地図</a>（活版印刷発祥）→ Mainzer Dom <a href="https://www.google.com/maps/search/?api=1&amp;query=Mainzer+Dom" target="_blank" rel="noopener">地図</a> → Marktplatz・旧市街<br>→ St.Stephan（シャガールの窓）→ ライン川沿い</div></td></tr>
+        <tr><td class="t">13:30</td><td><span class="et t-move">🚆</span>Mainz Hbf発 → Frankfurt空港（約35〜40分）</td></tr>
+        <tr><td class="t">14:15頃</td><td><span class="et t-hotel">🏨</span><strong>Frankfurt空港 着</strong>
+        <div class="sub">BestWestern で荷物を回収</div></td></tr>
+      </table>
+      <div class="lane-note dt">ℹ 空港⇔Mainzは約35〜40分でケルンより近く低リスク。コンパクトで徒歩観光向き。徒歩ルート：Gutenberg博物館→Dom→旧市街→St.Stephan→ライン川。</div>
+    </div>
+
+    <div class="joinbar" data-type="merge"><span>✈︎</span><span class="tm">14:00〜</span><span>ここから先は案によらず共通</span></div>
+    <div class="lane" data-who="all">
+      <table class="tl">
+        <tr><td class="t">出発前</td><td>📱 <strong><a href="https://services.digital.go.jp/visit-japan-web/" target="_blank" rel="noopener">Visit Japan Web</a> を登録</strong>
+        <div class="sub">9/14の帰国予定・税関申告を入れ、二次元コードを表示できるところまで確認</div><span class="note">二人とも各自で対応。偽サイトを避け、公式ページから利用する</span></td></tr>
+        <tr><td class="t">14:00〜</td><td><span class="et t-gate">🛂</span><strong>チェックイン</strong>
+        <div class="sub">荷物を回収してから。出発3時間前の 16:20 より前に空港着が目標</div></td></tr>
+        <tr><td class="t">17:00〜19:00</td><td>🛋 <strong>ラウンジ</strong>（二人とも）<span class="et t-tbd">ラウンジ名は要確認</span><span class="note">ワンワールド便。JAL/ワンワールドサファイア以上で利用資格あり。FRAのFinnair便は <strong>Terminal 3</strong>（<a href="https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html" target="_blank" rel="noopener">空港公式</a>）。T3には<a href="https://www.frankfurt-airport.com/en/at-the-airport/facilities-services/priority-lounge.html" target="_blank" rel="noopener">Priority Lounge</a>があるが、公式提携航空会社一覧にFinnairの記載がなく、HEL行きでの利用可否・指定ラウンジ名は未確認。オンラインチェックイン時の搭乗券表示またはFinnairで確認する。</span></td></tr>
+        <tr><td class="t">19:20発</td><td><span class="et t-fly">✈︎</span>FRA発 → HEL（Finnair AY1416／A321・2時間25分）</td></tr>
+        <tr><td class="t">22:45</td><td><span class="et t-fly">✈︎</span><strong>HEL 着</strong>
+          <div class="sub">乗継 2時間 → 搭乗口へ</div></td></tr>
+        <tr><td class="t">0:45発</td><td><span class="et t-fly">✈︎</span>HEL発 → NGO（AY79／A350・12時間50分）<span class="note">機内泊。翌9/14 19:35 セントレア着</span></td></tr>
+      </table>
+    </div>
+  </details>
+
+  <!-- ---------- 9/14 ---------- -->
+  <details class="day" open id="day-0914" data-label="9/14" data-dow="月" data-date="2026-09-14" data-kind="move">
+    <summary class="day-head"><span class="d">9/14（月）</span><span class="t">日本着 → 京都／犬山の自宅まで</span></summary>
+    <div class="lane" data-who="all">
+      <table class="tl">
+        <tr><td class="t">19:35</td><td><span class="et t-fly">✈︎</span><strong>中部国際空港（セントレア）着</strong>
+        <div class="sub">現地日付 +1</div></td></tr>
+        <tr><td class="t">19:35〜20:15</td><td><span class="et t-gate">🛂</span>入国審査・荷物受取・税関
+          <div class="sub"><a href="https://services.digital.go.jp/visit-japan-web/" target="_blank" rel="noopener">Visit Japan Web</a> の二次元コードをすぐ表示できるよう準備</div></td></tr>
+        <tr><td class="t">20:20頃</td><td>到着口出発（二人一緒）</td></tr>
+        <tr><td class="t">20:35頃</td><td><span class="et t-move">🚆</span>セントレア発 ミュースカイ（二人一緒）→ 名鉄名古屋（約28分）</td></tr>
+      </table>
+    </div>
+
+    <div class="joinbar" data-type="split"><span>🔀</span><span class="tm">21:05頃</span><span>名鉄名古屋で分岐 — ここから各自帰宅</span></div>
+
+    <div class="lanes">
+      <div class="lane" data-who="kyoto">
+        <div class="lane-head">👤 京都方面</div>
+        <table class="tl">
+          <tr><td class="t">21:05頃</td><td>JR名古屋へ乗換</td></tr>
+          <tr><td class="t">21:15頃</td><td><span class="et t-move">🚆</span>JR名古屋発（東海道新幹線）→ 京都駅（約35分）</td></tr>
+          <tr><td class="t">21:50頃</td><td>京都駅着 → 自宅へ</td></tr>
         </table>
       </div>
-      <div>
-        <div class="bg-purple-100 text-purple-800 px-3 py-1.5 font-bold text-xs">👤 犬山方面</div>
-        <table class="sp-table text-[11px]">
-          <tr><td class="tc" style="width:80px">21:05頃</td><td>名古屋（通過）→ 名鉄で乗継</td></tr>
-          <tr><td class="tc">21:10頃</td><td><span class="etag t-move">🚆</span> 名鉄名古屋発 → 犬山駅（約30分）</td></tr>
-          <tr><td class="tc">21:40頃</td><td>犬山駅着 → 自宅へ</td></tr>
+      <div class="lane" data-who="inuyama">
+        <div class="lane-head">👤 犬山方面</div>
+        <table class="tl">
+          <tr><td class="t">21:05頃</td><td>名鉄名古屋で乗換</td></tr>
+          <tr><td class="t">21:10頃</td><td><span class="et t-move">🚆</span>名鉄名古屋発 → 犬山駅（約30分）</td></tr>
+          <tr><td class="t">21:40頃</td><td>犬山駅着 → 自宅へ</td></tr>
         </table>
       </div>
     </div>
-    <div class="px-3 py-1.5 text-[11px] text-slate-500 bg-slate-50 border-t border-slate-200">ℹ 京都方面・犬山方面とも、到着日の運行状況に合わせて列車・乗換時刻を確認。表示時刻は目安。</div>
+    <div class="lane-note dt">ℹ 京都方面・犬山方面とも、到着日の運行状況に合わせて列車・乗換時刻を確認。表示時刻は目安。</div>
+  </details>
+
+  <div class="banner b-lock"><span class="i">🔒</span><div><strong>公開用：</strong>個人情報および予約識別番号は除外しています。</div></div>
+
+  <details class="card secondary-entry">
+    <summary class="ttl" style="cursor:pointer;list-style:none"><h2 style="display:inline;font:inherit;margin:0">出発前の準備・家族向け資料</h2></summary>
+    <div class="bd">
+      <a class="btn" href="#" data-goto="prep">✅ 出発前準備を開く</a>
+      <a class="btn" href="family_print.html">🖨 家族向け印刷版</a>
+      <span class="small muted">現地で頻繁に使わない情報は主要ナビから分離しています。</span>
+    </div>
+  </details>
+
+</section>
+
+<!-- ==================== タブ：準備 ==================== -->
+<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">
+  <div class="no-print" style="margin-bottom:10px"><button class="btn" data-goto="plan">← 旅程へ戻る</button></div>
+
+  <div class="card">
+    <h2 class="ttl">📋 要対応タスク <span id="todo-count" style="font-weight:400;opacity:.8"></span></h2>
+    <div class="bd" id="todo-list">
+      <div class="todo" data-k="t1"><input type="checkbox" id="cb-t1" data-done="1"><label for="cb-t1">フライト確定：Finnair NGO⇔FRA（HEL経由）</label></div>
+      <div class="todo" data-k="t2"><input type="checkbox" id="cb-t2" data-done="1"><label for="cb-t2">Stuttgart宿泊：Maritim Stuttgart（9/8〜9/12・4泊・朝食付）予約完了</label></div>
+      <div class="todo" data-k="t3"><input type="checkbox" id="cb-t3" data-done="1"><label for="cb-t3">BestWestern Frankfurt空港ホテル予約（完了）</label></div>
+      <div class="todo" data-k="t4"><input type="checkbox" id="cb-t4"><label for="cb-t4">9/12をA（Mainz観戦・キックオフ15:30）／B（ケルン観光）／C（ポルシェ博物館）／D（ポルシェ＋ケルン）から選ぶ</label></div>
+      <div class="todo" data-k="t5"><input type="checkbox" id="cb-t5"><label for="cb-t5">Mainz観戦チケット購入（<strong>発売は試合4〜5週間前＝8月上〜中旬見込み</strong>・午前10時〜／mainz05.de・ファンショップ・電話）<span class="note">Mainz 05 対 Eintracht Frankfurt、9/12（土）15:30 キックオフ</span></label></div>
+      <div class="todo" data-k="t6"><input type="checkbox" id="cb-t6" data-done="1"><label for="cb-t6">対戦カード・キックオフ時刻を確認（Mainz 05 対 Eintracht Frankfurt、9/12（土）15:30・Bundesliga 2026/7/15発表）</label></div>
+      <div class="todo" data-k="t7"><input type="checkbox" id="cb-t7"><label for="cb-t7">9/13の日中を条件に応じて選ぶ（9/12がA・CならX：ケルンも候補、9/12がB・DならY：フランクフルト市内／Z：Mainz。FRA空港16:20着基準）</label></div>
+      <div class="todo" data-k="t8"><input type="checkbox" id="cb-t8"><label for="cb-t8">帰国便の出発前に <a href="https://services.digital.go.jp/visit-japan-web/" target="_blank" rel="noopener">Visit Japan Web（デジタル庁公式）</a> へ9/14の帰国予定・税関申告を登録（二人とも各自／二次元コードの表示まで確認）</label></div>
+      <div class="todo" data-k="t9"><input type="checkbox" id="cb-t9" data-done="1"><label for="cb-t9">鉄道チケット方針を決定：現地で乗車時にDB Navigatorから都度購入（Stuttgart→Frankfurt空港、プランB・D・X選択時のFrankfurt⇔Kölnを含む）</label></div>
+      <div class="todo" data-k="t10"><input type="checkbox" id="cb-t10"><label for="cb-t10">ラウンジ最終確認（<strong>ワンワールド前提</strong>：JAL/ワンワールドサファイア資格の有無を二人分／NGO=JALサクララウンジ／HEL=復路乗継時のみFinnair Business Lounge候補、往路は乗継優先で使わない／FRAはT3、Finnair指定ラウンジ名とPriority Lounge利用可否をオンラインチェックイン時またはFinnairで確認）<span class="note">スターアライアンス(ANA/SFC)は本Finnair便では利用不可</span></label></div>
+    </div>
+    <div class="foot">☑ のチェック状態はこの端末に保存されます（サーバーには送信されません）。</div>
   </div>
 
-  <!-- ToDo -->
-  <section id="todo" class="section-anchor">
-    <div class="bg-white rounded-xl shadow-sm border border-red-200 p-4">
-      <div class="font-bold text-sm mb-2"><i class="fas fa-tasks text-red-500 mr-1"></i>要対応タスク</div>
-      <div class="todo-item done"><input type="checkbox" checked><label>フライト確定：Finnair NGO⇔FRA（HEL経由）</label></div>
+  <div class="card">
+    <h2 class="ttl">✈︎ 利用フライト（NGO⇔FRA Finnair）</h2>
+    <div class="bd">
+      <div class="banner b-info" style="margin-bottom:10px">✈︎ <div>NGO発着・HEL経由の往復エコノミー。<strong>前日入りができ、犬山からの空港アクセスが短い旅程。</strong></div></div>
 
-      <div class="todo-item done"><input type="checkbox" checked><label>Stuttgart宿泊：Maritim Stuttgart（9/8〜9/12・4泊・朝食込）予約完了</label></div>
-      <div class="todo-item done"><input type="checkbox" checked><label>BestWestern Frankfurt空港ホテル予約（完了）</label></div>
-      <div class="todo-item"><input type="checkbox"><label>9/12をA（Mainz観戦・15:30 KO）／B（ケルン観光）／C（ポルシェ博物館）から選ぶ</label></div>
-      <div class="todo-item"><input type="checkbox"><label>Mainz観戦チケット購入（<strong>発売は試合4〜5週間前＝8月上〜中旬見込み</strong>・午前10時〜／mainz05.de・ファンショップ・電話）<span class="sub">Mainz 05対Eintracht Frankfurt、9/12（土）15:30キックオフ</span></label></div>
-      <div class="todo-item done"><input type="checkbox" checked><label>対戦カード・キックオフ時刻を確認（Mainz 05対Eintracht Frankfurt、9/12（土）15:30・Bundesliga 2026/7/15発表）</label></div>
-      <div class="todo-item"><input type="checkbox"><label>9/13の日中を条件に応じて選ぶ（9/12がAならX：ケルンも候補、9/12がBならY：フランクフルト市内／Z：Mainz。FRA空港16:20着基準）</label></div>
-      <div class="todo-item"><input type="checkbox"><label>帰国便の出発前に<a href="https://services.digital.go.jp/visit-japan-web/" target="_blank" rel="noopener" class="text-blue-600 hover:underline">Visit Japan Web（デジタル庁公式）</a>へ9/14の帰国予定・税関申告を登録（二人とも各自／二次元コードの表示まで確認）</label></div>
-      <div class="todo-item done"><input type="checkbox" checked><label>鉄道チケット方針を決定：現地で乗車時にDB Navigatorから都度購入（Stuttgart→Frankfurt空港、プランBまたはX選択時のFrankfurt⇔Kölnを含む）</label></div>
-      <div class="todo-item"><input type="checkbox"><label>ラウンジ最終確認（<strong>ワンワールド前提</strong>：JAL/ワンワールドサファイア資格の有無を二人分／NGO=JALサクララウンジ／HEL=復路乗継時のみFinnair Business Lounge候補、往路は乗継優先で使わない／FRAはT3、Finnair指定ラウンジ名とPriority Lounge利用可否をオンラインチェックイン時またはFinnairで確認）<span class="sub">スターアライアンス(ANA/SFC)は本Finnair便では利用不可</span></label></div>
+      <h3>往路 9/7（月）〜9/8（火） <span class="muted small">総所要17時間30分</span></h3>
+      <div class="scroll-x"><table class="tb">
+        <tr><td class="t">22:50</td><td><strong>NGO 中部</strong>発 → HEL</td><td class="muted">AY80／A350／13時間5分（深夜便）</td></tr>
+        <tr><td class="t">9/8 5:55</td><td><strong>HEL ヘルシンキ</strong>着</td><td class="muted">乗継 <strong>1時間45分</strong></td></tr>
+        <tr><td class="t">9/8 7:40</td><td><strong>HEL</strong>発 → FRA</td><td class="muted">AY1411／A321／2時間40分／食事なし（有料軽食あり／水・ブルーベリージュース無料）</td></tr>
+        <tr><td class="t">9/8 9:20</td><td><strong>FRA フランクフルト</strong>着</td><td class="muted">Finnair・エコノミー／CO₂e 約661kg</td></tr>
+      </table></div>
+
+      <h3>復路 9/13（日）〜9/14（月） <span class="muted small">総所要17時間15分</span></h3>
+      <div class="scroll-x"><table class="tb">
+        <tr><td class="t">19:20</td><td><strong>FRA フランクフルト</strong>発 → HEL</td><td class="muted">AY1416／A321／2時間25分</td></tr>
+        <tr><td class="t">22:45</td><td><strong>HEL ヘルシンキ</strong>着</td><td class="muted">乗継 <strong>2時間</strong></td></tr>
+        <tr><td class="t">9/14 0:45</td><td><strong>HEL</strong>発 → NGO</td><td class="muted">AY79／A350／12時間50分（深夜便）</td></tr>
+        <tr><td class="t">9/14 19:35</td><td><strong>NGO 中部</strong>着</td><td class="muted">Finnair・エコノミー／CO₂e 約658kg</td></tr>
+      </table></div>
+
+      <div class="banner b-info" style="margin:10px 0 0">⏰ <div>復路19:20発 → 国際線チェックインは出発 <strong>3時間前目安</strong> で、<strong>16:20頃までにFRA空港到着</strong> を目標に、9/13日中の予定を組む。</div></div>
     </div>
-  </section>
+  </div>
 
+  <div class="card">
+    <h2 class="ttl">🏨 宿泊（2拠点）</h2>
+    <div class="bd small" style="display:grid;gap:10px">
+      <div>
+        <strong>Maritim Stuttgart</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a>（★★★★／Seidenstraße 34, 70174）：9/8〜9/12（4泊・朝食付）<span class="st st-booked">予約済</span><br>
+        <span style="font-weight:700">✔ 会場 Liederhalle <a href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a> に隣接（徒歩約3分）。</span>
+        <span class="note">クラシックダブル28㎡・禁煙・チェックイン15:00｜無料キャンセル 9/5 23:00(現地)まで｜TEL +49 711 9420</span>
+      </div>
+      <div>
+        <strong>Best Western Hotel Airport Frankfurt</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">（地図）</a>：9/12〜9/13（1泊・朝食付）<span class="st st-booked">予約済</span>
+      </div>
+    </div>
+  </div>
 
-
-  <!-- 主要リンク -->
-  <section class="section-anchor no-print">
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 text-xs">
-      <div class="font-bold text-sm mb-2"><i class="fas fa-map-location-dot text-slate-400 mr-1"></i>地図リンク集（場所を見る）</div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <div class="space-y-1">
-          <div class="font-semibold text-rose-600 text-[10px] uppercase">会場・ホテル</div>
-          <a href="https://www.google.com/maps/search/?api=1&query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" class="block text-blue-600 hover:underline">会場 Liederhalle (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" class="block text-blue-600 hover:underline">Maritim Stuttgart (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Berliner+Platz+Liederhalle+Stuttgart" target="_blank" class="block text-blue-600 hover:underline">ホテル最寄り Berliner Platz (Liederhalle) (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Stuttgart+Feuersee+station" target="_blank" class="block text-blue-600 hover:underline">S-Bahn Feuersee（Porsche Museum移動時）(地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" class="block text-blue-600 hover:underline">Best Western Hotel Airport Frankfurt (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=大阪空港ホテル+伊丹空港" target="_blank" class="block text-blue-600 hover:underline">大阪空港ホテル (地図・ITM案)</a>
+  <details class="card">
+    <summary class="ttl" style="cursor:pointer;list-style:none"><h2 style="display:inline;font:inherit;margin:0">🗺 地図・その他リンク集（タップで開く）</h2></summary>
+    <div class="bd">
+      <div class="links">
+        <div>
+          <h3 class="lnk">会場・ホテル</h3>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">会場 Liederhalle</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">Maritim Stuttgart</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Berliner+Platz+Liederhalle+Stuttgart" target="_blank" rel="noopener">最寄り Berliner Platz</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Stuttgart+Feuersee+station" target="_blank" rel="noopener">S-Bahn Feuersee</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">Best Western Airport Frankfurt</a>
         </div>
-        <div class="space-y-1">
-          <div class="font-semibold text-green-600 text-[10px] uppercase">サッカー・観光</div>
-          <a href="https://www.google.com/maps/search/?api=1&query=MEWA+ARENA+Mainz" target="_blank" class="block text-blue-600 hover:underline">MEWA ARENA@Mainz (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=PreZero+Arena+Sinsheim" target="_blank" class="block text-blue-600 hover:underline">PreZero Arena@ジンスハイム (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Technik+Museum+Sinsheim" target="_blank" class="block text-blue-600 hover:underline">Technik Museum@ジンスハイム (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Porsche+Museum+Stuttgart" target="_blank" class="block text-blue-600 hover:underline">Porsche Museum (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Koelner+Dom" target="_blank" class="block text-blue-600 hover:underline">Kölner Dom (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Roemerberg+Frankfurt" target="_blank" class="block text-blue-600 hover:underline">Römerberg Frankfurt (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Mainzer+Dom" target="_blank" class="block text-blue-600 hover:underline">Mainzer Dom (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Gutenberg+Museum+Mainz" target="_blank" class="block text-blue-600 hover:underline">Gutenberg博物館 (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Heidelberg+Schloss" target="_blank" class="block text-blue-600 hover:underline">Heidelberg城 (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Residenzschloss+Ludwigsburg" target="_blank" class="block text-blue-600 hover:underline">Ludwigsburg宮殿 (地図)</a>
+        <div>
+          <h3 class="lnk">サッカー・観光</h3>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=MEWA+ARENA+Mainz" target="_blank" rel="noopener">MEWA ARENA @Mainz</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Porsche+Museum+Stuttgart" target="_blank" rel="noopener">Porsche Museum</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Koelner+Dom" target="_blank" rel="noopener">Kölner Dom</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Roemerberg+Frankfurt" target="_blank" rel="noopener">Römerberg Frankfurt</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Kleinmarkthalle+Frankfurt" target="_blank" rel="noopener">Kleinmarkthalle</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Mainzer+Dom" target="_blank" rel="noopener">Mainzer Dom</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Gutenberg+Museum+Mainz" target="_blank" rel="noopener">Gutenberg博物館</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Residenzschloss+Ludwigsburg" target="_blank" rel="noopener">Ludwigsburg宮殿</a>
         </div>
-        <div class="space-y-1">
-          <div class="font-semibold text-slate-600 text-[10px] uppercase">空港（地図＋案内図）・ラウンジ</div>
-          <div><a href="https://www.google.com/maps/search/?api=1&query=Frankfurt+Airport+FRA" target="_blank" class="text-blue-600 hover:underline">FRA (地図)</a>／<a href="https://www.frankfurt-airport.com/en.html" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
-          <div><a href="https://www.google.com/maps/search/?api=1&query=Stuttgart+Airport+STR" target="_blank" class="text-blue-600 hover:underline">STR (地図)</a>／<a href="https://www.stuttgart-airport.com/" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
-          <div><a href="https://www.google.com/maps/search/?api=1&query=Istanbul+Airport+IST" target="_blank" class="text-blue-600 hover:underline">IST (地図)</a>／<a href="https://www.istairport.com/en/" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
-          <div><a href="https://www.google.com/maps/search/?api=1&query=中部国際空港+セントレア" target="_blank" class="text-blue-600 hover:underline">NGO 中部 (地図)</a>／<a href="https://www.centrair.jp/" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
-          <div><a href="https://www.google.com/maps/search/?api=1&query=関西国際空港" target="_blank" class="text-blue-600 hover:underline">KIX 関空 (地図)</a>／<a href="https://www.kansai-airport.or.jp/" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
-          <div><a href="https://www.google.com/maps/search/?api=1&query=大阪国際空港+伊丹" target="_blank" class="text-blue-600 hover:underline">ITM 伊丹 (地図)</a>／<a href="https://www.osaka-airport.co.jp/" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
-          <div><a href="https://www.google.com/maps/search/?api=1&query=羽田空港+第3ターミナル" target="_blank" class="text-blue-600 hover:underline">HND 羽田 (地図)</a>／<a href="https://tokyo-haneda.com/" target="_blank" class="text-blue-600 hover:underline">案内図</a></div>
-          <div class="text-slate-400 text-[10px] pt-1">ラウンジ位置</div>
-          <a href="https://www.google.com/maps/search/?api=1&query=JAL+サクララウンジ+中部国際空港" target="_blank" class="block text-blue-600 hover:underline">JALサクララウンジ@NGO (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Finnair+Lounge+Helsinki+Airport" target="_blank" class="block text-blue-600 hover:underline">Finnair Lounge@HEL (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Turkish+Airlines+Lounge+Istanbul+Airport" target="_blank" class="block text-blue-600 hover:underline">ターキッシュ Lounge@IST (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Lufthansa+Senator+Lounge+Frankfurt+Airport" target="_blank" class="block text-blue-600 hover:underline">Lufthansa Lounge@FRA (地図)</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=ANA+ラウンジ+羽田空港+第3ターミナル" target="_blank" class="block text-blue-600 hover:underline">ANAラウンジ@HND (地図)</a>
+        <div>
+          <h3 class="lnk">空港・ラウンジ</h3>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=中部国際空港+セントレア" target="_blank" rel="noopener">NGO 中部（地図）</a>
+          <a href="https://www.centrair.jp/" target="_blank" rel="noopener">NGO 案内図</a>
+          <a href="https://www.frankfurt-airport.com/en.html" target="_blank" rel="noopener">FRA 案内図</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=JAL+サクララウンジ+中部国際空港" target="_blank" rel="noopener">JALサクララウンジ @NGO</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=Finnair+Lounge+Helsinki+Airport" target="_blank" rel="noopener">Finnair Lounge @HEL</a>
         </div>
       </div>
 
-      <div class="font-bold text-sm mb-2 mt-4"><i class="fas fa-link text-slate-400 mr-1"></i>その他リンク</div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <div class="space-y-1">
-          <div class="font-semibold text-rose-600 text-[10px] uppercase">HRS・チケット</div>
-          <a href="https://acgrobot.com/" target="_blank" class="block text-blue-600 hover:underline">HRS 公式サイト</a>
-          <a href="https://acgrobot.com/contact/" target="_blank" class="block text-blue-600 hover:underline">HRS 参加登録</a>
-          <a href="https://www.eventbrite.com/e/humanoid-robots-summit-europe-2026-tickets-1989641450137" target="_blank" class="block text-blue-600 hover:underline">HRS Eventbrite</a>
-          <a href="https://www.bundesliga.com/en/bundesliga" target="_blank" class="block text-blue-600 hover:underline">Bundesliga 日程</a>
-          <a href="https://www.mainz05.de/tickets" target="_blank" class="block text-blue-600 hover:underline">Mainz 05 チケット</a>
-          <a href="https://www.tsg-hoffenheim.de/tickets" target="_blank" class="block text-blue-600 hover:underline">ホッフェンハイム チケット</a>
+      <h3>その他リンク</h3>
+      <div class="links">
+        <div>
+          <h3 class="lnk">HRS・チケット</h3>
+          <a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">HRS 公式（アジェンダ・出典）</a>
+          <a href="https://acgrobot.com/" target="_blank" rel="noopener">HRS 主催 acgrobot</a>
+          <a href="https://acgrobot.com/contact/" target="_blank" rel="noopener">HRS 参加登録</a>
+          <a href="https://www.eventbrite.com/e/humanoid-robots-summit-europe-2026-tickets-1989641450137" target="_blank" rel="noopener">HRS Eventbrite</a>
+          <a href="https://www.bundesliga.com/en/bundesliga" target="_blank" rel="noopener">Bundesliga 日程</a>
+          <a href="https://www.mainz05.de/tickets" target="_blank" rel="noopener">Mainz 05 チケット</a>
         </div>
-        <div class="space-y-1">
-          <div class="font-semibold text-cyan-600 text-[10px] uppercase">航空会社・鉄道</div>
-          <a href="https://www.finnair.com/" target="_blank" class="block text-blue-600 hover:underline">フィンエアー（NGO-FRA案）</a>
-          <a href="https://www.turkishairlines.com/" target="_blank" class="block text-blue-600 hover:underline">ターキッシュ（KIX-STR案）</a>
-          <a href="https://www.lufthansa.com/" target="_blank" class="block text-blue-600 hover:underline">ルフトハンザ（ITM-FRA案）</a>
-          <a href="https://www.jal.co.jp/" target="_blank" class="block text-blue-600 hover:underline">JAL（ワンワールド）</a>
-          <a href="https://www.ana.co.jp/" target="_blank" class="block text-blue-600 hover:underline">ANA（スターアライアンス）</a>
-          <a href="https://www.bahn.de/en" target="_blank" class="block text-blue-600 hover:underline">DB（ドイツ鉄道）</a>
-          <a href="https://www.meitetsu.co.jp/train/centrair/guidance/index.html" target="_blank" class="block text-blue-600 hover:underline">名鉄 ミュースカイ（NGO案）</a>
-          <a href="https://www.jr-odekake.net/railroad/train/haruka/" target="_blank" class="block text-blue-600 hover:underline">特急はるか（KIX案）</a>
+        <div>
+          <h3 class="lnk">航空・鉄道</h3>
+          <a href="https://www.finnair.com/" target="_blank" rel="noopener">Finnair</a>
+          <a href="https://www.jal.co.jp/" target="_blank" rel="noopener">JAL（ワンワールド）</a>
+          <a href="https://www.bahn.de/en" target="_blank" rel="noopener">DB（ドイツ鉄道）</a>
+          <a href="https://www.meitetsu.co.jp/train/centrair/guidance/index.html" target="_blank" rel="noopener">名鉄 ミュースカイ</a>
         </div>
-        <div class="space-y-1">
-          <div class="font-semibold text-amber-600 text-[10px] uppercase">アプリ・通信・緊急</div>
-          <a href="https://apps.apple.com/jp/app/db-navigator/id343555245" target="_blank" class="block text-blue-600 hover:underline">DB Navigator（App Store）</a>
-          <a href="https://play.google.com/store/apps/details?id=de.hafas.android.db" target="_blank" class="block text-blue-600 hover:underline">DB Navigator（Google Play）</a>
-          <a href="https://www.revolut.com" target="_blank" class="block text-blue-600 hover:underline">Revolut（両替・決済）</a>
-          <a href="https://www.airalo.com" target="_blank" class="block text-blue-600 hover:underline">Airalo（eSIM）</a>
-          <a href="https://www.de.emb-japan.go.jp/" target="_blank" class="block text-blue-600 hover:underline">在ドイツ日本国大使館</a>
-          <a href="https://www.anzen.mofa.go.jp/" target="_blank" class="block text-blue-600 hover:underline">外務省 海外安全ホームページ</a>
+        <div>
+          <h3 class="lnk">アプリ・通信・緊急</h3>
+          <a href="https://apps.apple.com/jp/app/db-navigator/id343555245" target="_blank" rel="noopener">DB Navigator（iOS）</a>
+          <a href="https://play.google.com/store/apps/details?id=de.hafas.android.db" target="_blank" rel="noopener">DB Navigator（Android）</a>
+          <a href="https://www.revolut.com" target="_blank" rel="noopener">Revolut（両替・決済）</a>
+          <a href="https://www.airalo.com" target="_blank" rel="noopener">Airalo（eSIM）</a>
+          <a href="https://www.de.emb-japan.go.jp/" target="_blank" rel="noopener">在ドイツ日本国大使館</a>
+          <a href="https://www.anzen.mofa.go.jp/" target="_blank" rel="noopener">外務省 海外安全ホームページ</a>
         </div>
       </div>
     </div>
-  </section>
+  </details>
+</section>
 
-  <div class="text-center text-[11px] text-slate-400 py-3 no-print">
-    作成日：2026年6月13日 ｜ 更新日：2026年8月11日（HRS公式サイト humanoidrobotssummit.com で確認。登壇38名を確認、NVIDIA（Timo Kistner氏）含め登壇者リストを維持・表記統一（BMW→BMW Group・Unitree→Unitree Robotics）。公式FAQで「Day1・2はLiederhalleでの講演＋展示（40+社）、Day3は近郊企業訪問日」と判明したため、9/11の日程を展示・Liederhalle参加想定から企業訪問（詳細未発表）想定に修正。日程・会場（Liederhalle, 9/9〜9/11）自体は公式サイトと一致）
+
+<!-- ==================== タブ：会場 ==================== -->
+<section class="tab" id="tab-venue" role="tabpanel" aria-label="会場">
+<div class="banner b-info">
+    <span class="i">📝</span>
+    <div><strong>講演ごとに、事前の狙い・質問と当日メモを入力できます。</strong>入力のたび、この端末・このブラウザ内へ自動保存します。サーバーや別端末には自動同期されないため、終了時は「記録」からJSONも書き出してください。</div>
   </div>
 
+  <div class="card">
+    <h2 class="ttl">🤖 HRS Europe 2026 — 会場と構成</h2>
+    <div class="bd small" style="display:grid;gap:5px">
+      <div>📍 <strong>Liederhalle</strong>（Berliner Platz 1-3） <a href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">地図</a> — ホテルから徒歩約3分</div>
+      <div>📅 9/9・9/10 は講演＋展示（40+社）／9/11 は近郊企業訪問</div>
+      <div>⭐ Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA <span class="st st-booked">登録済</span></div>
+    </div>
+    <div class="foot">💡 事前に「狙い・質問」を入れておき、講演中は隣の「当日メモ」へ要点・数字・後で調べることを記録します。どちらも入力のたび自動保存されます。</div>
+  </div>
+
+  <div class="card">
+    <h2 class="ttl">📗 Day 1（9/9 水）— 全11項目（うち VIP Dinner は不参加）</h2>
+    <div class="scroll-x"><table class="ses" id="ses-d1">
+      <thead><tr><th></th><th>セッション（公式英語表記）</th><th>事前の狙い・質問</th><th>当日メモ</th></tr></thead>
+      <tbody>
+        <tr data-k="d1-1"><td class="n">1</td><td><div class="en">Policy Framework, Market Access Standards &amp; Compliance Process</div><div class="ja">政策枠組み・市場アクセス基準・コンプライアンス</div></td></tr>
+        <tr data-k="d1-2"><td class="n">2</td><td><div class="en">A New Paradigm — Opportunities and Challenges in the Mass Production Era</div><div class="ja">量産時代の機会と課題</div></td></tr>
+        <tr data-k="d1-3"><td class="n">3</td><td><div class="en">Deep Integration of Embodied Intelligence and Large Models: Synchronous Awakening of the “Brain” and “Cerebellum” of Humanoid Robots</div><div class="ja">Embodied Intelligence と大規模モデルの統合</div></td></tr>
+        <tr data-k="d1-4"><td class="n">4</td><td><div class="en">Application Software in the Mass Production Era: The Last Mile for Large-Scale Deployment of General-Purpose Humanoid Robots</div><div class="ja">量産時代のアプリケーションソフトウェア</div></td></tr>
+        <tr data-k="d1-5"><td class="n">5</td><td><div class="en"><span class="kind">Panel</span>A New Era of Generalist Robotics — The Rise of Humanoids</div><div class="ja">ジェネラリストロボティクスの新時代</div></td></tr>
+        <tr data-k="d1-6"><td class="n">6</td><td><div class="en">Innovative Motor Technology Helps the Rapid Development of Humanoid Robots</div><div class="ja">モーター技術の革新</div></td></tr>
+        <tr data-k="d1-7"><td class="n">7</td><td><div class="en">Advanced Joint and Movement Control Technology</div><div class="ja">関節・動作制御技術</div></td></tr>
+        <tr data-k="d1-8"><td class="n">8</td><td><div class="en"><span class="kind">Panel</span>Investing in the Humanoid Robotics Ecosystem in Europe: A Venture Capital Perspective</div><div class="ja">欧州ヒューマノイドへの投資（VC視点）</div></td></tr>
+        <tr data-k="d1-9"><td class="n">9</td><td><div class="en">Collaborative Robots for Commercial Use: Safe, Flexible and Easy to Deploy</div><div class="ja">商用協働ロボット</div></td></tr>
+        <tr data-k="d1-10"><td class="n">10</td><td><div class="en">Challenges and Opportunities in the Transformation of the Automotive Industry — From Electric Vehicles to Humanoid Robots</div><div class="ja">自動車産業の変革（EVからヒューマノイドへ）</div></td></tr>
+        <tr data-k="d1-11"><td class="n">11</td><td><div class="en"><span class="kind">VIP</span>VIP Dinner <span class="st st-skip">不参加</span></div><div class="ja">VIPパス対象。今回は取得しないので出ない</div></td></tr>
+      </tbody>
+    </table></div>
+    <div class="foot">開場9:00・終了17:00頃を想定（各項目の時刻は公式プログラム待ち）。<br>
+      出典：<a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">humanoidrobotssummit.com</a>（2026-08-12 閲覧）の公式アジェンダ。英語表記は公式のまま、日本語は照合用の要約。</div>
+  </div>
+
+  <div class="card">
+    <h2 class="ttl">📘 Day 2（9/10 木）— 全13セッション</h2>
+    <div class="scroll-x"><table class="ses" id="ses-d2">
+      <thead><tr><th></th><th>セッション（公式英語表記）</th><th>事前の狙い・質問</th><th>当日メモ</th></tr></thead>
+      <tbody>
+        <tr data-k="d2-1"><td class="n">1</td><td><div class="en">Humanoid Robots: The AI Accelerator</div><div class="ja">AIアクセラレーター</div></td></tr>
+        <tr data-k="d2-2"><td class="n">2</td><td><div class="en">Application of Humanoid Robots in the Medical and Health Field</div><div class="ja">医療・ヘルスケア分野への応用</div></td></tr>
+        <tr data-k="d2-3"><td class="n">3</td><td><div class="en">Force Sensors — From Accurate Sensing to Intelligent Decision-Making</div><div class="ja">力覚センサー：高精度センシングから知的判断へ</div></td></tr>
+        <tr data-k="d2-4"><td class="n">4</td><td><div class="en"><span class="kind">Dialogue</span>Investors, Engineers, and Ethicists — An Introduction to Building Humanoid Robots</div><div class="ja">投資家・エンジニア・倫理学者による構築入門</div></td></tr>
+        <tr data-k="d2-5"><td class="n">5</td><td><div class="en">High-Performance Specialty Engineering Plastic — Weight Reduction Enhances Humanoid Robot Locomotion and Manipulation Precision</div><div class="ja">高性能特殊エンジニアリングプラスチック（軽量化）</div></td></tr>
+        <tr data-k="d2-6"><td class="n">6</td><td><div class="en">Compliance-Oriented Privacy Protection Architecture for Humanoid Robots in Home Service Environments</div><div class="ja">家庭用サービス環境向けプライバシー保護</div></td></tr>
+        <tr data-k="d2-7"><td class="n">7</td><td><div class="en">The Practice and Development of Flexible Production Lines for Humanoid Robots in the Automotive Industry</div><div class="ja">自動車産業向けフレキシブル生産ライン</div></td></tr>
+        <tr data-k="d2-8"><td class="n">8</td><td><div class="en">GDPR-Compliant Edge-Cloud Collaborative Computing Architecture with Localized Data Governance for Humanoid Robotics</div><div class="ja">GDPR準拠エッジ・クラウド協調コンピューティング</div></td></tr>
+        <tr data-k="d2-9"><td class="n">9</td><td><div class="en">Low-Power Motion Control Algorithm Innovations for Humanoid Robots under EU Carbon Neutrality Targets</div><div class="ja">低消費電力モーション制御アルゴリズム</div></td></tr>
+        <tr data-k="d2-10"><td class="n">10</td><td><div class="en">Multidimensional Haptic Dexterous Hand: Fueling the Haptic Revolution for Embodied Intelligence</div><div class="ja">多次元触覚デクスタラスハンド</div></td></tr>
+        <tr data-k="d2-11"><td class="n">11</td><td><div class="en">Ethical Governance and Policy Coordination — Social Norms for Human-Robot Coexistence, Regulation of Cross-Border Data Flows</div><div class="ja">倫理的ガバナンスと政策協調（越境データ流通規制等）</div></td></tr>
+        <tr data-k="d2-12"><td class="n">12</td><td><div class="en">Penetration Pathways of Humanoid Robots in Industrial Scenarios</div><div class="ja">産業シーンにおける浸透経路</div></td></tr>
+        <tr data-k="d2-13"><td class="n">13</td><td><div class="en"><span class="kind">Panel</span>Humanoid Robotics’ Industrial Breakthrough in Europe in the Medical and Health Field: Technological Adaptation and Business Model Closure</div><div class="ja">欧州の医療分野における産業ブレイクスルー</div></td></tr>
+      </tbody>
+    </table></div>
+    <div class="foot">詳細タイムテーブルは公式プログラム確認。<br>
+      出典：<a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">humanoidrobotssummit.com</a>（2026-08-12 閲覧）の公式アジェンダ。</div>
+  </div>
+
+  <div class="card">
+    <h2 class="ttl">🏭 Day 3（9/11 金）— 企業訪問 <span class="st st-tbd" style="margin-left:6px">訪問先 未発表</span></h2>
+    <div class="scroll-x"><table class="ses" id="ses-d3">
+      <thead><tr><th></th><th>セッション（公式英語表記）</th><th>事前の狙い・質問</th><th>当日メモ</th></tr></thead>
+      <tbody>
+        <tr data-k="d3-1"><td class="n">1</td><td><div class="en"><span class="kind">Site Visit</span>Visits to local humanoid robotics companies based in Stuttgart</div><div class="ja">Stuttgart近郊の関連企業をガイド付きで訪問</div></td></tr>
+      </tbody>
+    </table></div>
+    <div class="foot"><strong>訪問先企業リストは開催直前に公式発表予定で、現時点では未公開。</strong>集合時刻・場所（Liederhalle集合か、送迎の有無等）も公式未発表のため要確認。<br>
+      出典：<a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">humanoidrobotssummit.com</a>（2026-08-12 閲覧）。</div>
+  </div>
+</section>
+
+
+<!-- ==================== タブ：記録 ==================== -->
+<section class="tab" id="tab-rec" role="tabpanel" aria-label="記録">
+  <div class="banner b-info">
+    <span class="i">📝</span>
+    <div><strong>行く前に「狙い」、現地で「当日メモ」、帰ってから「所感」。</strong>
+    入力はこの端末・このブラウザ内に自動保存されます（サーバー送信・別端末同期なし）。PCでクラウド側の記録を読み込んだ後、全文をMarkdownファイルとしてダウンロードできます。コピーは出張報告や <code>CHANGELOG.md</code> の下書きに使えます。</div>
+  </div>
+
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" class="no-print">
+    <button class="btn" id="btn-export">📋 Markdownでコピー</button>
+
+    <button class="btn" id="btn-download-md">⬇ メモをMarkdownでDL</button>
+    <button class="btn" id="btn-export-json">⬇ バックアップJSONをDL</button>
+    <label class="btn" for="import-json" style="display:inline-flex;align-items:center">⬆ JSONを読み込む</label>
+    <input id="import-json" type="file" accept="application/json,.json" hidden>
+
+    <button class="btn" id="btn-clear">🗑 記録をすべて消す</button>
+    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>
+  </div>
+
+  <details class="card cloud-sync no-print" data-trip-cloud data-endpoint="https://trip-field-sync.mrkn55.workers.dev">
+    <summary class="ttl">☁ Cloudflare同期</summary>
+    <div class="bd">
+      <p class="small muted">オンライン版のメモを端末間で同期します。同期キーは公開HTMLへ書かず、この画面で入力します。</p>
+      <label class="cloud-key">同期キー<input type="password" autocomplete="current-password" data-trip-cloud-key></label>
+      <label class="cloud-remember"><input type="checkbox" data-trip-cloud-remember> この端末に同期キーを保存</label>
+      <div class="cloud-actions">
+        <button class="btn" type="button" data-trip-cloud-pull>クラウドから読込</button>
+        <button class="btn" type="button" data-trip-cloud-push>今すぐ保存</button>
+      </div>
+      <div data-trip-cloud-status role="status" aria-live="polite"></div>
+    </div>
+  </details>
+
+
+  <div class="card">
+    <h2 class="ttl">🎯 出張全体の目的（この1件で何を持ち帰るか）</h2>
+    <div class="bd" style="padding:0">
+      <div class="rec" style="border:0;margin:0">
+        <div class="fld aim"><span>狙い</span><textarea data-rec="all:aim" rows="2"></textarea></div>
+        <div class="fld"><span>帰国後の総括</span><textarea data-rec="all:after" rows="3"></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="rec-days"></div>
+</section>
+
+
+<!-- ==================== タブ：家族 ====================
+     方針：詳細は載せない。知りたいのは3つだけ。
+       ① 今どのあたりにいて、どんな状態か
+       ② 日本の何時が現地の何時か（現地の一日の進み方）
+       ③ いつ帰ってくるか
+     ==================================================== -->
+<section class="tab" id="tab-fam" role="tabpanel" aria-label="家族">
+
+  <!-- 家族に渡す紙は、この1タブだけを印刷する -->
+  <div class="no-print" style="display:flex;gap:6px;align-items:center;margin-bottom:12px">
+    <button class="btn" id="btn-print-fam">🖨 この家族用ページだけ印刷</button>
+    <span class="small muted">画面用の時計は紙には出ません</span>
+  </div>
+
+  <!-- ① 時差（紙でも分かる静的な説明）-->
+  <div class="card">
+    <h2 class="ttl">⏱ 日本とドイツの時差</h2>
+    <div class="bd">
+      <div style="text-align:center;background:var(--conf-bg);border:1px solid var(--conf);border-radius:10px;padding:12px 10px">
+        <div style="font-size:var(--f0);font-weight:700;color:var(--conf-tx);line-height:1.45">日本の時刻 <span style="color:var(--conf-tx)">− 7時間</span> ＝ 現地（ドイツ）の時刻</div>
+        <div class="small" style="color:var(--conf-tx);margin-top:4px">例：日本の 21:00 → 現地は同じ日の 14:00</div>
+      </div>
+      <div class="small muted" style="margin-top:8px">日本のほうが7時間進んでいます（9月のドイツは夏時間のため7時間。冬は8時間）。<br>
+        つまり <strong>日本の夕方〜深夜が、現地の朝〜夕方</strong>。日本の午前中は、現地はまだ夜中です。</div>
+    </div>
+  </div>
+
+  <!-- ② いまの状態（画面専用・自動更新） -->
+  <div class="card no-print">
+    <h2 class="ttl">🕐 いまの時刻と、たぶんしていること</h2>
+    <div class="bd">
+      <div id="fam-clock" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:var(--line2);border:1px solid var(--line);border-radius:10px;padding:10px 12px">
+          <div class="small muted" style="font-weight:700">🇯🇵 日本</div>
+          <div id="clk-jp" style="font-size:var(--f0);font-weight:700;font-variant-numeric:tabular-nums;line-height:1.25">--:--</div>
+          <div class="small muted" id="clk-jp-d">—</div>
+        </div>
+        <div style="background:var(--conf-bg);border:1px solid var(--conf);border-radius:10px;padding:10px 12px">
+          <div class="small" style="font-weight:700;color:var(--conf-tx)">🇩🇪 ドイツ（現地）</div>
+          <div id="clk-de" style="font-size:var(--f0);font-weight:700;font-variant-numeric:tabular-nums;line-height:1.25;color:var(--conf-tx)">--:--</div>
+          <div class="small" style="color:var(--conf-tx)" id="clk-de-d">—</div>
+        </div>
+      </div>
+      <div id="fam-now" class="banner b-info" style="margin:10px 0 0">
+        <span class="i">📍</span><div id="fam-now-tx">出張期間（9/7〜9/14）に入ると、その日の居場所と状態がここに出ます。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 毎日どこで何をしているか（FAM 定義から自動生成・日レベル） -->
+  <div class="card">
+    <h2 class="ttl">🗓 毎日どこで何をしているか</h2>
+    <div class="scroll-x"><table class="tb" id="fam-table">
+      <thead><tr><th style="width:74px">日付</th><th style="width:150px">場所</th><th>していること</th></tr></thead>
+      <tbody id="fam-days"></tbody>
+    </table></div>
+    <div class="foot">出張中は<strong>その日の行が色付き</strong>になります。細かい時刻までは載せていません。</div>
+  </div>
+
+  <!-- ④ 日本時間で見た、現地の一日 -->
+  <div class="card">
+    <h2 class="ttl">🕘 日本時間で見ると、現地はこうなっている</h2>
+    <div class="scroll-x"><table class="tb">
+      <thead><tr><th style="width:96px">日本の時刻</th><th style="width:96px">現地の時刻</th><th>現地の様子</th></tr></thead>
+      <tbody>
+        <tr><td class="t">朝 6:00</td><td class="t">前日 23:00</td><td>寝ている頃</td></tr>
+        <tr><td class="t">昼 12:00</td><td class="t">5:00</td><td>まだ寝ている頃</td></tr>
+        <tr><td class="t">15:00</td><td class="t">8:00</td><td>起きて朝食、会場へ向かう頃</td></tr>
+        <tr><td class="t">17:00</td><td class="t">10:00</td><td>会議中。返事は遅くなります</td></tr>
+        <tr style="background:var(--hov)"><td class="t">21:00〜24:00</td><td class="t">14:00〜17:00</td><td>会議の後半〜終わり。<strong>返事が来やすい頃</strong></td></tr>
+        <tr style="background:var(--hov)"><td class="t">翌 2:00</td><td class="t">19:00</td><td>夕食の頃。<strong>ゆっくり話せます</strong></td></tr>
+        <tr><td class="t">翌 4:00</td><td class="t">21:00</td><td>ホテルに戻って休んでいる頃</td></tr>
+      </tbody>
+    </table></div>
+    <div class="foot">💡 日本の夜（21時〜深夜）は現地の午後なので、返事が早いのはこの時間帯。ホテルと会場は Wi-Fi あり、移動中は eSIM。</div>
+  </div>
+
+  <!-- ③ 帰国 -->
+  <div class="card">
+    <h2 class="ttl">🏠 帰ってくる日</h2>
+    <div class="bd small" style="display:grid;gap:6px">
+      <div style="font-size:var(--f1);font-weight:700">9月14日（月）<strong>19:35</strong> 中部国際空港（セントレア）着</div>
+      <div>→ 入国審査・荷物受取に約40分 → 20:35頃 セントレア発（ミュースカイ）</div>
+      <div>→ <strong>21:50頃 京都駅</strong>着／<strong>21:40頃 犬山駅</strong>着（そこから各自の自宅へ）</div>
+      <div class="muted">帰りの便：9/13（日）19:20 フランクフルト発 → ヘルシンキ乗継 → 9/14（月）19:35 セントレア着（Finnair）。<br>
+      行きの便：9/7（月）22:50 セントレア発 → 9/8（火）9:20 フランクフルト着。</div>
+    </div>
+  </div>
+
+  <!-- 泊まる場所（ざっくり）＋緊急連絡 -->
+  <div class="card">
+    <h2 class="ttl">🏨 どこに泊まっているか</h2>
+    <div class="bd small" style="display:grid;gap:6px">
+      <div><strong>9/8〜9/12</strong>　Maritim Stuttgart（シュトゥットガルト）　TEL +49 711 9420 <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a><span class="note">会議の会場はホテルの隣（徒歩約3分）なので、この期間はほぼ同じ場所にいる。</span></div>
+      <div><strong>9/12〜9/13</strong>　Best Western Hotel Airport Frankfurt（フランクフルト空港） <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">（地図）</a></div>
+      <div><strong>9/7・9/13の夜</strong>　機内</div>
+      <div class="muted" style="padding-top:2px">🇯🇵 万一のとき：<a href="https://www.de.emb-japan.go.jp/" target="_blank" rel="noopener">在ドイツ日本国大使館</a>／<a href="https://www.anzen.mofa.go.jp/" target="_blank" rel="noopener">外務省 海外安全ホームページ</a></div>
+    </div>
+  </div>
+</section>
+
+<div class="credit">
+  作成日：2026年6月13日 ｜ 更新日：2026年8月13日（v3フィールド版） ｜ 出典：<a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">humanoidrobotssummit.com</a>（2026-08-12 閲覧）<br>
+  レイアウト v3（屋外スマホ・連続旅程・3セクション）｜ 変更履歴は CHANGELOG.md
 </div>
 
+</div><!-- /wrap -->
+
+<script src="../shared/trip-field/runtime.js"></script>
 <script>
+/* ============================================================
+   MEMBERS — メンバー定義はここ1か所だけ。
+   人フィルタのチップと、日カード内のレーン (.lane[data-who]) が
+   この定義から生成・対応づけされる。
+   別イベントに流用するときは、まずここを書き換える。
+   ============================================================ */
+const MEMBERS = [
+  { id:'kyoto',   label:'京都発', short:'京', emoji:'👤', hue:{ bg:'#B7D4F1', fg:'#153F68', bd:'#8EB6DC' } },
+  { id:'inuyama', label:'犬山発', short:'犬', emoji:'👤', hue:{ bg:'#BFDFC6', fg:'#17482A', bd:'#91C49C' } }
+];
+/* 人の色は MEMBERS から生成する。CSS 側に個人名を書かない。 */
+(function paintMembers(){
+  const css = MEMBERS.map(m =>
+    '.lane[data-who=' + m.id + '] > .lane-head{background:' + m.hue.bg + ';color:' + m.hue.fg + '}' +
+    '#who-chips .chip.on[data-who=' + m.id + ']{background:' + m.hue.fg + ';border-color:' + m.hue.fg + ';color:#fff}' +
+    '.ow[data-v="' + m.short + '"]{background:' + m.hue.bg + ';border-color:' + m.hue.bd + ';color:' + m.hue.fg + '}'
+  ).join('');
+  const el = document.createElement('style');
+  el.textContent = css;
+  document.head.appendChild(el);
+})();
+
+/* ============================================================
+   FAM — 家族タブ用の「粗い粒度」の1日。
+   旅程タブの詳細（分単位・列車名・地図）はここには持ち込まない。
+   同じ1日を、見る相手に応じた粒度で言い直しているだけ。
+   ============================================================ */
+const TZ_LOCAL = 'Europe/Berlin';      /* 現地タイムゾーン */
+const FAM = {
+  '2026-09-07': { place:'日本 → 機内',                        note:'夜にセントレアから出発（22:50発）' },
+  '2026-09-08': { place:'🇩🇪 シュトゥットガルト',              note:'朝フランクフルト着 → 列車で移動。午後は市内を散策' },
+  '2026-09-09': { place:'🇩🇪 シュトゥットガルト',              note:'ロボットの国際会議 1日目（会場はホテルの隣）', conf:true },
+  '2026-09-10': { place:'🇩🇪 シュトゥットガルト',              note:'国際会議 2日目', conf:true },
+  '2026-09-11': { place:'🇩🇪 シュトゥットガルト近郊',          note:'会議3日目・近郊の企業訪問', conf:true },
+  '2026-09-12': { place:'🇩🇪 シュトゥットガルト → フランクフルト', note:'移動日。日中の過ごし方は当日決定' },
+  '2026-09-13': { place:'🇩🇪 フランクフルト',                  note:'日中は近場を観光 → 夜19:20の便で出発' },
+  '2026-09-14': { place:'✈︎ 帰国日',                          note:'19:35 セントレア着 → 21:50頃 京都駅／21:40頃 犬山駅' }
+};
+
+const EVENT_KEY = 'hrs2026-v3';       /* localStorage 名前空間 */
+const store = window.TripField.createStore(EVENT_KEY);
+
 document.addEventListener('DOMContentLoaded', () => {
-  // 日程表を「時刻｜イベント｜コメント」の3列へ整形。
-  document.querySelectorAll('.day-section .sp-table').forEach(table => {
-    table.classList.add('schedule-3col');
-    table.querySelectorAll('tr').forEach(row => {
-      const cells = Array.from(row.children).filter(el => el.tagName === 'TD');
-      if(cells.length !== 2) return;
+  const days = Array.from(document.querySelectorAll('.day'));
 
-      const [timeCell, eventCell] = cells;
-      timeCell.classList.add('schedule-time');
-      timeCell.style.removeProperty('width');
-      eventCell.classList.add('schedule-event');
+  /* ---------- ヘッダー高さを CSS 変数へ（アンカーのズレ防止） ---------- */
+  const hdr = document.querySelector('.field-nav');
+  const setH = () => document.documentElement.style.setProperty('--hdrh', hdr.offsetHeight + 'px');
+  setH(); window.addEventListener('resize', setH);
 
-      const noteCell = document.createElement('td');
-      noteCell.className = 'schedule-note';
-      noteCell.setAttribute('aria-label', 'コメント');
-
-      Array.from(eventCell.children)
-        .filter(el => el.classList.contains('text-slate-500'))
-        .forEach(note => noteCell.appendChild(note));
-
-      if(!noteCell.hasChildNodes()){
-        const trailingNote = eventCell.innerHTML.match(/\s*(（[^（）<>]+）)\s*$/);
-        if(trailingNote){
-          eventCell.innerHTML = eventCell.innerHTML.slice(0, trailingNote.index).trimEnd();
-          noteCell.textContent = trailingNote[1];
-        }
-      }
-
-      if(noteCell.hasChildNodes()){
-        row.appendChild(noteCell);
-      } else {
-        eventCell.colSpan = 2;
-        eventCell.classList.add('schedule-event-wide');
-      }
+  /* ---------- タブ ---------- */
+  const subbar = document.getElementById('subbar');
+  function showTab(id){
+    document.querySelectorAll('.tab').forEach(s => s.classList.toggle('on', s.id === 'tab'+'-'+id));
+    document.querySelectorAll('#tabs button').forEach(b => {
+      const on = b.dataset.tab === id;
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
     });
-  });
+    subbar.classList.toggle('off', id !== 'plan');
+    setH();
+    store.set('tab', id);
+    /* 表示された欄は改めて高さを測る。旅程に戻った時は現在地も取り直す。 */
+    requestAnimationFrame(() => { refit(document.getElementById('tab-' + id)); if (id === 'plan') markDay(); });
+  }
+  document.querySelectorAll('#tabs button').forEach(b => b.addEventListener('click', () => { showTab(b.dataset.tab); window.scrollTo(0,0); }));
+  document.querySelectorAll('[data-goto]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); showTab(a.dataset.goto); window.scrollTo(0,0); }));
 
-  const dateNav = document.getElementById('date-nav');
-  document.querySelectorAll('.day-section').forEach(day => {
-    if(dateNav){
-      const link = document.createElement('a');
-      link.href = '#' + day.id;
-      link.textContent = day.dataset.dateLabel || day.id;
-      dateNav.appendChild(link);
+  /* ---------- 詳細トグル（既定はOFF＝骨だけ表示） ---------- */
+  const dtBtn = document.getElementById('detail-tg');
+  function applyDetail(on){
+    document.body.classList.toggle('detail', on);
+    dtBtn.textContent = on ? '−詳細' : '＋詳細';
+    dtBtn.style.background = on ? '#2C3440' : '';
+    dtBtn.style.color = on ? '#fff' : '';
+    dtBtn.style.borderColor = on ? '#2C3440' : '';
+    store.set('detail', on);
+    setH();
+  }
+  dtBtn.addEventListener('click', () => applyDetail(!document.body.classList.contains('detail')));
+  applyDetail(store.get('detail', false));
+
+  /* ---------- 人フィルタ（他レーンを淡くするだけ・非表示にはしない） ---------- */
+  const whoBox = document.getElementById('who-chips');
+  const whoBtn = (id, label) => {
+    const b = document.createElement('button');
+    b.className = 'chip'; b.dataset.who = id; b.textContent = label;
+    b.addEventListener('click', () => applyWho(id));
+    whoBox.appendChild(b); return b;
+  };
+  whoBtn('all', '👥 全員');
+  MEMBERS.forEach(m => whoBtn(m.id, m.emoji + ' ' + m.label));
+
+  function applyWho(who){
+    document.querySelectorAll('#who-chips .chip').forEach(c => c.classList.toggle('on', c.dataset.who === who));
+    document.querySelectorAll('.lane').forEach(l => {
+      const w = l.dataset.who;
+      l.classList.toggle('dim', who !== 'all' && w !== 'all' && w !== who);
+    });
+    store.set('who', who);
+  }
+  applyWho(store.get('who', 'all'));
+
+  /* ---------- 日カードの開閉 ----------
+     既定は全部畳んだ状態。8行の目次として眺めて、必要な日だけ開く。
+     会期中は当日だけ自動で開く。                                        */
+  const KIND_BADGE = { conf:'HRS', choose:'検討中' };
+  days.forEach(d => {
+    const badge = KIND_BADGE[d.dataset.kind];
+    if (badge) {
+      const b = document.createElement('span');
+      b.className = 'badge'; b.textContent = badge;
+      d.querySelector('summary.day-head').appendChild(b);
     }
-    const back = document.createElement('a');
-    back.href = '#date-nav';
-    back.className = 'back-to-date-nav no-print';
-    back.innerHTML = '<i class="fas fa-arrow-up mr-1"></i>日付ナビへ';
-    day.appendChild(back);
+    d.addEventListener('toggle', () => { setH(); });
   });
+  const openDay = id => {
+    const d = document.getElementById(id);
+    if (d && d.classList.contains('day')) d.open = true;
+    return d;
+  };
 
-  document.querySelectorAll('.todo-item').forEach(el => {
-    const cb = el.querySelector('input');
-    el.addEventListener('click', e => {
-      if(e.target !== cb){ cb.checked = !cb.checked; }
-      el.classList.toggle('done', cb.checked);
+  /* ---------- 日付ナビ ---------- */
+  const dayBox = document.getElementById('day-chips');
+  /* 端末のローカル日付（UTCではなく）。渡航中は現地日付になる。 */
+  const todayISO = (() => {
+    const n = new Date(), p = x => String(x).padStart(2,'0');
+    return n.getFullYear() + '-' + p(n.getMonth()+1) + '-' + p(n.getDate());
+  })();
+  days.forEach(d => {
+    const a = document.createElement('a');
+    a.className = 'chip'; a.href = '#' + d.id;
+    a.innerHTML = d.dataset.label + '<span style="font-weight:400;font-size:var(--f5);margin-left:2px">' + d.dataset.dow + '</span>';
+    a.dataset.for = d.id;
+    if (d.dataset.date === todayISO) a.classList.add('today');
+    a.addEventListener('click', () => openDay(d.id));   /* 畳んだ日へ飛ぶときは開く */
+    dayBox.appendChild(a);
+  });
+  /* 全部開く／畳む（横スクロールする日付行ではなく、人フィルタ行の右端に置く） */
+  const allBtn = document.createElement('button');
+  allBtn.className = 'chip'; allBtn.style.marginLeft = 'auto'; allBtn.style.position = 'sticky'; allBtn.style.right = '0';
+  const paintAll = () => { allBtn.textContent = days.every(d => d.open) ? '全部たたむ' : '全部ひらく'; };
+  allBtn.addEventListener('click', () => {
+    const toOpen = !days.every(d => d.open);
+    days.forEach(d => d.open = toOpen);
+    paintAll(); setH();
+  });
+  days.forEach(d => d.addEventListener('toggle', paintAll));
+  paintAll();
+  whoBox.appendChild(allBtn);
+
+  /* スクロール位置に応じて日付チップを点灯（ヘッダー直下にある日カードを現在地とみなす） */
+  const dayChipEls = Array.from(dayBox.querySelectorAll('.chip'));
+  function markDay(){
+    if (!document.getElementById('tab-plan').classList.contains('on')) return;
+    const line = hdr.offsetHeight + 12;
+    let cur = null;
+    days.forEach(d => { if (d.getBoundingClientRect().top <= line) cur = d.id; });
+    if (!cur) {
+      /* 判定線より上に日カードが無い（＝全部たたんでページが短い、または先頭）。
+         画面内で一番上にある日を現在地とみなす。 */
+      let best = Infinity;
+      days.forEach(d => {
+        const t = d.getBoundingClientRect().top;
+        if (t >= 0 && t < best) { best = t; cur = d.id; }
+      });
+      if (!cur) cur = days[0].id;
+    }
+    dayChipEls.forEach(c => {
+      const on = c.dataset.for === cur;
+      c.classList.toggle('on', on);
+      if (on) {  /* 点灯中のチップを横スクロール内に収める */
+        const l = c.offsetLeft - dayBox.offsetLeft, r = l + c.offsetWidth;
+        if (l < dayBox.scrollLeft) dayBox.scrollLeft = l - 8;
+        else if (r > dayBox.scrollLeft + dayBox.clientWidth) dayBox.scrollLeft = r - dayBox.clientWidth + 8;
+      }
     });
+  }
+  let raf = 0;
+  window.addEventListener('scroll', () => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => { raf = 0; markDay(); });
+  }, { passive: true });
+  markDay();
+
+  /* 会期中に開いたら、当日だけ開いてそこへ移動 */
+  const todayCard = days.find(d => d.dataset.date === todayISO);
+  if (todayCard) {
+    todayCard.open = true;
+    todayCard.classList.add('today');
+    setTimeout(() => todayCard.scrollIntoView({ block:'start' }), 80);
+  }
+
+  /* ---------- 案セレクタ（9/12 A/B/C/D・9/13 X/Y/Z） ---------- */
+  document.querySelectorAll('.plans').forEach(box => {
+    const g = box.dataset.group;
+    const apply = p => {
+      box.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.plan === p));
+      document.querySelectorAll('.plan[data-group="' + g + '"]').forEach(el => {
+        el.classList.toggle('hide', p !== 'all' && el.dataset.plan !== p);
+      });
+      store.set('plan:' + g, p);
+    };
+    box.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => apply(c.dataset.plan)));
+    /* 既定は「すべて表示」ではなく第一候補だけ。全部見たい時にチップで開く。 */
+    apply(store.get('plan:' + g, box.dataset.default || 'all'));
   });
 
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const t = document.querySelector(a.getAttribute('href'));
-      if(!t) return;
+
+  /* ---------- 候補の選択と確定を分ける ---------- */
+  document.querySelectorAll('.plans').forEach(box => {
+    const group = box.dataset.group;
+    const day = box.closest('.day');
+    const confirmButton = document.createElement('button');
+    confirmButton.type = 'button';
+    confirmButton.className = 'chip confirm-plan';
+    const paintConfirmation = () => {
+      const confirmed = store.get('plan-confirmed:' + group, false);
+      day.classList.toggle('confirmed', confirmed);
+      const badge = day.querySelector('.day-head .badge');
+      if (badge) badge.textContent = confirmed ? '確定' : '検討中';
+      confirmButton.textContent = confirmed ? '✓ 確定済み' : 'この案で確定';
+      confirmButton.classList.toggle('on', confirmed);
+    };
+    confirmButton.addEventListener('click', e => {
       e.preventDefault();
-      t.scrollIntoView({behavior:'smooth',block:'start'});
+      store.set('plan-confirmed:' + group, !store.get('plan-confirmed:' + group, false));
+      paintConfirmation();
+    });
+    box.addEventListener('click', e => {
+      if (!e.target.closest('.chip[data-plan]')) return;
+      store.set('plan-confirmed:' + group, false);
+      setTimeout(paintConfirmation, 0);
+    });
+    box.appendChild(confirmButton);
+    paintConfirmation();
+  });
+
+  /* ---------- ToDo ---------- */
+  const todos = Array.from(document.querySelectorAll('.todo'));
+  const countEl = document.getElementById('todo-count');
+  const recount = () => {
+    const done = todos.filter(t => t.querySelector('input').checked).length;
+    countEl.textContent = '（' + done + '/' + todos.length + '）';
+  };
+  todos.forEach(t => {
+    const cb = t.querySelector('input');
+    const k = 'todo:' + t.dataset.k;
+    /* data-done="1" は「着手時点で既に完了していた項目」の初期値 */
+    cb.checked = store.get(k, cb.dataset.done === '1');
+    t.classList.toggle('done', cb.checked);
+    /* label に for が付いているので、行のどこを押しても checkbox が切り替わる。
+       状態の反映は change に一本化する（click で二重にトグルしない）。 */
+    cb.addEventListener('change', () => {
+      t.classList.toggle('done', cb.checked);
+      store.set(k, cb.checked);
+      recount();
+    });
+    t.addEventListener('click', e => {
+      if (e.target.closest('a') || e.target === cb || e.target.closest('label')) return;
+      cb.checked = !cb.checked;
+      cb.dispatchEvent(new Event('change'));
     });
   });
+  recount();
+
+  /* ---------- 記録タブ：日ごとのブロックを日カードから生成 ---------- */
+  const recBox = document.getElementById('rec-days');
+  const SEED = {
+    'day-0908': '深夜便明けの体調を見て午後の行き先を当日選択。丸一日の遠出は9/12に温存する。',
+    'day-0909': 'Day 1：政策・市場・量産・Embodied AI・モーター技術。展示ブース（40+社）は二人で分担。',
+    'day-0910': 'Day 2：医療応用・センサー・GDPR・フレキシブル生産ライン。',
+    'day-0911': 'Day 3：近郊企業へのガイド付き訪問（訪問先は開催直前に公式発表）。'
+  };
+  days.forEach(d => {
+    const head = d.querySelector('.day-head');
+    const title = head.querySelector('.d').textContent + ' ' + head.querySelector('.t').textContent;
+    const el = document.createElement('div');
+    el.className = 'rec';
+    el.innerHTML =
+      '<div class="rh">' + title + '</div>' +
+      '<div class="fld aim"><span>事前の狙い</span><textarea data-rec="' + d.id + ':aim" rows="2"></textarea></div>' +
+      '<div class="fld"><span>当日メモ（実測・見たもの・聞いたこと）</span><textarea data-rec="' + d.id + ':day" rows="3"></textarea></div>' +
+      '<div class="fld"><span>帰国後の所感</span><textarea data-rec="' + d.id + ':after" rows="2"></textarea></div>';
+    el.dataset.title = title;
+    recBox.appendChild(el);
+    const aim = el.querySelector('[data-rec$=":aim"]');
+    if (SEED[d.id]) aim.placeholder = SEED[d.id];
+  });
+
+  /* ---------- 旅程タブ：日カードごとの「今日のメモ」（折り畳み） ----------
+     記録タブの「当日メモ」と同じ data-rec キーを共有する。
+     つまり同一フィールドの2粒度表示で、どちらで書いても同じ場所に入る。   */
+  days.forEach(d => {
+    const det = document.createElement('details');
+    det.className = 'memo';
+    det.innerHTML =
+      '<summary>📝 今日のメモ<span class="flag">未記入</span></summary>' +
+      '<div class="bd2">' +
+        '<textarea data-rec="' + d.id + ':day" placeholder="実測時刻・見たもの・聞いたこと・次にやること"></textarea>' +
+        '<div class="hint">記録タブの「当日メモ」と同じ欄。どちらで書いても同じ場所に入り、Markdown書き出しにも載ります。</div>' +
+      '</div>';
+    d.appendChild(det);
+    if (d.dataset.date === todayISO) det.open = true;
+  });
+
+  /* ---------- テキスト欄の保存と同期（同じキーの欄はすべて連動） ---------- */
+  const recAll = Array.from(document.querySelectorAll('textarea[data-rec]'));
+  /* 非表示（畳んだ details・隠れタブ）の要素は scrollHeight が 0 になる。
+     そこで高さを決めると本文が隠れるので、測れる時だけ測る。 */
+  const fit = ta => {
+    if (ta.offsetHeight === 0 && !ta.offsetParent) return;
+    ta.style.height = 'auto';
+    ta.style.height = Math.max(ta.scrollHeight, 52) + 'px';
+  };
+  const refit = root => (root || document).querySelectorAll('textarea[data-rec]').forEach(fit);
+  const paintFlag = ta => {
+    const f = ta.closest('.memo') && ta.closest('.memo').querySelector('.flag');
+    if (!f) return;
+    const has = ta.value.trim().length > 0;
+    f.textContent = has ? '記入あり' : '未記入';
+    f.classList.toggle('has', has);
+  };
+  recAll.forEach(ta => {
+    const key = ta.dataset.rec;
+    ta.value = store.get('rec:' + key, '');
+    if (ta.value) fit(ta);
+    paintFlag(ta);
+    ta.addEventListener('input', () => {
+      store.set('rec:' + key, ta.value);
+      fit(ta); paintFlag(ta);
+      /* 同じキーを持つ別粒度の欄へ反映 */
+      recAll.forEach(o => {
+        if (o !== ta && o.dataset.rec === key) { o.value = ta.value; fit(o); paintFlag(o); }
+      });
+    });
+  });
+
+  /* ---------- 記録の書き出し（Markdown） ---------- */
+  const msg = document.getElementById('export-msg');
+  const flash = t => { msg.textContent = t; setTimeout(() => msg.textContent = '', 2600); };
+
+  const buildRecordMarkdown = () => {
+    const v = k => store.get('rec:' + k, '').trim();
+    const L = ['# HRS Europe 2026 出張記録', ''];
+    const p0 = ['0912', '0913'].map(g => g.slice(0,2) + '/' + g.slice(2) + ' → ' + store.get('plan:' + g, 'all'));
+    L.push('選んだ案：' + p0.join(' ／ '), '');
+    if (v('all:aim') || v('all:after')) {
+      L.push('## 出張全体', '');
+      if (v('all:aim'))   L.push('**狙い**', '', v('all:aim'), '');
+      if (v('all:after')) L.push('**総括**', '', v('all:after'), '');
+    }
+    days.forEach(d => {
+      const a = v(d.id + ':aim'), b = v(d.id + ':day'), c = v(d.id + ':after');
+      if (!a && !b && !c) return;
+      const rec = Array.from(recBox.children).find(x => x.querySelector('[data-rec^="' + d.id + ':"]'));
+      L.push('## ' + (rec ? rec.dataset.title : d.dataset.label), '');
+      if (a) L.push('- **狙い**：' + a);
+      if (b) L.push('- **当日**：' + b);
+      if (c) L.push('- **所感**：' + c);
+      L.push('');
+    });
+    /* 会場タブに書いた講演ごとの事前準備と当日メモ */
+    const ses = [];
+    document.querySelectorAll('.ses tr[data-k]').forEach(tr => {
+      const prep = store.get('ses:' + tr.dataset.k + ':aim', '').trim();
+      const day = store.get('ses:' + tr.dataset.k + ':day', '').trim();
+      if (!prep && !day) return;
+      const enEl = tr.querySelector('.en').cloneNode(true);
+      const kind = enEl.querySelector('.kind');
+      const kindTx = kind ? kind.textContent.trim() : '';
+      enEl.querySelectorAll('.kind,.st').forEach(n => n.remove());
+      const en = (kindTx ? '[' + kindTx + '] ' : '') + enEl.textContent.trim().replace(/\s+/g, ' ');
+      ses.push('### ' + en, '');
+      if (prep) ses.push('- **事前の狙い・質問**：' + prep);
+      if (day) ses.push('- **当日メモ**：' + day);
+      ses.push('');
+    });
+    if (ses.length) L.push('## 講演別メモ', '', ...ses);
+
+    const done = todos.filter(t => t.querySelector('input').checked);
+    if (done.length) {
+      L.push('## 完了したタスク', '');
+      done.forEach(t => L.push('- [x] ' + t.querySelector('label').textContent.trim().replace(/\s+/g, ' ')));
+      L.push('');
+    }
+    return L.join('\n');
+  };
+
+  document.getElementById('btn-export').addEventListener('click', () => {
+    const text = buildRecordMarkdown();
+    const done2 = () => flash('✅ Markdownをコピーしました');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done2, () => fallback(text, done2));
+    } else fallback(text, done2);
+  });
+
+  document.getElementById('btn-download-md').addEventListener('click', () => {
+    TripField.downloadText(
+      buildRecordMarkdown(),
+      'hrs2026-trip-notes-' + new Date().toISOString().slice(0,10) + '.md',
+      'text/markdown;charset=utf-8'
+    );
+    flash('✅ Markdownをダウンロードしました');
+  });
+
+  function fallback(text, ok){
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); ok(); } catch(e) { flash('コピーできませんでした'); }
+    document.body.removeChild(ta);
+  }
+
+
+  /* ---------- オンライン版／オフライン版の記録移送（JSON） ---------- */
+  const jsonButton = document.getElementById('btn-export-json');
+  const jsonInput = document.getElementById('import-json');
+  if (jsonButton) jsonButton.addEventListener('click', () => {
+    const data = {};
+    store.keys().forEach(fullKey => {
+      const shortKey = fullKey.slice((EVENT_KEY + ':').length);
+      try { data[shortKey] = JSON.parse(localStorage.getItem(fullKey)); }
+      catch(e) { data[shortKey] = localStorage.getItem(fullKey); }
+    });
+    const payload = {
+      schema: 'hrs2026-field-records',
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      data
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type:'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'hrs2026-records-' + new Date().toISOString().slice(0,10) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    flash('✅ JSONを書き出しました');
+  });
+  if (jsonInput) jsonInput.addEventListener('change', () => {
+    const file = jsonInput.files && jsonInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const payload = JSON.parse(String(reader.result));
+        if (!payload || payload.schema !== 'hrs2026-field-records' || payload.version !== 1 || !payload.data || Array.isArray(payload.data)) {
+          throw new Error('形式が違います');
+        }
+        Object.entries(payload.data).forEach(([k, value]) => store.set(k, value));
+        flash('✅ 読み込みました。画面を更新します');
+        setTimeout(() => location.reload(), 600);
+      } catch(e) {
+        flash('⚠ JSONを読み込めませんでした');
+      } finally {
+        jsonInput.value = '';
+      }
+    };
+    reader.readAsText(file);
+  });
+  TripField.createCloudSync({
+    store,
+    endpoint: document.querySelector('[data-trip-cloud]')?.dataset.endpoint || '',
+    status: message => flash('☁ ' + message),
+    onRestore: () => setTimeout(() => location.reload(), 500)
+  });
+
+  document.getElementById('btn-clear').addEventListener('click', () => {
+    if (!confirm('この端末に保存した記録（狙い・当日メモ・所感）と、会場タブの「事前の狙い・質問」「当日メモ」をすべて消します。よろしいですか？')) return;
+    store.keys()
+      .filter(k => k.indexOf(EVENT_KEY + ':rec:') === 0 || k.indexOf(EVENT_KEY + ':ses:') === 0)
+      .forEach(k => localStorage.removeItem(k));
+    recAll.forEach(ta => { ta.value = ''; ta.style.height = 'auto'; paintFlag(ta); });
+    document.querySelectorAll('.ses .ed').forEach(ta => { ta.value = ''; ta.style.height = 'auto'; });
+    flash('記録を消しました');
+  });
+
+
+  /* ---------- 会場タブ：講演ごとの事前準備と当日メモ ----------
+     どちらもこの端末の localStorage に入力のたび保存する。
+     従来の :aim キーは事前準備として引き継ぐ。                  */
+  document.querySelectorAll('.ses tr[data-k]').forEach(tr => {
+    const k = tr.dataset.k;
+    const addField = ({ cellClass, label, placeholder, key, rows, day }) => {
+      const td = document.createElement('td');
+      td.className = cellClass;
+      const caption = document.createElement('span');
+      caption.className = 'session-field-label';
+      caption.textContent = label;
+      const ta = document.createElement('textarea');
+      ta.className = 'ed' + (day ? ' session-day' : '');
+      ta.rows = rows;
+      ta.placeholder = placeholder;
+      ta.setAttribute('aria-label', label);
+      ta.value = store.get('ses:' + k + ':' + key, '');
+      const grow = () => {
+        ta.style.height = 'auto';
+        ta.style.height = Math.max(ta.scrollHeight, day ? 72 : 52) + 'px';
+      };
+      if (ta.value) grow();
+      ta.addEventListener('input', () => {
+        store.set('ses:' + k + ':' + key, ta.value);
+        grow();
+      });
+      td.append(caption, ta);
+      tr.appendChild(td);
+    };
+    addField({
+      cellClass:'prepc',
+      label:'事前の狙い・質問',
+      placeholder:'聞きたいこと、確認したい技術・企業',
+      key:'aim', rows:2, day:false
+    });
+    addField({
+      cellClass:'notec',
+      label:'当日メモ',
+      placeholder:'要点、発言、数字、後で調べること',
+      key:'day', rows:3, day:true
+    });
+  });
+
+  /* ---------- 家族タブ：毎日の予定（FAM から生成・日レベルの粒度） ---------- */
+  const famBody = document.getElementById('fam-days');
+  if (famBody) {
+    const DOW = ['日','月','火','水','木','金','土'];
+    Object.keys(FAM).sort().forEach(k => {
+      const d = new Date(k + 'T00:00:00Z');
+      const f = FAM[k];
+      const tr = document.createElement('tr');
+      tr.dataset.date = k;
+      tr.innerHTML =
+        '<td class="t">' + (d.getUTCMonth()+1) + '/' + d.getUTCDate() + '（' + DOW[d.getUTCDay()] + '）</td>' +
+        '<td>' + f.place + '</td>' +
+        '<td>' + f.note + '</td>';
+      famBody.appendChild(tr);
+    });
+  }
+
+  /* ---------- 家族タブ：日本／現地の時計と、いまの状態 ---------- */
+  (function famClock(){
+    const jpT = document.getElementById('clk-jp'), jpD = document.getElementById('clk-jp-d');
+    const deT = document.getElementById('clk-de'), deD = document.getElementById('clk-de-d');
+    const nowTx = document.getElementById('fam-now-tx');
+    if (!jpT) return;
+
+    /* Intl があれば夏時間を正しく扱える。無ければ固定 +9 / +2 で代替。 */
+    const fmt = (tz, opt) => {
+      try { return new Intl.DateTimeFormat('ja-JP', Object.assign({ timeZone: tz }, opt)); }
+      catch(e) { return null; }
+    };
+    const fT = { hour:'2-digit', minute:'2-digit', hour12:false };
+    const fD = { month:'numeric', day:'numeric', weekday:'short' };
+    const fK = { year:'numeric', month:'2-digit', day:'2-digit' };
+    const jpTf = fmt('Asia/Tokyo', fT), jpDf = fmt('Asia/Tokyo', fD);
+    const deTf = fmt(TZ_LOCAL, fT),     deDf = fmt(TZ_LOCAL, fD), deKf = fmt(TZ_LOCAL, fK);
+    const shift = (ms, h) => new Date(ms + h * 3600000);
+    const pad = n => String(n).padStart(2, '0');
+
+    const band = h =>
+      h < 6  ? '深夜。就寝中の時間帯' :
+      h < 9  ? '朝。起きて朝食の頃'   :
+      h < 12 ? '午前'                 :
+      h < 14 ? 'お昼'                 :
+      h < 17 ? '午後'                 :
+      h < 20 ? '夕方。夕食の頃'       :
+      h < 23 ? '夜。ホテルで休んでいる頃' : '深夜';
+
+    function tick(){
+      const now = new Date(), ms = now.getTime();
+      if (jpTf) { jpT.textContent = jpTf.format(now); jpD.textContent = jpDf.format(now); }
+      else { const d = shift(ms, 9); jpT.textContent = pad(d.getUTCHours())+':'+pad(d.getUTCMinutes()); jpD.textContent = (d.getUTCMonth()+1)+'/'+d.getUTCDate(); }
+
+      let deKey, deHour;
+      if (deTf) {
+        deT.textContent = deTf.format(now); deD.textContent = deDf.format(now);
+        deKey  = deKf.format(now).replace(/\//g, '-');
+        deHour = parseInt(deTf.format(now).slice(0,2), 10);
+      } else {
+        const d = shift(ms, 2);
+        deHour = d.getUTCHours();
+        deT.textContent = pad(deHour)+':'+pad(d.getUTCMinutes());
+        deD.textContent = (d.getUTCMonth()+1)+'/'+d.getUTCDate();
+        deKey = d.getUTCFullYear()+'-'+pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate());
+      }
+
+      const f = FAM[deKey];
+      if (f) {
+        let st = band(deHour);
+        if (f.conf && deHour >= 9 && deHour < 17) st = '会議・企業訪問中（返信は遅れます）';
+        nowTx.innerHTML = '<strong>' + f.place + '</strong> — ' + f.note +
+          '<br><span class="small muted">いまは現地の ' + st + '。</span>';
+      }
+      /* 毎日の予定表で今日の行を光らせる */
+      if (famBody) famBody.querySelectorAll('tr').forEach(tr => {
+        const on = tr.dataset.date === deKey;
+        tr.style.background = on ? '#FDECEF' : '';
+        tr.style.fontWeight = on ? '700' : '';
+      });
+    }
+    tick();
+    setInterval(tick, 30000);
+  })();
+
+  /* ---------- ページ内アンカーのスムーススクロール ---------- */
+  document.body.addEventListener('click', e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a || a.dataset.goto) return;
+    const t = document.querySelector(a.getAttribute('href'));
+    if (!t) return;
+    e.preventDefault();
+    const host = t.closest('.tab');
+    if (host && !host.classList.contains('on')) showTab(host.id.replace('tab-', ''));
+    /* 畳んだ details へのリンクは、それ自身と親をすべて開いてから飛ぶ */
+    if (t.tagName === 'DETAILS') t.open = true;
+    for (let d = t.closest('details'); d; d = d.parentElement && d.parentElement.closest('details')) d.open = true;
+    t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  /* ---------- 印刷 ---------- */
+  /* 印刷中だけ全部開き、終わったら元の開閉状態に戻す（戻さないと画面が化ける）。 */
+  let printSnapshot = null;
+  window.addEventListener('beforeprint', () => {
+    printSnapshot = Array.from(document.querySelectorAll('details')).map(d => [d, d.open]);
+    printSnapshot.forEach(([d]) => d.open = true);
+  });
+  window.addEventListener('afterprint', () => {
+    document.body.classList.remove('print-fam');
+    if (printSnapshot) {
+      printSnapshot.forEach(([d, o]) => d.open = o);
+      printSnapshot = null;
+      paintAll();
+    }
+  });
+
+  /* 家族に渡す紙は家族タブだけ。中身の量が違うので、印刷対象も分けておく。 */
+  const pf = document.getElementById('btn-print-fam');
+  if (pf) pf.addEventListener('click', () => {
+    document.body.classList.add('print-fam');
+    window.print();   /* 解除は afterprint 側でまとめて行う */
+  });
+
+  /* ---------- 前回開いていたタブを復元 ---------- */
+  showTab(['plan','venue','rec','prep'].includes(store.get('tab','plan')) ? store.get('tab','plan') : 'plan');
 });
 </script>
 </body>
