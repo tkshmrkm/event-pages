@@ -372,6 +372,10 @@ h3{font-size:var(--f3);margin:14px 0 6px;color:var(--tx2)}
 }
 .trip-field textarea[data-trip-note=day]{min-height:84px}
 .trip-field textarea:focus,.trip-field input:focus,.trip-field select:focus{outline:3px solid rgba(23,107,117,.22);border-color:var(--trip-primary)}
+.trip-timestamp-row{display:flex;justify-content:flex-end;margin-top:7px}
+.trip-timestamp-button{min-height:44px;padding:8px 12px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-primary);font:700 13px/1.3 var(--trip-font);cursor:pointer}
+.trip-timestamp-button:hover{background:var(--trip-soft)}
+.trip-timestamp-button:focus-visible{outline:3px solid rgba(23,107,117,.22);outline-offset:2px}
 .trip-status{min-height:1.5em;color:var(--trip-muted);font-size:13px}
 .trip-cloud-help{margin:0 0 10px;color:var(--trip-muted);font-size:13px}
 .trip-cloud-key{display:grid;gap:5px;margin-bottom:8px;color:var(--trip-subtext);font-size:13px;font-weight:700}

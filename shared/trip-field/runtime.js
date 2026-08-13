@@ -215,6 +215,40 @@
     textarea.style.height = Math.max(textarea.scrollHeight, 52) + 'px';
   }
 
+  function localTimestamp(date){
+    const value = date || new Date();
+    const pad = number => String(number).padStart(2, '0');
+    const offset = -value.getTimezoneOffset();
+    const sign = offset >= 0 ? '+' : '-';
+    const absolute = Math.abs(offset);
+    return '[' + value.getFullYear() + '-' + pad(value.getMonth() + 1) + '-' + pad(value.getDate()) +
+      ' ' + pad(value.getHours()) + ':' + pad(value.getMinutes()) +
+      ' UTC' + sign + pad(Math.floor(absolute / 60)) + ':' + pad(absolute % 60) + ']';
+  }
+
+  function mountTimestampAppend(textarea, options){
+    if (!textarea || textarea.dataset.tripTimestampMounted === '1') return null;
+    textarea.dataset.tripTimestampMounted = '1';
+    const row = document.createElement('div');
+    row.className = 'trip-timestamp-row trip-no-print';
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'trip-timestamp-button';
+    button.textContent = options && options.label || '＋ 時刻付きで追記';
+    button.setAttribute('aria-label', options && options.ariaLabel || button.textContent);
+    button.addEventListener('click', () => {
+      const current = textarea.value.replace(/\s+$/, '');
+      textarea.value = (current ? current + '\n' : '') + localTimestamp() + ' ';
+      textarea.dispatchEvent(new Event('input', { bubbles:true }));
+      textarea.focus();
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+      fitTextarea(textarea);
+    });
+    row.appendChild(button);
+    textarea.insertAdjacentElement('afterend', row);
+    return button;
+  }
+
   function fieldValue(field){
     if (field.type === 'checkbox') return field.checked;
     return field.value;
@@ -294,6 +328,7 @@
         if (field.tagName === 'TEXTAREA') fitTextarea(field);
       });
     });
+    root.querySelectorAll('textarea[data-trip-append-timestamp]').forEach(field => mountTimestampAppend(field));
 
     const exportButton = root.querySelector('[data-trip-export-json]');
     if (exportButton) exportButton.addEventListener('click', () => {
@@ -354,6 +389,8 @@
     downloadText,
     readJsonFile,
     fitTextarea,
+    localTimestamp,
+    mountTimestampAppend,
     markdown,
     createCloudSync,
     mount

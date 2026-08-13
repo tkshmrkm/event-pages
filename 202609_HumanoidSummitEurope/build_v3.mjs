@@ -198,7 +198,7 @@ const cloudPanel = String.raw`
   <details class="card cloud-sync no-print" data-trip-cloud data-endpoint="${cloudEndpoint}">
     <summary class="ttl">☁ Cloudflare同期</summary>
     <div class="bd">
-      <p class="small muted">オンライン版のメモを端末間で同期します。同期キーは公開HTMLへ書かず、この画面で入力します。</p>
+      <p class="small muted">オンライン版のメモを端末間で同期します。複数端末では、クラウドから読込→時刻付き追記→保存の順で使います。最後の保存が優先されます。</p>
       <label class="cloud-key">同期キー<input type="password" autocomplete="current-password" data-trip-cloud-key></label>
       <label class="cloud-remember"><input type="checkbox" data-trip-cloud-remember> この端末に同期キーを保存</label>
       <div class="cloud-actions">
@@ -208,6 +208,14 @@ const cloudPanel = String.raw`
       <div data-trip-cloud-status role="status" aria-live="polite"></div>
     </div>
   </details>
+`;
+
+const timestampAppendScript = String.raw`
+  /* ---------- 当日メモ：既存内容を残した時刻付き追記 ---------- */
+  recAll
+    .filter(ta => ta.dataset.rec.endsWith(':day'))
+    .forEach(ta => TripField.mountTimestampAppend(ta));
+
 `;
 
 const transferScript = String.raw`
@@ -326,6 +334,7 @@ const sessionFieldsScript = String.raw`
         grow();
       });
       td.append(caption, ta);
+      if (day) TripField.mountTimestampAppend(ta);
       tr.appendChild(td);
     };
     addField({
@@ -445,14 +454,14 @@ function buildMain({ offline = false } = {}) {
     <div><strong>会場の公式構成と確認事項です。</strong>講演中のメモ入力はスマートフォンのオンライン版を使用します。</div>
   </div>` : String.raw`<div class="banner b-info">
     <span class="i">📝</span>
-    <div><strong>講演ごとに、事前の狙い・質問と当日メモを入力できます。</strong>入力のたび、この端末・このブラウザ内へ自動保存します。サーバーや別端末には自動同期されないため、終了時は「記録」からJSONも書き出してください。</div>
+    <div><strong>講演ごとに、事前の狙い・質問と当日メモを入力できます。</strong>当日メモは「＋ 時刻付きで追記」で既存内容の末尾へ追加でき、入力のたび自動保存します。</div>
   </div>`;
   html = mustReplace(html, '<section class="tab" id="tab-venue" role="tabpanel" aria-label="会場">', '<section class="tab" id="tab-venue" role="tabpanel" aria-label="会場">\n' + venueStorageNotice, 'venue storage notice');
   html = html.replace(/<th>狙い・聞くこと<\/th><th>担当<\/th>/g, '<th>事前の狙い・質問</th><th>当日メモ</th>');
   html = mustReplace(
     html,
     '<div class="foot">💡 「狙い・聞くこと」「担当」は下の表に直接書けます（この端末に保存）。担当ボタンは <strong>空 → 京 → 犬 → 両</strong> の順に切り替わります。</div>',
-    '<div class="foot">💡 事前に「狙い・質問」を入れておき、講演中は隣の「当日メモ」へ要点・数字・後で調べることを記録します。どちらも入力のたび自動保存されます。</div>',
+    '<div class="foot">💡 事前に「狙い・質問」を入れておき、講演中は隣の「当日メモ」へ要点・数字・後で調べることを時刻付きで追記します。どちらも入力のたび自動保存されます。</div>',
     'venue field guidance'
   );
 
@@ -478,6 +487,7 @@ function buildMain({ offline = false } = {}) {
   html = mustReplace(html, '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>', '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>\n' + cloudPanel, 'cloud sync panel');
   html = mustReplace(html, "  document.getElementById('btn-clear').addEventListener('click', () => {", transferScript + "  document.getElementById('btn-clear').addEventListener('click', () => {", 'JSON script insertion');
   html = mustReplace(html, '  /* ---------- ToDo ---------- */', confirmationScript + '  /* ---------- ToDo ---------- */', 'confirmation script insertion');
+  html = mustReplace(html, '  /* ---------- 記録の書き出し（Markdown） ---------- */', timestampAppendScript + '  /* ---------- 記録の書き出し（Markdown） ---------- */', 'timestamp append controls');
   html = mustReplace(
     html,
     /    \/\* 会場タブに書いた「狙い・聞くこと」「担当」 \*\/[\s\S]*?    if \(ses\.length\) L\.push\('## セッションの狙い・担当', '', \.\.\.ses, ''\);/,
@@ -494,7 +504,7 @@ function buildMain({ offline = false } = {}) {
   );
   html = html.replace('会場タブの「狙い・聞くこと」「担当」をすべて消します。', '会場タブの「事前の狙い・質問」「当日メモ」をすべて消します。');
   html = html.replace("    document.querySelectorAll('.ses .ow').forEach(bt => { bt.dataset.v = ''; bt.textContent = '—'; });\n", '');
-  html = html.replace('入力はこの端末に自動保存されます（サーバー送信なし）。', '入力はこの端末・このブラウザ内に自動保存されます（サーバー送信・別端末同期なし）。');
+  html = html.replace('入力はこの端末に自動保存されます（サーバー送信なし）。', '入力はまずこの端末・このブラウザ内に自動保存されます。Cloudflare同期を使う場合は、複数端末での同時編集を避けてください。');
   html = html.replace('下のボタンで全文を Markdown にしてコピーでき、そのまま出張報告や <code>CHANGELOG.md</code> の材料になります。', 'PCでクラウド側の記録を読み込んだ後、全文をMarkdownファイルとしてダウンロードできます。コピーは出張報告や <code>CHANGELOG.md</code> の下書きに使えます。');
 
   html = html.replace('レイアウト v2（タブ × 日カード × レーン）', `レイアウト v3（屋外スマホ・連続旅程・3セクション）${offline ? '｜机上用印刷版' : ''}`);

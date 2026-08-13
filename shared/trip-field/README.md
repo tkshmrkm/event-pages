@@ -29,6 +29,7 @@ Shared:
 - three-section navigation and date rail;
 - 44 px or larger controls and 16 px input text;
 - immediate local browser persistence plus optional Cloudflare synchronization;
+- timestamped append controls for same-day notes, preserving earlier entries;
 - JSON export/import format;
 - an online smartphone page plus a self-contained desk-print backup;
 - responsive targets around iPhone 16 (393 px) and Pixel 7a/8a (412 px).
@@ -62,6 +63,7 @@ The generic runtime recognizes:
 - `[data-trip-tab="name"]` — primary navigation control.
 - `[data-trip-panel="name"]` — corresponding panel.
 - `[data-trip-store="key"]` — autosaved input, textarea, select, or checkbox.
+- `textarea[data-trip-append-timestamp]` — appends an unambiguous local timestamp without replacing existing text.
 - `[data-trip-export-json]` — download all values in the namespace.
 - `[data-trip-import-json]` — JSON file input.
 - `[data-trip-download-markdown]` — download a readable final memo on a PC.
@@ -87,7 +89,7 @@ keys may vary, but should use readable prefixes such as `session:`,
 node .\shared\trip-field\build-desk-print.mjs .\EVENT\index.html .\EVENT\desk_print.html
 ```
 
-7. Validate the online page at 393 px and 412 px widths, then test reload persistence and JSON transfer.
+7. Validate the online page at 393 px and 412 px widths, then test timestamped append, reload persistence, and JSON transfer.
 8. Print-preview the desk copy. It should contain itinerary, preparation, and venue reference content, but no interactive record form or family page.
 
 ## Optional Cloudflare synchronization
@@ -104,7 +106,9 @@ can remember it in that device's browser when explicitly selected; it is kept
 outside the trip snapshot and JSON export.
 
 Cloud synchronization does not replace JSON backup. KV uses last-write-wins,
-so avoid editing the same trip simultaneously on multiple devices.
+so avoid editing the same trip simultaneously on multiple devices. When more
+than one device is used, load the cloud snapshot first, append the new
+timestamped entry, and then save it back to the cloud.
 
 ## Current adoption
 

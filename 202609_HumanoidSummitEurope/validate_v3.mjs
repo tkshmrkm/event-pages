@@ -55,6 +55,8 @@ assert(!online.includes('const OWNERS') && !online.includes('担当ボタン'), 
 assert(online.includes('data-trip-layout="field-v1"') && online.includes('<script src="../shared/trip-field/runtime.js"></script>'), `${onlineName}: shared trip-field runtime missing`);
 assert(online.includes('window.TripField.createStore(EVENT_KEY)'), `${onlineName}: shared storage API not used`);
 assert(online.includes('data-trip-cloud') && online.includes('TripField.createCloudSync'), `${onlineName}: Cloudflare sync UI/runtime missing`);
+assert((online.match(/TripField\.mountTimestampAppend\(/g) || []).length >= 2 && online.includes("dataset.rec.endsWith(':day')"), `${onlineName}: timestamp append controls missing`);
+assert(online.includes('クラウドから読込→時刻付き追記→保存'), `${onlineName}: multi-device append guidance missing`);
 assert(!/const\s+(?:API_KEY|SYNC_TOKEN)\s*=\s*["'][^"']+["']/.test(online), `${onlineName}: synchronization secret must not be embedded`);
 assert(online.includes('<link rel="stylesheet" href="v3.css">') && !online.includes('<style>'), `${onlineName}: shared stylesheet link missing or CSS still embedded`);
 assert(sharedCss.includes('--bg:#EDF2F3') && sharedCss.includes('.field-nav{position:sticky'), 'v3.css: v3 field styles missing');

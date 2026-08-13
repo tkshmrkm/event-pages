@@ -67,7 +67,7 @@
       </div>
       <div class="trip-field">
         <label for="target-day">当日メモ</label>
-        <textarea id="target-day" data-trip-store="venue:target-01:day" data-trip-note="day" placeholder="要点・数字・後で調べること"></textarea>
+        <textarea id="target-day" data-trip-store="venue:target-01:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
       </div>
     </article>
   </section>
@@ -84,7 +84,7 @@
     <details class="trip-card trip-cloud trip-no-print" data-trip-cloud data-endpoint="">
       <summary class="trip-card-title">☁ Cloudflare同期</summary>
       <div class="trip-card-body">
-        <p class="trip-cloud-help">オンライン版の記録を端末間で同期します。同期キーは公開HTMLへ書かず、この画面で入力します。</p>
+        <p class="trip-cloud-help">オンライン版の記録を端末間で同期します。複数端末では、クラウドから読込→追記→保存の順で使います。最後の保存が優先されます。</p>
         <label class="trip-cloud-key">同期キー<input type="password" autocomplete="current-password" data-trip-cloud-key></label>
         <label class="trip-cloud-remember"><input type="checkbox" data-trip-cloud-remember> この端末に同期キーを保存</label>
         <div class="trip-actions">

@@ -599,7 +599,7 @@
 <section class="tab" id="tab-venue" role="tabpanel" aria-label="会場">
 <div class="banner b-info">
     <span class="i">📝</span>
-    <div><strong>講演ごとに、事前の狙い・質問と当日メモを入力できます。</strong>入力のたび、この端末・このブラウザ内へ自動保存します。サーバーや別端末には自動同期されないため、終了時は「記録」からJSONも書き出してください。</div>
+    <div><strong>講演ごとに、事前の狙い・質問と当日メモを入力できます。</strong>当日メモは「＋ 時刻付きで追記」で既存内容の末尾へ追加でき、入力のたび自動保存します。</div>
   </div>
 
   <div class="card">
@@ -609,7 +609,7 @@
       <div>📅 9/9・9/10 は講演＋展示（40+社）／9/11 は近郊企業訪問</div>
       <div>⭐ Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA <span class="st st-booked">登録済</span></div>
     </div>
-    <div class="foot">💡 事前に「狙い・質問」を入れておき、講演中は隣の「当日メモ」へ要点・数字・後で調べることを記録します。どちらも入力のたび自動保存されます。</div>
+    <div class="foot">💡 事前に「狙い・質問」を入れておき、講演中は隣の「当日メモ」へ要点・数字・後で調べることを時刻付きで追記します。どちらも入力のたび自動保存されます。</div>
   </div>
 
   <div class="card">
@@ -677,7 +677,7 @@
   <div class="banner b-info">
     <span class="i">📝</span>
     <div><strong>行く前に「狙い」、現地で「当日メモ」、帰ってから「所感」。</strong>
-    入力はこの端末・このブラウザ内に自動保存されます（サーバー送信・別端末同期なし）。PCでクラウド側の記録を読み込んだ後、全文をMarkdownファイルとしてダウンロードできます。コピーは出張報告や <code>CHANGELOG.md</code> の下書きに使えます。</div>
+    入力はまずこの端末・このブラウザ内に自動保存されます。Cloudflare同期を使う場合は、複数端末での同時編集を避けてください。PCでクラウド側の記録を読み込んだ後、全文をMarkdownファイルとしてダウンロードできます。コピーは出張報告や <code>CHANGELOG.md</code> の下書きに使えます。</div>
   </div>
 
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" class="no-print">
@@ -695,7 +695,7 @@
   <details class="card cloud-sync no-print" data-trip-cloud data-endpoint="https://trip-field-sync.mrkn55.workers.dev">
     <summary class="ttl">☁ Cloudflare同期</summary>
     <div class="bd">
-      <p class="small muted">オンライン版のメモを端末間で同期します。同期キーは公開HTMLへ書かず、この画面で入力します。</p>
+      <p class="small muted">オンライン版のメモを端末間で同期します。複数端末では、クラウドから読込→時刻付き追記→保存の順で使います。最後の保存が優先されます。</p>
       <label class="cloud-key">同期キー<input type="password" autocomplete="current-password" data-trip-cloud-key></label>
       <label class="cloud-remember"><input type="checkbox" data-trip-cloud-remember> この端末に同期キーを保存</label>
       <div class="cloud-actions">
@@ -1169,6 +1169,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+
+  /* ---------- 当日メモ：既存内容を残した時刻付き追記 ---------- */
+  recAll
+    .filter(ta => ta.dataset.rec.endsWith(':day'))
+    .forEach(ta => TripField.mountTimestampAppend(ta));
+
   /* ---------- 記録の書き出し（Markdown） ---------- */
   const msg = document.getElementById('export-msg');
   const flash = t => { msg.textContent = t; setTimeout(() => msg.textContent = '', 2600); };
@@ -1337,6 +1343,7 @@ document.addEventListener('DOMContentLoaded', () => {
         grow();
       });
       td.append(caption, ta);
+      if (day) TripField.mountTimestampAppend(ta);
       tr.appendChild(td);
     };
     addField({
