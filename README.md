@@ -13,3 +13,6 @@ contract and generation workflow.
 
 The current decisions, implemented scope, and next work are summarized in
 [`OVERSEAS_TRIP_LAYOUT_SUMMARY.md`](OVERSEAS_TRIP_LAYOUT_SUMMARY.md).
+
+Claude Code should begin with [`CLAUDE.md`](CLAUDE.md) and the current handoff
+in [`WORK_STATUS.md`](WORK_STATUS.md).
