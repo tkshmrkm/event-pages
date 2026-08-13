@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>海外出張フィールドガイド</title>
+<link rel="stylesheet" href="core.css">
+<link rel="stylesheet" href="theme-template.css">
+</head>
+<body class="trip-page" data-trip-key="replace-with-unique-trip-key" data-trip-layout="field-v1">
+<header class="trip-header">
+  <div class="trip-wrap trip-header-inner">
+    <div>
+      <div class="trip-eyebrow">OVERSEAS BUSINESS TRIP</div>
+      <h1 class="trip-title">イベント名・出張ガイド</h1>
+      <p class="trip-subtitle">YYYY/MM/DD〜MM/DD｜都市｜参加者</p>
+    </div>
+    <button class="trip-button trip-no-print" type="button" onclick="window.print()" aria-label="印刷">🖨</button>
+  </div>
+</header>
+
+<div class="trip-field-nav">
+  <div class="trip-wrap">
+    <nav class="trip-tabs" role="tablist" aria-label="主要セクション">
+      <button class="trip-tab is-active" data-trip-tab="itinerary" role="tab" aria-selected="true">📅 旅程</button>
+      <button class="trip-tab" data-trip-tab="venue" role="tab" aria-selected="false">🏭 会場</button>
+      <button class="trip-tab" data-trip-tab="records" role="tab" aria-selected="false">📝 記録</button>
+    </nav>
+    <nav class="trip-date-rail" aria-label="日付">
+      <span class="trip-date-label">日付</span>
+      <a class="trip-date-link is-active" href="#day-01">1日目</a>
+      <a class="trip-date-link" href="#day-02">2日目</a>
+    </nav>
+  </div>
+</div>
+
+<main class="trip-wrap trip-main">
+  <section class="trip-panel is-active" data-trip-panel="itinerary" aria-label="旅程">
+    <div class="trip-banner" data-kind="warning"><span>⚠️</span><div>未確定事項と、現地で再確認する条件をここに表示します。</div></div>
+
+    <article class="trip-day" id="day-01" data-kind="travel">
+      <h2 class="trip-day-title"><span class="trip-day-date">10/1（木）</span><span class="trip-day-summary">日本出発・現地へ移動</span></h2>
+      <div class="trip-row"><div class="trip-time">09:00</div><div class="trip-action"><strong>自宅を出発</strong><span class="trip-detail">駅・空港までの実用情報</span></div></div>
+      <div class="trip-row"><div class="trip-time">13:00</div><div class="trip-action"><strong><span class="trip-flight" aria-hidden="true">✈︎</span> 搭乗便</strong><span class="trip-detail">便名・ターミナル・乗継情報</span></div></div>
+    </article>
+
+    <article class="trip-day" id="day-02" data-kind="event">
+      <h2 class="trip-day-title"><span class="trip-day-date">10/2（金）</span><span class="trip-day-summary">イベント参加</span></h2>
+      <div class="trip-row"><div class="trip-time">09:00</div><div class="trip-action"><strong>会場受付</strong><span class="trip-detail">入口・必要な提示物</span></div></div>
+    </article>
+
+    <details class="trip-card trip-secondary">
+      <summary class="trip-card-title">出発前の準備・書類</summary>
+      <div class="trip-card-body">
+        <label><input type="checkbox" data-trip-store="prep:passport"> パスポートと有効期限を確認</label>
+      </div>
+    </details>
+  </section>
+
+  <section class="trip-panel" data-trip-panel="venue" aria-label="会場">
+    <div class="trip-banner"><span>📝</span><div>事前準備と当日メモは、この端末・このブラウザ内へ入力のたび保存されます。</div></div>
+    <article class="trip-record">
+      <h2 class="trip-card-title">対象セッション・企業・工場見学</h2>
+      <div class="trip-field">
+        <label for="target-prep">事前の狙い・質問</label>
+        <textarea id="target-prep" data-trip-store="venue:target-01:prep" data-trip-note="prep" placeholder="確認したい技術・企業・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="target-day">当日メモ</label>
+        <textarea id="target-day" data-trip-store="venue:target-01:day" data-trip-note="day" placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+  </section>
+
+  <section class="trip-panel" data-trip-panel="records" aria-label="記録">
+    <div class="trip-banner"><span>💾</span><div>入力はこのオンライン版のブラウザ内に残ります。JSONをバックアップと端末移行に使います。</div></div>
+    <div class="trip-actions trip-no-print">
+      <button class="trip-button" type="button" data-trip-export-markdown>Markdownをコピー</button>
+      <button class="trip-button" type="button" data-trip-export-json>JSONを書き出す</button>
+      <label class="trip-button" for="trip-import">JSONを読み込む</label>
+      <input id="trip-import" type="file" accept="application/json,.json" data-trip-import-json hidden>
+    </div>
+    <div class="trip-status" data-trip-status role="status" aria-live="polite"></div>
+    <article class="trip-record">
+      <h2 class="trip-card-title">出張全体</h2>
+      <div class="trip-field"><label for="trip-aim">持ち帰ること</label><textarea id="trip-aim" data-trip-store="trip:aim"></textarea></div>
+      <div class="trip-field"><label for="trip-summary">帰国後の総括</label><textarea id="trip-summary" data-trip-store="trip:summary" data-trip-note="day"></textarea></div>
+    </article>
+  </section>
+</main>
+
+<script src="runtime.js"></script>
+<script>TripField.mount();</script>
+</body>
+</html>

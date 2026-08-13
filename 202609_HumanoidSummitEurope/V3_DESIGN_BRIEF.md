@@ -7,7 +7,7 @@ Build a field-use version for smartphone operation, including possible use outdo
 ## Deliverables
 
 - `index_v3.html`: primary online version.
-- `index_v3_offline.html`: self-contained emergency version with no CDN or external runtime dependency.
+- `index_v3_offline.html`: self-contained desk-print version with no CDN or external runtime dependency.
 - `family_print.html`: separate family-facing print document.
 - Generate the online and offline versions from the same canonical content rather than maintaining two independent copies.
 
@@ -41,6 +41,7 @@ Preparation content should not occupy a primary field-use tab. Keep it in a sepa
 - Use white cards, dark text, stronger borders, and sufficiently distinct colored surfaces.
 - Keep the title scrollable; keep only the three-section navigation and date navigation sticky where needed.
 - Avoid horizontal page overflow at a 390 px viewport.
+- Use the monochrome text symbol `✈︎` for flights. Express direction with `発` and `着`, not OS-dependent colored airplane emoji.
 
 Latest palette:
 
@@ -57,9 +58,9 @@ Latest palette:
 - Inuyama lane: `#BFDFC6` with `#17482A`
 - Merged/neutral surface: `#D8E2E6` with `#263640`
 
-## Online and offline records
+## Online records and desk-print backup
 
-Browser storage for the online URL and a standalone local HTML file will not automatically share data. Use the online version as the primary record and provide JSON or Markdown export/import so notes created in the emergency offline version can be transferred.
+Use the online version on the smartphone as the primary record. Notes remain in that browser's local storage; JSON export provides backup and transfer to another device, while Markdown export provides a readable report. The self-contained desk-print version is a static paper reference containing the itinerary, preparation, and venue information, with no input fields or synchronization behavior.
 
 ## Design samples
 
@@ -68,3 +69,29 @@ Browser storage for the online URL and a standalone local HTML file will not aut
 - `index_v2_three_way_comparison.html`: current v2 versus the earlier proposal versus the outdoor-mobile proposal.
 
 The existing `index.html` and `index_v2.html` remain unchanged at this checkpoint.
+
+## Implementation status
+
+Completed on 2026-08-13:
+
+- `index_v3.html`: primary field-use version with three-section navigation, continuously open day cards, outdoor-mobile palette, and separate candidate selection/confirmation states.
+- `index_v3_offline.html`: self-contained static desk-print copy containing itinerary, preparation, and venue reference information.
+- `family_print.html`: separate family-facing print document generated at day-level detail.
+- `v3.css`: shared stylesheet for the online field guide and family print page.
+- `build_v3.mjs`: generates all three deliverables from the canonical content in `index_v2.html` plus the v3 presentation and transfer rules.
+- `validate_v3.mjs`: checks HTML balance, script syntax, desk-print independence, the three-section navigation, eight open day cards, JSON transfer controls, and the eight-row family summary.
+
+Regenerate and validate from the repository root:
+
+```powershell
+node .\202609_HumanoidSummitEurope\build_v3.mjs
+node .\202609_HumanoidSummitEurope\validate_v3.mjs
+```
+
+The online page and family print page load `v3.css` as a normal shared asset. The desk-print page embeds the generated CSS so it remains a single self-contained file and contains no scripts. Records live only in the online version's browser storage. Back them up or transfer them with the JSON controls in `記録`; Markdown copy remains available for human-readable reporting.
+
+Family mobile targets are iPhone 16, Pixel 7a, and Pixel 8a. On narrow screens the family itinerary changes from a three-column table to one card per day; print media restores the table layout.
+
+The venue section has no assignment control. Every listed session has two independently saved fields: `事前の狙い・質問` and `当日メモ`. Both use browser local storage and are included in Markdown and JSON exports. They persist across normal reloads in the same browser and origin, but do not sync to another device or a server.
+
+The page now conforms to the repository-wide `shared/trip-field` field-layout contract. Its existing HRS appearance is preserved, while storage uses the shared runtime and the generated stylesheet includes the shared core components for future compatibility.

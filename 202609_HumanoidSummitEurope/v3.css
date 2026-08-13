@@ -1,0 +1,515 @@
+:root{
+  /* 本文フォント。ここ1行を差し替えれば全体が変わる。
+     候補：'Meiryo'（既定・線が太めで読みやすい）
+           'BIZ UDPGothic'（ユニバーサルデザイン系・さらに素直）
+           'Yu Gothic UI'（細く上品だが小さい字は読みにくい）
+           'Hiragino Kaku Gothic ProN'（Mac標準） */
+  --font:'Meiryo','BIZ UDPGothic','Hiragino Kaku Gothic ProN',system-ui,sans-serif;
+
+  /* 地・罫・文字。面は明るく、字は濃いまま保つ。 */
+  --bg:#FBFCFD; --card:#fff; --line:#E6EAEE; --line2:#F2F5F8;
+  --tx:#2C3440; --mu:#626C7A; --mu2:#97A0AC;
+  --tx2:#3A4453; --tx3:#4A5462;             /* 小見出し／補助行の太字 */
+  --hov:#EDF1F5;                            /* ホバー・淡い面 */
+  /* 日カードのヘッダ：地はライトトーン、文字は濃色。面の大きさは変えない。
+     明度は高く保ったまま彩度も残す（彩度を落とすとライトグレイッシュ＝くすんで見える）。
+     ふつうの日=ライトアクア／HRS=ライトローズ／未確定=ライトラベンダー */
+  --move:#B5DFE8;   --move-tx:#17505C;
+  --conf:#FBBFC9;   --conf-tx:#8C2740;
+  --choose:#D5C9F5; --choose-tx:#4A3388;
+  --conf-bg:#FDECEF;                        /* HRS の淡い面 */
+  --tbd-bg:#EDE7FB; --tbd-bd:#C9B9F0;       /* 未確定まわりの淡い面（案セレクタ等） */
+  --warn-bg:#FCE9BE; --warn-bd:#F0D28C; --warn-tx:#6B4A0C;  /* 黄は警告だけに使う */
+  --neu-bg:#DFE7EE;  --neu-bd:#C4D2DE;      /* 合流・分岐など無彩の面 */
+  /* 文字サイズは6段階だけ。ここ以外に px を直書きしない。
+     f0 数字の大見せ（時計・時差）／f1 見出し／f2 本文／f3 補助行・表／f4 注記・操作／f5 ラベル */
+  --f0:21px; --f1:15px; --f2:14px; --f3:12.5px; --f4:11px; --f5:10px;
+
+  --hdrh:150px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--tx);
+  font-family:var(--font);
+  font-size:var(--f2); line-height:1.65; -webkit-text-size-adjust:100%;
+}
+
+/* ============================================================
+   情報量の制御 — 補足説明はすべて既定で隠す。
+   ヘッダーの「詳細」チップを押した時だけ出る（設定は保存される）。
+   .note … 行に付く補足   .dt … 注記ブロックまるごと
+   ============================================================ */
+.note,.dt{display:none}
+body.detail .note{display:block}
+body.detail .dt{display:block}
+.wrap{max-width:920px;margin:0 auto;padding:0 14px}
+a{color:#2A5FA0}
+a:hover{text-decoration:none}
+
+/* ===== ヘッダー（タイトル＋タブ＋サブバー） ===== */
+.hdr{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:0 1px 3px rgba(15,23,42,.05)}
+.hdr-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:8px 0 6px}
+.eyebrow{font-size:var(--f5);font-weight:700;letter-spacing:.14em;color:var(--mu2)}
+.hdr h1{margin:1px 0 1px;font-size:var(--f1);line-height:1.25}
+.hdr .subtitle{font-size:var(--f4);color:var(--mu);line-height:1.45}
+.btn{border:1px solid var(--line);background:#fff;color:var(--mu);border-radius:8px;padding:5px 10px;font-size:var(--f4);font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit}
+.btn:hover{background:var(--hov);color:var(--tx)}
+
+/* タブ */
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:1 0 auto;min-width:60px;border:0;background:none;padding:4px 10px 6px;font:inherit;font-size:var(--f4);font-weight:700;color:var(--mu2);cursor:pointer;border-bottom:2px solid transparent}
+.tabs button .ic{display:block;font-size:var(--f3);line-height:1.35}
+.tabs button.on{color:var(--tx);border-bottom-color:var(--tx)}
+
+/* サブバー（人フィルタ＋日付ナビ／旅程タブのみ） */
+.subbar{border-top:1px solid var(--line2);padding:5px 0 6px}
+.subbar.off{display:none}
+.chips{display:flex;gap:5px;align-items:center;overflow-x:auto;scrollbar-width:none;padding-bottom:1px}
+.chips::-webkit-scrollbar{display:none}
+.chips + .chips{margin-top:5px}
+.chips .lbl{flex:0 0 auto;font-size:var(--f5);font-weight:700;color:var(--mu2);padding-right:2px}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--tx3);border-radius:999px;padding:3px 10px;font-size:var(--f4);font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit;text-decoration:none;display:inline-block}
+.chip:hover{background:var(--hov)}
+.chip.on{background:var(--tx);border-color:var(--tx);color:#fff}
+.chip.today::after{content:'今日';margin-left:5px;font-size:var(--f5);background:var(--tx);color:#fff;border-radius:3px;padding:0 3px}
+
+/* ===== タブ本体 ===== */
+.tab{display:none;padding:14px 0 28px}
+.tab.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:12px}
+h2.ttl{margin:0}
+.card > .ttl{padding:9px 14px;font-weight:700;font-size:var(--f2);background:var(--neu-bg);color:var(--move-tx)}
+details.card > summary.ttl::-webkit-details-marker{display:none}
+details.card > summary.ttl::after{content:'▸';float:right;opacity:.7}
+details.card[open] > summary.ttl::after{content:'▾'}
+.card > .bd{padding:12px 14px}
+.card > .bd > :first-child{margin-top:0}
+.card > .bd > :last-child{margin-bottom:0}
+h3{font-size:var(--f3);margin:14px 0 6px;color:var(--tx2)}
+.foot{padding:7px 14px;font-size:var(--f4);color:var(--mu);background:var(--line2);border-top:1px solid var(--line2)}
+
+/* バナー */
+.banner{border-radius:10px;padding:10px 12px;font-size:var(--f3);margin-bottom:12px;display:flex;gap:8px;align-items:flex-start}
+.banner .i{flex:0 0 auto}
+.b-warn{background:var(--warn-bg);border:1px solid var(--warn-bd);color:var(--warn-tx)}
+.b-info{background:var(--line2);border:1px solid var(--line);color:var(--tx2)}
+.b-lock{background:var(--line2);border:1px solid var(--line);color:var(--mu)}
+
+/* ============================================================
+   色と強調のルール（崩さない）
+     色は「日の種類」と「人」の識別だけに使う。強調には使わない。
+     すべてライトトーン（明度は高く、彩度は上げない）で揃える。
+       ふつうの日   … ペールブルーグレー
+       HRS 開催日   … ライトローズ
+       未確定の日   … ライトラベンダー
+       京都発       … ライトブルー    犬山発 … ライトグリーン
+       合流・分岐   … 無彩色（人の色と競合させないため色相を持たせない）
+     黄は「警告」だけに使う。未確定・今日・案セレクタには使わない。
+     今日はページ内で唯一の濃い輪郭で示す（色を足さない）。
+     太字は1行に1つ。「その行で何をするか」だけを 600 で示す。
+     イベント種別は絵文字だけで表す（色付きの丸はやめる）。
+   ============================================================ */
+
+/* ===== 日カード（日ごとに畳む） ===== */
+.day{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:8px;scroll-margin-top:calc(var(--hdrh) + 8px)}
+.day > summary.day-head{cursor:pointer;list-style:none;padding:9px 14px 10px 30px;color:var(--move-tx);background:var(--move);position:relative}
+.day > summary.day-head::-webkit-details-marker{display:none}
+.day > summary.day-head::before{content:'▸';position:absolute;left:14px;top:11px;font-size:var(--f4);opacity:.75}
+.day[open] > summary.day-head::before{content:'▾'}
+.day-head .d{display:block;font-size:var(--f1);font-weight:700;letter-spacing:.01em}
+.day-head .t{display:block;margin-top:2px;font-size:var(--f3);opacity:.82;font-weight:400;padding-right:52px}
+.day-head .badge{position:absolute;right:12px;top:10px;font-size:var(--f5);font-weight:700;background:rgba(0,0,0,.08);border-radius:999px;padding:1px 8px;white-space:nowrap}
+.day[data-kind=conf]   > summary.day-head{background:var(--conf);color:var(--conf-tx)}
+.day[data-kind=choose] > summary.day-head{background:var(--choose);color:var(--choose-tx)}
+/* 今日 — ページ内で唯一の濃い輪郭。色を足さずに見つけられる。 */
+.day.today{border-color:var(--tx);box-shadow:0 0 0 1px var(--tx)}
+
+/* レーン（色は人の識別のみ） */
+.lanes{display:grid;grid-template-columns:1fr 1fr}
+.lanes > .lane + .lane{border-left:1px solid var(--line)}
+.lane-head{font-size:var(--f4);font-weight:700;padding:5px 12px;background:var(--line2);color:var(--tx3);border-bottom:1px solid var(--line2)}
+.lane{transition:opacity .15s}
+.lane.dim{opacity:.34;filter:grayscale(1)}
+.lane-note{padding:7px 12px;font-size:var(--f3);color:var(--mu);background:var(--line2);border-top:1px solid var(--line2);line-height:1.6}
+
+/* 合流／分岐バー — 分かれていたものが1つに戻る／分かれる境目。
+   人（9/7 合流・9/14 分岐）でも案（9/13 X/Y/Z が夜に合流）でも同じ意味なので1色。
+   人そのものの色（青・緑）と competing しないよう、ここは色相を持たせない。 */
+.joinbar{display:flex;gap:8px;align-items:center;padding:8px 14px;font-size:var(--f3);font-weight:600;
+  background:var(--neu-bg);color:var(--move-tx);border-top:1px solid var(--neu-bd);border-bottom:1px solid var(--neu-bd)}
+.joinbar .tm{font-variant-numeric:tabular-nums;background:#fff;border:1px solid var(--neu-bd);border-radius:5px;padding:0 6px;font-size:var(--f3)}
+
+/* タイムライン表 */
+.tl{width:100%;border-collapse:collapse}
+.tl td{border-top:1px solid var(--line2);padding:9px 12px;vertical-align:top;font-size:var(--f2);line-height:1.6}
+.tl tr:first-child td{border-top:0}
+.tl td.t{width:92px;color:var(--mu);font-size:var(--f3);font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;background:#FAFCFD}
+.tl tr:hover td{background:#F7F9FB}
+/* 行の中の階層：1行目＝すること／.sub＝手段・順序（常時）／.note＝補足（詳細時のみ） */
+.tl strong,.lane-note strong{font-weight:600;color:var(--tx)}
+.sub{margin-top:4px;font-size:var(--f3);color:var(--mu);line-height:1.65}
+/* 補助行の中の便名・番線は目印だが、1行目の太字とは競合させない */
+.sub strong,.opt strong{font-weight:600;color:var(--tx3)}
+.opt{margin-top:5px;padding-left:9px;border-left:2px solid var(--line);font-size:var(--f3);line-height:1.65}
+.opt + .opt{margin-top:4px}
+.opt > b{display:block;font-weight:600;color:var(--tx2)}
+.note{margin-top:5px;color:var(--mu);font-size:var(--f4);line-height:1.65;padding-left:9px;border-left:2px solid var(--line2)}
+
+/* イベント種別：絵文字だけ。色は付けない（HRSと要検討のみ例外）
+   ✈飛行機 🚆鉄道 🚕タクシー 🛂空港手続き 🏨宿 🍽食事 🏛観光 ⚽観戦 🤖HRS
+   印を付けないのは「徒歩」と「その場での行動」。
+   ⚽は観戦で、HRS（🤖）とは別物なので rose の色は使わない。 */
+.et{margin-right:3px;font-style:normal}
+.legend{font-size:var(--f4);letter-spacing:.01em}
+.legend .muted{margin-left:2px}
+.et.t-conf{display:inline-block;background:var(--conf-bg);color:var(--conf-tx);border-radius:4px;padding:0 6px;font-size:var(--f4);font-weight:700;margin-right:4px}
+.et.t-tbd{display:inline-block;border:1px dashed var(--tbd-bd);background:var(--tbd-bg);color:var(--choose-tx);border-radius:4px;padding:0 5px;font-size:var(--f4);font-weight:700;margin-left:4px}
+
+/* 状態チップ */
+.st{display:inline-block;padding:0 7px;border-radius:999px;font-size:var(--f5);font-weight:700;border:1px solid;white-space:nowrap}
+.st-booked{background:var(--hov);border-color:#CBD3DC;color:var(--tx2)}
+.st-tbd{background:var(--tbd-bg);border-color:var(--tbd-bd);color:var(--choose-tx)}
+.st-skip{background:var(--line2);border-color:#CBD3DC;color:#6B7684}
+
+/* 案セレクタ（9/12 A/B/C/D・9/13 X/Y/Z） */
+.plans{display:flex;flex-wrap:wrap;gap:5px;align-items:center;padding:8px 12px;background:var(--tbd-bg);border-bottom:1px solid var(--tbd-bd)}
+.plans .lbl{font-size:var(--f5);font-weight:700;color:var(--choose-tx);margin-right:2px}
+.plan-head{padding:6px 12px;font-size:var(--f3);font-weight:700;background:var(--choose);color:var(--choose-tx);border-top:1px solid var(--tbd-bd);border-bottom:1px solid var(--tbd-bd)}
+.plan.hide{display:none}
+/* 案は 9/12（A/B/C/D）も 9/13（X/Y/Z）も同じ「未確定」なので、色も1つに揃える */
+
+/* セッション表（会場タブ）— 公式英語タイトルを主、日本語要約を副に */
+.ses{width:100%;border-collapse:collapse}
+.ses th{background:var(--line2);border-bottom:1px solid var(--line);padding:5px 8px;font-size:var(--f4);color:var(--mu);text-align:left;font-weight:700}
+.ses td{border-top:1px solid var(--line2);padding:7px 8px;vertical-align:top}
+.ses td.n{width:22px;color:var(--mu2);font-size:var(--f4);font-weight:700;text-align:right}
+.ses .en{font-size:var(--f2);line-height:1.5;font-weight:600}
+.ses .ja{font-size:var(--f3);color:var(--mu);line-height:1.5;margin-top:2px}
+.ses .kind{display:inline-block;font-size:var(--f5);font-weight:700;border-radius:3px;padding:0 4px;margin-right:4px;background:var(--hov);color:var(--tx3);border:1px solid var(--neu-bg);vertical-align:1px}
+.ses td.aimc{width:35%}
+.ses td.owc{width:52px;text-align:center}
+/* 記入欄（狙い・担当） */
+.ed{width:100%;border:1px solid var(--line);border-radius:6px;padding:4px 6px;font:inherit;font-size:var(--f2);background:#fff;color:inherit;min-height:30px;line-height:1.5;resize:vertical}
+.ed:focus{outline:2px solid #A8C6DE;outline-offset:-1px;border-color:#7FA9C8}
+.ed:placeholder-shown{background:#FBFCFE}
+.ow{border:1px solid var(--line);background:#fff;border-radius:6px;width:40px;height:28px;font:inherit;font-size:var(--f3);font-weight:700;color:var(--mu2);cursor:pointer}
+.ow[data-v="両"]{background:var(--neu-bg);border-color:#9AA5B2;color:var(--tx)}
+
+/* 表（汎用） */
+.tb{width:100%;border-collapse:collapse;font-size:var(--f3)}
+.tb th,.tb td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+.tb th{background:var(--line2);font-size:var(--f4);color:var(--tx3)}
+.tb td.t{white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--tx3);font-weight:700;font-size:var(--f3)}
+.scroll-x{overflow-x:auto}
+
+/* ToDo */
+.todo{display:flex;gap:9px;align-items:flex-start;padding:8px 4px;border-bottom:1px solid var(--line2);cursor:pointer}
+.todo:last-child{border-bottom:0}
+.todo:hover{background:var(--line2)}
+.todo input{width:16px;height:16px;margin:3px 0 0;flex:0 0 auto;cursor:pointer}
+.todo label{font-size:var(--f2);cursor:pointer}
+.todo.done label{text-decoration:line-through;color:var(--mu2)}
+
+/* 記録タブ */
+.rec{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:10px}
+.rec > .rh{padding:6px 12px;font-size:var(--f3);font-weight:700;background:var(--line2);border-bottom:1px solid var(--line2)}
+.rec .fld{padding:8px 12px;border-top:1px solid var(--line2)}
+.rec .fld:first-of-type{border-top:0}
+.rec .fld > span{display:block;font-size:var(--f5);font-weight:700;color:var(--mu2);margin-bottom:3px}
+.rec textarea{width:100%;min-height:52px;border:1px solid var(--line);border-radius:7px;padding:6px 8px;font:inherit;font-size:var(--f2);line-height:1.6;resize:vertical;background:#fff;color:inherit}
+.rec textarea:focus{outline:2px solid #A8C6DE;outline-offset:-1px;border-color:#7FA9C8}
+.rec .fld.aim textarea{background:#FBFCFE}
+
+/* リンク集 */
+.links{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;font-size:var(--f3)}
+.links .lnk{margin:0 0 4px;font-size:var(--f5);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mu2)}
+.links a{display:block;padding:1px 0}
+
+/* 日カード内の「今日のメモ」折り畳み（記録タブの当日メモと同一フィールド） */
+.memo{border-top:1px solid var(--line2);background:#FBFCFE}
+.memo > summary{cursor:pointer;list-style:none;padding:6px 14px;font-size:var(--f3);font-weight:700;color:var(--tx3);display:flex;align-items:center;gap:6px}
+.memo > summary::-webkit-details-marker{display:none}
+.memo > summary::before{content:'▸';font-size:var(--f5);color:var(--mu2)}
+.memo[open] > summary::before{content:'▾'}
+.memo > summary:hover{background:var(--hov);color:var(--tx)}
+.memo > summary .flag{margin-left:auto;font-size:var(--f5);font-weight:700;border-radius:999px;padding:0 7px;background:var(--hov);color:var(--mu2);border:1px solid var(--line)}
+.memo > summary .flag.has{background:var(--neu-bg);border-color:#9AA5B2;color:var(--tx2)}
+.memo .bd2{padding:0 14px 10px}
+.memo textarea{width:100%;min-height:60px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:inherit;font-size:var(--f2);line-height:1.6;resize:vertical;background:#fff;color:inherit}
+.memo textarea:focus{outline:2px solid #A8C6DE;outline-offset:-1px;border-color:#7FA9C8}
+.memo .hint{font-size:var(--f5);color:var(--mu2);padding-top:3px}
+
+.muted{color:var(--mu)}
+.small{font-size:var(--f4)}
+.credit{text-align:center;font-size:var(--f4);color:var(--mu2);padding:6px 0 4px;line-height:1.7}
+
+@media (max-width:640px){
+  /* セッション表：狭い画面では表をやめ、1件＝1ブロックに積む */
+  .ses,.ses tbody,.ses tr,.ses td{display:block;width:auto}
+  .ses thead{display:none}
+  .ses tr{border-top:1px solid var(--line2);padding:9px 10px 10px 26px;position:relative}
+  .ses tr:first-child{border-top:0}
+  .ses td{border:0;padding:0}
+  .ses td.n{position:absolute;left:8px;top:10px;text-align:left}
+  .ses td.owc{position:absolute;right:10px;top:8px}
+  .ses td.aimc{margin-top:7px}
+  .ses tr > td:nth-child(2){padding-right:52px}
+
+  .lanes{grid-template-columns:1fr}
+  .lanes > .lane + .lane{border-left:0;border-top:1px solid var(--line)}
+  .tl td{padding:6px 10px}
+  .tl td.t{width:74px;font-size:var(--f3)}
+  .links{grid-template-columns:1fr}
+  .hdr h1{font-size:var(--f1)}
+}
+
+@media print{
+  @page{size:A4;margin:10mm 12mm}
+  body{background:#fff;font-size:9pt}
+  .hdr{position:static;box-shadow:none}
+  .no-print,.tabs,.subbar,.plans,.btn{display:none!important}
+  .tab{display:block!important;padding:0;break-before:page}
+  .tab:first-of-type{break-before:auto}
+  /* 「家族用ページだけ印刷」を押したときは、その1タブだけを出す */
+  body.print-fam .tab{display:none!important}
+  body.print-fam #tab-fam{display:block!important;break-before:auto}
+  body.print-fam .tb tr{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body.print-fam .credit{display:none}   /* 公式サイト確認履歴などは家族の紙には不要 */
+  .plan.hide{display:block!important}
+  .note,.dt{display:block!important}
+  .lane.dim{opacity:1;filter:none}
+  .day,.card,.rec{break-inside:avoid}
+  .tl td{padding:3px 6px;font-size:8pt}
+}
+
+/* Overseas Trip Field Layout — neutral reusable shell */
+:root{
+  --trip-font:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif;
+  --trip-page:#EEF2F3;
+  --trip-card:#FFFFFF;
+  --trip-text:#101820;
+  --trip-subtext:#263640;
+  --trip-muted:#52616A;
+  --trip-border:#AEBCC3;
+  --trip-neutral:#D8E2E6;
+  --trip-primary:#176B75;
+  --trip-primary-soft:#B8DEE2;
+  --trip-event:#94513D;
+  --trip-event-soft:#F0C2B1;
+  --trip-pending:#403574;
+  --trip-pending-soft:#D4CEEA;
+  --trip-warning:#6B4A0C;
+  --trip-warning-soft:#FCE9BE;
+  --trip-radius:12px;
+  --trip-shadow:0 1px 3px rgba(16,24,32,.10);
+  --trip-sticky-height:104px;
+}
+
+.trip-page{
+  margin:0;
+  padding:0 0 24px;
+  background:var(--trip-page);
+  color:var(--trip-text);
+  font-family:var(--trip-font);
+  font-size:16px;
+  line-height:1.62;
+  -webkit-text-size-adjust:100%;
+}
+.trip-page *{box-sizing:border-box}
+.trip-wrap{width:min(940px,100%);margin:0 auto;padding:0 12px}
+.trip-page a{color:#175E92}
+
+.trip-header{position:static;background:#fff;border-bottom:1px solid var(--trip-border)}
+.trip-header-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 0 10px}
+.trip-eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--trip-muted)}
+.trip-title{margin:2px 0;font-size:20px;line-height:1.3}
+.trip-subtitle{margin:0;color:var(--trip-subtext);font-size:13px}
+
+.trip-field-nav{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.98);border-bottom:2px solid var(--trip-border);box-shadow:0 2px 6px rgba(16,24,32,.12)}
+.trip-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-top:4px}
+.trip-tabs::-webkit-scrollbar,.trip-date-rail::-webkit-scrollbar{display:none}
+.trip-tab{flex:1 0 auto;min-width:0;min-height:48px;padding:6px 12px;border:0;border-bottom:4px solid transparent;background:transparent;color:var(--trip-muted);font:700 14px/1.3 var(--trip-font);cursor:pointer}
+.trip-tab[aria-selected=true],.trip-tab.is-active{border-bottom-color:var(--trip-primary);color:var(--trip-text)}
+.trip-date-rail{display:flex;gap:7px;align-items:center;overflow-x:auto;scrollbar-width:none;padding:6px 0 7px;border-top:1px solid #E2E9EC}
+.trip-date-label{flex:0 0 auto;color:var(--trip-subtext);font-size:12px;font-weight:700}
+.trip-date-link{flex:0 0 auto;min-height:44px;padding:10px 14px;border:1px solid var(--trip-border);border-radius:999px;background:#fff;color:var(--trip-subtext);font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap}
+.trip-date-link.is-active{background:var(--trip-text);border-color:var(--trip-text);color:#fff}
+
+.trip-main{padding-top:12px}
+.trip-panel{display:none}
+.trip-panel.is-active{display:block}
+.trip-card,.trip-day,.trip-record{margin:0 0 12px;overflow:hidden;border:2px solid var(--trip-border);border-radius:var(--trip-radius);background:var(--trip-card);box-shadow:var(--trip-shadow)}
+.trip-card-title,.trip-day-title{margin:0;padding:11px 14px;background:var(--trip-neutral);color:var(--trip-subtext);font-size:16px;font-weight:700}
+.trip-card-body{padding:12px 14px}
+.trip-day{scroll-margin-top:calc(var(--trip-sticky-height) + 8px)}
+.trip-day-title{background:var(--trip-primary-soft);color:var(--trip-primary)}
+.trip-day[data-kind=event] .trip-day-title{background:var(--trip-event-soft);color:var(--trip-event)}
+.trip-day[data-kind=pending] .trip-day-title{background:var(--trip-pending-soft);color:var(--trip-pending)}
+.trip-day-date{display:block;font-size:18px}
+.trip-day-summary{display:block;margin-top:2px;font-size:14px;font-weight:400}
+
+.trip-row{display:grid;grid-template-columns:98px minmax(0,1fr);border-top:1px solid #E1E8EB}
+.trip-row:first-child{border-top:0}
+.trip-time{padding:11px 12px;background:#F4F7F8;color:var(--trip-subtext);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.trip-action{min-width:0;padding:11px 12px}
+.trip-detail{display:block;margin-top:4px;color:var(--trip-muted);font-size:13px}
+.trip-flight{font-family:'Segoe UI Symbol','Noto Sans Symbols 2',sans-serif;font-style:normal;font-weight:700;color:var(--trip-primary)}
+
+.trip-banner{display:flex;gap:8px;align-items:flex-start;margin:0 0 12px;padding:10px 12px;border:2px solid var(--trip-border);border-radius:10px;background:#fff;color:var(--trip-subtext);font-size:14px}
+.trip-banner[data-kind=warning]{border-color:#DAB864;background:var(--trip-warning-soft);color:var(--trip-warning)}
+.trip-secondary{margin-top:14px}
+
+.trip-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 13px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-subtext);font:700 13px/1.3 var(--trip-font);text-decoration:none;cursor:pointer}
+.trip-button:hover,.trip-button:focus-visible{background:#E7EEF0;color:var(--trip-text)}
+.trip-actions{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+
+.trip-field{padding:10px 12px;border-top:1px solid #E1E8EB}
+.trip-field:first-child{border-top:0}
+.trip-field label{display:block;margin-bottom:5px;color:var(--trip-subtext);font-size:13px;font-weight:700}
+.trip-field textarea,.trip-field input[type=text],.trip-field select{
+  width:100%;min-height:52px;padding:8px 10px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-text);font:16px/1.55 var(--trip-font);resize:vertical
+}
+.trip-field textarea[data-trip-note=day]{min-height:84px}
+.trip-field textarea:focus,.trip-field input:focus,.trip-field select:focus{outline:3px solid rgba(23,107,117,.22);border-color:var(--trip-primary)}
+.trip-status{min-height:1.5em;color:var(--trip-muted);font-size:13px}
+
+.trip-split{display:grid;grid-template-columns:1fr 1fr}
+.trip-split > * + *{border-left:1px solid var(--trip-border)}
+.trip-lane-title{padding:7px 12px;border-bottom:1px solid var(--trip-border);font-size:13px;font-weight:700}
+.trip-merge{display:flex;gap:8px;align-items:center;padding:10px 14px;border-block:1px solid var(--trip-border);background:var(--trip-neutral);color:var(--trip-subtext);font-size:14px;font-weight:700}
+
+@media(max-width:640px){
+  .trip-wrap{padding-inline:10px}
+  .trip-header-inner{gap:8px}
+  .trip-title{font-size:18px}
+  .trip-tab{padding-inline:8px}
+  .trip-row{grid-template-columns:82px minmax(0,1fr)}
+  .trip-time,.trip-action{padding:10px 9px}
+  .trip-split{grid-template-columns:1fr}
+  .trip-split > * + *{border-left:0;border-top:1px solid var(--trip-border)}
+}
+
+@media print{
+  .trip-page{padding:0;background:#fff;font-size:9pt}
+  .trip-field-nav,.trip-actions,.trip-no-print{display:none!important}
+  .trip-panel{display:block!important}
+  .trip-card,.trip-day,.trip-record{break-inside:avoid;box-shadow:none}
+}
+
+
+/* ============================================================
+   v3 field-use overrides — direct-sunlight mobile operation
+   ============================================================ */
+:root{
+  --font:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif;
+  --bg:#EDF2F3;--card:#FFFFFF;--line:#AEBCC3;--line2:#E3EAED;
+  --tx:#101820;--mu:#46565F;--mu2:#5C6B73;--tx2:#263640;--tx3:#263640;
+  --hov:#E7EEF0;
+  --move:#9FD7D8;--move-tx:#0B3A3C;
+  --conf:#F0B49F;--conf-tx:#5D200F;--conf-bg:#FBE8E0;
+  --choose:#CFC7EA;--choose-tx:#302568;--tbd-bg:#EEEAF8;--tbd-bd:#A79BCB;
+  --neu-bg:#D8E2E6;--neu-bd:#AEBCC3;
+  --f0:24px;--f1:18px;--f2:16px;--f3:14px;--f4:13px;--f5:12px;
+  --hdrh:104px;
+}
+body{line-height:1.62;padding-bottom:24px}
+.wrap{max-width:940px;padding-left:12px;padding-right:12px}
+.hdr{position:static;background:#fff;box-shadow:none;border-bottom:1px solid var(--line)}
+.hdr-top{padding:12px 0 10px}
+.hdr h1{font-size:20px}
+.hdr .subtitle{font-size:13px;color:var(--tx2)}
+.field-nav{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.98);border-bottom:2px solid var(--line);box-shadow:0 2px 6px rgba(16,24,32,.12)}
+.tabs{gap:6px;padding-top:4px}
+.tabs button{min-height:48px;padding:6px 14px;font-size:14px;color:var(--mu);border-bottom-width:4px}
+.tabs button .ic{display:inline;margin-right:5px;font-size:16px}
+.tabs button.on{color:var(--tx);border-bottom-color:#0B3A3C}
+.subbar{padding:6px 0 7px;border-top:1px solid var(--line2)}
+#who-chips{display:none!important}
+.chips{gap:7px}
+.chips .lbl{font-size:12px;color:var(--tx2)}
+.chip{min-height:44px;padding:10px 14px;border-color:var(--line);font-size:13px;color:var(--tx2)}
+.chip.on{background:#101820;border-color:#101820;color:#fff}
+.tab{padding-top:12px}
+.card,.day,.rec{border-width:2px;border-color:var(--line);box-shadow:0 1px 2px rgba(16,24,32,.05)}
+.day{scroll-margin-top:calc(var(--hdrh) + 8px);margin-bottom:12px}
+.day > summary.day-head{padding:12px 14px 12px 34px;min-height:64px}
+.day > summary.day-head::before{left:14px;top:16px;font-size:14px}
+.day-head .d{font-size:18px}
+.day-head .t{font-size:14px;opacity:1;color:inherit}
+.day-head .badge{top:12px;font-size:12px;padding:3px 9px;border:1px solid currentColor;background:rgba(255,255,255,.55)}
+.day.confirmed > summary.day-head{background:var(--move);color:var(--move-tx)}
+.day.confirmed .badge{background:#fff;border-style:solid}
+.lane-head{font-size:13px;padding:8px 12px;border-bottom-color:var(--line)}
+.lane[data-who=all]{background:#fff;color:var(--tx)}
+.joinbar{background:var(--neu-bg);color:var(--tx2);border-color:var(--line);padding:10px 14px}
+.tl td{padding:11px 12px;font-size:16px;border-top-color:var(--line2)}
+.tl td.t{width:98px;font-size:14px;color:var(--tx2);background:#F4F7F8}
+.sub,.opt,.lane-note{font-size:14px;color:var(--tx2)}
+.note{font-size:13px;color:var(--mu);border-left-color:var(--line)}
+.btn{min-height:44px;padding:9px 13px;font-size:13px;border-color:var(--line);color:var(--tx2)}
+.banner{font-size:14px;border-width:2px}
+.card > .ttl{padding:11px 14px;font-size:16px;color:var(--tx2)}
+.memo > summary{min-height:44px;font-size:14px}
+.memo textarea,.rec textarea,.ed{font-size:16px;border-color:var(--line)}
+.ses td.prepc,.ses td.notec{width:34%}
+.session-field-label{display:none;font-size:12px;font-weight:700;color:var(--tx2);margin-bottom:5px}
+.ed.session-day{min-height:72px;background:#fff}
+.transfer-help{margin:0 0 12px;padding:10px 12px;border:2px solid var(--line);border-radius:10px;background:#fff;color:var(--tx2);font-size:13px}
+.secondary-entry{margin-top:14px}
+.secondary-entry .bd{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.secondary-entry .btn{text-decoration:none;display:inline-flex;align-items:center}
+.offline-mark{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:#101820;color:#fff;font-size:11px;vertical-align:2px}
+@media(max-width:640px){
+  .wrap{padding-left:10px;padding-right:10px}
+  .hdr-top{gap:8px}
+  .hdr-top .no-print{align-self:center}
+  .hdr .eyebrow{font-size:11px}
+  .hdr h1{font-size:18px}
+  .tabs button{min-width:0;padding-left:8px;padding-right:8px}
+  .day-head .t{padding-right:64px}
+  .lanes{grid-template-columns:1fr}
+  .tl td{padding:10px 9px}
+  .tl td.t{width:82px;white-space:normal}
+  .plans{gap:7px;padding:9px 10px}
+  .plans .chip{padding:9px 11px}
+  .ses tr{padding-top:12px;padding-bottom:12px}
+  .ses tr > td:nth-child(2){padding-right:0}
+  .ses td.prepc,.ses td.notec{width:auto;margin-top:10px}
+  .session-field-label{display:block}
+}
+@media print{
+  .field-nav,.secondary-entry,.transfer-help{display:none!important}
+  .hdr{border-bottom:1px solid #777}
+}
+
+
+/* Family page: compact cards on phones, normal table on paper. */
+.family-page{padding:0 0 24px}
+.family-head{background:#fff;border-bottom:2px solid var(--line);padding:16px 0 12px}
+.family-head h1{margin:2px 0;font-size:22px}
+.family-head p{margin:0;color:var(--tx2);font-size:14px}
+.family-page .tab,.family-page .tab.on{display:block}
+@media(max-width:640px){
+  .family-head{padding:12px 0 10px}
+  .family-head h1{font-size:20px}
+  .family-page #fam-table,.family-page #fam-table tbody,.family-page #fam-table tr,.family-page #fam-table td{display:block;width:100%}
+  .family-page #fam-table thead{display:none}
+  .family-page #fam-table tr{padding:0 0 10px;border:0;border-bottom:2px solid var(--line);background:#fff}
+  .family-page #fam-table tr:last-child{border-bottom:0}
+  .family-page #fam-table td{border:0;padding:5px 12px;white-space:normal;font-size:15px}
+  .family-page #fam-table td:first-child{padding:8px 12px;background:var(--neu-bg);color:var(--tx);font-size:16px;font-weight:700}
+  .family-page #fam-table td:nth-child(2){padding-top:8px;font-weight:700;color:var(--tx2)}
+  .family-page #fam-table td:nth-child(2)::before{content:'場所';display:inline-block;min-width:52px;margin-right:6px;color:var(--mu);font-size:12px;font-weight:700}
+  .family-page #fam-table td:nth-child(3)::before{content:'予定';display:inline-block;min-width:52px;margin-right:6px;color:var(--mu);font-size:12px;font-weight:700;vertical-align:top}
+}
+@media print{
+  .family-head{padding-top:0}
+  .family-page .tab{padding-top:8px}
+  .family-page #fam-table{display:table;width:100%}
+  .family-page #fam-table thead{display:table-header-group}
+  .family-page #fam-table tbody{display:table-row-group}
+  .family-page #fam-table tr{display:table-row}
+  .family-page #fam-table td{display:table-cell;width:auto;padding:5px 8px;border:1px solid var(--line);font-size:var(--f3);background:transparent}
+  .family-page #fam-table td:nth-child(2)::before,.family-page #fam-table td:nth-child(3)::before{display:none;content:none}
+}

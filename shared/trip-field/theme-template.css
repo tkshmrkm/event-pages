@@ -1,0 +1,21 @@
+/* Copy this file into an event folder and change only these tokens first. */
+:root{
+  --trip-page:#EEF2F3;
+  --trip-card:#FFFFFF;
+  --trip-text:#101820;
+  --trip-subtext:#263640;
+  --trip-muted:#52616A;
+  --trip-border:#AEBCC3;
+  --trip-neutral:#D8E2E6;
+  --trip-primary:#176B75;
+  --trip-primary-soft:#B8DEE2;
+  --trip-event:#94513D;
+  --trip-event-soft:#F0C2B1;
+  --trip-pending:#403574;
+  --trip-pending-soft:#D4CEEA;
+  --trip-warning:#6B4A0C;
+  --trip-warning-soft:#FCE9BE;
+  --trip-radius:12px;
+}
+
+/* Add event-specific card or lane treatments below this line. */
