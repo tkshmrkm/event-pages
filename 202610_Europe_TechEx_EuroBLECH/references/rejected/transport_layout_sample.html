@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>交通表示サンプル — Europe 2026</title>
+  <link rel="stylesheet" href="../202609_HumanoidSummitEurope/v3.css">
+  <style>
+    /* 検討用の追加は時刻列の扱いだけ。色・文字・日カード・レーンはHRS v3.cssを使用。 */
+    .sample-note{margin:12px 0;padding:10px 12px;border:2px solid var(--line);border-radius:10px;background:#fff;color:var(--tx2);font-size:var(--f3);line-height:1.65}
+    .day-zone,.lane-zone{padding:7px 12px;background:var(--line2);color:var(--mu);font-size:var(--f4);line-height:1.5}
+    .day-zone{border-bottom:1px solid var(--line)}
+    .lane-zone{border-bottom:1px solid var(--line2)}
+    .sample-timeline td.t{width:116px;white-space:nowrap;font-variant-numeric:tabular-nums;vertical-align:top}
+    .sample-timeline .time-main{display:block;color:var(--tx);font-weight:700;line-height:1.35}
+    .sample-timeline .time-note{display:block;margin-top:3px;color:var(--mu);font-size:var(--f5);font-weight:400}
+    .sample-timeline .row-title{display:block;color:var(--tx);font-weight:600;line-height:1.5}
+    .sample-timeline .sub{margin-left:0;line-height:1.55}
+    .sample-timeline tr.transfer-row td{background:var(--neu-bg);border-top-color:var(--neu-bd)}
+    .sample-timeline tr.transfer-row td.t{color:var(--tx2)}
+    .sample-summary{display:flex;flex-wrap:wrap;gap:8px 18px;padding:9px 12px;border-top:1px solid var(--line);color:var(--mu);font-size:var(--f4)}
+    .mobile-sample{max-width:390px;margin:14px auto}
+    .parallel-grid{display:grid;grid-template-columns:64px minmax(0,1fr) minmax(0,1fr);background:#fff}
+    .parallel-grid > div{min-width:0;padding:8px 7px;border-top:1px solid var(--line2);line-height:1.45}
+    .parallel-grid > div:nth-child(3n+2),.parallel-grid > div:nth-child(3n+3){border-left:1px solid var(--line)}
+    .parallel-grid .parallel-corner,.parallel-grid .parallel-head{border-top:0;font-size:var(--f4);font-weight:700}
+    .parallel-corner{background:var(--line2);color:var(--mu);text-align:center}
+    .parallel-head.murakami{background:#B7D4F1;color:#153F68}
+    .parallel-head.mima-kanezuki{background:#BFDFC6;color:#17482A}
+    .parallel-time{background:#F7FAFB;color:var(--tx);font-size:var(--f4);font-weight:700;font-variant-numeric:tabular-nums;text-align:center;white-space:nowrap}
+    .parallel-event{color:var(--tx2);font-size:var(--f4);overflow-wrap:anywhere}
+    .parallel-event strong{display:block;color:var(--tx);font-weight:600;line-height:1.45}
+    .parallel-event .sub{margin:3px 0 0;font-size:var(--f5);line-height:1.45}
+    .parallel-empty{background:#FBFCFD}
+    .flight-mark{display:inline-block;margin-right:5px;color:var(--tx2);font-family:'Segoe UI Symbol','Noto Sans Symbols 2',sans-serif;font-size:19px;font-weight:700;line-height:1;vertical-align:-2px;-webkit-text-stroke:.35px currentColor}
+    .route-four{display:grid;grid-template-columns:82px minmax(0,1fr) 82px minmax(0,1fr);background:#fff}
+    .route-four + .route-four{border-top:1px solid var(--line)}
+    .route-four > div{min-width:0;padding:10px 7px;line-height:1.4}
+    .route-four > div + div{border-left:1px solid var(--line)}
+    .route-row-time{display:flex;align-items:flex-start;background:#EEF3F5;color:var(--tx);font-size:var(--f3);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .route-endpoint{color:var(--tx2);font-size:var(--f4);overflow-wrap:anywhere}
+    .route-endpoint .route-label{display:block;margin-bottom:5px;color:var(--mu);font-size:var(--f5);font-weight:700}
+    .route-endpoint time{display:block;color:var(--tx);font-size:var(--f4);font-weight:700;line-height:1.5}
+    .route-endpoint .route-tz{display:block;margin-top:1px;padding:0;background:none;color:var(--mu);font-size:var(--f5);font-weight:600;line-height:1.35}
+    .route-endpoint .route-place{display:block;margin-top:5px;color:#2A5FA0;font-size:var(--f4);font-weight:600;line-height:1.45}
+    .route-mode{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--tx2);font-size:var(--f5);text-align:center;overflow-wrap:anywhere}
+    .route-mode .route-arrow{color:var(--mu);font-size:var(--f2)}
+    .route-mode strong{margin-top:4px;color:var(--tx);font-size:var(--f4);font-weight:600;line-height:1.4}
+    .route-mode span:last-child{margin-top:4px;color:var(--mu);line-height:1.4}
+    .route-four-action{display:grid;grid-template-columns:82px minmax(0,1fr);border-top:1px solid var(--line)}
+    .route-four-action > div{padding:10px 7px}
+    .route-four-action .route-row-time{border-right:1px solid var(--line)}
+    .route-four-action strong{font-weight:600}
+    @media(max-width:640px){
+      .sample-timeline td.t{width:96px;white-space:nowrap;padding-left:9px;padding-right:7px}
+      .sample-timeline td:not(.t){padding-left:9px;padding-right:9px}
+    }
+  </style>
+</head>
+<body>
+  <header class="hdr">
+    <div class="wrap hdr-top">
+      <div>
+        <div class="eyebrow">表示検討用・本番未反映</div>
+        <h1>交通表示サンプル</h1>
+        <div class="subtitle">HRSの時刻列を使って、移動と行動を同じリズムで並べる案</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="tab on">
+      <div class="sample-note">
+        左端は全行共通の時刻列です。到着時刻が分かる移動は「出発〜到着」、未確認なら出発時刻だけを表示します。右側は、移動なら「出発地 → 到着地」、移動でなければ行動名を表示します。
+      </div>
+
+      <details class="day mobile-sample" open>
+        <summary class="day-head"><span class="d">10/18（日）</span><span class="t">390px・交通4列案</span></summary>
+        <div class="day-zone">月日と曜日は日カードにだけ表示します。出発・到着欄は時刻だけ。同じ日の出発時刻は、左端と出発欄の2か所に表示されます。</div>
+        <div class="lane" data-who="all">
+          <div class="lane-head">👥 美馬・金築 — 京都 → 名古屋 → NGO</div>
+
+          <div class="route-four">
+            <div class="route-row-time">11:30頃</div>
+            <div class="route-endpoint">
+              <span class="route-label">出発</span>
+              <time>11:30</time>
+              <span class="route-tz">（JST）</span>
+              <span class="route-place">京都駅</span>
+            </div>
+            <div class="route-mode">
+              <span class="route-arrow">→</span>
+              <strong>新幹線<br>のぞみ</strong>
+              <span>所要<br>約36分</span>
+            </div>
+            <div class="route-endpoint">
+              <span class="route-label">到着</span>
+              <time>時刻未確認</time>
+              <span class="route-tz">（JST）</span>
+              <span class="route-place">名古屋駅</span>
+            </div>
+          </div>
+
+          <div class="route-four">
+            <div class="route-row-time">12:35</div>
+            <div class="route-endpoint">
+              <span class="route-label">出発</span>
+              <time>12:35</time>
+              <span class="route-tz">（JST）</span>
+              <span class="route-place">名鉄名古屋駅</span>
+            </div>
+            <div class="route-mode">
+              <span class="route-arrow">→</span>
+              <strong>名鉄<br>ミュースカイ</strong>
+              <span>所要<br>約28分</span>
+            </div>
+            <div class="route-endpoint">
+              <span class="route-label">到着</span>
+              <time>13:03</time>
+              <span class="route-tz">（JST）</span>
+              <span class="route-place">中部国際空港駅</span>
+            </div>
+          </div>
+
+          <div class="route-four-action">
+            <div class="route-row-time">13:10</div>
+            <div><strong><span class="flight-mark" aria-label="飛行機">✈</span>空港到着目安</strong><div class="sub">国際線のため出発3時間前を目安にチェックイン</div></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="day mobile-sample" open>
+        <summary class="day-head"><span class="d">10/24（土）</span><span class="t">390px・日またぎ表記例</span></summary>
+        <div class="day-zone">到着日が翌日になる場合だけ、到着時刻の後ろに「+1」を表示します。</div>
+        <div class="lane" data-who="all">
+          <div class="lane-head">👥 全員 — Frankfurt → Hong Kong</div>
+          <div class="route-four">
+            <div class="route-row-time">13:40</div>
+            <div class="route-endpoint">
+              <span class="route-label">出発</span>
+              <time>13:40</time>
+              <span class="route-tz">（CEST）</span>
+              <span class="route-place">Frankfurt Airport</span>
+            </div>
+            <div class="route-mode">
+              <span class="flight-mark" aria-label="飛行機">✈</span>
+              <strong>CX288</strong>
+              <span>所要<br>11時間40分</span>
+            </div>
+            <div class="route-endpoint">
+              <span class="route-label">到着</span>
+              <time>07:20 +1</time>
+              <span class="route-tz">（HKT）</span>
+              <span class="route-place">Hong Kong International Airport</span>
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <details class="day" open>
+        <summary class="day-head"><span class="d">10/17（土）</span><span class="t">1レーン例 — 移動と手続きを時刻列で揃える</span></summary>
+        <div class="day-zone">この日の基準：各地点の現地時間。時差が変わる到着地点に「日本より何時間遅い」を表示</div>
+        <div class="lane" data-who="all">
+          <div class="lane-head">👤 村上</div>
+          <table class="tl sample-timeline">
+            <tbody>
+              <tr>
+                <td class="t"><span class="time-main">11:30頃</span><span class="time-note">到着未確認</span></td>
+                <td><span class="row-title">🚆 京都駅 発 → 名古屋駅 着</span><div class="sub">新幹線 のぞみ・所要約36分</div></td>
+              </tr>
+              <tr>
+                <td class="t"><span class="time-main">12:35〜13:03</span></td>
+                <td><span class="row-title">🚆 名鉄名古屋駅 発 → 中部国際空港駅 着</span><div class="sub">名鉄ミュースカイ・所要28分</div></td>
+              </tr>
+              <tr>
+                <td class="t"><span class="time-main">13:10</span></td>
+                <td><span class="row-title">🛂 空港到着目安</span><div class="sub">チェックイン・保安検査・出国審査</div></td>
+              </tr>
+              <tr>
+                <td class="t"><span class="time-main">16:10〜19:30</span></td>
+                <td><span class="row-title"><span class="flight-mark" aria-label="飛行機">✈</span>中部国際空港（NGO）発 → 香港国際空港（HKG）着</span><div class="sub">CX539・エコノミー・所要4時間20分／香港は日本より1時間遅い</div></td>
+              </tr>
+              <tr class="transfer-row">
+                <td class="t"><span class="time-main">19:30〜23:15</span></td>
+                <td><span class="row-title">乗り換え：香港国際空港</span><div class="sub">乗り換え時間3時間45分</div></td>
+              </tr>
+              <tr>
+                <td class="t"><span class="time-main">23:15〜</span><span class="time-note">翌06:55</span></td>
+                <td><span class="row-title"><span class="flight-mark" aria-label="飛行機">✈</span>香港国際空港（HKG）発 → Amsterdam Schiphol（AMS）着</span><div class="sub">CX271・エコノミー・所要13時間40分／翌10/18（日）着・Amsterdamは日本より7時間遅い</div></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="sample-summary"><span>宿泊：機内</span><span>往路総所要：約21時間45分</span></div>
+        </div>
+      </details>
+
+      <details class="day mobile-sample" open>
+        <summary class="day-head"><span class="d">10/19（月）</span><span class="t">390px・3列例</span></summary>
+        <div class="day-zone">左に時刻を1列置き、右を「村上」「美馬・金築」の2列に分割。時刻は欧州現地時間（日本より7時間遅い）</div>
+        <div class="parallel-grid" role="table" aria-label="村上と美馬・金築の並行予定">
+          <div class="parallel-corner" role="columnheader">時刻</div>
+          <div class="parallel-head murakami" role="columnheader">👤 村上</div>
+          <div class="parallel-head mima-kanezuki" role="columnheader">👥 美馬・金築</div>
+
+          <div class="parallel-time" role="rowheader">07:15</div>
+          <div class="parallel-event parallel-empty" role="cell"></div>
+          <div class="parallel-event" role="cell"><strong><span class="flight-mark" aria-label="飛行機">✈</span>FRA着</strong><div class="sub">入国審査・荷物受取</div></div>
+
+          <div class="parallel-time" role="rowheader">08:22</div>
+          <div class="parallel-event parallel-empty" role="cell"></div>
+          <div class="parallel-event" role="cell"><strong>🚆 Frankfurt空港 発</strong><div class="sub">→ 10:31 Göttingen Hbf着<br>RE2＋ICE・2時間9分</div></div>
+
+          <div class="parallel-time" role="rowheader">08:30</div>
+          <div class="parallel-event" role="cell"><strong>🚆 ホテル 発</strong><div class="sub">→ 08:58 RAI Amsterdam着</div></div>
+          <div class="parallel-event parallel-empty" role="cell"></div>
+
+          <div class="parallel-time" role="rowheader">09:45</div>
+          <div class="parallel-event" role="cell"><strong>💼 TechEx Day 1</strong><div class="sub">17:00まで</div></div>
+          <div class="parallel-event parallel-empty" role="cell"></div>
+
+          <div class="parallel-time" role="rowheader">10:31</div>
+          <div class="parallel-event parallel-empty" role="cell"></div>
+          <div class="parallel-event" role="cell"><strong>🏨 荷物を預ける</strong><div class="sub">Hotel FREIgeist</div></div>
+
+          <div class="parallel-time" role="rowheader">11:00頃</div>
+          <div class="parallel-event parallel-empty" role="cell"></div>
+          <div class="parallel-event" role="cell"><strong>🚆 Göttingen Hbf発</strong><div class="sub">→ Wolfsburg Hbf着<br>Hannover経由・約1時間15〜20分</div></div>
+
+          <div class="parallel-time" role="rowheader">18:00</div>
+          <div class="parallel-event" role="cell"><strong>🥂 Networking Drinks</strong><div class="sub">21:00まで</div></div>
+          <div class="parallel-event parallel-empty" role="cell"></div>
+
+          <div class="parallel-time" role="rowheader">18:45頃</div>
+          <div class="parallel-event parallel-empty" role="cell"></div>
+          <div class="parallel-event" role="cell"><strong>🚆 Wolfsburg Hbf発</strong><div class="sub">→ Göttingen Hbf着<br>到着時刻未確認</div></div>
+        </div>
+      </details>
+    </section>
+  </main>
+</body>
+</html>

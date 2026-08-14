@@ -19,7 +19,7 @@
 7. `index_v2.html` — 家族タブの内容・情報構造の基準
 8. `build_v3.mjs`、`v3.css`、`v3.js`、`validate_v3.mjs` — 現在のv3実装
 
-`transport_layout_sample.html` は無効な旧試作。基準にしない。
+`references/rejected/transport_layout_sample.html` は無効な旧試作。参考用に隔離しているが、基準にしない。
 
 ## 編集ルール
 
@@ -143,6 +143,6 @@ git diff --check
 ## Gitの注意
 
 - この引き継ぎ作成時点のブランチは `main`。
-- `transport_layout_sample.html` は無効な旧試作なのでコミット対象外。
+- `references/rejected/transport_layout_sample.html` は無効な旧試作として隔離。対象フォルダ直下へ戻さない。
 - `index.html` は変更しない。
 - ワークツリーに別作業の変更があれば巻き込まない。
