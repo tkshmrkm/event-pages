@@ -19,7 +19,7 @@
 - HRS共通ランタイム: `../shared/trip-field/runtime.js`
 - 承認済み4列サンプル: `transport_actual_1017_1018_sample.html`
 - 現在の生成コード: `build_v3.mjs`
-- 現在の成果物: `index_v3.html`
+- 現在の成果物: `index.html`（フォルダの公開入口。`index_v3.html` は転送ページであって成果物ではない）
 - ページ固有検証: `validate_v3.mjs`
 
 `references/rejected/transport_layout_sample.html` は失敗した旧試作。参考用に隔離しているが、実装基準にしない。
@@ -75,18 +75,22 @@
 - `CLAUDE_HANDOFF.md`
 - `transport_actual_1017_1018_sample.html`
 - `build_v2.mjs`、`index_v2.html`、`v2.css`、`v2.js`
-- `build_v3.mjs`、`index_v3.html`、`v3.css`、`v3.js`、`validate_v3.mjs`
+- `build_v3.mjs`、`index.html`、`v3.css`、`v3.js`、`validate_v3.mjs`
+- `index_v1.html`（旅程内容の元データ）、`index_v3.html`（転送ページ）
 - `references/rejected/transport_layout_sample.html`
 - `references/superseded/`（旧旅程・旧スケジュールと `README.md`）
 
-`index.html` は現行の正であり、旅程内容の元データでもある。直接変更しない。
-フォルダ直下に置くのは、この引き継ぎ2件、`index.html`、v2一式、v3一式、
-承認済み4列サンプル、`references/` だけにする。旧案が増えたら `references/superseded/` へ移す。
+`index.html` は現行の正だが、これは `build_v3.mjs` の生成物なので直接変更しない。
+旅程内容の元データは `index_v1.html`、家族タブの基準は `index_v2.html` であり、
+これらも直接上書きしない。
+フォルダ直下に置くのは、この引き継ぎ2件、`index.html`、`index_v1.html`、`index_v3.html`、
+v2一式、v3一式、承認済み4列サンプル、`references/` だけにする。
+旧案が増えたら `references/superseded/` へ移す。
 
 ## 次セッションの開始手順
 
 1. `CLAUDE_HANDOFF.md` を全文読む。
 2. 本書と承認済み4列サンプル、HRS公開版を確認する。
 3. `CLAUDE_HANDOFF.md` の「未完了 — 次に対応する項目」を上から反映する。
-4. `build_v3.mjs` を修正し、`index_v3.html` を再生成する。
+4. `build_v3.mjs` を修正し、`index.html` を再生成する。
 5. `validate_v3.mjs`、`git diff --check`、390px/デスクトップのブラウザ確認を行う。
