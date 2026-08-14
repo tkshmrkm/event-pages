@@ -33,7 +33,7 @@ Shared:
 - JSON export/import format;
 - an online smartphone page plus a self-contained desk-print backup;
 - responsive targets around iPhone 16 (393 px) and Pixel 7a/8a (412 px).
-- monochrome text-presentation `✈︎` for flights; use words such as `発` and `着` rather than OS-dependent colored departure/arrival emoji.
+- EUROBLECH-style transport icons: `.flight-mark` (SVG mask) for flights and `.mode-icon mode-icon-{train|walk|car|unknown}` (inline SVG) for every other mode, matched in size and color. Neither colored emoji nor the monochrome text `✈︎` is used. Reserve `unknown` for a genuinely undecided mode; use words such as `発` and `着` rather than OS-dependent colored departure/arrival emoji.
 
 Event-specific:
 
