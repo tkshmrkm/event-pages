@@ -112,10 +112,8 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['ラウンジは対象外なので<strong>制限エリア内で夕食を取る</strong>', 'ラウンジを利用しない場合は<strong>制限エリア内で夕食を取る</strong>'],
   ['Gold Passに含まれる特典。<strong>翌20日は14:55に会場を出るため、参加できるのは実質この日だけ</strong>。開催時刻・場所は当日のアジェンダで確認。', '開催時刻・場所は当日のアジェンダで確認。'],
   ['          <div class="text-xs text-slate-500 px-1">EuroBLECHは10/20開幕のため19日は自由日。Wolfsburgへの日帰りはゲッティンゲンが経路上にあるため、先にホテルへ荷物を預けて身軽に移動</div>\n', ''],
-  ['<td>10/18 セントレア出発</td><td>美馬・金築</td><td>カードラウンジ（出国審査前）/ プラザ・プレミアム・ラウンジ名古屋（有料）</td>', '<td>10/18 セントレア出発</td><td>美馬・金築</td><td>航空会社：JALサクララウンジ<br>Priority Pass：Plaza Premium Lounge / The Coral Finest Business Class Lounge</td>'],
-  ['<td>❌ サクララウンジは対象外。ゴールドカード以上があれば出国審査前のカードラウンジを無料で使える</td>', '<td>利用条件：搭乗クラス・航空会社ステータス・招待条件／Priority Passの当日対象施設・同伴条件</td>'],
-  ['<td>10/18 HKG乗継 4時間25分</td><td>美馬・金築</td><td>—</td>', '<td>10/18 HKG乗継 4時間25分</td><td>美馬・金築</td><td>航空会社：Cathay Pacific Business Lounge<br>Priority Pass：Plaza Premium Lounge</td>'],
-  ['<td>❌ 利用不可。ターミナル内で夕食をとって過ごす</td>', '<td>利用条件：搭乗クラス・航空会社ステータス／Priority Passの当日対象施設・同伴条件</td>'],
+  // 準備タブの「ラウンジ利用可否」表は transformScript 側で区間×4系統に組み直す。
+  // 個々のセルをここで置換すると二重管理になるため、表への置換は持たせない。
   ['美馬・金築は<strong>ゴールドカード以上ならセントレアの出国審査前カードラウンジが無料</strong>。', '美馬・金築は、航空会社ラウンジとPriority Passラウンジの利用条件を確認。'],
   ['<strong>有料ラウンジ</strong>: Plaza Premium は <strong>Gate 60 が24時間・HKD 250〜（最安）</strong>、Gate 1 が24時間・HKD 650〜。Plaza Premium First は West Hall 06:00〜／East Hall 06:30〜。', '<strong>一般有料ラウンジ</strong>: Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。Plaza Premium First は East Hall（Gate 1）06:30〜01:00／West Hall（Gate 35）06:00〜01:00・HKD 980〜。Priority Passの対象施設かは未確認のため、会員本人のアプリで当日確認する。'],
   // 香港のラウンジ。営業時間はキャセイ公式のラウンジ個別ページで確認済み（2026-08-14時点）。
@@ -129,9 +127,7 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['<div class="text-slate-500">20:00〜22:30</div>', '<div class="text-slate-500">19:30〜23:15</div>'],
   // 10/17 村上の香港乗継 3時間45分。
   ['          <div class="font-semibold">🛋 ビジネスクラスラウンジで夕食＋シャワー</div>\n          <div class="text-slate-600 text-xs">Sapphireでビジネスクラスラウンジ可（The Pier ビジネス側はシャワー14室）。⚠️ <strong>営業時間が未確認</strong>のため、到着後にトランスファーデスクで開いているラウンジを聞く。</div>\n          <details class="fold mt-1">\n            <summary>閉まっていた場合の代替・無料シャワーの場所</summary>\n            <div class="fold-body">\n              <div>⭐ <strong>無料シャワー（L5・24時間）</strong>: Gate 12付近 / Gate 43付近。シャンプー等あり、タオルは近くの自販機で購入。<strong>ラウンジの可否と無関係に使える</strong>ので、総移動21時間45分の後半が楽になる。</div>\n              <div><strong>有料ラウンジ</strong>: Plaza Premium が Gate 60（24時間・HKD 250〜／最安）、Gate 1（24時間・HKD 650〜）。</div>\n              <div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng（香港式の茶餐廳）・McDonald\'s が<strong>24時間</strong>。Level 7 フードコート（Tasty Congee のお粥・雲呑麺など）は22〜23時台に閉まる可能性があるので、行くなら早めに。</div>\n              <div>ファースト側の「ザ・カバナ」「ザ・ヘイヴン」は Sapphire では対象外。</div>\n            </div>\n          </details>\n',
-    '          <div class="font-semibold">🕐 香港で乗り継ぎ（3時間45分）</div>\n          <details class="fold mt-1">\n            <summary>やること</summary>\n            <div class="fold-body">\n              <div>23:15発のCX271へ乗り継ぐ。搭乗ゲートは現地の案内で確認する</div>\n              <div>総移動21時間45分の後半にあたるので、ここでシャワーを浴びて休む</div>\n              <div>CX539の機内食のあとなので、食べるなら軽めにする</div>\n            </div>\n          </details>\n          <details class="fold mt-1">\n            <summary>ラウンジで過ごす（4系統）</summary>\n            <div class="fold-body">\n              <div><strong>エアライン</strong>: oneworld Sapphireでキャセイのビジネスクラスラウンジに<strong>本人＋同伴1名</strong>（キャセイ運航ラウンジのみ）。The Deck（Gate 6付近・L7）と The Pier, Business（Gate 65付近・L6）が05:30〜00:30、The Bridge（Gate 35付近・L6）が05:00〜最終キャセイ便。20:00〜22:30はいずれも営業時間内。The Pier, Business はシャワー14室。</div>\n              <div><strong>Priority Pass</strong>: 香港の対象施設は未確認。会員本人のアプリで当日の対象と同伴条件を確認する。</div>\n              <div><strong>一般有料</strong>（会員資格が無くても買える）: Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。</div>\n              <div><strong>カード付帯</strong>: 香港での対象は未確認。保有カードの特典ページで当日確認する。</div>\n              <div>ファーストクラスラウンジ（The Wing, First / The Pier, First）と、その中の「ザ・カバナ」「ザ・ヘイヴン」は Sapphire では対象外。</div>\n            </div>\n          </details>\n          <details class="fold mt-1">\n            <summary>ラウンジを使わずに過ごす</summary>\n            <div class="fold-body">\n              <div>⭐ <strong>無料シャワー（L5・24時間）</strong>: Gate 12付近 / Gate 43付近。シャンプー等あり、タオルは近くの自販機で購入。<strong>ラウンジの可否と無関係に使える</strong>ので、総移動21時間45分の後半が楽になる。</div>\n              <div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng（香港式の茶餐廳）・McDonald\'s が<strong>24時間</strong>。Level 7 フードコート（Tasty Congee のお粥・雲呑麺など）は22〜23時台に閉まる可能性があるので、行くなら早めに。</div>\n            </div>\n          </details>\n'],
-  ['<td>10/17 HKG乗継 3時間45分</td><td>村上</td><td>キャセイ ビジネスクラスラウンジ（The Wing / The Pier / The Deck / The Bridge）</td>', '<td>10/17 HKG乗継 3時間45分</td><td>村上</td><td>キャセイ ビジネスクラスラウンジ（The Deck / The Pier, Business / The Bridge）</td>'],
-  ['<td>✅ 利用可（Sapphire）。ファーストクラスラウンジは対象外</td>', '<td>✅ 利用可（Sapphire・本人＋同伴1名）。The Deck と The Pier, Business は05:30〜00:30、The Bridge は05:00〜最終キャセイ便。ファーストクラスラウンジは対象外</td>'],
+    '          <div class="font-semibold">🕐 香港で乗り継ぎ（3時間45分）</div>\n          <details class="fold mt-1">\n            <summary>やること</summary>\n            <div class="fold-body">\n              <div>23:15発のCX271へ乗り継ぐ。搭乗ゲートは現地の案内で確認する</div>\n              <div>総移動21時間45分の後半にあたるので、ここでシャワーを浴びて休む</div>\n              <div>CX539の機内食のあとなので、食べるなら軽めにする</div>\n            </div>\n          </details>\n          <details class="fold mt-1">\n            <summary>ラウンジで過ごす（4系統）</summary>\n            <div class="fold-body">\n              <div><strong>エアライン</strong>: キャセイのビジネスクラスラウンジ。The Deck（Gate 6付近・L7）と The Pier, Business（Gate 65付近・L6）が05:30〜00:30、The Bridge（Gate 35付近・L6）が05:00〜最終キャセイ便。20:00〜22:30はいずれも営業時間内。The Pier, Business はシャワー14室。</div>\n              <div><strong>Priority Pass</strong>: 香港の対象施設は未確認。</div>\n              <div><strong>一般有料</strong>: Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。</div>\n              <div><strong>カード付帯</strong>: 香港での対象は未確認。</div>\n              <div>利用資格は準備タブの「ラウンジ利用可否」に集約してある。</div>\n            </div>\n          </details>\n          <details class="fold mt-1">\n            <summary>ラウンジを使わずに過ごす</summary>\n            <div class="fold-body">\n              <div>⭐ <strong>無料シャワー（L5・24時間）</strong>: Gate 12付近 / Gate 43付近。シャンプー等あり、タオルは近くの自販機で購入。<strong>ラウンジの可否と無関係に使える</strong>ので、総移動21時間45分の後半が楽になる。</div>\n              <div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng（香港式の茶餐廳）・McDonald\'s が<strong>24時間</strong>。Level 7 フードコート（Tasty Congee のお粥・雲呑麺など）は22〜23時台に閉まる可能性があるので、行くなら早めに。</div>\n            </div>\n          </details>\n'],
   ['<div>⚠️ <strong>キャセイ自社ラウンジ（The Wing / The Pier / The Deck / The Bridge）の営業時間は未確認</strong>（公式サイトにアクセスできず特定できなかった）。<strong>夜23時台・早朝7時台は閉まっている可能性がある</strong>ため、出発前にキャセイに確認するか、到着後にトランスファーデスクで開いているラウンジを聞く。</div>', '<div>⭐ <strong>キャセイのビジネスクラスラウンジ営業時間</strong>: The Deck（L7・Gate 6付近）と The Pier, Business（L6・Gate 65付近）が<strong>05:30〜00:30</strong>、The Bridge（L6・Gate 35付近）が<strong>05:00〜最終キャセイ便（00:30〜03:20の範囲）</strong>。<strong>夜23時台も早朝7時台も営業時間内</strong>。The Wing は現行のラウンジ一覧では First のみで、Business側の掲載が無い。</div>'],
   // 10/25 全員の香港乗継 2時間15分。ここもラウンジを選択肢の一つとして並べる。
   // 昼食の場所は時刻ではなく場所に張り付く常設情報なので、日トップの食事トピック側に置く。
@@ -141,7 +137,7 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['<div class="font-semibold">⏱ 乗継2時間15分 — まず搭乗ゲートを確認</div>', '<div class="font-semibold">🕐 香港国際空港（HKG）着・乗り継ぎ（2時間15分）</div>'],
   ['<div class="text-slate-600 text-xs">セキュリティ再検査と液体物の追加検査があり、<strong>搭乗ゲートのコンコースは搭乗券が出るまで分からない</strong>。ラウンジは<strong>同伴1名まで＝3名のうち1名が入れない</strong>ので、分かれるより3名で店に入る方が無駄がない。<br>⚠️ <strong>土産は往路（10/17・10/18の夜）に済ませておく</strong>。復路の早朝は開いていない店がある。</div>', '<details class="fold mt-1"><summary>やること</summary><div class="fold-body"><div>セキュリティ再検査と液体物の追加検査がある</div><div><strong>搭乗ゲートのコンコースは搭乗券が出るまで分からない</strong>ので、先に確認する</div><div>ラウンジは<strong>同伴1名まで＝3名のうち1名が入れない</strong>。分かれるより3名で店に入る方が無駄がない</div><div>⚠️ <strong>土産は往路（10/17・10/18の夜）に済ませておく</strong>。復路の早朝は開いていない店がある</div></div></details>'],
   ['<summary>コンコース間の移動時間・早朝の営業状況</summary>', '<summary>ラウンジで過ごす（4系統）とコンコース間の移動</summary>'],
-  ['<div>村上はSapphireでビジネスクラスラウンジ可（営業時間は未確認）。無料シャワーは L5 の Gate 12付近 / Gate 43付近で24時間。</div>', '<div><strong>エアライン</strong>: 村上はSapphireでキャセイのビジネスクラスラウンジ可（本人＋同伴1名）。07:20着の時点で The Bridge（05:00〜）、The Deck と The Pier, Business（05:30〜）はいずれも営業時間内。</div><div><strong>Priority Pass</strong>: 香港の対象施設は未確認。会員本人のアプリで当日の対象と同伴条件を確認する。</div><div><strong>一般有料</strong>: Plaza Premium Lounge は Gate 60・Gate 1 が24時間。会員資格が無くても買える。</div><div><strong>カード付帯</strong>: 香港での対象は未確認。保有カードの特典ページで当日確認する。</div><div><strong>ラウンジを使わない場合</strong>: 無料シャワーは L5 の Gate 12付近 / Gate 43付近で24時間。</div>'],
+  ['<div>村上はSapphireでビジネスクラスラウンジ可（営業時間は未確認）。無料シャワーは L5 の Gate 12付近 / Gate 43付近で24時間。</div>', '<div><strong>エアライン</strong>: キャセイのビジネスクラスラウンジ。07:20着の時点で The Bridge（05:00〜）、The Deck と The Pier, Business（05:30〜）はいずれも営業時間内。</div><div><strong>Priority Pass</strong>: 香港の対象施設は未確認。</div><div><strong>一般有料</strong>: Plaza Premium Lounge は Gate 60・Gate 1 が24時間。</div><div><strong>カード付帯</strong>: 香港での対象は未確認。</div><div>利用資格は準備タブの「ラウンジ利用可否」に集約してある。</div><div><strong>ラウンジを使わない場合</strong>: 無料シャワーは L5 の Gate 12付近 / Gate 43付近で24時間。</div>'],
   // EuroBLECHは展示会視察。TechExの「参加」、Mercedesの「工場見学」とは語を分ける。
   // アイコンも工場（🏭）ではなく展示会（🏛）にする。🏭はMercedes工場見学だけに残す。
   ['🏭 EuroBLECH Day 1', '🏛 EuroBLECH Day 1'],
@@ -439,7 +435,7 @@ const transformScript = `
       const lunch = rowFor(day, 'セントレアで昼食');
       const arrival = rowFor(day, '空港到着目安');
       if (arrival) {
-        arrival.innerHTML = '<div class="row-time">13:10〜16:10</div><div class="action-body"><div class="font-semibold">🕐 セントレアで出発待ち（約3時間）</div><div class="text-slate-600 text-xs">機内食は離陸1時間後が目安（17:10頃）。昼は軽く</div><details class="fold mt-1"><summary>やること（チェックイン・保安検査・出国審査）</summary><div class="fold-body"><div>国際線のため出発3時間前にチェックイン</div><div>自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く</div><div>保安検査と出国審査を済ませてから制限エリアへ</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div><strong>エアライン</strong>: JALサクララウンジ（出国審査後の制限エリア内・2階）。oneworld Sapphireでエコノミーでも利用可で、約2時間半使える。<strong>搭乗券と会員証の提示が必要</strong>。キャセイはセントレアに自社ラウンジを持たないため提携先になる。</div><div><strong>Priority Pass</strong>: セントレアの対象施設は未確認。会員本人のアプリで当日の対象と同伴条件を確認する。</div><div><strong>一般有料</strong>: プラザ・プレミアム・ラウンジ名古屋。料金と営業時間は当日確認。</div><div><strong>カード付帯</strong>: 出国審査前のプレミアムラウンジ セントレア／第2プレミアムラウンジ セントレア／QUALIA LOUNGE。対象になるカードかは保有カードの特典ページで確認。出国審査の前なので、入るなら早めに。</div></div></details><details class="fold mt-1"><summary>ラウンジを使わずに過ごす</summary><div class="fold-body"><div><strong>昼食</strong>: 保安検査後に軽く済ませる</div><div><strong>CX539で機内食が出る</strong>: エコノミーでも主菜＋デザートが出る。16:10発・4時間20分なので、これが実質の夕食になる。昼を食べすぎない</div><div><strong>事前の機内食予約はできない</strong>: 「食事の選択」はファースト／ビジネス限定。エコノミーで必要なのは特別食（アレルギー・ベジタリアン等）の申請だけ</div></div></details></div>';
+        arrival.innerHTML = '<div class="row-time">13:10〜16:10</div><div class="action-body"><div class="font-semibold">🕐 セントレアで出発待ち（約3時間）</div><div class="text-slate-600 text-xs">機内食は離陸1時間後が目安（17:10頃）。昼は軽く</div><details class="fold mt-1"><summary>やること（チェックイン・保安検査・出国審査）</summary><div class="fold-body"><div>国際線のため出発3時間前にチェックイン</div><div>自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く</div><div>保安検査と出国審査を済ませてから制限エリアへ</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div><strong>エアライン</strong>: JALサクララウンジ（出国審査後の制限エリア内・2階）。<strong>搭乗券と会員証の提示が必要</strong>。</div><div><strong>Priority Pass</strong>: セントレアの対象施設は未確認。</div><div><strong>一般有料</strong>: プラザ・プレミアム・ラウンジ名古屋。料金と営業時間は当日確認。</div><div><strong>カード付帯</strong>: プレミアムラウンジ セントレア／第2プレミアムラウンジ セントレア／QUALIA LOUNGE。<strong>出国審査の前</strong>なので、入るなら早めに。</div><div>利用資格は準備タブの「ラウンジ利用可否」に集約してある。</div></div></details><details class="fold mt-1"><summary>ラウンジを使わずに過ごす</summary><div class="fold-body"><div><strong>昼食</strong>: 保安検査後に軽く済ませる</div><div><strong>CX539で機内食が出る</strong>: エコノミーでも主菜＋デザートが出る。16:10発・4時間20分なので、これが実質の夕食になる。昼を食べすぎない</div><div><strong>事前の機内食予約はできない</strong>: 「食事の選択」はファースト／ビジネス限定。エコノミーで必要なのは特別食（アレルギー・ベジタリアン等）の申請だけ</div></div></details></div>';
         arrival.className = 'action';
       }
       lunch?.remove();
@@ -453,9 +449,9 @@ const transformScript = `
       const lounge = rowFor(day, 'ラウンジ候補');
       // 10/17と同じく、13:10の「空港到着目安」と重複していたので1行に寄せる。
       rowFor(day, '空港到着目安')?.remove();
-      if (lounge) lounge.innerHTML = '<div class="text-slate-500">13:10〜16:10</div><div class="font-semibold">🕐 セントレアで出発待ち（約3時間）</div><div class="text-slate-600 text-xs">機内食は離陸1時間後が目安（17:10頃）。昼は軽く</div><details class="fold mt-1"><summary>やること（チェックイン・保安検査・出国審査）</summary><div class="fold-body"><div>国際線のため出発3時間前にチェックイン</div><div>自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く</div><div>保安検査と出国審査を済ませてから制限エリアへ</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div><strong>エアライン</strong>: JALサクララウンジ（第1ターミナル・国際線制限エリア）。CX539での利用可否は、搭乗クラス・oneworld/Cathay等のステータス・航空会社の招待条件をチェックイン時に確認。</div><div><strong>Priority Pass</strong>: Plaza Premium Lounge／The Coral Finest Business Class Lounge。当日の対象施設・同伴条件を会員本人のアプリで確認。</div><div><strong>一般有料</strong>: プラザ・プレミアム・ラウンジ名古屋。料金と営業時間は当日確認。</div><div><strong>カード付帯</strong>: 出国審査前のプレミアムラウンジ セントレア／第2プレミアムラウンジ セントレア／QUALIA LOUNGE。対象になるカードかは保有カードの特典ページで確認。出国審査の前なので、入るなら早めに。</div></div></details>';
+      if (lounge) lounge.innerHTML = '<div class="text-slate-500">13:10〜16:10</div><div class="font-semibold">🕐 セントレアで出発待ち（約3時間）</div><div class="text-slate-600 text-xs">機内食は離陸1時間後が目安（17:10頃）。昼は軽く</div><details class="fold mt-1"><summary>やること（チェックイン・保安検査・出国審査）</summary><div class="fold-body"><div>国際線のため出発3時間前にチェックイン</div><div>自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く</div><div>保安検査と出国審査を済ませてから制限エリアへ</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div><strong>エアライン</strong>: JALサクララウンジ（第1ターミナル・国際線制限エリア）。</div><div><strong>Priority Pass</strong>: Plaza Premium Lounge／The Coral Finest Business Class Lounge。</div><div><strong>一般有料</strong>: プラザ・プレミアム・ラウンジ名古屋。料金と営業時間は当日確認。</div><div><strong>カード付帯</strong>: プレミアムラウンジ セントレア／第2プレミアムラウンジ セントレア／QUALIA LOUNGE。<strong>出国審査の前</strong>なので、入るなら早めに。</div><div>利用資格は準備タブの「ラウンジ利用可否」に集約してある。</div></div></details>';
       const cx539 = routeRowFor(day, 'CX539');
-      cx539?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">19:30〜23:55</div><div class="action-body"><div class="font-semibold">🕐 香港で乗り継ぎ（4時間25分）</div><details class="fold mt-1"><summary>やること</summary><div class="fold-body"><div>23:20頃にCX289の搭乗口へ</div><div>搭乗ゲートは現地の案内で確認する</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div><strong>エアライン</strong>: キャセイのビジネスクラスラウンジ。搭乗クラスまたはoneworld/Cathay等のステータスが対象かを確認。The Deck（Gate 6付近・L7）と The Pier, Business（Gate 65付近・L6）が05:30〜00:30、The Bridge（Gate 35付近・L6）が05:00〜最終キャセイ便。</div><div><strong>Priority Pass</strong>: 香港の対象施設は未確認。会員本人のアプリで当日の対象と同伴条件を確認する。</div><div><strong>一般有料</strong>: Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。</div><div><strong>カード付帯</strong>: 香港での対象は未確認。保有カードの特典ページで当日確認する。</div></div></details><details class="fold mt-1"><summary>ラウンジを使わずに過ごす</summary><div class="fold-body"><div>⭐ <strong>無料シャワー（L5・24時間）</strong>: Gate 12付近 / Gate 43付近。シャンプー等あり、タオルは自販機で購入。ラウンジの可否と無関係に使える。</div><div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng・McDonald&#39;s が24時間。Level 7 フードコートは22〜23時台に閉まる可能性がある。</div></div></details></div></div>');
+      cx539?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">19:30〜23:55</div><div class="action-body"><div class="font-semibold">🕐 香港で乗り継ぎ（4時間25分）</div><details class="fold mt-1"><summary>やること</summary><div class="fold-body"><div>23:20頃にCX289の搭乗口へ</div><div>搭乗ゲートは現地の案内で確認する</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div><strong>エアライン</strong>: キャセイのビジネスクラスラウンジ。The Deck（Gate 6付近・L7）と The Pier, Business（Gate 65付近・L6）が05:30〜00:30、The Bridge（Gate 35付近・L6）が05:00〜最終キャセイ便。</div><div><strong>Priority Pass</strong>: 香港の対象施設は未確認。</div><div><strong>一般有料</strong>: Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。</div><div><strong>カード付帯</strong>: 香港での対象は未確認。</div><div>利用資格は準備タブの「ラウンジ利用可否」に集約してある。</div></div></details><details class="fold mt-1"><summary>ラウンジを使わずに過ごす</summary><div class="fold-body"><div>⭐ <strong>無料シャワー（L5・24時間）</strong>: Gate 12付近 / Gate 43付近。シャンプー等あり、タオルは自販機で購入。ラウンジの可否と無関係に使える。</div><div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng・McDonald&#39;s が24時間。Level 7 フードコートは22〜23時台に閉まる可能性がある。</div></div></details></div></div>');
       // afterendは後から挿入したものが手前に来る。機内食(17:10)を乗り継ぎ(19:30)より前に置くため、
       // 乗り継ぎブロックを入れたあとに機内食を挿入する。
       cx539?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">17:10頃</div><div class="action-body"><div class="font-semibold">🍽 機内食（主菜＋デザート）</div><div class="text-slate-600 text-xs">離陸1時間後が目安。これが実質の夕食になる</div></div></div>');
@@ -480,7 +476,10 @@ const transformScript = `
       techEx?.insertAdjacentHTML('afterbegin', '<div class="text-slate-500">09:45–14:55</div>');
       const ice77 = routeRowFor(day, 'ICE77');
       ice77?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">20:30頃</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">Göttingen Hbfから徒歩約3〜5分</div></div></div>');
+      // 会場そのものへの地図リンクは場所名に張る。元資料の「📍 ハノーファーメッセ」は
+      // 別リンクの旧形式なので、10/21・10/23と同じ「会場は<場所名>」にそろえる。
       const expo = rowFor(day, 'EuroBLECH Day 1');
+      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00頃〜17:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH Day 1</div><div class="text-slate-600 text-xs">美馬・金築が終日視察。会場は' + mapLink('ハノーファーメッセ') + '</div>';
       const back = ROUTES.find(route => route[0] === '1020' && route[1].includes('戻る'));
       expo?.insertAdjacentHTML('afterend', '<div class="route-four route-estimate">' + routeMarkup(back) + '</div>');
     }
@@ -506,6 +505,8 @@ const transformScript = `
       }
     }
     if (id === '1023') {
+      const expo1023 = rowFor(day, 'EuroBLECH（最終）');
+      if (expo1023) expo1023.innerHTML = '<div class="text-slate-500">09:00〜14:15頃</div><div class="font-semibold text-teal-800">🏛 EuroBLECH（最終）</div><div class="text-slate-600 text-xs">会場は' + mapLink('ハノーファーメッセ') + '</div><div class="text-slate-600 text-xs">入場後は荷物をクロークへ。14:30発の列車に合わせて14:15頃退場</div>';
       const lastTrain = routeRowFor(day, 'ICE771');
       lastTrain?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">17:30頃</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">フランクフルト中央駅南口から徒歩約2分</div></div></div><div class="action"><div class="row-time">18:30頃</div><div class="action-body"><div class="font-semibold">🍽 夕食</div><div class="text-slate-600 text-xs">フランクフルト中央駅周辺。夜は荷物・貴重品に注意。</div></div></div>');
     }
@@ -517,7 +518,7 @@ const transformScript = `
       const airport = rowFor(day, 'FRA空港 到着');
       const lounge = rowFor(day, 'FRAラウンジ');
       lounge?.remove();
-      if (airport) airport.innerHTML = '<div class="text-slate-500">10:40〜13:40</div><div class="font-semibold">🕐 フランクフルト空港で出発待ち（3時間）</div><details class="fold mt-1"><summary>やること（チェックイン・保安検査・出国審査）</summary><div class="fold-body"><div>CX288のチェックインカウンターと搭乗ゲートは当日の案内で確認</div><div>10:40〜12:55を目安に手続きを済ませる</div><div>Terminal 3発。ターミナル間の移動時間を見ておく</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div>フランクフルトの対象ラウンジは4系統とも未確認。準備タブの「ラウンジ利用可否」に集約してある</div><div>キャセイはFRAに自社ラウンジが無く契約ラウンジを使う。どこかは未確定</div></div></details>';
+      if (airport) airport.innerHTML = '<div class="text-slate-500">10:40〜13:40</div><div class="font-semibold">🕐 フランクフルト空港で出発待ち（3時間）</div><details class="fold mt-1"><summary>やること（チェックイン・保安検査・出国審査）</summary><div class="fold-body"><div>CX288のチェックインカウンターと搭乗ゲートは当日の案内で確認</div><div>10:40〜12:55を目安に手続きを済ませる</div><div>Terminal 3発。ターミナル間の移動時間を見ておく</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div><strong>エアライン</strong>: キャセイはFRAに自社ラウンジが無く契約ラウンジを使う。どこかは未確定。</div><div><strong>Priority Pass</strong>: フランクフルトの対象施設は未確認。</div><div><strong>一般有料</strong>: 対象施設は未確認。</div><div><strong>カード付帯</strong>: 対象施設は未確認。</div><div>利用資格は準備タブの「ラウンジ利用可否」に集約してある。</div></div></details>';
     }
     if (id === '1025') {
       // 到着行と乗り継ぎ行が「2時間15分」で二重になっていたので、折り畳みを持つ方に寄せる。
@@ -624,11 +625,73 @@ const transformScript = `
   ].map(([cls,label,diff,unit,note]) => '<div class="timezone-card ' + cls + '"><span>' + label + '</span><strong class="tz-diff">' + diff + (unit ? '<i>' + unit + '</i>' : '') + '</strong><small>' + note + '</small></div>').join('');
   const returnFooter = family.querySelector('.flight-return > footer');
   if (returnFooter) returnFooter.textContent = '総移動 約17時間30分・全員同便';
+  // ラウンジは「空港での過ごし方」なので、置き場所は会場タブではなく準備タブ。
+  // 旅程には4系統の名前と営業時間だけを残し、利用資格の確認はここへ集約する。
+  // 区間ごとに4系統を必ず並べ、確認できていない系統は消さずに「未確認」で残す。
+  // 未確認を「使えない」と読み替えない。断定を足すときは一次情報を読んでからにする。
+  const LOUNGE_STATE = { ok: '利用可', tbd: '未確認' };
+  const LOUNGE_SEGMENTS = [
+    ['10/17 セントレア出発', '村上・約3時間', [
+      ['エアライン', 'ok', 'JALサクララウンジ（国際線制限エリア・2階）。<strong>oneworld Sapphireでエコノミーでも利用可</strong>で、約2時間半使える。搭乗券と会員証の提示が必要。キャセイはセントレアに自社ラウンジを持たないため提携先になる。'],
+      ['Priority Pass', 'tbd', 'セントレアの対象施設は未確認。会員本人のアプリで当日の対象と同伴条件を確認する。'],
+      ['一般有料', 'ok', 'プラザ・プレミアム・ラウンジ名古屋。会員資格が無くても買える。料金と営業時間は当日確認。'],
+      ['カード付帯', 'tbd', '出国審査前のプレミアムラウンジ セントレア／第2プレミアムラウンジ セントレア／QUALIA LOUNGE。対象になるカードかは保有カードの特典ページで確認する。'],
+    ]],
+    ['10/17 HKG乗継', '村上・3時間45分', [
+      ['エアライン', 'ok', 'oneworld Sapphireでキャセイのビジネスクラスラウンジに<strong>本人＋同伴1名</strong>（キャセイ運航ラウンジのみ）。The Deck と The Pier, Business は05:30〜00:30、The Bridge は05:00〜最終キャセイ便。ファーストクラスラウンジ（The Wing, First / The Pier, First）と、その中の「ザ・カバナ」「ザ・ヘイヴン」は対象外。'],
+      ['Priority Pass', 'tbd', '香港の対象施設は未確認。会員本人のアプリで当日の対象と同伴条件を確認する。'],
+      ['一般有料', 'ok', 'Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。Plaza Premium First は East Hall（Gate 1）06:30〜01:00／West Hall（Gate 35）06:00〜01:00・HKD 980〜。'],
+      ['カード付帯', 'tbd', '香港での対象は未確認。保有カードの特典ページで当日確認する。'],
+    ]],
+    ['10/18 セントレア出発', '美馬・金築・約3時間', [
+      ['エアライン', 'tbd', 'JALサクララウンジ（第1ターミナル・国際線制限エリア）。CX539での利用可否は、搭乗クラス・oneworld/Cathay等のステータス・航空会社の招待条件をチェックイン時に確認する。'],
+      ['Priority Pass', 'tbd', 'Plaza Premium Lounge／The Coral Finest Business Class Lounge。当日の対象施設・同伴条件を会員本人のアプリで確認する。'],
+      ['一般有料', 'ok', 'プラザ・プレミアム・ラウンジ名古屋。会員資格が無くても買える。料金と営業時間は当日確認。'],
+      ['カード付帯', 'tbd', '出国審査前のプレミアムラウンジ セントレア／第2プレミアムラウンジ セントレア／QUALIA LOUNGE。対象になるカードかは保有カードの特典ページで確認する。'],
+    ]],
+    ['10/18 HKG乗継', '美馬・金築・4時間25分', [
+      ['エアライン', 'tbd', 'キャセイのビジネスクラスラウンジ。搭乗クラスまたはoneworld/Cathay等のステータスが対象かを確認する。営業時間は The Deck と The Pier, Business が05:30〜00:30、The Bridge が05:00〜最終キャセイ便。'],
+      ['Priority Pass', 'tbd', '香港の対象施設は未確認。会員本人のアプリで当日の対象と同伴条件を確認する。'],
+      ['一般有料', 'ok', 'Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。'],
+      ['カード付帯', 'tbd', '香港での対象は未確認。保有カードの特典ページで当日確認する。'],
+    ]],
+    ['10/24 FRA出発', '全員・3時間', [
+      ['エアライン', 'tbd', 'キャセイはFRAに自社ラウンジが無く契約ラウンジを使う。どこかは未確定。<strong>Terminal 3</strong>発（キャセイは2026/4移転済み、旧T2は2026/6/9閉鎖）。'],
+      ['Priority Pass', 'tbd', 'フランクフルトの対象施設は未確認。'],
+      ['一般有料', 'tbd', '対象施設は未確認。'],
+      ['カード付帯', 'tbd', '対象施設は未確認。'],
+    ]],
+    ['10/25 HKG乗継', '全員・2時間15分', [
+      ['エアライン', 'ok', '村上はSapphireでキャセイのビジネスクラスラウンジ可（本人＋同伴1名）。<strong>同伴は1名まで＝3名のうち1名が入れない</strong>。07:20着の時点で The Bridge（05:00〜）、The Deck と The Pier, Business（05:30〜）はいずれも営業時間内。'],
+      ['Priority Pass', 'tbd', '香港の対象施設は未確認。会員本人のアプリで当日の対象と同伴条件を確認する。'],
+      ['一般有料', 'ok', 'Plaza Premium Lounge は Gate 60・Gate 1 が24時間。会員資格が無くても買える。'],
+      ['カード付帯', 'tbd', '香港での対象は未確認。保有カードの特典ページで当日確認する。'],
+    ]],
+  ];
+  const loungeCard = Array.from(prepStack ? prepStack.children : []).find(card => card.firstElementChild && card.firstElementChild.textContent.includes('ラウンジ利用可否'));
+  if (!loungeCard) throw new Error('Lounge card is missing');
+  const loungeTable = loungeCard.querySelector('table');
+  if (!loungeTable) throw new Error('Lounge table is missing');
+  loungeTable.outerHTML = '<div class="lounge-groups">' + LOUNGE_SEGMENTS.map(segment => {
+    const [title, who, systems] = segment;
+    return '<article class="lounge-seg"><header><strong>' + esc(title) + '</strong><span>' + esc(who) + '</span></header><dl>' +
+      systems.map(([label, state, body]) => '<div class="lounge-row lounge-' + state + '"><dt>' + esc(label) + '<i>' + LOUNGE_STATE[state] + '</i></dt><dd>' + body + '</dd></div>').join('') +
+      '</dl></article>';
+  }).join('') + '</div>';
+
   [prep, venue, family].forEach(panel => {
     panel.className = 'tab legacy-tab'; panel.setAttribute('role','tabpanel');
     const inner = panel.querySelector(':scope > div'); if (inner) inner.className = 'legacy-stack';
   });
   family.classList.add('family-tab');
+  // 5列の表は393pxで幅が足りず、カード側の overflow:hidden に当たって右端が切れる。
+  // 表だけを横スクロールできる箱へ入れ、切らずに読めるようにする。
+  document.querySelectorAll('.legacy-tab table').forEach(table => {
+    const box = document.createElement('div');
+    box.className = 'table-scroll';
+    table.replaceWith(box);
+    box.appendChild(table);
+  });
   itinerary.className = 'tab on'; itinerary.setAttribute('role','tabpanel');
 
   const header = document.createElement('header');

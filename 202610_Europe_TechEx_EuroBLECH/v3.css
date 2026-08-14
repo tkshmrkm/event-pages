@@ -137,6 +137,8 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .legacy-stack>.bg-white,.legacy-stack>[class*="bg-white"]{overflow:hidden;margin:0;border:2px solid var(--line)!important;border-radius:12px!important;background:#fff!important;box-shadow:0 1px 2px rgba(16,24,32,.05)!important}
 .legacy-stack>.bg-white>[class*="bg-gray-700"],.legacy-stack>.bg-white>[class*="bg-gradient"],.legacy-stack>[class*="bg-white"]>[class*="bg-gray-700"]{padding:10px 14px!important;background:var(--neu-bg)!important;color:var(--tx2)!important;font-size:16px!important;font-weight:700!important}
 .legacy-stack>.bg-white>.p-4,.legacy-stack>.bg-white>.p-3,.legacy-stack>[class*="bg-white"]>.p-4,.legacy-stack>[class*="bg-white"]>.p-3{padding:12px 14px!important}
+/* Wide tables scroll inside their own box instead of being clipped by the card. */
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .legacy-tab table{width:100%;border-collapse:collapse;font-size:var(--f3)}
 .legacy-tab th,.legacy-tab td{padding:8px;border-bottom:1px solid var(--line2);vertical-align:top;text-align:left}
 .legacy-tab th{background:var(--line2);color:var(--tx2);font-weight:700}
@@ -233,7 +235,25 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .family-day-row>section,.family-day-row>aside{min-width:0;border-left:1px solid var(--line);padding:9px 10px}.family-day-row h3{margin:0 0 7px;color:var(--mu);font-size:12px;font-weight:700;letter-spacing:.04em}.agenda-line{display:grid;grid-template-columns:82px auto minmax(0,1fr);align-items:start;gap:6px;padding:7px 0;border-top:1px solid var(--line2)}.agenda-line:first-of-type{border-top:0;padding-top:0}.agenda-line time{color:#0B4F5A;font-size:14px;font-weight:800;line-height:1.35;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.agenda-line p,.family-day-row aside p{margin:0;color:var(--tx2);font-size:13px;line-height:1.55;overflow-wrap:anywhere}.agenda-line p b{color:var(--tx)}.agenda-empty{color:var(--mu);font-size:13px}.family-day-row aside{background:#F7F9FA}.family-day-row aside p+p{margin-top:8px;border-top:1px solid var(--line2);padding-top:8px}.family-day-row aside small{color:var(--mu);font-size:11px}.shared-day .family-shared{grid-column:2/4}
 .field-footer{border-top:1px solid var(--line);padding:18px 12px 28px;color:var(--mu);text-align:center;font-size:var(--f4)}
 
+/* Lounge eligibility lives in the preparation tab: every segment lists all four systems.
+   Unconfirmed systems stay on the list marked 未確認 rather than being dropped. */
+.lounge-groups{display:grid;gap:10px}
+.lounge-seg{overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff}
+.lounge-seg>header{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--line2)}
+.lounge-seg>header strong{color:var(--tx);font-size:var(--f3)}
+.lounge-seg>header span{color:var(--mu);font-size:var(--f5)}
+.lounge-seg dl{display:grid;margin:0}
+.lounge-row{display:grid;grid-template-columns:104px minmax(0,1fr);gap:0 10px;padding:8px 10px;border-top:1px solid var(--line2)}
+.lounge-row:first-child{border-top:0}
+.lounge-row dt{color:var(--tx2);font-size:var(--f4);font-weight:700}
+.lounge-row dt i{display:block;margin-top:3px;font-style:normal;font-size:var(--f5);font-weight:700}
+.lounge-ok dt i{color:#1F6A3A}
+.lounge-tbd dt i{color:#7A3E08}
+.lounge-row dd{margin:0;color:var(--tx2);font-size:var(--f4);line-height:1.6}
+
 @media(max-width:640px){
+  .lounge-row{grid-template-columns:minmax(0,1fr);gap:3px}
+  .lounge-row dt i{display:inline-block;margin:0 0 0 7px}
   .hdr-top{align-items:center}
   .header-actions{gap:4px}
   .header-actions .btn{padding-left:8px;padding-right:8px}
@@ -274,6 +294,7 @@ details.fold>.fold-body>div+div{margin-top:5px}
 @media print{
   .header-actions,.field-nav,.record-actions,.field-footer{display:none!important}
   .tab{display:block!important}
+  .table-scroll{overflow:visible}
   .day,.record-card,.legacy-stack>.bg-white{break-inside:avoid;box-shadow:none!important}
   .topic{display:block}
 }
