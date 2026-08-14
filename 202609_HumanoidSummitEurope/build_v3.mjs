@@ -26,6 +26,16 @@ function mustReplace(text, search, replacement, label) {
   return text.replace(search, replacement);
 }
 
+// EuroBLECH方式の全件置換。同一文字列が複数箇所に出る場合に、件数を数えて
+// 期待値と食い違ったら止める（黙って0件・過剰置換になるのを防ぐ）。
+function replaceAllCounted(text, search, replacement, label, expectedCount) {
+  const count = text.split(search).length - 1;
+  if (count !== expectedCount) {
+    throw new Error(`Replacement count mismatch: ${label} (expected ${expectedCount}, found ${count})`);
+  }
+  return text.split(search).join(replacement);
+}
+
 const outdoorCss = String.raw`
 /* ============================================================
    v3 field-use overrides — direct-sunlight mobile operation
@@ -98,6 +108,12 @@ body{line-height:1.62;padding-bottom:24px}
 .cloud-sync .cloud-remember input{width:18px;height:18px;margin:1px 0 0}
 .cloud-sync .cloud-actions{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:7px}
 .cloud-sync [data-trip-cloud-status]{min-height:1.5em;color:var(--mu);font-size:var(--f3)}
+/* 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーではなくここに置く（202610_Europe_TechEx_EuroBLECHのv3.cssと同一） */
+.day-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin:9px 0 0;color:var(--mu);font-size:var(--f5)}
+.day-toolbar .btn{padding:5px 11px;font-size:var(--f5)}
+/* 凡例は地の文なので、行内に並ぶようにする。.mode-iconの既定はflexで、そのままだと行が崩れる。 */
+.legend .flight-mark,.legend .mode-icon{vertical-align:-4px;margin-right:1px}
+.legend .mode-icon{display:inline-flex}
 @media(max-width:640px){
   .wrap{padding-left:10px;padding-right:10px}
   .hdr-top{gap:8px}
@@ -189,7 +205,188 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
 }
 `;
 
-const compiledSharedCss = `${sourceCssMatch[1]}\n${sharedCoreCss}\n${outdoorCss}\n${familyCss}`.trim() + '\n';
+// ---------- 交通手段アイコン（202610_Europe_TechEx_EuroBLECHのbuild_v3.mjs 303〜325行目付近と同一） ----------
+// フライトは.flight-mark（core.cssのmaskアイコン）、それ以外は.mode-icon配下にSVGを差し込む。
+const MODE_ICON_PATHS = {
+  train: '<rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/>',
+  car: '<path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2m12 0v2h2v-2M6 13h12"/><circle cx="8" cy="15" r=".8"/><circle cx="16" cy="15" r=".8"/>',
+};
+const MODE_ICON_LABELS = { train: '鉄道', car: 'タクシー' };
+const modeIconHtml = kind => '<span class="mode-icon mode-icon-' + kind + '" role="img" aria-label="' + MODE_ICON_LABELS[kind] + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + MODE_ICON_PATHS[kind] + '</svg></span>';
+const flightMarkHtml = '<span class="flight-mark" role="img" aria-label="フライト"></span>';
+
+// ---------- 地図リンクを場所名そのものへ張り替える ----------
+// 「地図」「（地図）」という別リンクをやめ、直前の場所名を<a class="place">で包む。
+// hrefは既存のGoogle Maps検索リンクをそのまま流用する。3件目・4件目は、
+// 3列目に'all'を指定すると全件を置換する（同一文が複数箇所に出る場合）。
+const MAP_LINK_FIXUPS = [
+  [
+    '<strong>Stuttgart Hbf 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Stuttgart+Hauptbahnhof" target="_blank" rel="noopener">地図</a>',
+    '<strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Stuttgart+Hauptbahnhof" target="_blank" rel="noopener">Stuttgart Hbf</a> 着</strong>',
+    1,
+  ],
+  [
+    'Arnulf-Klett-Platz 側の乗り場 <a href="https://www.google.com/maps/search/?api=1&amp;query=Taxi+Stuttgart+Hauptbahnhof+Arnulf-Klett-Platz" target="_blank" rel="noopener">（地図）</a> から',
+    '<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Taxi+Stuttgart+Hauptbahnhof+Arnulf-Klett-Platz" target="_blank" rel="noopener">Arnulf-Klett-Platz</a> 側の乗り場から',
+    1,
+  ],
+  [
+    'Berliner Platz (Liederhalle) <a href="https://www.google.com/maps/search/?api=1&amp;query=Berliner+Platz+Liederhalle+Stuttgart" target="_blank" rel="noopener">（地図）</a>（約3分）',
+    '<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Berliner+Platz+Liederhalle+Stuttgart" target="_blank" rel="noopener">Berliner Platz (Liederhalle)</a>（約3分）',
+    1,
+  ],
+  [
+    '<strong>Maritim Stuttgart 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">地図</a>',
+    '<strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">Maritim Stuttgart</a> 着</strong>',
+    1,
+  ],
+  [
+    'Schlossplatz <a href="https://www.google.com/maps/search/?api=1&amp;query=Schlossplatz+Stuttgart" target="_blank" rel="noopener">地図</a>、',
+    '<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Schlossplatz+Stuttgart" target="_blank" rel="noopener">Schlossplatz</a>、',
+    1,
+  ],
+  [
+    'Residenzschloss＋Blühendes Barock庭園 <a href="https://www.google.com/maps/search/?api=1&amp;query=Residenzschloss+Ludwigsburg" target="_blank" rel="noopener">地図</a> →',
+    '<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Residenzschloss+Ludwigsburg" target="_blank" rel="noopener">Residenzschloss＋Blühendes Barock庭園</a> →',
+    1,
+  ],
+  [
+    // 9/9の「ホテル→Liederhalle」と、宿泊カード内の「会場 Liederhalle」の2箇所で共通。
+    'Liederhalle <a href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a>',
+    '<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">Liederhalle</a>',
+    2,
+  ],
+  [
+    // 会場タブの📍付き別リンク形式。📍自体は場所名の目印として残す。
+    '📍 <strong>Liederhalle</strong>（Berliner Platz 1-3） <a href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">地図</a> — ホテルから徒歩約3分',
+    '📍 <strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">Liederhalle</a></strong>（Berliner Platz 1-3） — ホテルから徒歩約3分',
+    1,
+  ],
+  [
+    // 9/12（プランB/D）・9/13（プランX/Z）の「BestWestern 着」×3。
+    '<strong>BestWestern 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">地図</a>',
+    '<strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">BestWestern</a> 着</strong>',
+    3,
+  ],
+  [
+    '<strong>Best Western Hotel Airport Frankfurt</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">（地図）</a>：9/12〜9/13',
+    '<strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">Best Western Hotel Airport Frankfurt</a></strong>：9/12〜9/13',
+    1,
+  ],
+  [
+    'Best Western Hotel Airport Frankfurt（フランクフルト空港） <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">（地図）</a>',
+    '<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">Best Western Hotel Airport Frankfurt</a>（フランクフルト空港）',
+    1,
+  ],
+  [
+    // 9/12（プランA/C）の「Frankfurt空港発 → Mainz Hbf」×2。
+    '<strong>Frankfurt空港発 → Mainz Hbf</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Mainz+Hauptbahnhof" target="_blank" rel="noopener">地図</a>（約35〜40分）',
+    '<strong>Frankfurt空港発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Mainz+Hauptbahnhof" target="_blank" rel="noopener">Mainz Hbf</a></strong>（約35〜40分）',
+    2,
+  ],
+  [
+    '<strong>Mainz Hbf発 → MEWA ARENA</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=MEWA+ARENA+Mainz" target="_blank" rel="noopener">地図</a>',
+    '<strong>Mainz Hbf発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=MEWA+ARENA+Mainz" target="_blank" rel="noopener">MEWA ARENA</a></strong>',
+    1,
+  ],
+  [
+    // 9/12（プランB/D）・9/13（プランY）の「ケルン大聖堂と旧市街」×3。
+    '<strong>ケルン大聖堂と旧市街</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Koelner+Dom" target="_blank" rel="noopener">地図</a>',
+    '<strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Koelner+Dom" target="_blank" rel="noopener">ケルン大聖堂と旧市街</a></strong>',
+    3,
+  ],
+  [
+    // 9/12（プランA）・9/13（プランX）の「Porsche Museum 見学」×2。
+    '<strong>Porsche Museum 見学</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Porsche+Museum+Stuttgart" target="_blank" rel="noopener">地図</a>',
+    '<strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Porsche+Museum+Stuttgart" target="_blank" rel="noopener">Porsche Museum</a> 見学</strong>',
+    2,
+  ],
+  [
+    'Römerberg <a href="https://www.google.com/maps/search/?api=1&amp;query=Roemerberg+Frankfurt" target="_blank" rel="noopener">地図</a>',
+    '<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Roemerberg+Frankfurt" target="_blank" rel="noopener">Römerberg</a>',
+    1,
+  ],
+  [
+    'Kleinmarkthalle <a href="https://www.google.com/maps/search/?api=1&amp;query=Kleinmarkthalle+Frankfurt" target="_blank" rel="noopener">地図</a>',
+    '<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Kleinmarkthalle+Frankfurt" target="_blank" rel="noopener">Kleinmarkthalle</a>',
+    1,
+  ],
+  [
+    'Gutenberg博物館 <a href="https://www.google.com/maps/search/?api=1&amp;query=Gutenberg+Museum+Mainz" target="_blank" rel="noopener">地図</a>',
+    '<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Gutenberg+Museum+Mainz" target="_blank" rel="noopener">Gutenberg博物館</a>',
+    1,
+  ],
+  [
+    'Mainzer Dom <a href="https://www.google.com/maps/search/?api=1&amp;query=Mainzer+Dom" target="_blank" rel="noopener">地図</a>',
+    '<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Mainzer+Dom" target="_blank" rel="noopener">Mainzer Dom</a>',
+    1,
+  ],
+  [
+    '<strong>Maritim Stuttgart</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a>（★★★★／Seidenstraße 34, 70174）',
+    '<strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">Maritim Stuttgart</a></strong>（★★★★／Seidenstraße 34, 70174）',
+    1,
+  ],
+  [
+    'Maritim Stuttgart（シュトゥットガルト）　TEL +49 711 9420 <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a>',
+    '<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">Maritim Stuttgart</a>（シュトゥットガルト）　TEL +49 711 9420',
+    1,
+  ],
+];
+
+const dayToolbar = '<div class="day-toolbar no-print"><span>日付カード</span><button class="btn" id="days-tg" type="button" aria-expanded="true">すべて閉じる</button></div>';
+
+const dayToggleScript = String.raw`  const openDay = id => {
+    const d = document.getElementById(id);
+    if (d && d.classList.contains('day')) d.open = true;
+    syncDaysToggle();
+    return d;
+  };
+
+  /* ---------- 日付ナビ ---------- */
+  const dayBox = document.getElementById('day-chips');
+  /* 端末のローカル日付（UTCではなく）。渡航中は現地日付になる。 */
+  const todayISO = (() => {
+    const n = new Date(), p = x => String(x).padStart(2,'0');
+    return n.getFullYear() + '-' + p(n.getMonth()+1) + '-' + p(n.getDate());
+  })();
+  days.forEach(d => {
+    const a = document.createElement('a');
+    a.className = 'chip'; a.href = '#' + d.id;
+    a.innerHTML = d.dataset.label + '<span style="font-weight:400;font-size:var(--f5);margin-left:2px">' + d.dataset.dow + '</span>';
+    a.dataset.for = d.id;
+    if (d.dataset.date === todayISO) a.classList.add('today');
+    a.addEventListener('click', () => openDay(d.id));   /* 畳んだ日へ飛ぶときは開く */
+    dayBox.appendChild(a);
+  });
+
+  /* ---------- 日付カードの一括開閉 ----------
+     ラベルは今の状態を示すので、個別に開閉したときや日付チップで
+     開いたときも追随させる（202610_Europe_TechEx_EuroBLECHのv3.jsと同一の判定）。
+     開閉状態は保存しない（既定は全部開く）。                                */
+  const daysToggle = document.getElementById('days-tg');
+  const syncDaysToggle = () => {
+    if (!daysToggle) return;
+    const anyOpen = days.some(d => d.open);
+    daysToggle.textContent = anyOpen ? 'すべて閉じる' : 'すべて開く';
+    daysToggle.setAttribute('aria-expanded', String(anyOpen));
+  };
+  daysToggle?.addEventListener('click', () => {
+    const closing = days.some(d => d.open);
+    days.forEach(d => { d.open = !closing; });
+    syncDaysToggle(); setH();
+    if (closing) window.scrollTo({ top: 0, behavior: 'auto' });
+  });
+  days.forEach(d => d.addEventListener('toggle', syncDaysToggle));
+  syncDaysToggle();`;
+
+// 元CSSのコメントが旧アイコン方式（✈/🚆/🚕）のままだと、机上用印刷版に埋め込まれた
+// ときに廃止済みの記号が残る。説明を現行方式へ書き換えてから連結する。
+// v3.css（オンライン版が読む）と机上用印刷版（元CSSをそのまま埋め込む）の
+// 両方に効かせる必要があるので、対にして2箇所で使う。
+const LEGEND_COMMENT_OLD = '   ✈飛行機 🚆鉄道 🚕タクシー 🛂空港手続き 🏨宿 🍽食事 🏛観光 ⚽観戦 🤖HRS';
+const LEGEND_COMMENT_NEW = '   交通手段はアイコン（.flight-mark／.mode-icon）。その他は 🛂空港手続き 🏨宿 🍽食事 🏛観光 ⚽観戦 🤖HRS';
+const sourceCss = mustReplace(sourceCssMatch[1], LEGEND_COMMENT_OLD, LEGEND_COMMENT_NEW, 'legend comment in source CSS');
+const compiledSharedCss = `${sourceCss}\n${sharedCoreCss}\n${outdoorCss}\n${familyCss}`.trim() + '\n';
 
 const transferControls = String.raw`
     <button class="btn" id="btn-download-md">⬇ メモをMarkdownでDL</button>
@@ -445,7 +642,74 @@ function buildMain({ offline = false } = {}) {
   html = mustReplace(html, /<header class="hdr">[\s\S]*?<\/header>/, header, 'header');
 
   html = html.replace(/<details class="day"/g, '<details class="day" open');
-  html = html.replace(/\u2708\uFE0F?/g, '\u2708\uFE0E').replace(/[🛫🛬]/gu, '\u2708\uFE0E');
+  // ---------- 交通手段アイコン（EuroBLECH方式） ----------
+  // 旧方式（カラー絵文字✈️をモノクロ✈︎へ正規化するだけの処理）は廃止。
+  // フライトは.flight-mark、鉄道・タクシーは.mode-iconへ差し替える。2列構造・文言は変えない。
+  html = replaceAllCounted(html, '<span class="et t-fly">✈</span>', flightMarkHtml, 'flight icon (t-fly)', 8);
+  html = replaceAllCounted(html, '<span class="et t-move">🚆</span>', modeIconHtml('train'), 'train icon (t-move)', 35);
+  html = replaceAllCounted(html, '<span class="et t-taxi">🚕</span>', modeIconHtml('car'), 'taxi icon (t-taxi)', 1);
+  // 旧ビルドはカラー絵文字✈️をモノクロ✈︎へ正規化していた。その処理を外した以上、
+  // 交通行の外に残る✈️も.flight-markへ変えないと、カラー絵文字がそのまま出てしまう。
+  html = replaceAllCounted(html, '<div class="joinbar" data-type="merge"><span>✈️</span>', `<div class="joinbar" data-type="merge"><span>${flightMarkHtml}</span>`, 'joinbar flight glyph', 1);
+  html = replaceAllCounted(html, '<h2 class="ttl">✈️ 利用フライト', `<h2 class="ttl">${flightMarkHtml} 利用フライト`, 'flight card heading glyph', 1);
+  // FAMのplaceはindex.htmlとfamily_print.htmlの両方でinnerHTML経由で描画されるのでHTMLを入れてよい。
+  html = replaceAllCounted(html, "place:'✈️ 帰国日'", `place:'${flightMarkHtml} 帰国日'`, 'family return-day glyph', 1);
+  // 準備タブの鉄道チケットの行も交通手段の印なので、絵文字ではなくアイコンにそろえる。
+  html = replaceAllCounted(html, '<div>🚆 鉄道は事前購入せず', `<div>${modeIconHtml('train')} 鉄道は事前購入せず`, 'rail ticket bullet', 1);
+  // 机上用印刷版は元CSSをそのまま<style>へ埋め込むため、v3.css側とは別にここでも当てる。
+  html = mustReplace(html, LEGEND_COMMENT_OLD, LEGEND_COMMENT_NEW, 'legend comment in embedded CSS');
+
+  // ---------- 地図リンクを場所名そのものへ ----------
+  MAP_LINK_FIXUPS.forEach(([search, replacement, expectedCount], i) => {
+    html = replaceAllCounted(html, search, replacement, `map link fixup #${i}`, expectedCount);
+  });
+
+  // ---------- 日付カードの一括開閉 ----------
+  html = mustReplace(
+    html,
+    '    <div class="foot legend">✈ 飛行機 ・ 🚆 鉄道 ・ 🚕 タクシー ・ 🛂 空港手続き ・ 🏨 宿 ・ 🍽 食事 ・ 🏛 観光 ・ ⚽ 観戦 ・ 🛋 ラウンジ ・ 🤖 HRS<span class="muted">｜印が無い行は徒歩か、その場での行動</span></div>\n  </div>\n\n  <!-- ---------- 9/7 ---------- -->',
+    `    <div class="foot legend">${flightMarkHtml} 飛行機 ・ ${modeIconHtml('train')} 鉄道 ・ ${modeIconHtml('car')} タクシー ・ 🛂 空港手続き ・ 🏨 宿 ・ 🍽 食事 ・ 🏛 観光 ・ ⚽ 観戦 ・ 🛋 ラウンジ ・ 🤖 HRS<span class="muted">｜印が無い行は徒歩か、その場での行動</span></div>\n  </div>\n\n  ${dayToolbar}\n\n  <!-- ---------- 9/7 ---------- -->`,
+    'day toolbar insertion point'
+  );
+  html = mustReplace(
+    html,
+    String.raw`  const openDay = id => {
+    const d = document.getElementById(id);
+    if (d && d.classList.contains('day')) d.open = true;
+    return d;
+  };
+
+  /* ---------- 日付ナビ ---------- */
+  const dayBox = document.getElementById('day-chips');
+  /* 端末のローカル日付（UTCではなく）。渡航中は現地日付になる。 */
+  const todayISO = (() => {
+    const n = new Date(), p = x => String(x).padStart(2,'0');
+    return n.getFullYear() + '-' + p(n.getMonth()+1) + '-' + p(n.getDate());
+  })();
+  days.forEach(d => {
+    const a = document.createElement('a');
+    a.className = 'chip'; a.href = '#' + d.id;
+    a.innerHTML = d.dataset.label + '<span style="font-weight:400;font-size:var(--f5);margin-left:2px">' + d.dataset.dow + '</span>';
+    a.dataset.for = d.id;
+    if (d.dataset.date === todayISO) a.classList.add('today');
+    a.addEventListener('click', () => openDay(d.id));   /* 畳んだ日へ飛ぶときは開く */
+    dayBox.appendChild(a);
+  });
+  /* 全部開く／畳む（横スクロールする日付行ではなく、人フィルタ行の右端に置く） */
+  const allBtn = document.createElement('button');
+  allBtn.className = 'chip'; allBtn.style.marginLeft = 'auto'; allBtn.style.position = 'sticky'; allBtn.style.right = '0';
+  const paintAll = () => { allBtn.textContent = days.every(d => d.open) ? '全部たたむ' : '全部ひらく'; };
+  allBtn.addEventListener('click', () => {
+    const toOpen = !days.every(d => d.open);
+    days.forEach(d => d.open = toOpen);
+    paintAll(); setH();
+  });
+  days.forEach(d => d.addEventListener('toggle', paintAll));
+  paintAll();
+  whoBox.appendChild(allBtn);`,
+    dayToggleScript,
+    'day card bulk toggle script'
+  );
   html = mustReplace(html, "const EVENT_KEY = 'hrs2026-v2';", "const EVENT_KEY = 'hrs2026-v3';", 'storage namespace');
   html = mustReplace(html, /const store = \{[\s\S]*?\n\};/, 'const store = window.TripField.createStore(EVENT_KEY);', 'shared storage runtime');
   html = mustReplace(html, "const hdr = document.querySelector('.hdr');", "const hdr = document.querySelector('.field-nav');", 'sticky height element');
@@ -538,6 +802,22 @@ function buildMain({ offline = false } = {}) {
   return html;
 }
 
+// 家族印刷版はbuildFamily()が変換前のsourceから切り出すので、
+// buildMain()側の置換が届かない。同じ規約をこちら側にも当てる。
+const FAMILY_FIXUPS = [
+  // 帰国日のカラー絵文字を共通のフライトアイコンへ
+  ["✈️ 帰国日", `${flightMarkHtml} 帰国日`],
+  // 地図リンクはホテル名そのものへ張る。「（地図）」の別リンクは出さない
+  [
+    '<strong>9/8〜9/12</strong>　Maritim Stuttgart（シュトゥットガルト）　TEL +49 711 9420 <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a>',
+    '<strong>9/8〜9/12</strong>　<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">Maritim Stuttgart</a>（シュトゥットガルト）　TEL +49 711 9420',
+  ],
+  [
+    '<strong>9/12〜9/13</strong>　Best Western Hotel Airport Frankfurt（フランクフルト空港） <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">（地図）</a>',
+    '<strong>9/12〜9/13</strong>　<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">Best Western Hotel Airport Frankfurt</a>（フランクフルト空港）',
+  ],
+];
+
 function extractFamilyRows() {
   const match = source.match(/const FAM = (\{[\s\S]*?\n\});/);
   if (!match) throw new Error('FAM data not found');
@@ -559,6 +839,10 @@ function buildFamily() {
     .replace('<tbody id="fam-days"></tbody>', `<tbody id="fam-days">${extractFamilyRows()}</tbody>`);
   section = section.replace(/<!-- ② いまの状態[\s\S]*?<!-- ③ 毎日どこで何をしているか/, '<!-- 毎日どこで何をしているか');
   section = section.replace('出張中は<strong>その日の行が色付き</strong>になります。細かい時刻までは載せていません。', '細かい時刻は省き、居場所と大きな予定だけを載せています。');
+  FAMILY_FIXUPS.forEach(([search, replacement], i) => {
+    if (!section.includes(search)) throw new Error(`Family fixup #${i} not found`);
+    section = section.split(search).join(replacement);
+  });
   return `<!DOCTYPE html>
 <html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>HRS Europe 2026 家族向け予定表</title><link rel="stylesheet" href="v3.css"></head>

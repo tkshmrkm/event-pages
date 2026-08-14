@@ -165,7 +165,7 @@ h3{font-size:var(--f3);margin:14px 0 6px;color:var(--tx2)}
 .note{margin-top:5px;color:var(--mu);font-size:var(--f4);line-height:1.65;padding-left:9px;border-left:2px solid var(--line2)}
 
 /* イベント種別：絵文字だけ。色は付けない（HRSと要検討のみ例外）
-   ✈︎飛行機 🚆鉄道 🚕タクシー 🛂空港手続き 🏨宿 🍽食事 🏛観光 ⚽観戦 🤖HRS
+   交通手段はアイコン（.flight-mark／.mode-icon）。その他は 🛂空港手続き 🏨宿 🍽食事 🏛観光 ⚽観戦 🤖HRS
    印を付けないのは「徒歩」と「その場での行動」。
    ⚽は観戦で、HRS（🤖）とは別物なので rose の色は使わない。 */
 .et{margin-right:3px;font-style:normal}
@@ -362,6 +362,12 @@ body{line-height:1.62;padding-bottom:24px}
 .cloud-sync .cloud-remember input{width:18px;height:18px;margin:1px 0 0}
 .cloud-sync .cloud-actions{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:7px}
 .cloud-sync [data-trip-cloud-status]{min-height:1.5em;color:var(--mu);font-size:var(--f3)}
+/* 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーではなくここに置く（202610_Europe_TechEx_EuroBLECHのv3.cssと同一） */
+.day-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin:9px 0 0;color:var(--mu);font-size:var(--f5)}
+.day-toolbar .btn{padding:5px 11px;font-size:var(--f5)}
+/* 凡例は地の文なので、行内に並ぶようにする。.mode-iconの既定はflexで、そのままだと行が崩れる。 */
+.legend .flight-mark,.legend .mode-icon{vertical-align:-4px;margin-right:1px}
+.legend .mode-icon{display:inline-flex}
 @media(max-width:640px){
   .wrap{padding-left:10px;padding-right:10px}
   .hdr-top{gap:8px}
@@ -468,13 +474,15 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
     <h2 class="ttl">🧭 現地での方針</h2>
     <div class="bd small" style="display:grid;gap:4px">
       <div>🧳 荷物は常にホテルに預ける<span class="note">コインロッカーは使わない。</span></div>
-      <div>🚆 鉄道は事前購入せず DB Navigator で都度購入<span class="note">Stuttgart→Frankfurt空港、プランB・D・X選択時の Frankfurt⇔Köln を含む。</span></div>
+      <div><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span> 鉄道は事前購入せず DB Navigator で都度購入<span class="note">Stuttgart→Frankfurt空港、プランB・D・X選択時の Frankfurt⇔Köln を含む。</span></div>
       <div>🏨 Stuttgart 4泊 → Frankfurt空港 1泊 <span class="st st-booked">予約済</span><span class="note">Maritim Stuttgart（9/8〜9/12・朝食付・会場まで徒歩約3分）／Best Western Hotel Airport Frankfurt（9/12〜9/13・朝食付）。詳細は準備タブ。</span></div>
     </div>
     <div class="foot" style="border-bottom:1px solid var(--line2)">🚉 <strong>Frankfurt空港には駅が2つある。</strong>長距離駅（Fernbf・ICE）と近郊駅（S-Bahn）は別の場所なので、乗る前にどちらか確認する。</div>
     <div class="foot" style="border-bottom:1px solid var(--line2)">🏷 <strong>未確定の書き分け：</strong>「未発表」＝先方が出していない ／「要確認」＝調べれば分かる ／「要検討」＝こちらが決める</div>
-    <div class="foot legend">✈︎ 飛行機 ・ 🚆 鉄道 ・ 🚕 タクシー ・ 🛂 空港手続き ・ 🏨 宿 ・ 🍽 食事 ・ 🏛 観光 ・ ⚽ 観戦 ・ 🛋 ラウンジ ・ 🤖 HRS<span class="muted">｜印が無い行は徒歩か、その場での行動</span></div>
+    <div class="foot legend"><span class="flight-mark" role="img" aria-label="フライト"></span> 飛行機 ・ <span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span> 鉄道 ・ <span class="mode-icon mode-icon-car" role="img" aria-label="タクシー"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2m12 0v2h2v-2M6 13h12"/><circle cx="8" cy="15" r=".8"/><circle cx="16" cy="15" r=".8"/></svg></span> タクシー ・ 🛂 空港手続き ・ 🏨 宿 ・ 🍽 食事 ・ 🏛 観光 ・ ⚽ 観戦 ・ 🛋 ラウンジ ・ 🤖 HRS<span class="muted">｜印が無い行は徒歩か、その場での行動</span></div>
   </div>
+
+  <div class="day-toolbar no-print"><span>日付カード</span><button class="btn" id="days-tg" type="button" aria-expanded="true">すべて閉じる</button></div>
 
   <!-- ---------- 9/7 ---------- -->
   <details class="day" open id="day-0907" data-label="9/7" data-dow="月" data-date="2026-09-07" data-kind="move">
@@ -485,7 +493,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="lane-head">👤 京都発</div>
         <table class="tl">
           <tr><td class="t">18:00</td><td>自宅発 → 京都駅へ</td></tr>
-          <tr><td class="t">18:30</td><td><span class="et t-move">🚆</span>京都駅発（新幹線）→ 名古屋（約35分）</td></tr>
+          <tr><td class="t">18:30</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span>京都駅発（新幹線）→ 名古屋（約35分）</td></tr>
           <tr><td class="t">19:05頃</td><td>JR名古屋着 → 名鉄名古屋駅へ移動（徒歩約10分）</td></tr>
         </table>
       </div>
@@ -493,7 +501,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="lane-head">👤 犬山発</div>
         <table class="tl">
           <tr><td class="t">18:10</td><td>自宅発 → 犬山駅へ</td></tr>
-          <tr><td class="t">18:40頃</td><td><span class="et t-move">🚆</span>名鉄 犬山駅発 → 名鉄名古屋駅（約30分）</td></tr>
+          <tr><td class="t">18:40頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span>名鉄 犬山駅発 → 名鉄名古屋駅（約30分）</td></tr>
         </table>
       </div>
     </div>
@@ -503,11 +511,11 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
 
     <div class="lane" data-who="all">
       <table class="tl">
-        <tr><td class="t">19:30頃</td><td><span class="et t-move">🚆</span>名鉄名古屋駅発 ミュースカイ → セントレア（約28分）</td></tr>
+        <tr><td class="t">19:30頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span>名鉄名古屋駅発 ミュースカイ → セントレア（約28分）</td></tr>
         <tr><td class="t">20:00頃</td><td><strong>セントレア着</strong>
           <div class="sub"><span class="et t-gate">🛂</span>チェックイン・保安検査・出国審査 → 🛋 JALサクララウンジ（国際線）</div>
           <div class="note">出発の約2時間50分前に到着する想定。</div></td></tr>
-        <tr><td class="t">22:50発</td><td><span class="et t-fly">✈︎</span>NGO発 → HEL（Finnair AY80／A350・13時間5分）<span class="note">機内泊</span></td></tr>
+        <tr><td class="t">22:50発</td><td><span class="flight-mark" role="img" aria-label="フライト"></span>NGO発 → HEL（Finnair AY80／A350・13時間5分）<span class="note">機内泊</span></td></tr>
       </table>
     </div>
   </details>
@@ -517,25 +525,25 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
     <summary class="day-head"><span class="d">9/8（火）</span><span class="t">FRA着 → Stuttgart移動（荷物は先にホテルへ）</span></summary>
     <div class="lane" data-who="all">
       <table class="tl">
-        <tr><td class="t">5:55</td><td><span class="et t-fly">✈︎</span><strong>HEL 着</strong>
+        <tr><td class="t">5:55</td><td><span class="flight-mark" role="img" aria-label="フライト"></span><strong>HEL 着</strong>
           <div class="sub">シェンゲン入域審査 → 搭乗口へ（乗継 1時間45分）</div><span class="note">ラウンジや買物は予定に入れず、入域審査と搭乗口確認を優先。朝食用のパン／サンドイッチはFRA到着後に購入する</span></td></tr>
-        <tr><td class="t">7:40</td><td><span class="et t-fly">✈︎</span>HEL発 → FRA（AY1411／A321・2時間40分）<span class="note">エコノミーは食事なし。<a href="https://www.finnair.com/fi-en/nordic-kitchen--onboard-meals-and-beverages/short-haul-meals" target="_blank" rel="noopener">Finnair公式</a>では水・ブルーベリージュースは無料、軽食・コーヒー等は有料。必要なら事前注文も可</span></td></tr>
-        <tr><td class="t">9:20</td><td><span class="et t-fly">✈︎</span><strong>FRA 着</strong>
+        <tr><td class="t">7:40</td><td><span class="flight-mark" role="img" aria-label="フライト"></span>HEL発 → FRA（AY1411／A321・2時間40分）<span class="note">エコノミーは食事なし。<a href="https://www.finnair.com/fi-en/nordic-kitchen--onboard-meals-and-beverages/short-haul-meals" target="_blank" rel="noopener">Finnair公式</a>では水・ブルーベリージュースは無料、軽食・コーヒー等は有料。必要なら事前注文も可</span></td></tr>
+        <tr><td class="t">9:20</td><td><span class="flight-mark" role="img" aria-label="フライト"></span><strong>FRA 着</strong>
           <div class="sub">荷物受取・税関</div><span class="note">入国審査はHELで完了。荷物受取・税関後、T3の<a href="https://www.frankfurt-airport.com/en/locations/b/bread-and-bite/bread-and-bite.html" target="_blank" rel="noopener">Bread &amp; Bite</a>（6:00〜22:00）などでICE車内用のパン／サンドイッチを購入してから長距離駅へ</span></td></tr>
-        <tr><td class="t">10:51目安</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Stuttgart Hbf</strong>（1時間20分）
+        <tr><td class="t">10:51目安</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Stuttgart Hbf</strong>（1時間20分）
           <div class="sub"><strong>ICE 515</strong>・直通</div><span class="note">9:20着から約90分あり、通常ならパン購入を含めて10:51発を目指せる。荷物受取等に時間がかかった場合は次の直通ICEに切り替える。乗換ありの便より直通を優先</span></td></tr>
-        <tr><td class="t">12:11</td><td><span class="et t-move">🚆</span><strong>Stuttgart Hbf 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Stuttgart+Hauptbahnhof" target="_blank" rel="noopener">地図</a>
-          <div class="sub"><span class="et t-taxi">🚕</span>タクシーでホテルへ（約1.5km・€5〜10・現金払い）</div>
-          <div class="note"><strong>① タクシー（第一候補）：</strong>駅構内の案内に従い Arnulf-Klett-Platz 側の乗り場 <a href="https://www.google.com/maps/search/?api=1&amp;query=Taxi+Stuttgart+Hauptbahnhof+Arnulf-Klett-Platz" target="_blank" rel="noopener">（地図）</a> から。運転手へ “Zum Maritim Hotel Stuttgart, bitte.” 必要なら住所 <strong>Seidenstraße 34</strong> を見せる。€10札を含む€20程度を用意。<br>
-          <strong>② 公共交通：</strong>Hbf駅前から <strong>Stadtbahn U1 または U9</strong> → Berliner Platz (Liederhalle) <a href="https://www.google.com/maps/search/?api=1&amp;query=Berliner+Platz+Liederhalle+Stuttgart" target="_blank" rel="noopener">（地図）</a>（約3分）→ 徒歩数分。S-Bahnではなく Stadtbahn を使う。<br>
+        <tr><td class="t">12:11</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Stuttgart+Hauptbahnhof" target="_blank" rel="noopener">Stuttgart Hbf</a> 着</strong>
+          <div class="sub"><span class="mode-icon mode-icon-car" role="img" aria-label="タクシー"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2m12 0v2h2v-2M6 13h12"/><circle cx="8" cy="15" r=".8"/><circle cx="16" cy="15" r=".8"/></svg></span>タクシーでホテルへ（約1.5km・€5〜10・現金払い）</div>
+          <div class="note"><strong>① タクシー（第一候補）：</strong>駅構内の案内に従い <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Taxi+Stuttgart+Hauptbahnhof+Arnulf-Klett-Platz" target="_blank" rel="noopener">Arnulf-Klett-Platz</a> 側の乗り場から。運転手へ “Zum Maritim Hotel Stuttgart, bitte.” 必要なら住所 <strong>Seidenstraße 34</strong> を見せる。€10札を含む€20程度を用意。<br>
+          <strong>② 公共交通：</strong>Hbf駅前から <strong>Stadtbahn U1 または U9</strong> → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Berliner+Platz+Liederhalle+Stuttgart" target="_blank" rel="noopener">Berliner Platz (Liederhalle)</a>（約3分）→ 徒歩数分。S-Bahnではなく Stadtbahn を使う。<br>
           ※1.5kmはHbfからホテルまでの距離（Berliner Platzからではない）。Uberは駅前で呼ぶ前提にせず、使う場合のみアプリ指定の乗車地点へ。カードは現金不足時の予備として乗車前に利用可を確認。</div></td></tr>
-        <tr><td class="t">12:30頃</td><td><span class="et t-hotel">🏨</span><strong>Maritim Stuttgart 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">地図</a>
+        <tr><td class="t">12:30頃</td><td><span class="et t-hotel">🏨</span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">Maritim Stuttgart</a> 着</strong>
           <div class="sub">荷物を預けて身軽に行動</div>
           <div class="note">正式チェックインは15:00〜。</div></td></tr>
         <tr><td class="t">13:00〜14:00</td><td><span class="et t-food">🍽</span>ランチ候補 <span class="et t-tbd">要検討</span><span class="note">・Markthalle Stuttgart（食品市場内の軽食・惣菜／ホテルから徒歩圏）<br>・Bohnenviertel（旧市街の飲食街／シュヴァーベン料理のカジュアル店多数）<br>・Königstraße周辺のカフェ・ベーカリー</span></td></tr>
         <tr><td class="t">14:00〜</td><td><span class="et t-see">🏛</span><strong>午後観光（時差調整を兼ねる）</strong>
-          <div class="opt"><b>① Stuttgart市内</b>Schlossplatz <a href="https://www.google.com/maps/search/?api=1&amp;query=Schlossplatz+Stuttgart" target="_blank" rel="noopener">地図</a>、Königstraße を散策</div>
-          <div class="opt"><b>② Ludwigsburg</b>S-Bahn 約15〜20分 → Residenzschloss＋Blühendes Barock庭園 <a href="https://www.google.com/maps/search/?api=1&amp;query=Residenzschloss+Ludwigsburg" target="_blank" rel="noopener">地図</a> → 旧市街 Marktplatz で早めのディナー</div>
+          <div class="opt"><b>① Stuttgart市内</b><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Schlossplatz+Stuttgart" target="_blank" rel="noopener">Schlossplatz</a>、Königstraße を散策</div>
+          <div class="opt"><b>② Ludwigsburg</b>S-Bahn 約15〜20分 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Residenzschloss+Ludwigsburg" target="_blank" rel="noopener">Residenzschloss＋Blühendes Barock庭園</a> → 旧市街 Marktplatz で早めのディナー</div>
           <div class="note">深夜便明けの体調を見て当日選択。疲れていればStuttgart市内、元気ならLudwigsburg。丸一日の遠出は9/12に温存する。</div></td></tr>
         <tr><td class="t">夕方〜夜</td><td><span class="et t-hotel">🏨</span><strong>Maritim Stuttgart チェックイン</strong>
           <div class="sub">夕食（市内 or Ludwigsburg）→ 休息</div>
@@ -550,7 +558,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
     <div class="lane" data-who="all">
       <table class="tl">
         <tr><td class="t">7:30</td><td><span class="et t-food">🍽</span>ホテル朝食</td></tr>
-        <tr><td class="t">8:50</td><td>ホテル → Liederhalle <a href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a>（徒歩約3分）</td></tr>
+        <tr><td class="t">8:50</td><td>ホテル → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">Liederhalle</a>（徒歩約3分）</td></tr>
         <tr><td class="t">9:00〜17:00</td><td><span class="et t-conf">🤖 Day 1</span>政策・市場・量産・Embodied AI・モーター技術<span class="note">セッション一覧（全11項目のうち、夜の VIP Dinner はVIPパス対象で不参加。実質10項目）と当日の狙いは <a href="#" data-goto="venue">会場タブ</a> に集約。開場9:00・終了17:00頃を想定</span></td></tr>
         <tr><td class="t">17:00〜18:00</td><td>Networking／展示ブース（40+社）</td></tr>
         <tr><td class="t">夜</td><td><span class="et t-food">🍽</span>夕食（<a href="#dinner">候補リスト</a>）→ <span class="et t-hotel">🏨</span>Maritim Stuttgart泊</td></tr>
@@ -624,23 +632,23 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <tr><td class="t">8:45</td><td><span class="et t-food">🍽</span><strong>Maritim で朝食</strong>
         <div class="sub">宿泊に朝食が付いている</div></td></tr>
       <tr><td class="t">9:45</td><td><strong>Maritim チェックアウト</strong>（荷物持参）
-        <div class="sub">Berliner Platz (Liederhalle) へ徒歩 → <span class="et t-move">🚆</span><strong>Stadtbahn U1 / U9</strong> で Stuttgart Hbf（約3分）</div><span class="note">※ホテルからHbfは約1.5km。荷物が多ければUber／タクシーでHbfへ直行</span></td></tr>
-        <tr><td class="t">10:26</td><td><span class="et t-move">🚆</span><strong>Stuttgart Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（1時間12分）
+        <div class="sub">Berliner Platz (Liederhalle) へ徒歩 → <span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Stadtbahn U1 / U9</strong> で Stuttgart Hbf（約3分）</div><span class="note">※ホテルからHbfは約1.5km。荷物が多ければUber／タクシーでHbfへ直行</span></td></tr>
+        <tr><td class="t">10:26</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Stuttgart Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（1時間12分）
         <div class="sub"><strong>ICE 1010</strong>・直通</div>
         <div class="note">この区間は便により約1時間12分〜1時間30分。ICE 1010 は直通で最短。</div></td></tr>
-        <tr><td class="t">11:38</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf） 着</strong></td></tr>
-        <tr><td class="t">11:50</td><td><span class="et t-hotel">🏨</span><strong>BestWestern 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">地図</a>
+        <tr><td class="t">11:38</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Frankfurt空港 長距離駅（Fernbf） 着</strong></td></tr>
+        <tr><td class="t">11:50</td><td><span class="et t-hotel">🏨</span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">BestWestern</a> 着</strong>
         <div class="sub">荷物を預ける（アーリーチェックイン交渉）</div></td></tr>
-        <tr><td class="t">12:20</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港発 → Mainz Hbf</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Mainz+Hauptbahnhof" target="_blank" rel="noopener">地図</a>（約35〜40分）
+        <tr><td class="t">12:20</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Frankfurt空港発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Mainz+Hauptbahnhof" target="_blank" rel="noopener">Mainz Hbf</a></strong>（約35〜40分）
         <div class="note">長距離駅（Fernbf）と近郊駅（S-Bahn）のどちらから乗るかは、当日の便で決まる。ホームを取り違えないよう乗車前に確認する。</div></td></tr>
         <tr><td class="t">13:00〜13:20</td><td><span class="et t-food">🍽</span><strong>Mainz Hbf周辺で軽食</strong></td></tr>
-        <tr><td class="t">13:20</td><td><span class="et t-move">🚆</span><strong>Mainz Hbf発 → MEWA ARENA</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=MEWA+ARENA+Mainz" target="_blank" rel="noopener">地図</a>
+        <tr><td class="t">13:20</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Mainz Hbf発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=MEWA+ARENA+Mainz" target="_blank" rel="noopener">MEWA ARENA</a></strong>
         <div class="sub">手段と所要は未確認。試合日は臨時輸送が出ることが多いので、当日の案内に従う</div>
         <div class="note">所要が読めないぶん、入場を25分後に置いて余裕を取っている。</div></td></tr>
         <tr><td class="t">13:45</td><td><span class="et t-match">⚽</span><strong>MEWA ARENA 入場</strong></td></tr>
         <tr><td class="t">15:30</td><td><span class="et t-match">⚽</span><strong>Mainz 05 対 Eintracht Frankfurt</strong> キックオフ
         <div class="sub">試合 約1時間45分。17:15頃 終了の見込み</div></td></tr>
-        <tr><td class="t">17:45頃</td><td><span class="et t-move">🚆</span><strong>Mainz Hbf発 → Frankfurt空港</strong>（約35〜40分）
+        <tr><td class="t">17:45頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Mainz Hbf発 → Frankfurt空港</strong>（約35〜40分）
         <div class="sub">終了から30分。退場と駅の混雑を見込む</div></td></tr>
         <tr><td class="t">18:30頃</td><td><span class="et t-hotel">🏨</span><strong>BestWestern チェックイン</strong>
         <div class="sub">夕食</div></td></tr>
@@ -655,15 +663,15 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="sub">宿泊に朝食が付いている</div></td></tr>
       <tr><td class="t">8:00頃</td><td><strong>Maritim チェックアウト</strong>（荷物持参）
         <div class="sub">Stuttgart Hbf へ</div></td></tr>
-        <tr><td class="t">8:30頃</td><td><span class="et t-move">🚆</span><strong>Stuttgart Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間12分〜1時間30分）
+        <tr><td class="t">8:30頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Stuttgart Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間12分〜1時間30分）
         <div class="sub">ICE。便は当日決める</div></td></tr>
-        <tr><td class="t">10:00〜10:45</td><td><span class="et t-hotel">🏨</span><strong>BestWestern 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">地図</a>
+        <tr><td class="t">10:00〜10:45</td><td><span class="et t-hotel">🏨</span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">BestWestern</a> 着</strong>
         <div class="sub">荷物を預ける → 長距離駅（Fernbf）へ戻る</div></td></tr>
-        <tr><td class="t">11:00頃</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Köln Hbf</strong>（約1時間）
+        <tr><td class="t">11:00頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Köln Hbf</strong>（約1時間）
         <div class="sub">直通ICE</div></td></tr>
-        <tr><td class="t">12:00〜16:00</td><td><span class="et t-see">🏛</span><strong>ケルン大聖堂と旧市街</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Koelner+Dom" target="_blank" rel="noopener">地図</a>
+        <tr><td class="t">12:00〜16:00</td><td><span class="et t-see">🏛</span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Koelner+Dom" target="_blank" rel="noopener">ケルン大聖堂と旧市街</a></strong>
         <div class="sub">旧市街・ライン川沿いを散策、昼食（約4時間）</div></td></tr>
-        <tr><td class="t">16:15頃</td><td><span class="et t-move">🚆</span><strong>Köln Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間）
+        <tr><td class="t">16:15頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Köln Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間）
         <div class="sub">直通ICE</div></td></tr>
         <tr><td class="t">18:00頃</td><td><span class="et t-hotel">🏨</span><strong>BestWestern チェックイン</strong>
         <div class="sub">夕食</div></td></tr>
@@ -678,16 +686,16 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="sub">宿泊に朝食が付いている</div></td></tr>
       <tr><td class="t">9:00</td><td><strong>Maritim チェックアウト</strong>
         <div class="sub">荷物を預ける</div></td></tr>
-        <tr><td class="t">9:30</td><td><span class="et t-move">🚆</span><strong>Feuersee発 → Neuwirtshaus (Porscheplatz)</strong>（約25分）
+        <tr><td class="t">9:30</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Feuersee発 → Neuwirtshaus (Porscheplatz)</strong>（約25分）
         <div class="sub">S-Bahn（S6等）。Porsche Museum の最寄り</div><span class="note">※MaritimからPorscheplatzはFeuersee経由が便利</span></td></tr>
-        <tr><td class="t">10:00〜13:00</td><td><span class="et t-see">🏛</span><strong>Porsche Museum 見学</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Porsche+Museum+Stuttgart" target="_blank" rel="noopener">地図</a>
+        <tr><td class="t">10:00〜13:00</td><td><span class="et t-see">🏛</span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Porsche+Museum+Stuttgart" target="_blank" rel="noopener">Porsche Museum</a> 見学</strong>
         <div class="sub">所要2〜3時間</div></td></tr>
-        <tr><td class="t">13:00</td><td><span class="et t-move">🚆</span><strong>Porscheplatz発 → Feuersee</strong>（約25分）
+        <tr><td class="t">13:00</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Porscheplatz発 → Feuersee</strong>（約25分）
         <div class="sub">Maritim で荷物を回収</div></td></tr>
         <tr><td class="t">14:00</td><td><span class="et t-food">🍽</span>Stuttgart市内で昼食</td></tr>
-        <tr><td class="t">15:00</td><td><span class="et t-move">🚆</span><strong>Stuttgart Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間12分〜1時間30分）
+        <tr><td class="t">15:00</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Stuttgart Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間12分〜1時間30分）
         <div class="sub">ICE。下の到着時刻は遅い側で置いている</div></td></tr>
-        <tr><td class="t">16:30</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf） 着</strong></td></tr>
+        <tr><td class="t">16:30</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Frankfurt空港 長距離駅（Fernbf） 着</strong></td></tr>
         <tr><td class="t">16:45</td><td><span class="et t-hotel">🏨</span><strong>BestWestern チェックイン</strong>
         <div class="sub">荷物を回収 → 夕食</div></td></tr>
       </table>
@@ -699,26 +707,26 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="sub">宿泊に朝食が付いている</div></td></tr>
       <tr><td class="t">9:00</td><td><strong>Maritim チェックアウト</strong>
           <div class="sub">荷物を預ける（昼に回収する）</div></td></tr>
-        <tr><td class="t">9:30</td><td><span class="et t-move">🚆</span><strong>Feuersee発 → Neuwirtshaus (Porscheplatz)</strong>（約25分）
+        <tr><td class="t">9:30</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Feuersee発 → Neuwirtshaus (Porscheplatz)</strong>（約25分）
           <div class="sub">S-Bahn（S6等）</div></td></tr>
-        <tr><td class="t">10:00〜12:00</td><td><span class="et t-see">🏛</span><strong>Porsche Museum 見学</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Porsche+Museum+Stuttgart" target="_blank" rel="noopener">地図</a>
+        <tr><td class="t">10:00〜12:00</td><td><span class="et t-see">🏛</span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Porsche+Museum+Stuttgart" target="_blank" rel="noopener">Porsche Museum</a> 見学</strong>
           <div class="sub">C案の2〜3時間を <strong>2時間に短縮</strong>して切り上げる</div>
           <div class="note">開館時刻は公式未確認。10:00 から回れない場合はこの案自体が成立しないので、事前に確認する。</div></td></tr>
-        <tr><td class="t">12:00</td><td><span class="et t-move">🚆</span><strong>Porscheplatz発 → Feuersee</strong>（約25分）
+        <tr><td class="t">12:00</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Porscheplatz発 → Feuersee</strong>（約25分）
           <div class="sub">Maritim で荷物を回収 → Stuttgart Hbf へ</div></td></tr>
-        <tr><td class="t">13:00頃</td><td><span class="et t-move">🚆</span><strong>Stuttgart Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間12分〜1時間30分）
+        <tr><td class="t">13:00頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Stuttgart Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間12分〜1時間30分）
           <div class="sub">ICE。遅い側で見て14:30頃着</div></td></tr>
-        <tr><td class="t">14:30頃</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf） 着</strong></td></tr>
-        <tr><td class="t">14:45頃</td><td><span class="et t-hotel">🏨</span><strong>BestWestern 着</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">地図</a>
+        <tr><td class="t">14:30頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Frankfurt空港 長距離駅（Fernbf） 着</strong></td></tr>
+        <tr><td class="t">14:45頃</td><td><span class="et t-hotel">🏨</span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">BestWestern</a> 着</strong>
           <div class="sub">荷物を預ける → 長距離駅（Fernbf）へ戻る</div></td></tr>
-        <tr><td class="t">15:15頃</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Köln Hbf</strong>（約1時間）
+        <tr><td class="t">15:15頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Köln Hbf</strong>（約1時間）
           <div class="sub">直通ICE。16:15頃着の見込み</div></td></tr>
-        <tr><td class="t">16:15〜19:00</td><td><span class="et t-see">🏛</span><strong>ケルン大聖堂と旧市街</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Koelner+Dom" target="_blank" rel="noopener">地図</a>
+        <tr><td class="t">16:15〜19:00</td><td><span class="et t-see">🏛</span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Koelner+Dom" target="_blank" rel="noopener">ケルン大聖堂と旧市街</a></strong>
           <div class="sub">B案の約4時間を <strong>約2時間45分に短縮</strong>。夕食もケルンで</div>
           <div class="note">大聖堂は駅の目の前なので、短い滞在でも外観と旧市街・ライン川沿いは回れる。ただし <strong>内部の拝観時間と周辺博物館の閉館時刻は未確認</strong>。中に入りたいなら B 案を選ぶ。</div></td></tr>
-        <tr><td class="t">19:00頃</td><td><span class="et t-move">🚆</span><strong>Köln Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間）
+        <tr><td class="t">19:00頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Köln Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（約1時間）
           <div class="sub">直通ICE。20:00頃着の見込み</div></td></tr>
-        <tr><td class="t">20:00頃</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf） 着</strong></td></tr>
+        <tr><td class="t">20:00頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Frankfurt空港 長距離駅（Fernbf） 着</strong></td></tr>
         <tr><td class="t">20:15頃</td><td><span class="et t-hotel">🏨</span><strong>BestWestern チェックイン</strong>
           <div class="sub">荷物を回収して休息</div></td></tr>
       </table>
@@ -748,13 +756,13 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="sub">宿泊に朝食が付いている</div></td></tr>
       <tr><td class="t">8:00</td><td><strong>BestWestern チェックアウト</strong>
         <div class="sub">荷物を預ける</div></td></tr>
-        <tr><td class="t">8:26</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Köln Hbf</strong>（1時間6分）
+        <tr><td class="t">8:26</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Köln Hbf</strong>（1時間6分）
         <div class="sub"><strong>ICE 1612</strong>・直通</div></td></tr>
-        <tr><td class="t">9:32</td><td><span class="et t-move">🚆</span><strong>Köln Hbf 着</strong>
+        <tr><td class="t">9:32</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Köln Hbf 着</strong>
         <div class="sub">大聖堂の目の前</div></td></tr>
-        <tr><td class="t">9:32〜13:00</td><td><span class="et t-see">🏛</span><strong>ケルン大聖堂と旧市街</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Koelner+Dom" target="_blank" rel="noopener">地図</a>
+        <tr><td class="t">9:32〜13:00</td><td><span class="et t-see">🏛</span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Koelner+Dom" target="_blank" rel="noopener">ケルン大聖堂と旧市街</a></strong>
         <div class="sub">旧市街・ライン川沿い散策・昼食（約3時間30分）</div></td></tr>
-        <tr><td class="t">13:18</td><td><span class="et t-move">🚆</span><strong>Köln Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（55分）
+        <tr><td class="t">13:18</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Köln Hbf発 → Frankfurt空港 長距離駅（Fernbf）</strong>（55分）
         <div class="sub"><strong>ICE 123</strong>・直通</div></td></tr>
         <tr><td class="t">14:13</td><td><span class="et t-hotel">🏨</span><strong>Frankfurt空港 着</strong>
         <div class="sub">BestWestern で荷物を回収</div></td></tr>
@@ -769,11 +777,11 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="sub">宿泊に朝食が付いている</div></td></tr>
       <tr><td class="t">9:00</td><td><strong>BestWestern チェックアウト</strong>
         <div class="sub">荷物を預ける</div></td></tr>
-        <tr><td class="t">9:30</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港 近郊駅（S-Bahn）発 → Hauptwache / Hbf</strong>（約11〜15分）
+        <tr><td class="t">9:30</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Frankfurt空港 近郊駅（S-Bahn）発 → Hauptwache / Hbf</strong>（約11〜15分）
         <div class="sub">S-Bahn（S8/S9）。市内中心部</div></td></tr>
         <tr><td class="t">10:00〜13:30</td><td><span class="et t-see">🏛</span><strong>フランクフルト旧市街を歩く</strong>
-        <div class="sub">Eiserner Steg（鉄橋）→ Römerberg <a href="https://www.google.com/maps/search/?api=1&amp;query=Roemerberg+Frankfurt" target="_blank" rel="noopener">地図</a> → Kaiserdom（大聖堂）<br>→ Kleinmarkthalle <a href="https://www.google.com/maps/search/?api=1&amp;query=Kleinmarkthalle+Frankfurt" target="_blank" rel="noopener">地図</a> で昼食 → Museumsufer（博物館1館）</div></td></tr>
-        <tr><td class="t">13:30</td><td><span class="et t-move">🚆</span><strong>Hauptwache / Hbf発 → Frankfurt空港 近郊駅（S-Bahn）</strong>（約15分）
+        <div class="sub">Eiserner Steg（鉄橋）→ <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Roemerberg+Frankfurt" target="_blank" rel="noopener">Römerberg</a> → Kaiserdom（大聖堂）<br>→ <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Kleinmarkthalle+Frankfurt" target="_blank" rel="noopener">Kleinmarkthalle</a> で昼食 → Museumsufer（博物館1館）</div></td></tr>
+        <tr><td class="t">13:30</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Hauptwache / Hbf発 → Frankfurt空港 近郊駅（S-Bahn）</strong>（約15分）
         <div class="sub">S-Bahn</div></td></tr>
         <tr><td class="t">14:00頃</td><td><span class="et t-hotel">🏨</span><strong>Frankfurt空港 着</strong>
         <div class="sub">BestWestern で荷物を回収</div></td></tr>
@@ -788,18 +796,18 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="sub">宿泊に朝食が付いている</div></td></tr>
       <tr><td class="t">9:00</td><td><strong>BestWestern チェックアウト</strong>
         <div class="sub">荷物を預ける</div></td></tr>
-        <tr><td class="t">9:30</td><td><span class="et t-move">🚆</span><strong>Frankfurt空港発 → Mainz Hbf</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Mainz+Hauptbahnhof" target="_blank" rel="noopener">地図</a>（約35〜40分）
+        <tr><td class="t">9:30</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Frankfurt空港発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Mainz+Hauptbahnhof" target="_blank" rel="noopener">Mainz Hbf</a></strong>（約35〜40分）
         <div class="note">長距離駅（Fernbf）と近郊駅（S-Bahn）のどちらから乗るかは、当日の便で決まる。ホームを取り違えないよう乗車前に確認する。</div></td></tr>
         <tr><td class="t">10:15〜13:30</td><td><span class="et t-see">🏛</span><strong>Mainz 旧市街を歩く</strong>
-        <div class="sub">Gutenberg博物館 <a href="https://www.google.com/maps/search/?api=1&amp;query=Gutenberg+Museum+Mainz" target="_blank" rel="noopener">地図</a>（活版印刷発祥）→ Mainzer Dom <a href="https://www.google.com/maps/search/?api=1&amp;query=Mainzer+Dom" target="_blank" rel="noopener">地図</a> → Marktplatz・旧市街<br>→ St.Stephan（シャガールの窓）→ ライン川沿い</div></td></tr>
-        <tr><td class="t">13:30</td><td><span class="et t-move">🚆</span>Mainz Hbf発 → Frankfurt空港（約35〜40分）</td></tr>
+        <div class="sub"><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Gutenberg+Museum+Mainz" target="_blank" rel="noopener">Gutenberg博物館</a>（活版印刷発祥）→ <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Mainzer+Dom" target="_blank" rel="noopener">Mainzer Dom</a> → Marktplatz・旧市街<br>→ St.Stephan（シャガールの窓）→ ライン川沿い</div></td></tr>
+        <tr><td class="t">13:30</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span>Mainz Hbf発 → Frankfurt空港（約35〜40分）</td></tr>
         <tr><td class="t">14:15頃</td><td><span class="et t-hotel">🏨</span><strong>Frankfurt空港 着</strong>
         <div class="sub">BestWestern で荷物を回収</div></td></tr>
       </table>
       <div class="lane-note dt">ℹ 空港⇔Mainzは約35〜40分でケルンより近く低リスク。コンパクトで徒歩観光向き。徒歩ルート：Gutenberg博物館→Dom→旧市街→St.Stephan→ライン川。</div>
     </div>
 
-    <div class="joinbar" data-type="merge"><span>✈︎</span><span class="tm">14:00〜</span><span>ここから先は案によらず共通</span></div>
+    <div class="joinbar" data-type="merge"><span><span class="flight-mark" role="img" aria-label="フライト"></span></span><span class="tm">14:00〜</span><span>ここから先は案によらず共通</span></div>
     <div class="lane" data-who="all">
       <table class="tl">
         <tr><td class="t">出発前</td><td>📱 <strong><a href="https://services.digital.go.jp/visit-japan-web/" target="_blank" rel="noopener">Visit Japan Web</a> を登録</strong>
@@ -807,10 +815,10 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <tr><td class="t">14:00〜</td><td><span class="et t-gate">🛂</span><strong>チェックイン</strong>
         <div class="sub">荷物を回収してから。出発3時間前の 16:20 より前に空港着が目標</div></td></tr>
         <tr><td class="t">17:00〜19:00</td><td>🛋 <strong>ラウンジ</strong>（二人とも）<span class="et t-tbd">ラウンジ名は要確認</span><span class="note">ワンワールド便。JAL/ワンワールドサファイア以上で利用資格あり。FRAのFinnair便は <strong>Terminal 3</strong>（<a href="https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html" target="_blank" rel="noopener">空港公式</a>）。T3には<a href="https://www.frankfurt-airport.com/en/at-the-airport/facilities-services/priority-lounge.html" target="_blank" rel="noopener">Priority Lounge</a>があるが、公式提携航空会社一覧にFinnairの記載がなく、HEL行きでの利用可否・指定ラウンジ名は未確認。オンラインチェックイン時の搭乗券表示またはFinnairで確認する。</span></td></tr>
-        <tr><td class="t">19:20発</td><td><span class="et t-fly">✈︎</span>FRA発 → HEL（Finnair AY1416／A321・2時間25分）</td></tr>
-        <tr><td class="t">22:45</td><td><span class="et t-fly">✈︎</span><strong>HEL 着</strong>
+        <tr><td class="t">19:20発</td><td><span class="flight-mark" role="img" aria-label="フライト"></span>FRA発 → HEL（Finnair AY1416／A321・2時間25分）</td></tr>
+        <tr><td class="t">22:45</td><td><span class="flight-mark" role="img" aria-label="フライト"></span><strong>HEL 着</strong>
           <div class="sub">乗継 2時間 → 搭乗口へ</div></td></tr>
-        <tr><td class="t">0:45発</td><td><span class="et t-fly">✈︎</span>HEL発 → NGO（AY79／A350・12時間50分）<span class="note">機内泊。翌9/14 19:35 セントレア着</span></td></tr>
+        <tr><td class="t">0:45発</td><td><span class="flight-mark" role="img" aria-label="フライト"></span>HEL発 → NGO（AY79／A350・12時間50分）<span class="note">機内泊。翌9/14 19:35 セントレア着</span></td></tr>
       </table>
     </div>
   </details>
@@ -820,12 +828,12 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
     <summary class="day-head"><span class="d">9/14（月）</span><span class="t">日本着 → 京都／犬山の自宅まで</span></summary>
     <div class="lane" data-who="all">
       <table class="tl">
-        <tr><td class="t">19:35</td><td><span class="et t-fly">✈︎</span><strong>中部国際空港（セントレア）着</strong>
+        <tr><td class="t">19:35</td><td><span class="flight-mark" role="img" aria-label="フライト"></span><strong>中部国際空港（セントレア）着</strong>
         <div class="sub">現地日付 +1</div></td></tr>
         <tr><td class="t">19:35〜20:15</td><td><span class="et t-gate">🛂</span>入国審査・荷物受取・税関
           <div class="sub"><a href="https://services.digital.go.jp/visit-japan-web/" target="_blank" rel="noopener">Visit Japan Web</a> の二次元コードをすぐ表示できるよう準備</div></td></tr>
         <tr><td class="t">20:20頃</td><td>到着口出発（二人一緒）</td></tr>
-        <tr><td class="t">20:35頃</td><td><span class="et t-move">🚆</span>セントレア発 ミュースカイ（二人一緒）→ 名鉄名古屋（約28分）</td></tr>
+        <tr><td class="t">20:35頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span>セントレア発 ミュースカイ（二人一緒）→ 名鉄名古屋（約28分）</td></tr>
       </table>
     </div>
 
@@ -836,7 +844,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="lane-head">👤 京都方面</div>
         <table class="tl">
           <tr><td class="t">21:05頃</td><td>JR名古屋へ乗換</td></tr>
-          <tr><td class="t">21:15頃</td><td><span class="et t-move">🚆</span>JR名古屋発（東海道新幹線）→ 京都駅（約35分）</td></tr>
+          <tr><td class="t">21:15頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span>JR名古屋発（東海道新幹線）→ 京都駅（約35分）</td></tr>
           <tr><td class="t">21:50頃</td><td>京都駅着 → 自宅へ</td></tr>
         </table>
       </div>
@@ -844,7 +852,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="lane-head">👤 犬山方面</div>
         <table class="tl">
           <tr><td class="t">21:05頃</td><td>名鉄名古屋で乗換</td></tr>
-          <tr><td class="t">21:10頃</td><td><span class="et t-move">🚆</span>名鉄名古屋発 → 犬山駅（約30分）</td></tr>
+          <tr><td class="t">21:10頃</td><td><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span>名鉄名古屋発 → 犬山駅（約30分）</td></tr>
           <tr><td class="t">21:40頃</td><td>犬山駅着 → 自宅へ</td></tr>
         </table>
       </div>
@@ -887,9 +895,9 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
   </div>
 
   <div class="card">
-    <h2 class="ttl">✈︎ 利用フライト（NGO⇔FRA Finnair）</h2>
+    <h2 class="ttl"><span class="flight-mark" role="img" aria-label="フライト"></span> 利用フライト（NGO⇔FRA Finnair）</h2>
     <div class="bd">
-      <div class="banner b-info" style="margin-bottom:10px">✈︎ <div>NGO発着・HEL経由の往復エコノミー。<strong>前日入りができ、犬山からの空港アクセスが短い旅程。</strong></div></div>
+      <div class="banner b-info" style="margin-bottom:10px">🛫 <div>NGO発着・HEL経由の往復エコノミー。<strong>前日入りができ、犬山からの空港アクセスが短い旅程。</strong></div></div>
 
       <h3>往路 9/7（月）〜9/8（火） <span class="muted small">総所要17時間30分</span></h3>
       <div class="scroll-x"><table class="tb">
@@ -915,12 +923,12 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
     <h2 class="ttl">🏨 宿泊（2拠点）</h2>
     <div class="bd small" style="display:grid;gap:10px">
       <div>
-        <strong>Maritim Stuttgart</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a>（★★★★／Seidenstraße 34, 70174）：9/8〜9/12（4泊・朝食付）<span class="st st-booked">予約済</span><br>
-        <span style="font-weight:700">✔ 会場 Liederhalle <a href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a> に隣接（徒歩約3分）。</span>
+        <strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">Maritim Stuttgart</a></strong>（★★★★／Seidenstraße 34, 70174）：9/8〜9/12（4泊・朝食付）<span class="st st-booked">予約済</span><br>
+        <span style="font-weight:700">✔ 会場 <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">Liederhalle</a> に隣接（徒歩約3分）。</span>
         <span class="note">クラシックダブル28㎡・禁煙・チェックイン15:00｜無料キャンセル 9/5 23:00(現地)まで｜TEL +49 711 9420</span>
       </div>
       <div>
-        <strong>Best Western Hotel Airport Frankfurt</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">（地図）</a>：9/12〜9/13（1泊・朝食付）<span class="st st-booked">予約済</span>
+        <strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">Best Western Hotel Airport Frankfurt</a></strong>：9/12〜9/13（1泊・朝食付）<span class="st st-booked">予約済</span>
       </div>
     </div>
   </div>
@@ -1001,7 +1009,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
   <div class="card">
     <h2 class="ttl">🤖 HRS Europe 2026 — 会場と構成</h2>
     <div class="bd small" style="display:grid;gap:5px">
-      <div>📍 <strong>Liederhalle</strong>（Berliner Platz 1-3） <a href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">地図</a> — ホテルから徒歩約3分</div>
+      <div>📍 <strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">Liederhalle</a></strong>（Berliner Platz 1-3） — ホテルから徒歩約3分</div>
       <div>📅 9/9・9/10 は講演＋展示（40+社）／9/11 は近郊企業訪問</div>
       <div>⭐ Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA <span class="st st-booked">登録済</span></div>
     </div>
@@ -1211,8 +1219,8 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
   <div class="card">
     <h2 class="ttl">🏨 どこに泊まっているか</h2>
     <div class="bd small" style="display:grid;gap:6px">
-      <div><strong>9/8〜9/12</strong>　Maritim Stuttgart（シュトゥットガルト）　TEL +49 711 9420 <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a><span class="note">会議の会場はホテルの隣（徒歩約3分）なので、この期間はほぼ同じ場所にいる。</span></div>
-      <div><strong>9/12〜9/13</strong>　Best Western Hotel Airport Frankfurt（フランクフルト空港） <a href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">（地図）</a></div>
+      <div><strong>9/8〜9/12</strong>　<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">Maritim Stuttgart</a>（シュトゥットガルト）　TEL +49 711 9420<span class="note">会議の会場はホテルの隣（徒歩約3分）なので、この期間はほぼ同じ場所にいる。</span></div>
+      <div><strong>9/12〜9/13</strong>　<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">Best Western Hotel Airport Frankfurt</a>（フランクフルト空港）</div>
       <div><strong>9/7・9/13の夜</strong>　機内</div>
       <div class="muted" style="padding-top:2px">🇯🇵 万一のとき：<a href="https://www.de.emb-japan.go.jp/" target="_blank" rel="noopener">在ドイツ日本国大使館</a>／<a href="https://www.anzen.mofa.go.jp/" target="_blank" rel="noopener">外務省 海外安全ホームページ</a></div>
     </div>

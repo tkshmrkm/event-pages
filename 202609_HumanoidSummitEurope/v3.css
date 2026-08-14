@@ -157,7 +157,7 @@ h3{font-size:var(--f3);margin:14px 0 6px;color:var(--tx2)}
 .note{margin-top:5px;color:var(--mu);font-size:var(--f4);line-height:1.65;padding-left:9px;border-left:2px solid var(--line2)}
 
 /* イベント種別：絵文字だけ。色は付けない（HRSと要検討のみ例外）
-   ✈飛行機 🚆鉄道 🚕タクシー 🛂空港手続き 🏨宿 🍽食事 🏛観光 ⚽観戦 🤖HRS
+   交通手段はアイコン（.flight-mark／.mode-icon）。その他は 🛂空港手続き 🏨宿 🍽食事 🏛観光 ⚽観戦 🤖HRS
    印を付けないのは「徒歩」と「その場での行動」。
    ⚽は観戦で、HRS（🤖）とは別物なので rose の色は使わない。 */
 .et{margin-right:3px;font-style:normal}
@@ -354,7 +354,18 @@ h3{font-size:var(--f3);margin:14px 0 6px;color:var(--tx2)}
 .trip-time{padding:11px 12px;background:#F4F7F8;color:var(--trip-subtext);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
 .trip-action{min-width:0;padding:11px 12px}
 .trip-detail{display:block;margin-top:4px;color:var(--trip-muted);font-size:13px}
-.trip-flight{font-family:'Segoe UI Symbol','Noto Sans Symbols 2',sans-serif;font-style:normal;font-weight:700;color:var(--trip-primary)}
+/* 交通手段アイコン。色・寸法・stroke幅は202610_Europe_TechEx_EuroBLECH/v3.cssと同一にそろえる。
+   フライトはmask画像、鉄道・徒歩・車・手段未定は呼び出し側がSVGを差し込む。
+   `.mode`配下に限定せず単独セレクタにして、`.mode`という構造を持たないイベントでも使えるようにする。 */
+.flight-mark{display:inline-block;flex:0 0 auto;width:20px;height:20px;color:#0B5C60;background:currentColor;vertical-align:-4px;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.inline-flight-mark{margin-right:5px}
+.mode-icon{display:flex;flex:0 0 auto;align-items:center;justify-content:center;width:20px;height:20px;color:#0B5C60}
+.mode-icon svg{display:block;width:100%;height:100%;overflow:visible}
+.mode-icon-unknown{color:#B96B16}
+/* 地図リンクは場所名そのものに張る。「地図」という別リンクは出さない。
+   EUROBLECHでは .endpoint / .stay 配下に限定した指定だが、共通基盤では
+   構造を前提にできないので単独セレクタで持つ。 */
+.place{color:#2A5FA0;font-weight:600;text-decoration:none}
 
 .trip-banner{display:flex;gap:8px;align-items:flex-start;margin:0 0 12px;padding:10px 12px;border:2px solid var(--trip-border);border-radius:10px;background:#fff;color:var(--trip-subtext);font-size:14px}
 .trip-banner[data-kind=warning]{border-color:#DAB864;background:var(--trip-warning-soft);color:var(--trip-warning)}
@@ -490,6 +501,12 @@ body{line-height:1.62;padding-bottom:24px}
 .cloud-sync .cloud-remember input{width:18px;height:18px;margin:1px 0 0}
 .cloud-sync .cloud-actions{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:7px}
 .cloud-sync [data-trip-cloud-status]{min-height:1.5em;color:var(--mu);font-size:var(--f3)}
+/* 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーではなくここに置く（202610_Europe_TechEx_EuroBLECHのv3.cssと同一） */
+.day-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin:9px 0 0;color:var(--mu);font-size:var(--f5)}
+.day-toolbar .btn{padding:5px 11px;font-size:var(--f5)}
+/* 凡例は地の文なので、行内に並ぶようにする。.mode-iconの既定はflexで、そのままだと行が崩れる。 */
+.legend .flight-mark,.legend .mode-icon{vertical-align:-4px;margin-right:1px}
+.legend .mode-icon{display:inline-flex}
 @media(max-width:640px){
   .wrap{padding-left:10px;padding-right:10px}
   .hdr-top{gap:8px}
