@@ -106,7 +106,7 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['<div><strong>出国審査前のカードラウンジ</strong>（ゴールドカード以上が対象）: プレミアムラウンジ セントレア / 第2プレミアムラウンジ セントレア / QUALIA LOUNGE。</div>', '<div><strong>Priority Pass側：</strong>Plaza Premium Lounge（第1ターミナル・保安検査／出国審査後・Gate 18付近）または The Coral Finest Business Class Lounge。会員本人のアプリで当日の対象施設と同伴条件を確認。</div>'],
   ['                <div>制限エリア内で確実に休むなら プラザ・プレミアム・ラウンジ名古屋（有料 約5,930円/人〜・<strong>営業時間は要確認</strong>）。</div>\n', ''],
   ['ラウンジは対象外。<strong>香港らしいものを食べるなら着いてすぐ Level 7 へ</strong>', 'ラウンジ資格は未確認。<strong>香港らしいものを食べるなら着いてすぐ Level 7 へ</strong>'],
-  ['<div><strong>ラウンジを使うなら</strong>: 有料の Plaza Premium。Gate 60 が24時間・HKD 250〜で最安、Gate 1 が24時間・HKD 650〜。</div>', '<div><strong>エアライン側：</strong>Cathay Pacific Business Lounge。搭乗クラスまたはoneworld/Cathay等のステータスが対象かを確認。</div><div><strong>Priority Pass側：</strong>Plaza Premium Lounge（Gate 1付近は24時間、Gate 35付近は06:00〜翌01:00）。会員本人のアプリで当日の対象施設と同伴条件を確認。</div>'],
+  ['<div><strong>ラウンジを使うなら</strong>: 有料の Plaza Premium。Gate 60 が24時間・HKD 250〜で最安、Gate 1 が24時間・HKD 650〜。</div>', '<div><strong>エアライン側：</strong>キャセイのビジネスクラスラウンジ。搭乗クラスまたはoneworld/Cathay等のステータスが対象かを確認。The Deck と The Pier, Business は05:30〜00:30、The Bridge は05:00〜最終キャセイ便。</div><div><strong>一般有料：</strong>Plaza Premium Lounge は Gate 1・Gate 60 が24時間、Gate 35 が06:00〜01:00。Priority Passの対象施設かは未確認のため、会員本人のアプリで当日の対象と同伴条件を確認。</div>'],
   ['ラウンジは対象外なので<strong>制限エリア内で夕食を取る</strong>', 'ラウンジを利用しない場合は<strong>制限エリア内で夕食を取る</strong>'],
   ['Gold Passに含まれる特典。<strong>翌20日は14:55に会場を出るため、参加できるのは実質この日だけ</strong>。開催時刻・場所は当日のアジェンダで確認。', '開催時刻・場所は当日のアジェンダで確認。'],
   ['          <div class="text-xs text-slate-500 px-1">EuroBLECHは10/20開幕のため19日は自由日。Wolfsburgへの日帰りはゲッティンゲンが経路上にあるため、先にホテルへ荷物を預けて身軽に移動</div>\n', ''],
@@ -115,7 +115,20 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['<td>10/18 HKG乗継 4時間25分</td><td>美馬・金築</td><td>—</td>', '<td>10/18 HKG乗継 4時間25分</td><td>美馬・金築</td><td>航空会社：Cathay Pacific Business Lounge<br>Priority Pass：Plaza Premium Lounge</td>'],
   ['<td>❌ 利用不可。ターミナル内で夕食をとって過ごす</td>', '<td>利用条件：搭乗クラス・航空会社ステータス／Priority Passの当日対象施設・同伴条件</td>'],
   ['美馬・金築は<strong>ゴールドカード以上ならセントレアの出国審査前カードラウンジが無料</strong>。', '美馬・金築は、航空会社ラウンジとPriority Passラウンジの利用条件を確認。'],
-  ['<strong>有料ラウンジ</strong>: Plaza Premium は <strong>Gate 60 が24時間・HKD 250〜（最安）</strong>、Gate 1 が24時間・HKD 650〜。Plaza Premium First は West Hall 06:00〜／East Hall 06:30〜。', '<strong>Priority Pass候補</strong>: Plaza Premium Lounge は Gate 1付近が24時間、Gate 35付近が06:00〜翌01:00。利用前に会員本人のPPアプリで当日の対象施設と同伴条件を確認。'],
+  ['<strong>有料ラウンジ</strong>: Plaza Premium は <strong>Gate 60 が24時間・HKD 250〜（最安）</strong>、Gate 1 が24時間・HKD 650〜。Plaza Premium First は West Hall 06:00〜／East Hall 06:30〜。', '<strong>一般有料ラウンジ</strong>: Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。Plaza Premium First は East Hall（Gate 1）06:30〜01:00／West Hall（Gate 35）06:00〜01:00・HKD 980〜。Priority Passの対象施設かは未確認のため、会員本人のアプリで当日確認する。'],
+  // 香港のラウンジ。営業時間はキャセイ公式のラウンジ個別ページで確認済み（2026-08-14時点）。
+  // The Deck: L7・Gate 6付近・05:30-00:30 / The Pier, Business: L6・Gate 65付近・05:30-00:30・シャワー14室
+  // The Bridge: L6・Gate 35付近・05:00〜最終キャセイ便（00:30-03:20の範囲）
+  // oneworld Sapphireはビジネスクラスラウンジのみ本人＋同伴1名、キャセイ運航ラウンジに限る。ファーストは対象外。
+  // The Wingは現行のHKGラウンジ一覧にFirstのみ在り、Business側の掲載が無い。
+  ['Sapphireでビジネスクラスラウンジ可（The Pier ビジネス側はシャワー14室）。⚠️ <strong>営業時間が未確認</strong>のため、到着後にトランスファーデスクで開いているラウンジを聞く。', 'oneworld Sapphireは<strong>ビジネスクラスラウンジに本人＋同伴1名</strong>（キャセイ運航ラウンジのみ）。20:00〜22:30は The Deck（Gate 6付近・L7）と The Pier, Business（Gate 65付近・L6）が05:30〜00:30、The Bridge（Gate 35付近・L6）が05:00〜最終キャセイ便で、いずれも営業時間内。The Pier, Business はシャワー14室。'],
+  ['<summary>閉まっていた場合の代替・無料シャワーの場所</summary>', '<summary>無料シャワーの場所と有料の選択肢</summary>'],
+  ['<div>ファースト側の「ザ・カバナ」「ザ・ヘイヴン」は Sapphire では対象外。</div>', '<div>ファーストクラスラウンジ（The Wing, First / The Pier, First）と、その中の「ザ・カバナ」「ザ・ヘイヴン」は Sapphire では対象外。</div>'],
+  ['<div><strong>有料ラウンジ</strong>: Plaza Premium が Gate 60（24時間・HKD 250〜／最安）、Gate 1（24時間・HKD 650〜）。</div>', '<div><strong>一般有料ラウンジ</strong>（会員資格が無くても買える）: Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。Priority Passの対象施設かは未確認。</div>'],
+  ['<td>10/17 HKG乗継 3時間45分</td><td>村上</td><td>キャセイ ビジネスクラスラウンジ（The Wing / The Pier / The Deck / The Bridge）</td>', '<td>10/17 HKG乗継 3時間45分</td><td>村上</td><td>キャセイ ビジネスクラスラウンジ（The Deck / The Pier, Business / The Bridge）</td>'],
+  ['<td>✅ 利用可（Sapphire）。ファーストクラスラウンジは対象外</td>', '<td>✅ 利用可（Sapphire・本人＋同伴1名）。The Deck と The Pier, Business は05:30〜00:30、The Bridge は05:00〜最終キャセイ便。ファーストクラスラウンジは対象外</td>'],
+  ['<div>⚠️ <strong>キャセイ自社ラウンジ（The Wing / The Pier / The Deck / The Bridge）の営業時間は未確認</strong>（公式サイトにアクセスできず特定できなかった）。<strong>夜23時台・早朝7時台は閉まっている可能性がある</strong>ため、出発前にキャセイに確認するか、到着後にトランスファーデスクで開いているラウンジを聞く。</div>', '<div>⭐ <strong>キャセイのビジネスクラスラウンジ営業時間</strong>: The Deck（L7・Gate 6付近）と The Pier, Business（L6・Gate 65付近）が<strong>05:30〜00:30</strong>、The Bridge（L6・Gate 35付近）が<strong>05:00〜最終キャセイ便（00:30〜03:20の範囲）</strong>。<strong>夜23時台も早朝7時台も営業時間内</strong>。The Wing は現行のラウンジ一覧では First のみで、Business側の掲載が無い。</div>'],
+  ['<div>村上はSapphireでビジネスクラスラウンジ可（営業時間は未確認）。無料シャワーは L5 の Gate 12付近 / Gate 43付近で24時間。</div>', '<div>村上はSapphireでビジネスクラスラウンジ可（本人＋同伴1名）。07:20着の時点で The Bridge（05:00〜）、The Deck と The Pier, Business（05:30〜）はいずれも営業時間内。無料シャワーは L5 の Gate 12付近 / Gate 43付近で24時間。</div>'],
   // EuroBLECHは展示会視察。TechExの「参加」、Mercedesの「工場見学」とは語を分ける。
   // アイコンも工場（🏭）ではなく展示会（🏛）にする。🏭はMercedes工場見学だけに残す。
   ['🏭 EuroBLECH Day 1', '🏛 EuroBLECH Day 1'],

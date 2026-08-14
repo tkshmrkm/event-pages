@@ -6,7 +6,8 @@
 
 `index_v3.html` を、HRS公開版と承認済み4列サンプルに沿った現地用ページとして完成させる。
 
-このチェックポイントは、ユーザーとの対話で行った体裁・粒度・家族タブの修正を保存したもの。ただし、末尾の「未完了」を反映するまでは完成扱いにしない。
+当初の未完了6項目は2026-08-14にすべて反映した。以降の仕様確定はこのフォルダで行い、
+固まったものを標準としてHRSへ戻す。
 
 **このファイルが現在の引き継ぎ本体。** `NEXT_SESSION_HANDOFF.md` は初期設計の補足資料であり、内容が異なる場合は本書とユーザーの最新指示を優先する。
 
@@ -61,66 +62,86 @@
 - 家族タブの冗長な日時を整理し、フライト、地上移動、到着/乗り継ぎ、手続き、要検討を区別。
 - 表記監査で指摘されたゼロ埋め、`Day 1`/`Day 2`、`VIP Networking Drinks`、`荷物受取`、`機内`、日本語区切りの多くを生成時に統一。
 
-## 未完了 — 次に対応する項目
+## 未完了だった6項目 — 2026-08-14に全件反映
 
-### 1. 10/17 香港ラウンジを公式情報で確定して書き直す
+引き継ぎ作成時の「未完了」6項目は、すべて `build_v3.mjs` 側で反映して再生成済み。
+以下は反映内容と、次に触る人が前提を取り違えないための注記。
 
-現行は「営業時間未確認」と書いており古い。航空会社ラウンジ、Priority Pass、一般有料施設を混ぜない。
+### 1. 10/17 香港ラウンジ（反映済み）
 
-確認済みの公式情報:
+「営業時間が未確認」という記述をすべて削除し、キャセイ公式のラウンジ個別ページで
+確認した営業時間に置き換えた。確認日は2026-08-14。
 
-- oneworld Sapphireは、対象便利用時にキャセイのビジネスクラスラウンジへ本人＋同伴1名で入室可。ファーストクラスラウンジは対象外。
-  - <https://www.cathaypacific.com/cx/en_GB/destinations/lounges/all-lounges-admittance.html>
-- The Deck: Gate 6付近、毎日05:30〜00:30、シャワー8室。
-  - <https://www.cathaypacific.com/cx/en_CA/destinations/lounges/hong-kong-hkg/the-deck.html>
-- The Pier, Business: Gate 65付近、毎日05:30〜00:30。
-  - <https://www.cathaypacific.com/cx/en_CA/destinations/lounges/hong-kong-hkg/the-pier.accessibility.html>
-- The Bridge: Gate 35付近、05:00から最終キャセイ便まで（00:30〜03:20の範囲）、シャワーあり。
-  - <https://www.cathaypacific.com/cx/en_SG/destinations/lounges/hong-kong-hkg/the-bridge.html>
-- The Wing, Businessは改装休業中で、2027年再開予定。
-  - <https://www.cathaypacific.com/cx/en_IN/destinations/lounges/hong-kong-hkg/the-wing.html>
-- 香港空港の無料シャワー: Gate 12/Gate 43付近、L5、24時間。
-  - <https://www.hongkongairport.com/en/passenger-guide/airport-facilities-services/shower-facilities>
-- Plaza Premium一般有料: Gate 1とGate 60は24時間、Gate 35は06:00〜01:00。料金と空席は利用時に再確認。
-  - <https://www.plazapremiumlounge.com/en-uk/find/china-regions/hong-kong/hong-kong>
+- The Deck: Terminal 1・Level 7・Gate 6付近・05:30〜00:30（毎日）
+- The Pier, Business: Terminal 1・Level 6・Gate 65付近・05:30〜00:30（毎日）・シャワー14室
+- The Bridge: Terminal 1・Level 6・Gate 35付近・05:00〜最終キャセイ便（00:30〜03:20の範囲）
+- oneworld Sapphire: ビジネスクラスラウンジのみ本人＋同伴1名。ファーストクラスラウンジは対象外。
+  キャセイ運航ラウンジに限られ、キャセイ／oneworld便の利用が条件。
 
-Priority Passで現在利用できる香港空港ラウンジ名・営業時間は、Priority Pass公式ページ/アプリでまだ確認できていない。Plaza PremiumをPP対象と断定しないこと。
+**`The Wing` の扱いを変更した。** 現行のHKGラウンジ一覧に載っているのは `The Wing, First` だけで、
+`The Wing, Business` の掲載が無い。よって村上が使えるラウンジの列挙から `The Wing` を外した。
+引き継ぎ作成時にあった「The Wing, Businessは改装休業中で2027年再開予定」という記述は、
+今回の確認では裏が取れていない（一覧に無いことしか分からない）ため、ページには書いていない。
 
-### 2. 10/18村上の到着を主旅程にも明記
+空港の無料シャワーは香港国際空港の公式ページで確認した。Arrivals Level（L5）の
+Gate 12付近とGate 43付近、24時間、シャンプー等は無料、タオル等は自販機で購入。
 
-10/17のフライト4列には `06:55 +1 AMS着` があるが、10/18村上レーンの先頭は現在 `入国審査・荷物受取`だけ。
+Plaza Premiumは運営会社の公式ページで確認した。Gate 60が24時間・HKD 250〜、
+Gate 1が24時間・HKD 650〜、Gate 35が06:00〜01:00・HKD 650〜。
+Plaza Premium Firstは East Hall（Gate 1）06:30〜01:00、West Hall（Gate 35）06:00〜01:00・HKD 980〜。
 
-`06:55 Amsterdam Airport Schiphol（AMS）着` と `入国審査・荷物受取` が同日欄で分かるようにする。家族タブにはすでに到着表示がある。
+**Priority Passは依然として未確認。** Plaza Premiumの公式ページにPriority Passの記載が無く、
+Priority Pass側でも確認していない。ページ上は「一般有料ラウンジ」として扱い、
+「Priority Passの対象施設かは未確認」と明示してある。**Plaza PremiumをPP対象と断定しないこと。**
 
-### 3. CX539のチェックイン表現
+### 2. 10/18村上の到着（反映済み）
 
-中部国際空港の公式航空会社案内では、CX539/CX531のカウンターは出発3時間前に開始、T1 Iカウンター。
+到着日の人物レーン先頭を `06:55` ＋ `Amsterdam Airport Schiphol（AMS）着` の主表示、
+`入国審査・荷物受取` の従表示という2段にした。美馬・金築の `Frankfurt Airport（FRA）着` も
+同じ形にそろえてある。日跨ぎ便の前日側4列交通はそのまま残している。
 
-- <https://www.centrair.jp/en/flight/airline/cathaypacific.html>
+### 3. CX539のチェックイン表現（反映済み）
 
-CX539で自動手荷物預けが使えるかは未確認。公式の対象航空会社を確認できるまでは、`有人カウンターで預ける前提` とし、自動手荷物預け対応を断定しない。
+村上10/17と美馬・金築10/18の両方を
+`国際線のため3時間前にチェックイン。自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く`
+に統一した。**自動手荷物預けの対象便かどうかは確認していない。** 断定を足さないこと。
+中部国際空港のカウンター位置（T1 Iカウンター等）も未確認のため書いていない。
 
-10/17村上と10/18美馬・金築の両方を同じ表現にそろえる。
+同一文を複数箇所へ当てる必要があったので、`SOURCE_TEXT_REPLACEMENTS` の
+第3要素に `'all'` を指定すると全件置換になる仕組みを足した。
 
-### 4. 10/22の色と確定/未確定の区別
+### 4. 10/22の色（反映済み）
 
-工場見学自体は予約確定。未確定なのは次の2点だけ。
+**日ヘッダーの色は変えていない。** `data-kind="visit"` のラベンダーはHRSの色契約なので、
+ここを崩すと標準をHRSへ戻すときに影響が出る。代わりに凡例側を直した。
 
-- Bremen Hbf → Mercedes-Benz Werk Bremenの交通手段
-- 早帰り案/18:00頃まで滞在案の選択と復路列車
+- `展示会` → `展示会視察`
+- `工場・企業見学` → `工場・企業見学（予約確定）`
+- オレンジの `要検討（この帯だけが未定）` を凡例に追加（`.swatch-review` を `v3.css` に追加）
 
-現在の10/22日ヘッダーは `data-kind="visit"` のラベンダー。HRS契約上は「工場・企業訪問」の色だが、ユーザーには「未定色」に見える。未定帯に見えない色へ変更するか、凡例を `工場見学（予約確定）` と明示し、オレンジの `要検討` 行だけを未定として見せる。ユーザー意図を優先する。
+未定色の手がかりが凡例に無かったことが、ラベンダーを未定色と読ませていた原因。
+10/22の未定は、オレンジの `.route-review` と `.return-choice` の3帯だけが示す。
 
-### 5. EuroBLECHの文言
+### 5. EuroBLECHの文言（反映済み）
 
-主旅程・会場タブ・家族タブを横断し、説明語として `参加` や工場アイコンが残っている箇所を `展示会視察` に統一する。イベント固有名のラベル `EuroBLECH` はそのままでよい。
+説明語を `参加` から `展示会視察`／`視察` へ統一した。アイコンも工場から展示会
+（`line-icon-event`）へ変更した。工場アイコンはMercedes工場見学の3箇所だけに残っている。
 
-### 6. アイコン最終監査
+`TechEx Europe: 参加` と `Mercedes-Benz Werk Bremen: 工場見学` はそのまま。
+イベント固有名のラベル `EuroBLECH` も変えていない。
 
-- Font Awesomeは読み込まない。
-- 空表示の `fa-*` が残っていないか確認する。
-- 航空券/フライトは共通 `.flight-mark`。
-- 黒い塗りつぶし絵文字ではなく、既存の線画 `.line-icon` を使う。
+### 6. アイコン監査（反映済み）
+
+生成物での実測値。`fa-*` 0件、Font Awesomeの読み込み0件、カラー飛行機絵文字0件、
+フライトは共通 `.flight-mark` が14件、`line-icon-event` 8件、`line-icon-factory` 3件。
+
+## 既知の未修正 — 準備タブの表が393pxで切れる
+
+準備タブの `.transport-table` は、393px幅で右端が約34px切れて読めない。
+表を包む `div.bg-white.rounded-xl` が `overflow-x: hidden` のため、横スクロールもできない。
+
+これは今回の6項目より前から在る不具合で、生成物のこの表のマークアップは
+引き継ぎ時点とバイト一致している。412px以上では発生しない。
 
 ## 検証
 
