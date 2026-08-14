@@ -35,7 +35,7 @@ button,input,textarea,select{font-family:inherit}
 .day-kind-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px 12px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;color:var(--tx2);font-size:var(--f4)}
 .day-kind-legend strong{margin-right:2px;color:var(--tx);font-weight:700}
 .day-kind-legend span{display:inline-flex;align-items:center;gap:5px}
-.kind-swatch{display:inline-block;width:15px;height:15px;border:1px solid currentColor;border-radius:4px}.swatch-move{background:var(--move);color:var(--move-tx)}.swatch-conf{background:var(--conf);color:var(--conf-tx)}.swatch-visit{background:var(--choose);color:var(--choose-tx)}
+.kind-swatch{display:inline-block;width:15px;height:15px;border:1px solid currentColor;border-radius:4px}.swatch-move{background:var(--move);color:var(--move-tx)}.swatch-conf{background:var(--conf);color:var(--conf-tx)}.swatch-visit{background:var(--choose);color:var(--choose-tx)}.swatch-review{background:#FFF3D6;color:#7A3E08}
 
 /* Transport contract: row time | departure | service/duration | arrival. */
 .route-four{display:grid;grid-template-columns:92px minmax(0,1fr) 132px minmax(0,1fr);border-top:1px solid var(--line2);background:#fff}

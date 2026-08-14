@@ -19,8 +19,8 @@ const DAY_META = {
   '1017': { date: '2026-10-17', kind: 'move', badge: '移動', zone: '各地点の現地時刻。香港は日本より1時間遅い', focus: '村上が1日先行。香港で夕食・シャワー後、アムステルダム行き深夜便へ' },
   '1018': { date: '2026-10-18', kind: 'move', badge: '別行動', zone: '村上は欧州現地時間（日本より7時間遅い）。美馬・金築は日本・香港の各現地時刻', focus: '村上はアムステルダム到着後に時差調整。美馬・金築は日本を出発' },
   '1019': { date: '2026-10-19', kind: 'conf', badge: 'TechEx', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: '村上はTechEx Europe Day 1。美馬・金築はEuroBLECH開幕前の自由日を利用してヴォルフスブルクへ日帰り。ゲッティンゲンが経路上にあるため、先にホテルへ荷物を預けて身軽に移動する' },
-  '1020': { date: '2026-10-20', kind: 'conf', badge: '別行動', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: '村上はTechEx Day 2後、20:30頃にゲッティンゲンのホテルへ到着。美馬・金築はEuroBLECH Day 1に参加後、18:00頃に戻る目安' },
-  '1021': { date: '2026-10-21', kind: 'conf', badge: 'EuroBLECH', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: '3名で09:00〜17:00にEuroBLECHへ参加。18:00頃にゲッティンゲンへ戻り、19:00頃に夕食' },
+  '1020': { date: '2026-10-20', kind: 'conf', badge: '別行動', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: '村上はTechEx Day 2後、20:30頃にゲッティンゲンのホテルへ到着。美馬・金築はEuroBLECH Day 1を視察後、18:00頃に戻る目安' },
+  '1021': { date: '2026-10-21', kind: 'conf', badge: 'EuroBLECH', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: '3名で09:00〜17:00にEuroBLECHを展示会視察。18:00頃にゲッティンゲンへ戻り、19:00頃に夕食' },
   '1022': { date: '2026-10-22', kind: 'visit', badge: '工場見学', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: 'Mercedes-Benz Werk Bremenを見学。復路は「早めに戻って資料整理」と「18:00頃まで市内滞在」の2案から決める' },
   '1023': { date: '2026-10-23', kind: 'conf', badge: 'EuroBLECH', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: 'EuroBLECH最終日。17:30頃にフランクフルトのホテルへチェックインし、18:30頃に夕食' },
   '1024': { date: '2026-10-24', kind: 'move', badge: '帰国便', zone: '欧州現地時間 CEST（日本より7時間遅い）。到着後の香港は日本より1時間遅い', focus: '東横INNで朝食・チェックアウト後、フランクフルト空港から香港行きCX288に搭乗' },
@@ -116,6 +116,23 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['<td>❌ 利用不可。ターミナル内で夕食をとって過ごす</td>', '<td>利用条件：搭乗クラス・航空会社ステータス／Priority Passの当日対象施設・同伴条件</td>'],
   ['美馬・金築は<strong>ゴールドカード以上ならセントレアの出国審査前カードラウンジが無料</strong>。', '美馬・金築は、航空会社ラウンジとPriority Passラウンジの利用条件を確認。'],
   ['<strong>有料ラウンジ</strong>: Plaza Premium は <strong>Gate 60 が24時間・HKD 250〜（最安）</strong>、Gate 1 が24時間・HKD 650〜。Plaza Premium First は West Hall 06:00〜／East Hall 06:30〜。', '<strong>Priority Pass候補</strong>: Plaza Premium Lounge は Gate 1付近が24時間、Gate 35付近が06:00〜翌01:00。利用前に会員本人のPPアプリで当日の対象施設と同伴条件を確認。'],
+  // EuroBLECHは展示会視察。TechExの「参加」、Mercedesの「工場見学」とは語を分ける。
+  // アイコンも工場（🏭）ではなく展示会（🏛）にする。🏭はMercedes工場見学だけに残す。
+  ['🏭 EuroBLECH Day 1', '🏛 EuroBLECH Day 1'],
+  ['🏭 EuroBLECH（Hannover Messe）', '🏛 EuroBLECH（Hannover Messe）'],
+  ['🏭 EuroBLECH（最終）', '🏛 EuroBLECH（最終）'],
+  ['🏭 EuroBLECH 2026', '🏛 EuroBLECH 2026'],
+  ['<i class="fas fa-industry"></i> EuroBLECH 公式サイト', '<i class="fas fa-landmark"></i> EuroBLECH 公式サイト'],
+  ['EuroBLECH フル参加 — 全員合流', 'EuroBLECH 展示会視察 — 全員合流'],
+  ['<!-- Day 5: 10/21 EuroBLECH フル参加（全員合流） -->', '<!-- Day 5: 10/21 EuroBLECH 展示会視察（全員合流） -->'],
+  ['EuroBLECH フル参加（全員合流・ハノーファーメッセ）', 'EuroBLECH 展示会視察（全員合流・ハノーファーメッセ）'],
+  ['<div class="text-sm text-slate-600 mt-1">村上・美馬・金築 全員参加</div>', '<div class="text-sm text-slate-600 mt-1">村上・美馬・金築 全員で終日視察</div>'],
+  ['Hannover Messe · 10/20（火）– 10/23（金）· 全員参加', 'Hannover Messe ・ 10/20（火）– 10/23（金）・ 全員で展示会視察'],
+  ['美馬・金築が20日朝ハノーファーへ移動して参加', '美馬・金築が20日朝ハノーファーへ移動して視察'],
+  ['<div class="font-semibold">10/21（水）— 全員フル参加</div>', '<div class="font-semibold">10/21（水）— 全員で終日視察</div>'],
+  ['10/22（木）12:45–14:00 · 全員参加・予約確定済み', '10/22（木）12:45–14:00 ・ 全員で工場見学・予約確定済み'],
+  // 自動手荷物預けの対象便かは未確認。有人カウンター前提にそろえる（村上10/17・美馬金築10/18の両方）。
+  ['<div class="text-slate-600 text-xs">国際線のため3時間前にチェックイン</div>', '<div class="text-slate-600 text-xs">国際線のため3時間前にチェックイン。自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く</div>', 'all'],
 ];
 
 const FAMILY_DAYS = [
@@ -163,7 +180,7 @@ const FAMILY_DAYS = [
   ], stays:[['全員','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/21', dow:'水', shared:[
     ['07:55','move','移動','Göttingen Hbf → Hannover Messe/Laatzen 08:23'],
-    ['09:00〜17:00','euro','EuroBLECH','全員で終日参加'],
+    ['09:00〜17:00','euro','EuroBLECH','全員で終日視察'],
     ['17:30頃','move','移動目安','Hannover Messe/Laatzen → Göttingen Hbf 18:00頃'],
     ['19:00頃','meal','夕食','ゲッティンゲン旧市街'],
   ], stays:[['全員','Hotel FREIgeist Göttingen Innenstadt']] },
@@ -218,9 +235,10 @@ function replaceDivById(html, id, replacement) {
 const readSource = (file) => readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
 
 let source = readSource(sourcePath);
-for (const [from, to] of SOURCE_TEXT_REPLACEMENTS) {
+for (const [from, to, scope] of SOURCE_TEXT_REPLACEMENTS) {
   if (!source.includes(from)) throw new Error('Missing source text replacement: ' + from.slice(0, 72));
-  source = source.replace(from, to);
+  // 第3要素 'all' は、同一文が複数人・複数日に出る場合にすべて置き換える指定。
+  source = scope === 'all' ? source.split(from).join(to) : source.replace(from, to);
 }
 const familySource = readSource(familySourcePath);
 const [familyStart, familyEnd] = divRangeById(familySource, 'tab-family');
@@ -330,9 +348,11 @@ const transformScript = `
       const row = rowFor(day, route[1]);
       if (row) { row.className = 'route-four'; row.innerHTML = routeMarkup(route); }
     });
-    [['AMS 着','06:55','🛂 入国審査・荷物受取'],['FRA 着','07:15','🛂 入国審査・荷物受取'],['HKG 着','07:20','香港で乗り継ぎ（2時間15分）']].forEach(([match,time,label]) => {
+    // 日跨ぎ便は前日の4列交通に到着を残すが、到着日の人物レーンだけを見ても
+    // どこに何時に着いたか分かるように、空港名を主表示、手続きを従表示にする。
+    [['AMS 着','06:55','🛂 Amsterdam Airport Schiphol（AMS）着','入国審査・荷物受取'],['FRA 着','07:15','🛂 Frankfurt Airport（FRA）着','入国審査・荷物受取'],['HKG 着','07:20','香港で乗り継ぎ（2時間15分）','']].forEach(([match,time,label,sub]) => {
       const row = rowFor(day, match);
-      if (row && !row.classList.contains('route-four')) row.innerHTML = '<div class="text-slate-500">' + time + '</div><div class="font-semibold">' + label + '</div>';
+      if (row && !row.classList.contains('route-four')) row.innerHTML = '<div class="text-slate-500">' + time + '</div><div class="font-semibold">' + label + '</div>' + (sub ? '<div class="text-slate-600 text-xs">' + sub + '</div>' : '');
     });
     if (id === '1021') {
       const before = Array.from(day.querySelectorAll('.font-semibold')).find(el => /宿泊/.test(el.textContent))?.closest('[class*="border-l-4"]');
@@ -375,7 +395,7 @@ const transformScript = `
     }
     if (id === '1021') {
       const expo = rowFor(day, 'EuroBLECH（Hannover Messe）');
-      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00–17:00</div><div class="font-semibold text-teal-800">🏭 EuroBLECH</div><div class="text-slate-600 text-xs">全員で終日参加</div>';
+      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00–17:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">全員で終日視察</div>';
       const back = Array.from(day.querySelectorAll('.route-estimate')).at(-1);
       back?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">19:00頃</div><div class="action-body"><div class="font-semibold">🍽 全員で夕食</div><div class="text-slate-600 text-xs">ゲッティンゲン旧市街</div></div></div>');
     }
@@ -461,7 +481,9 @@ const transformScript = `
   if (stack) {
     stack.className = 'itinerary-stack';
     stack.querySelectorAll(':scope > :not(.day)').forEach(el => { if (!el.closest('.day')) el.classList.add('intro-card'); });
-    stack.insertAdjacentHTML('afterbegin','<div class="day-kind-legend" aria-label="日付カードの色の意味"><strong>日付カードの色</strong><span><i class="kind-swatch swatch-move"></i>移動・帰着</span><span><i class="kind-swatch swatch-conf"></i>展示会</span><span><i class="kind-swatch swatch-visit"></i>工場・企業見学</span></div>');
+    // 日ヘッダーの色は予定の種類であって、決まっているかどうかではない。
+    // 未定はオレンジの帯だけが示す、と凡例で明示しないと10/22のラベンダーが未定色に読まれる。
+    stack.insertAdjacentHTML('afterbegin','<div class="day-kind-legend" aria-label="日付カードの色の意味"><strong>日付カードの色</strong><span><i class="kind-swatch swatch-move"></i>移動・帰着</span><span><i class="kind-swatch swatch-conf"></i>展示会視察</span><span><i class="kind-swatch swatch-visit"></i>工場・企業見学（予約確定）</span><span><i class="kind-swatch swatch-review"></i>要検討（この帯だけが未定）</span></div>');
   }
   const familyEventMarkup = event => '<div class="agenda-line"><time>' + esc(event[0]) + '</time><span class="schedule-tag kind-' + esc(event[1]) + '">' + esc(event[2]) + '</span><p>' + esc(event[3]) + '</p></div>';
   const familySectionMarkup = (title, events) => '<section><h3>' + esc(title) + '</h3>' + (events.length ? events.map(familyEventMarkup).join('') : '<div class="agenda-empty">日本</div>') + '</section>';
@@ -473,7 +495,7 @@ const transformScript = `
     return '<article class="family-day-row' + (day.shared ? ' shared-day' : '') + '"><header><strong>' + esc(day.date) + '</strong><span>' + esc(day.dow) + '</span></header>' + body + familyStayMarkup(day.stays) + '</article>';
   };
   const familySchedule = family.querySelector('.family-schedule .schedule-body');
-  if (familySchedule) familySchedule.innerHTML = '<div class="schedule-legend" aria-label="色の意味"><strong>表示の区別</strong><span class="schedule-tag kind-flight">フライト</span><span class="schedule-tag kind-move">地上移動</span><span class="schedule-tag kind-transfer">到着・乗り継ぎ</span><span class="schedule-tag kind-procedure">手続き</span><span class="schedule-tag kind-techex">TechEx</span><span class="schedule-tag kind-euro">EuroBLECH</span><span class="schedule-tag kind-visit">工場・企業訪問</span><span class="schedule-tag kind-review">要検討</span></div>' + FAMILY_DAYS.map(familyDayMarkup).join('');
+  if (familySchedule) familySchedule.innerHTML = '<div class="schedule-legend" aria-label="色の意味"><strong>表示の区別</strong><span class="schedule-tag kind-flight">フライト</span><span class="schedule-tag kind-move">地上移動</span><span class="schedule-tag kind-transfer">到着・乗り継ぎ</span><span class="schedule-tag kind-procedure">手続き</span><span class="schedule-tag kind-techex">TechEx</span><span class="schedule-tag kind-euro">EuroBLECH</span><span class="schedule-tag kind-visit">工場・企業見学</span><span class="schedule-tag kind-review">要検討</span></div>' + FAMILY_DAYS.map(familyDayMarkup).join('');
   family.querySelector('.flight-fares')?.remove();
   family.querySelectorAll('.flight-status').forEach(status => status.remove());
   family.querySelector('.timezone-note')?.remove();
@@ -499,7 +521,7 @@ const transformScript = `
   [itinerary, prep, venue, record, family].forEach(panel => main.appendChild(panel));
   nav.after(main);
   document.body.insertAdjacentHTML('beforeend','<footer class="field-footer">TechEx Europe・EuroBLECH 2026 ・ field guide v3</footer><!--V3_SCRIPT-->');
-  const legacyIconMap = { 'fa-train':'🚆', 'fa-industry':'🏭', 'fa-laptop':'💻', 'fa-building':'🏢', 'fa-hotel':'🏨' };
+  const legacyIconMap = { 'fa-train':'🚆', 'fa-industry':'🏭', 'fa-landmark':'🏛', 'fa-laptop':'💻', 'fa-building':'🏢', 'fa-hotel':'🏨' };
   document.querySelectorAll('i.fas').forEach(icon => {
     if (icon.classList.contains('fa-plane')) {
       const mark = document.createElement('span');
