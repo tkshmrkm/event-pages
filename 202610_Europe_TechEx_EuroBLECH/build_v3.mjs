@@ -213,12 +213,16 @@ function replaceDivById(html, id, replacement) {
   return html.slice(0, start) + replacement + html.slice(end);
 }
 
-let source = readFileSync(sourcePath, 'utf8');
+// 置換文字列はLFで書いてある。core.autocrlf=trueのWindowsチェックアウトでは
+// 作業ツリーがCRLFになるため、読み込み時にLFへそろえてから照合する。
+const readSource = (file) => readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+
+let source = readSource(sourcePath);
 for (const [from, to] of SOURCE_TEXT_REPLACEMENTS) {
   if (!source.includes(from)) throw new Error('Missing source text replacement: ' + from.slice(0, 72));
   source = source.replace(from, to);
 }
-const familySource = readFileSync(familySourcePath, 'utf8');
+const familySource = readSource(familySourcePath);
 const [familyStart, familyEnd] = divRangeById(familySource, 'tab-family');
 source = replaceDivById(source, 'tab-family', familySource.slice(familyStart, familyEnd));
 source = source

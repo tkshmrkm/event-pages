@@ -131,6 +131,12 @@ git diff --check
 
 `scripts/validate_event_page.mjs` はこのチェックアウトには存在しない。追加されている環境では併用する。
 
+`build_v3.mjs` の置換文字列はLFで書いてある。リポジトリは `.gitattributes` の `* text=auto` と
+`core.autocrlf=true` により作業ツリーがCRLFになるため、`index.html` と `index_v2.html` は
+読み込み時にLFへ正規化してから照合する。この正規化を外すと `Missing source text replacement` で
+ビルドが止まる。生成物はLFで書き出されるので、直後の `git status` に `index_v3.html` が
+修正扱いで出ることがあるが、`git diff --numstat` が0行なら内容の差分はない。
+
 その後、localhostで `index_v3.html` を開き、390pxと約1200pxで次を実機確認する。
 
 - 横はみ出しが0件
