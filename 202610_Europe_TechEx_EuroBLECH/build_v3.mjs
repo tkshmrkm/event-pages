@@ -132,6 +132,8 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['<td>✅ 利用可（Sapphire）。ファーストクラスラウンジは対象外</td>', '<td>✅ 利用可（Sapphire・本人＋同伴1名）。The Deck と The Pier, Business は05:30〜00:30、The Bridge は05:00〜最終キャセイ便。ファーストクラスラウンジは対象外</td>'],
   ['<div>⚠️ <strong>キャセイ自社ラウンジ（The Wing / The Pier / The Deck / The Bridge）の営業時間は未確認</strong>（公式サイトにアクセスできず特定できなかった）。<strong>夜23時台・早朝7時台は閉まっている可能性がある</strong>ため、出発前にキャセイに確認するか、到着後にトランスファーデスクで開いているラウンジを聞く。</div>', '<div>⭐ <strong>キャセイのビジネスクラスラウンジ営業時間</strong>: The Deck（L7・Gate 6付近）と The Pier, Business（L6・Gate 65付近）が<strong>05:30〜00:30</strong>、The Bridge（L6・Gate 35付近）が<strong>05:00〜最終キャセイ便（00:30〜03:20の範囲）</strong>。<strong>夜23時台も早朝7時台も営業時間内</strong>。The Wing は現行のラウンジ一覧では First のみで、Business側の掲載が無い。</div>'],
   // 10/25 全員の香港乗継 2時間15分。ここもラウンジを選択肢の一つとして並べる。
+  // 昼食の場所は時刻ではなく場所に張り付く常設情報なので、日トップの食事トピック側に置く。
+  ['<div>Autostadt内での昼食が遅めになる想定なので、夕食は軽めでも足りる。到着が19時前なのでラストオーダーに注意。</div>', '<div>昼食はAutostadt内か、<strong>ヴォルフスブルク中央駅の周辺</strong>（少し歩けば店がある）。どちらも遅めになる想定なので、夕食は軽めでも足りる。到着が19時前なのでラストオーダーに注意。</div>'],
   ['<div class="font-semibold">⏱ 乗継2時間15分 — まず搭乗ゲートを確認</div>', '<div class="font-semibold">🕐 香港で乗り継ぎ（2時間15分）</div>'],
   ['<div class="text-slate-600 text-xs">セキュリティ再検査と液体物の追加検査があり、<strong>搭乗ゲートのコンコースは搭乗券が出るまで分からない</strong>。ラウンジは<strong>同伴1名まで＝3名のうち1名が入れない</strong>ので、分かれるより3名で店に入る方が無駄がない。<br>⚠️ <strong>土産は往路（10/17・10/18の夜）に済ませておく</strong>。復路の早朝は開いていない店がある。</div>', '<details class="fold mt-1"><summary>やること</summary><div class="fold-body"><div>セキュリティ再検査と液体物の追加検査がある</div><div><strong>搭乗ゲートのコンコースは搭乗券が出るまで分からない</strong>ので、先に確認する</div><div>ラウンジは<strong>同伴1名まで＝3名のうち1名が入れない</strong>。分かれるより3名で店に入る方が無駄がない</div><div>⚠️ <strong>土産は往路（10/17・10/18の夜）に済ませておく</strong>。復路の早朝は開いていない店がある</div></div></details>'],
   ['<summary>コンコース間の移動時間・早朝の営業状況</summary>', '<summary>ラウンジで過ごす（4系統）とコンコース間の移動</summary>'],
@@ -451,6 +453,8 @@ const transformScript = `
       cx539?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">17:10頃</div><div class="action-body"><div class="font-semibold">🍽 機内食（主菜＋デザート）</div><div class="text-slate-600 text-xs">離陸1時間後が目安。これが実質の夕食になる</div></div></div>');
     }
     if (id === '1019') {
+      // 07:15着〜08:22発の1時間しかない行動なので、日トップではなく時系列に置く。
+      rowFor(day, 'Frankfurt Airport（FRA）着')?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">07:45頃</div><div class="action-body"><div class="font-semibold">🍽 空港で買い出し</div><div class="text-slate-600 text-xs">08:22発の列車まで待ち時間。パンと飲み物を買っておく</div></div></div>');
       const techEx = rowFor(day, 'TechEx Day 1 — Gold Track');
       techEx?.insertAdjacentHTML('afterbegin', '<div class="text-slate-500">09:45–16:50</div>');
       Array.from(techEx?.querySelectorAll('div') || []).find(el => el.textContent.trim() === '18:00–21:00 VIP Networking Drinks（Gold Pass特典）')?.remove();
@@ -676,16 +680,17 @@ const transformScript = `
     home: '<path d="m3 11 9-8 9 8M5 10v11h14V10m-9 11v-6h4v6"/>',
     event: '<path d="M4 20h16M6 20V9h12v11M5 9l7-5 7 5M9 12v5m6-5v5"/>',
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    car: '<path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2m12 0v2h2v-2M6 13h12"/><circle cx="8" cy="15" r=".8"/><circle cx="16" cy="15" r=".8"/>',
   };
-  const lineIconMap = { '🛋':'lounge', '🛂':'procedure', '🏨':'hotel', '🍽':'meal', '😴':'rest', '🥂':'drinks', '🏭':'factory', '🚶':'walk', '🏠':'home', '🏛':'event', '🕐':'clock' };
+  const lineIconMap = { '🛋':'lounge', '🛂':'procedure', '🏨':'hotel', '🍽':'meal', '😴':'rest', '🥂':'drinks', '🏭':'factory', '🚶':'walk', '🏠':'home', '🏛':'event', '🕐':'clock', '🚗':'car' };
   const iconNodes = [];
   const iconWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (iconWalker.nextNode()) {
     const node = iconWalker.currentNode;
-    if (!node.parentElement?.closest('script,style,.tabs') && /^[\\s]*(?:🛋|🛂|🏨|🍽|😴|🥂|🏭|🚶|🏠|🏛|🕐)/u.test(node.nodeValue)) iconNodes.push(node);
+    if (!node.parentElement?.closest('script,style,.tabs') && /^[\\s]*(?:🛋|🛂|🏨|🍽|😴|🥂|🏭|🚶|🏠|🏛|🕐|🚗)/u.test(node.nodeValue)) iconNodes.push(node);
   }
   iconNodes.forEach(node => {
-    const match = node.nodeValue.match(/^(\\s*)(🛋|🛂|🏨|🍽|😴|🥂|🏭|🚶|🏠|🏛|🕐)\\s*/u);
+    const match = node.nodeValue.match(/^(\\s*)(🛋|🛂|🏨|🍽|😴|🥂|🏭|🚶|🏠|🏛|🕐|🚗)\\s*/u);
     if (!match) return;
     const fragment = document.createDocumentFragment();
     if (match[1]) fragment.appendChild(document.createTextNode(match[1]));
