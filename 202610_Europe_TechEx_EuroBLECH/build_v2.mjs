@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const root = dirname(fileURLToPath(import.meta.url));
-const sourcePath = join(root, 'index.html');
+const sourcePath = join(root, 'index_v1.html');
 const outputPath = join(root, 'index_v2.html');
 let html = readFileSync(sourcePath, 'utf8');
 

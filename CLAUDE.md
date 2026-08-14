@@ -31,6 +31,9 @@
   `family_print.html`、`v3.css`。
 - 旧版の `index_v1.html` と元資料の `index_v2.html` は、移行元として保存する。
 - `index_v3.html` は、以前の共有URLを `index.html` へ転送する互換ページ。
+- EUROBLECH（`202610_Europe_TechEx_EuroBLECH`）も2026-08-14に同じ並びへそろえた。
+  `index.html` が生成物、`index_v1.html` が入力元、`index_v3.html` が転送ページ。
+  詳細は `202610_Europe_TechEx_EuroBLECH/CLAUDE_HANDOFF.md` を読む。
 - 共通機能は `shared/trip-field` に置き、HRS固有の外観はHRS側に残す。
 - 机上用印刷版は静的で、メモ欄、クラウド同期、実行スクリプトを含めない。
 - 飛行機アイコンは色付き絵文字ではなく、モノクロ文字の `✈︎` を使う。

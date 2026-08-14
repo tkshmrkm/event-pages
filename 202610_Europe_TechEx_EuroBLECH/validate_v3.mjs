@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const html = readFileSync(join(here, 'index_v3.html'), 'utf8');
+const html = readFileSync(join(here, 'index.html'), 'utf8');
 const css = readFileSync(join(here, 'v3.css'), 'utf8');
 const js = readFileSync(join(here, 'v3.js'), 'utf8');
 const hrsCss = readFileSync(join(here, '..', '202609_HumanoidSummitEurope', 'v3.css'), 'utf8');

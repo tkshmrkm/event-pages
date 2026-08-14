@@ -6,14 +6,14 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const sourcePath = join(here, 'index.html');
+const sourcePath = join(here, 'index_v1.html');
 const familySourcePath = join(here, 'index_v2.html');
-const outputPath = join(here, 'index_v3.html');
+const outputPath = join(here, 'index.html');
 const browserPath = [
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
 ].find(existsSync);
-if (!browserPath) throw new Error('Chrome or Edge is required to build index_v3.html');
+if (!browserPath) throw new Error('Chrome or Edge is required to build index.html');
 
 const DAY_META = {
   '1017': { date: '2026-10-17', kind: 'move', badge: '移動', zone: '各地点の現地時刻。香港は日本より1時間遅い', focus: '村上が1日先行。夕食は機内食で済み、香港ではシャワーと休憩。深夜便でアムステルダムへ' },

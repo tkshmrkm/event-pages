@@ -4,7 +4,7 @@
 
 ## 目的
 
-`index_v3.html` を、HRS公開版と承認済み4列サンプルに沿った現地用ページとして完成させる。
+`index.html`（フォルダの公開入口）を、HRS公開版と承認済み4列サンプルに沿った現地用ページとして完成させる。
 
 当初の未完了6項目は2026-08-14にすべて反映した。以降の仕様確定はこのフォルダで行い、
 固まったものを標準としてHRSへ戻す。
@@ -22,6 +22,22 @@ CRLF正規化はHRS側にも適用済み。
 
 **このファイルが現在の引き継ぎ本体。** `NEXT_SESSION_HANDOFF.md` は初期設計の補足資料であり、内容が異なる場合は本書とユーザーの最新指示を優先する。
 
+## ファイル構成（2026-08-14にHRS方式へそろえた）
+
+v3をフォルダの公開入口にした。HRS（`202609_HumanoidSummitEurope`）と同じ並びである。
+
+| ファイル | 役割 |
+| --- | --- |
+| `index.html` | **v3の生成物。公開入口。** 直接編集しない |
+| `index_v1.html` | 旧版。`build_v3.mjs` と `build_v2.mjs` の入力元 |
+| `index_v2.html` | 家族タブの内容・情報構造の基準。`build_v2.mjs` の生成物 |
+| `index_v3.html` | 以前の共有URLを `./` へ転送する互換ページ |
+| `build_v3.mjs` | `index_v1.html` ＋ `index_v2.html` から `index.html` を生成 |
+| `validate_v3.mjs` | `index.html` を検査 |
+
+以前は `index.html` が旧版、`index_v3.html` が生成物だった。**入れ替わっているので、
+古い手順書やメモの `index_v3.html` を生成物と読まないこと。**
+
 ## 最初に全文確認するファイル
 
 1. `NEXT_SESSION_HANDOFF.md` — Git管理済みの初期設計補足。本書と異なる場合は本書を優先
@@ -30,7 +46,7 @@ CRLF正規化はHRS側にも適用済み。
 4. `../202609_HumanoidSummitEurope/v3.css`
 5. `../202609_HumanoidSummitEurope/V3_DESIGN_BRIEF.md`
 6. `../shared/trip-field/runtime.js` — HRS共通ランタイム。HRS固有の挙動は `index.html` 内のインラインスクリプトも確認
-7. `index.html` — 旅程内容の元データ。直接編集しない
+7. `index_v1.html` — 旅程内容の元データ。生成の入力なので直接編集しない
 8. `index_v2.html` — 家族タブの内容・情報構造の基準
 9. `build_v3.mjs`、`v3.css`、`v3.js`、`validate_v3.mjs` — 現在のv3実装
 
@@ -41,8 +57,8 @@ CRLF正規化はHRS側にも適用済み。
 
 ## 編集ルール
 
-- 原則として `build_v3.mjs` を修正し、`node build_v3.mjs` で `index_v3.html` を再生成する。
-- `index.html`、`index_v2.html`、各サンプルを直接上書きしない。
+- 原則として `build_v3.mjs` を修正し、`node build_v3.mjs` で `index.html` を再生成する。
+- `index_v1.html`、`index_v2.html`、各サンプルを直接上書きしない。
 - 交通はスマートフォンでも必ず4列のままにする。
 - 日付ナビ、タブ、フォントはHRS方式を維持する。
 - フォントは `BIZ UDPGothic`, `Yu Gothic UI`, `Meiryo`, `system-ui`, `sans-serif`。
@@ -344,12 +360,12 @@ git diff --check
 `scripts/validate_event_page.mjs` はこのチェックアウトには存在しない。追加されている環境では併用する。
 
 `build_v3.mjs` の置換文字列はLFで書いてある。リポジトリは `.gitattributes` の `* text=auto` と
-`core.autocrlf=true` により作業ツリーがCRLFになるため、`index.html` と `index_v2.html` は
+`core.autocrlf=true` により作業ツリーがCRLFになるため、`index_v1.html` と `index_v2.html` は
 読み込み時にLFへ正規化してから照合する。この正規化を外すと `Missing source text replacement` で
-ビルドが止まる。生成物はLFで書き出されるので、直後の `git status` に `index_v3.html` が
+ビルドが止まる。生成物はLFで書き出されるので、直後の `git status` に `index.html` が
 修正扱いで出ることがあるが、`git diff --numstat` が0行なら内容の差分はない。
 
-その後、localhostで `index_v3.html` を開き、390pxと約1200pxで次を実機確認する。
+その後、localhostで `index.html` を開き、390pxと約1200pxで次を実機確認する。
 
 - 横はみ出しが0件
 - 4列交通が崩れない
@@ -359,7 +375,7 @@ git diff --check
 - 10/22の確定/未定の色が誤解を生まない
 - 家族タブの時刻とタグが読みやすい
 
-最終的に、再生成した `index_v3.html` とブラウザ確認したファイルが同一であることを確認する。
+最終的に、再生成した `index.html` とブラウザ確認したファイルが同一であることを確認する。
 
 ## Gitの注意
 
@@ -368,5 +384,5 @@ git diff --check
   改行コードだけで modified 扱いになる。`git diff --numstat` が0行なら
   `git checkout --` で戻してよい。EUROBLECHのコミットに巻き込まない。
 - `references/rejected/transport_layout_sample.html` は無効な旧試作として隔離。対象フォルダ直下へ戻さない。
-- `index.html` は変更しない。
+- `index_v1.html` は変更しない。
 - ワークツリーに別作業の変更があれば巻き込まない。

@@ -110,7 +110,10 @@ Cloudflare同期、PCダウンロード、二人の上書きなし共同追記�
 - `202609_HumanoidSummitEurope/build_v3.mjs`: HRS v3の編集元
 - `202609_HumanoidSummitEurope/validate_v3.mjs`: HRS受入検証
 - `cloudflare/trip-notes-worker/src/index.js`: Worker本体
-- `202610_Europe_TechEx_EuroBLECH/index.html`: EUROBLECHの現行ページ
+- `202610_Europe_TechEx_EuroBLECH/index.html`: EUROBLECH v3の正式公開入口
+- `202610_Europe_TechEx_EuroBLECH/index_v1.html`: EUROBLECH旧版の退避ファイル
+- `202610_Europe_TechEx_EuroBLECH/build_v3.mjs`: EUROBLECH v3の編集元
+- `202610_Europe_TechEx_EuroBLECH/CLAUDE_HANDOFF.md`: EUROBLECHの引き継ぎ本体
 
 ## 検証
 
