@@ -24,6 +24,10 @@
 
 `references/rejected/transport_layout_sample.html` は失敗した旧試作。参考用に隔離しているが、実装基準にしない。
 
+`references/superseded/` には、現行と矛盾する旧旅程・旧スケジュールを退避してある。
+日程としては読まない。視察テーマとセッション選定だけは未取り込みの材料として残してある。
+詳細は `references/superseded/README.md` を見る。
+
 ## HRSから継承する設計
 
 - フォントは `BIZ UDPGothic`, `Yu Gothic UI`, `Meiryo`, `system-ui`, `sans-serif`。
@@ -73,8 +77,11 @@
 - `build_v2.mjs`、`index_v2.html`、`v2.css`、`v2.js`
 - `build_v3.mjs`、`index_v3.html`、`v3.css`、`v3.js`、`validate_v3.mjs`
 - `references/rejected/transport_layout_sample.html`
+- `references/superseded/`（旧旅程・旧スケジュールと `README.md`）
 
-`index.html` は旅程内容の元データとして保持し、直接変更しない。
+`index.html` は現行の正であり、旅程内容の元データでもある。直接変更しない。
+フォルダ直下に置くのは、この引き継ぎ2件、`index.html`、v2一式、v3一式、
+承認済み4列サンプル、`references/` だけにする。旧案が増えたら `references/superseded/` へ移す。
 
 ## 次セッションの開始手順
 

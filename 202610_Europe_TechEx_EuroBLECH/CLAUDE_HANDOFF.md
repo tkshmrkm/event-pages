@@ -24,6 +24,9 @@
 
 `references/rejected/transport_layout_sample.html` は無効な旧試作。参考用に隔離しているが、基準にしない。
 
+`references/superseded/` は、現行と矛盾する旧旅程・旧スケジュールの退避先。
+フォルダ直下へ戻さない。扱いは `references/superseded/README.md` に書いてある。
+
 ## 編集ルール
 
 - 原則として `build_v3.mjs` を修正し、`node build_v3.mjs` で `index_v3.html` を再生成する。
