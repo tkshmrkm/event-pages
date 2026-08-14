@@ -43,13 +43,19 @@ const checks = [
   ['lodging without a place is not linked', /<strong>宿泊：<\/strong>機内/.test(itinerary) && !/<a class="place"[^>]*>機内<\/a>/.test(html) && !/<a class="place"[^>]*>帰宅<\/a>/.test(html)],
   // セントレアの出発待ちは10/17村上と10/18美馬・金築の2回。どちらも1ブロックに寄せてある。
   // 残る「空港到着目安」は10/20のスキポールの1件だけ。
-  ['pre-departure windows are single blocks', (itinerary.match(/セントレアで出発待ち 3時間 — 過ごし方/g) || []).length === 2 && (itinerary.match(/13:10〜16:10/g) || []).length === 2 && (itinerary.match(/空港到着目安/g) || []).length === 1 && !itinerary.includes('セントレアで昼食') && !itinerary.includes('JALサクララウンジ（国際線・出国審査後）')],
+  ['pre-departure windows are single blocks', (itinerary.match(/セントレアで出発待ち（約3時間）/g) || []).length === 2 && (itinerary.match(/13:10〜16:10/g) || []).length === 2 && (itinerary.match(/空港到着目安/g) || []).length === 1 && !itinerary.includes('セントレアで昼食') && !itinerary.includes('JALサクララウンジ（国際線・出国審査後）')],
+  // 待ち・乗り継ぎの見出しは「地点＋所要」だけ。理由や手順は折り畳みの中に置く。
+  // 所要は交通手段と同じ規則で、推定には約を付け、時刻表どおりの区間には付けない。
+  ['wait headings carry only place and duration', ['セントレアで出発待ち（約3時間）', '香港で乗り継ぎ（3時間45分）', '香港で乗り継ぎ（4時間25分）', '香港で乗り継ぎ（2時間15分）'].every(t => itinerary.includes(t)) && !itinerary.includes('— 過ごし方')],
+  // やることの折り畳みは5件: セントレア2回（10/17・10/18）と香港3回（10/17・10/18・10/25）。
+  ['todo lists live inside folds', count(/<summary>やること/g) === 5 && !/text-slate-600 text-xs">[^<]*セキュリティ再検査/.test(itinerary)],
   ['10/19 granularity aligned', itinerary.includes('<div class="row-time">09:45〜16:50</div>') && itinerary.includes('👥 美馬・金築（FRA着・ヴォルフスブルク日帰り）') && itinerary.includes('荷物受取・チェックイン') && !itinerary.includes('なぜ先にゲッティンゲンへ寄るのか')],
   ['10/19 networking time retained', /<div class="row-time">18:00〜21:00<\/div>[\s\S]{0,700}VIP Networking Drinks/.test(itinerary) && !/<div class="row-time">夕方<\/div>[\s\S]{0,700}VIP Networking Drinks/.test(itinerary)],
   ['10/19 movements use four-column rows', /class="route-four"[^>]*><div class="row-time">12:20頃[\s\S]*?<strong>徒歩<\/strong>[\s\S]*?<time>12:30頃<\/time>/.test(itinerary) && /class="route-four"[^>]*><div class="row-time">17:30頃[\s\S]*?<strong>ICE直通<\/strong>[\s\S]*?<time>18:45頃<\/time>/.test(itinerary)],
   ['10/22 decisions and review styling present', day1022.includes('class="return-choice"') && day1022.includes('早帰り案：16:00頃') && day1022.includes('市内滞在案：18:00頃') && day1022.includes('20:05頃ホテル着') && (day1022.match(/route-review/g) || []).length === 2],
   ['10/24 return-day sequence aligned', itinerary.includes('07:00〜10:00') && itinerary.includes('10:40〜12:55') && itinerary.includes('フランクフルト出発 → 香港（全員）') && !itinerary.includes('旧T2時代の案内・館内図は使えない')],
-  ['10/25 return sequence aligned', day1025.includes('香港国際空港着・乗り継ぎ') && day1025.includes('14:10〜15:00頃') && day1025.includes('15:00頃') && day1025.includes('Visit Japan Web') && !/(?:15:28頃|16:45頃|名鉄ミュースカイ|新幹線 のぞみ)/.test(day1025)],
+  // 到着行と乗り継ぎ行の二重を解消し、他の乗り継ぎと同じ見出しにそろえた。
+  ['10/25 return sequence aligned', day1025.includes('香港で乗り継ぎ（2時間15分）') && (day1025.match(/2時間15分/g) || []).length === 1 && day1025.includes('14:10〜15:00頃') && day1025.includes('15:00頃') && day1025.includes('Visit Japan Web') && !/(?:15:28頃|16:45頃|名鉄ミュースカイ|新幹線 のぞみ)/.test(day1025)],
   ['baggage terminology aligned', !/手荷物受取|荷物ピックアップ/.test(html) && (itinerary.match(/荷物受取/g) || []).length >= 3],
   ['airport procedures use consistent outline icons', (itinerary.match(/line-icon-procedure/g) || []).length >= 4 && itinerary.includes('入国審査・荷物受取・税関') && itinerary.includes('チェックイン・保安検査・出国審査')],
   ['itinerary times are zero-padded', !/<div class="row-time">[0-9]:[0-9]{2}/.test(itinerary)],
