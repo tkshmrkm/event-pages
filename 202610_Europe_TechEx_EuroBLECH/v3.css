@@ -235,6 +235,9 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .family-day-row>section,.family-day-row>aside{min-width:0;border-left:1px solid var(--line);padding:9px 10px}.family-day-row h3{margin:0 0 7px;color:var(--mu);font-size:12px;font-weight:700;letter-spacing:.04em}.agenda-line{display:grid;grid-template-columns:82px auto minmax(0,1fr);align-items:start;gap:6px;padding:7px 0;border-top:1px solid var(--line2)}.agenda-line:first-of-type{border-top:0;padding-top:0}.agenda-line time{color:#0B4F5A;font-size:14px;font-weight:800;line-height:1.35;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.agenda-line p,.family-day-row aside p{margin:0;color:var(--tx2);font-size:13px;line-height:1.55;overflow-wrap:anywhere}.agenda-line p b{color:var(--tx)}.agenda-empty{color:var(--mu);font-size:13px}.family-day-row aside{background:#F7F9FA}.family-day-row aside p+p{margin-top:8px;border-top:1px solid var(--line2);padding-top:8px}.family-day-row aside small{color:var(--mu);font-size:11px}.shared-day .family-shared{grid-column:2/4}
 .field-footer{border-top:1px solid var(--line);padding:18px 12px 28px;color:var(--mu);text-align:center;font-size:var(--f4)}
 
+/* Inside 過ごし方, the four lounge systems hang off the lounge line as one option among several. */
+.fold-body .opt-sub{padding-left:11px;border-left:2px solid var(--line)}
+
 /* Lounge eligibility lives in the preparation tab: every segment lists all four systems.
    Unconfirmed systems stay on the list marked 未確認 rather than being dropped. */
 .lounge-groups{display:grid;gap:10px}

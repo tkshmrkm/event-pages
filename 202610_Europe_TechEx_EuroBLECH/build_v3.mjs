@@ -19,10 +19,10 @@ const DAY_META = {
   '1017': { date: '2026-10-17', kind: 'move', badge: '移動', zone: '各地点の現地時刻。香港は日本より1時間遅い', focus: '村上が1日先行。夕食は機内食で済み、香港ではシャワーと休憩。深夜便でアムステルダムへ' },
   '1018': { date: '2026-10-18', kind: 'move', badge: '別行動', zone: '村上は欧州現地時間（日本より7時間遅い）。美馬・金築は日本・香港の各現地時刻', focus: '村上はアムステルダム到着後に時差調整。美馬・金築は日本を出発' },
   '1019': { date: '2026-10-19', kind: 'conf', badge: 'TechEx', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: '村上はTechEx Europe Day 1。美馬・金築はEuroBLECH開幕前の自由日を利用してヴォルフスブルクへ日帰り。ゲッティンゲンが経路上にあるため、先にホテルへ荷物を預けて身軽に移動する' },
-  '1020': { date: '2026-10-20', kind: 'conf', badge: '別行動', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: '村上はTechEx Day 2後、20:30頃にゲッティンゲンのホテルへ到着。美馬・金築はEuroBLECH Day 1を視察後、18:00頃に戻る目安' },
+  '1020': { date: '2026-10-20', kind: 'conf', badge: '別行動', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: '村上はTechEx Day 2後、20:30頃にゲッティンゲンのホテルへ到着。美馬・金築はEuroBLECHを視察後、18:00頃に戻る目安' },
   '1021': { date: '2026-10-21', kind: 'conf', badge: 'EuroBLECH', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: '3名で09:00〜17:00にEuroBLECHを展示会視察。18:00頃にゲッティンゲンへ戻り、19:00頃に夕食' },
   '1022': { date: '2026-10-22', kind: 'visit', badge: '工場見学', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: 'Mercedes-Benz Werk Bremenを見学。復路は「早めに戻って資料整理」と「18:00頃まで市内滞在」の2案から決める' },
-  '1023': { date: '2026-10-23', kind: 'conf', badge: 'EuroBLECH', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: 'EuroBLECH最終日。17:30頃にフランクフルトのホテルへチェックインし、18:30頃に夕食' },
+  '1023': { date: '2026-10-23', kind: 'conf', badge: 'EuroBLECH', zone: '欧州現地時間 CEST（日本より7時間遅い）', focus: 'EuroBLECHを14:15頃まで視察。17:30頃にフランクフルトのホテルへチェックインし、18:30頃に夕食' },
   '1024': { date: '2026-10-24', kind: 'move', badge: '帰国便', zone: '欧州現地時間 CEST（日本より7時間遅い）。到着後の香港は日本より1時間遅い', focus: '東横INNで朝食・チェックアウト後、フランクフルト空港から香港行きCX288に搭乗' },
   '1025': { date: '2026-10-25', kind: 'move', badge: '帰着', zone: '香港は日本より1時間遅い。日本到着後はJST', focus: '07:20に香港着、09:35にセントレア行きへ乗り継ぎ。14:10到着後はVisit Japan Webを用意して入国・税関手続き' },
 };
@@ -84,7 +84,10 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['出発日 — 村上のみ セントレア発（美馬・金築は翌18日発）', '出発日 — 村上のみセントレア発（美馬・金築は翌18日発）'],
   ['AMS着・時差調整日（村上）/ 出発日（美馬・金築）', 'AMS着・時差調整日（村上）／出発日（美馬・金築）'],
   ['TechEx Day 1 フル参加（村上）/ 美馬・金築 FRA着→ゲッティンゲン（荷物預け）→Wolfsburg（Autostadt）', 'TechEx Day 1（村上）／FRA着・ヴォルフスブルク日帰り（美馬・金築）'],
-  ['TechEx Day 2 → ゲッティンゲン移動（村上）/ EuroBLECH Day 1（美馬・金築）', 'TechEx Day 2・ゲッティンゲン移動（村上）／EuroBLECH Day 1（美馬・金築）'],
+  // EuroBLECHの日には番号を振らない。会期が10/20開幕であることは元資料にあるが、
+  // 何日開催かは未確認で、`Day 1` も `最終` も裏が取れていない。参加日は日付カードで分かる。
+  ['TechEx Day 2 → ゲッティンゲン移動（村上）/ EuroBLECH Day 1（美馬・金築）', 'TechEx Day 2・ゲッティンゲン移動（村上）／EuroBLECH 視察（美馬・金築）'],
+  ['EuroBLECH 最終 → フランクフルト移動（全員）', 'EuroBLECH 視察 → フランクフルト移動（全員）'],
   ['Bremen 日帰り — 全員（工場見学）', 'ブレーメン日帰り — 全員（工場見学）'],
   ['👥 美馬・金築（FRA着 → ゲッティンゲンで荷物預け → Wolfsburg → ゲッティンゲン）', '👥 美馬・金築（FRA着・ヴォルフスブルク日帰り）'],
   ['フランクフルト → セントレア 出発（全員同便）', 'フランクフルト出発 → 香港（全員）'],
@@ -127,17 +130,14 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['<div class="text-slate-500">20:00〜22:30</div>', '<div class="text-slate-500">19:30〜23:15</div>'],
   // 10/17 村上の香港乗継 3時間45分。
   ['          <div class="font-semibold">🛋 ビジネスクラスラウンジで夕食＋シャワー</div>\n          <div class="text-slate-600 text-xs">Sapphireでビジネスクラスラウンジ可（The Pier ビジネス側はシャワー14室）。⚠️ <strong>営業時間が未確認</strong>のため、到着後にトランスファーデスクで開いているラウンジを聞く。</div>\n          <details class="fold mt-1">\n            <summary>閉まっていた場合の代替・無料シャワーの場所</summary>\n            <div class="fold-body">\n              <div>⭐ <strong>無料シャワー（L5・24時間）</strong>: Gate 12付近 / Gate 43付近。シャンプー等あり、タオルは近くの自販機で購入。<strong>ラウンジの可否と無関係に使える</strong>ので、総移動21時間45分の後半が楽になる。</div>\n              <div><strong>有料ラウンジ</strong>: Plaza Premium が Gate 60（24時間・HKD 250〜／最安）、Gate 1（24時間・HKD 650〜）。</div>\n              <div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng（香港式の茶餐廳）・McDonald\'s が<strong>24時間</strong>。Level 7 フードコート（Tasty Congee のお粥・雲呑麺など）は22〜23時台に閉まる可能性があるので、行くなら早めに。</div>\n              <div>ファースト側の「ザ・カバナ」「ザ・ヘイヴン」は Sapphire では対象外。</div>\n            </div>\n          </details>\n',
-    '          <div class="font-semibold">🕐 香港で乗り継ぎ（3時間45分）</div>\n          <details class="fold mt-1">\n            <summary>やること</summary>\n            <div class="fold-body">\n              <div>23:15発のCX271へ乗り継ぐ。搭乗ゲートは現地の案内で確認する</div>\n              <div>総移動21時間45分の後半にあたるので、ここでシャワーを浴びて休む</div>\n              <div>CX539の機内食のあとなので、食べるなら軽めにする</div>\n            </div>\n          </details>\n          <details class="fold mt-1">\n            <summary>ラウンジで過ごす（4系統）</summary>\n            <div class="fold-body">\n              <div><strong>エアライン</strong>: キャセイのビジネスクラスラウンジ。The Deck（Gate 6付近・L7）と The Pier, Business（Gate 65付近・L6）が05:30〜00:30、The Bridge（Gate 35付近・L6）が05:00〜最終キャセイ便。20:00〜22:30はいずれも営業時間内。The Pier, Business はシャワー14室。</div>\n              <div><strong>Priority Pass</strong>: 香港の対象施設は未確認。</div>\n              <div><strong>一般有料</strong>: Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。</div>\n              <div><strong>カード付帯</strong>: 香港での対象は未確認。</div>\n              <div>利用資格は準備タブの「ラウンジ利用可否」に集約してある。</div>\n            </div>\n          </details>\n          <details class="fold mt-1">\n            <summary>ラウンジを使わずに過ごす</summary>\n            <div class="fold-body">\n              <div>⭐ <strong>無料シャワー（L5・24時間）</strong>: Gate 12付近 / Gate 43付近。シャンプー等あり、タオルは近くの自販機で購入。<strong>ラウンジの可否と無関係に使える</strong>ので、総移動21時間45分の後半が楽になる。</div>\n              <div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng（香港式の茶餐廳）・McDonald\'s が<strong>24時間</strong>。Level 7 フードコート（Tasty Congee のお粥・雲呑麺など）は22〜23時台に閉まる可能性があるので、行くなら早めに。</div>\n            </div>\n          </details>\n'],
+    '          <div class="font-semibold">🕐 香港で乗り継ぎ（3時間45分）</div>\n'],
   ['<div>⚠️ <strong>キャセイ自社ラウンジ（The Wing / The Pier / The Deck / The Bridge）の営業時間は未確認</strong>（公式サイトにアクセスできず特定できなかった）。<strong>夜23時台・早朝7時台は閉まっている可能性がある</strong>ため、出発前にキャセイに確認するか、到着後にトランスファーデスクで開いているラウンジを聞く。</div>', '<div>⭐ <strong>キャセイのビジネスクラスラウンジ営業時間</strong>: The Deck（L7・Gate 6付近）と The Pier, Business（L6・Gate 65付近）が<strong>05:30〜00:30</strong>、The Bridge（L6・Gate 35付近）が<strong>05:00〜最終キャセイ便（00:30〜03:20の範囲）</strong>。<strong>夜23時台も早朝7時台も営業時間内</strong>。The Wing は現行のラウンジ一覧では First のみで、Business側の掲載が無い。</div>'],
   // 10/25 全員の香港乗継 2時間15分。ここもラウンジを選択肢の一つとして並べる。
   // 昼食の場所は時刻ではなく場所に張り付く常設情報なので、日トップの食事トピック側に置く。
   ['<div>Autostadt内での昼食が遅めになる想定なので、夕食は軽めでも足りる。到着が19時前なのでラストオーダーに注意。</div>', '<div>昼食はAutostadt内か、<strong>ヴォルフスブルク中央駅の周辺</strong>（少し歩けば店がある）。どちらも遅めになる想定なので、夕食は軽めでも足りる。到着が19時前なのでラストオーダーに注意。</div>'],
   // 日跨ぎ便で着いた日は、その日の先頭で「◯◯着」を示す。前日の4列交通しか
   // 到着を持っていないため、その日だけ見ると着いたことが分からなくなる。
-  ['<div class="font-semibold">⏱ 乗継2時間15分 — まず搭乗ゲートを確認</div>', '<div class="font-semibold">🕐 香港国際空港（HKG）着・乗り継ぎ（2時間15分）</div>'],
-  ['<div class="text-slate-600 text-xs">セキュリティ再検査と液体物の追加検査があり、<strong>搭乗ゲートのコンコースは搭乗券が出るまで分からない</strong>。ラウンジは<strong>同伴1名まで＝3名のうち1名が入れない</strong>ので、分かれるより3名で店に入る方が無駄がない。<br>⚠️ <strong>土産は往路（10/17・10/18の夜）に済ませておく</strong>。復路の早朝は開いていない店がある。</div>', '<details class="fold mt-1"><summary>やること</summary><div class="fold-body"><div>セキュリティ再検査と液体物の追加検査がある</div><div><strong>搭乗ゲートのコンコースは搭乗券が出るまで分からない</strong>ので、先に確認する</div><div>ラウンジは<strong>同伴1名まで＝3名のうち1名が入れない</strong>。分かれるより3名で店に入る方が無駄がない</div><div>⚠️ <strong>土産は往路（10/17・10/18の夜）に済ませておく</strong>。復路の早朝は開いていない店がある</div></div></details>'],
-  ['<summary>コンコース間の移動時間・早朝の営業状況</summary>', '<summary>ラウンジで過ごす（4系統）とコンコース間の移動</summary>'],
-  ['<div>村上はSapphireでビジネスクラスラウンジ可（営業時間は未確認）。無料シャワーは L5 の Gate 12付近 / Gate 43付近で24時間。</div>', '<div><strong>エアライン</strong>: キャセイのビジネスクラスラウンジ。07:20着の時点で The Bridge（05:00〜）、The Deck と The Pier, Business（05:30〜）はいずれも営業時間内。</div><div><strong>Priority Pass</strong>: 香港の対象施設は未確認。</div><div><strong>一般有料</strong>: Plaza Premium Lounge は Gate 60・Gate 1 が24時間。</div><div><strong>カード付帯</strong>: 香港での対象は未確認。</div><div>利用資格は準備タブの「ラウンジ利用可否」に集約してある。</div><div><strong>ラウンジを使わない場合</strong>: 無料シャワーは L5 の Gate 12付近 / Gate 43付近で24時間。</div>'],
+  // 10/25の乗り継ぎ行は transformScript 側で「やること」「過ごし方」に組み直す。
   // EuroBLECHは展示会視察。TechExの「参加」、Mercedesの「工場見学」とは語を分ける。
   // アイコンも工場（🏭）ではなく展示会（🏛）にする。🏭はMercedes工場見学だけに残す。
   ['🏭 EuroBLECH Day 1', '🏛 EuroBLECH Day 1'],
@@ -183,7 +183,7 @@ const WHERE_DAYS = [
     ['全員','ブレーメン','Mercedes工場見学','work'],
   ] },
   { date:'10/23', dow:'金', shared:true, cells:[
-    ['全員','ハノーファー → フランクフルト','EuroBLECH最終日。夕方に移動','move'],
+    ['全員','ハノーファー → フランクフルト','EuroBLECH 展示会視察。夕方に移動','move'],
   ] },
   { date:'10/24', dow:'土', shared:true, cells:[
     ['全員','フランクフルト → 香港','昼に出発。機内泊','move'],
@@ -224,7 +224,7 @@ const FAMILY_DAYS = [
     ['16:50','flight','フライト','KL1791 Amsterdam AMS発 → Hannover HAJ 17:45着'],
     ['20:30頃','stay','チェックイン','Hotel FREIgeist Göttingen Innenstadt'],
   ], team:[
-    ['09:00〜17:00','work','仕事','EuroBLECH 展示会視察 Day 1（ハノーファー）'],
+    ['09:00〜17:00','work','仕事','EuroBLECH 展示会視察（ハノーファー）'],
     ['18:00頃','stay','戻り目安','ゲッティンゲンのホテルへ'],
   ], stays:[['全員','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/21', dow:'水', shared:[
@@ -236,7 +236,7 @@ const FAMILY_DAYS = [
     ['18:05頃／20:05頃','review','戻り時刻は未定','早帰り案と市内滞在案のどちらかで決まる'],
   ], stays:[['全員','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/23', dow:'金', shared:[
-    ['09:00〜14:15頃','work','仕事','EuroBLECH最終日（ハノーファー）'],
+    ['09:00〜14:15頃','work','仕事','EuroBLECH 展示会視察（ハノーファー）'],
     ['17:14','move','移動','フランクフルト中央駅着'],
     ['17:30頃','stay','チェックイン','Toyoko Inn Frankfurt am Main Hauptbahnhof'],
   ], stays:[['全員','Toyoko Inn Frankfurt am Main Hauptbahnhof']] },
@@ -333,6 +333,14 @@ const transformScript = `
       '<div class="mode">' + modeIcon(service) + '<strong>' + esc(service) + '</strong><small>' + esc(duration.replace('所要時間未確認','時間未確認')) + '</small></div>' +
       '<div class="endpoint"><span class="label">到着</span><time>' + esc(arrive) + '</time><span class="tz">（' + esc(arriveZone) + '）</span>' + mapLink(arrivePlace) + '</div>';
   };
+  // 空港での待ち時間と乗り継ぎは「やること」と「過ごし方」の2つだけにする。
+  // ラウンジは過ごし方の一案であって、それ専用の見出しは作らない。
+  // 手続き・確認・館内移動は、過ごし方ではなく「やること」に入れる。
+  const todoFold = items => '<details class="fold mt-1"><summary>やること</summary><div class="fold-body">' + items.map(item => '<div>' + item + '</div>').join('') + '</div></details>';
+  const spendFold = blocks => '<details class="fold mt-1"><summary>過ごし方</summary><div class="fold-body">' + blocks.join('') + '</div></details>';
+  // ラウンジは4系統を必ず並べる。確認できていない系統も消さずに残す。資格は準備タブが持つ。
+  const loungeOption = systems => '<div><strong>ラウンジ</strong>: 次の4系統のいずれか。利用資格は準備タブの「ラウンジ利用可否」に集約してある</div>' +
+    systems.map(([label, body]) => '<div class="opt-sub"><strong>' + label + '</strong>: ' + body + '</div>').join('');
   const rows = day => Array.from(day.querySelectorAll('[class*="border-l-4"]'));
   const rowFor = (day, text) => rows(day).find(row => row.textContent.replace(/\\s+/g, ' ').includes(text));
   const routeRowFor = (day, text) => Array.from(day.querySelectorAll('.route-four')).find(row => row.textContent.replace(/\\s+/g, ' ').includes(text));
@@ -413,7 +421,7 @@ const transformScript = `
     });
     // 日跨ぎ便は前日の4列交通に到着を残すが、到着日の人物レーンだけを見ても
     // どこに何時に着いたか分かるように、空港名を主表示、手続きを従表示にする。
-    [['AMS 着','06:55','🛂 Amsterdam Airport Schiphol（AMS）着','入国審査・荷物受取'],['FRA 着','07:15','🛂 Frankfurt Airport（FRA）着','入国審査・荷物受取'],['HKG 着','07:20','香港で乗り継ぎ（2時間15分）','']].forEach(([match,time,label,sub]) => {
+    [['AMS 着','06:55','🛂 Amsterdam Airport Schiphol（AMS）着','入国審査・荷物受取'],['FRA 着','07:15','🛂 Frankfurt Airport（FRA）着','入国審査・荷物受取'],['HKG 着','07:20', flightIcon() + ' 香港国際空港（HKG）着','']].forEach(([match,time,label,sub]) => {
       const row = rowFor(day, match);
       if (row && !row.classList.contains('route-four')) row.innerHTML = '<div class="text-slate-500">' + time + '</div><div class="font-semibold">' + label + '</div>' + (sub ? '<div class="text-slate-600 text-xs">' + sub + '</div>' : '');
     });
@@ -435,11 +443,38 @@ const transformScript = `
       const lunch = rowFor(day, 'セントレアで昼食');
       const arrival = rowFor(day, '空港到着目安');
       if (arrival) {
-        arrival.innerHTML = '<div class="row-time">13:10〜16:10</div><div class="action-body"><div class="font-semibold">🕐 セントレアで出発待ち（約3時間）</div><div class="text-slate-600 text-xs">機内食は離陸1時間後が目安（17:10頃）。昼は軽く</div><details class="fold mt-1"><summary>やること（チェックイン・保安検査・出国審査）</summary><div class="fold-body"><div>国際線のため出発3時間前にチェックイン</div><div>自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く</div><div>保安検査と出国審査を済ませてから制限エリアへ</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div><strong>エアライン</strong>: JALサクララウンジ（出国審査後の制限エリア内・2階）。<strong>搭乗券と会員証の提示が必要</strong>。</div><div><strong>Priority Pass</strong>: セントレアの対象施設は未確認。</div><div><strong>一般有料</strong>: プラザ・プレミアム・ラウンジ名古屋。料金と営業時間は当日確認。</div><div><strong>カード付帯</strong>: プレミアムラウンジ セントレア／第2プレミアムラウンジ セントレア／QUALIA LOUNGE。<strong>出国審査の前</strong>なので、入るなら早めに。</div><div>利用資格は準備タブの「ラウンジ利用可否」に集約してある。</div></div></details><details class="fold mt-1"><summary>ラウンジを使わずに過ごす</summary><div class="fold-body"><div><strong>昼食</strong>: 保安検査後に軽く済ませる</div><div><strong>CX539で機内食が出る</strong>: エコノミーでも主菜＋デザートが出る。16:10発・4時間20分なので、これが実質の夕食になる。昼を食べすぎない</div><div><strong>事前の機内食予約はできない</strong>: 「食事の選択」はファースト／ビジネス限定。エコノミーで必要なのは特別食（アレルギー・ベジタリアン等）の申請だけ</div></div></details></div>';
+        arrival.innerHTML = '<div class="row-time">13:10〜16:10</div><div class="action-body"><div class="font-semibold">🕐 セントレアで出発待ち（約3時間）</div><div class="text-slate-600 text-xs">機内食は離陸1時間後が目安（17:10頃）。昼は軽く</div>' + todoFold([
+          '国際線のため出発3時間前にチェックイン',
+          '自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く',
+          '保安検査と出国審査を済ませてから制限エリアへ',
+          '事前の機内食予約は不要。「食事の選択」はファースト／ビジネス限定で、エコノミーで要るのは特別食（アレルギー・ベジタリアン等）の申請だけ',
+        ]) + spendFold([
+          loungeOption([
+            ['エアライン', 'JALサクララウンジ（出国審査後の制限エリア内・2階）。<strong>搭乗券と会員証の提示が必要</strong>'],
+            ['Priority Pass', 'セントレアの対象施設は未確認'],
+            ['一般有料', 'プラザ・プレミアム・ラウンジ名古屋。料金と営業時間は当日確認'],
+            ['カード付帯', 'プレミアムラウンジ セントレア／第2プレミアムラウンジ セントレア／QUALIA LOUNGE。<strong>出国審査の前</strong>なので、入るなら早めに'],
+          ]),
+          '<div><strong>昼食</strong>: 保安検査後に軽く済ませる。CX539はエコノミーでも主菜＋デザートが出て、16:10発・4時間20分なのでこれが実質の夕食になる</div>',
+        ]) + '</div>';
         arrival.className = 'action';
       }
       lunch?.remove();
       lounge?.remove();
+      const hkg1017 = rowFor(day, '香港で乗り継ぎ（3時間45分）');
+      hkg1017?.insertAdjacentHTML('beforeend', todoFold([
+        '23:15発のCX271へ乗り継ぐ',
+        '搭乗ゲートは現地の案内で確認する',
+      ]) + spendFold([
+        loungeOption([
+          ['エアライン', 'キャセイのビジネスクラスラウンジ。The Deck（Gate 6付近・L7）と The Pier, Business（Gate 65付近・L6）が05:30〜00:30、The Bridge（Gate 35付近・L6）が05:00〜最終キャセイ便。20:00〜22:30はいずれも営業時間内。The Pier, Business はシャワー14室'],
+          ['Priority Pass', '香港の対象施設は未確認'],
+          ['一般有料', 'Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜'],
+          ['カード付帯', '香港での対象は未確認'],
+        ]),
+        '<div>⭐ <strong>無料シャワー</strong>: L5の Gate 12付近 / Gate 43付近が24時間。シャンプー等あり、タオルは近くの自販機で購入。<strong>ラウンジの可否と無関係に使える</strong>ので、総移動21時間45分の後半が楽になる</div>',
+        '<div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng（香港式の茶餐廳）・McDonald&#39;s が<strong>24時間</strong>。Level 7 フードコート（Tasty Congee のお粥・雲呑麺など）は22〜23時台に閉まる可能性があるので、行くなら早めに。CX539の機内食のあとなので、食べるなら軽めにする</div>',
+      ]));
       // 16:10発の機内食を時系列にも出す。出発待ちの一行と合わせて、昼の量を決められるようにする。
       routeRowFor(day, 'CX539')?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">17:10頃</div><div class="action-body"><div class="font-semibold">🍽 機内食（主菜＋デザート）</div><div class="text-slate-600 text-xs">離陸1時間後が目安。これが実質の夕食になる</div></div></div>');
     }
@@ -449,9 +484,33 @@ const transformScript = `
       const lounge = rowFor(day, 'ラウンジ候補');
       // 10/17と同じく、13:10の「空港到着目安」と重複していたので1行に寄せる。
       rowFor(day, '空港到着目安')?.remove();
-      if (lounge) lounge.innerHTML = '<div class="text-slate-500">13:10〜16:10</div><div class="font-semibold">🕐 セントレアで出発待ち（約3時間）</div><div class="text-slate-600 text-xs">機内食は離陸1時間後が目安（17:10頃）。昼は軽く</div><details class="fold mt-1"><summary>やること（チェックイン・保安検査・出国審査）</summary><div class="fold-body"><div>国際線のため出発3時間前にチェックイン</div><div>自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く</div><div>保安検査と出国審査を済ませてから制限エリアへ</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div><strong>エアライン</strong>: JALサクララウンジ（第1ターミナル・国際線制限エリア）。</div><div><strong>Priority Pass</strong>: Plaza Premium Lounge／The Coral Finest Business Class Lounge。</div><div><strong>一般有料</strong>: プラザ・プレミアム・ラウンジ名古屋。料金と営業時間は当日確認。</div><div><strong>カード付帯</strong>: プレミアムラウンジ セントレア／第2プレミアムラウンジ セントレア／QUALIA LOUNGE。<strong>出国審査の前</strong>なので、入るなら早めに。</div><div>利用資格は準備タブの「ラウンジ利用可否」に集約してある。</div></div></details>';
+      if (lounge) lounge.innerHTML = '<div class="text-slate-500">13:10〜16:10</div><div class="font-semibold">🕐 セントレアで出発待ち（約3時間）</div><div class="text-slate-600 text-xs">機内食は離陸1時間後が目安（17:10頃）。昼は軽く</div>' + todoFold([
+        '国際線のため出発3時間前にチェックイン',
+        '自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く',
+        '保安検査と出国審査を済ませてから制限エリアへ',
+      ]) + spendFold([
+        loungeOption([
+          ['エアライン', 'JALサクララウンジ（第1ターミナル・国際線制限エリア）'],
+          ['Priority Pass', 'Plaza Premium Lounge／The Coral Finest Business Class Lounge'],
+          ['一般有料', 'プラザ・プレミアム・ラウンジ名古屋。料金と営業時間は当日確認'],
+          ['カード付帯', 'プレミアムラウンジ セントレア／第2プレミアムラウンジ セントレア／QUALIA LOUNGE。<strong>出国審査の前</strong>なので、入るなら早めに'],
+        ]),
+        '<div><strong>昼食</strong>: 保安検査後に軽く済ませる。CX539はエコノミーでも主菜＋デザートが出て、16:10発・4時間20分なのでこれが実質の夕食になる</div>',
+      ]);
       const cx539 = routeRowFor(day, 'CX539');
-      cx539?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">19:30〜23:55</div><div class="action-body"><div class="font-semibold">🕐 香港で乗り継ぎ（4時間25分）</div><details class="fold mt-1"><summary>やること</summary><div class="fold-body"><div>23:20頃にCX289の搭乗口へ</div><div>搭乗ゲートは現地の案内で確認する</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div><strong>エアライン</strong>: キャセイのビジネスクラスラウンジ。The Deck（Gate 6付近・L7）と The Pier, Business（Gate 65付近・L6）が05:30〜00:30、The Bridge（Gate 35付近・L6）が05:00〜最終キャセイ便。</div><div><strong>Priority Pass</strong>: 香港の対象施設は未確認。</div><div><strong>一般有料</strong>: Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。</div><div><strong>カード付帯</strong>: 香港での対象は未確認。</div><div>利用資格は準備タブの「ラウンジ利用可否」に集約してある。</div></div></details><details class="fold mt-1"><summary>ラウンジを使わずに過ごす</summary><div class="fold-body"><div>⭐ <strong>無料シャワー（L5・24時間）</strong>: Gate 12付近 / Gate 43付近。シャンプー等あり、タオルは自販機で購入。ラウンジの可否と無関係に使える。</div><div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng・McDonald&#39;s が24時間。Level 7 フードコートは22〜23時台に閉まる可能性がある。</div></div></details></div></div>');
+      cx539?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">19:30〜23:55</div><div class="action-body"><div class="font-semibold">🕐 香港で乗り継ぎ（4時間25分）</div>' + todoFold([
+        '23:20頃にCX289の搭乗口へ',
+        '搭乗ゲートは現地の案内で確認する',
+      ]) + spendFold([
+        loungeOption([
+          ['エアライン', 'キャセイのビジネスクラスラウンジ。The Deck（Gate 6付近・L7）と The Pier, Business（Gate 65付近・L6）が05:30〜00:30、The Bridge（Gate 35付近・L6）が05:00〜最終キャセイ便'],
+          ['Priority Pass', '香港の対象施設は未確認'],
+          ['一般有料', 'Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜'],
+          ['カード付帯', '香港での対象は未確認'],
+        ]),
+        '<div>⭐ <strong>無料シャワー</strong>: L5の Gate 12付近 / Gate 43付近が24時間。シャンプー等あり、タオルは自販機で購入。ラウンジの可否と無関係に使える</div>',
+        '<div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng・McDonald&#39;s が24時間。Level 7 フードコートは22〜23時台に閉まる可能性がある</div>',
+      ]) + '</div></div>');
       // afterendは後から挿入したものが手前に来る。機内食(17:10)を乗り継ぎ(19:30)より前に置くため、
       // 乗り継ぎブロックを入れたあとに機内食を挿入する。
       cx539?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">17:10頃</div><div class="action-body"><div class="font-semibold">🍽 機内食（主菜＋デザート）</div><div class="text-slate-600 text-xs">離陸1時間後が目安。これが実質の夕食になる</div></div></div>');
@@ -478,8 +537,9 @@ const transformScript = `
       ice77?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">20:30頃</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">Göttingen Hbfから徒歩約3〜5分</div></div></div>');
       // 会場そのものへの地図リンクは場所名に張る。元資料の「📍 ハノーファーメッセ」は
       // 別リンクの旧形式なので、10/21・10/23と同じ「会場は<場所名>」にそろえる。
+      // 検索キーは元資料の文字列。表示側は3日とも「EuroBLECH ＋ 誰が視察するか ＋ 会場」でそろえる。
       const expo = rowFor(day, 'EuroBLECH Day 1');
-      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00頃〜17:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH Day 1</div><div class="text-slate-600 text-xs">美馬・金築が終日視察。会場は' + mapLink('ハノーファーメッセ') + '</div>';
+      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00頃〜17:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">美馬・金築が終日視察。会場は' + mapLink('ハノーファーメッセ') + '</div>';
       const back = ROUTES.find(route => route[0] === '1020' && route[1].includes('戻る'));
       expo?.insertAdjacentHTML('afterend', '<div class="route-four route-estimate">' + routeMarkup(back) + '</div>');
     }
@@ -506,7 +566,7 @@ const transformScript = `
     }
     if (id === '1023') {
       const expo1023 = rowFor(day, 'EuroBLECH（最終）');
-      if (expo1023) expo1023.innerHTML = '<div class="text-slate-500">09:00〜14:15頃</div><div class="font-semibold text-teal-800">🏛 EuroBLECH（最終）</div><div class="text-slate-600 text-xs">会場は' + mapLink('ハノーファーメッセ') + '</div><div class="text-slate-600 text-xs">入場後は荷物をクロークへ。14:30発の列車に合わせて14:15頃退場</div>';
+      if (expo1023) expo1023.innerHTML = '<div class="text-slate-500">09:00〜14:15頃</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">全員で視察。会場は' + mapLink('ハノーファーメッセ') + '</div><div class="text-slate-600 text-xs">入場後は荷物をクロークへ。14:30発の列車に合わせて14:15頃退場</div>';
       const lastTrain = routeRowFor(day, 'ICE771');
       lastTrain?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">17:30頃</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">フランクフルト中央駅南口から徒歩約2分</div></div></div><div class="action"><div class="row-time">18:30頃</div><div class="action-body"><div class="font-semibold">🍽 夕食</div><div class="text-slate-600 text-xs">フランクフルト中央駅周辺。夜は荷物・貴重品に注意。</div></div></div>');
     }
@@ -518,18 +578,45 @@ const transformScript = `
       const airport = rowFor(day, 'FRA空港 到着');
       const lounge = rowFor(day, 'FRAラウンジ');
       lounge?.remove();
-      if (airport) airport.innerHTML = '<div class="text-slate-500">10:40〜13:40</div><div class="font-semibold">🕐 フランクフルト空港で出発待ち（3時間）</div><details class="fold mt-1"><summary>やること（チェックイン・保安検査・出国審査）</summary><div class="fold-body"><div>CX288のチェックインカウンターと搭乗ゲートは当日の案内で確認</div><div>10:40〜12:55を目安に手続きを済ませる</div><div>Terminal 3発。ターミナル間の移動時間を見ておく</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div><strong>エアライン</strong>: キャセイはFRAに自社ラウンジが無く契約ラウンジを使う。どこかは未確定。</div><div><strong>Priority Pass</strong>: フランクフルトの対象施設は未確認。</div><div><strong>一般有料</strong>: 対象施設は未確認。</div><div><strong>カード付帯</strong>: 対象施設は未確認。</div><div>利用資格は準備タブの「ラウンジ利用可否」に集約してある。</div></div></details>';
+      if (airport) airport.innerHTML = '<div class="text-slate-500">10:40〜13:40</div><div class="font-semibold">🕐 フランクフルト空港で出発待ち（3時間）</div>' + todoFold([
+        'CX288のチェックインカウンターと搭乗ゲートは当日の案内で確認',
+        '10:40〜12:55を目安にチェックイン・保安検査・出国審査を済ませる',
+        'Terminal 3発。ターミナル間の移動時間を見ておく',
+      ]) + spendFold([
+        loungeOption([
+          ['エアライン', 'キャセイはFRAに自社ラウンジが無く契約ラウンジを使う。どこかは未確定'],
+          ['Priority Pass', 'フランクフルトの対象施設は未確認'],
+          ['一般有料', '対象施設は未確認'],
+          ['カード付帯', '対象施設は未確認'],
+        ]),
+      ]);
     }
     if (id === '1025') {
-      // 到着行と乗り継ぎ行が「2時間15分」で二重になっていたので、折り畳みを持つ方に寄せる。
-      // 10/17・10/18と同じ「地点で乗り継ぎ（所要）」1行の形にそろえる。
+      // 到着と乗り継ぎは別の出来事なので1行にまとめない。10/18 AMS・10/19 FRAと同じく
+      // 「◯◯着」を出したうえで、乗り継ぎは他日と同じ「地点で乗り継ぎ（所要）」にする。
+      // 館内移動と再検査は過ごし方ではなく「やること」。ラウンジは過ごし方に置く。
       const transfer = rows(day).find(row => row.textContent.includes('コンコース間の移動'));
-      const duplicate = rows(day).find(row => row !== transfer && row.textContent.includes('香港で乗り継ぎ'));
-      if (transfer) transfer.insertAdjacentHTML('afterbegin', '<div class="text-slate-500">07:20〜09:35</div>');
-      duplicate?.remove();
+      if (transfer) transfer.innerHTML = '<div class="text-slate-500">07:20〜09:35</div><div class="font-semibold">🕐 香港で乗り継ぎ（2時間15分）</div>' + todoFold([
+        'セキュリティ再検査と液体物の追加検査がある',
+        '<strong>搭乗ゲートのコンコースは搭乗券が出るまで分からない</strong>ので、先に確認する',
+        'コンコース間の移動は、T1本館⇄Midfield が地下のAPMで約2.5分、T1本館⇄T1 Satellite が Sky Bridge を徒歩5〜10分（動く歩道あり）。<strong>Terminal 2 は乗継には無関係</strong>（チェックイン・出発処理専用でゲートが無い）',
+        '⚠️ <strong>土産は往路（10/17・10/18の夜）に済ませておく</strong>。復路の早朝は開いていない店がある',
+      ]) + spendFold([
+        loungeOption([
+          ['エアライン', 'キャセイのビジネスクラスラウンジ。07:20着の時点で The Bridge（05:00〜）、The Deck と The Pier, Business（05:30〜）はいずれも営業時間内。<strong>同伴は1名まで＝3名のうち1名が入れない</strong>ので、分かれるより3名で店に入る方が無駄がない'],
+          ['Priority Pass', '香港の対象施設は未確認'],
+          ['一般有料', 'Plaza Premium Lounge は Gate 60・Gate 1 が24時間。Plaza Premium First は West Hall 06:00〜／East Hall 06:30〜'],
+          ['カード付帯', '香港での対象は未確認'],
+        ]),
+        '<div>⭐ <strong>無料シャワー</strong>: L5の Gate 12付近 / Gate 43付近が24時間</div>',
+        '<div><strong>飲食</strong>: フードコートや免税店は開店07〜08時が多く、07:20着だと閉まっている可能性がある。確実なのは Gate 10〜11付近 Level 6 の Men Wah Bing Teng・McDonald&#39;s（<strong>24時間</strong>）。<strong>CX536で機内食が出る</strong>ので、食べるなら軽めにする</div>',
+      ]);
+      // CX536でも離陸1時間後に機内食が出る。往路のCX539と同じく時系列にも出して、
+      // 乗り継ぎ中にどれだけ食べるかを決められるようにする。
+      routeRowFor(day, 'CX536')?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">10:35頃</div><div class="action-body"><div class="font-semibold">🍽 機内食（昼食）</div><div class="text-slate-600 text-xs">離陸1時間後が目安。香港時刻</div></div></div>');
       const before = rowFor(day, '解散・帰宅');
       if (before) before.innerHTML = '<div class="text-slate-500">15:00頃</div><div class="font-semibold">🏠 セントレア発・各自帰宅</div><div class="text-slate-600 text-xs">空港から先は各自の経路へ</div>';
-      before?.insertAdjacentHTML('beforebegin', '<div class="action"><div class="row-time">14:10〜15:00頃</div><div class="action-body"><div class="font-semibold">🛂 入国審査・荷物受取・税関</div><div class="text-slate-600 text-xs">Visit Japan WebのQRコードを用意</div></div></div>');
+      before?.insertAdjacentHTML('beforebegin', '<div class="action"><div class="row-time">14:10〜15:00頃</div><div class="action-body"><div class="font-semibold">🛂 入国審査・荷物受取・税関</div>' + todoFold(['Visit Japan WebのQRコードを用意する']) + '</div></div>');
     }
     const absorbed = {
       '1017': ['HKG着（乗継 3時間45分）'],
