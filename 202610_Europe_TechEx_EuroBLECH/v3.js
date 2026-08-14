@@ -105,25 +105,26 @@ const CHECKLIST = [
   '🎫 EuroBLECH 入場券（美馬・自身で購入済み／領収書を精算用に保管）',
   '🎫 EuroBLECH 入場券（金築・ベッコフ経由を連絡済み → 発券を待って受領）',
   '💻 TechEx Europe Gold Pass（村上・無償付与で取得済み／当日提示物を確認）',
-  '✈︎ CX 航空券 村上往路（NGO-HKG-AMS CX539/CX271・10/17 16:10発）購入手配',
-  '✈︎ CX 航空券 美馬・金築往路（NGO-HKG-FRA CX539/CX289・10/18 16:10発）手配',
-  '✈︎ 航空券 復路（FRA-HKG-NGO CX288/CX536・10/24発・NGO着 10/25 14:10）購入手配',
-  '✈︎ KL1791 AMS→HAJ 航空券購入（村上・10/20 16:50発）',
-  '🏨 Holiday Inn Express Amsterdam - Sloterdijk Station（村上・10/18-20 2泊）予約済み',
-  '🏨 Hotel FREIgeist Göttingen Innenstadt（10/19-23泊）予約済み・村上レイトチェックイン確認',
+  '<span class="flight-mark inline-flight-mark" role="img" aria-label="フライト"></span> CX 航空券 村上往路（NGO→HKG→AMS CX539/CX271・10/17 16:10発）購入手配',
+  '<span class="flight-mark inline-flight-mark" role="img" aria-label="フライト"></span> CX 航空券 美馬・金築往路（NGO→HKG→FRA CX539/CX289・10/18 16:10発）手配',
+  '<span class="flight-mark inline-flight-mark" role="img" aria-label="フライト"></span> 航空券 復路（FRA→HKG→NGO CX288/CX536・10/24発・NGO着 10/25 14:10）購入手配',
+  '<span class="flight-mark inline-flight-mark" role="img" aria-label="フライト"></span> KL1791 AMS→HAJ 航空券購入（村上・10/20 16:50発）',
+  '🏨 Holiday Inn Express Amsterdam - Sloterdijk Station（村上・10/18〜20 2泊）予約済み',
+  '🏨 Hotel FREIgeist Göttingen Innenstadt（10/19〜23泊）予約済み・村上レイトチェックイン確認',
   '🏨 Toyoko Inn Frankfurt am Main Hauptbahnhof（全員・10/23泊）予約済み',
-  '🏭 Mercedes-Benz Werk Bremen 工場見学（全員3名分・10/22 12:45-14:00）予約確定済み',
-  '🚆 美馬・金築 FRA→Göttingen 鉄道予約（RE2+ICE774）',
+  '🏭 Mercedes-Benz Werk Bremen 工場見学（全員3名分・10/22 12:45〜14:00）予約確定済み',
+  '🚆 美馬・金築 FRA→Göttingen 鉄道予約（RE2＋ICE774）',
   '🚆 美馬・金築 Göttingen⇄Wolfsburg 鉄道予約',
   '🎫 美馬・金築 Autostadt Wolfsburg 入場チケット手配',
   '🛄 Hotel FREIgeist 日中の荷物預かりを事前連絡',
   '🚆 Göttingen→Hannover Messe/Laatzen 鉄道予約',
   '🚆 Hannover Flughafen→Göttingen 鉄道予約',
   '🚆 Göttingen→Bremen Hbf 鉄道予約',
-  '🚆 Hannover Messe/Laatzen→Frankfurt(Main)Hbf 鉄道予約',
+  '🚆 Hannover Messe/Laatzen→Frankfurt(Main) Hbf 鉄道予約',
   '🚄 京都⇄名古屋 新幹線＋名鉄ミュースカイ手配',
-  '💳 クレジットカード / Revolut 海外設定確認',
+  '💳 クレジットカード／Revolut 海外設定確認',
   '📱 DB Navigator アプリ',
+  '📱 Visit Japan Web（入国・税関情報を事前登録し、QRコードを端末に保存）',
   '📋 名刺（多めに用意）',
   '🔌 変換プラグ（Cタイプ・EU規格）',
 ];
@@ -170,7 +171,7 @@ function mountRecords() {
 }
 
 document.getElementById('export-records')?.addEventListener('click', () => {
-  const lines = ['# Europe TechEx / EuroBLECH 2026 記録', ''];
+  const lines = ['# TechEx Europe・EuroBLECH 2026 記録', ''];
   document.querySelectorAll('.record-card').forEach(card => {
     lines.push(`## ${card.querySelector('.record-heading span')?.childNodes[0]?.textContent?.trim() || card.dataset.recordDay}`);
     card.querySelectorAll('textarea[data-rec]').forEach(field => {

@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ヨーロッパ出張 2026年10月 — フィールドガイド v2</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .checkin-box { color: #1f2937; padding: 12px 16px; border-radius: 8px; display: flex; align-items: center; gap: 12px; }
+  .transport-table { width: 100%; font-size: 13px; border-collapse: collapse; }
+  .transport-table th, .transport-table td { border: 1px solid #e2e8f0; padding: 6px 10px; text-align: left; }
+  .transport-table th { background: #f8fafc; font-weight: 600; }
+  .recommended { background: #dbeafe; }
+  .risk-low { color: #10b981; }
+  .risk-mid { color: #f59e0b; }
+  .risk-high { color: #ef4444; }
+  .session-star { color: #f59e0b; }
+  .split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 480px) { .split-grid { grid-template-columns: 1fr; } }
+  .day-card { scroll-margin-top: 60px; }
+  #day-nav::-webkit-scrollbar { display: none; }
+  .daychip.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+  /* 折り畳み（詳細データ用） */
+  details.fold > summary {
+    cursor: pointer; list-style: none; font-size: 12px; color: #475569;
+    display: flex; align-items: center; gap: 4px; padding: 2px 0; user-select: none;
+  }
+  details.fold > summary::-webkit-details-marker { display: none; }
+  details.fold > summary::before {
+    content: '▸'; font-size: 10px; color: #94a3b8; transition: transform .15s;
+  }
+  details.fold[open] > summary::before { transform: rotate(90deg); }
+  details.fold > summary:hover { color: #1d4ed8; }
+  details.fold > .fold-body {
+    margin-top: 6px; padding-left: 10px; border-left: 2px solid #e2e8f0;
+    font-size: 12px; color: #475569;
+  }
+  details.fold > .fold-body > div + div { margin-top: 5px; }
+  @media print { details.fold[open] > summary::before { transform: none; } }
+</style>
+<link rel="stylesheet" href="v2.css">
+</head>
+<body class="bg-slate-50 pb-20">
+
+<!-- ===== HRS-STYLE FIELD HEADER ===== -->
+<header class="hrs-header">
+  <div class="field-wrap">
+    <div class="hrs-header-row">
+      <div>
+        <div class="hrs-eyebrow">🇳🇱 TECH EX EUROPE · 🇩🇪 EUROBLECH 2026</div>
+        <h1>ヨーロッパ出張 フィールドガイド</h1>
+        <p>10/17（土）発 〜 10/25（日）着 ｜ 村上・美馬・金築 ｜ Amsterdam → Göttingen → Hannover → Bremen → Frankfurt</p>
+      </div>
+      <div class="hrs-header-actions no-print">
+        <button type="button" id="detail-toggle" aria-pressed="false">＋詳細</button>
+        <button type="button" onclick="window.print()" aria-label="印刷">🖨</button>
+      </div>
+    </div>
+    <div class="trip-status" role="note"><strong>現状：</strong>ホテル3拠点・TechEx Gold Pass・村上／美馬のEuroBLECH券・Bremen工場見学は確保済み。村上のCX往復・KL1791は見積取得済みで未購入。美馬・金築分を含むフライトと鉄道の購入、金築のEuroBLECH券発行を進める。</div>
+  </div>
+</header>
+
+<div class="field-nav no-print">
+  <div class="field-wrap">
+    <nav class="primary-tabs" aria-label="主要セクション">
+      <button type="button" onclick="switchTab('itinerary')" id="nav-itinerary" class="nav-btn is-active" aria-selected="true"><span>📅</span>旅程</button>
+      <button type="button" onclick="switchTab('prep')" id="nav-prep" class="nav-btn" aria-selected="false"><span>✅</span>準備</button>
+      <button type="button" onclick="switchTab('events')" id="nav-events" class="nav-btn" aria-selected="false"><span>🏭</span>会場</button>
+      <button type="button" onclick="switchTab('rec')" id="nav-rec" class="nav-btn" aria-selected="false"><span>📝</span>記録</button>
+      <button type="button" onclick="switchTab('family')" id="nav-family" class="nav-btn" aria-selected="false"><span>🏠</span>家族</button>
+    </nav>
+  </div>
+</div>
+
+<!-- ===== TAB: 旅程 ===== -->
+<div id="tab-itinerary" class="tab-content active">
+
+<!-- 日付クイックナビ（パンくず） -->
+<div id="day-nav" class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+  <div class="max-w-2xl mx-auto px-2 py-2 flex gap-1.5 overflow-x-auto" style="scrollbar-width:none;">
+    <button onclick="jumpDay('1017')" class="daychip shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100">17<span class="text-[10px] font-normal">土</span></button>
+    <button onclick="jumpDay('1018')" class="daychip shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100">18<span class="text-[10px] font-normal">日</span></button>
+    <button onclick="jumpDay('1019')" class="daychip shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100">19<span class="text-[10px] font-normal">月</span></button>
+    <button onclick="jumpDay('1020')" class="daychip shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100">20<span class="text-[10px] font-normal">火</span></button>
+    <button onclick="jumpDay('1021')" class="daychip shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100">21<span class="text-[10px] font-normal">水</span></button>
+    <button onclick="jumpDay('1022')" class="daychip shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100">22<span class="text-[10px] font-normal">木</span></button>
+    <button onclick="jumpDay('1023')" class="daychip shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100">23<span class="text-[10px] font-normal">金</span></button>
+    <button onclick="jumpDay('1024')" class="daychip shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100">24<span class="text-[10px] font-normal">土</span></button>
+    <button onclick="jumpDay('1025')" class="daychip shrink-0 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100">25<span class="text-[10px] font-normal">日</span></button>
+  </div>
+</div>
+
+<div class="max-w-2xl mx-auto px-4 py-4 space-y-4">
+
+  <!-- Day 1: 10/17 村上出発 -->
+  <div id="day-1017" class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-indigo-600 text-white px-5 py-4 font-bold text-lg flex items-center gap-2">
+      <span>10/17（土）</span><span class="text-base font-normal text-indigo-200">出発日 — 村上のみ セントレア発（美馬・金築は翌18日発）</span>
+    </div>
+    <div class="p-4 space-y-3">
+      <div class="space-y-2">
+        <div class="text-xs font-bold text-blue-700 bg-blue-50 rounded px-2 py-1">👤 村上（京都 → 名古屋 → NGO → AMS）</div>
+        <div class="border-l-4 border-blue-400 pl-3 py-2 rounded-r-md text-sm">
+          <div class="text-slate-500">11:30 頃</div>
+          <div class="font-semibold">🚄 京都駅発 → 名古屋</div>
+          <div class="text-slate-600 text-xs">新幹線のぞみ 約36分 · <a href="https://maps.google.com/?q=Kyoto+Station" target="_blank" class="text-blue-600 underline">📍 京都駅</a></div>
+        </div>
+        <div class="border-l-4 border-blue-400 pl-3 py-2 rounded-r-md text-sm">
+          <div class="text-slate-500">12:35</div>
+          <div class="font-semibold">🚈 名古屋駅発 → 中部国際空港</div>
+          <div class="text-slate-600 text-xs">名鉄ミュースカイ 約28分・13:03着 · <a href="https://maps.google.com/?q=Nagoya+Station" target="_blank" class="text-blue-600 underline">📍 名古屋駅</a></div>
+        </div>
+        <div class="border-l-4 border-blue-400 pl-3 py-2 rounded-r-md text-sm">
+          <div class="text-slate-500">13:10</div>
+          <div class="font-semibold">✈︎ 空港到着目安</div>
+          <div class="text-slate-600 text-xs">国際線のため3時間前にチェックイン</div>
+        </div>
+        <div class="border-l-4 border-orange-300 pl-3 py-2 rounded-r-md text-sm bg-orange-50/40">
+          <div class="text-slate-500">13:40</div>
+          <div class="font-semibold">🍽 セントレアで昼食</div>
+          <div class="text-slate-600 text-xs">保安検査後に軽く。香港乗継が3時間45分あるので夕食は香港で取れる</div>
+        </div>
+        <div class="border-l-4 border-slate-300 pl-3 py-2 rounded-r-md text-sm bg-slate-50/50">
+          <div class="text-slate-500">13:10〜15:40</div>
+          <div class="font-semibold">🛋 JALサクララウンジ（国際線・出国審査後）</div>
+          <div class="text-slate-600 text-xs">Sapphireでエコノミーでも利用可。約2時間半使える。<strong>搭乗券と会員証の提示が必要</strong>。</div>
+          <details class="fold mt-1">
+            <summary>場所とサクララウンジになる理由</summary>
+            <div class="fold-body">
+              <div>キャセイは<strong>セントレアに自社ラウンジを持たない</strong>ため、提携先のJALサクララウンジになる。</div>
+              <div>場所は<strong>出国審査後の制限エリア内（2階）</strong>。2025年3月末に営業を再開している。</div>
+            </div>
+          </details>
+        </div>
+        <div class="border-l-4 border-blue-400 pl-3 py-2 rounded-r-md text-sm">
+          <div class="text-slate-500">16:10</div>
+          <div class="font-semibold">✈︎ CX539 NGO発</div>
+          <div class="text-slate-600">キャセイパシフィック航空<br>
+            <a href="https://maps.google.com/?q=Chubu+Centrair+International+Airport+NGO" target="_blank" class="text-blue-600 underline text-xs">📍 中部国際空港（セントレア / NGO）</a>
+          </div>
+        </div>
+        <div class="border-l-4 border-blue-300 pl-3 py-2 rounded-r-md text-sm">
+          <div class="text-slate-500">19:30</div>
+          <div class="font-semibold">✈︎ HKG着（乗継 3時間45分）</div>
+          <div class="text-slate-600 text-xs"><a href="https://maps.google.com/?q=Hong+Kong+International+Airport" target="_blank" class="text-blue-600 underline">📍 香港国際空港（HKG）</a></div>
+        </div>
+        <div class="border-l-4 border-slate-300 pl-3 py-2 rounded-r-md text-sm bg-slate-50/50">
+          <div class="text-slate-500">20:00〜22:30</div>
+          <div class="font-semibold">🛋 ビジネスクラスラウンジで夕食＋シャワー</div>
+          <div class="text-slate-600 text-xs">Sapphireでビジネスクラスラウンジ可（The Pier ビジネス側はシャワー14室）。⚠️ <strong>営業時間が未確認</strong>のため、到着後にトランスファーデスクで開いているラウンジを聞く。</div>
+          <details class="fold mt-1">
+            <summary>閉まっていた場合の代替・無料シャワーの場所</summary>
+            <div class="fold-body">
+              <div>⭐ <strong>無料シャワー（L5・24時間）</strong>: Gate 12付近 / Gate 43付近。シャンプー等あり、タオルは近くの自販機で購入。<strong>ラウンジの可否と無関係に使える</strong>ので、総移動21時間45分の後半が楽になる。</div>
+              <div><strong>有料ラウンジ</strong>: Plaza Premium が Gate 60（24時間・HKD 250〜／最安）、Gate 1（24時間・HKD 650〜）。</div>
+              <div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng（香港式の茶餐廳）・McDonald's が<strong>24時間</strong>。Level 7 フードコート（Tasty Congee のお粥・雲呑麺など）は22〜23時台に閉まる可能性があるので、行くなら早めに。</div>
+              <div>ファースト側の「ザ・カバナ」「ザ・ヘイヴン」は Sapphire では対象外。</div>
+            </div>
+          </details>
+        </div>
+        <div class="border-l-4 border-blue-400 pl-3 py-2 rounded-r-md text-sm">
+          <div class="text-slate-500">23:15</div>
+          <div class="font-semibold">✈︎ CX271 HKG発</div>
+        </div>
+        <div class="border-l-4 border-indigo-300 pl-3 py-2 rounded-r-md bg-indigo-50/30 text-sm">
+          <div class="text-slate-500">機内泊</div>
+          <div class="font-semibold">🌙 深夜便（総移動 約21時間45分）</div>
+          <div class="text-slate-600">AMS 10/18（日）06:55 着予定</div>
+        </div>
+        <div class="border-l-4 border-amber-400 pl-3 py-2 rounded-r-md bg-amber-50/40 text-sm">
+          <div class="text-amber-700 font-bold text-xs">✅ 選定済み（未購入）</div>
+          <div class="text-slate-600 text-xs">キャセイパシフィック航空 ｜ 運賃は手配中（概算未確定）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 2: 10/18 村上AMS着・休息 / 美馬・金築出発 -->
+  <div id="day-1018" class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-indigo-500 text-white px-5 py-4 font-bold text-lg flex items-center gap-2">
+      <span>10/18（日）</span><span class="text-base font-normal text-indigo-200">AMS着・時差調整日（村上）/ 出発日（美馬・金築）</span>
+    </div>
+    <div class="p-4 space-y-3">
+      <div class="split-grid">
+        <!-- 村上 -->
+        <div class="space-y-2">
+          <div class="text-xs font-bold text-blue-700 bg-blue-50 rounded px-2 py-1">👤 村上（AMS着・休息日）</div>
+          <div class="border-l-4 border-blue-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">06:55</div>
+            <div class="font-semibold">✈︎ AMS 着</div>
+            <div class="text-slate-600">入国審査・荷物受取<br>
+              <a href="https://maps.google.com/?q=Amsterdam+Airport+Schiphol+AMS" target="_blank" class="text-blue-600 underline text-xs">📍 スキポール（AMS）</a>
+            </div>
+          </div>
+          <div class="border-l-4 border-blue-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">7:30</div>
+            <div class="font-semibold">🚆 Schiphol → Amsterdam Sloterdijk駅</div>
+            <div class="text-slate-600">NS直通 約8〜10分 → 徒歩数分でHoliday Inn Express Sloterdijk Stationへ</div>
+          </div>
+          <div class="border-l-4 border-purple-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">7:45〜</div>
+            <div class="font-semibold">🏨 ホテルに荷物を預ける</div>
+            <div class="text-slate-600 text-xs">早朝着のため、通常チェックイン時刻（15時頃想定）まではフロントに荷物預け</div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">午前〜午後</div>
+            <div class="font-semibold">😴 時差調整・休息</div>
+            <div class="text-slate-600 text-xs">仮眠は短めにして、午後は軽く散策など現地時間に体を合わせる</div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">夜</div>
+            <div class="font-semibold">🏨 Holiday Inn Express Amsterdam - Sloterdijk Station に宿泊</div>
+            <div class="text-slate-600 text-xs">早めに就寝し、翌日のTechEx Day1に備える</div>
+          </div>
+        </div>
+        <!-- 美馬・金築 -->
+        <div class="space-y-2">
+          <div class="text-xs font-bold text-teal-700 bg-teal-50 rounded px-2 py-1">👥 美馬・金築（京都 → 名古屋 → NGO → FRA）</div>
+          <div class="border-l-4 border-teal-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">11:30 頃</div>
+            <div class="font-semibold">🚄 京都駅発 → 名古屋</div>
+            <div class="text-slate-600 text-xs">新幹線のぞみ 約36分 · <a href="https://maps.google.com/?q=Kyoto+Station" target="_blank" class="text-teal-600 underline">📍 京都駅</a></div>
+          </div>
+          <div class="border-l-4 border-teal-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">12:35</div>
+            <div class="font-semibold">🚈 名古屋駅発 → 中部国際空港</div>
+            <div class="text-slate-600 text-xs">名鉄ミュースカイ 約28分・13:03着 · <a href="https://maps.google.com/?q=Nagoya+Station" target="_blank" class="text-teal-600 underline">📍 名古屋駅</a></div>
+          </div>
+          <div class="border-l-4 border-teal-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">13:10</div>
+            <div class="font-semibold">✈︎ 空港到着目安</div>
+            <div class="text-slate-600 text-xs">国際線のため3時間前にチェックイン</div>
+          </div>
+          <div class="border-l-4 border-amber-400 pl-3 py-2 rounded-r-md text-sm bg-amber-50/40">
+            <div class="font-semibold">🛋 美馬・金築：JALサクララウンジは利用不可</div>
+            <div class="text-slate-600 text-xs"><strong>ゴールドカード以上を持っていれば、出国審査前のカードラウンジが無料</strong>で使える → 出国審査の前なので早めに入る。</div>
+            <details class="fold mt-1">
+              <summary>対象ラウンジ名・有料の選択肢</summary>
+              <div class="fold-body">
+                <div>ステータス無し・プライオリティパス無しのため<strong>サクララウンジは利用不可</strong>。村上は前日出発のため同伴枠も使えない。</div>
+                <div><strong>出国審査前のカードラウンジ</strong>（ゴールドカード以上が対象）: プレミアムラウンジ セントレア / 第2プレミアムラウンジ セントレア / QUALIA LOUNGE。</div>
+                <div>制限エリア内で確実に休むなら プラザ・プレミアム・ラウンジ名古屋（有料 約5,930円/人〜・<strong>営業時間は要確認</strong>）。</div>
+              </div>
+            </details>
+          </div>
+          <div class="border-l-4 border-teal-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">16:10</div>
+            <div class="font-semibold">✈︎ CX539 NGO発</div>
+            <div class="text-slate-600">キャセイパシフィック航空<br>
+              <a href="https://maps.google.com/?q=Chubu+Centrair+International+Airport+NGO" target="_blank" class="text-teal-600 underline text-xs">📍 中部国際空港（セントレア / NGO）</a>
+            </div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">19:30</div>
+            <div class="font-semibold">✈︎ HKG着（乗継 4時間25分）</div>
+            <div class="text-slate-600 text-xs">美馬・金築は航空会社ラウンジを利用できない。<strong>香港らしいものを食べるなら着いてすぐ Level 7 へ</strong>（22〜23時台に閉まる可能性）。24時間営業の店もあるので夕食は確保できる · <a href="https://maps.google.com/?q=Hong+Kong+International+Airport" target="_blank" class="text-teal-600 underline">📍 香港国際空港（HKG）</a></div>
+            <details class="fold mt-1">
+              <summary>4時間25分の過ごし方（無料シャワー・休憩・ラウンジ）</summary>
+              <div class="fold-body">
+                <div>夕食の店は<strong>下の「🍽 夕食（香港国際空港）」枠</strong>にまとめた。</div>
+                <div>⭐ <strong>無料シャワー（L5・24時間）</strong>: Gate 12付近 / Gate 43付近。<strong>ラウンジが無くてもこれは無料</strong>で、総移動22時間5分なので効く。タオルは自販機で購入。</div>
+                <div><strong>休憩</strong>: 無料のリクライニングエリアが Departures Level 6 の各ゲート付近（Gate 1・5〜7・24・26・33・44〜48・64〜66・69 付近）。静音表示があっても騒がしいので耳栓があると良い。</div>
+                <div><strong>ラウンジを使うなら</strong>: 有料の Plaza Premium。Gate 60 が24時間・HKD 250〜で最安、Gate 1 が24時間・HKD 650〜。</div>
+                <div>充電は<strong>英国式3ピンまたはUSB — 変換アダプタが必要</strong>。無料Wi‑Fiあり。</div>
+              </div>
+            </details>
+          </div>
+          <div class="border-l-4 border-teal-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">23:55</div>
+            <div class="font-semibold">✈︎ CX289 HKG発</div>
+          </div>
+          <div class="border-l-4 border-indigo-300 pl-3 py-2 rounded-r-md bg-indigo-50/30 text-sm">
+            <div class="text-slate-500">機内泊</div>
+            <div class="font-semibold">🌙 深夜便（総移動 約22時間5分）</div>
+            <div class="text-slate-600">FRA 10/19（月）07:15 着予定</div>
+          </div>
+        </div>
+      </div>
+      <div class="border-l-4 border-orange-300 pl-3 py-2 rounded-r-md text-sm bg-orange-50/40 mt-1">
+        <div class="font-semibold">🍽 食事・🛒 スーパー（アムステルダム / Sloterdijk周辺）· 村上</div>
+        <div class="text-slate-600 text-xs mt-0.5"><strong>日曜で休業・短縮営業の店が多い</strong>。開いているスーパーで軽く買い出し＋ホテル近くで軽めの夕食に。</div>
+        <details class="fold mt-1">
+          <summary>この日の食事メモ</summary>
+          <div class="fold-body">
+            <div>時差調整日なので軽めに。翌朝のTechEx用にパンを買っておくと安心。</div>
+          </div>
+        </details>
+        <div class="flex flex-wrap gap-1.5 mt-1.5">
+          <a href="https://maps.google.com/?q=restaurants+near+Amsterdam+Sloterdijk" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🍽 レストランを探す</a>
+          <a href="https://maps.google.com/?q=supermarket+near+Amsterdam+Sloterdijk" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🛒 スーパーを探す</a>
+        </div>
+      </div>
+      <div class="border-l-4 border-orange-300 pl-3 py-2 rounded-r-md text-sm bg-orange-50/40 mt-1">
+        <div class="font-semibold">🍽 夕食（香港国際空港・乗継 19:30–23:55／4時間25分）· 美馬・金築</div>
+        <div class="text-slate-600 text-xs mt-0.5">美馬・金築は航空会社ラウンジを利用できないため、<strong>制限エリア内で夕食を取る</strong>。香港らしいものを食べるなら<strong>着いてすぐ Level 7 へ</strong>（22〜23時台に閉まる可能性）。閉まっていても24時間営業の店があるので夕食は確保できる。</div>
+        <details class="fold mt-1">
+          <summary>店の候補と時間の逆算</summary>
+          <div class="fold-body">
+            <div><strong>Level 7 フードコート</strong>: Tasty Congee（お粥・雲呑麺）、Duddell's（広東料理）、Putien（福建料理）。<strong>22〜23時台に閉まる可能性</strong>があるので、行くなら20時前後に。</div>
+            <div><strong>24時間営業（確実な選択肢）</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng（香港式の茶餐廳）・McDonald's。</div>
+            <div>23:55発なので<strong>23:20頃にはゲート</strong>へ。食事は21:30頃までに切り上げ、残りをシャワー・休憩に充てる（シャワーは左の乗継メモ参照）。</div>
+            <div>店名・営業時間は<strong>未確認</strong>のため、到着後に館内の案内表示で確認する。</div>
+          </div>
+        </details>
+        <div class="flex flex-wrap gap-1.5 mt-1.5">
+          <a href="https://maps.google.com/?q=restaurants+Hong+Kong+International+Airport+Terminal+1" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🍽 空港内の飲食店を探す</a>
+          <a href="https://maps.google.com/?q=Men+Wah+Bing+Teng+Hong+Kong+International+Airport" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🍜 Men Wah Bing Teng</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 3: 10/19 TechEx Day1（フル参加） / 美馬・金築FRA着 -->
+  <div id="day-1019" class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-blue-600 text-white px-5 py-4 font-bold text-lg flex items-center gap-2">
+      <span>10/19（月）</span><span class="text-base font-normal text-blue-200">TechEx Day 1 フル参加（村上）/ 美馬・金築 FRA着→ゲッティンゲン（荷物預け）→Wolfsburg（Autostadt）</span>
+    </div>
+    <div class="p-4 space-y-3">
+      <div class="split-grid">
+        <!-- 村上 -->
+        <div class="space-y-2">
+          <div class="text-xs font-bold text-blue-700 bg-blue-50 rounded px-2 py-1">👤 村上（TechEx Day 1）</div>
+          <div class="border-l-4 border-blue-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">8:30</div>
+            <div class="font-semibold">🚆 ホテル → RAI（Gold Pass で受付）</div>
+            <div class="text-slate-600">メトロ50系統（Ringlijn）直通・RAI駅まで約18分、会場入口まで徒歩含め約25〜28分 · <a href="https://maps.google.com/?q=RAI+Amsterdam+Convention+Centre" target="_blank" class="text-blue-600 underline">📍 RAI Amsterdam</a></div>
+          </div>
+          <div class="border-l-4 border-purple-400 pl-3 py-2 rounded-r-md text-sm bg-blue-50/40">
+            <div class="font-semibold text-blue-800">🏛 TechEx Day 1 — Gold Track フル参加</div>
+            <div class="text-slate-600 text-xs space-y-1 mt-1">
+              <div>IoT Tech Expo「Industrial AI and Autonomous Operations」（Gold Track）</div>
+              <div>09:45–10:00 Opening</div>
+              <div>10:00–10:30 Schneider Electric｜Intelligent Factory 🎯</div>
+              <div>10:35–11:20 Panel｜Connected Factories（Electrolux・Bosch・Siemens）🎯</div>
+              <div>11:25–11:45 OPC Foundation｜Robotics and MES Integration 🎯</div>
+              <div>12:25–12:45 ArcelorMittal｜Next Gen Smart Factory 🎯</div>
+              <div>12:50–13:10 BSH Group｜Lean First, Tech Second 🎯</div>
+              <div>14:10–14:30 Fireside｜Operational Digital Twins（Audi・BMW）🎯</div>
+              <div>15:50–16:10 DHL｜Robots in the Flow 🎯</div>
+              <div>16:30–16:50 Renault｜AI in supply chain 🎯</div>
+              <div>18:00–21:00 VIP Networking Drinks（Gold Pass特典）</div>
+            </div>
+          </div>
+          <div class="border-l-4 border-purple-300 pl-3 py-2 rounded-r-md text-sm bg-purple-50/30">
+            <div class="text-slate-500">夕方</div>
+            <div class="font-semibold">🥂 VIP networking drinks（Gold Pass特典）</div>
+            <div class="text-slate-600 text-xs">Gold Passに含まれる特典。<strong>翌20日は14:55に会場を出るため、参加できるのは実質この日だけ</strong>。開催時刻・場所は当日のアジェンダで確認。</div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">夜</div>
+            <div class="font-semibold">🚆 RAI → ホテルへ戻る</div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">夜</div>
+            <div class="font-semibold">🏨 Holiday Inn Express Amsterdam - Sloterdijk Station に宿泊</div>
+          </div>
+        </div>
+        <!-- 美馬・金築 -->
+        <div class="space-y-2">
+          <div class="text-xs font-bold text-teal-700 bg-teal-50 rounded px-2 py-1">👥 美馬・金築（FRA着 → ゲッティンゲンで荷物預け → Wolfsburg → ゲッティンゲン）</div>
+          <div class="text-xs text-slate-500 px-1">EuroBLECHは10/20開幕のため19日は自由日。Wolfsburgへの日帰りはゲッティンゲンが経路上にあるため、先にホテルへ荷物を預けて身軽に移動</div>
+          <div class="border-l-4 border-teal-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">07:15</div>
+            <div class="font-semibold">✈︎ FRA 着</div>
+            <div class="text-slate-600">入国審査・荷物受取<br>
+              <a href="https://maps.google.com/?q=Frankfurt+Airport+FRA" target="_blank" class="text-teal-600 underline text-xs">📍 フランクフルト空港（FRA）</a>
+            </div>
+          </div>
+          <div class="border-l-4 border-teal-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">08:22</div>
+            <div class="font-semibold">🚆 RE2 + ICE774 FRA空港駅発</div>
+            <div class="text-slate-600">Frankfurt(M) Flughafen Regionalbf → Göttingen · 乗継1回・2時間9分 · <a href="https://int.bahn.de/en/buchung/start?vbid=5743e38c-94f7-4bdd-af04-40a60e6183c8" target="_blank" class="text-teal-600 underline">€43.99〜 予約ページ</a></div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">10:31</div>
+            <div class="font-semibold">ゲッティンゲン着 → Hotel FREIgeistへ荷物を預ける</div>
+            <div class="text-slate-600 text-xs">正式チェックインは夜だが、スーツケースはフロントで日中預かってもらう想定（要事前確認）<br>
+              <a href="https://maps.google.com/?q=Goettingen+Hauptbahnhof" target="_blank" class="text-teal-600 underline">📍 ゲッティンゲン中央駅（Göttingen Hbf）</a>
+            </div>
+            <details class="fold mt-1">
+              <summary>なぜ先にゲッティンゲンへ寄るのか</summary>
+              <div class="fold-body">
+                <div>ゲッティンゲンはFRA→Hannover→Wolfsburg方面のICE経路上にあるため、遠回りにならずにホテルへスーツケースを置ける。</div>
+                <div>Autostadtは屋外移動と館内歩きが多く、荷物を持ったままでは回りにくいので、身軽にしてから往復する。</div>
+              </div>
+            </details>
+          </div>
+          <div class="border-l-4 border-teal-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">11:00頃</div>
+            <div class="font-semibold">🚆 ICE ゲッティンゲン発 → Wolfsburg（身軽に）</div>
+            <div class="text-slate-600 text-xs">Hannover経由・所要約1時間15〜20分</div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">12:20頃</div>
+            <div class="font-semibold">ヴォルフスブルク中央駅（Wolfsburg Hbf） 着 → Autostadtへ</div>
+            <div class="text-slate-600 text-xs">駅からAutostadtまで徒歩約10分・専用歩道橋あり<br>
+              <a href="https://maps.google.com/?q=Autostadt+Wolfsburg" target="_blank" class="text-teal-600 underline">📍 Autostadt</a>
+            </div>
+          </div>
+          <div class="border-l-4 border-purple-300 pl-3 py-2 rounded-r-md text-sm bg-teal-50/40">
+            <div class="text-sm text-slate-500">12:30頃–17:00</div>
+            <div class="font-semibold text-teal-800">🚗 Autostadt 見学</div>
+            <div class="text-slate-600 text-xs">VWグループの企業テーマパーク（パビリオン・工場ツアー等）・開館10:00–18:00</div>
+            <details class="fold mt-1">
+              <summary>当日確認したいこと</summary>
+              <div class="fold-body">
+                <div>入場チケットと工場ツアー（ドイツ語／英語の実施回・所要時間）は事前に公式サイトで確認・予約が必要な場合がある。</div>
+                <div>昼食はAutostadt内または ヴォルフスブルク中央駅（Wolfsburg Hbf） 周辺で。到着が12:20頃なので着いてすぐ軽く取るのが動きやすい。</div>
+                <div>開館時間・休館日は季節で変わるため、10月の実際の時間を出発前に再確認する（上記は概算）。</div>
+              </div>
+            </details>
+          </div>
+          <div class="border-l-4 border-teal-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">17:30頃</div>
+            <div class="font-semibold">🚆 ICE ヴォルフスブルク中央駅（Wolfsburg Hbf）発 → ゲッティンゲン</div>
+            <div class="text-slate-600 text-xs">所要約1時間15〜20分（直通ICE、平均本数多め）</div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">18:45頃</div>
+            <div class="font-semibold">ゲッティンゲン着 → 荷物ピックアップ・正式チェックイン</div>
+            <div class="text-slate-600 text-xs">
+              <a href="https://maps.google.com/?q=Goettingen+Hauptbahnhof" target="_blank" class="text-teal-600 underline">📍 ゲッティンゲン中央駅（Göttingen Hbf）</a>
+            </div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">夜</div>
+            <div class="font-semibold">🏨 Hotel FREIgeist Göttingen Innenstadt に宿泊</div>
+            <div class="text-slate-600 text-xs">中央駅から徒歩約3〜5分・デザインホテル系チェーン。村上より1日早くチェックイン</div>
+          </div>
+          <div class="border-l-4 border-yellow-400 pl-3 py-2 rounded-r-md bg-yellow-50/40 text-sm">
+            <div class="text-yellow-700 font-bold text-xs">⚠️ 鉄道時刻は概算・bahn.deで最終確認。日中の荷物預かりはホテルに事前連絡推奨</div>
+          </div>
+        </div>
+      </div>
+      <div class="border-l-4 border-orange-300 pl-3 py-2 rounded-r-md text-sm bg-orange-50/40 mt-1">
+        <div class="font-semibold">🍽 食事・🛒 スーパー（アムステルダム / Sloterdijk周辺）· 村上</div>
+        <div class="text-slate-600 text-xs mt-0.5">TechEx後、ホテル周辺で夕食。この日は市内でしっかり食べられる。</div>
+        <details class="fold mt-1">
+          <summary>この日の食事メモ</summary>
+          <div class="fold-body">
+            <div>翌日はTechEx最終日→夕方ゲッティンゲンへ移動するので、翌朝のスーパー（Albert Heijn等）で会場用のパンを調達しておくと動きやすい。</div>
+          </div>
+        </details>
+        <div class="flex flex-wrap gap-1.5 mt-1.5">
+          <a href="https://maps.google.com/?q=restaurants+near+Amsterdam+Sloterdijk" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🍽 レストランを探す</a>
+          <a href="https://maps.google.com/?q=supermarket+near+Amsterdam+Sloterdijk" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🛒 スーパーを探す</a>
+        </div>
+      </div>
+      <div class="border-l-4 border-orange-300 pl-3 py-2 rounded-r-md text-sm bg-orange-50/40 mt-1">
+        <div class="font-semibold">🍽 食事・🛒 スーパー（ゲッティンゲン / 中央駅〜旧市街）· 美馬・金築</div>
+        <div class="text-slate-600 text-xs mt-0.5">Wolfsburgから<strong>18:45頃</strong>にゲッティンゲン着 → 荷物ピックアップ・チェックイン後に旧市街（中央駅から徒歩圏）で夕食。<strong>月曜は閉まる店もある</strong>ので候補は複数見ておく。</div>
+        <details class="fold mt-1">
+          <summary>この日の食事メモ</summary>
+          <div class="fold-body">
+            <div>Autostadt内での昼食が遅めになる想定なので、夕食は軽めでも足りる。到着が19時前なのでラストオーダーに注意。</div>
+            <div><strong>ホテルは朝食が付かない</strong>。翌朝はEuroBLECH初日で07:55発の列車に乗るため、<strong>この夜のうちにスーパーでパン等を調達</strong>しておくと動きやすい。ドイツのスーパーは20時閉店が多いので、チェックイン直後に寄るのが安全。</div>
+            <div>Wolfsburgからの列車が遅れた場合は、駅構内・駅前で買って済ませる方向に切り替える。</div>
+          </div>
+        </details>
+        <div class="flex flex-wrap gap-1.5 mt-1.5">
+          <a href="https://maps.google.com/?q=restaurants+Goettingen+Altstadt" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🍽 レストランを探す</a>
+          <a href="https://maps.google.com/?q=supermarket+near+Goettingen+Hauptbahnhof" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🛒 スーパーを探す</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 4: 10/20 TechEx Day2 → ゲッティンゲン移動 / 美馬・金築EuroBLECH Day1 -->
+  <div id="day-1020" class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-blue-500 text-white px-5 py-4 font-bold text-lg flex items-center gap-2">
+      <span>10/20（火）</span><span class="text-base font-normal text-blue-100">TechEx Day 2 → ゲッティンゲン移動（村上）/ EuroBLECH Day 1（美馬・金築）</span>
+    </div>
+    <div class="p-4 space-y-3">
+      <div class="split-grid">
+        <!-- 村上 -->
+        <div class="space-y-2">
+          <div class="text-xs font-bold text-blue-700 bg-blue-50 rounded px-2 py-1">👤 村上（TechEx→移動）</div>
+          <div class="border-l-4 border-blue-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">朝</div>
+            <div class="font-semibold">🏨 チェックアウト（荷物持参）→ RAIへ</div>
+            <div class="text-slate-600">メトロ50系統 直通・会場まで約25〜28分</div>
+          </div>
+          <div class="border-l-4 border-purple-400 pl-3 py-2 rounded-r-md text-sm bg-blue-50/40">
+            <div class="font-semibold text-blue-800">🏛 TechEx Day 2 — Physical AI（最優先）</div>
+            <div class="text-slate-600 text-xs space-y-1 mt-1">
+              <div>9:45–10:00 Opening</div>
+              <div>10:00–10:40 Panel｜The Physical AI Stack（Unitree・IBM）🎯</div>
+              <div>10:45–11:15 Airbus｜Physical AI in 2026 🎯</div>
+              <div>11:20–11:50 Fireside｜Hugging Face LeRobot（Open Innovation）🎯</div>
+              <div>12:20–12:50 Maersk｜Operating at fleet scale</div>
+              <div>12:55–13:15 Swisslog｜From Intelligence to Action</div>
+              <div>14:15–14:55 Panel｜Embodied Intelligence Stack 🎯 ★最重要。ここで退出</div>
+            </div>
+            <div class="text-slate-500 text-xs mt-1">⚠️ <strong>昼休憩（13:15–14:15）中にクロークで荷物を引き取る</strong> — 14:55にそのまま出られる状態にしておく。</div>
+            <details class="fold mt-1">
+              <summary>なぜ昼に回収するのか／最終セッションを聴かない理由</summary>
+              <div class="fold-body">
+                <div>閉場前のクロークは混むため、行列でフライトに影響が出るのを避ける。昼はRAI会場でしっかり食べておく。</div>
+                <div>15:00–15:30 の最終セッションまで残ると <strong>Schiphol 着が15:52頃</strong>になり、KL1791（16:50発）の<strong>預け荷物の締切（出発45分前＝16:05頃）に間に合わない</strong>ため聴かない。</div>
+              </div>
+            </details>
+          </div>
+          <div class="border-l-4 border-red-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500 font-bold">14:55</div>
+            <div class="font-semibold">RAI → <a href="https://maps.google.com/?q=Amsterdam+Airport+Schiphol+AMS" target="_blank" class="text-red-700 underline">Schiphol</a>（電車 約10分）</div>
+          </div>
+          <div class="border-l-4 border-teal-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">15:20</div>
+            <div class="font-semibold">✈︎ 空港到着目安</div>
+            <div class="text-slate-600 text-xs">シェンゲン域内便のため1.5時間前にチェックイン</div>
+          </div>
+          <div class="border-l-4 border-teal-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">16:50</div>
+            <div class="font-semibold">✈︎ KL1791（KLM Cityhopper）AMS発</div>
+            <div class="text-slate-600">直行便・55分 · 17:45 <a href="https://maps.google.com/?q=Hannover+Airport+HAJ" target="_blank" class="text-teal-600 underline">HAJ着</a> · 選定済み（運賃未定）</div>
+          </div>
+          <div class="border-l-4 border-orange-300 pl-3 py-2 rounded-r-md text-sm bg-orange-50/40">
+            <div class="text-slate-500">17:45〜19:00</div>
+            <div class="font-semibold">🍽 HAJ空港で夕食・調達</div>
+            <div class="text-slate-600 text-xs">S5発（19:06）まで約1時間20分。<strong>夕食はここが本命</strong>。ゲッティンゲン着は20:25と遅く店が閉まりがちなので、空港で食べるか列車用に買っておく。</div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">19:06</div>
+            <div class="font-semibold">🚆 S5 Hannover Flughafen発</div>
+            <div class="text-slate-600">→ 19:23 <a href="https://maps.google.com/?q=Hannover+Hauptbahnhof" target="_blank" class="text-teal-600 underline">ハノーファー中央駅（Hannover Hbf）</a>着（17分）· <a href="https://int.bahn.de/en/buchung/start?vbid=7ea0ca77-27af-45c3-ac6d-ddff2d43ec64" target="_blank" class="text-teal-600 underline">€22.99〜 予約ページ（通し）</a></div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">19:53</div>
+            <div class="font-semibold">🚄 ICE77 ハノーファー中央駅（Hannover Hbf）発（乗継30分）</div>
+            <div class="text-slate-600">→ 20:25 <a href="https://maps.google.com/?q=Goettingen+Hauptbahnhof" target="_blank" class="text-teal-600 underline">ゲッティンゲン</a>着（32分）</div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">夜</div>
+            <div class="font-semibold">🏨 Hotel FREIgeist Göttingen Innenstadt に宿泊</div>
+            <div class="text-slate-600 text-xs">到着20時25分頃、レイトチェックイン可否を要確認</div>
+          </div>
+        </div>
+        <!-- 美馬・金築 -->
+        <div class="space-y-2">
+          <div class="text-xs font-bold text-teal-700 bg-teal-50 rounded px-2 py-1">👥 美馬・金築（EuroBLECH開幕）</div>
+          <div class="border-l-4 border-teal-400 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">07:55</div>
+            <div class="font-semibold">🚄 ICE888 <a href="https://maps.google.com/?q=Goettingen+Hauptbahnhof" target="_blank" class="text-teal-700 underline">ゲッティンゲン</a>発</div>
+            <div class="text-slate-600">Hannover Messe/Laatzen行き・直通28分 · <a href="https://int.bahn.de/en/buchung/start?vbid=ea738228-3620-4883-aad0-ee2ca98fbc5e" target="_blank" class="text-teal-600 underline">€17.99〜 予約ページ</a></div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">08:23</div>
+            <div class="font-semibold">ハノーファー・メッセ／ラーツェン駅（Hannover Messe/Laatzen）着</div>
+            <div class="text-slate-600 text-xs">メッセ会場直結 · <a href="https://maps.google.com/?q=Hannover+Messe+Messegelaende+Hannover" target="_blank" class="text-teal-600 underline">📍 ハノーファーメッセ</a></div>
+          </div>
+          <div class="border-l-4 border-purple-300 pl-3 py-2 rounded-r-md text-sm bg-teal-50/40">
+            <div class="text-sm text-slate-500">9:00頃–17:00</div>
+            <div class="font-semibold text-teal-800">🏭 EuroBLECH Day 1</div>
+            <div class="text-slate-600">
+              <a href="https://maps.google.com/?q=Hannover+Messe+Messegelaende" target="_blank" class="text-teal-600 underline">📍 ハノーファーメッセ</a>
+            </div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-2 rounded-r-md text-sm">
+            <div class="text-slate-500">夜</div>
+            <div class="font-semibold">🏨 Hotel FREIgeist Göttingen Innenstadt に宿泊</div>
+          </div>
+        </div>
+      </div>
+      <div class="border-l-4 border-orange-300 pl-3 py-2 rounded-r-md text-sm bg-orange-50/40 mt-1">
+        <div class="font-semibold">🍽 食事・🛒 スーパー（ゲッティンゲン / 中央駅〜旧市街）</div>
+        <div class="text-slate-600 text-xs mt-0.5">美馬・金築はEuroBLECH後に旧市街で夕食可。<strong>村上は20:25着</strong>と遅いため、駅周辺で開いている店を確認するか到着前に軽食を確保。</div>
+        <details class="fold mt-1">
+          <summary>この日の食事メモ</summary>
+          <div class="fold-body">
+            <div><strong>ホテルは朝食が付かない</strong>。前夜に買っておけば確実だが、会場（メッセ）到着後でも朝の時間帯にパン等はとれる。こだわるなら前夜調達を。</div>
+          </div>
+        </details>
+        <div class="flex flex-wrap gap-1.5 mt-1.5">
+          <a href="https://maps.google.com/?q=restaurants+Goettingen+Altstadt" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🍽 レストランを探す</a>
+          <a href="https://maps.google.com/?q=supermarket+near+Goettingen+Hauptbahnhof" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🛒 スーパーを探す</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 5: 10/21 EuroBLECH フル参加（全員合流） -->
+  <div id="day-1021" class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-teal-600 text-white px-5 py-4 font-bold text-lg flex items-center gap-2">
+      <span>10/21（水）</span><span class="text-base font-normal text-teal-100">EuroBLECH フル参加 — 全員合流</span>
+    </div>
+    <div class="p-4 space-y-3">
+      <div class="border-l-4 border-teal-400 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-sm text-slate-500">07:55</div>
+        <div class="font-semibold">🚄 ICE888 <a href="https://maps.google.com/?q=Goettingen+Hauptbahnhof" target="_blank" class="text-teal-700 underline">ゲッティンゲン</a>発（全員）</div>
+        <div class="text-sm text-slate-600">→ 08:23 <a href="https://maps.google.com/?q=Hannover+Messe+Messegelaende+Hannover" target="_blank" class="text-teal-600 underline">Hannover Messe/Laatzen</a>着（28分）· <a href="https://int.bahn.de/en/buchung/start?vbid=11eb968b-2aa4-440e-ac7e-16aeb4486be8" target="_blank" class="text-teal-600 underline">€17.99〜 予約ページ</a></div>
+      </div>
+      <div class="border-l-4 border-purple-300 pl-4 py-2 rounded-r-md bg-teal-50/40 text-sm">
+        <div class="text-sm text-slate-500">9:00–17:00</div>
+        <div class="font-semibold text-teal-800">🏭 EuroBLECH（Hannover Messe）</div>
+        <div class="text-sm text-slate-600 mt-1">全員で参加</div>
+        <div class="text-slate-500 text-xs mt-1">🥐 朝はゲッティンゲン駅でパンを買って会場へ。昼は<strong>小腹がすいたら会場のフードコート</strong>で（コーヒー等含め割高、目安 〜€5前後）。</div>
+      </div>
+      <div class="border-l-4 border-teal-300 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-slate-500">夜</div>
+        <div class="font-semibold">🏨 Hotel FREIgeist Göttingen Innenstadt に宿泊</div>
+      </div>
+      <div class="border-l-4 border-orange-300 pl-3 py-2 rounded-r-md text-sm bg-orange-50/40 mt-1">
+        <div class="font-semibold">🍽 食事・🛒 スーパー（ゲッティンゲン / 中央駅〜旧市街）</div>
+        <div class="text-slate-600 text-xs mt-0.5">全員合流後の夜。旧市街で全員そろって夕食できる数少ない日なので、気になる店は予約を。</div>
+        <details class="fold mt-1">
+          <summary>この日の食事メモ</summary>
+          <div class="fold-body">
+            <div><strong>ホテルは朝食が付かない</strong>。翌朝は09:00発でBremenへ向かうので、前夜に買っておくか、駅・車内・ブレーメン到着後に軽くとってもよい。</div>
+          </div>
+        </details>
+        <div class="flex flex-wrap gap-1.5 mt-1.5">
+          <a href="https://maps.google.com/?q=restaurants+Goettingen+Altstadt" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🍽 レストランを探す</a>
+          <a href="https://maps.google.com/?q=supermarket+near+Goettingen+Hauptbahnhof" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🛒 スーパーを探す</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 6: 10/22 Bremen日帰り（全員） -->
+  <div id="day-1022" class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-slate-600 text-white px-5 py-4 font-bold text-lg flex items-center gap-2">
+      <span>10/22（木）</span><span class="text-base font-normal text-slate-300">Bremen 日帰り — 全員（工場見学）</span>
+    </div>
+    <div class="p-4 space-y-3">
+      <div class="border-l-4 border-blue-400 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-slate-500">09:00</div>
+        <div class="font-semibold">🚄 ICE1674 <a href="https://maps.google.com/?q=Goettingen+Hauptbahnhof" target="_blank" class="text-blue-700 underline">ゲッティンゲン</a>発（全員）</div>
+        <div class="text-slate-600">→ 10:45 <a href="https://maps.google.com/?q=Bremen+Hauptbahnhof" target="_blank" class="text-blue-600 underline">ブレーメン中央駅（Bremen Hbf）</a>着（直通1時間45分）· <a href="https://int.bahn.de/en/buchung/start?vbid=9d9da320-9752-49c9-b341-bcabf3239929" target="_blank" class="text-blue-600 underline">€19.99〜 予約ページ</a></div>
+      </div>
+      <div class="border-l-4 border-amber-400 pl-4 py-2 rounded-r-md text-sm bg-amber-50/40">
+        <div class="text-sm text-slate-500">12:45–14:00</div>
+        <div class="font-semibold">🏭 Mercedes-Benz Werk Bremen 工場見学（全員）</div>
+        <div class="text-slate-600 text-xs"><a href="https://maps.google.com/?q=Mercedes-Benz+Werk+Bremen" target="_blank" class="text-amber-700 underline">📍 Mercedes-Benz Werk Bremen</a></div>
+      </div>
+      <div class="border-l-4 border-purple-300 pl-4 py-2 rounded-r-md text-sm bg-purple-50/30">
+        <div class="text-slate-500">14:00以降</div>
+        <div class="font-semibold">🚶 時間と体力に余裕があれば、ブレーメン旧市街を散策</div>
+        <div class="text-slate-600 text-xs mt-0.5">見学後、遅めのランチ＋旧市街を短時間散策してから列車で戻るのも可。徒歩圏にまとまっている。</div>
+        <div class="flex flex-wrap gap-1.5 mt-1.5">
+          <a href="https://maps.google.com/?q=Bremen+Marktplatz+Rathaus" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 マルクト広場・市庁舎（世界遺産）</a>
+          <a href="https://maps.google.com/?q=Bremen+Town+Musicians+statue" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 ブレーメンの音楽隊像</a>
+          <a href="https://maps.google.com/?q=Schnoor+Bremen" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 シュノーア地区（路地）</a>
+          <a href="https://maps.google.com/?q=Boettcherstrasse+Bremen" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 ベットヒャー通り</a>
+        </div>
+      </div>
+      <div class="border-l-4 border-blue-400 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-slate-500">夕方</div>
+        <div class="font-semibold">🚄 ブレーメン中央駅（Bremen Hbf） → ゲッティンゲン（全員）</div>
+        <div class="text-slate-600 text-xs">散策の状況に合わせた列車で。早めに戻れば18時前にゲッティンゲン帰着可能</div>
+      </div>
+      <div class="border-l-4 border-teal-300 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-slate-500">夜</div>
+        <div class="font-semibold">🏨 Hotel FREIgeist Göttingen Innenstadt に宿泊</div>
+      </div>
+      <div class="border-l-4 border-orange-300 pl-3 py-2 rounded-r-md text-sm bg-orange-50/40 mt-1">
+        <div class="font-semibold">🍽 食事・🛒 スーパー（ブレーメン → ゲッティンゲン）</div>
+        <div class="text-slate-600 text-xs mt-0.5"><strong>昼はブレーメン</strong>（マルクト広場周辺）でランチ。<strong>夜</strong>は、ブレーメンに良い店があればそのまま夕食、なければ18時前にゲッティンゲンへ戻って旧市街で。</div>
+        <details class="fold mt-1">
+          <summary>この日の食事メモ</summary>
+          <div class="fold-body">
+            <div><strong>ホテルは朝食が付かない</strong>うえ翌朝は07:55発と早い。前夜に買っておくと確実だが、この日も会場（メッセ）到着後に朝の時間帯でパン等はとれる。</div>
+          </div>
+        </details>
+        <div class="flex flex-wrap gap-1.5 mt-1.5">
+          <a href="https://maps.google.com/?q=restaurants+Bremen+Marktplatz" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🍽 ブレーメン</a>
+          <a href="https://maps.google.com/?q=restaurants+Goettingen+Altstadt" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🍽 ゲッティンゲン</a>
+          <a href="https://maps.google.com/?q=supermarket+near+Goettingen+Hauptbahnhof" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🛒 スーパー</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 7: 10/23 EuroBLECH最終 → FRA移動（全員） -->
+  <div id="day-1023" class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-teal-500 text-white px-5 py-4 font-bold text-lg flex items-center gap-2">
+      <span>10/23（金）</span><span class="text-base font-normal text-teal-100">EuroBLECH 最終 → フランクフルト移動（全員）</span>
+    </div>
+    <div class="p-4 space-y-3">
+      <div class="border-l-4 border-teal-400 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-sm text-slate-500">朝</div>
+        <div class="font-semibold">🏨 ゲッティンゲンをチェックアウト（荷物持参・全員）</div>
+      </div>
+      <div class="border-l-4 border-teal-400 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-sm text-slate-500">07:55</div>
+        <div class="font-semibold">🚄 ICE888 <a href="https://maps.google.com/?q=Goettingen+Hauptbahnhof" target="_blank" class="text-teal-700 underline">ゲッティンゲン</a>発（全員・荷物持参）</div>
+        <div class="text-sm text-slate-600">→ 08:23 <a href="https://maps.google.com/?q=Hannover+Messe+Messegelaende+Hannover" target="_blank" class="text-teal-600 underline">Hannover Messe/Laatzen</a>着（28分）· <a href="https://int.bahn.de/en/buchung/start?vbid=a06815cf-98b3-42bd-bb5e-ba005bf7ec6b" target="_blank" class="text-teal-600 underline">€17.99〜 予約ページ</a></div>
+      </div>
+      <div class="border-l-4 border-purple-300 pl-4 py-2 rounded-r-md bg-teal-50/40 text-sm">
+        <div class="text-sm text-slate-500">9:00–14:15頃</div>
+        <div class="font-semibold text-teal-800">🏭 EuroBLECH（最終）</div>
+        <div class="text-sm text-slate-600">入場後は荷物をクロークへ。14:30発の列車に合わせて14:15頃退場</div>
+      </div>
+      <div class="border-l-4 border-blue-400 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-sm text-slate-500">14:30</div>
+        <div class="font-semibold">🚄 S4 <a href="https://maps.google.com/?q=Hannover+Messe+Messegelaende+Hannover" target="_blank" class="text-blue-700 underline">Hannover Messe/Laatzen</a>発</div>
+        <div class="text-sm text-slate-600">→ 14:38 <a href="https://maps.google.com/?q=Hannover+Hauptbahnhof" target="_blank" class="text-blue-600 underline">ハノーファー中央駅（Hannover Hbf）</a>着（8分）</div>
+      </div>
+      <div class="border-l-4 border-blue-400 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-sm text-slate-500">14:53</div>
+        <div class="font-semibold">🚄 ICE771 ハノーファー中央駅（Hannover Hbf）発（乗継15分）</div>
+        <div class="text-sm text-slate-600">→ 17:14 <a href="https://maps.google.com/?q=Frankfurt+am+Main+Hauptbahnhof" target="_blank" class="text-blue-600 underline">フランクフルト中央駅（Frankfurt(Main) Hbf）</a>着（2時間21分）· <a href="https://int.bahn.de/en/buchung/start?vbid=a325506a-dda5-4d3b-bae2-46b8be1bb3d4" target="_blank" class="text-blue-600 underline">€80.99〜 予約ページ（通し）</a></div>
+      </div>
+      <div class="border-l-4 border-slate-400 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-slate-500">夜</div>
+        <div class="font-semibold">🏨 Toyoko Inn Frankfurt am Main Hauptbahnhof に宿泊</div>
+      </div>
+      <div class="border-l-4 border-orange-300 pl-3 py-2 rounded-r-md text-sm bg-orange-50/40 mt-1">
+        <div class="font-semibold">🍽 食事・🛒 スーパー（フランクフルト / 中央駅周辺）</div>
+        <div class="text-slate-600 text-xs mt-0.5">17時過ぎにFRA着。時間に余裕があるので<strong>散策しながら店を決めればよい</strong>（出張最終夜。名物アップルワインも）。<strong>⚠️ 中央駅周辺は夜スリ・客引きが多いエリア</strong>。荷物は前に持ち、貴重品に注意。</div>
+        <details class="fold mt-1">
+          <summary>この日の食事メモ</summary>
+          <div class="fold-body">
+            <div>翌朝（10/24・土）は<strong>東横INNの無料朝食（土日祝 7:00〜10:00）</strong>を利用できる。10:15ホテル発なので朝食をとってから出発可能。</div>
+          </div>
+        </details>
+        <div class="flex flex-wrap gap-1.5 mt-1.5">
+          <a href="https://maps.google.com/?q=restaurants+near+Frankfurt+Hauptbahnhof" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🍽 レストランを探す</a>
+          <a href="https://maps.google.com/?q=supermarket+near+Frankfurt+Hauptbahnhof" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🛒 スーパーを探す</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 8: 10/24 帰国フライト（全員同便） -->
+  <div id="day-1024" class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-slate-600 text-white px-5 py-4 font-bold text-lg flex items-center gap-2">
+      <span>10/24（土）</span><span class="text-base font-normal text-slate-300">フランクフルト → セントレア 出発（全員同便）</span>
+    </div>
+    <div class="p-4 space-y-3">
+      <div class="border-l-4 border-slate-400 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-sm text-slate-500">10:15</div>
+        <div class="font-semibold">🚄 <a href="https://maps.google.com/?q=Frankfurt+am+Main+Hauptbahnhof" target="_blank" class="text-slate-600 underline">フランクフルト中央駅（Frankfurt(Main) Hbf）</a> → <a href="https://maps.google.com/?q=Frankfurt+Airport+FRA" target="_blank" class="text-slate-600 underline">空港</a>（エアポートエクスプレス 約12分）</div>
+      </div>
+      <div class="border-l-4 border-slate-400 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-sm text-slate-500 font-bold">10:40</div>
+        <div class="font-semibold">✈︎ FRA空港 到着（出発3時間前）— <strong class="text-slate-800">ターミナル3</strong></div>
+        <div class="text-sm text-slate-600">チェックイン・保安検査・出国</div>
+        <div class="text-slate-600 text-xs mt-1">⚠️ <strong>旧T2時代の案内・館内図は使えない</strong>。駅からの経路とチェックインカウンター位置を9月に現地確認する。</div>
+        <details class="fold mt-1">
+          <summary>ターミナル移転の経緯</summary>
+          <div class="fold-body">
+            <div>キャセイは2026/4/23にターミナル3へ移転済み（第1陣13社）。</div>
+            <div>旧ターミナル2は2026/6/9に閉鎖・2030年代半ばまで改修予定。</div>
+            <div>T3はコンコース 3H / 3J で、ワンワールド各社が集まる。</div>
+            <div>SkyLine延伸の可否も9月に確認する。</div>
+          </div>
+        </details>
+      </div>
+      <div class="border-l-4 border-slate-300 pl-4 py-2 rounded-r-md text-sm bg-slate-50/50">
+        <div class="font-semibold text-slate-500">🛋 FRAラウンジ — 未確定（9月にアップデート）</div>
+        <div class="text-slate-600 text-xs">キャセイはFRAに自社ラウンジが無く契約ラウンジを使用。<strong>どこかは未確定</strong>。村上（Sapphire）は約3時間あるので使えれば効く区間。9月の出張時に現地でアップデート予定。</div>
+      </div>
+      <div class="border-l-4 border-indigo-400 pl-4 py-2 rounded-r-md bg-indigo-50/30 text-sm">
+        <div class="text-sm text-slate-500 font-bold">13:40 ✈︎ CX288 FRA発（全員）</div>
+        <div class="font-semibold text-indigo-800">フランクフルト → 香港（HKG）</div>
+        <div class="text-sm text-slate-600">キャセイパシフィック航空 · 飛行 約11時間40分 · 深夜便（HKG到着は翌10/25 07:20）</div>
+      </div>
+      <div class="border-l-4 border-amber-400 pl-4 py-2 rounded-r-md bg-amber-50/40 text-sm">
+        <div class="text-amber-700 font-bold text-xs">✅ 選定済み（未購入・総移動 約17時間30分）</div>
+        <div class="text-slate-600 text-xs">HKG乗継 2時間15分 — セントレア（NGO）到着は10/25 14:10 ｜ 運賃は手配中</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Day 9: 10/25 セントレア帰着 -->
+  <div id="day-1025" class="day-card bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-indigo-500 text-white px-5 py-4 font-bold text-lg flex items-center gap-2">
+      <span>10/25（日）</span><span class="text-base font-normal text-indigo-200">セントレア 帰着 🎉</span>
+    </div>
+    <div class="p-4 space-y-3">
+      <div class="border-l-4 border-indigo-300 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-sm text-slate-500">07:20</div>
+        <div class="font-semibold">✈︎ HKG 着</div>
+        <div class="text-sm text-slate-600">乗継 2時間15分 · <a href="https://maps.google.com/?q=Hong+Kong+International+Airport" target="_blank" class="text-indigo-600 underline">📍 香港国際空港</a></div>
+      </div>
+      <div class="border-l-4 border-amber-400 pl-4 py-2 rounded-r-md text-sm bg-amber-50/40">
+        <div class="font-semibold">⏱ 乗継2時間15分 — まず搭乗ゲートを確認</div>
+        <div class="text-slate-600 text-xs">セキュリティ再検査と液体物の追加検査があり、<strong>搭乗ゲートのコンコースは搭乗券が出るまで分からない</strong>。ラウンジは<strong>同伴1名まで＝3名のうち1名が入れない</strong>ので、分かれるより3名で店に入る方が無駄がない。<br>⚠️ <strong>土産は往路（10/17・10/18の夜）に済ませておく</strong>。復路の早朝は開いていない店がある。</div>
+        <details class="fold mt-1">
+          <summary>コンコース間の移動時間・早朝の営業状況</summary>
+          <div class="fold-body">
+            <div><strong>移動</strong>: Midfield Concourse なら地下のAPMで約2.5分、T1 Satellite Concourse なら Sky Bridge を徒歩5〜10分（動く歩道あり）。<strong>Terminal 2 は乗継には無関係</strong>（チェックイン・出発処理専用でゲートが無い）。</div>
+            <div><strong>早朝に開いている店</strong>: フードコートや免税店は開店07〜08時が多く、07:20着だと閉まっている可能性がある。確実なのは Gate 10〜11付近 Level 6 の Men Wah Bing Teng・McDonald's（<strong>24時間</strong>）と Plaza Premium（Gate 60・Gate 1 が24時間）。Plaza Premium First は West Hall 06:00〜／East Hall 06:30〜。</div>
+            <div>村上はSapphireでビジネスクラスラウンジ可（営業時間は未確認）。無料シャワーは L5 の Gate 12付近 / Gate 43付近で24時間。</div>
+          </div>
+        </details>
+      </div>
+      <div class="border-l-4 border-indigo-400 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-sm text-slate-500">09:35</div>
+        <div class="font-semibold">✈︎ CX536 HKG発</div>
+      </div>
+      <div class="border-l-4 border-indigo-400 pl-4 py-2 rounded-r-md bg-indigo-50/30 text-sm">
+        <div class="text-sm text-slate-500 font-bold">14:10</div>
+        <div class="font-semibold text-indigo-800">✈︎ 中部国際空港（セントレア）着陸（全員）</div>
+        <div class="text-sm text-slate-600">入国審査 / 税関 / 手荷物受取<br>
+          <a href="https://maps.google.com/?q=Chubu+Centrair+International+Airport+NGO" target="_blank" class="text-indigo-600 underline text-xs">📍 セントレア（NGO）</a>
+        </div>
+      </div>
+      <div class="border-l-4 border-green-300 pl-4 py-2 rounded-r-md text-sm">
+        <div class="text-sm text-slate-500">午後〜</div>
+        <div class="font-semibold">🏠 解散・帰宅</div>
+        <div class="text-sm text-slate-600">入国後、各自帰宅　<span class="text-xs text-slate-500">15:00頃 空港駅発（名鉄ミュースカイ 約28分）→ 名古屋駅で新幹線乗換 → 16:45頃 京都駅着（目安）</span></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /max-w -->
+</div><!-- /tab-itinerary -->
+
+
+<!-- ===== TAB: 準備 ===== -->
+<div id="tab-prep" class="tab-content">
+  <div class="prep-related no-print"><button type="button" onclick="switchTab('docs')"><strong>📁 書類を開く</strong><span>チケット・予約・公式リンク</span></button></div>
+<div class="max-w-2xl mx-auto px-4 py-4 space-y-4">
+
+  <!-- チェックリスト -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-gray-700 text-white px-5 py-3 font-bold flex items-center justify-between">
+      <span>✅ 出発前チェックリスト</span>
+      <span id="check-progress" class="text-sm font-normal text-gray-300">0/25</span>
+    </div>
+    <div id="checklist-body" class="p-4 space-y-2"></div>
+  </div>
+
+  <!-- ホテル予約状況 -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-gray-700 text-white px-5 py-3 font-bold text-base">🏨 ホテル予約状況</div>
+    <div class="p-4 space-y-3">
+
+      <div class="checkin-box" style="background: #dcfce7;">
+        <span class="text-2xl">✅</span>
+        <div>
+          <div class="font-bold text-green-800">Holiday Inn Express Amsterdam - Sloterdijk Station</div>
+          <div class="text-sm text-green-700">【予約済み】 10/18–10/20（2泊）· 村上1室のみ</div>
+          <div class="text-xs text-slate-600 mt-1">Zaventemweg 3, 1043 EH Amsterdam。Schiphol⇄Sloterdijk駅はNS直通約8〜10分、RAIまではメトロ50系統で約25〜28分。10/18早朝06:55着のため通常チェックインまでフロント荷物預け想定</div>
+        </div>
+      </div>
+
+      <div class="checkin-box" style="background: #dcfce7;">
+        <span class="text-2xl">✅</span>
+        <div>
+          <div class="font-bold text-green-800">Hotel FREIgeist Göttingen Innenstadt</div>
+          <div class="text-sm text-green-700">【予約済み】 美馬・金築: 10/19–10/23（4泊・先着）· 村上: 10/20–10/23（3泊・到着20時25分頃）</div>
+          <div class="text-xs text-slate-600 mt-1">Berliner Strasse 30, 37073 Göttingen（中央駅から徒歩約3〜5分）。村上のレイトチェックイン可否は要確認。<strong>朝食は付いていない</strong>ため、朝は駅周辺のスーパー／ベーカリーで調達</div>
+        </div>
+      </div>
+
+      <div class="checkin-box" style="background: #dcfce7;">
+        <span class="text-2xl">✅</span>
+        <div>
+          <div class="font-bold text-green-800">Toyoko Inn Frankfurt am Main Hauptbahnhof</div>
+          <div class="text-sm text-green-700">【予約済み】 10/23–10/24（1泊）· 全員</div>
+          <div class="text-xs text-slate-600 mt-1">Stuttgarter Straße 35, 60329 Frankfurt am Main（中央駅南口から徒歩約2分）。<strong>無料朝食あり</strong>（ビュッフェ／平日 6:30〜9:30・土日祝 7:00〜10:00）。チェックアウト10:00</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 航空券状況 -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-gray-700 text-white px-5 py-3 font-bold text-base">✈︎ 航空券手配状況</div>
+    <div class="p-4">
+      <p class="transport-status-note">ここは購入状況だけを確認する欄です。発着日時・便・所要時間は「家族 → フライト情報」に同じ順序で表示しています。</p>
+      <table class="transport-table status-only-table">
+        <thead><tr><th>対象</th><th>便</th><th>状況</th><th>見積</th></tr></thead>
+        <tbody>
+          <tr style="background:#fef9c3"><td>村上</td><td>CX539 / CX271 / CX288 / CX536</td><td class="risk-mid font-bold">見積取得・未購入</td><td>337,040円</td></tr>
+          <tr style="background:#fef9c3"><td>美馬・金築</td><td>CX539 / CX289 / CX288 / CX536</td><td class="risk-mid font-bold">選定済み・未購入<br><small>予約クラス未確認</small></td><td>約670,920円／2名</td></tr>
+          <tr style="background:#fef9c3"><td>村上</td><td>KL1791</td><td class="risk-mid font-bold">見積取得・未購入</td><td>82,660円</td></tr>
+        </tbody>
+      </table>
+      <div class="mt-3 text-sm text-amber-700 bg-amber-50 rounded p-2 border border-amber-200">⚠️ 村上分はCX往復とKL1791の見積を取得済み。美馬・金築分を含め、航空券はすべて未購入です。</div>
+    </div>
+  </div>
+
+  <!-- ラウンジ利用可否 -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-gray-700 text-white px-5 py-3 font-bold text-base">🛋 ラウンジ利用可否</div>
+    <div class="p-4">
+      <table class="transport-table">
+        <thead>
+          <tr><th>区間・空港</th><th>対象</th><th>使えるラウンジ</th><th>状況</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>10/17 セントレア出発</td><td>村上</td><td>JALサクララウンジ（国際線・制限エリア内2階）</td>
+            <td>✅ 利用可（Sapphire・約2時間半）。搭乗券と会員証の提示が必要</td>
+          </tr>
+          <tr>
+            <td>10/17 HKG乗継 3時間45分</td><td>村上</td><td>キャセイ ビジネスクラスラウンジ（The Wing / The Pier / The Deck / The Bridge）</td>
+            <td>✅ 利用可（Sapphire）。ファーストクラスラウンジは対象外</td>
+          </tr>
+          <tr style="background:#fef9c3">
+            <td>10/18 セントレア出発</td><td>美馬・金築</td><td>カードラウンジ（出国審査前）/ プラザ・プレミアム・ラウンジ名古屋（有料）</td>
+            <td>利用不可：JALサクララウンジ。美馬・金築が対象のゴールドカード以上を持っている場合のみ、出国審査前のカードラウンジを無料で利用できる</td>
+          </tr>
+          <tr style="background:#fef9c3">
+            <td>10/18 HKG乗継 4時間25分</td><td>美馬・金築</td><td>—</td>
+            <td>❌ 利用不可。ターミナル内で夕食をとって過ごす</td>
+          </tr>
+          <tr style="background:#fef9c3">
+            <td>10/24 FRA出発（10:40空港着・約3時間）<br><span class="text-xs text-slate-500">ターミナル3（キャセイは2026/4移転済み）</span></td><td>全員</td><td>未確定</td>
+            <td>⚠️ 契約ラウンジがどこか未確定。2026年9月の出張時に現地でアップデート予定</td>
+          </tr>
+          <tr>
+            <td>10/25 HKG乗継 2時間15分</td><td>村上＋同伴1名</td><td>キャセイ ビジネスクラスラウンジ</td>
+            <td>✅ 村上は利用可（Sapphire）。<strong>同伴は1名まで</strong>なので美馬・金築のうち1名しか一緒に入れない</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mt-3 text-sm text-amber-700 bg-amber-50 rounded p-2 border border-amber-200">
+        <div>⚠️ oneworld Sapphire は搭乗クラスを問わずビジネスクラスラウンジに入れる（<strong>同伴1名まで</strong>）。<strong>ファーストクラスラウンジは対象外</strong>。</div>
+        <div class="mt-1">美馬・金築は<strong>ゴールドカード以上ならセントレアの出国審査前カードラウンジが無料</strong>。</div>
+        <div class="mt-1">FRAは<strong>T3移転済み</strong>で契約ラウンジが未確定 — 9月に現地確認。</div>
+        <details class="fold mt-1">
+          <summary>ラウンジ利用の詳細</summary>
+          <div class="fold-body">
+            <div>搭乗券と会員証の提示が必要。</div>
+            <div>利用は搭乗日当日または翌朝06:00前まで。</div>
+            <div>混雑時は入場制限あり。</div>
+            <div>旧T2は2026/6/9閉鎖。</div>
+          </div>
+        </details>
+      </div>
+
+      <details class="fold mt-3">
+        <summary>🇭🇰 香港（HKG）乗継の共通メモ — 無料シャワー・24時間営業・乗継の実務</summary>
+        <div class="fold-body">
+          <div>⚠️ <strong>キャセイ自社ラウンジ（The Wing / The Pier / The Deck / The Bridge）の営業時間は未確認</strong>（公式サイトにアクセスできず特定できなかった）。<strong>夜23時台・早朝7時台は閉まっている可能性がある</strong>ため、出発前にキャセイに確認するか、到着後にトランスファーデスクで開いているラウンジを聞く。</div>
+          <div>⭐ <strong>無料シャワー</strong>: Arrivals Level（L5）Gate 12付近 / Gate 43付近・<strong>24時間</strong>・タオルは自販機で購入。<strong>ラウンジの可否と無関係に全員が使える</strong>。</div>
+          <div><strong>24時間営業の飲食</strong>: Men Wah Bing Teng（香港式の茶餐廳）・McDonald's（Gate 10〜11付近 Level 6）。香港らしいものは Level 7 フードコート（Tasty Congee のお粥・雲呑麺、Duddell's の広東料理など）だが22〜23時台に閉まる可能性あり。</div>
+          <div><strong>有料ラウンジ</strong>: Plaza Premium は <strong>Gate 60 が24時間・HKD 250〜（最安）</strong>、Gate 1 が24時間・HKD 650〜。Plaza Premium First は West Hall 06:00〜／East Hall 06:30〜。</div>
+          <div><strong>乗継の実務</strong>: 通し便なので再チェックイン不要・手荷物スルー・入国不要。ただし<strong>セキュリティ再検査あり</strong>、<strong>液体物は乗継客向けの追加検査あり</strong>で時間がかかる。</div>
+          <div><strong>館内移動</strong>: T1本館⇄T1 Satellite は Sky Bridge を徒歩5〜10分、T1本館⇄Midfield は地下APMで約2.5分。<strong>Terminal 2 は乗継には無関係</strong>（チェックイン・出発処理専用でゲートが無い）。</div>
+          <div>無料Wi‑Fiあり。充電は<strong>英国式3ピン／USB — 変換アダプタが必要</strong>。無料のリクライニングエリアが Departures Level 6 の各ゲート付近にある（騒がしいので耳栓推奨）。</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- 予算概算 -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-gray-700 text-white px-5 py-3 font-bold text-base">💰 予算概算（3名合計）</div>
+    <div class="p-4">
+      <table class="transport-table">
+        <thead><tr><th>項目</th><th>金額</th><th>備考</th></tr></thead>
+        <tbody>
+          <tr style="background:#fef9c3"><td>航空券 CX（村上・往復・1名分）</td><td class="font-bold">337,040円</td><td class="risk-mid font-bold">見積取得・未購入（運賃217,600円＋空港諸税等111,740円＋発券手数料7,700円）</td></tr>
+          <tr style="background:#fef9c3"><td>航空券 CX（美馬・金築・往復2名）</td><td class="font-bold">約 670,920円</td><td class="risk-mid font-bold">選定済み・未購入（概算 323,460円/人）</td></tr>
+          <tr style="background:#fef9c3"><td>AMS→HAJ（村上・KL1791・1名分）</td><td class="font-bold">82,660円</td><td class="risk-mid font-bold">見積取得・未購入（運賃EUR 285.00＝53,200円換算＋空港諸税等21,760円＋発券手数料7,700円）</td></tr>
+          <tr><td>国内交通（京都⇄セントレア・3名往復）</td><td>約 36,000円</td><td>新幹線＋名鉄ミュースカイ・概算 12,000円/人</td></tr>
+          <tr><td>ホテル3拠点＋美馬・金築別泊分</td><td>未見積</td><td>3拠点とも予約済み。金額は要確認</td></tr>
+          <tr><td>TechExパス（村上）</td><td>€0（無償）</td><td class="font-bold text-green-700">✅ Gold Pass 取得済み（申請により無償付与・定価€1,399+VAT）</td></tr>
+          <tr><td>EuroBLECH入場（村上）</td><td>€0（無償）</td><td class="font-bold text-green-700">✅ ベッコフ経由で無料チケット発行済み</td></tr>
+          <tr><td>EuroBLECH入場（美馬）</td><td>実費（金額要確認）</td><td>すでに自身で購入済み。<strong>ベッコフ経由の無償枠より先に購入</strong>したため精算対象</td></tr>
+          <tr><td>EuroBLECH入場（金築）</td><td>€0（無償見込み）</td><td>ベッコフへ経由発行を連絡済み・発券待ち</td></tr>
+          <tr><td>Mercedes-Benz Werk Bremen 見学（3名分）</td><td>要確認</td><td>予約確定済み</td></tr>
+          <tr><td>鉄道・タクシー移動</td><td>概算未定</td><td>ICE・タクシー複数区間あり</td></tr>
+          <tr><td>食費・雑費</td><td>概算未定</td><td>&nbsp;</td></tr>
+          <tr style="background:#fef9c3"><td class="font-bold">合計</td><td class="font-bold text-amber-700">見積前</td><td>予約確定後に算出</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div><!-- /tab-prep -->
+
+
+<!-- ===== TAB: 書類 ===== -->
+<div id="tab-docs" class="tab-content">
+<div class="max-w-2xl mx-auto px-4 py-4 space-y-4">
+
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-gray-700 text-white px-5 py-3 font-bold text-base">📄 重要書類・リンク集</div>
+    <div class="p-4 space-y-3">
+      <div class="border border-blue-200 rounded-lg p-3 bg-blue-50">
+        <div class="font-bold text-blue-800 mb-2">✈︎ 航空券手配状況</div>
+        <div class="space-y-2 text-sm text-slate-600">
+          <div class="flex items-center justify-between border-b pb-2">
+            <span>CX539/CX271 NGO→AMS 10/17発（村上）</span>
+            <span class="text-xs bg-yellow-200 text-yellow-700 rounded px-2 py-0.5">見積取得・未購入</span>
+          </div>
+          <div class="flex items-center justify-between border-b pb-2">
+            <span>CX539/CX289 NGO→FRA 10/18発（美馬・金築）</span>
+            <span class="text-xs bg-yellow-200 text-yellow-700 rounded px-2 py-0.5">選定済み・未購入</span>
+          </div>
+          <div class="flex items-center justify-between border-b pb-2">
+            <span>KL1791 AMS→HAJ 10/20発（村上）</span>
+            <span class="text-xs bg-yellow-200 text-yellow-700 rounded px-2 py-0.5">見積取得・未購入</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>CX288/CX536 FRA→HKG→NGO 10/24発（全員・NGO着 10/25 14:10）</span>
+            <span class="text-xs bg-yellow-200 text-yellow-700 rounded px-2 py-0.5">選定済み・未購入</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-teal-200 rounded-lg p-3 bg-teal-50">
+        <div class="font-bold text-teal-800 mb-2">🏨 ホテル確認書</div>
+        <div class="space-y-2 text-sm text-slate-600">
+          <div class="flex items-center justify-between border-b pb-2">
+            <span>Holiday Inn Express Amsterdam - Sloterdijk Station（村上・10/18–20 2泊）</span>
+            <span class="text-xs bg-green-200 text-green-700 rounded px-2 py-0.5">予約済み</span>
+          </div>
+          <div class="flex items-center justify-between border-b pb-2">
+            <span>Hotel FREIgeist Göttingen Innenstadt（美馬・金築 10/19〜／村上 10/20〜）</span>
+            <span class="text-xs bg-green-200 text-green-700 rounded px-2 py-0.5">予約済み</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Toyoko Inn Frankfurt am Main Hauptbahnhof（全員）</span>
+            <span class="text-xs bg-green-200 text-green-700 rounded px-2 py-0.5">予約済み</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-slate-200 rounded-lg p-3 bg-slate-50">
+        <div class="font-bold text-slate-700 mb-2">🎫 イベントパス・見学予約</div>
+        <div class="space-y-2 text-sm text-slate-600">
+          <div class="flex items-center justify-between border-b pb-2">
+            <span>TechEx Europe <strong>Gold Pass</strong>（村上）</span>
+            <span class="text-xs bg-green-200 text-green-700 rounded px-2 py-0.5">取得済み（無償）</span>
+          </div>
+          <div class="flex items-center justify-between border-b pb-2">
+            <span>EuroBLECH 入場（村上）<span class="text-xs text-slate-400">ベッコフ経由</span></span>
+            <span class="text-xs bg-green-200 text-green-700 rounded px-2 py-0.5">無料発行済み</span>
+          </div>
+          <div class="flex items-center justify-between border-b pb-2">
+            <span>EuroBLECH 入場（美馬）<span class="text-xs text-slate-400">自身で購入</span></span>
+            <span class="text-xs bg-green-200 text-green-700 rounded px-2 py-0.5">購入済み</span>
+          </div>
+          <div class="flex items-center justify-between border-b pb-2">
+            <span>EuroBLECH 入場（金築）<span class="text-xs text-slate-400">ベッコフ経由</span></span>
+            <span class="text-xs bg-yellow-200 text-yellow-700 rounded px-2 py-0.5">連絡済み・発券待ち</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>Mercedes-Benz Werk Bremen 工場見学（10/22 12:45–14:00）</span>
+            <span class="text-xs bg-green-200 text-green-700 rounded px-2 py-0.5">予約確定</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-slate-200 rounded-lg p-3">
+        <div class="font-bold text-slate-700 mb-2">📱 便利リンク</div>
+        <div class="space-y-2 text-sm">
+          <a href="https://www.bahn.de" target="_blank" class="flex items-center gap-2 text-blue-600 underline">
+            <i class="fas fa-train"></i> DB Navigator（ドイツ鉄道）
+          </a>
+          <a href="https://www.euroblech.com" target="_blank" class="flex items-center gap-2 text-blue-600 underline">
+            <i class="fas fa-industry"></i> EuroBLECH 公式サイト
+          </a>
+          <a href="https://techexevent.com/register-now/" target="_blank" class="flex items-center gap-2 text-blue-600 underline">
+            <i class="fas fa-laptop"></i> TechEx Europe 登録ページ
+          </a>
+          <a href="https://www.rai.nl" target="_blank" class="flex items-center gap-2 text-blue-600 underline">
+            <i class="fas fa-building"></i> RAI Amsterdam 公式サイト
+          </a>
+          <a href="https://www.mercedes-benz-werk-bremen.de" target="_blank" class="flex items-center gap-2 text-blue-600 underline">
+            <i class="fas fa-industry"></i> Mercedes-Benz Werk Bremen 公式サイト
+          </a>
+          <a href="https://www.cathaypacific.com" target="_blank" class="flex items-center gap-2 text-blue-600 underline">
+            <i class="fas fa-plane"></i> キャセイパシフィック航空（予約管理）
+          </a>
+          <a href="https://www.klm.com" target="_blank" class="flex items-center gap-2 text-blue-600 underline">
+            <i class="fas fa-plane"></i> KLMオランダ航空（予約管理）
+          </a>
+          <a href="https://www.hrs.com" target="_blank" class="flex items-center gap-2 text-blue-600 underline">
+            <i class="fas fa-hotel"></i> HRS ホテル予約（社内ポータル）
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /tab-docs -->
+
+
+<!-- ===== TAB: 会場 ===== -->
+<div id="tab-events" class="tab-content">
+<div class="max-w-2xl mx-auto px-4 py-4 space-y-4">
+
+  <!-- TechEx Europe -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-blue-600 text-white px-5 py-4">
+      <div class="font-bold text-lg">🏛 TechEx Europe 2026</div>
+      <div class="text-blue-200 text-sm mt-0.5">RAI Amsterdam · 10/19（月）– 10/20（火）· 村上のみ参加</div>
+      <div class="flex flex-wrap gap-2 mt-2">
+        <a href="https://maps.google.com/?q=RAI+Amsterdam+Convention+Centre" target="_blank"
+           class="inline-block text-xs bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-full transition-colors">
+          📍 RAI Amsterdam
+        </a>
+        <a href="https://techexevent.com" target="_blank"
+           class="inline-block text-xs bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-full transition-colors">
+          🌐 公式サイト
+        </a>
+      </div>
+    </div>
+    <div class="p-4 space-y-4">
+      <div class="border border-green-200 rounded-lg p-3 bg-green-50">
+        <div class="font-bold text-green-800 mb-1">🎫 パス：Gold Pass 取得済み（無償）</div>
+        <div class="text-sm text-slate-600">申請により <strong>Gold Pass</strong>（定価 €1,399+VAT）が無償で付与された。最大の価値は<strong>有料セッションに入場できる</strong>こと。</div>
+        <details class="fold mt-1">
+          <summary>特典の内訳と、含まれないもの</summary>
+          <div class="fold-body">
+            <div><strong>①有料セッションに入場可</strong> — Free枠は無料セッション＋Learning Hubのみ。これがFreeとの最大の差。</div>
+            <div><strong>②VIP networking drinks 参加可</strong>（10/19 18:00–21:00・Exhibition Floor）。Freeは対象外。</div>
+            <div><strong>③ネットワーキングアプリの上級機能</strong>。</div>
+            <div>Expo（200社超）と Meetup Zone は<strong>Freeでも入場可</strong>なのでGold固有の特典ではない。</div>
+            <div>⚠️ <strong>昼食・ケータリング・ラウンジはどのパスにも含まれない</strong>（公式サイト記載）。昼は自前で調達する前提。</div>
+          </div>
+        </details>
+      </div>
+      <!-- Day1 -->
+      <div>
+        <div class="font-bold text-blue-700 mb-2">📅 Day 1 — 10/19（月）Gold Track フル参加</div>
+        <div class="text-slate-600 text-xs mb-2">IoT Tech Expo『Industrial AI and Autonomous Operations』（<strong>Gold Track</strong> — Gold Pass専用）／製造現場・デジタルツイン・搬送ロボが主題 · 09:45開始–17:00終了</div>
+        <div class="space-y-2">
+          <div class="border-l-4 border-blue-500 pl-3 py-1 text-sm bg-blue-50/50 rounded-r">
+            <div class="font-semibold text-blue-900">10:35–11:20 Panel｜Connected Factories and Real-Time Operational Visibility ★</div>
+            <div class="text-slate-500 text-xs">Electrolux・Robert Bosch・Siemens・Holcim・Volvo Group</div>
+          </div>
+          <div class="border-l-4 border-blue-500 pl-3 py-1 text-sm bg-blue-50/50 rounded-r">
+            <div class="font-semibold text-blue-900">11:25–11:45 Robotics and MES Integration for High-Autonomy Manufacturing ★★</div>
+            <div class="text-slate-500 text-xs">OPC Foundation — MES×ロボット統合。制御・フィールドバスの関心に直結</div>
+          </div>
+          <div class="border-l-4 border-blue-500 pl-3 py-1 text-sm bg-blue-50/50 rounded-r">
+            <div class="font-semibold text-blue-900">12:25–12:45 The Next Generation Smart Factory: Trends & Opportunities ★</div>
+            <div class="text-slate-500 text-xs">Mustafa Aldemir, Head of AI (ArcelorMittal) — 鉄鋼＝板金の川上</div>
+          </div>
+          <div class="border-l-4 border-blue-500 pl-3 py-1 text-sm bg-blue-50/50 rounded-r">
+            <div class="font-semibold text-blue-900">12:50–13:10 Lean First, Tech Second – i4.0の教訓とAIで避けるべきこと ★</div>
+            <div class="text-slate-500 text-xs">Alexander Fuchs (BSH Group)</div>
+          </div>
+          <div class="border-l-4 border-blue-500 pl-3 py-1 text-sm bg-blue-50/50 rounded-r">
+            <div class="font-semibold text-blue-900">14:10–14:30 Fireside｜Operational Digital Twins for Real-Time Decision Making ★</div>
+            <div class="text-slate-500 text-xs">Audi Hungaria・BMW Group・Digital Twin Consortium(CTO)</div>
+          </div>
+          <div class="border-l-4 border-blue-500 pl-3 py-1 text-sm bg-blue-50/50 rounded-r">
+            <div class="font-semibold text-blue-900">15:50–16:10 Robots in the Flow: Redefining Supply Chain Agility ★</div>
+            <div class="text-slate-500 text-xs">Mohamed Fouda, Global Director of Robotics (DHL Supply Chain)</div>
+          </div>
+          <div class="border-l-4 border-blue-500 pl-3 py-1 text-sm bg-blue-50/50 rounded-r">
+            <div class="font-semibold text-blue-900">16:30–16:50 AI in supply chain & operations: Hype vs Implementation ★</div>
+            <div class="text-slate-500 text-xs">Renault Group</div>
+          </div>
+          <div class="border-l-4 border-purple-300 pl-3 py-1 text-sm bg-purple-50/30 rounded-r">
+            <div class="font-semibold">18:00–21:00 VIP Networking Drinks</div>
+            <div class="text-slate-500 text-xs">Exhibition Floor・Gold Pass特典</div>
+          </div>
+          <details class="fold mt-1">
+            <summary>その他のセッション（Opening / 休憩 / Lunch など）</summary>
+            <div class="fold-body">
+              <div>09:45–10:00 Chairperson's welcome</div>
+              <div>10:00–10:30 Beyond Automation: Building the Intelligent Factory of Tomorrow (Schneider Electric)</div>
+              <div>11:45–12:25 Networking Break（Expoフロア巡回に充てる）</div>
+              <div>13:10–14:10 Networking Lunch</div>
+              <div>14:35–14:55 Integrating Digital Twins with PLM, Engineering and Operations</div>
+              <div>15:00–15:20 The Connected Thread: Rolls-Royce サプライチェーンの living digital twin</div>
+              <div>15:20–15:50 Networking Break</div>
+              <div>16:15–16:25 Supply Chain Digitisation for Closed-Loop Autonomous Control</div>
+              <div>16:50–17:00 Chairperson's Closing Remarks</div>
+            </div>
+          </details>
+        </div>
+      </div>
+      <!-- Day2 -->
+      <div>
+        <div class="font-bold text-blue-700 mb-2">📅 Day 2 — 10/20（火）Physical AI ＋ 14:55退出</div>
+        <div class="text-slate-600 text-xs mb-2">Intelligent Automation & Robotics / Physical AI Expo『Physical AI』（<strong>Free Track</strong> — 無料枠のため Gold Pass 不要）。<strong>Gold Passの価値はDay1に集中している</strong> · 09:45開始–14:55退出</div>
+        <div class="space-y-2">
+          <div class="border-l-4 border-blue-500 pl-3 py-1 text-sm bg-blue-50/50 rounded-r">
+            <div class="font-semibold text-blue-900">10:00–10:40 Panel｜The Physical AI Stack — From Edge Devices to Autonomous Action ★</div>
+            <div class="text-slate-500 text-xs">Unitree Robotics・IBM・Back to Engineering</div>
+          </div>
+          <div class="border-l-4 border-blue-500 pl-3 py-1 text-sm bg-blue-50/50 rounded-r">
+            <div class="font-semibold text-blue-900">10:45–11:15 Physical AI in 2026 — from pilots to scaled fleets ★★</div>
+            <div class="text-slate-500 text-xs">Grzegorz Ombach, SVP (Airbus)</div>
+          </div>
+          <div class="border-l-4 border-blue-500 pl-3 py-1 text-sm bg-blue-50/50 rounded-r">
+            <div class="font-semibold text-blue-900">11:20–11:50 Fireside｜Accelerating Physical AI Through Open Innovation ★★</div>
+            <div class="text-slate-500 text-xs">Pepijn Kooijmans, LeRobot Lead (Hugging Face) — 旧アジェンダのPhilips回から差し替わった。ロボット基盤モデルのOSS（LeRobot）</div>
+          </div>
+          <div class="border-l-4 border-blue-500 pl-3 py-1 text-sm bg-blue-50/50 rounded-r">
+            <div class="font-semibold text-blue-900">12:55–13:15 From Intelligence to Action ★</div>
+            <div class="text-slate-500 text-xs">Jan Andreas Daske (Swisslog) — Day1のGoldトラックを優先するためこちらで回収</div>
+          </div>
+          <div class="border-l-4 border-amber-300 pl-3 py-1 text-sm bg-amber-50/40">
+            <div class="font-semibold text-amber-900">13:15–14:15 Lunch Break</div>
+            <div class="text-amber-700 text-xs">⚠️ この時間にクロークから荷物を引き取る（14:55にそのまま出られる状態にする）</div>
+          </div>
+          <div class="border-l-4 border-blue-500 pl-3 py-1 text-sm bg-blue-50/50 rounded-r">
+            <div class="font-semibold text-blue-900">14:15–14:55 Panel｜Robots, Autonomous Systems & the New Embodied Intelligence Stack ★★★</div>
+            <div class="text-slate-500 text-xs">Hugging Face・Unitree Robotics・Bavarian Univ.教授・Sifted編集者 — 最重要。ここまで聴いて退出</div>
+          </div>
+          <div class="border-l-4 border-slate-200 pl-3 py-1 text-sm">
+            <div class="font-semibold text-slate-400">15:00–15:30 The Economics of Physical AI</div>
+            <div class="text-slate-400 text-xs"><strong>フライトに間に合わないため聴かない</strong></div>
+          </div>
+          <details class="fold mt-1">
+            <summary>その他のセッション（Opening / 休憩など）</summary>
+            <div class="fold-body">
+              <div>09:45–10:00 Chairperson's Opening (Pierre-Alexandre Balland, General Robotics 共同創業者)</div>
+              <div>11:50–12:20 Networking Break</div>
+              <div>12:20–12:50 Operating at fleet scale — orchestration, routing (A.P. Moller Maersk)</div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EuroBLECH -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-teal-600 text-white px-5 py-4">
+      <div class="font-bold text-lg">🏭 EuroBLECH 2026</div>
+      <div class="text-teal-200 text-sm mt-0.5">Hannover Messe · 10/20（火）– 10/23（金）· 全員参加</div>
+      <div class="flex flex-wrap gap-2 mt-2">
+        <a href="https://maps.google.com/?q=Hannover+Messe+Messegelaende+Hannover" target="_blank"
+           class="inline-block text-xs bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-full transition-colors">
+          📍 ハノーファーメッセ
+        </a>
+        <a href="https://www.euroblech.com" target="_blank"
+           class="inline-block text-xs bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-full transition-colors">
+          🌐 公式サイト
+        </a>
+      </div>
+    </div>
+    <div class="p-4 space-y-4">
+      <div class="border border-green-200 rounded-lg p-3 bg-green-50">
+        <div class="font-bold text-green-800 mb-1">🎫 入場券：ベッコフ経由で無料発行</div>
+        <div class="text-sm text-slate-600">村上は<strong>ベッコフ（Beckhoff）経由で無料チケットを発行済み</strong>。金築も同経由で発行を依頼・連絡済み（発券待ち）。美馬は<strong>依頼前に自身で購入済み</strong>のため、領収書を精算用に保管する。
+          <span class="text-xs text-slate-500 block mt-1">Eチケットは入場時に提示。当日はスマホ表示だけに頼らず印刷も持つと安心（会場Wi‑Fiが混みやすい）。</span>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-teal-700 mb-2">👥 担当割り</div>
+        <div class="space-y-2 text-sm">
+          <div class="border-l-4 border-teal-400 pl-3 py-1">
+            <div class="font-semibold">10/20（火）— 美馬・金築 のみ Day 1</div>
+            <div class="text-slate-600">美馬・金築が20日朝ハノーファーへ移動して参加（村上はTechEx Day2のため合流は翌21日）</div>
+          </div>
+          <div class="border-l-4 border-purple-300 pl-3 py-1">
+            <div class="font-semibold">10/21（水）— 全員フル参加</div>
+            <div class="text-slate-600">村上・美馬・金築 合流</div>
+          </div>
+          <div class="border-l-4 border-slate-300 pl-3 py-1">
+            <div class="font-semibold">10/22（木）— 全員でBremen工場見学（日帰り）</div>
+          </div>
+          <div class="border-l-4 border-teal-300 pl-3 py-1">
+            <div class="font-semibold">10/23（金）— 全員 最終スウィープ（午前のみ）</div>
+            <div class="text-slate-600">入場後は荷物をクロークへ → 午後フランクフルトへ出発</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 注目ブース（公式出展社リスト公開後に記入） -->
+      <div class="border border-dashed border-teal-300 rounded-lg p-3 bg-teal-50/30">
+        <div class="font-bold text-teal-700 mb-1">🎯 注目ブース・重点テーマ</div>
+        <div class="text-xs text-slate-500 mb-2">公式の出展社リスト／フロアマップ公開後（<strong>出発2週間前・10月上旬目安</strong>）に記入する。</div>
+        <details class="fold mt-1">
+          <summary>記入方針</summary>
+          <div class="fold-body">
+            <div>板金・レーザー・プレス・搬送・ロボット自動化など関心テーマ軸でリストアップし、重要度をマーキングして記入する。</div>
+          </div>
+        </details>
+        <div class="flex flex-wrap gap-1.5 mt-2">
+          <a href="https://www.euroblech.com/exhibitor-search/" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🔍 出展社検索（公式）</a>
+          <a href="https://www.euroblech.com/hall-plan/" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">🗺 フロアマップ（公式）</a>
+        </div>
+        <div class="border border-dashed border-slate-300 rounded p-2 text-xs text-slate-400 mt-2">✍️ 注目ブース（記入欄）：</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mercedes-Benz Werk Bremen -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-slate-600 text-white px-5 py-4">
+      <div class="font-bold text-lg">🏭 Mercedes-Benz Werk Bremen</div>
+      <div class="text-slate-300 text-sm mt-0.5">10/22（木）12:45–14:00 · 全員参加・予約確定済み</div>
+      <div class="flex flex-wrap gap-2 mt-2">
+        <a href="https://maps.google.com/?q=Mercedes-Benz+Werk+Bremen" target="_blank"
+           class="inline-block text-xs bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-full transition-colors">
+          📍 Mercedes-Benz Werk Bremen
+        </a>
+        <a href="https://www.mercedes-benz-werk-bremen.de" target="_blank"
+           class="inline-block text-xs bg-white/20 hover:bg-white/30 text-white px-3 py-1 rounded-full transition-colors">
+          🌐 公式サイト
+        </a>
+      </div>
+    </div>
+    <div class="p-4 text-sm text-slate-600">
+      ゲッティンゲンからICE直通で日帰り往復（各区間 約1時間35分〜2時間）。見学は12:45–14:00。3名分の見学枠は予約確定済み。
+    </div>
+  </div>
+
+  <!-- 食事・グルメ -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-orange-600 text-white px-5 py-4">
+      <div class="font-bold text-lg">🍽 食事・グルメ候補</div>
+      <div class="text-orange-100 text-sm mt-0.5">都市別の食事エリア。気になる店は「候補メモ」に書き込み</div>
+    </div>
+    <div class="p-4 space-y-4">
+
+      <!-- 共通メモ -->
+      <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800 space-y-1">
+        <div>🕗 独・蘭は<strong>夜の営業が早め（L.O. 21〜22時頃）・日曜休が多い</strong>。到着夜は事前に開店確認を。</div>
+        <div>💳 現金のみの店もあるため <strong>現金（EUR）とVISA/Mastercard</strong> を用意。人気店は予約推奨。</div>
+      </div>
+
+      <!-- アムステルダム -->
+      <div>
+        <div class="font-bold text-blue-700 mb-2">🇳🇱 アムステルダム（村上・10/18–20）</div>
+        <div class="space-y-2 text-sm">
+          <div class="border-l-4 border-blue-300 pl-3 py-1">
+            <div class="font-semibold">ホテル周辺（Sloterdijk / 市中心部）</div>
+            <div class="text-slate-500 text-xs">オランダ料理・カフェ・多国籍。到着日夜はホテル近くで軽めに。</div>
+            <div class="text-slate-500 text-xs mt-1"><strong>TechEx中の昼</strong>：朝アムステルダムのスーパー（Albert Heijn等）で調達したパンが基本。</div>
+            <details class="fold mt-1">
+              <summary>この日の食事メモ</summary>
+              <div class="fold-body">
+                <div>RAI館内フードは混雑・割高なので、broodje（サンドイッチ）やkroket（コロッケ）は小腹がすいたときに。</div>
+                <div>※Gold Passに昼食は含まれないため、調達は2日間とも必要。</div>
+              </div>
+            </details>
+            <div class="flex flex-wrap gap-1.5 mt-1">
+              <a href="https://maps.google.com/?q=restaurants+near+Amsterdam+Sloterdijk" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 Sloterdijk周辺</a>
+              <a href="https://maps.google.com/?q=restaurants+near+RAI+Amsterdam" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 RAI会場周辺</a>
+            </div>
+          </div>
+          <div class="border border-dashed border-slate-300 rounded p-2 text-xs text-slate-400">✍️ 候補メモ：</div>
+        </div>
+      </div>
+
+      <!-- ゲッティンゲン -->
+      <div>
+        <div class="font-bold text-teal-700 mb-2">🇩🇪 ゲッティンゲン（全員の拠点・夕食3〜4泊）</div>
+        <div class="space-y-2 text-sm">
+          <div class="border-l-4 border-teal-300 pl-3 py-1">
+            <div class="font-semibold">中央駅〜旧市街（ホテルから徒歩圏）</div>
+            <div class="text-slate-500 text-xs">大学町で夜も比較的にぎやか。ドイツ料理・イタリアン・アジア系。連泊なので夕食の主戦場。</div>
+            <div class="flex flex-wrap gap-1.5 mt-1">
+              <a href="https://maps.google.com/?q=restaurants+Goettingen+Altstadt" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 旧市街</a>
+              <a href="https://maps.google.com/?q=restaurants+near+Goettingen+Hauptbahnhof" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 中央駅周辺</a>
+            </div>
+          </div>
+          <div class="border border-dashed border-slate-300 rounded p-2 text-xs text-slate-400">✍️ 候補メモ：</div>
+        </div>
+      </div>
+
+      <!-- ハノーファー -->
+      <div>
+        <div class="font-bold text-teal-700 mb-2">🇩🇪 ハノーファー（EuroBLECH会場・昼食）</div>
+        <div class="space-y-2 text-sm">
+          <div class="border-l-4 border-teal-300 pl-3 py-1">
+            <div class="font-semibold">メッセ会場内 / 中央駅周辺</div>
+            <div class="text-slate-500 text-xs">昼は<strong>朝ゲッティンゲンで調達したパンが基本</strong>。会場のフードスタンドは混雑・割高なので、ブラートヴルスト（Bratwurst・パン付き）などは小腹がすいたときに利用。</div>
+            <div class="flex flex-wrap gap-1.5 mt-1">
+              <a href="https://maps.google.com/?q=restaurants+near+Hannover+Messe" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 メッセ周辺</a>
+              <a href="https://maps.google.com/?q=restaurants+near+Hannover+Hauptbahnhof" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 中央駅周辺</a>
+            </div>
+          </div>
+          <div class="border border-dashed border-slate-300 rounded p-2 text-xs text-slate-400">✍️ 候補メモ：</div>
+        </div>
+      </div>
+
+      <!-- ブレーメン -->
+      <div>
+        <div class="font-bold text-slate-700 mb-2">🇩🇪 ブレーメン（10/22 工場見学の前後）</div>
+        <div class="space-y-2 text-sm">
+          <div class="border-l-4 border-slate-300 pl-3 py-1">
+            <div class="font-semibold">中央駅〜旧市街・マルクト広場</div>
+            <div class="text-slate-500 text-xs">見学後に昼食＋短時間観光。世界遺産の市庁舎・ローラント像周辺に飲食店。</div>
+            <div class="flex flex-wrap gap-1.5 mt-1">
+              <a href="https://maps.google.com/?q=restaurants+Bremen+Marktplatz" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 マルクト広場</a>
+              <a href="https://maps.google.com/?q=restaurants+near+Bremen+Hauptbahnhof" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 中央駅周辺</a>
+            </div>
+          </div>
+          <div class="border border-dashed border-slate-300 rounded p-2 text-xs text-slate-400">✍️ 候補メモ：</div>
+        </div>
+      </div>
+
+      <!-- フランクフルト -->
+      <div>
+        <div class="font-bold text-slate-700 mb-2">🇩🇪 フランクフルト（全員・最終夜 10/23）</div>
+        <div class="space-y-2 text-sm">
+          <div class="border-l-4 border-slate-300 pl-3 py-1">
+            <div class="font-semibold">中央駅周辺（ホテルから徒歩圏）</div>
+            <div class="text-slate-500 text-xs">最終夜。名物アップルワイン（Apfelwein）やドイツ料理も。翌朝は早いので近場で。</div>
+            <div class="flex flex-wrap gap-1.5 mt-1">
+              <a href="https://maps.google.com/?q=restaurants+near+Frankfurt+Hauptbahnhof" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 py-0.5 rounded">📍 中央駅周辺</a>
+            </div>
+          </div>
+          <div class="border border-dashed border-slate-300 rounded p-2 text-xs text-slate-400">✍️ 候補メモ：</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div><!-- /tab-events -->
+
+
+<!-- ===== TAB: 家族 ===== -->
+<div id="tab-family" class="tab-content">
+<div class="max-w-2xl mx-auto px-4 py-4 space-y-4">
+
+  <!-- サマリー -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-gray-700 text-white px-5 py-3 font-bold text-base">🌍 ヨーロッパ出張 — サマリー</div>
+    <div class="p-4">
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div class="bg-blue-50 text-blue-800 rounded-lg p-3 text-sm">
+          <div class="font-bold text-xs text-blue-500 mb-1">🇳🇱 オランダ</div>
+          <div class="font-bold">アムステルダム</div>
+          <div class="text-xs mt-1">10/18〜10/20（村上のみ）<br>TechEx Europe 2026<br>RAI Amsterdam</div>
+        </div>
+        <div class="bg-teal-50 text-teal-800 rounded-lg p-3 text-sm">
+          <div class="font-bold text-xs text-teal-500 mb-1">🇩🇪 ドイツ</div>
+          <div class="font-bold">ゲッティンゲン / ハノーファー / ブレーメン / Wolfsburg</div>
+          <div class="text-xs mt-1">10/19〜10/24（美馬・金築先着）<br>EuroBLECH 2026 + Mercedes工場見学 + Autostadt（美馬・金築のみ・10/19）</div>
+        </div>
+      </div>
+      <div class="bg-slate-50 rounded-lg p-3 text-sm">
+        <div class="grid grid-cols-3 gap-2 text-center">
+          <div><div class="font-bold text-slate-700">出発</div><div class="text-xs text-slate-500">村上 10/17 (土)<br>美馬・金築 10/18 (日)<br>セントレア発（往路は別便）</div></div>
+          <div><div class="font-bold text-slate-700">期間</div><div class="text-xs text-slate-500">村上9日間 / 美馬・金築8日間<br>3名出張</div></div>
+          <div><div class="font-bold text-slate-700">帰着</div><div class="text-xs text-slate-500">10/25 (日)<br>セントレア 14:10（全員同便）</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 時差情報（先に確認） -->
+  <section class="timezone-early">
+    <div class="family-section-head">🕐 現地時刻の見方</div>
+    <div class="timezone-body">
+      <p class="timezone-lead"><strong>フライト・鉄道・イベントの時刻は、すべてその場所の現地時刻です。</strong></p>
+      <div class="timezone-cards">
+        <div class="timezone-card zone-japan"><span>🇯🇵 日本</span><strong>JST</strong><b>UTC+9</b><small>基準</small></div>
+        <div class="timezone-card zone-europe"><span>🇳🇱🇩🇪 欧州</span><strong>CEST</strong><b>UTC+2</b><small>日本より7時間遅い</small></div>
+        <div class="timezone-card zone-hongkong"><span>🇭🇰 香港</span><strong>HKT</strong><b>UTC+8</b><small>日本より1時間遅い</small></div>
+      </div>
+      <div class="timezone-contact">
+        <strong>日本から連絡しやすい時間</strong>
+        <span>日本 17:00–20:00<br>＝ 欧州 10:00–13:00</span>
+        <span>日本 22:00–24:00<br>＝ 欧州 15:00–17:00</span>
+      </div>
+      <p class="timezone-note">10/25（日）未明に欧州夏時間が終了。今回の欧州内予定は10/24の出発まで <b>CEST</b> で読みます。</p>
+    </div>
+  </section>
+
+  <!-- フライト情報 -->
+  <section class="family-flights">
+    <div class="family-section-head">✈︎ フライト情報</div>
+    <div class="flight-body">
+      <div class="timezone-guide"><strong>各空港の現地時刻で表示</strong><span>JST / HKT / CEST は上の時差表を参照</span></div>
+      <div class="flight-spec-guide"><strong>便名の下：</strong>予約クラス ／ キャビンクラス ／ 所要時間</div>
+      <div class="carrier-guide"><strong>CX</strong> キャセイパシフィック航空 <span>／</span> <strong>KL</strong> KLMオランダ航空</div>
+
+      <article class="flight-card flight-murakami">
+        <header class="flight-card-head">
+          <div><span class="flight-label">往路 1</span><h3>村上：日本 → アムステルダム</h3></div>
+          <span class="flight-status">見積取得・未購入</span>
+        </header>
+        <div class="flight-leg">
+          <div class="flight-point depart">
+            <span class="point-label">出発</span>
+            <time datetime="2026-10-17T16:10:00+09:00"><span class="flight-date">10/17（土）</span><strong>16:10</strong><em>JST</em></time>
+            <a href="https://maps.google.com/?q=Chubu+Centrair+International+Airport+NGO" target="_blank" rel="noopener">セントレア <b>NGO</b></a>
+          </div>
+          <div class="flight-route"><strong>CX539</strong><span>✈︎</span><small>予約クラス B<br>エコノミー<br>所要 4時間20分</small></div>
+          <div class="flight-point arrive">
+            <span class="point-label">到着</span>
+            <time datetime="2026-10-17T19:30:00+08:00"><span class="flight-date">10/17（土）</span><strong>19:30</strong><em>HKT</em></time>
+            <a href="https://maps.google.com/?q=Hong+Kong+International+Airport" target="_blank" rel="noopener">香港 <b>HKG</b></a>
+          </div>
+        </div>
+        <div class="layover"><span>乗り換え</span><strong>香港 3時間45分</strong><small>同日中に次便へ</small></div>
+        <div class="flight-leg">
+          <div class="flight-point depart">
+            <span class="point-label">出発</span>
+            <time datetime="2026-10-17T23:15:00+08:00"><span class="flight-date">10/17（土）</span><strong>23:15</strong><em>HKT</em></time>
+            <a href="https://maps.google.com/?q=Hong+Kong+International+Airport" target="_blank" rel="noopener">香港 <b>HKG</b></a>
+          </div>
+          <div class="flight-route"><strong>CX271</strong><span>✈︎</span><small>予約クラス B<br>エコノミー<br>所要 13時間40分</small></div>
+          <div class="flight-point arrive">
+            <span class="point-label">到着</span>
+            <time datetime="2026-10-18T06:55:00+02:00"><span class="flight-date">10/18（日）</span><strong>06:55</strong><em>CEST</em></time>
+            <a href="https://maps.google.com/?q=Amsterdam+Airport+Schiphol+AMS" target="_blank" rel="noopener">Amsterdam <b>AMS</b></a>
+          </div>
+        </div>
+        <footer>総移動 約21時間45分</footer>
+      </article>
+
+      <article class="flight-card flight-team">
+        <header class="flight-card-head">
+          <div><span class="flight-label">往路 2</span><h3>美馬・金築：日本 → フランクフルト</h3></div>
+          <span class="flight-status">選定済み・未購入</span>
+        </header>
+        <div class="flight-leg">
+          <div class="flight-point depart">
+            <span class="point-label">出発</span>
+            <time datetime="2026-10-18T16:10:00+09:00"><span class="flight-date">10/18（日）</span><strong>16:10</strong><em>JST</em></time>
+            <a href="https://maps.google.com/?q=Chubu+Centrair+International+Airport+NGO" target="_blank" rel="noopener">セントレア <b>NGO</b></a>
+          </div>
+          <div class="flight-route"><strong>CX539</strong><span>✈︎</span><small>予約クラス未確認<br>エコノミー<br>所要 4時間20分</small></div>
+          <div class="flight-point arrive">
+            <span class="point-label">到着</span>
+            <time datetime="2026-10-18T19:30:00+08:00"><span class="flight-date">10/18（日）</span><strong>19:30</strong><em>HKT</em></time>
+            <a href="https://maps.google.com/?q=Hong+Kong+International+Airport" target="_blank" rel="noopener">香港 <b>HKG</b></a>
+          </div>
+        </div>
+        <div class="layover"><span>乗り換え</span><strong>香港 4時間25分</strong><small>同日中に次便へ</small></div>
+        <div class="flight-leg">
+          <div class="flight-point depart">
+            <span class="point-label">出発</span>
+            <time datetime="2026-10-18T23:55:00+08:00"><span class="flight-date">10/18（日）</span><strong>23:55</strong><em>HKT</em></time>
+            <a href="https://maps.google.com/?q=Hong+Kong+International+Airport" target="_blank" rel="noopener">香港 <b>HKG</b></a>
+          </div>
+          <div class="flight-route"><strong>CX289</strong><span>✈︎</span><small>予約クラス未確認<br>エコノミー<br>所要 13時間20分</small></div>
+          <div class="flight-point arrive">
+            <span class="point-label">到着</span>
+            <time datetime="2026-10-19T07:15:00+02:00"><span class="flight-date">10/19（月）</span><strong>07:15</strong><em>CEST</em></time>
+            <a href="https://maps.google.com/?q=Frankfurt+Airport+FRA" target="_blank" rel="noopener">Frankfurt <b>FRA</b></a>
+          </div>
+        </div>
+        <footer>総移動 約22時間5分</footer>
+      </article>
+
+      <article class="flight-card flight-europe">
+        <header class="flight-card-head">
+          <div><span class="flight-label">欧州内</span><h3>村上：アムステルダム → ハノーファー</h3></div>
+          <span class="flight-status">見積取得・未購入</span>
+        </header>
+        <div class="flight-leg">
+          <div class="flight-point depart">
+            <span class="point-label">出発</span>
+            <time datetime="2026-10-20T16:50:00+02:00"><span class="flight-date">10/20（火）</span><strong>16:50</strong><em>CEST</em></time>
+            <a href="https://maps.google.com/?q=Amsterdam+Airport+Schiphol+AMS" target="_blank" rel="noopener">Amsterdam <b>AMS</b></a>
+          </div>
+          <div class="flight-route"><strong>KL1791</strong><span>✈︎</span><small>予約クラス L<br>エコノミー<br>所要 55分</small></div>
+          <div class="flight-point arrive">
+            <span class="point-label">到着</span>
+            <time datetime="2026-10-20T17:45:00+02:00"><span class="flight-date">10/20（火）</span><strong>17:45</strong><em>CEST</em></time>
+            <a href="https://maps.google.com/?q=Hannover+Airport+HAJ" target="_blank" rel="noopener">Hannover <b>HAJ</b></a>
+          </div>
+        </div>
+        <footer>KLM Cityhopper・直行便</footer>
+      </article>
+
+      <article class="flight-card flight-return">
+        <header class="flight-card-head">
+          <div><span class="flight-label">復路</span><h3>全員：フランクフルト → 日本</h3></div>
+          <span class="flight-status">村上分見積・未購入</span>
+        </header>
+        <div class="flight-leg">
+          <div class="flight-point depart">
+            <span class="point-label">出発</span>
+            <time datetime="2026-10-24T13:40:00+02:00"><span class="flight-date">10/24（土）</span><strong>13:40</strong><em>CEST</em></time>
+            <a href="https://maps.google.com/?q=Frankfurt+Airport+FRA" target="_blank" rel="noopener">Frankfurt <b>FRA</b></a>
+          </div>
+          <div class="flight-route"><strong>CX288</strong><span>✈︎</span><small>村上：予約クラス H<br>美馬・金築：未確認<br>エコノミー・所要 11時間40分</small></div>
+          <div class="flight-point arrive">
+            <span class="point-label">到着</span>
+            <time datetime="2026-10-25T07:20:00+08:00"><span class="flight-date">10/25（日）</span><strong>07:20</strong><em>HKT</em></time>
+            <a href="https://maps.google.com/?q=Hong+Kong+International+Airport" target="_blank" rel="noopener">香港 <b>HKG</b></a>
+          </div>
+        </div>
+        <div class="layover"><span>乗り換え</span><strong>香港 2時間15分</strong><small>同日中に次便へ</small></div>
+        <div class="flight-leg">
+          <div class="flight-point depart">
+            <span class="point-label">出発</span>
+            <time datetime="2026-10-25T09:35:00+08:00"><span class="flight-date">10/25（日）</span><strong>09:35</strong><em>HKT</em></time>
+            <a href="https://maps.google.com/?q=Hong+Kong+International+Airport" target="_blank" rel="noopener">香港 <b>HKG</b></a>
+          </div>
+          <div class="flight-route"><strong>CX536</strong><span>✈︎</span><small>村上：予約クラス H<br>美馬・金築：未確認<br>エコノミー・所要 3時間35分</small></div>
+          <div class="flight-point arrive">
+            <span class="point-label">到着</span>
+            <time datetime="2026-10-25T14:10:00+09:00"><span class="flight-date">10/25（日）</span><strong>14:10</strong><em>JST</em></time>
+            <a href="https://maps.google.com/?q=Chubu+Centrair+International+Airport+NGO" target="_blank" rel="noopener">セントレア <b>NGO</b></a>
+          </div>
+        </div>
+        <footer>総移動 約17時間30分・全員同便。予約クラスと運賃は村上の見積内容</footer>
+      </article>
+
+      <section class="flight-fares" aria-labelledby="flight-fares-title">
+        <header>
+          <div><span>航空券見積</span><h3 id="flight-fares-title">村上・1名分</h3></div>
+          <strong>合計 419,700円</strong>
+        </header>
+        <div class="fare-card">
+          <div class="fare-title"><strong>CX 往復</strong><span>NGO → HKG → AMS ／ FRA → HKG → NGO</span></div>
+          <dl><div><dt>運賃</dt><dd>217,600円</dd></div><div><dt>空港諸税等</dt><dd>111,740円</dd></div><div><dt>発券手数料</dt><dd>7,700円</dd></div><div class="fare-total"><dt>合計</dt><dd>337,040円</dd></div></dl>
+        </div>
+        <div class="fare-card">
+          <div class="fare-title"><strong>KL1791</strong><span>AMS → HAJ</span></div>
+          <dl><div><dt>運賃</dt><dd>EUR 285.00<br><small>53,200円換算</small></dd></div><div><dt>空港諸税等</dt><dd>21,760円</dd></div><div><dt>発券手数料</dt><dd>7,700円</dd></div><div class="fare-total"><dt>合計</dt><dd>82,660円</dd></div></dl>
+        </div>
+        <p>未購入。円換算額は見積時点のレートで、発券時に変動する場合があります。</p>
+      </section>
+    </div>
+  </section>
+
+  <!-- 宿泊先情報 -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-gray-700 text-white px-5 py-3 font-bold text-base">🏨 宿泊先情報（3名）</div>
+    <div class="p-4 space-y-3">
+
+      <!-- Amsterdam -->
+      <div class="border border-blue-200 rounded pl-4 py-3 bg-blue-50">
+        <div class="flex justify-between items-start mb-2">
+          <div class="font-bold text-blue-900">🇳🇱 Holiday Inn Express Amsterdam - Sloterdijk Station</div>
+          <span class="text-xs text-white px-2 py-1 rounded shrink-0 ml-2" style="background: linear-gradient(to right, #1d4ed8, #0891b2);">10/18–10/20</span>
+        </div>
+        <div class="text-sm text-slate-700 space-y-0.5">
+          <div class="text-xs text-slate-600">村上 1室・2泊</div>
+          <div class="text-xs text-slate-500">Zaventemweg 3, 1043 EH Amsterdam。Schiphol⇄Sloterdijk駅はNS直通約8〜10分、RAIまではメトロ50系統で約25〜28分</div>
+        </div>
+        <div class="flex gap-2 mt-2">
+          <a href="https://maps.google.com/?q=Holiday+Inn+Express+Amsterdam+Sloterdijk+Station+Zaventemweg+3" target="_blank" class="text-xs bg-slate-700 text-white px-3 py-1 rounded hover:bg-slate-600">📍 地図で確認</a>
+        </div>
+      </div>
+
+      <!-- Göttingen -->
+      <div class="border border-teal-200 rounded pl-4 py-3 bg-teal-50">
+        <div class="flex justify-between items-start mb-2">
+          <div class="font-bold text-teal-900">🇩🇪 Hotel FREIgeist Göttingen Innenstadt</div>
+          <span class="text-xs text-white px-2 py-1 rounded shrink-0 ml-2" style="background: linear-gradient(to right, #0d9488, #0f766e);">10/19–10/23</span>
+        </div>
+        <div class="text-sm text-slate-700 space-y-0.5">
+          <div class="text-xs text-slate-600">美馬・金築: 10/19〜（4泊・先着） · 村上: 10/20〜（到着20時25分頃・3泊）</div>
+          <div class="text-xs text-slate-500">Berliner Strasse 30, 37073 Göttingen（中央駅から徒歩約3〜5分）。村上のレイトチェックイン可否は要確認。朝食は付いていないため朝は各自スーパー等で調達</div>
+        </div>
+        <div class="flex gap-2 mt-2">
+          <a href="https://maps.google.com/?q=FREIgeist+Goettingen+Innenstadt+Berliner+Strasse+30" target="_blank" class="text-xs bg-slate-700 text-white px-3 py-1 rounded hover:bg-slate-600">📍 地図で確認</a>
+        </div>
+      </div>
+
+      <!-- Frankfurt -->
+      <div class="border border-slate-200 rounded pl-4 py-3 bg-slate-50">
+        <div class="flex justify-between items-start mb-2">
+          <div class="font-bold text-slate-800">🇩🇪 Toyoko Inn Frankfurt am Main Hauptbahnhof</div>
+          <span class="text-xs text-white px-2 py-1 rounded shrink-0 ml-2" style="background: linear-gradient(to right, #475569, #334155);">10/23–10/24</span>
+        </div>
+        <div class="text-sm text-slate-700 space-y-0.5">
+          <div class="text-xs text-slate-600">全員・1泊</div>
+          <div class="text-xs text-slate-500">Stuttgarter Straße 35, 60329 Frankfurt am Main（中央駅南口から徒歩約2分）。無料朝食あり（ビュッフェ／平日 6:30〜9:30・土日祝 7:00〜10:00）。チェックアウト10:00</div>
+        </div>
+        <div class="flex gap-2 mt-2">
+          <a href="https://maps.google.com/?q=Toyoko+Inn+Frankfurt+am+Main+Hauptbahnhof+Stuttgarter+Strasse+35" target="_blank" class="text-xs bg-slate-700 text-white px-3 py-1 rounded hover:bg-slate-600">📍 地図で確認</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 緊急連絡先 -->
+  <div class="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden">
+    <div class="bg-gray-700 text-white px-5 py-3 font-bold text-base">🆘 緊急連絡先</div>
+    <div class="p-4 space-y-2 text-sm">
+      <div class="border-l-4 border-red-500 pl-3 py-2">
+        <div class="font-bold text-red-800">村上・美馬・金築 携帯（現地ローミング）</div>
+        <div class="text-slate-600">
+          <a href="tel:" class="underline text-blue-700">（渡航前に番号を記入）</a>
+        </div>
+      </div>
+      <div class="border-l-4 border-blue-400 pl-3 py-2">
+        <div class="font-bold text-slate-700">🇩🇪 在ドイツ日本国大使館</div>
+        <div class="text-slate-600">
+          Hiroshimastraße 6, 10785 Berlin<br>
+          <a href="tel:+493021094-0" class="underline text-blue-700">📞 +49 30 21094-0</a><br>
+          緊急時: <a href="tel:+493021094-222" class="underline text-blue-700">+49 30 21094-222</a><br>
+          <a href="https://maps.google.com/?q=Embassy+of+Japan+in+Germany+Berlin" target="_blank" class="underline text-blue-700 text-xs">📍 地図</a>
+        </div>
+      </div>
+      <div class="border-l-4 border-blue-300 pl-3 py-2">
+        <div class="font-bold text-slate-700">🇳🇱 在オランダ日本国大使館</div>
+        <div class="text-slate-600">
+          Tobias Asserlaan 2, 2517 KC Den Haag<br>
+          <a href="tel:+31703469544" class="underline text-blue-700">📞 +31 70 346-9544</a><br>
+          <a href="https://maps.google.com/?q=Embassy+of+Japan+in+the+Netherlands+Den+Haag" target="_blank" class="underline text-blue-700 text-xs">📍 地図</a>
+        </div>
+      </div>
+      <div class="border-l-4 border-slate-300 pl-3 py-2">
+        <div class="font-bold text-slate-700">🚑 欧州共通緊急番号</div>
+        <div class="text-slate-600">
+          警察・救急・消防 <a href="tel:112" class="underline text-blue-700 font-bold">112</a>（EU全土）
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 日程詳細（家族向け） -->
+  <section class="family-schedule">
+    <div class="family-section-head">📅 日程詳細（家族向け）</div>
+    <div class="schedule-body">
+      <div class="schedule-legend" aria-label="色の意味">
+        <strong>色の意味</strong>
+        <span class="schedule-tag kind-move">移動・フライト</span>
+        <span class="schedule-tag kind-techex">TechEx</span>
+        <span class="schedule-tag kind-euro">EuroBLECH</span>
+        <span class="schedule-tag kind-visit">工場・企業訪問</span>
+        <span class="schedule-tag kind-home">帰着</span>
+      </div>
+
+      <article class="family-day-row">
+        <header><strong>10/17</strong><span>土</span></header>
+        <section><h3>村上</h3>
+          <div class="agenda-line"><time>11:30頃</time><span class="schedule-tag kind-move">移動</span><p><b>出発：</b>10/17 11:30頃 JST 京都駅<br><b>交通：</b>のぞみ 約36分 → 名鉄ミュースカイ 約28分<br><b>到着：</b>10/17 13:03 JST 中部国際空港駅</p></div>
+          <div class="agenda-line"><time>16:10</time><span class="schedule-tag kind-move">フライト</span><p><b>出発：</b>10/17 16:10 JST セントレア NGO<br><b>便：</b>CX539・4時間20分 → 香港乗継3時間45分 → CX271・13時間40分<br><b>到着：</b>10/18 06:55 CEST Amsterdam AMS</p></div>
+        </section>
+        <section><h3>美馬・金築</h3><div class="agenda-empty">日本</div></section>
+        <aside><h3>宿泊</h3><p>機内泊<br><small>村上</small></p></aside>
+      </article>
+
+      <article class="family-day-row">
+        <header><strong>10/18</strong><span>日</span></header>
+        <section><h3>村上</h3>
+          <div class="agenda-line"><time>06:55</time><span class="schedule-tag kind-home">手続き</span><p>Amsterdam AMSで入国審査・荷物受取</p></div>
+          <div class="agenda-line"><time>日中</time><span class="schedule-tag kind-home">休息</span><p>ホテルへ荷物預け<br>時差調整</p></div>
+        </section>
+        <section><h3>美馬・金築</h3>
+          <div class="agenda-line"><time>11:30頃</time><span class="schedule-tag kind-move">移動</span><p><b>出発：</b>10/18 11:30頃 JST 京都駅<br><b>交通：</b>のぞみ 約36分 → 名鉄ミュースカイ 約28分<br><b>到着：</b>10/18 13:03 JST 中部国際空港駅</p></div>
+          <div class="agenda-line"><time>16:10</time><span class="schedule-tag kind-move">フライト</span><p><b>出発：</b>10/18 16:10 JST セントレア NGO<br><b>便：</b>CX539・4時間20分 → 香港乗継4時間25分 → CX289・13時間20分<br><b>到着：</b>10/19 07:15 CEST Frankfurt FRA</p></div>
+        </section>
+        <aside><h3>宿泊</h3><p>Holiday Inn Express Amsterdam -<br>Sloterdijk Station<br><small>村上</small></p><p>機内泊<br><small>美馬・金築</small></p></aside>
+      </article>
+
+      <article class="family-day-row">
+        <header><strong>10/19</strong><span>月</span></header>
+        <section><h3>村上</h3>
+          <div class="agenda-line"><time>終日</time><span class="schedule-tag kind-techex">TechEx</span><p>TechEx Europe<br>Day 1 フル参加</p></div>
+        </section>
+        <section><h3>美馬・金築</h3>
+          <div class="agenda-line"><time>07:15</time><span class="schedule-tag kind-home">手続き</span><p>Frankfurt FRAで入国審査・荷物受取</p></div>
+          <div class="agenda-line"><time>08:22</time><span class="schedule-tag kind-move">移動</span><p><b>出発：</b>10/19 08:22 CEST Frankfurt空港駅<br><b>列車：</b>RE2＋ICE774・2時間9分<br><b>到着：</b>10/19 10:31 CEST Göttingen Hbf</p></div>
+          <div class="agenda-line"><time>11:00頃</time><span class="schedule-tag kind-visit">見学</span><p><b>出発：</b>10/19 11:00頃 CEST Göttingen Hbf<br><b>列車：</b>ICE・約1時間15〜20分<br><b>到着：</b>10/19 12:20頃 CEST ヴォルフスブルク中央駅（Wolfsburg Hbf） → Autostadt</p></div>
+          <div class="agenda-line"><time>17:30頃</time><span class="schedule-tag kind-move">移動</span><p><b>出発：</b>10/19 17:30頃 CEST ヴォルフスブルク中央駅（Wolfsburg Hbf）<br><b>列車：</b>ICE直通・約1時間15〜20分<br><b>到着：</b>10/19 18:45頃 CEST Göttingen Hbf</p></div>
+        </section>
+        <aside><h3>宿泊</h3><p>Holiday Inn Express Amsterdam -<br>Sloterdijk Station<br><small>村上</small></p><p>Hotel FREIgeist Göttingen<br>Innenstadt<br><small>美馬・金築</small></p></aside>
+      </article>
+
+      <article class="family-day-row">
+        <header><strong>10/20</strong><span>火</span></header>
+        <section><h3>村上</h3>
+          <div class="agenda-line"><time>午前〜14:55</time><span class="schedule-tag kind-techex">TechEx</span><p>TechEx Europe<br>Day 2</p></div>
+          <div class="agenda-line"><time>16:50</time><span class="schedule-tag kind-move">フライト</span><p><b>出発：</b>10/20 16:50 CEST Amsterdam AMS<br><b>便：</b>KL1791・55分<br><b>到着：</b>10/20 17:45 CEST Hannover HAJ</p></div>
+          <div class="agenda-line"><time>19:06</time><span class="schedule-tag kind-move">移動</span><p><b>出発：</b>10/20 19:06 CEST Hannover Flughafen<br><b>列車：</b>S5 17分 → 乗換30分 → ICE77 32分<br><b>到着：</b>10/20 20:25 CEST Göttingen Hbf</p></div>
+        </section>
+        <section><h3>美馬・金築</h3>
+          <div class="agenda-line"><time>07:55</time><span class="schedule-tag kind-move">移動</span><p><b>出発：</b>10/20 07:55 CEST Göttingen Hbf<br><b>列車：</b>ICE888・28分<br><b>到着：</b>10/20 08:23 CEST Hannover Messe/Laatzen</p></div>
+          <div class="agenda-line"><time>日中</time><span class="schedule-tag kind-euro">EuroBLECH</span><p>EuroBLECH<br>Day 1</p></div>
+        </section>
+        <aside><h3>宿泊</h3><p>Hotel FREIgeist Göttingen<br>Innenstadt<br><small>全員</small></p></aside>
+      </article>
+
+      <article class="family-day-row shared-day">
+        <header><strong>10/21</strong><span>水</span></header>
+        <section class="family-shared"><h3>全員</h3>
+          <div class="agenda-line"><time>07:55</time><span class="schedule-tag kind-move">移動</span><p><b>出発：</b>10/21 07:55 CEST Göttingen Hbf<br><b>列車：</b>ICE888・28分<br><b>到着：</b>10/21 08:23 CEST Hannover Messe/Laatzen</p></div>
+          <div class="agenda-line"><time>終日</time><span class="schedule-tag kind-euro">EuroBLECH</span><p>EuroBLECH<br>フル参加</p></div>
+        </section>
+        <aside><h3>宿泊</h3><p>Hotel FREIgeist Göttingen<br>Innenstadt<br><small>全員</small></p></aside>
+      </article>
+
+      <article class="family-day-row shared-day">
+        <header><strong>10/22</strong><span>木</span></header>
+        <section class="family-shared"><h3>全員</h3>
+          <div class="agenda-line"><time>09:00</time><span class="schedule-tag kind-move">移動</span><p><b>出発：</b>10/22 09:00 CEST Göttingen Hbf<br><b>列車：</b>ICE1674・1時間45分<br><b>到着：</b>10/22 10:45 CEST Bremen Hbf<br><b>復路：</b>時刻・列車・所要時間は未確認</p></div>
+          <div class="agenda-line"><time>12:45–14:00</time><span class="schedule-tag kind-visit">工場見学</span><p>Mercedes-Benz<br>Werk Bremen</p></div>
+        </section>
+        <aside><h3>宿泊</h3><p>Hotel FREIgeist Göttingen<br>Innenstadt<br><small>全員</small></p></aside>
+      </article>
+
+      <article class="family-day-row shared-day">
+        <header><strong>10/23</strong><span>金</span></header>
+        <section class="family-shared"><h3>全員</h3>
+          <div class="agenda-line"><time>午前〜午後</time><span class="schedule-tag kind-euro">EuroBLECH</span><p>EuroBLECH<br>最終日</p></div>
+          <div class="agenda-line"><time>14:30</time><span class="schedule-tag kind-move">移動</span><p>Hannover Messe発</p></div>
+          <div class="agenda-line"><time>17:14</time><span class="schedule-tag kind-move">到着</span><p>フランクフルト中央駅（Frankfurt(Main) Hbf）着</p></div>
+        </section>
+        <aside><h3>宿泊</h3><p>Toyoko Inn Frankfurt am Main<br>Hauptbahnhof<br><small>全員</small></p></aside>
+      </article>
+
+      <article class="family-day-row shared-day">
+        <header><strong>10/24</strong><span>土</span></header>
+        <section class="family-shared"><h3>全員</h3>
+          <div class="agenda-line"><time>13:40</time><span class="schedule-tag kind-move">フライト</span><p><b>出発：</b>10/24 13:40 CEST Frankfurt FRA<br><b>便：</b>CX288・11時間40分 → 香港乗継2時間15分 → CX536・3時間35分<br><b>到着：</b>翌日14:10 JST セントレア NGO</p></div>
+        </section>
+        <aside><h3>宿泊</h3><p>機内泊<br><small>全員</small></p></aside>
+      </article>
+
+      <article class="family-day-row shared-day">
+        <header><strong>10/25</strong><span>日</span></header>
+        <section class="family-shared"><h3>全員</h3>
+          <div class="agenda-line"><time>14:10</time><span class="schedule-tag kind-home">帰着</span><p>セントレア <b>NGO</b>着<br>→ 各自帰宅</p></div>
+        </section>
+        <aside><h3>宿泊</h3><p>帰宅</p></aside>
+      </article>
+    </div>
+  </section>
+
+</div>
+</div><!-- /tab-family -->
+
+
+
+<!-- ===== TAB: 記録 ===== -->
+<div id="tab-rec" class="tab-content">
+  <main class="records-shell">
+    <div class="records-intro">
+      <div>
+        <div class="section-kicker">FIELD NOTES</div>
+        <h2>出張記録</h2>
+        <p>狙い・当日メモ・帰国後の所感を日ごとに保存します。入力内容はこの端末のブラウザ内に自動保存されます。</p>
+      </div>
+      <div class="record-actions no-print">
+        <button type="button" id="btn-download-md">MarkdownでDL</button>
+        <button type="button" id="btn-export-json">JSONバックアップ</button>
+        <label for="import-json" class="record-button">JSON読込</label>
+        <input id="import-json" type="file" accept="application/json,.json" hidden>
+      </div>
+    </div>
+
+    <section class="record-card record-overall">
+      <div class="record-heading"><span>出張全体</span><span class="save-state" role="status" aria-live="polite">自動保存</span></div>
+      <label><span>今回の狙い</span><textarea data-rec="all:aim" rows="3" placeholder="TechEx / EuroBLECH / 工場見学で確認したいこと"></textarea></label>
+      <label><span>帰国後の総括</span><textarea data-rec="all:after" rows="4" placeholder="得られた示唆、社内共有、次のアクション"></textarea></label>
+    </section>
+
+    <div id="record-days"></div>
+
+    <section class="secondary-tools no-print">
+      <h2>補助資料</h2>
+      <div class="secondary-grid">
+        <button type="button" onclick="switchTab('prep')"><strong>✅ 準備</strong><span>手配チェックリスト・費用</span></button>
+        <button type="button" onclick="switchTab('docs')"><strong>📁 書類</strong><span>チケット・予約・公式リンク</span></button>
+        <button type="button" onclick="switchTab('family')"><strong>🏠 家族用</strong><span>宿泊先・緊急連絡・日程表</span></button>
+      </div>
+    </section>
+
+    <button type="button" id="btn-clear-records" class="danger-button no-print">記録をすべて消す</button>
+  </main>
+</div>
+
+<!-- ===== FIELD FOOTER ===== -->
+<footer class="field-footer">ヨーロッパ出張 2026 · フィールドガイド v2 ｜ 入力はブラウザ内に保存</footer>
+
+<script>
+// ── Tab switching ──────────────────────────────────────────
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.classList.remove('text-blue-600', 'border-t-2', 'border-blue-600');
+    btn.classList.add('text-slate-400');
+  });
+  const activeBtn = document.getElementById('nav-' + tabId);
+  if (activeBtn) {
+    activeBtn.classList.remove('text-slate-400');
+    activeBtn.classList.add('text-blue-600', 'border-t-2', 'border-blue-600');
+  }
+  window.scrollTo(0, 0);
+}
+
+// ── 日付クイックナビ（旅程タブ内ジャンプ） ─────────────────
+function jumpDay(mmdd) {
+  const target = document.getElementById('day-' + mmdd);
+  if (!target) return;
+  target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.daychip').forEach(c => c.classList.remove('active'));
+  const btn = document.querySelector(`.daychip[onclick="jumpDay('${mmdd}')"]`);
+  if (btn) btn.classList.add('active');
+}
+
+// ── Checklist ──────────────────────────────────────────────
+const CHECKLIST = [
+  '📘 旅券（有効期限6ヶ月以上確認・全員）',
+  '🎫 EuroBLECH 入場券（村上・ベッコフ経由で無料発行済み／Eチケット持参）',
+  '🎫 EuroBLECH 入場券（美馬・自身で購入済み／領収書を精算用に保管）',
+  '🎫 EuroBLECH 入場券（金築・ベッコフ経由を連絡済み → 発券を待って受領）',
+  '💻 TechEx Europe Gold Pass（村上・無償付与で取得済み／当日提示物を確認）',
+  '✈︎ 航空券購入｜村上｜CX539 / CX271｜NGO → HKG → AMS｜10/17 16:10発',
+  '✈︎ 航空券購入｜美馬・金築｜CX539 / CX289｜NGO → HKG → FRA｜10/18 16:10発',
+  '✈︎ 航空券購入｜全員｜CX288 / CX536｜FRA → HKG → NGO｜10/24 13:40発',
+  '✈︎ 航空券購入｜村上｜KL1791｜AMS → HAJ｜10/20 16:50発',
+  '🏨 Holiday Inn Express Amsterdam - Sloterdijk Station（村上・10/18-20 2泊）予約済み',
+  '🏨 Hotel FREIgeist Göttingen Innenstadt（村上+美馬・金築・10/19-23泊）予約済み・村上レイトチェックイン確認',
+  '🏨 Toyoko Inn Frankfurt am Main Hauptbahnhof（全員・10/23泊）予約済み',
+  '🏭 Mercedes-Benz Werk Bremen 工場見学（3名分・10/22 12:45-14:00）予約確定済み',
+  '🚆 美馬・金築 FRA→ゲッティンゲン 鉄道予約（RE2+ICE774, 08:22発, €43.99〜）',
+  '🚆 美馬・金築 ゲッティンゲン⇄Wolfsburg 鉄道予約（10/19・往路11:00頃発／復路17:30頃発, 各約1時間15〜20分）',
+  '🎫 美馬・金築 Autostadt Wolfsburg 入場チケット手配（10/19・工場ツアーの実施回と開館時間を要確認）',
+  '🛄 美馬・金築 Hotel FREIgeist 日中の荷物預かりを事前連絡（10/19・チェックイン前）',
+  '🚆 美馬・金築 ゲッティンゲン→Hannover Messe/Laatzen 鉄道予約（ICE888, 10/20 07:55発, €17.99〜）',
+  '🚆 村上 Hannover Flughafen→ゲッティンゲン 鉄道予約（S5+ICE77, 10/20 19:06発, €22.99〜）',
+  '🚆 全員 ゲッティンゲン→Hannover Messe/Laatzen 鉄道予約（ICE888, 10/21 07:55発, €17.99〜）',
+  '🚆 全員 ゲッティンゲン→ブレーメン中央駅（Bremen Hbf） 鉄道予約（ICE1674, 10/22 09:00発, €19.99〜）',
+  '🚆 全員 ゲッティンゲン→Hannover Messe/Laatzen 鉄道予約（ICE888, 10/23 07:55発, €17.99〜）',
+  '🚆 全員 Hannover Messe/Laatzen→フランクフルト中央駅（Frankfurt(Main) Hbf） 鉄道予約（S4+ICE771, 10/23 14:30発, €80.99〜）',
+  '🚄 京都⇄名古屋 新幹線＋名鉄ミュースカイ（3名往復・概算 12,000円/人）手配',
+  '💳 クレジットカード / Revolut 海外設定確認',
+  '📱 DB Navigator アプリ（ドイツ鉄道）',
+  '📋 名刺（多めに用意）',
+  '🔌 変換プラグ（C タイプ・EU 規格）'
+];
+
+// 入場券（村上・美馬）・TechEx Gold Pass・ホテル3拠点・Mercedes見学は確定済みのため初期状態でチェック済み扱い
+// （金築のEuroBLECH券 index 3 は発券待ちのため未チェック）
+const DEFAULT_CHECKED = [1, 2, 4, 9, 10, 11, 12];
+
+function isChecked(i) {
+  const stored = localStorage.getItem('eu_v4_c' + i);
+  return stored === null ? DEFAULT_CHECKED.includes(i) : stored === '1';
+}
+
+function loadChecklist() {
+  const body = document.getElementById('checklist-body');
+  if (!body) return;
+  body.innerHTML = CHECKLIST.map((item, i) => {
+    const checked = isChecked(i);
+    return `<label class="flex items-start gap-3 cursor-pointer p-2 rounded-lg hover:bg-slate-50 transition-colors ${checked ? 'opacity-50' : ''}">
+      <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleCheck(${i})"
+        class="mt-0.5 w-5 h-5 rounded accent-blue-600 shrink-0">
+      <span class="text-sm text-slate-700 ${checked ? 'line-through' : ''}">${item}</span>
+    </label>`;
+  }).join('');
+  updateCheckProgress();
+}
+
+function toggleCheck(idx) {
+  const current = isChecked(idx);
+  localStorage.setItem('eu_v4_c' + idx, current ? '0' : '1');
+  loadChecklist();
+}
+
+function updateCheckProgress() {
+  const done = CHECKLIST.filter((_, i) => isChecked(i)).length;
+  const el = document.getElementById('check-progress');
+  if (el) el.textContent = done + '/' + CHECKLIST.length;
+}
+
+// ── Init ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  setupFieldUi();
+  switchTab('itinerary');
+  loadChecklist();
+});
+</script>
+<script src="v2.js"></script>
+</body>
+</html>

@@ -31,6 +31,11 @@ button,input,textarea,select{font-family:inherit}
 .lane-murakami>.lane-head{background:var(--lane-murakami);color:var(--lane-murakami-tx)}
 .lane-team>.lane-head{background:var(--lane-team);color:var(--lane-team-tx)}
 .lane-all>.lane-head{background:var(--neu-bg);color:var(--tx2)}
+.day[data-kind=visit]>.day-head{background:var(--choose);color:var(--choose-tx)}
+.day-kind-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px 12px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;color:var(--tx2);font-size:var(--f4)}
+.day-kind-legend strong{margin-right:2px;color:var(--tx);font-weight:700}
+.day-kind-legend span{display:inline-flex;align-items:center;gap:5px}
+.kind-swatch{display:inline-block;width:15px;height:15px;border:1px solid currentColor;border-radius:4px}.swatch-move{background:var(--move);color:var(--move-tx)}.swatch-conf{background:var(--conf);color:var(--conf-tx)}.swatch-visit{background:var(--choose);color:var(--choose-tx)}
 
 /* Transport contract: row time | departure | service/duration | arrival. */
 .route-four{display:grid;grid-template-columns:92px minmax(0,1fr) 132px minmax(0,1fr);border-top:1px solid var(--line2);background:#fff}
@@ -38,7 +43,7 @@ button,input,textarea,select{font-family:inherit}
 .lanes .route-four{grid-template-columns:78px minmax(0,1fr) 86px minmax(0,1fr)}
 .route-four>div{min-width:0;padding:10px 7px;line-height:1.4}
 .route-four>div+div{border-left:1px solid var(--line)}
-.row-time{display:flex;align-items:flex-start;background:#EEF3F5;color:var(--tx);font-size:var(--f3);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.row-time{display:flex;align-items:flex-start;background:#EEF3F5;color:var(--tx);font-size:var(--f3);font-weight:700;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
 .endpoint{color:var(--tx2);font-size:var(--f4);overflow-wrap:anywhere}
 .endpoint .label{display:block;margin-bottom:5px;color:var(--mu);font-size:var(--f5);font-weight:700}
 .endpoint time{display:inline;color:var(--tx);font-size:var(--f4);font-weight:700;line-height:1.45}
@@ -48,7 +53,21 @@ button,input,textarea,select{font-family:inherit}
 .mode .arrow{color:var(--mu);font-size:var(--f2)}
 .mode strong{margin-top:4px;color:var(--tx);font-size:var(--f4);font-weight:600;line-height:1.4}
 .mode small{margin-top:4px;color:var(--mu);font-size:var(--f5);line-height:1.4}
-.flight-mark{display:inline-block;color:var(--tx2);font-family:'Segoe UI Symbol','Noto Sans Symbols 2',sans-serif;font-size:19px;font-weight:700;line-height:1;-webkit-text-stroke:.35px currentColor}
+.flight-mark{display:inline-block;flex:0 0 auto;width:20px;height:20px;color:#0B5C60;background:currentColor;vertical-align:-4px;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.inline-flight-mark{margin-right:5px}
+[class*="bg-gray-700"] .flight-mark{color:#fff}
+.line-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:19px;height:19px;margin-right:4px;color:#0B5C60;vertical-align:-4px}
+.line-icon svg{display:block;width:100%;height:100%;overflow:visible}
+[class*="bg-gray-700"] .line-icon{color:currentColor}
+
+.route-estimate{border-top:2px dashed #78A9A9;background:#F3F9F9}
+.route-estimate>div{background:#F3F9F9}
+.route-review{border-top:2px solid #B96B16;border-bottom:2px solid #B96B16;background:#FFF3D6}
+.route-review>div{background:#FFF3D6}
+.route-review .mode strong,.route-review .row-time{color:#7A3E08}
+.return-choice{display:grid;gap:4px;border-top:2px solid #B96B16;padding:10px 12px;background:#FFF3D6;color:#5E360B;font-size:var(--f4);line-height:1.5}
+.return-choice strong{font-size:var(--f3);color:#7A3E08}
+.return-choice span{display:block}
 
 /* Non-transport actions keep the HRS two-column timeline grammar. */
 .action{display:grid;grid-template-columns:92px minmax(0,1fr);border-top:1px solid var(--line2);background:#fff}
@@ -133,6 +152,42 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .check-item.done{opacity:.58;text-decoration:line-through}
 .check-item input{flex:0 0 auto;margin-top:2px}
 .legacy-tab a{overflow-wrap:anywhere}
+
+/* Family tab keeps the v2 information architecture, tuned to the HRS type scale. */
+.family-tab{font-size:15px;line-height:1.55}
+.family-tab .legacy-stack{gap:14px}
+.family-section-head{padding:10px 14px;background:var(--neu-bg);color:var(--tx2);font-size:16px;font-weight:700}
+.timezone-early,.family-flights,.family-schedule{overflow:hidden;border:2px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,32,.05)}
+.timezone-body,.flight-body{padding:13px 14px}
+.timezone-lead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0 0 10px;color:var(--tx2);font-size:14px}
+.timezone-lead strong{color:#0B4F5A;font-size:19px;line-height:1.3}.timezone-lead span{color:var(--mu);font-size:13px}
+.timezone-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.timezone-card{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:2px 8px;min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#F5F8F9;color:var(--tx2)}
+.timezone-card span,.timezone-card small{grid-column:1/3}.timezone-card span{font-size:13px;font-weight:700}.timezone-card strong{color:var(--tx);font-size:22px;line-height:1.1}.timezone-card b,.timezone-card small{color:var(--mu);font-size:12px}
+.zone-europe{border-color:#78A9A9;background:#E7F3F2}.zone-hongkong{border-color:#C3A658;background:#FFF6D9;color:#5B420C}
+.timezone-contact{display:grid;grid-template-columns:auto 1fr 1fr;align-items:center;gap:8px;margin-top:9px;border-radius:8px;padding:9px 10px;background:#F1F4F5;color:var(--tx2);font-size:13px}
+.timezone-contact strong{color:var(--tx)}.timezone-contact span{min-width:0;border-left:2px solid var(--line);padding-left:8px}
+.timezone-note{margin:9px 0 0;border-left:4px solid #9B7A2E;padding:5px 0 5px 9px;color:#5A4511;font-size:13px}
+.timezone-guide{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:12px;border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:#F1F6F7;color:var(--tx2);font-size:13px}
+.timezone-guide strong{margin-right:auto;color:var(--tx)}.timezone-guide span{border-radius:999px;padding:3px 8px;background:#fff}
+.flight-spec-guide,.carrier-guide{margin:-4px 2px 8px;color:var(--mu);font-size:12px;line-height:1.5}.carrier-guide{margin-bottom:12px;color:var(--tx2)}.carrier-guide strong{color:var(--tx)}.carrier-guide span{color:var(--line)}
+.flight-card{overflow:hidden;margin-top:12px;border:2px solid var(--line);border-radius:11px;background:#fff}.flight-card:first-of-type{margin-top:0}
+.flight-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 13px;background:var(--lane-murakami);color:var(--lane-murakami-tx)}
+.flight-team .flight-card-head{background:var(--lane-team);color:var(--lane-team-tx)}.flight-europe .flight-card-head{background:var(--move);color:var(--move-tx)}.flight-return .flight-card-head{background:var(--neu-bg);color:var(--tx2)}
+.flight-label{display:inline-block;margin-bottom:2px;font-size:12px;font-weight:700;letter-spacing:.06em}.flight-card h3{margin:0;font-size:16px;line-height:1.35}.flight-status{flex:none;border:1px solid currentColor;border-radius:999px;padding:3px 8px;font-size:12px;font-weight:700;white-space:nowrap}
+.flight-leg{display:grid;grid-template-columns:minmax(0,1fr) 92px minmax(0,1fr);align-items:stretch;padding:12px 13px}.flight-point,.flight-route{min-width:0}.point-label{display:block;color:var(--mu);font-size:12px;font-weight:700;letter-spacing:.06em}
+.flight-point time{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px}.flight-date{flex-basis:100%;color:var(--tx2);font-size:13px;font-weight:700}.flight-point time strong{color:var(--tx);font-size:25px;line-height:1.1}.flight-point time em{border-radius:4px;padding:1px 4px;background:var(--tx2);color:#fff;font-size:11px;font-style:normal;font-weight:700}
+.flight-point>a{display:inline-block;margin-top:5px;color:#075F70!important;font-size:14px;font-weight:700}.flight-point>a b{color:var(--tx)}
+.flight-route{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mu);text-align:center}.flight-route strong{color:var(--tx);font-size:13px}.flight-route span{width:100%;margin:2px 0;color:var(--move-tx);font-size:17px;line-height:1}.flight-route small{color:var(--tx2);font-size:11px;line-height:1.35}
+.flight-route>.flight-mark{width:22px;height:22px;margin:3px auto;color:var(--move-tx)}.flight-route>.flight-mark::before,.flight-route>.flight-mark::after{content:none}
+.layover{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:9px;margin:0 13px;border:1px dashed #9B7A2E;border-radius:8px;padding:7px 10px;background:#FFF4CE;color:#4D3B0F;font-size:13px}.layover span{border-radius:999px;padding:2px 7px;background:#705615;color:#fff;font-weight:700}.layover strong{font-size:14px}.layover small{color:#705615}
+.flight-card>footer{border-top:1px solid var(--line2);padding:7px 13px;background:#F7F9FA;color:var(--mu);font-size:12px;text-align:right}
+.flight-fares{margin-top:14px;border:2px solid var(--line);border-radius:11px;padding:12px;background:#F7FAFB}.flight-fares>header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:9px}.flight-fares>header span{display:block;color:var(--mu);font-size:11px;font-weight:700}.flight-fares h3{margin:1px 0 0;color:var(--tx);font-size:17px}.flight-fares>header>strong{color:#7A3616;font-size:18px;white-space:nowrap}
+.fare-card{margin-top:8px;border:1px solid var(--line);border-radius:9px;padding:10px;background:#fff}.fare-title{display:flex;align-items:baseline;gap:8px;margin-bottom:7px}.fare-title strong{color:var(--tx);font-size:14px}.fare-title span{color:var(--mu);font-size:11px}.fare-card dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0}.fare-card dl>div{min-width:0;border-left:1px solid var(--line2);padding:0 7px}.fare-card dl>div:first-child{border-left:0;padding-left:0}.fare-card dt{color:var(--mu);font-size:11px}.fare-card dd{margin:2px 0 0;color:var(--tx);font-size:13px;font-weight:700}.fare-card dd small{color:var(--mu);font-size:10px;font-weight:600}.fare-card .fare-total dd{color:#8B2F16;font-size:14px}.flight-fares>p{margin:9px 1px 0;color:#715515;font-size:12px;line-height:1.5}
+.schedule-body{padding:12px}.schedule-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:10px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#F5F8F9}.schedule-legend>strong{margin-right:3px;color:var(--tx2);font-size:13px}
+.schedule-tag{display:inline-flex;align-items:center;width:fit-content;min-height:24px;border:1px solid currentColor;border-radius:999px;padding:2px 7px;font-size:11px;font-weight:700;white-space:nowrap}.kind-flight{background:#E8E7FA;color:#40378A}.kind-move{background:var(--move);color:var(--move-tx)}.kind-transfer{background:#E9F2FA;color:#245A85}.kind-procedure{background:#F1F3F4;color:#45545D}.kind-stay{background:#EEF5FB;color:#245A85}.kind-meal{background:#F8EEDF;color:#734812}.kind-review{background:#FFF0C2;color:#7A3E08}.kind-techex{background:var(--lane-murakami);color:var(--lane-murakami-tx)}.kind-euro{background:var(--conf);color:var(--conf-tx)}.kind-visit{background:var(--choose);color:var(--choose-tx)}.kind-home{background:var(--neu-bg);color:var(--tx2)}
+.family-day-row{display:grid;grid-template-columns:72px minmax(0,1fr) minmax(0,1fr) 170px;overflow:hidden;margin-top:8px;border:1px solid var(--line);border-radius:9px;background:#fff}.family-day-row>header{padding:11px 9px;background:var(--tx2);color:#fff;text-align:center}.family-day-row>header strong,.family-day-row>header span{display:block}.family-day-row>header strong{font-size:16px}.family-day-row>header span{font-size:12px;opacity:.85}
+.family-day-row>section,.family-day-row>aside{min-width:0;border-left:1px solid var(--line);padding:9px 10px}.family-day-row h3{margin:0 0 7px;color:var(--mu);font-size:12px;font-weight:700;letter-spacing:.04em}.agenda-line{display:grid;grid-template-columns:82px auto minmax(0,1fr);align-items:start;gap:6px;padding:7px 0;border-top:1px solid var(--line2)}.agenda-line:first-of-type{border-top:0;padding-top:0}.agenda-line time{color:#0B4F5A;font-size:14px;font-weight:800;line-height:1.35;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.agenda-line p,.family-day-row aside p{margin:0;color:var(--tx2);font-size:13px;line-height:1.55;overflow-wrap:anywhere}.agenda-line p b{color:var(--tx)}.agenda-empty{color:var(--mu);font-size:13px}.family-day-row aside{background:#F7F9FA}.family-day-row aside p+p{margin-top:8px;border-top:1px solid var(--line2);padding-top:8px}.family-day-row aside small{color:var(--mu);font-size:11px}.shared-day .family-shared{grid-column:2/4}
 .field-footer{border-top:1px solid var(--line);padding:18px 12px 28px;color:var(--mu);text-align:center;font-size:var(--f4)}
 
 @media(max-width:640px){
@@ -142,12 +197,28 @@ details.fold>.fold-body>div+div{margin-top:5px}
   .field-nav .tabs{gap:2px}
   .field-nav .tabs button{padding-left:2px;padding-right:2px;font-size:12px}
   .field-nav .tabs button .ic{display:block;margin:0;font-size:15px;line-height:1.15}
-  .route-four,.lanes .route-four{grid-template-columns:82px minmax(0,1fr) 88px minmax(0,1fr)}
-  .action,.lanes .action{grid-template-columns:82px minmax(0,1fr)}
+  .day-head>*{min-width:0}
+  .day-head .t,.action-body>*,.topic-body>*,.joinbar>*{max-width:100%;overflow-wrap:anywhere}
+  .route-four,.lanes .route-four{grid-template-columns:72px minmax(0,1fr) 74px minmax(0,1fr)}
+  .route-four>div{padding:9px 5px}
+  .route-four .row-time{font-size:12px;white-space:normal;overflow-wrap:anywhere}
+  .route-four .endpoint,.route-four .endpoint time,.route-four .endpoint .place,.route-four .mode strong{font-size:12px}
+  .action,.lanes .action{grid-template-columns:72px minmax(0,1fr)}
+  .action>.row-time{font-size:12px;white-space:normal;overflow-wrap:anywhere}
   .records-intro{display:block}
   .record-actions{justify-content:flex-start;margin-top:12px}
   .record-actions button{flex:1 1 calc(50% - 7px)}
   .legacy-tab .grid-cols-2,.legacy-tab .grid-cols-3{grid-template-columns:1fr}
+  #tab-prep .space-y-2>.flex.items-center.justify-between{align-items:flex-start;gap:8px}
+  #tab-prep .space-y-2>.flex.items-center.justify-between>span:first-child{min-width:0;flex:1 1 auto}
+  #tab-prep .space-y-2>.flex.items-center.justify-between>span:last-child{flex:0 0 auto;white-space:nowrap}
+  .timezone-cards{grid-template-columns:1fr}
+  .timezone-contact{grid-template-columns:1fr 1fr}.timezone-contact strong{grid-column:1/3}.timezone-contact span{border-left:0;border-top:1px solid var(--line);padding:7px 0 0}
+  .flight-card-head{display:block}.flight-status{display:inline-block;margin-top:6px}
+  .flight-leg{grid-template-columns:minmax(0,1fr) 70px minmax(0,1fr);padding:10px 9px}.flight-point time strong{font-size:22px}.flight-point>a{font-size:13px}.flight-route small{font-size:10px}
+  .layover{grid-template-columns:auto minmax(0,1fr);margin:0 9px}.layover small{grid-column:2}
+  .flight-fares>header{display:block}.flight-fares>header>strong{display:block;margin-top:3px}.fare-card dl{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 0}.fare-card dl>div:nth-child(odd){border-left:0;padding-left:0}
+  .family-day-row{grid-template-columns:58px minmax(0,1fr)}.family-day-row>header{grid-row:1/4}.family-day-row>section,.family-day-row>aside{grid-column:2;border-left:1px solid var(--line);border-top:1px solid var(--line)}.family-day-row>section:first-of-type{border-top:0}.shared-day .family-shared{grid-column:2}.agenda-line{grid-template-columns:82px minmax(0,1fr);gap:3px 7px}.agenda-line time{grid-row:1/3;font-size:14px}.agenda-line .schedule-tag{grid-column:2}.agenda-line p{grid-column:2}
 }
 
 @media print{

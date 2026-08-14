@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>10/17・10/18 実旅程 — HRSレスポンシブサンプル</title>
+  <link rel="stylesheet" href="../202609_HumanoidSummitEurope/v3.css">
+  <style>
+    .sample-intro{margin:12px 0;padding:10px 12px;border:2px solid var(--line);border-radius:10px;background:#fff;color:var(--tx2);font-size:var(--f3);line-height:1.65}
+    .actual-days{display:grid;gap:14px}
+    .actual-days .day{margin:0}
+    .day-zone{padding:7px 12px;border-bottom:1px solid var(--line);background:var(--line2);color:var(--mu);font-size:var(--f4);line-height:1.5}
+    .lane-head.murakami{background:#B7D4F1;color:#153F68}
+    .lane-head.team{background:#BFDFC6;color:#17482A}
+    .route-four{display:grid;grid-template-columns:92px minmax(0,1fr) 132px minmax(0,1fr);background:#fff;border-top:1px solid var(--line2)}
+    .route-four:first-of-type{border-top:0}
+    .lanes .route-four{grid-template-columns:78px minmax(0,1fr) 86px minmax(0,1fr)}
+    .route-four > div{min-width:0;padding:10px 7px;line-height:1.4}
+    .route-four > div + div{border-left:1px solid var(--line)}
+    .row-time{display:flex;align-items:flex-start;background:#EEF3F5;color:var(--tx);font-size:var(--f3);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .endpoint{color:var(--tx2);font-size:var(--f4);overflow-wrap:anywhere}
+    .endpoint .label{display:block;margin-bottom:5px;color:var(--mu);font-size:var(--f5);font-weight:700}
+    .endpoint time{display:inline;color:var(--tx);font-size:var(--f4);font-weight:700;line-height:1.45}
+    .endpoint .tz{display:inline;margin-left:2px;color:var(--mu);font-size:var(--f5);font-weight:600;line-height:1.35}
+    .endpoint .place{display:block;margin-top:5px;color:#2A5FA0;font-size:var(--f4);font-weight:600;line-height:1.45}
+    .mode{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--tx2);font-size:var(--f5);text-align:center;overflow-wrap:anywhere}
+    .mode .arrow{color:var(--mu);font-size:var(--f2)}
+    .mode strong{margin-top:4px;color:var(--tx);font-size:var(--f4);font-weight:600;line-height:1.4}
+    .mode small{margin-top:4px;color:var(--mu);font-size:var(--f5);line-height:1.4}
+    .flight-mark{display:inline-block;color:var(--tx2);font-family:'Segoe UI Symbol','Noto Sans Symbols 2',sans-serif;font-size:19px;font-weight:700;line-height:1;-webkit-text-stroke:.35px currentColor}
+    .action{display:grid;grid-template-columns:92px minmax(0,1fr);border-top:1px solid var(--line2);background:#fff}
+    .lanes .action{grid-template-columns:78px minmax(0,1fr)}
+    .action > div{min-width:0;padding:10px 9px;line-height:1.5}
+    .action .row-time{border-right:1px solid var(--line);padding-left:7px;padding-right:7px}
+    .action strong{display:block;color:var(--tx);font-size:var(--f3);font-weight:600}
+    .action .sub{margin-top:3px;color:var(--mu);font-size:var(--f4);line-height:1.5}
+    .stay{padding:9px 12px;border-top:1px solid var(--line);background:#FAFCFD;color:var(--tx2);font-size:var(--f4);line-height:1.5}
+    .stay strong{font-weight:600;color:var(--tx)}
+    .sample-fold{margin-top:5px;color:var(--mu);font-size:var(--f4)}
+    .sample-fold summary{cursor:pointer;color:#2A5FA0;font-weight:600}
+    .sample-fold div{padding-top:5px;line-height:1.55}
+    @media(max-width:640px){
+      .route-four,.lanes .route-four{grid-template-columns:82px minmax(0,1fr) 88px minmax(0,1fr)}
+      .action,.lanes .action{grid-template-columns:82px minmax(0,1fr)}
+    }
+  </style>
+</head>
+<body>
+  <header class="hdr">
+    <div class="wrap hdr-top">
+      <div>
+        <div class="eyebrow">表示検討用・本番未反映</div>
+        <h1>10/17・10/18 実旅程</h1>
+        <div class="subtitle">HRSと同じ1ページが画面幅に応じて変化</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="sample-intro">
+      交通は「行時刻｜出発｜移動手段・時間｜到着」の4列です。月日は日カードだけに表示し、翌日到着は時刻の後ろに「+1」。HRSの幅とレーン構造を変更せず、18日の別行動はPCでは左右、640px以下では人物ごとに縦積みします。
+    </div>
+    <div class="actual-days">
+    <details class="day" open>
+      <summary class="day-head"><span class="d">10/17（土）</span><span class="t">村上 出発日</span></summary>
+      <div class="day-zone">各地点の現地時刻。香港は日本より1時間遅く、Amsterdamは日本より7時間遅い</div>
+      <div class="lane single-lane" data-who="murakami">
+        <div class="lane-head murakami">👤 村上 — 京都 → 名古屋 → NGO → HKG → AMS</div>
+
+        <div class="route-four">
+          <div class="row-time">11:30頃</div>
+          <div class="endpoint"><span class="label">出発</span><time>11:30頃</time><span class="tz">（JST）</span><span class="place">京都駅</span></div>
+          <div class="mode"><span class="arrow">→</span><strong>新幹線<br>のぞみ</strong><small>約36分</small></div>
+          <div class="endpoint"><span class="label">到着</span><time>時刻未確認</time><span class="tz">（JST）</span><span class="place">名古屋駅</span></div>
+        </div>
+
+        <div class="route-four">
+          <div class="row-time">12:35</div>
+          <div class="endpoint"><span class="label">出発</span><time>12:35</time><span class="tz">（JST）</span><span class="place">名鉄名古屋駅</span></div>
+          <div class="mode"><span class="arrow">→</span><strong>名鉄<br>ミュースカイ</strong><small>約28分</small></div>
+          <div class="endpoint"><span class="label">到着</span><time>13:03</time><span class="tz">（JST）</span><span class="place">中部国際空港駅</span></div>
+        </div>
+
+        <div class="action"><div class="row-time">13:10</div><div><strong>🛂 空港到着・出発手続き</strong><div class="sub">チェックイン、保安検査、出国審査</div></div></div>
+        <div class="action"><div class="row-time">13:40</div><div><strong>🍽 セントレアで昼食</strong><div class="sub">保安検査後に軽く食べる</div></div></div>
+        <div class="action"><div class="row-time"><span>13:10〜<br>15:40</span></div><div><strong>🛋 JALサクララウンジ</strong><div class="sub">Sapphire資格で利用。搭乗券と会員証を提示</div></div></div>
+
+        <div class="route-four">
+          <div class="row-time">16:10</div>
+          <div class="endpoint"><span class="label">出発</span><time>16:10</time><span class="tz">（JST）</span><span class="place">中部国際空港（NGO）</span></div>
+          <div class="mode"><span class="flight-mark">✈</span><strong>CX539</strong><small>エコノミー<br>4時間20分</small></div>
+          <div class="endpoint"><span class="label">到着</span><time>19:30</time><span class="tz">（HKT）</span><span class="place">香港国際空港（HKG）</span></div>
+        </div>
+
+        <div class="action"><div class="row-time"><span>20:00〜<br>22:30</span></div><div><strong>🍽 香港で夕食・シャワー</strong><div class="sub">利用可能なビジネスクラスラウンジを到着後に確認</div><details class="sample-fold"><summary>代替案</summary><div>ラウンジが閉まっている場合は、Gate 12または43付近の24時間無料シャワーと、24時間営業の飲食店を利用。</div></details></div></div>
+
+        <div class="route-four">
+          <div class="row-time">23:15</div>
+          <div class="endpoint"><span class="label">出発</span><time>23:15</time><span class="tz">（HKT）</span><span class="place">香港国際空港（HKG）</span></div>
+          <div class="mode"><span class="flight-mark">✈</span><strong>CX271</strong><small>エコノミー<br>13時間40分</small></div>
+          <div class="endpoint"><span class="label">到着</span><time>06:55 +1</time><span class="tz">（CEST）</span><span class="place">Amsterdam Airport Schiphol（AMS）</span></div>
+        </div>
+        <div class="stay"><strong>宿泊：</strong>機内</div>
+      </div>
+    </details>
+
+    <details class="day" open>
+      <summary class="day-head"><span class="d">10/18（日）</span><span class="t">村上 Amsterdam到着／美馬・金築 出発日</span></summary>
+      <div class="day-zone">村上は欧州現地時間（日本より7時間遅い）。美馬・金築は日本・香港の各現地時間</div>
+      <div class="lanes">
+        <div class="lane" data-who="murakami">
+          <div class="lane-head murakami">👤 村上 — Amsterdam到着・時差調整</div>
+          <div class="action"><div class="row-time">06:55</div><div><strong>🛂 入国審査・荷物受取</strong><div class="sub">到着便の発着情報は10/17の交通行に表示</div></div></div>
+          <div class="route-four">
+            <div class="row-time">07:30</div>
+            <div class="endpoint"><span class="label">出発</span><time>07:30</time><span class="tz">（CEST）</span><span class="place">Schiphol Airport Station</span></div>
+            <div class="mode"><span class="arrow">→</span><strong>NS直通</strong><small>約8〜10分</small></div>
+            <div class="endpoint"><span class="label">到着</span><time>時刻未確認</time><span class="tz">（CEST）</span><span class="place">Amsterdam Sloterdijk</span></div>
+          </div>
+          <div class="action"><div class="row-time">07:45〜</div><div><strong>🏨 ホテルに荷物を預ける</strong><div class="sub">通常チェックインは15時頃を想定</div></div></div>
+          <div class="action"><div class="row-time">午前〜午後</div><div><strong>時差調整・休息</strong><div class="sub">短い仮眠と軽い散策で現地時間に合わせる</div></div></div>
+          <div class="action"><div class="row-time">夜</div><div><strong>🍽 軽めの夕食・翌朝分の買い出し</strong><div class="sub">日曜のため営業中の店舗を現地で確認</div></div></div>
+          <div class="stay"><strong>宿泊：</strong>Holiday Inn Express Amsterdam - Sloterdijk Station</div>
+        </div>
+
+        <div class="lane" data-who="team">
+          <div class="lane-head team">👥 美馬・金築 — 京都 → 名古屋 → NGO → HKG → FRA</div>
+          <div class="route-four">
+            <div class="row-time">11:30頃</div>
+            <div class="endpoint"><span class="label">出発</span><time>11:30頃</time><span class="tz">（JST）</span><span class="place">京都駅</span></div>
+            <div class="mode"><span class="arrow">→</span><strong>新幹線<br>のぞみ</strong><small>約36分</small></div>
+            <div class="endpoint"><span class="label">到着</span><time>時刻未確認</time><span class="tz">（JST）</span><span class="place">名古屋駅</span></div>
+          </div>
+          <div class="route-four">
+            <div class="row-time">12:35</div>
+            <div class="endpoint"><span class="label">出発</span><time>12:35</time><span class="tz">（JST）</span><span class="place">名鉄名古屋駅</span></div>
+            <div class="mode"><span class="arrow">→</span><strong>名鉄<br>ミュースカイ</strong><small>約28分</small></div>
+            <div class="endpoint"><span class="label">到着</span><time>13:03</time><span class="tz">（JST）</span><span class="place">中部国際空港駅</span></div>
+          </div>
+          <div class="action"><div class="row-time"><span>13:10〜<br>15:40</span></div><div><strong>🛂 出発手続き・空港で休憩</strong><div class="sub">JALサクララウンジは利用不可。ゴールドカード保有者のみ、出国審査前のカードラウンジを検討</div></div></div>
+          <div class="route-four">
+            <div class="row-time">16:10</div>
+            <div class="endpoint"><span class="label">出発</span><time>16:10</time><span class="tz">（JST）</span><span class="place">中部国際空港（NGO）</span></div>
+            <div class="mode"><span class="flight-mark">✈</span><strong>CX539</strong><small>エコノミー<br>4時間20分</small></div>
+            <div class="endpoint"><span class="label">到着</span><time>19:30</time><span class="tz">（HKT）</span><span class="place">香港国際空港（HKG）</span></div>
+          </div>
+          <div class="action"><div class="row-time"><span>19:30〜<br>23:20</span></div><div><strong>🍽 香港で夕食・休憩</strong><div class="sub">航空会社ラウンジは利用不可。夕食、無料シャワー、リクライニングエリアを利用し、23:20頃に搭乗口へ</div></div></div>
+          <div class="route-four">
+            <div class="row-time">23:55</div>
+            <div class="endpoint"><span class="label">出発</span><time>23:55</time><span class="tz">（HKT）</span><span class="place">香港国際空港（HKG）</span></div>
+            <div class="mode"><span class="flight-mark">✈</span><strong>CX289</strong><small>エコノミー<br>13時間20分</small></div>
+            <div class="endpoint"><span class="label">到着</span><time>07:15 +1</time><span class="tz">（CEST）</span><span class="place">Frankfurt Airport（FRA）</span></div>
+          </div>
+          <div class="stay"><strong>宿泊：</strong>機内</div>
+        </div>
+      </div>
+    </details>
+    </div>
+  </main>
+</body>
+</html>
