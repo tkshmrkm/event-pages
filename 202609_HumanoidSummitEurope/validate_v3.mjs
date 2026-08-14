@@ -116,57 +116,127 @@ assert(!/<script\b/i.test(offlineMarkup), 'index_v3_offline.html: desk-print cop
 assert(offline.includes('data-trip-layout="desk-print-v1"') && offline.includes('body.desk-copy #tab-rec'), 'index_v3_offline.html: desk-print layout rules missing');
 
 const family = fs.readFileSync(path.join(here, 'family_print.html'), 'utf8');
-// 日別は「どこにいて何をしているか」の1ブロックだけ。以前は同じ内容の表が並んでいた。
-assert((family.match(/class="where-day/g) || []).length === 8, 'family_print.html: family itinerary must have eight day rows');
+// 「🗓 どこにいて何をしているか」は「📅 日程詳細（家族向け）」と内容が重複していたため
+// 削除済み（ユーザーの決定）。fam-table／fam-daysの重複表も引き続き無い。
+assert(!family.includes('class="family-where"') && !family.includes('class="where-day'), 'family_print.html: the redundant "どこにいて何をしているか" block must not come back');
 assert(!family.includes('fam-table') && !family.includes('fam-days'), 'family_print.html: the duplicate day table must not come back');
-// 国旗絵文字の検査は「どこにいるか」ブロックと時差カードだけに絞る。ページ全体を
-// 対象にすると、緊急連絡先の「🇯🇵 万一のとき」（この検査の対象外・意図した表示）を
-// 誤検知して落ちる。
-const familyWhereSection = family.match(/<section class="family-where">[\s\S]*?<\/section>/);
-assert(familyWhereSection, 'family_print.html: family-where section missing');
-assert(!/[\u{1F1E6}-\u{1F1FF}]{2}/u.test(familyWhereSection[0]), 'family_print.html: where-block must not use flag emoji (renders as letters on Windows)');
+// 国旗絵文字の検査は時差カードだけに絞る。ページ全体を対象にすると、緊急連絡先の
+// 「🇯🇵 万一のとき」的な表示（この検査の対象外）を誤検知するおそれがある。
 const timezoneZoneLabels = [...family.matchAll(/<div class="timezone-card[^"]*"><span>([^<]*)<\/span>/g)].map(m => m[1]);
 assert(timezoneZoneLabels.length === 2, 'family_print.html: expected 2 timezone cards (Japan, Germany)');
 timezoneZoneLabels.forEach(label => assert(!/[\u{1F1E6}-\u{1F1FF}]{2}/u.test(label), 'family_print.html: timezone zone label must not use flag emoji (renders as letters on Windows)'));
 
-// ---------- EuroBLECH（202610_Europe_TechEx_EuroBLECH）と同じ「どこにいるか」構造 ----------
-// section.family-where > .family-section-head + .where-body(.where-lead + .where-grid)、
-// .where-day > .where-people > .where-cell(.place)。人別セルを持たないHRSは、
-// EuroBLECHの合流後表示と同じ.is-sharedを常に付け、.where-peopleの中は常に1セル。
-assert((family.match(/<section class="family-where">/g) || []).length === 1, 'family_print.html: family-where section missing or duplicated');
-assert(family.includes('class="family-section-head"'), 'family_print.html: family-section-head heading missing');
-assert(family.includes('class="where-body"'), 'family_print.html: where-body wrapper missing');
-assert(family.includes('class="where-lead"'), 'family_print.html: where-lead intro missing');
-assert((family.match(/class="where-people"/g) || []).length === 8, 'family_print.html: where-people wrapper must match the eight day rows');
-assert((family.match(/class="where-cell where-\w+"><b class="place"/g) || []).length === 8, 'family_print.html: where-cell must wrap the city name in EuroBLECH\'s <b class="place">');
-assert(!family.includes('class="who"'), 'family_print.html: HRS has no separate-action days, so <span class="who"> must not appear');
-assert(/\.where-cell \.place\{[^}]*font-size:19px/.test(sharedCss), 'family_print.html: city name must stay the dominant type (19px, scoped to .where-cell .place)');
-
-// ---------- EuroBLECHと同じ.timezone-cards構造 ----------
+// ---------- EuroBLECHと同じ.timezone-cards構造。「日本時間で見ると、現地はこうなっている」の
+// 対応表は削除済み（ユーザーの決定）。timezone-cardsとtimezone-leadだけ残す。 ----------
 assert(family.includes('class="timezone-cards"'), 'family_print.html: timezone-cards wrapper missing');
 assert((family.match(/class="tz-diff"/g) || []).length === 2, 'family_print.html: expected 2 tz-diff cards (Japan basis, Germany difference)');
 assert(family.includes('class="timezone-card zone-japan"') && family.includes('class="timezone-card zone-europe"'), 'family_print.html: Japan/Germany timezone cards missing');
+assert(family.includes('class="timezone-lead"'), 'family_print.html: timezone-lead heading missing');
 assert(family.includes('日本のほうが7時間進んでいます') && family.includes('例：日本の 21:00 → 現地は同じ日の 14:00'), 'family_print.html: existing timezone supplementary facts must survive the restructure');
+assert(!/<th>日本の時刻<\/th><th>現地の時刻<\/th>/.test(family), 'family_print.html: the retired "日本時間で見ると" correspondence table must not come back');
 assert(!family.includes('id="fam-clock"'), 'family_print.html: live clock should not be in print-only document');
 assert(family.includes('<link rel="stylesheet" href="v3.css">') && !family.includes('<style>'), 'family_print.html: shared stylesheet link missing or CSS still embedded');
 assert(family.includes('data-trip-layout="family-v1"'), 'family_print.html: shared family layout marker missing');
 
 // ---------- 家族印刷版：5セクション構成 ----------
-// 出張サマリー／時差・気候／家族日程詳細／宿泊先情報／緊急連絡先の順で、
+// 出張サマリー／時差・気候／日程詳細／宿泊先情報／緊急連絡先の順で、
 // すべて同じfamily-section-headの見出し様式であること。
 assert(!/<script\b/i.test(family), 'family_print.html: family copy must have no runtime scripts');
 const familySectionHeadings = [...family.matchAll(/class="family-section-head">([^<]*)</g)].map(m => m[1]);
 assert(
   JSON.stringify(familySectionHeadings) === JSON.stringify([
-    '🧳 出張サマリー', '🕐 時差・気候', '🗓 どこにいて何をしているか', '🏨 宿泊先情報', '🆘 緊急連絡先',
+    '🧳 出張サマリー', '🕐 時差・気候', '📅 日程詳細（家族向け）', '🏨 宿泊先情報', '🆘 緊急連絡先',
   ]),
   `family_print.html: five sections must appear in the expected order (got ${familySectionHeadings.join(' | ')})`
 );
+
+// ---------- 日程詳細（家族向け）：202610_Europe_TechEx_EuroBLECHと同じ構造 ----------
+assert((family.match(/<section class="family-schedule">/g) || []).length === 1, 'family_print.html: family-schedule section missing or duplicated');
+assert((family.match(/class="family-day-row shared-day"/g) || []).length === 8, 'family_print.html: family-schedule must have eight day rows');
+// family-scheduleは日ごとに<section class="family-shared">を入れ子で持つため、
+// 非貪欲な[\s\S]*?<\/section>は最初の内側</section>で止まってしまう。
+// 次の兄弟セクション（🏨宿泊先情報）の開始位置までを素直に切り出す。
+const scheduleStart = family.indexOf('<section class="family-schedule">');
+const hotelStart = family.indexOf('<section class="family-section family-hotel">');
+assert(scheduleStart >= 0 && hotelStart > scheduleStart, 'family_print.html: family-schedule section body missing');
+const familySchedule = family.slice(scheduleStart, hotelStart);
+const scheduleLegendMatch = familySchedule.match(/<div class="schedule-legend"[\s\S]*?<\/div>/);
+assert(scheduleLegendMatch, 'family_print.html: schedule-legend missing');
+const scheduleLegendKinds = [...scheduleLegendMatch[0].matchAll(/schedule-tag kind-(\w+)/g)].map(m => m[1]).sort();
+const scheduleBodyKinds = [...new Set(
+  [...familySchedule.matchAll(/class="agenda-line"><time>[^<]*<\/time><span class="schedule-tag kind-(\w+)"/g)].map(m => m[1])
+)].sort();
+assert(
+  JSON.stringify(scheduleLegendKinds) === JSON.stringify(scheduleBodyKinds),
+  `family_print.html: schedule-legend kinds must exactly match kinds used in the schedule body (legend: ${scheduleLegendKinds.join(',')}, used: ${scheduleBodyKinds.join(',')})`
+);
+const agendaLines = [...familySchedule.matchAll(/<div class="agenda-line">([\s\S]*?)<\/div>/g)].map(m => m[1]);
+assert(agendaLines.length >= 8, 'family_print.html: family-schedule must have at least one agenda-line per day');
+agendaLines.forEach((inner, i) => {
+  assert(/^<time>[^<]+<\/time>/.test(inner), `family_print.html: agenda-line #${i} missing a leading <time>`);
+  assert(/<span class="schedule-tag kind-\w+">[^<]+<\/span>/.test(inner), `family_print.html: agenda-line #${i} missing its schedule-tag`);
+  assert(/<p>[\s\S]+<\/p>$/.test(inner), `family_print.html: agenda-line #${i} missing its <p> body`);
+});
+assert(/機内/.test(familySchedule) && /連絡がつきにくい/.test(familySchedule), 'family_print.html: schedule must flag an in-flight hard-to-reach window');
+
+// ---------- 緊急連絡先：外務省「在外公館リスト」（令和5年5月22日付）の実値 ----------
 assert(family.includes('href="tel:112"'), 'family_print.html: European emergency number 112 must be a tel: link');
 assert(/<a class="place"[^>]*>在ドイツ日本国大使館<\/a>/.test(family), 'family_print.html: embassy name itself must be the map link, not a separate 📍 地図 link');
+assert(/<a class="place"[^>]*>在フランクフルト日本国総領事館<\/a>/.test(family), 'family_print.html: consulate name itself must be the map link, not a separate 📍 地図 link');
 const familyEmergencySection = family.match(/<section class="family-section family-emergency">[\s\S]*?<\/section>/);
 assert(familyEmergencySection, 'family_print.html: emergency section missing');
-assert(!/\+49/.test(familyEmergencySection[0]), 'family_print.html: emergency section must not carry an unverified +49 phone number');
+assert(familyEmergencySection[0].includes('href="tel:+4930210940"'), 'family_print.html: embassy phone must be a tel: link (+49 30 210940)');
+assert(familyEmergencySection[0].includes('href="tel:+49692385730"'), 'family_print.html: consulate phone must be a tel: link (+49 69 2385730)');
+assert(!familyEmergencySection[0].includes('>地図</a>') && !familyEmergencySection[0].includes('>（地図）</a>') && !familyEmergencySection[0].includes('📍'), 'family_print.html: emergency section must not carry a separate 📍 地図 link');
+assert(!/管轄/.test(familyEmergencySection[0]), 'family_print.html: emergency section must not claim consular jurisdiction (not confirmed in the source list)');
+assert(/外務省 在外公館リスト/.test(familyEmergencySection[0]) && /令和5年5月22日付/.test(familyEmergencySection[0]) && /2026-08-15確認/.test(familyEmergencySection[0]), 'family_print.html: emergency section must cite its source and confirmation date');
+
+// ---------- 気候：4都市（名古屋・京都は1行にまとめる）＋各行に出典名と統計期間 ----------
+const climateSection = family.match(/<section class="family-section family-timezone">[\s\S]*?<\/section>/);
+assert(climateSection, 'family_print.html: climate/timezone section missing');
+const climateRows = [...climateSection[0].matchAll(/<tr><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><\/tr>/g)];
+assert(climateRows.length === 3, `family_print.html: climate table must have three rows, Nagoya+Kyoto merged (got ${climateRows.length})`);
+const climatePlaces = climateRows.map(m => m[1]).join(' | ');
+assert(/名古屋/.test(climatePlaces) && /京都/.test(climatePlaces), 'family_print.html: Nagoya and Kyoto must both be named (merged into one row)');
+assert(/シュトゥットガルト/.test(climatePlaces), 'family_print.html: Stuttgart climate row missing');
+assert(/フランクフルト/.test(climatePlaces), 'family_print.html: Frankfurt climate row missing');
+// 丸めた行（名古屋・京都）は「約」を付けて丸めたと分かる書き方にする。
+const nagoyaKyotoRow = climateRows.find(m => /名古屋/.test(m[1]));
+assert(nagoyaKyotoRow && /^約/.test(nagoyaKyotoRow[2]) && /^約/.test(nagoyaKyotoRow[3]), 'family_print.html: the merged Nagoya/Kyoto row must mark its values as rounded (約)');
+// 各行の出典・期間セルに、統計期間（西暦4桁の年を含む範囲）が入っていること。
+// 「限界」「概算比較」といった欠陥扱いの注記は書かない（ユーザーの訂正）。
+climateRows.forEach(([, place, , , src], i) => {
+  assert(/\d{4}.\d{4}/.test(climateRows[i][4]), `family_print.html: climate row "${place}" must state its statistical period`);
+});
+assert(!/限界/.test(climateSection[0]) && !/概算比較/.test(climateSection[0]), 'family_print.html: climate section must not frame the period difference as a limitation/defect');
+assert(!/未確認/.test(climateSection[0]), 'family_print.html: all four cities\' climate values are confirmed, so climate section must not call any of them unconfirmed');
+
+// ---------- 印刷アイコン：黒塗りグリフになる🖨（U+1F5A8）と🗓（U+1F5D3）を全生成物から除く ----------
+for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml], ['family_print.html', family]]) {
+  assert(!/\u{1F5A8}/u.test(text), `${name}: printer glyph U+1F5A8 must be replaced by the SVG print-icon`);
+  assert(!/\u{1F5D3}/u.test(text), `${name}: U+1F5D3 must not appear (its section was removed)`);
+  // U+1F5FA も既定表示が文字なので、同じく黒い輪郭グリフになる。
+  assert(!/\u{1F5FA}/u.test(text), `${name}: map glyph U+1F5FA must be replaced by the SVG line-icon`);
+}
+assert(sharedCss.includes('.line-icon{'), 'v3.css: line-icon style missing');
+assert((online.match(/class="line-icon line-icon-print"/g) || []).length >= 3, `${onlineName}: expected the print line-icon SVG in the header button, family-print link, and family-tab print button`);
+assert((offlineHtml.match(/class="line-icon line-icon-print"/g) || []).length >= 1, 'index_v3_offline.html: expected the print line-icon SVG in the desk-print banner');
+assert((online.match(/class="line-icon line-icon-calendar"/g) || []).length >= 1, `${onlineName}: expected the calendar line-icon SVG replacing the retired 🗓 glyph`);
+
+// ---------- 旅程タブの長い補足を折り畳みへ ----------
+const FOLD_COUNT = 8;
+for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml]]) {
+  // 机上用印刷版は全<details>を強制的にopenへ書き換えるため、class="fold"の前に
+  // open属性が挿入される（<details open class="fold">）。属性順に依存しない数え方にする。
+  assert((text.match(/<details[^>]*\bclass="fold"/g) || []).length === FOLD_COUNT, `${name}: expected ${FOLD_COUNT} folded itinerary notes`);
+  assert((text.match(/<div class="fold-body">/g) || []).length === FOLD_COUNT, `${name}: expected ${FOLD_COUNT} fold-body wrappers`);
+}
+// 常時表示のまま残った<span class="note">に、極端に長い（100字超）ものが残っていないこと。
+const planOnly = online.slice(online.indexOf('id="tab-plan"'), online.indexOf('id="tab-venue"'));
+const remainingNotes = [...planOnly.matchAll(/<span class="note">([\s\S]*?)<\/span>/g)].map(m => m[1].replace(/<[^>]+>/g, ''));
+remainingNotes.forEach((text, i) => {
+  assert(text.length <= 100, `${onlineName}: itinerary note #${i} is ${text.length} chars and should have been folded ("${text.slice(0, 30)}...")`);
+});
 
 const redirect = fs.readFileSync(path.join(here, 'index_v3.html'), 'utf8');
 assert(redirect.includes('http-equiv="refresh"') && redirect.includes('url=./'), 'index_v3.html: legacy URL redirect missing');

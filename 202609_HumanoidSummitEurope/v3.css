@@ -479,8 +479,22 @@ body{line-height:1.62;padding-bottom:24px}
 .tl td.t{width:98px;font-size:14px;color:var(--tx2);background:#F4F7F8}
 .sub,.opt,.lane-note{font-size:14px;color:var(--tx2)}
 .note{font-size:13px;color:var(--mu);border-left-color:var(--line)}
+/* 補足の折り畳み。202610_Europe_TechEx_EuroBLECHのdetails.fold／.fold-bodyと同一定義
+   （あちらのmt-1相当の上マージンはdetails.fold自身のmargin-topで持たせる）。 */
+details.fold{margin-top:5px}
+details.fold>summary{min-height:38px;display:flex;align-items:center;gap:5px;cursor:pointer;list-style:none;color:#2A5FA0;font-size:var(--f4);font-weight:600}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::before{content:'▸';color:var(--mu);font-size:var(--f5)}
+details.fold[open]>summary::before{content:'▾'}
+details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding-left:9px;color:var(--tx2);font-size:var(--f4);line-height:1.6}
 .btn{min-height:44px;padding:9px 13px;font-size:13px;border-color:var(--line);color:var(--tx2)}
 .banner{font-size:14px;border-width:2px}
+/* 黒塗りグリフ対策のモノクロSVGアイコン。202610_Europe_TechEx_EuroBLECHの
+   .line-icon／.line-icon-*と同じクラス名・寸法・色（19x19、margin-right 4px、
+   vertical-align -4px、色#0B5C60）にそろえる。個別名（-print／-calendar）は
+   意味づけのためのモディファイアで、EuroBLECH同様スタイルはベースクラスが持つ。 */
+.line-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:19px;height:19px;margin-right:4px;color:#0B5C60;vertical-align:-4px}
+.line-icon svg{display:block;width:100%;height:100%;overflow:visible}
 .card > .ttl{padding:11px 14px;font-size:16px;color:var(--tx2)}
 .memo > summary{min-height:44px;font-size:14px}
 .memo textarea,.rec textarea,.ed{font-size:16px;border-color:var(--line)}
@@ -570,37 +584,51 @@ body{line-height:1.62;padding-bottom:24px}
 .family-head h1{margin:2px 0;font-size:22px}
 .family-head p{margin:0;color:var(--tx2);font-size:14px}
 .family-page .tab,.family-page .tab.on{display:block}
-/* どこにいるか：202610_Europe_TechEx_EuroBLECHのv3.cssと同じ構造
-   （section.family-where > .where-body > .where-lead + .where-grid、
-   .where-day > .where-people > .where-cell）。都市名が主役なので、
-   日付と補足はその手がかりに徹して小さくする。HRSは全行程が同一行動なので
-   人別セルを持たず、.where-peopleの中は常に1セル。EuroBLECHの.is-shared
-   （合流後の1セル表示）と同じ扱いにして、1セルでも幅いっぱいに広げる。 */
 /* .family-section は5セクション構成の共通カード枠（出張サマリー／時差・気候／
-   宿泊先情報／緊急連絡先）。.family-whereと同じ枠・見出し様式を再利用し、
-   重複定義しない。 */
-.family-where,.family-section{margin-bottom:14px;overflow:hidden;border:2px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,32,.05)}
+   日程詳細／宿泊先情報／緊急連絡先）。「🗓 どこにいて何をしているか」は
+   日程詳細と内容が重複するため削除済み（.family-whereと.where-*一式も廃止）。
+   .family-scheduleも同じ枠を使う（202610_Europe_TechEx_EuroBLECHと同じ）。 */
+.family-section,.family-schedule{margin-bottom:14px;overflow:hidden;border:2px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,32,.05)}
 .family-section-head{padding:10px 14px;background:var(--neu-bg);color:var(--tx2);font-size:16px;font-weight:700}
-.where-body,.family-section-body{padding:13px 14px}
+.family-section-body{padding:13px 14px}
+/* .where-leadはどこにいるかブロックの廃止後も、出張サマリー・気候の見出し段落として残る。 */
 .where-lead{margin:0 0 11px;color:var(--tx2);font-size:13px;line-height:1.6}
-.where-grid{display:grid;gap:8px}
-.where-day{display:grid;grid-template-columns:56px minmax(0,1fr);overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff}
-.where-day>header{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:10px 6px;background:var(--tx2);color:#fff;text-align:center}
-.where-day>header strong{font-size:17px;line-height:1.1;font-variant-numeric:tabular-nums}
-.where-day>header span{font-size:12px;opacity:.85}
-.where-people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));min-width:0}
-.where-day.is-shared .where-people{grid-template-columns:minmax(0,1fr)}
-.where-cell{min-width:0;border-left:1px solid var(--line);padding:9px 11px}
-.where-cell:first-child{border-left:0}
-/* 地図リンク用の.place（shared/trip-field/core.cssで#2A5FA0・太さ600・下線なし）と
-   同じクラス名だが意味が違うので、.where-cellの内側だけ本文色・800・19pxへ上書きする。 */
-.where-cell .place{display:block;color:var(--tx);font-size:19px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
-.where-cell small{display:block;margin-top:4px;color:var(--tx);font-size:13.5px;font-weight:600;line-height:1.5;overflow-wrap:anywhere}
-.where-work small{color:#0B5C60}
-.where-home small{color:var(--mu);font-weight:400}
-.where-work{background:#F2F8F7}.where-work .place{color:#0B4F5A}
-.where-move{background:#F6F7FA}
-.where-home{background:#F7F8F8}.where-home .place{color:var(--mu)}
+/* 日程詳細（家族向け）：202610_Europe_TechEx_EuroBLECHのv3.cssと同一定義
+   （.schedule-body／.schedule-legend／.schedule-tag kind-*／.family-day-row／.agenda-line）。
+   kind-*はHRSが実際に使う7種類だけを移植する（meal/techex/euro/visit/homeは未使用のため省く）。
+   kind-moveとkind-workは共通トークン（--move/--move-tx/--conf/--conf-tx）を使うので、
+   このファイル冒頭のHRS配色（outdoorCss）をそのまま継承する。
+   .family-day-row aside .placeは個別に色指定しない。shared/trip-field/core.cssの
+   既定.place（#2A5FA0・太さ600・下線なし）がEuroBLECHと同じ値のため重複させない。 */
+.schedule-body{padding:12px}
+.schedule-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:10px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#F5F8F9}
+.schedule-legend>strong{margin-right:3px;color:var(--tx2);font-size:13px}
+.schedule-tag{display:inline-flex;align-items:center;width:fit-content;min-height:24px;border:1px solid currentColor;border-radius:999px;padding:2px 7px;font-size:11px;font-weight:700;white-space:nowrap}
+.kind-flight{background:#E8E7FA;color:#40378A}
+.kind-move{background:var(--move);color:var(--move-tx)}
+.kind-transfer{background:#E9F2FA;color:#245A85}
+.kind-procedure{background:#F1F3F4;color:#45545D}
+.kind-work{background:var(--conf);color:var(--conf-tx)}
+.kind-stay{background:#EEF5FB;color:#245A85}
+.kind-review{background:#FFF0C2;color:#7A3E08}
+/* HRSは全行程が同一行動なので、EuroBLECHの.family-shared（合流後の1枠表示）を
+   毎日使う。人別の2枠は使わないため、grid-template-columnsはheader/section/asideの
+   3列で足りる（EuroBLECHは人別2枠を持つため4列）。 */
+.family-day-row{display:grid;grid-template-columns:72px minmax(0,1fr) 170px;overflow:hidden;margin-top:8px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.family-day-row>header{padding:11px 9px;background:var(--tx2);color:#fff;text-align:center}
+.family-day-row>header strong,.family-day-row>header span{display:block}
+.family-day-row>header strong{font-size:16px}
+.family-day-row>header span{font-size:12px;opacity:.85}
+.family-day-row>section,.family-day-row>aside{min-width:0;border-left:1px solid var(--line);padding:9px 10px}
+.family-day-row h3{margin:0 0 7px;color:var(--mu);font-size:12px;font-weight:700;letter-spacing:.04em}
+.agenda-line{display:grid;grid-template-columns:82px auto minmax(0,1fr);align-items:start;gap:6px;padding:7px 0;border-top:1px solid var(--line2)}
+.agenda-line:first-of-type{border-top:0;padding-top:0}
+.agenda-line time{color:#0B4F5A;font-size:14px;font-weight:800;line-height:1.35;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.agenda-line p,.family-day-row aside p{margin:0;color:var(--tx2);font-size:13px;line-height:1.55;overflow-wrap:anywhere}
+.agenda-line p b{color:var(--tx)}
+.family-day-row aside{background:#F7F9FA}
+.family-day-row aside p+p{margin-top:8px;border-top:1px solid var(--line2);padding-top:8px}
+.family-day-row aside small{color:var(--mu);font-size:11px}
 /* 時刻の読み方の宣言。EuroBLECHの.timezone-leadと同じ寸法。
    文面だけHRSの実態に合わせる（HRSは現地時刻と日本時間が混在するため）。 */
 .timezone-lead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0 0 10px;color:var(--tx2);font-size:14px}
@@ -622,6 +650,21 @@ body{line-height:1.62;padding-bottom:24px}
 @media(max-width:640px){
   .family-head{padding:12px 0 10px}
   .family-head h1{font-size:20px}
+  /* 日程詳細：header/section/asideの3列を2列（見出し＋本文）へ畳む。
+     HRSは人別セクションを持たないので、本文列はsection・asideの2段だけでよい
+     （EuroBLECHは人別2枠＋asideの3段）。202610_Europe_TechEx_EuroBLECHのv3.css
+     と同じ考え方だが、段数がHRSの実態に合わせて少ない。 */
+  /* EuroBLECHの58pxそのままだと、HRSの2桁日付（9/10・9/12・9/13・9/14）が
+     見出しの<strong>内で42px要り、40pxの余白（58px−左右padding18px）に収まらず
+     折り返す。64pxへ広げて1行に収める。 */
+  .family-day-row{grid-template-columns:64px minmax(0,1fr)}
+  .family-day-row>header{grid-row:1/3}
+  .family-day-row>section,.family-day-row>aside{grid-column:2;border-left:1px solid var(--line);border-top:1px solid var(--line)}
+  .family-day-row>section{border-top:0}
+  .agenda-line{grid-template-columns:82px minmax(0,1fr);gap:3px 7px}
+  .agenda-line time{grid-row:1/3;font-size:14px}
+  .agenda-line .schedule-tag{grid-column:2}
+  .agenda-line p{grid-column:2}
   .family-page #fam-table,.family-page #fam-table tbody,.family-page #fam-table tr,.family-page #fam-table td{display:block;width:100%}
   .family-page #fam-table thead{display:none}
   .family-page #fam-table tr{padding:0 0 10px;border:0;border-bottom:2px solid var(--line);background:#fff}

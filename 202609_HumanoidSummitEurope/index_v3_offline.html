@@ -340,8 +340,22 @@ body{line-height:1.62;padding-bottom:24px}
 .tl td.t{width:98px;font-size:14px;color:var(--tx2);background:#F4F7F8}
 .sub,.opt,.lane-note{font-size:14px;color:var(--tx2)}
 .note{font-size:13px;color:var(--mu);border-left-color:var(--line)}
+/* 補足の折り畳み。202610_Europe_TechEx_EuroBLECHのdetails.fold／.fold-bodyと同一定義
+   （あちらのmt-1相当の上マージンはdetails.fold自身のmargin-topで持たせる）。 */
+details.fold{margin-top:5px}
+details.fold>summary{min-height:38px;display:flex;align-items:center;gap:5px;cursor:pointer;list-style:none;color:#2A5FA0;font-size:var(--f4);font-weight:600}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::before{content:'▸';color:var(--mu);font-size:var(--f5)}
+details.fold[open]>summary::before{content:'▾'}
+details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding-left:9px;color:var(--tx2);font-size:var(--f4);line-height:1.6}
 .btn{min-height:44px;padding:9px 13px;font-size:13px;border-color:var(--line);color:var(--tx2)}
 .banner{font-size:14px;border-width:2px}
+/* 黒塗りグリフ対策のモノクロSVGアイコン。202610_Europe_TechEx_EuroBLECHの
+   .line-icon／.line-icon-*と同じクラス名・寸法・色（19x19、margin-right 4px、
+   vertical-align -4px、色#0B5C60）にそろえる。個別名（-print／-calendar）は
+   意味づけのためのモディファイアで、EuroBLECH同様スタイルはベースクラスが持つ。 */
+.line-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:19px;height:19px;margin-right:4px;color:#0B5C60;vertical-align:-4px}
+.line-icon svg{display:block;width:100%;height:100%;overflow:visible}
 .card > .ttl{padding:11px 14px;font-size:16px;color:var(--tx2)}
 .memo > summary{min-height:44px;font-size:14px}
 .memo textarea,.rec textarea,.ed{font-size:16px;border-color:var(--line)}
@@ -472,7 +486,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="subtitle">9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA</div>
       </div>
       <div class="desk-print-trigger" style="display:flex;gap:5px;flex-shrink:0">
-        <button class="btn" onclick="window.print()" aria-label="印刷">🖨</button>
+        <button class="btn" onclick="window.print()" aria-label="印刷"><span class="line-icon line-icon-print" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></span></button>
       </div>
     </div>
   </div>
@@ -495,7 +509,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
 
 <!-- ==================== タブ：旅程 ==================== -->
 <section class="tab on" id="tab-plan" role="tabpanel" aria-label="旅程">
-<div class="banner b-info"><span class="i">🖨</span><div><strong>机上用印刷版です。</strong>スマートフォンではオンライン版を使用します。この紙には旅程・準備・会場の参照情報だけを載せ、メモ入力欄は含めません。</div></div>
+<div class="banner b-info"><span class="i"><span class="line-icon line-icon-print" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></span></span><div><strong>机上用印刷版です。</strong>スマートフォンではオンライン版を使用します。この紙には旅程・準備・会場の参照情報だけを載せ、メモ入力欄は含めません。</div></div>
 
   <div class="banner b-warn">
     <span class="i">⚠️</span>
@@ -507,7 +521,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
     <div class="bd small" style="display:grid;gap:4px">
       <div>🧳 荷物は常にホテルに預ける<span class="note">コインロッカーは使わない。</span></div>
       <div><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span> 鉄道は事前購入せず DB Navigator で都度購入<span class="note">Stuttgart→Frankfurt空港、プランB・D・X選択時の Frankfurt⇔Köln を含む。</span></div>
-      <div>🏨 Stuttgart 4泊 → Frankfurt空港 1泊 <span class="st st-booked">予約済</span><span class="note">Maritim Stuttgart（9/8〜9/12・朝食付・会場まで徒歩約3分）／Best Western Hotel Airport Frankfurt（9/12〜9/13・朝食付）。詳細は準備タブ。</span></div>
+      <div>🏨 Stuttgart 4泊 → Frankfurt空港 1泊 <span class="st st-booked">予約済</span><details open class="fold"><summary>宿泊の内訳</summary><div class="fold-body">Maritim Stuttgart（9/8〜9/12・朝食付・会場まで徒歩約3分）／Best Western Hotel Airport Frankfurt（9/12〜9/13・朝食付）。詳細は準備タブ。</div></details></div>
     </div>
     <div class="foot" style="border-bottom:1px solid var(--line2)">🚉 <strong>Frankfurt空港には駅が2つある。</strong>長距離駅（Fernbf・ICE）と近郊駅（S-Bahn）は別の場所なので、乗る前にどちらか確認する。</div>
     <div class="foot" style="border-bottom:1px solid var(--line2)">🏷 <strong>未確定の書き分け：</strong>「未発表」＝先方が出していない ／「要確認」＝調べれば分かる ／「要検討」＝こちらが決める</div>
@@ -561,9 +575,9 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
           <div class="sub">シェンゲン入域審査 → 搭乗口へ（乗継 1時間45分）</div><span class="note">ラウンジや買物は予定に入れず、入域審査と搭乗口確認を優先。朝食用のパン／サンドイッチはFRA到着後に購入する</span></div></div>
         <div class="route-four"><div class="row-time">7:40</div><div class="endpoint"><span class="label">出発</span><time>7:40</time><span class="tz">（EEST）</span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Helsinki+Airport" target="_blank" rel="noopener">ヘルシンキ空港（HEL）</a></div><div class="mode"><span class="flight-mark" role="img" aria-label="フライト"></span><strong>AY1411</strong><small>A321・2時間40分</small></div><div class="endpoint"><span class="label">到着</span><time>9:20</time><span class="tz">（CEST）</span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Frankfurt+Airport" target="_blank" rel="noopener">フランクフルト空港（FRA）</a></div></div><div class="action no-time"><div class="row-time"></div><div class="action-body"><span class="note">エコノミーは食事なし。<a href="https://www.finnair.com/fi-en/nordic-kitchen--onboard-meals-and-beverages/short-haul-meals" target="_blank" rel="noopener">Finnair公式</a>では水・ブルーベリージュースは無料、軽食・コーヒー等は有料。必要なら事前注文も可</span></div></div>
         <div class="action"><div class="row-time">9:20</div><div class="action-body"><span class="flight-mark" role="img" aria-label="フライト"></span><strong>FRA 着</strong>
-          <div class="sub">荷物受取・税関</div><span class="note">入国審査はHELで完了。荷物受取・税関後、T3の<a href="https://www.frankfurt-airport.com/en/locations/b/bread-and-bite/bread-and-bite.html" target="_blank" rel="noopener">Bread &amp; Bite</a>（6:00〜22:00）などでICE車内用のパン／サンドイッチを購入してから長距離駅へ</span></div></div>
+          <div class="sub">荷物受取・税関</div><details open class="fold"><summary>朝食の調達</summary><div class="fold-body">入国審査はHELで完了。荷物受取・税関後、T3の<a href="https://www.frankfurt-airport.com/en/locations/b/bread-and-bite/bread-and-bite.html" target="_blank" rel="noopener">Bread &amp; Bite</a>（6:00〜22:00）などでICE車内用のパン／サンドイッチを購入してから長距離駅へ</div></details></div></div>
         <div class="action"><div class="row-time">10:51目安</div><div class="action-body"><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>Frankfurt空港 長距離駅（Fernbf）発 → Stuttgart Hbf</strong>（1時間20分）
-          <div class="sub"><strong>ICE 515</strong>・直通</div><span class="note">9:20着から約90分あり、通常ならパン購入を含めて10:51発を目指せる。荷物受取等に時間がかかった場合は次の直通ICEに切り替える。乗換ありの便より直通を優先</span></div></div>
+          <div class="sub"><strong>ICE 515</strong>・直通</div><details open class="fold"><summary>乗る便の判断</summary><div class="fold-body">9:20着から約90分あり、通常ならパン購入を含めて10:51発を目指せる。荷物受取等に時間がかかった場合は次の直通ICEに切り替える。乗換ありの便より直通を優先</div></details></div></div>
         <div class="action"><div class="row-time">12:11</div><div class="action-body"><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Stuttgart+Hauptbahnhof" target="_blank" rel="noopener">Stuttgart Hbf</a> 着</strong>
           <div class="sub"><span class="mode-icon mode-icon-car" role="img" aria-label="タクシー"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2m12 0v2h2v-2M6 13h12"/><circle cx="8" cy="15" r=".8"/><circle cx="16" cy="15" r=".8"/></svg></span>タクシーでホテルへ（約1.5km・€5〜10・現金払い）</div>
           <div class="note"><strong>① タクシー（第一候補）：</strong>駅構内の案内に従い <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Taxi+Stuttgart+Hauptbahnhof+Arnulf-Klett-Platz" target="_blank" rel="noopener">Arnulf-Klett-Platz</a> 側の乗り場から。運転手へ “Zum Maritim Hotel Stuttgart, bitte.” 必要なら住所 <strong>Seidenstraße 34</strong> を見せる。€10札を含む€20程度を用意。<br>
@@ -572,7 +586,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="action"><div class="row-time">12:30頃</div><div class="action-body"><span class="et t-hotel">🏨</span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">Maritim Stuttgart</a> 着</strong>
           <div class="sub">荷物を預けて身軽に行動</div>
           <div class="note">正式チェックインは15:00〜。</div></div></div>
-        <div class="action"><div class="row-time">13:00〜14:00</div><div class="action-body"><span class="et t-food">🍽</span>ランチ候補 <span class="et t-tbd">要検討</span><span class="note">・Markthalle Stuttgart（食品市場内の軽食・惣菜／ホテルから徒歩圏）<br>・Bohnenviertel（旧市街の飲食街／シュヴァーベン料理のカジュアル店多数）<br>・Königstraße周辺のカフェ・ベーカリー</span></div></div>
+        <div class="action"><div class="row-time">13:00〜14:00</div><div class="action-body"><span class="et t-food">🍽</span>ランチ候補 <span class="et t-tbd">要検討</span><details open class="fold"><summary>ランチ候補</summary><div class="fold-body">・Markthalle Stuttgart（食品市場内の軽食・惣菜／ホテルから徒歩圏）<br>・Bohnenviertel（旧市街の飲食街／シュヴァーベン料理のカジュアル店多数）<br>・Königstraße周辺のカフェ・ベーカリー</div></details></div></div>
         <div class="action"><div class="row-time">14:00〜</div><div class="action-body"><span class="et t-see">🏛</span><strong>午後観光（時差調整を兼ねる）</strong>
           <div class="opt"><b>① Stuttgart市内</b><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Schlossplatz+Stuttgart" target="_blank" rel="noopener">Schlossplatz</a>、Königstraße を散策</div>
           <div class="opt"><b>② Ludwigsburg</b>S-Bahn 約15〜20分 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Residenzschloss+Ludwigsburg" target="_blank" rel="noopener">Residenzschloss＋Blühendes Barock庭園</a> → 旧市街 Marktplatz で早めのディナー</div>
@@ -591,7 +605,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
       <div class="tl-stack">
         <div class="action"><div class="row-time">7:30</div><div class="action-body"><span class="et t-food">🍽</span>ホテル朝食</div></div>
         <div class="action"><div class="row-time">8:50</div><div class="action-body">ホテル → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">Liederhalle</a>（徒歩約3分）</div></div>
-        <div class="action"><div class="row-time">9:00〜17:00</div><div class="action-body"><span class="et t-conf">🤖 Day 1</span>政策・市場・量産・Embodied AI・モーター技術<span class="note">セッション一覧（全11項目のうち、夜の VIP Dinner はVIPパス対象で不参加。実質10項目）と当日の狙いは <a href="#" data-goto="venue">会場タブ</a> に集約。開場9:00・終了17:00頃を想定</span></div></div>
+        <div class="action"><div class="row-time">9:00〜17:00</div><div class="action-body"><span class="et t-conf">🤖 Day 1</span>政策・市場・量産・Embodied AI・モーター技術<details open class="fold"><summary>会期の内訳</summary><div class="fold-body">セッション一覧（全11項目のうち、夜の VIP Dinner はVIPパス対象で不参加。実質10項目）と当日の狙いは <a href="#" data-goto="venue">会場タブ</a> に集約。開場9:00・終了17:00頃を想定</div></details></div></div>
         <div class="action"><div class="row-time">17:00〜18:00</div><div class="action-body">Networking／展示ブース（40+社）</div></div>
         <div class="action"><div class="row-time">夜</div><div class="action-body"><span class="et t-food">🍽</span>夕食（<a href="#dinner">候補リスト</a>）→ <span class="et t-hotel">🏨</span>Maritim Stuttgart泊</div></div>
       </div>
@@ -617,7 +631,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
     <div class="lane" data-who="all">
       <div class="tl-stack">
         <div class="action"><div class="row-time">7:30</div><div class="action-body"><span class="et t-food">🍽</span>ホテル朝食</div></div>
-        <div class="action"><div class="row-time">終日</div><div class="action-body"><span class="et t-conf">🤖 Day 3</span>近郊のヒューマノイドロボット関連企業への訪問（Company Visits）<span class="et t-tbd">未発表</span><span class="note">公式サイトによれば、Day 1・2（9/9・9/10）がLiederhalle会場での講演・展示（40+社出展）で、Day 3（9/11）はStuttgart近郊の企業を巡るガイド付き訪問日という構成。訪問先企業リストは開催直前に公式発表予定で、現時点では未公開。集合時刻・場所（Liederhalle集合か、送迎の有無等）も公式未発表のため要確認</span></div></div>
+        <div class="action"><div class="row-time">終日</div><div class="action-body"><span class="et t-conf">🤖 Day 3</span>近郊のヒューマノイドロボット関連企業への訪問（Company Visits）<span class="et t-tbd">未発表</span><details open class="fold"><summary>会期の構成</summary><div class="fold-body">公式サイトによれば、Day 1・2（9/9・9/10）がLiederhalle会場での講演・展示（40+社出展）で、Day 3（9/11）はStuttgart近郊の企業を巡るガイド付き訪問日という構成。訪問先企業リストは開催直前に公式発表予定で、現時点では未公開。集合時刻・場所（Liederhalle集合か、送迎の有無等）も公式未発表のため要確認</div></details></div></div>
         <div class="action"><div class="row-time">夜</div><div class="action-body"><span class="et t-food">🍽</span>夕食（<a href="#dinner">候補リスト</a>）→ <span class="et t-hotel">🏨</span>Maritim Stuttgart泊（最終泊）</div></div>
       </div>
     </div>
@@ -733,7 +747,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
       </div>
     </div>
     <div class="plan" data-group="0912" data-plan="D">
-      <div class="plan-head">🗺 プランD：ポルシェ博物館＋ケルン（B＋C の詰め込み）</div>
+      <div class="plan-head"><span class="line-icon line-icon-map" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4z"/><path d="M9 4v13m6-10.5V20"/></svg></span> プランD：ポルシェ博物館＋ケルン（B＋C の詰め込み）</div>
       <div class="tl-stack">
         <div class="action"><div class="row-time">8:00</div><div class="action-body"><span class="et t-food">🍽</span><strong>Maritim で朝食</strong>
         <div class="sub">宿泊に朝食が付いている</div></div></div>
@@ -846,7 +860,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="sub">9/14の帰国予定・税関申告を入れ、二次元コードを表示できるところまで確認</div><span class="note">二人とも各自で対応。偽サイトを避け、公式ページから利用する</span></div></div>
         <div class="action"><div class="row-time">14:00〜</div><div class="action-body"><span class="et t-gate">🛂</span><strong>チェックイン</strong>
         <div class="sub">荷物を回収してから。出発3時間前の 16:20 より前に空港着が目標</div></div></div>
-        <div class="action"><div class="row-time">17:00〜19:00</div><div class="action-body">🛋 <strong>ラウンジ</strong>（二人とも）<span class="et t-tbd">ラウンジ名は要確認</span><span class="note">ワンワールド便。JAL/ワンワールドサファイア以上で利用資格あり。FRAのFinnair便は <strong>Terminal 3</strong>（<a href="https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html" target="_blank" rel="noopener">空港公式</a>）。T3には<a href="https://www.frankfurt-airport.com/en/at-the-airport/facilities-services/priority-lounge.html" target="_blank" rel="noopener">Priority Lounge</a>があるが、公式提携航空会社一覧にFinnairの記載がなく、HEL行きでの利用可否・指定ラウンジ名は未確認。オンラインチェックイン時の搭乗券表示またはFinnairで確認する。</span></div></div>
+        <div class="action"><div class="row-time">17:00〜19:00</div><div class="action-body">🛋 <strong>ラウンジ</strong>（二人とも）<span class="et t-tbd">ラウンジ名は要確認</span><details open class="fold"><summary>ラウンジの利用資格</summary><div class="fold-body">ワンワールド便。JAL/ワンワールドサファイア以上で利用資格あり。FRAのFinnair便は <strong>Terminal 3</strong>（<a href="https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html" target="_blank" rel="noopener">空港公式</a>）。T3には<a href="https://www.frankfurt-airport.com/en/at-the-airport/facilities-services/priority-lounge.html" target="_blank" rel="noopener">Priority Lounge</a>があるが、公式提携航空会社一覧にFinnairの記載がなく、HEL行きでの利用可否・指定ラウンジ名は未確認。オンラインチェックイン時の搭乗券表示またはFinnairで確認する。</div></details></div></div>
         <div class="route-four"><div class="row-time">19:20発</div><div class="endpoint"><span class="label">出発</span><time>19:20</time><span class="tz">（CEST）</span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Frankfurt+Airport" target="_blank" rel="noopener">フランクフルト空港（FRA）</a></div><div class="mode"><span class="flight-mark" role="img" aria-label="フライト"></span><strong>Finnair AY1416</strong><small>A321・2時間25分</small></div><div class="endpoint"><span class="label">到着</span><time>22:45</time><span class="tz">（EEST）</span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Helsinki+Airport" target="_blank" rel="noopener">ヘルシンキ空港（HEL）</a></div></div>
         <div class="action"><div class="row-time">22:45</div><div class="action-body"><span class="flight-mark" role="img" aria-label="フライト"></span><strong>HEL 着</strong>
           <div class="sub">乗継 2時間 → 搭乗口へ</div></div></div>
@@ -898,7 +912,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
     <summary class="ttl" style="cursor:pointer;list-style:none"><h2 style="display:inline;font:inherit;margin:0">出発前の準備・家族向け資料</h2></summary>
     <div class="bd">
       <a class="btn" href="#" data-goto="prep">✅ 出発前準備を開く</a>
-      <a class="btn" href="family_print.html">🖨 家族向け印刷版</a>
+      <a class="btn" href="family_print.html"><span class="line-icon line-icon-print" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></span> 家族向け印刷版</a>
       <span class="small muted">現地で頻繁に使わない情報は主要ナビから分離しています。</span>
     </div>
   </details>
@@ -957,7 +971,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
       <div>
         <strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">Maritim Stuttgart</a></strong>（★★★★／Seidenstraße 34, 70174）：9/8〜9/12（4泊・朝食付）<span class="st st-booked">予約済</span><br>
         <span style="font-weight:700">✔ 会場 <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">Liederhalle</a> に隣接（徒歩約3分）。</span>
-        <span class="note">クラシックダブル28㎡・禁煙・チェックイン15:00｜無料キャンセル 9/5 23:00(現地)まで｜TEL +49 711 9420</span>
+        <details open class="fold"><summary>予約条件</summary><div class="fold-body">クラシックダブル28㎡・禁煙・チェックイン15:00｜無料キャンセル 9/5 23:00(現地)まで｜TEL +49 711 9420</div></details>
       </div>
       <div>
         <strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt" target="_blank" rel="noopener">Best Western Hotel Airport Frankfurt</a></strong>：9/12〜9/13（1泊・朝食付）<span class="st st-booked">予約済</span>
@@ -966,7 +980,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
   </div>
 
   <details open class="card">
-    <summary class="ttl" style="cursor:pointer;list-style:none"><h2 style="display:inline;font:inherit;margin:0">🗺 地図・その他リンク集（タップで開く）</h2></summary>
+    <summary class="ttl" style="cursor:pointer;list-style:none"><h2 style="display:inline;font:inherit;margin:0"><span class="line-icon line-icon-map" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4z"/><path d="M9 4v13m6-10.5V20"/></svg></span> 地図・その他リンク集（タップで開く）</h2></summary>
     <div class="bd">
       <div class="links">
         <div>
@@ -1168,7 +1182,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
 
   <!-- 家族に渡す紙は、この1タブだけを印刷する -->
   <div class="no-print" style="display:flex;gap:6px;align-items:center;margin-bottom:12px">
-    <button class="btn" id="btn-print-fam">🖨 この家族用ページだけ印刷</button>
+    <button class="btn" id="btn-print-fam"><span class="line-icon line-icon-print" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></span> この家族用ページだけ印刷</button>
     <span class="small muted">画面用の時計は紙には出ません</span>
   </div>
 
@@ -1209,7 +1223,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
 
   <!-- ③ 毎日どこで何をしているか（FAM 定義から自動生成・日レベル） -->
   <div class="card">
-    <h2 class="ttl">🗓 毎日どこで何をしているか</h2>
+    <h2 class="ttl"><span class="line-icon line-icon-calendar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/><path d="M8 13h2m4 0h2m-8 4h2m4 0h2"/></svg></span> 毎日どこで何をしているか</h2>
     <div class="scroll-x"><table class="tb" id="fam-table">
       <thead><tr><th style="width:74px">日付</th><th style="width:150px">場所</th><th>していること</th></tr></thead>
       <tbody id="fam-days"></tbody>

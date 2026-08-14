@@ -96,8 +96,22 @@ body{line-height:1.62;padding-bottom:24px}
 .tl td.t{width:98px;font-size:14px;color:var(--tx2);background:#F4F7F8}
 .sub,.opt,.lane-note{font-size:14px;color:var(--tx2)}
 .note{font-size:13px;color:var(--mu);border-left-color:var(--line)}
+/* 補足の折り畳み。202610_Europe_TechEx_EuroBLECHのdetails.fold／.fold-bodyと同一定義
+   （あちらのmt-1相当の上マージンはdetails.fold自身のmargin-topで持たせる）。 */
+details.fold{margin-top:5px}
+details.fold>summary{min-height:38px;display:flex;align-items:center;gap:5px;cursor:pointer;list-style:none;color:#2A5FA0;font-size:var(--f4);font-weight:600}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::before{content:'▸';color:var(--mu);font-size:var(--f5)}
+details.fold[open]>summary::before{content:'▾'}
+details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding-left:9px;color:var(--tx2);font-size:var(--f4);line-height:1.6}
 .btn{min-height:44px;padding:9px 13px;font-size:13px;border-color:var(--line);color:var(--tx2)}
 .banner{font-size:14px;border-width:2px}
+/* 黒塗りグリフ対策のモノクロSVGアイコン。202610_Europe_TechEx_EuroBLECHの
+   .line-icon／.line-icon-*と同じクラス名・寸法・色（19x19、margin-right 4px、
+   vertical-align -4px、色#0B5C60）にそろえる。個別名（-print／-calendar）は
+   意味づけのためのモディファイアで、EuroBLECH同様スタイルはベースクラスが持つ。 */
+.line-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:19px;height:19px;margin-right:4px;color:#0B5C60;vertical-align:-4px}
+.line-icon svg{display:block;width:100%;height:100%;overflow:visible}
 .card > .ttl{padding:11px 14px;font-size:16px;color:var(--tx2)}
 .memo > summary{min-height:44px;font-size:14px}
 .memo textarea,.rec textarea,.ed{font-size:16px;border-color:var(--line)}
@@ -188,37 +202,51 @@ const familyCss = String.raw`
 .family-head h1{margin:2px 0;font-size:22px}
 .family-head p{margin:0;color:var(--tx2);font-size:14px}
 .family-page .tab,.family-page .tab.on{display:block}
-/* どこにいるか：202610_Europe_TechEx_EuroBLECHのv3.cssと同じ構造
-   （section.family-where > .where-body > .where-lead + .where-grid、
-   .where-day > .where-people > .where-cell）。都市名が主役なので、
-   日付と補足はその手がかりに徹して小さくする。HRSは全行程が同一行動なので
-   人別セルを持たず、.where-peopleの中は常に1セル。EuroBLECHの.is-shared
-   （合流後の1セル表示）と同じ扱いにして、1セルでも幅いっぱいに広げる。 */
 /* .family-section は5セクション構成の共通カード枠（出張サマリー／時差・気候／
-   宿泊先情報／緊急連絡先）。.family-whereと同じ枠・見出し様式を再利用し、
-   重複定義しない。 */
-.family-where,.family-section{margin-bottom:14px;overflow:hidden;border:2px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,32,.05)}
+   日程詳細／宿泊先情報／緊急連絡先）。「🗓 どこにいて何をしているか」は
+   日程詳細と内容が重複するため削除済み（.family-whereと.where-*一式も廃止）。
+   .family-scheduleも同じ枠を使う（202610_Europe_TechEx_EuroBLECHと同じ）。 */
+.family-section,.family-schedule{margin-bottom:14px;overflow:hidden;border:2px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,32,.05)}
 .family-section-head{padding:10px 14px;background:var(--neu-bg);color:var(--tx2);font-size:16px;font-weight:700}
-.where-body,.family-section-body{padding:13px 14px}
+.family-section-body{padding:13px 14px}
+/* .where-leadはどこにいるかブロックの廃止後も、出張サマリー・気候の見出し段落として残る。 */
 .where-lead{margin:0 0 11px;color:var(--tx2);font-size:13px;line-height:1.6}
-.where-grid{display:grid;gap:8px}
-.where-day{display:grid;grid-template-columns:56px minmax(0,1fr);overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff}
-.where-day>header{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:10px 6px;background:var(--tx2);color:#fff;text-align:center}
-.where-day>header strong{font-size:17px;line-height:1.1;font-variant-numeric:tabular-nums}
-.where-day>header span{font-size:12px;opacity:.85}
-.where-people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));min-width:0}
-.where-day.is-shared .where-people{grid-template-columns:minmax(0,1fr)}
-.where-cell{min-width:0;border-left:1px solid var(--line);padding:9px 11px}
-.where-cell:first-child{border-left:0}
-/* 地図リンク用の.place（shared/trip-field/core.cssで#2A5FA0・太さ600・下線なし）と
-   同じクラス名だが意味が違うので、.where-cellの内側だけ本文色・800・19pxへ上書きする。 */
-.where-cell .place{display:block;color:var(--tx);font-size:19px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
-.where-cell small{display:block;margin-top:4px;color:var(--tx);font-size:13.5px;font-weight:600;line-height:1.5;overflow-wrap:anywhere}
-.where-work small{color:#0B5C60}
-.where-home small{color:var(--mu);font-weight:400}
-.where-work{background:#F2F8F7}.where-work .place{color:#0B4F5A}
-.where-move{background:#F6F7FA}
-.where-home{background:#F7F8F8}.where-home .place{color:var(--mu)}
+/* 日程詳細（家族向け）：202610_Europe_TechEx_EuroBLECHのv3.cssと同一定義
+   （.schedule-body／.schedule-legend／.schedule-tag kind-*／.family-day-row／.agenda-line）。
+   kind-*はHRSが実際に使う7種類だけを移植する（meal/techex/euro/visit/homeは未使用のため省く）。
+   kind-moveとkind-workは共通トークン（--move/--move-tx/--conf/--conf-tx）を使うので、
+   このファイル冒頭のHRS配色（outdoorCss）をそのまま継承する。
+   .family-day-row aside .placeは個別に色指定しない。shared/trip-field/core.cssの
+   既定.place（#2A5FA0・太さ600・下線なし）がEuroBLECHと同じ値のため重複させない。 */
+.schedule-body{padding:12px}
+.schedule-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:10px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#F5F8F9}
+.schedule-legend>strong{margin-right:3px;color:var(--tx2);font-size:13px}
+.schedule-tag{display:inline-flex;align-items:center;width:fit-content;min-height:24px;border:1px solid currentColor;border-radius:999px;padding:2px 7px;font-size:11px;font-weight:700;white-space:nowrap}
+.kind-flight{background:#E8E7FA;color:#40378A}
+.kind-move{background:var(--move);color:var(--move-tx)}
+.kind-transfer{background:#E9F2FA;color:#245A85}
+.kind-procedure{background:#F1F3F4;color:#45545D}
+.kind-work{background:var(--conf);color:var(--conf-tx)}
+.kind-stay{background:#EEF5FB;color:#245A85}
+.kind-review{background:#FFF0C2;color:#7A3E08}
+/* HRSは全行程が同一行動なので、EuroBLECHの.family-shared（合流後の1枠表示）を
+   毎日使う。人別の2枠は使わないため、grid-template-columnsはheader/section/asideの
+   3列で足りる（EuroBLECHは人別2枠を持つため4列）。 */
+.family-day-row{display:grid;grid-template-columns:72px minmax(0,1fr) 170px;overflow:hidden;margin-top:8px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.family-day-row>header{padding:11px 9px;background:var(--tx2);color:#fff;text-align:center}
+.family-day-row>header strong,.family-day-row>header span{display:block}
+.family-day-row>header strong{font-size:16px}
+.family-day-row>header span{font-size:12px;opacity:.85}
+.family-day-row>section,.family-day-row>aside{min-width:0;border-left:1px solid var(--line);padding:9px 10px}
+.family-day-row h3{margin:0 0 7px;color:var(--mu);font-size:12px;font-weight:700;letter-spacing:.04em}
+.agenda-line{display:grid;grid-template-columns:82px auto minmax(0,1fr);align-items:start;gap:6px;padding:7px 0;border-top:1px solid var(--line2)}
+.agenda-line:first-of-type{border-top:0;padding-top:0}
+.agenda-line time{color:#0B4F5A;font-size:14px;font-weight:800;line-height:1.35;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.agenda-line p,.family-day-row aside p{margin:0;color:var(--tx2);font-size:13px;line-height:1.55;overflow-wrap:anywhere}
+.agenda-line p b{color:var(--tx)}
+.family-day-row aside{background:#F7F9FA}
+.family-day-row aside p+p{margin-top:8px;border-top:1px solid var(--line2);padding-top:8px}
+.family-day-row aside small{color:var(--mu);font-size:11px}
 /* 時刻の読み方の宣言。EuroBLECHの.timezone-leadと同じ寸法。
    文面だけHRSの実態に合わせる（HRSは現地時刻と日本時間が混在するため）。 */
 .timezone-lead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0 0 10px;color:var(--tx2);font-size:14px}
@@ -240,6 +268,21 @@ const familyCss = String.raw`
 @media(max-width:640px){
   .family-head{padding:12px 0 10px}
   .family-head h1{font-size:20px}
+  /* 日程詳細：header/section/asideの3列を2列（見出し＋本文）へ畳む。
+     HRSは人別セクションを持たないので、本文列はsection・asideの2段だけでよい
+     （EuroBLECHは人別2枠＋asideの3段）。202610_Europe_TechEx_EuroBLECHのv3.css
+     と同じ考え方だが、段数がHRSの実態に合わせて少ない。 */
+  /* EuroBLECHの58pxそのままだと、HRSの2桁日付（9/10・9/12・9/13・9/14）が
+     見出しの<strong>内で42px要り、40pxの余白（58px−左右padding18px）に収まらず
+     折り返す。64pxへ広げて1行に収める。 */
+  .family-day-row{grid-template-columns:64px minmax(0,1fr)}
+  .family-day-row>header{grid-row:1/3}
+  .family-day-row>section,.family-day-row>aside{grid-column:2;border-left:1px solid var(--line);border-top:1px solid var(--line)}
+  .family-day-row>section{border-top:0}
+  .agenda-line{grid-template-columns:82px minmax(0,1fr);gap:3px 7px}
+  .agenda-line time{grid-row:1/3;font-size:14px}
+  .agenda-line .schedule-tag{grid-column:2}
+  .agenda-line p{grid-column:2}
   .family-page #fam-table,.family-page #fam-table tbody,.family-page #fam-table tr,.family-page #fam-table td{display:block;width:100%}
   .family-page #fam-table thead{display:none}
   .family-page #fam-table tr{padding:0 0 10px;border:0;border-bottom:2px solid var(--line);background:#fff}
@@ -306,6 +349,23 @@ const MODE_ICON_PATHS = {
 const MODE_ICON_LABELS = { train: '鉄道', car: 'タクシー' };
 const modeIconHtml = kind => '<span class="mode-icon mode-icon-' + kind + '" role="img" aria-label="' + MODE_ICON_LABELS[kind] + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + MODE_ICON_PATHS[kind] + '</svg></span>';
 const flightMarkHtml = '<span class="flight-mark" role="img" aria-label="フライト"></span>';
+
+// ---------- 黒塗りグリフの置き換え（202610_Europe_TechEx_EuroBLECHの.line-icon方式） ----------
+// 🖨（U+1F5A8）と🗓（U+1F5D3）はどちらもWindowsで異体字セレクタ無しの既定＝黒塗りの
+// 輪郭グリフになる（Miscellaneous Symbols範囲の既定テキスト表示）。EuroBLECHが絵文字を
+// モノクロSVGへ置き換える方式（<span class="line-icon line-icon-*">内にviewBox 24x24・
+// stroke幅1.7のSVG）と寸法・描き方をそろえる。隣接するテキスト（ボタンのaria-label、
+// バナー・見出しの文言）が既に意味を伝えるため、アイコン自体はaria-hidden。
+const LINE_ICON_PATHS = {
+  print: '<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+  // 🗓の置き換え。オンライン版タブ内「毎日どこで何をしているか」の見出しだけに残る
+  // （家族印刷版の同義ブロックは作業1で削除済み）。
+  calendar: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/><path d="M8 13h2m4 0h2m-8 4h2m4 0h2"/>',
+  // 🗺 U+1F5FA の置き換え。プランDの見出しと地図リンク集の見出しの2箇所。
+  map: '<path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4z"/><path d="M9 4v13m6-10.5V20"/>',
+};
+const lineIconHtml = name => `<span class="line-icon line-icon-${name}" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${LINE_ICON_PATHS[name]}</svg></span>`;
+const printIconHtml = lineIconHtml('print');
 
 // ---------- フライトの4列表示（EUROBLECH方式） ----------
 // EUROBLECHの.route-fourは「row-time / endpoint / mode / endpoint」の4列を
@@ -462,6 +522,47 @@ const MAP_LINK_FIXUPS = [
     'Maritim Stuttgart（シュトゥットガルト）　TEL +49 711 9420 <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a>',
     '<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">Maritim Stuttgart</a>（シュトゥットガルト）　TEL +49 711 9420',
     1,
+  ],
+];
+
+// ---------- 旅程タブの長い補足を折り畳みへ ----------
+// EuroBLECHの規則：常時表示は30字程度の事実まで。理由・判断材料・条件・列挙は
+// 折り畳みへ。61字以上の8件が対象（字数は目安で、内容が単一の事実なら残す判断も
+// あり得るが、この8件はいずれも理由・判断材料・列挙のいずれかに当たる）。
+// 中身（<span class="note">の内側）は書き換えず、置き場所だけ<details class="fold">へ移す。
+// summaryはEuroBLECHの「やること」「過ごし方」と同じ考え方で、中身を示す語にする。
+const FOLD_NOTES = [
+  [
+    'Maritim Stuttgart（9/8〜9/12・朝食付・会場まで徒歩約3分）／Best Western Hotel Airport Frankfurt（9/12〜9/13・朝食付）。詳細は準備タブ。',
+    '宿泊の内訳',
+  ],
+  [
+    '入国審査はHELで完了。荷物受取・税関後、T3の<a href="https://www.frankfurt-airport.com/en/locations/b/bread-and-bite/bread-and-bite.html" target="_blank" rel="noopener">Bread &amp; Bite</a>（6:00〜22:00）などでICE車内用のパン／サンドイッチを購入してから長距離駅へ',
+    '朝食の調達',
+  ],
+  [
+    '9:20着から約90分あり、通常ならパン購入を含めて10:51発を目指せる。荷物受取等に時間がかかった場合は次の直通ICEに切り替える。乗換ありの便より直通を優先',
+    '乗る便の判断',
+  ],
+  [
+    '・Markthalle Stuttgart（食品市場内の軽食・惣菜／ホテルから徒歩圏）<br>・Bohnenviertel（旧市街の飲食街／シュヴァーベン料理のカジュアル店多数）<br>・Königstraße周辺のカフェ・ベーカリー',
+    'ランチ候補',
+  ],
+  [
+    'セッション一覧（全11項目のうち、夜の VIP Dinner はVIPパス対象で不参加。実質10項目）と当日の狙いは <a href="#" data-goto="venue">会場タブ</a> に集約。開場9:00・終了17:00頃を想定',
+    '会期の内訳',
+  ],
+  [
+    '公式サイトによれば、Day 1・2（9/9・9/10）がLiederhalle会場での講演・展示（40+社出展）で、Day 3（9/11）はStuttgart近郊の企業を巡るガイド付き訪問日という構成。訪問先企業リストは開催直前に公式発表予定で、現時点では未公開。集合時刻・場所（Liederhalle集合か、送迎の有無等）も公式未発表のため要確認',
+    '会期の構成',
+  ],
+  [
+    'ワンワールド便。JAL/ワンワールドサファイア以上で利用資格あり。FRAのFinnair便は <strong>Terminal 3</strong>（<a href="https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html" target="_blank" rel="noopener">空港公式</a>）。T3には<a href="https://www.frankfurt-airport.com/en/at-the-airport/facilities-services/priority-lounge.html" target="_blank" rel="noopener">Priority Lounge</a>があるが、公式提携航空会社一覧にFinnairの記載がなく、HEL行きでの利用可否・指定ラウンジ名は未確認。オンラインチェックイン時の搭乗券表示またはFinnairで確認する。',
+    'ラウンジの利用資格',
+  ],
+  [
+    'クラシックダブル28㎡・禁煙・チェックイン15:00｜無料キャンセル 9/5 23:00(現地)まで｜TEL +49 711 9420',
+    '予約条件',
   ],
 ];
 
@@ -752,7 +853,7 @@ function buildMain({ offline = false } = {}) {
         <div class="subtitle">9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA</div>
       </div>
       <div class="${offline ? 'desk-print-trigger' : 'no-print'}" style="display:flex;gap:5px;flex-shrink:0">
-        <button class="btn" onclick="window.print()" aria-label="印刷">🖨</button>
+        <button class="btn" onclick="window.print()" aria-label="印刷">${printIconHtml}</button>
       </div>
     </div>
   </div>
@@ -857,6 +958,19 @@ function buildMain({ offline = false } = {}) {
     html = replaceAllCounted(html, search, replacement, `map link fixup #${i}`, expectedCount);
   });
 
+  // ---------- 旅程タブの長い補足を折り畳みへ ----------
+  // <span class="note">の中身はそのまま、置き場所だけ<details class="fold">へ移す。
+  // 机上用印刷版は後段の共通処理で全<details>をopenにするため、常時展開で読める。
+  FOLD_NOTES.forEach(([text, summary], i) => {
+    html = replaceAllCounted(
+      html,
+      `<span class="note">${text}</span>`,
+      `<details class="fold"><summary>${summary}</summary><div class="fold-body">${text}</div></details>`,
+      `itinerary note fold #${i} (${summary})`,
+      1
+    );
+  });
+
   // ---------- 日付カードの一括開閉 ----------
   html = mustReplace(
     html,
@@ -910,7 +1024,7 @@ function buildMain({ offline = false } = {}) {
   html = html.replace("{ id:'inuyama', label:'犬山発', short:'犬', emoji:'👤', hue:{ bg:'#B6E4C4', fg:'#1A5C33', bd:'#86CB9C' } }", "{ id:'inuyama', label:'犬山発', short:'犬', emoji:'👤', hue:{ bg:'#BFDFC6', fg:'#17482A', bd:'#91C49C' } }");
 
   const planIntro = offline
-    ? `<div class="banner b-info"><span class="i">🖨</span><div><strong>机上用印刷版です。</strong>スマートフォンではオンライン版を使用します。この紙には旅程・準備・会場の参照情報だけを載せ、メモ入力欄は含めません。</div></div>`
+    ? `<div class="banner b-info"><span class="i">${printIconHtml}</span><div><strong>机上用印刷版です。</strong>スマートフォンではオンライン版を使用します。この紙には旅程・準備・会場の参照情報だけを載せ、メモ入力欄は含めません。</div></div>`
     : `<div class="transfer-help"><strong>記録の正本はこのオンライン版です。</strong>入力はこの端末・ブラウザ内に保存されます。終了時はJSONを書き出してバックアップしてください。</div>`;
   html = mustReplace(html, '<section class="tab on" id="tab-plan" role="tabpanel" aria-label="旅程">', `<section class="tab on" id="tab-plan" role="tabpanel" aria-label="旅程">\n${planIntro}`, 'plan section');
 
@@ -935,11 +1049,32 @@ function buildMain({ offline = false } = {}) {
     <summary class="ttl" style="cursor:pointer;list-style:none"><h2 style="display:inline;font:inherit;margin:0">出発前の準備・家族向け資料</h2></summary>
     <div class="bd">
       <a class="btn" href="#" data-goto="prep">✅ 出発前準備を開く</a>
-      <a class="btn" href="family_print.html">🖨 家族向け印刷版</a>
+      <a class="btn" href="family_print.html">${printIconHtml} 家族向け印刷版</a>
       <span class="small muted">現地で頻繁に使わない情報は主要ナビから分離しています。</span>
     </div>
   </details>
 `;
+  // タブ内「家族タブだけ印刷」ボタンも同じアイコンにそろえる（家族向け印刷版とは別に、
+  // オンライン版のfam-fabタブをその場で印刷するボタン）。
+  html = mustReplace(
+    html,
+    '<button class="btn" id="btn-print-fam">🖨 この家族用ページだけ印刷</button>',
+    `<button class="btn" id="btn-print-fam">${printIconHtml} この家族用ページだけ印刷</button>`,
+    'family-tab print button icon'
+  );
+  // オンライン版タブ内「毎日どこで何をしているか」の見出しにも🗓が残る
+  // （家族印刷版側の同義ブロックは作業1で削除済みだが、これはオンライン版だけが持つ
+  // 別機能＝JS生成の日別テーブルの見出しで、削除対象ではないためアイコンだけ差し替える）。
+  html = mustReplace(
+    html,
+    '<h2 class="ttl">🗓 毎日どこで何をしているか</h2>',
+    `<h2 class="ttl">${lineIconHtml('calendar')} 毎日どこで何をしているか</h2>`,
+    'family-tab day table heading icon'
+  );
+  // 🗺 U+1F5FA も既定表示が文字なので黒い輪郭グリフになる。旅程のプラン見出しと
+  // 会場タブの地図リンク集の見出しに残っていた。同じ方式でSVGへ差し替える。
+  html = replaceAllCounted(html, '<div class="plan-head">🗺 ', `<div class="plan-head">${lineIconHtml('map')} `, 'plan head map glyph', 1);
+  html = replaceAllCounted(html, '>🗺 地図・その他リンク集', `>${lineIconHtml('map')} 地図・その他リンク集`, 'link collection map glyph', 1);
   html = mustReplace(
     html,
     /<\/section>\s*(<!-- ==================== タブ：準備 ==================== -->)/,
@@ -995,45 +1130,6 @@ function buildMain({ offline = false } = {}) {
   return html;
 }
 
-// ---------- 家族印刷版の「どこにいて何をしているか」（EUROBLECH方式） ----------
-// 家族が最初に知りたいのは「どの日にどこにいるか」なので、都市名を最大文字にし、
-// 日付と予定はその手がかりに徹して小さくする。文言はFAMのまま。事実は足していない。
-// HRSは全行程が同一行動なので、EUROBLECHのような人別セルは持たない。
-// 日別の場所と予定はFAMが持っている。ここで別に書き起こすと二重管理になり、
-// 「どこにいるか」と「毎日どこで何をしているか」が同じ内容で2つ並ぶ。FAMから作る。
-function whereDays() {
-  const match = source.match(/const FAM = (\{[\s\S]*?\n\});/);
-  if (!match) throw new Error('FAM data not found');
-  const fam = Function(`"use strict"; return (${match[1]});`)();
-  const dowNames = ['日', '月', '火', '水', '木', '金', '土'];
-  const keys = Object.keys(fam).sort();
-  return keys.map((key, i) => {
-    const date = new Date(`${key}T00:00:00Z`);
-    const item = fam[key];
-    // 国旗絵文字はWindowsで「DE」と出るうえ、都市名を最大文字にする妨げになる。
-    // 最終日の`✈️ 帰国日`は場所ではないので、他の行と同じ「どこ→どこ」にそろえる。
-    let city = item.place.replace(/^[\u{1F1E6}-\u{1F1FF}]{2}\s*/u, '').replace(/^✈️\s*/, '');
-    if (city === '帰国日') city = '機内 → 日本';
-    return {
-      date: `${date.getUTCMonth() + 1}/${date.getUTCDate()}`,
-      dow: dowNames[date.getUTCDay()],
-      city,
-      note: item.note,
-      kind: item.conf ? 'work' : (i === keys.length - 1 ? 'home' : 'move'),
-    };
-  });
-}
-// 都市名はEuroBLECHと同じ.placeを使う（地図リンク用の.placeと衝突しないよう、
-// familyCss側で.where-cell .placeだけ本文色・800・19pxへ上書きする）。
-// <span class="who">は入れない。HRSは全行程が同一行動で、人別セルを持たないため。
-const whereCell = d => `<div class="where-cell where-${d.kind}"><b class="place">${d.city}</b><small>${d.note}</small></div>`;
-const whereDay = d => `<article class="where-day is-shared"><header><strong>${d.date}</strong><span>${d.dow}</span></header><div class="where-people">${whereCell(d)}</div></article>`;
-const whereBlock = `  <!-- どこにいるか（1日1行・都市名が主役。FAMが唯一の出どころ。EuroBLECHと同じ
-       section.family-where > .where-body > .where-lead + .where-grid の構造）-->
-  <section class="family-where"><div class="family-section-head">🗓 どこにいて何をしているか</div><div class="where-body"><p class="where-lead">出張期間中、別行動はない。</p><div class="where-grid">${whereDays().map(whereDay).join('')}</div></div></section>
-
-`;
-
 // 時差は、家族が使うのは差の数字なので、そこを最大文字にする。
 // タイムゾーン略号とUTCオフセットは補足に落とす（EuroBLECHと同じ.timezone-cards構造）。
 const timezoneCardOld = `      <div style="text-align:center;background:var(--conf-bg);border:1px solid var(--conf);border-radius:10px;padding:12px 10px">
@@ -1083,22 +1179,112 @@ const FAMILY_FIXUPS = [
 const FAMILY_BLACKOUT_OUTBOUND = '9/7 22:50 〜 9/8 16:20';
 const FAMILY_BLACKOUT_RETURN = '9/14 2:20 〜 9/14 19:35';
 
-// ---------- 時差・気候：シュトゥットガルトと名古屋の平年値 ----------
+// ---------- 時差・気候：出発日・帰国日と同じ9月同士で比べる ----------
 // 数値は一次情報を読んで確認済み（ドイツ側は独語版Wikipediaの気候表、
-// 名古屋側は気象庁の平年値）。ここでは調べ直さず、そのまま使う。
-// 期間・出典が違う概算比較であることは家族印刷版の本文にも明記する。
+// 名古屋・京都側は気象庁の平年値）。ここでは調べ直さず、そのまま使う。
+// 4都市とも一次情報で確認済みで、未確認の数値は無い。不揃いなのは統計期間だけなので
+// 「限界」とは書かず、各都市に出典名と統計期間を併記して読み手が違いに気付ける形にする
+// （季節感の用途では直近6年の値のほうが実態に近いこともあり、欠陥として書くのは不正確）。
+// 名古屋（29.1／21.0）と京都（29.2／20.7）は実測値がほぼ同じなので1行にまとめる。
+// 丸めたことが分かるよう「約」を付ける（29.1と29.2を「29.1」とだけ書くと片方の値に
+// 見えてしまうため）。シュトゥットガルト・フランクフルトは元の値が1都市ぶんなので
+// 丸めない。
 const CLIMATE_ROWS = [
+  ['名古屋・京都 9月', '約29℃', '約21℃', '気象庁 平年値（1991–2020）。名古屋29.1/21.0、京都29.2/20.7の概数'],
   ['シュトゥットガルト 9月', '21.0℃', '11.0℃', '独語版Wikipediaの気候表（2015–2020、出典表記は wetterdienst.de／wetterkontor.de）'],
-  ['名古屋 10月', '23.3℃', '14.8℃', '気象庁 平年値（1991–2020）'],
-  ['名古屋 11月', '17.3℃', '8.6℃', '気象庁 平年値（1991–2020）'],
+  ['フランクフルト（空港） 9月', '21℃', '12℃', '独語版Wikipediaの気候表（1981–2010、出典表記は Deutscher Wetterdienst／wetterkontor.de）'],
 ];
+// 季節感の換算（本文で使うだけで、表の行にはしない）。10月・11月も名古屋・京都は
+// ほぼ同じ値なので丸めてまとめる。名古屋23.3/14.8・京都23.4/14.4 → 約23℃/約14〜15℃、
+// 名古屋17.3/8.6・京都17.3/8.4 → 約17℃/約8.5℃。
+
+// ---------- 家族印刷版：日程詳細（EUROBLECH方式） ----------
+// 202610_Europe_TechEx_EuroBLECHのsection.family-schedule（schedule-body内に
+// schedule-legend＋family-day-row×日数、各日はagenda-line＋asideの宿泊）と
+// 同じ構造をそのまま踏襲する。出どころはindex_v2.htmlの旅程タブ（#tab-plan、
+// 8日分）だけで、時刻・便名・地名はすべてそこに書かれている値をそのまま使う。
+// 新しい時刻・場所は足していない。9/12・9/13の日中は本人たちもまだ未決なので、
+// 特定の案を先取りせず「要検討」として案の名前だけを載せる。
+// HRSは全行程が同一行動（人別の別行動がない）ので、EuroBLECHが合流後に使う
+// <section class="family-shared"><h3>全員</h3> の1枠構成を毎日使う
+// （class="family-day-row shared-day"も毎日付ける）。
+const FAMILY_DAYS = [
+  { date:'9/7', dow:'月', events:[
+    ['22:50発','flight','機内','NGO発 → HEL（Finnair AY80／A350・13時間5分）。<b>翌朝まで連絡がつきにくい</b>'],
+  ], stays:[['全員','機内']] },
+  { date:'9/8', dow:'火', events:[
+    ['5:55〜7:40','transfer','乗り継ぎ','ヘルシンキで1時間45分'],
+    ['7:40','flight','フライト','HEL発 → FRA（AY1411／A321・2時間40分）9:20着'],
+    ['9:20','procedure','到着','Frankfurt FRA着。荷物受取・税関'],
+    ['12:11〜12:30頃','move','移動','Stuttgart Hbf着 → Maritim Stuttgartに荷物を預ける（正式チェックインは15:00〜）'],
+    ['夕方〜夜','stay','チェックイン','Maritim Stuttgartにチェックイン'],
+  ], stays:[['全員','Maritim Stuttgart']] },
+  { date:'9/9', dow:'水', events:[
+    ['9:00〜17:00','work','仕事','HRS Europe 2026 Day 1（Liederhalle）'],
+  ], stays:[['全員','Maritim Stuttgart']] },
+  { date:'9/10', dow:'木', events:[
+    ['9:00〜17:00','work','仕事','HRS Europe 2026 Day 2（Liederhalle）'],
+  ], stays:[['全員','Maritim Stuttgart']] },
+  { date:'9/11', dow:'金', events:[
+    ['終日','work','仕事','HRS Europe 2026 Day 3：近郊企業への訪問（Company Visits）。訪問先は未発表'],
+  ], stays:[['全員','Maritim Stuttgart']] },
+  { date:'9/12', dow:'土', events:[
+    ['日中','review','過ごし方は未定','A：Mainz観戦／B：ケルン／C：ポルシェ／D：ポルシェ＋ケルンの4案から検討中'],
+  ], stays:[['全員','Best Western Hotel Airport Frankfurt']] },
+  { date:'9/13', dow:'日', events:[
+    ['日中','review','過ごし方は未定','X：ケルン／Y：市内／Z：Mainzの3案から検討中'],
+    ['19:20発','flight','フライト','FRA発 → HEL（Finnair AY1416／A321・2時間25分）22:45着'],
+    ['22:45〜0:45','transfer','乗り継ぎ','ヘルシンキで2時間'],
+    ['0:45発','flight','機内','HEL発 → NGO（AY79／A350・12時間50分）。<b>翌9/14 19:35セントレア着まで連絡がつきにくい</b>'],
+  ], stays:[['全員','機内']] },
+  { date:'9/14', dow:'月', events:[
+    ['19:35','flight','帰着','中部国際空港（セントレア）着'],
+    ['21:05頃','move','帰宅','入国審査・荷物受取・税関を終え、名鉄名古屋で分岐して各自帰宅'],
+  ], stays:[['全員','帰宅']] },
+];
+// 地図リンクは場所名そのものに張るのが規約。2件のURLはFAMILY_FIXUPSが使っている
+// ものと同じ値（出どころは同一の既存リンク）。「機内」「帰宅」は場所を指さないので
+// リンクしない（EuroBLECHのNON_PLACE_STAYSと同じ扱い）。
+const FAMILY_STAY_MAP_LINKS = {
+  'Maritim Stuttgart': 'https://www.google.com/maps/search/?api=1&query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart',
+  'Best Western Hotel Airport Frankfurt': 'https://www.google.com/maps/search/?api=1&query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt',
+};
+const NON_PLACE_STAYS = ['機内', '帰宅'];
+function familyStayPlace(name) {
+  if (NON_PLACE_STAYS.includes(name)) return name;
+  const href = FAMILY_STAY_MAP_LINKS[name];
+  if (!href) throw new Error(`Family schedule stay place URL missing: ${name}`);
+  return `<a class="place" href="${href}" target="_blank" rel="noopener">${name}</a>`;
+}
+const familyEventMarkup = ([time, kind, tag, text]) =>
+  `<div class="agenda-line"><time>${time}</time><span class="schedule-tag kind-${kind}">${tag}</span><p>${text}</p></div>`;
+const familyStayMarkup = stays =>
+  `<aside><h3>宿泊</h3>${stays.map(([who, name]) => `<p>${familyStayPlace(name)}<br><small>${who}</small></p>`).join('')}</aside>`;
+const familyDayMarkup = day =>
+  `<article class="family-day-row shared-day"><header><strong>${day.date}</strong><span>${day.dow}</span></header>` +
+  `<section class="family-shared"><h3>全員</h3>${day.events.map(familyEventMarkup).join('')}</section>` +
+  familyStayMarkup(day.stays) + '</article>';
+// 凡例はHRSが実際に使う7種類（202610_Europe_TechEx_EuroBLECHと同一の7種すべてを使う。
+// 該当なしで外した種別はない）。
+const familyScheduleLegend = '<div class="schedule-legend" aria-label="色の意味"><strong>表示の区別</strong>'
+  + '<span class="schedule-tag kind-flight">フライト</span>'
+  + '<span class="schedule-tag kind-move">地上移動</span>'
+  + '<span class="schedule-tag kind-transfer">到着・乗り継ぎ</span>'
+  + '<span class="schedule-tag kind-procedure">手続き</span>'
+  + '<span class="schedule-tag kind-work">仕事</span>'
+  + '<span class="schedule-tag kind-stay">滞在・宿</span>'
+  + '<span class="schedule-tag kind-review">要検討</span></div>';
+const familyScheduleSection = `<section class="family-schedule"><div class="family-section-head">📅 日程詳細（家族向け）</div><div class="schedule-body">${familyScheduleLegend}${FAMILY_DAYS.map(familyDayMarkup).join('')}</div></section>`;
 
 function buildFamily() {
   const sectionMatch = source.match(/<section class="tab" id="tab-fam"[\s\S]*?<\/section>/);
   if (!sectionMatch) throw new Error('Family source not found');
   let section = sectionMatch[0]
     .replace('<section class="tab"', '<section class="tab on"')
-    .replace('id="btn-print-fam"', 'onclick="window.print()"');
+    .replace('id="btn-print-fam"', 'onclick="window.print()"')
+    // 🖨（U+1F5A8）はWindowsで黒塗りグリフになるため、家族印刷版のボタンでも
+    // オンライン版と同じline-icon SVGへそろえる。
+    .replace('🖨 この家族用ページだけ印刷', `${printIconHtml} この家族用ページだけ印刷`);
   FAMILY_FIXUPS.forEach(([search, replacement], i) => {
     if (!section.includes(search)) throw new Error(`Family fixup #${i} not found`);
     section = section.split(search).join(replacement);
@@ -1123,12 +1309,8 @@ function buildFamily() {
     'family timezone inner block'
   );
 
-  // ④日本時間で見るとカードの対応表。
-  const japanTimeInner = mustExtract(
-    section,
-    /<div class="scroll-x"><table class="tb">[\s\S]*?<\/table><\/div>\s*<div class="foot">[\s\S]*?<\/div>/,
-    'family japan-time table block'
-  );
+  // 「日本時間で見ると、現地はこうなっている」の対応表は削除する（ユーザーの決定）。
+  // .timezone-cardsと.timezone-leadの時差カードだけを残し、時刻の対応表は載せない。
 
   // 🏨宿泊カードの3行（Maritim／BestWestern／機内泊）。地図リンクは
   // 既にFAMILY_FIXUPSでホテル名そのものへ張り替え済み。
@@ -1188,18 +1370,16 @@ function buildFamily() {
   const familyTimezoneSection = String.raw`<section class="family-section family-timezone"><div class="family-section-head">🕐 時差・気候</div><div class="family-section-body" style="display:grid;gap:12px">
     <p class="timezone-lead"><strong>時刻は現地時刻。日本時間には「日本時間」と付けます</strong><span>日本＝JST・UTC+9／ドイツ＝CEST・UTC+2</span></p>
     ${timezoneInner}
-    ${japanTimeInner}
     <div>
-      <p class="where-lead" style="margin-bottom:8px">現地の気候（季節感の目安）</p>
+      <p class="where-lead" style="margin-bottom:8px">現地の気候（9月同士の比較）</p>
       <div class="scroll-x"><table class="tb">
         <thead><tr><th>地点・月</th><th>平均最高</th><th>平均最低</th><th>出典・期間</th></tr></thead>
         <tbody>
         ${climateTableRows}
         </tbody>
       </table></div>
-      <div class="small muted" style="margin-top:6px">季節感でいうと、名古屋の10月下旬〜11月上旬くらい。日中は10月寄り、朝晩は11月寄りで、昼と朝晩の体感がずれる。<br>
-        ※ シュトゥットガルト側は独語版Wikipediaの2015–2020の値（DWDの30年平年値ではない）。名古屋は気象庁の30年平年値（1991–2020）。期間も出典も異なる概算比較。<br>
-        ※ 数値はシュトゥットガルトのもの。フランクフルト（9/12〜9/14）の気候は未確認。</div>
+      <div class="small muted" style="margin-top:6px">9月同士で比べると、シュトゥットガルトは名古屋・京都より日中で約8℃低く、朝晩で約9〜10℃低い。季節感でいうと、名古屋・京都の10月下旬〜11月上旬くらい。日中は10月寄り、朝晩は11月寄りで、昼と朝晩の体感がずれる。<br>
+        各都市の出典・統計期間は表を参照。</div>
     </div>
   </div></section>`;
 
@@ -1209,15 +1389,19 @@ function buildFamily() {
   </div></section>`;
 
   // ---------- ⑤ 緊急連絡先 ----------
-  // 大使館名そのものが地図リンク（プロジェクトの規約）。電話番号・住所は
-  // 大使館公式サイトが403で確認できていないため載せない。渡航前に確認して
-  // 書き込む欄だけを置く。
+  // 住所・電話は外務省「在外公館リスト」（令和5年5月22日付）を実際に開いて確認した値。
+  // 名称そのものが地図リンク（プロジェクトの規約。別に「📍 地図」は作らない）。
+  // 管轄区域はこのリストに記載が無く未確認のため書かない。滞在先に地理的に近いのが
+  // フランクフルトという事実だけ添える（「管轄」という言葉は使わない）。
   const familyEmergencySection = String.raw`<section class="family-section family-emergency"><div class="family-section-head">🆘 緊急連絡先</div><div class="family-section-body" style="display:grid;gap:8px">
-    <div class="small"><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Embassy+of+Japan+in+Germany+Berlin" target="_blank" rel="noopener">在ドイツ日本国大使館</a></strong>　（<a href="${embassyHref}" target="_blank" rel="noopener">公式サイト</a>）</div>
-    <div class="small muted">電話番号・住所は未確認です（大使館公式サイトが開けず確認できていません）。渡航前に公式サイトで確認し、下欄に書き込んでください。<br>
-      電話：______________________　住所：______________________</div>
+    <div class="small"><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Hiroshimastr.+6+10785+Berlin" target="_blank" rel="noopener">在ドイツ日本国大使館</a></strong><br>
+      Hiroshimastr.6, 10785 Berlin｜<a href="tel:+4930210940">+49 30 210940</a>｜<a href="${embassyHref}" target="_blank" rel="noopener">公式サイト</a></div>
+    <div class="small"><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Friedrich-Ebert-Anlage+49+60327+Frankfurt+am+Main" target="_blank" rel="noopener">在フランクフルト日本国総領事館</a></strong><br>
+      MesseTurm 34. OG, Friedrich-Ebert-Anlage 49, 60327 Frankfurt am Main｜<a href="tel:+49692385730">+49 69 2385730</a></div>
+    <div class="small muted">滞在先（フランクフルト空港近郊のホテル）に地理的に近いのは在フランクフルト日本国総領事館。</div>
     <div class="small">欧州共通緊急番号：<a href="tel:112">112</a>（警察・消防・救急）</div>
     <div class="small"><a href="${mofaHref}" target="_blank" rel="noopener">外務省 海外安全ホームページ</a></div>
+    <div class="small muted">出典：外務省 在外公館リスト（令和5年5月22日付）、2026-08-15確認。</div>
   </div></section>`;
 
   const openTag = mustExtract(section, /^<section[^>]*>/, 'family section open tag');
@@ -1228,7 +1412,8 @@ function buildFamily() {
 
   ${familyTimezoneSection}
 
-  ${whereBlock}
+  ${familyScheduleSection}
+
   ${familyHotelSection}
 
   ${familyEmergencySection}
