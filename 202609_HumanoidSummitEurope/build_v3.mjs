@@ -111,6 +111,9 @@ body{line-height:1.62;padding-bottom:24px}
 /* 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーではなくここに置く（202610_Europe_TechEx_EuroBLECHのv3.cssと同一） */
 .day-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin:9px 0 0;color:var(--mu);font-size:var(--f5)}
 .day-toolbar .btn{padding:5px 11px;font-size:var(--f5)}
+/* 「＋詳細」トグルは廃止した。EUROBLECHにも無い。補足は常に出す。
+   机上用印刷版は元から常時表示だったので、これで online と揃う。 */
+.note,.dt{display:block}
 /* 旅程はdivスタック。.actionと.route-fourの第1列を同じ幅にして、
    2列の行と4列の行で時刻を縦にそろえる。EUROBLECHと同じ考え方。 */
 .tl-stack{display:block;background:#fff}
@@ -708,7 +711,6 @@ function buildMain({ offline = false } = {}) {
         <div class="subtitle">9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA</div>
       </div>
       <div class="${offline ? 'desk-print-trigger' : 'no-print'}" style="display:flex;gap:5px;flex-shrink:0">
-        ${offline ? '' : '<button class="btn" id="detail-tg" title="補足説明の表示を切り替え">＋詳細</button>'}
         <button class="btn" onclick="window.print()" aria-label="印刷">🖨</button>
       </div>
     </div>
@@ -728,6 +730,28 @@ function buildMain({ offline = false } = {}) {
   </div>
 </div>`;
   html = mustReplace(html, /<header class="hdr">[\s\S]*?<\/header>/, header, 'header');
+
+  // ---------- 「＋詳細」トグルの撤去 ----------
+  // EUROBLECHはこのボタンを持たない。補足を隠す既定は、現地で見落としの元になる。
+  // ボタンを消すだけだと.noteと.dtが永久に隠れるので、CSS側で常時表示にしてある。
+  html = mustReplace(html, `  /* ---------- 詳細トグル（既定はOFF＝骨だけ表示） ---------- */
+  const dtBtn = document.getElementById('detail-tg');
+  function applyDetail(on){
+    document.body.classList.toggle('detail', on);
+    dtBtn.textContent = on ? '−詳細' : '＋詳細';
+    dtBtn.style.background = on ? '#2C3440' : '';
+    dtBtn.style.color = on ? '#fff' : '';
+    dtBtn.style.borderColor = on ? '#2C3440' : '';
+    store.set('detail', on);
+    setH();
+  }
+  dtBtn.addEventListener('click', () => applyDetail(!document.body.classList.contains('detail')));
+  applyDetail(store.get('detail', false));
+`, `  /* 廃止した詳細トグルの保存値を落とす。書き出しが除くのは ui: 付きのキーだけなので、
+     残すとバックアップJSONに毎回入り、読み込んだ端末へも複製される。
+     古いJSONを読み込めば戻ってくるので、この1行は常設で意味がある。 */
+  store.del('detail');
+`, 'detail toggle script');
 
   html = html.replace(/<details class="day"/g, '<details class="day" open');
   // ---------- 交通手段アイコン（EuroBLECH方式） ----------

@@ -101,6 +101,12 @@ assert(countIn(online, /<a class="place"/g) >= 20, `${onlineName}: place map lin
 // ---------- 日付カードの一括開閉 ----------
 assert(online.includes('id="days-tg"') && online.includes('class="day-toolbar no-print"'), `${onlineName}: day card collapse/expand control missing`);
 assert(online.includes('syncDaysToggle') && online.includes("addEventListener('toggle', syncDaysToggle)"), `${onlineName}: collapse label must follow individual day toggles`);
+// 「＋詳細」トグルは廃止。ボタンも処理も残さず、補足は常に見える状態にする。
+for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml]]) {
+  assert(!text.includes('id="detail-tg"') && !text.includes('applyDetail'), `${name}: retired detail toggle still present`);
+}
+assert(online.includes("store.del('detail')"), `${onlineName}: stored detail flag must be cleared, or it rides along in the backup JSON`);
+assert(/\.note,\.dt\{display:block\}/.test(sharedCss), 'v3.css: notes must stay visible without the detail toggle');
 
 const offline = fs.readFileSync(path.join(here, 'index_v3_offline.html'), 'utf8');
 assert(offline.includes('DESK PRINT') && offline.includes('机上用印刷版'), 'index_v3_offline.html: desk-print identity missing');

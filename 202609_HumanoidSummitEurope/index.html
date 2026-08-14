@@ -37,7 +37,6 @@
         <div class="subtitle">9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA</div>
       </div>
       <div class="no-print" style="display:flex;gap:5px;flex-shrink:0">
-        <button class="btn" id="detail-tg" title="補足説明の表示を切り替え">＋詳細</button>
         <button class="btn" onclick="window.print()" aria-label="印刷">🖨</button>
       </div>
     </div>
@@ -902,19 +901,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('#tabs button').forEach(b => b.addEventListener('click', () => { showTab(b.dataset.tab); window.scrollTo(0,0); }));
   document.querySelectorAll('[data-goto]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); showTab(a.dataset.goto); window.scrollTo(0,0); }));
 
-  /* ---------- 詳細トグル（既定はOFF＝骨だけ表示） ---------- */
-  const dtBtn = document.getElementById('detail-tg');
-  function applyDetail(on){
-    document.body.classList.toggle('detail', on);
-    dtBtn.textContent = on ? '−詳細' : '＋詳細';
-    dtBtn.style.background = on ? '#2C3440' : '';
-    dtBtn.style.color = on ? '#fff' : '';
-    dtBtn.style.borderColor = on ? '#2C3440' : '';
-    store.set('detail', on);
-    setH();
-  }
-  dtBtn.addEventListener('click', () => applyDetail(!document.body.classList.contains('detail')));
-  applyDetail(store.get('detail', false));
+  /* 廃止した詳細トグルの保存値を落とす。書き出しが除くのは ui: 付きのキーだけなので、
+     残すとバックアップJSONに毎回入り、読み込んだ端末へも複製される。
+     古いJSONを読み込めば戻ってくるので、この1行は常設で意味がある。 */
+  store.del('detail');
 
   /* ---------- 人フィルタ（他レーンを淡くするだけ・非表示にはしない） ---------- */
   const whoBox = document.getElementById('who-chips');

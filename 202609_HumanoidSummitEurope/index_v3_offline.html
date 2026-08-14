@@ -365,6 +365,9 @@ body{line-height:1.62;padding-bottom:24px}
 /* 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーではなくここに置く（202610_Europe_TechEx_EuroBLECHのv3.cssと同一） */
 .day-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin:9px 0 0;color:var(--mu);font-size:var(--f5)}
 .day-toolbar .btn{padding:5px 11px;font-size:var(--f5)}
+/* 「＋詳細」トグルは廃止した。EUROBLECHにも無い。補足は常に出す。
+   机上用印刷版は元から常時表示だったので、これで online と揃う。 */
+.note,.dt{display:block}
 /* 旅程はdivスタック。.actionと.route-fourの第1列を同じ幅にして、
    2列の行と4列の行で時刻を縦にそろえる。EUROBLECHと同じ考え方。 */
 .tl-stack{display:block;background:#fff}
@@ -469,7 +472,6 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="subtitle">9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA</div>
       </div>
       <div class="desk-print-trigger" style="display:flex;gap:5px;flex-shrink:0">
-
         <button class="btn" onclick="window.print()" aria-label="印刷">🖨</button>
       </div>
     </div>
