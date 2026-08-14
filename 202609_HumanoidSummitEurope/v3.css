@@ -504,6 +504,30 @@ body{line-height:1.62;padding-bottom:24px}
 /* 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーではなくここに置く（202610_Europe_TechEx_EuroBLECHのv3.cssと同一） */
 .day-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin:9px 0 0;color:var(--mu);font-size:var(--f5)}
 .day-toolbar .btn{padding:5px 11px;font-size:var(--f5)}
+/* 旅程はdivスタック。.actionと.route-fourの第1列を同じ幅にして、
+   2列の行と4列の行で時刻を縦にそろえる。EUROBLECHと同じ考え方。 */
+.tl-stack{display:block;background:#fff}
+/* 時刻列は112px。表のときは列が内容に合わせて自動で広がったが、gridは広がらない。
+   「13:00〜14:00」が112px要るので、そこに合わせたうえで折り返しも許す。 */
+.action{display:grid;grid-template-columns:112px minmax(0,1fr);border-top:1px solid var(--line2);background:#fff}
+.tl-stack>.action:first-child,.tl-stack>.route-four:first-child{border-top:0}
+.action>div{min-width:0;padding:11px 12px;line-height:1.6}
+.action>.row-time{border-right:1px solid var(--line);padding-left:7px;padding-right:7px;background:#F4F7F8;color:var(--tx2);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
+.action.no-time>.row-time{color:transparent}
+.action-body{color:var(--tx2);font-size:16px;overflow-wrap:anywhere}
+.action:hover{background:#F7F9FB}
+/* フライトの4列。畳むと発着の対応が読めなくなるので、スマートフォンでも4列のまま。 */
+.route-four{display:grid;grid-template-columns:112px minmax(0,1fr) 124px minmax(0,1fr);border-top:1px solid var(--line2);background:#fff}
+.route-four>div{min-width:0;padding:11px 7px;line-height:1.45}
+.route-four>.row-time{border-right:1px solid var(--line);background:#F4F7F8;color:var(--tx2);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
+.route-four>div+div+div{border-left:1px solid var(--line)}
+.route-four .endpoint{color:var(--tx2);font-size:var(--f3);overflow-wrap:anywhere}
+.route-four .endpoint .label{display:block;margin-bottom:5px;color:var(--mu);font-size:var(--f4);font-weight:700}
+.route-four .endpoint time{display:inline;color:var(--tx);font-size:var(--f3);font-weight:700;line-height:1.45}
+.route-four .endpoint .tz{display:inline;margin-left:2px;color:var(--mu);font-size:var(--f4);font-weight:600}
+.route-four .endpoint .place{display:block;margin-top:5px;font-size:var(--f3);line-height:1.45}
+.route-four .mode{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--tx2);font-size:var(--f4);text-align:center;overflow-wrap:anywhere}
+.route-four .mode strong{color:var(--tx2);font-size:var(--f3);font-weight:700}
 /* 凡例は地の文なので、行内に並ぶようにする。.mode-iconの既定はflexで、そのままだと行が崩れる。 */
 .legend .flight-mark,.legend .mode-icon{vertical-align:-4px;margin-right:1px}
 .legend .mode-icon{display:inline-flex}
@@ -515,6 +539,12 @@ body{line-height:1.62;padding-bottom:24px}
   .hdr h1{font-size:18px}
   .tabs button{min-width:0;padding-left:8px;padding-right:8px}
   .day-head .t{padding-right:64px}
+  .action{grid-template-columns:82px minmax(0,1fr)}
+  .action>div{padding:10px 9px}
+  .action>.row-time{white-space:normal;overflow-wrap:anywhere}
+  .route-four{grid-template-columns:82px minmax(0,1fr) 74px minmax(0,1fr)}
+  .route-four>div{padding:9px 5px}
+  .route-four>.row-time{white-space:normal;overflow-wrap:anywhere}
   .lanes{grid-template-columns:1fr}
   .tl td{padding:10px 9px}
   .tl td.t{width:82px;white-space:normal}

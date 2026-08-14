@@ -111,6 +111,30 @@ body{line-height:1.62;padding-bottom:24px}
 /* 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーではなくここに置く（202610_Europe_TechEx_EuroBLECHのv3.cssと同一） */
 .day-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin:9px 0 0;color:var(--mu);font-size:var(--f5)}
 .day-toolbar .btn{padding:5px 11px;font-size:var(--f5)}
+/* 旅程はdivスタック。.actionと.route-fourの第1列を同じ幅にして、
+   2列の行と4列の行で時刻を縦にそろえる。EUROBLECHと同じ考え方。 */
+.tl-stack{display:block;background:#fff}
+/* 時刻列は112px。表のときは列が内容に合わせて自動で広がったが、gridは広がらない。
+   「13:00〜14:00」が112px要るので、そこに合わせたうえで折り返しも許す。 */
+.action{display:grid;grid-template-columns:112px minmax(0,1fr);border-top:1px solid var(--line2);background:#fff}
+.tl-stack>.action:first-child,.tl-stack>.route-four:first-child{border-top:0}
+.action>div{min-width:0;padding:11px 12px;line-height:1.6}
+.action>.row-time{border-right:1px solid var(--line);padding-left:7px;padding-right:7px;background:#F4F7F8;color:var(--tx2);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
+.action.no-time>.row-time{color:transparent}
+.action-body{color:var(--tx2);font-size:16px;overflow-wrap:anywhere}
+.action:hover{background:#F7F9FB}
+/* フライトの4列。畳むと発着の対応が読めなくなるので、スマートフォンでも4列のまま。 */
+.route-four{display:grid;grid-template-columns:112px minmax(0,1fr) 124px minmax(0,1fr);border-top:1px solid var(--line2);background:#fff}
+.route-four>div{min-width:0;padding:11px 7px;line-height:1.45}
+.route-four>.row-time{border-right:1px solid var(--line);background:#F4F7F8;color:var(--tx2);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;white-space:normal;overflow-wrap:anywhere}
+.route-four>div+div+div{border-left:1px solid var(--line)}
+.route-four .endpoint{color:var(--tx2);font-size:var(--f3);overflow-wrap:anywhere}
+.route-four .endpoint .label{display:block;margin-bottom:5px;color:var(--mu);font-size:var(--f4);font-weight:700}
+.route-four .endpoint time{display:inline;color:var(--tx);font-size:var(--f3);font-weight:700;line-height:1.45}
+.route-four .endpoint .tz{display:inline;margin-left:2px;color:var(--mu);font-size:var(--f4);font-weight:600}
+.route-four .endpoint .place{display:block;margin-top:5px;font-size:var(--f3);line-height:1.45}
+.route-four .mode{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--tx2);font-size:var(--f4);text-align:center;overflow-wrap:anywhere}
+.route-four .mode strong{color:var(--tx2);font-size:var(--f3);font-weight:700}
 /* 凡例は地の文なので、行内に並ぶようにする。.mode-iconの既定はflexで、そのままだと行が崩れる。 */
 .legend .flight-mark,.legend .mode-icon{vertical-align:-4px;margin-right:1px}
 .legend .mode-icon{display:inline-flex}
@@ -122,6 +146,12 @@ body{line-height:1.62;padding-bottom:24px}
   .hdr h1{font-size:18px}
   .tabs button{min-width:0;padding-left:8px;padding-right:8px}
   .day-head .t{padding-right:64px}
+  .action{grid-template-columns:82px minmax(0,1fr)}
+  .action>div{padding:10px 9px}
+  .action>.row-time{white-space:normal;overflow-wrap:anywhere}
+  .route-four{grid-template-columns:82px minmax(0,1fr) 74px minmax(0,1fr)}
+  .route-four>div{padding:9px 5px}
+  .route-four>.row-time{white-space:normal;overflow-wrap:anywhere}
   .lanes{grid-template-columns:1fr}
   .tl td{padding:10px 9px}
   .tl td.t{width:82px;white-space:normal}
@@ -232,6 +262,46 @@ const MODE_ICON_PATHS = {
 const MODE_ICON_LABELS = { train: '鉄道', car: 'タクシー' };
 const modeIconHtml = kind => '<span class="mode-icon mode-icon-' + kind + '" role="img" aria-label="' + MODE_ICON_LABELS[kind] + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + MODE_ICON_PATHS[kind] + '</svg></span>';
 const flightMarkHtml = '<span class="flight-mark" role="img" aria-label="フライト"></span>';
+
+// ---------- フライトの4列表示（EUROBLECH方式） ----------
+// EUROBLECHの.route-fourは「row-time / endpoint / mode / endpoint」の4列を
+// 1つのグリッドが持つ。時刻列をグリッドの外に出さない。各endpointは
+// <span class="label">出発</span> と <time> を別要素として持ち、時刻をラベルに混ぜない。
+// HRSの旅程は<table>なので、行を<td colspan="2">にしてその中へ同じ4列を置く。
+//
+// EUROBLECHとの相違は1点だけ。あちらの endpoint は <span class="tz">（JST）</span> と
+// 空港名の地図リンクを持つが、HRSの元データは空港コードしか持たず、
+// 時間帯も正式名称も書かれていない。書けば未検証の断定になるので付けていない。
+// 空港の正式名称はいずれも元データにある。地図クエリも既存のものを使う。
+// 時間帯はページ自身の数字で確定する。NGO 22:50発＋13時間5分でHEL 5:55着なら
+// 到着地は出発地より6時間遅い。日本がUTC+9なのでHELはUTC+3。同じ計算を4区間で
+// 行うと HEL=UTC+3・FRA=UTC+2 が2回ずつ一致する。9月はEUの夏時間なのでEEST/CEST。
+const AIRPORTS = {
+  NGO: ['中部国際空港（NGO）', 'JST',  '中部国際空港+セントレア'],
+  HEL: ['ヘルシンキ空港（HEL）', 'EEST', 'Helsinki+Airport'],
+  FRA: ['フランクフルト空港（FRA）', 'CEST', 'Frankfurt+Airport'],
+};
+const endpoint = (label, time, code) => {
+  const [name, tz, query] = AIRPORTS[code];
+  return `<div class="endpoint"><span class="label">${label}</span><time>${time}</time><span class="tz">（${tz}）</span>`
+    + `<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=${query}" target="_blank" rel="noopener">${name}</a></div>`;
+};
+const routeFour = (rowTime, from, to, carrier, detail, depart, arrival) =>
+  '<div class="route-four">'
+  + `<div class="row-time">${rowTime}</div>`
+  + endpoint('出発', depart, from)
+  + `<div class="mode">${flightMarkHtml}<strong>${carrier}</strong><small>${detail}</small></div>`
+  + endpoint('到着', arrival, to)
+  + '</div>';
+const escapeRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+// 便名・機材・所要は元の丸括弧の中身をそのまま分解しただけ。到着時刻は
+// 各区間の直後にある到着行の値。いずれもこちらで足した数字はない。
+const FLIGHT_SEGMENTS = [
+  ['22:50発', 'NGO発 → HEL（Finnair AY80／A350・13時間5分）',   'NGO', 'HEL', 'Finnair AY80',   'A350・13時間5分',  '22:50', '5:55'],
+  ['7:40',    'HEL発 → FRA（AY1411／A321・2時間40分）',         'HEL', 'FRA', 'AY1411',         'A321・2時間40分',  '7:40',  '9:20'],
+  ['19:20発', 'FRA発 → HEL（Finnair AY1416／A321・2時間25分）', 'FRA', 'HEL', 'Finnair AY1416', 'A321・2時間25分',  '19:20', '22:45'],
+  ['0:45発',  'HEL発 → NGO（AY79／A350・12時間50分）',          'HEL', 'NGO', 'AY79',           'A350・12時間50分', '0:45',  '19:35'],
+];
 
 // ---------- 地図リンクを場所名そのものへ張り替える ----------
 // 「地図」「（地図）」という別リンクをやめ、直前の場所名を<a class="place">で包む。
@@ -672,6 +742,46 @@ function buildMain({ offline = false } = {}) {
   html = replaceAllCounted(html, '<h2 class="ttl">✈️ 利用フライト', `<h2 class="ttl">${flightMarkHtml} 利用フライト`, 'flight card heading glyph', 1);
   // FAMのplaceはindex.htmlとfamily_print.htmlの両方でinnerHTML経由で描画されるのでHTMLを入れてよい。
   html = replaceAllCounted(html, "place:'✈️ 帰国日'", `place:'${flightMarkHtml} 帰国日'`, 'family return-day glyph', 1);
+  // ---------- フライトを4列にする ----------
+  // 到着行（「HEL 着」など）は乗継や入国手続きを持つ別の出来事なので、まとめない。
+  // EUROBLECHの「到着と乗り継ぎは分ける」「日跨ぎ便で着いた日は◯◯着を出す」に従う。
+  // ---------- 旅程の表をdivスタックへ ----------
+  // EUROBLECHは.lane直下に.actionと.route-fourを並べる。両者の第1列が同じ幅なので、
+  // 2列の行と4列の行で時刻が縦にそろう。<table>のcolspanではこの整列が作れない。
+  // 旅程タブの106行はすべて<td class="t">X</td><td>Y</td>の同形でcolspanの例外は無い。
+  // （ファイル全体では114行あるが、残り8行は準備タブの表で、ここでは触らない。）
+  let stacks = 0, actions = 0;
+  html = html.replace(/<table class="tl">[\s\S]*?<\/table>/g, block => {
+    stacks++;
+    const converted = block
+      .replace(/^<table class="tl">/, '<div class="tl-stack">')
+      .replace(/<\/table>$/, '</div>')
+      .replace(/<tr><td class="t">([\s\S]*?)<\/td><td>([\s\S]*?)<\/td><\/tr>/g, (m, time, body) => {
+        actions++;
+        return `<div class="action"><div class="row-time">${time}</div><div class="action-body">${body}</div></div>`;
+      });
+    // 変換漏れはこのブロックの中だけで見る。文書全体を見ると他タブの表を拾ってしまう。
+    if (/<(?:table|tr|td)\b/.test(converted)) throw new Error(`Table markup left in itinerary stack ${stacks}`);
+    return converted;
+  });
+  if (stacks !== 18) throw new Error(`Expected 18 itinerary tables, converted ${stacks}`);
+  if (actions !== 106) throw new Error(`Expected 106 itinerary rows, converted ${actions}`);
+
+  // ---------- フライトを4列にする ----------
+  // 到着行（「HEL 着」など）は乗継や入国手続きを持つ別の出来事なのでまとめない。
+  // 補足（機内泊など）は4列の中に押し込まず、EUROBLECHと同じく時刻なしの.actionへ出す。
+  FLIGHT_SEGMENTS.forEach(([rowTime, text, from, to, carrier, detail, depart, arrival]) => {
+    const pattern = new RegExp(
+      `<div class="action"><div class="row-time">${escapeRe(rowTime)}</div>`
+      + `<div class="action-body">${escapeRe(flightMarkHtml + text)}([\\s\\S]*?)</div></div>`
+    );
+    const found = html.match(pattern);
+    if (!found) throw new Error(`Flight route ${from}-${to} not found`);
+    const rest = found[1].trim();
+    html = html.replace(pattern, routeFour(rowTime, from, to, carrier, detail, depart, arrival)
+      + (rest ? `<div class="action no-time"><div class="row-time"></div><div class="action-body">${rest}</div></div>` : ''));
+  });
+
   // 準備タブの鉄道チケットの行も交通手段の印なので、絵文字ではなくアイコンにそろえる。
   html = replaceAllCounted(html, '<div>🚆 鉄道は事前購入せず', `<div>${modeIconHtml('train')} 鉄道は事前購入せず`, 'rail ticket bullet', 1);
   // 机上用印刷版は元CSSをそのまま<style>へ埋め込むため、v3.css側とは別にここでも当てる。
