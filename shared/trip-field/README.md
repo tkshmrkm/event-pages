@@ -34,6 +34,7 @@ Shared:
 - an online smartphone page plus a self-contained desk-print backup;
 - responsive targets around iPhone 16 (393 px) and Pixel 7a/8a (412 px).
 - EUROBLECH-style transport icons: `.flight-mark` (SVG mask) for flights and `.mode-icon mode-icon-{train|walk|car|unknown}` (inline SVG) for every other mode, matched in size and color. Neither colored emoji nor the monochrome text `✈︎` is used. Reserve `unknown` for a genuinely undecided mode; use words such as `発` and `着` rather than OS-dependent colored departure/arrival emoji.
+- Field-guide prose, not an essay. An always-visible supporting line carries a fact in roughly 30 characters or fewer; reasons, criteria and conditions go inside a `details.fold`. Name the fold's `summary` after what it holds (`やること`, `過ごし方`, `ラウンジの利用資格`) so it reads without opening; never `続きを読む`. Always-visible lines end without a full stop, since they are labels rather than sentences; text inside a fold is exempt. The character count is a guide, not a rule — a single fact may run longer, and a short explanation still belongs in the fold.
 
 Event-specific:
 
