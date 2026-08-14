@@ -85,6 +85,8 @@ button,input,textarea,select{font-family:inherit}
 .stay{padding:9px 12px;border-top:1px solid var(--line);background:#FAFCFD;color:var(--tx2);font-size:var(--f4);line-height:1.5}
 .stay>span{display:block;margin-bottom:2px;font-size:var(--f5);font-weight:700}
 .stay strong{font-weight:600;color:var(--tx)}
+/* 宿泊のホテル名も、交通の場所名と同じく文字そのものを地図リンクにする */
+.stay .place,.family-day-row aside .place{color:#2A5FA0;font-weight:600}
 .stay-murakami{background:#EEF5FB;color:var(--lane-murakami-tx)}
 .stay-team{background:#F0F8F2;color:var(--lane-team-tx)}
 .stay-shared{background:#F3F6F7;color:var(--tx2)}

@@ -35,7 +35,12 @@ const checks = [
   ['unnecessary one-day wording removed', !html.includes('参加できるのは実質この日だけ')],
   ['booking status belongs to preparation', !/選定済み（未購入|運賃は手配中/.test(itinerary) && prep.includes('航空券状況') && prep.includes('選定済み（未購入')],
   ['baggage-drop wording matches approved sample', (itinerary.match(/ホテルに荷物を預ける/g) || []).length === 2 && !itinerary.includes('ホテルフロントへ荷物預け') && !itinerary.includes('荷物預け（予約済み）')],
-  ['hotel names are kept in lodging outcomes', (itinerary.match(/<strong>宿泊：<\/strong>Holiday Inn Express Amsterdam - Sloterdijk Station/g) || []).length === 2 && (itinerary.match(/<strong>宿泊：<\/strong>Hotel FREIgeist Göttingen Innenstadt/g) || []).length >= 4 && !/ホテルに荷物を預ける[\s\S]{0,250}(?:Holiday Inn Express|Hotel FREIgeist)/.test(itinerary)],
+  // ホテル名は場所名と同じく、文字そのものが地図リンクである（2026-08-14からの標準）。
+  ['hotel names are kept in lodging outcomes', (itinerary.match(/<strong>宿泊：<\/strong><a class="place"[^>]*>Holiday Inn Express Amsterdam - Sloterdijk Station<\/a>/g) || []).length === 2 && (itinerary.match(/<strong>宿泊：<\/strong><a class="place"[^>]*>Hotel FREIgeist Göttingen Innenstadt<\/a>/g) || []).length >= 4 && !/ホテルに荷物を預ける[\s\S]{0,250}(?:Holiday Inn Express|Hotel FREIgeist)/.test(itinerary)],
+  ['lodging without a place is not linked', /<strong>宿泊：<\/strong>機内/.test(itinerary) && !/<a class="place"[^>]*>機内<\/a>/.test(html) && !/<a class="place"[^>]*>帰宅<\/a>/.test(html)],
+  // セントレアの出発待ちは10/17村上と10/18美馬・金築の2回。どちらも1ブロックに寄せてある。
+  // 残る「空港到着目安」は10/20のスキポールの1件だけ。
+  ['pre-departure windows are single blocks', (itinerary.match(/セントレアで出発待ち 3時間 — 過ごし方/g) || []).length === 2 && (itinerary.match(/13:10〜16:10/g) || []).length === 2 && (itinerary.match(/空港到着目安/g) || []).length === 1 && !itinerary.includes('セントレアで昼食') && !itinerary.includes('JALサクララウンジ（国際線・出国審査後）')],
   ['10/19 granularity aligned', itinerary.includes('<div class="row-time">09:45〜16:50</div>') && itinerary.includes('👥 美馬・金築（FRA着・ヴォルフスブルク日帰り）') && itinerary.includes('荷物受取・チェックイン') && !itinerary.includes('なぜ先にゲッティンゲンへ寄るのか')],
   ['10/19 networking time retained', /<div class="row-time">18:00〜21:00<\/div>[\s\S]{0,700}VIP Networking Drinks/.test(itinerary) && !/<div class="row-time">夕方<\/div>[\s\S]{0,700}VIP Networking Drinks/.test(itinerary)],
   ['10/19 movements use four-column rows', /class="route-four"[^>]*><div class="row-time">12:20頃[\s\S]*?<strong>徒歩<\/strong>[\s\S]*?<time>12:30頃<\/time>/.test(itinerary) && /class="route-four"[^>]*><div class="row-time">17:30頃[\s\S]*?<strong>ICE直通<\/strong>[\s\S]*?<time>18:45頃<\/time>/.test(itinerary)],
