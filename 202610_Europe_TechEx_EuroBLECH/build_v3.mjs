@@ -95,6 +95,8 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['<strong>②VIP networking drinks 参加可</strong>', '<strong>②VIP Networking Drinks 参加可</strong>'],
   ['<div class="text-slate-600 text-xs mt-0.5"><strong>昼はブレーメン</strong>（マルクト広場周辺）でランチ。<strong>夜</strong>は、ブレーメンに良い店があればそのまま夕食、なければ18時前にゲッティンゲンへ戻って旧市街で。</div>', '<div class="text-slate-600 text-xs mt-0.5"><strong>昼はブレーメン</strong>（マルクト広場周辺）でランチ。<strong>夜</strong>は、ブレーメンに良い店があればそのまま夕食、なければゲッティンゲンへ戻って旧市街で。</div>'],
   ['<strong>ホテルは朝食が付かない</strong>うえ翌朝は07:55発と早い。前夜に買っておくと確実だが、この日も会場（メッセ）到着後に朝の時間帯でパン等はとれる。', '<strong>ホテルは朝食が付かない</strong>うえ翌朝は09:00発。前夜に購入するか、ゲッティンゲン駅・車内・ブレーメン到着後に軽くとる。'],
+  // 10/20 村上のHAJ待ちも、FRAの買い出しと同じ「短い主表示＋折り畳み」にそろえる。
+  ['<div class="text-slate-600 text-xs">S5発（19:06）まで約1時間20分。<strong>夕食はここが本命</strong>。ゲッティンゲン着は20:25と遅く店が閉まりがちなので、空港で食べるか列車用に買っておく。</div>', '<div class="text-slate-600 text-xs">S5発（19:06）まで約1時間20分。ここで夕食か買い出しを済ませる</div><details class="fold mt-1"><summary>なぜここで済ませるか</summary><div class="fold-body"><div>ゲッティンゲン着は20:25と遅く、旧市街の店が閉まりがち</div><div>空港で食べるか、列車で食べる分を買っておく</div></div></details>'],
   ['17時過ぎにFRA着。', '17:14頃にフランクフルト中央駅着。'],
   ['🏨 ゲッティンゲンをチェックアウト（荷物持参・全員）', '🏨 チェックアウト（荷物持参）'],
   ['Gold Passの価値はDay1に集中している', 'Gold Passの価値はDay 1に集中している'],
@@ -416,9 +418,9 @@ const transformScript = `
       if (row && !row.classList.contains('route-four')) row.innerHTML = '<div class="text-slate-500">' + time + '</div><div class="font-semibold">' + label + '</div>' + (sub ? '<div class="text-slate-600 text-xs">' + sub + '</div>' : '');
     });
     if (id === '1021') {
-      const before = Array.from(day.querySelectorAll('.font-semibold')).find(el => /宿泊/.test(el.textContent))?.closest('[class*="border-l-4"]');
+      const expo1021 = rowFor(day, 'EuroBLECH（Hannover Messe）');
       const back = ROUTES.find(route => route[0] === '1021' && route[1].includes('戻る'));
-      before?.insertAdjacentHTML('beforebegin', '<div class="route-four route-estimate">' + routeMarkup(back) + '</div>');
+      expo1021?.insertAdjacentHTML('afterend', '<div class="route-four route-estimate">' + routeMarkup(back) + '</div>');
     }
     if (id === '1022') {
       const before = rowFor(day, 'Mercedes-Benz Werk Bremen');
@@ -478,26 +480,38 @@ const transformScript = `
     }
     if (id === '1021') {
       const expo = rowFor(day, 'EuroBLECH（Hannover Messe）');
-      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00–17:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">全員で終日視察</div>';
+      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00–17:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">全員で終日視察。会場は' + mapLink('ハノーファーメッセ') + '</div>';
       const back = Array.from(day.querySelectorAll('.route-estimate')).at(-1);
       back?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">19:00頃</div><div class="action-body"><div class="font-semibold">🍽 全員で夕食</div><div class="text-slate-600 text-xs">ゲッティンゲン旧市街</div></div></div>');
     }
     if (id === '1022') {
+      // 復路は列車が2本あるので、案を文章で並べずに交通行を2本出す。
+      // どちらも未決なので route-review のまま。選んだら片方を消す。
       const returnRoute = routeRowFor(day, '列車候補を確認');
-      returnRoute?.classList.add('route-review');
-      returnRoute?.insertAdjacentHTML('beforebegin', '<div class="return-choice"><strong>復路は要検討</strong><span>早帰り案：16:00頃 Bremen Hbf発 → 18:05頃ホテル着・資料整理</span><span>市内滞在案：18:00頃 Bremen Hbf発 → 20:05頃ホテル着</span></div>');
+      if (returnRoute) {
+        const early = ['1022','','16:00頃','CEST','Bremen Hbf','列車候補を確認','約2時間の目安','18:00頃','CEST','Göttingen Hbf'];
+        const late  = ['1022','','18:00頃','CEST','Bremen Hbf','列車候補を確認','約2時間の目安','20:00頃','CEST','Göttingen Hbf'];
+        returnRoute.outerHTML =
+          '<div class="choice-head"><strong>復路は2案</strong><span>どちらかを選んだら、もう片方の行を消す</span></div>' +
+          '<div class="choice-label">早帰り案 — ホテル18:05頃着。夕方を資料整理に使う</div>' +
+          '<div class="route-four route-review">' + routeMarkup(early) + '</div>' +
+          '<div class="choice-label">市内滞在案 — ホテル20:05頃着。ブレーメン市内を見る</div>' +
+          '<div class="route-four route-review">' + routeMarkup(late) + '</div>';
+      }
     }
     if (id === '1023') {
       const lastTrain = routeRowFor(day, 'ICE771');
       lastTrain?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">17:30頃</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">フランクフルト中央駅南口から徒歩約2分</div></div></div><div class="action"><div class="row-time">18:30頃</div><div class="action-body"><div class="font-semibold">🍽 夕食</div><div class="text-slate-600 text-xs">フランクフルト中央駅周辺。夜は荷物・貴重品に注意。</div></div></div>');
     }
     if (id === '1024') {
+      // 朝の要点は朝食ではなく10:00のチェックアウト。朝食は付随情報なので折り畳みへ。
       const firstRoute = day.querySelector('.route-four');
-      firstRoute?.insertAdjacentHTML('beforebegin', '<div class="action"><div class="row-time">07:00–10:00</div><div class="action-body"><div class="font-semibold">🍽 朝食・チェックアウト</div><div class="text-slate-600 text-xs">東横INNの無料朝食後、10:15にホテルを出発</div></div></div>');
+      firstRoute?.insertAdjacentHTML('beforebegin', '<div class="action"><div class="row-time">10:00</div><div class="action-body"><div class="font-semibold">🏨 チェックアウト</div><div class="text-slate-600 text-xs">荷物を持って10:15にホテルを出発</div><details class="fold mt-1"><summary>それまでにやること</summary><div class="fold-body"><div>07:00〜10:00に東横INNの無料朝食</div><div>この日から機内泊なので、着替えと充電器を手荷物へ移しておく</div></div></details></div></div>');
+      // 空港も他日と同じ「出発待ち（所要）」1行にまとめる。手続きもラウンジも折り畳みへ。
       const airport = rowFor(day, 'FRA空港 到着');
-      if (airport) airport.innerHTML = '<div class="text-slate-500">10:40–12:55</div><div class="font-semibold">🛂 チェックイン・保安検査・出国審査</div><div class="text-slate-600 text-xs">CX288のチェックインカウンターと搭乗ゲートは当日の案内で確認</div>';
       const lounge = rowFor(day, 'FRAラウンジ');
-      if (lounge) lounge.innerHTML = '<div class="text-slate-500">12:55頃</div><div class="font-semibold">🛋 ラウンジ候補</div><div class="text-slate-600 text-xs">搭乗開始まで時間がある場合、航空会社指定ラウンジとPriority Pass対象施設を確認。</div>';
+      lounge?.remove();
+      if (airport) airport.innerHTML = '<div class="text-slate-500">10:40〜13:40</div><div class="font-semibold">🕐 フランクフルト空港で出発待ち（3時間）</div><details class="fold mt-1"><summary>やること（チェックイン・保安検査・出国審査）</summary><div class="fold-body"><div>CX288のチェックインカウンターと搭乗ゲートは当日の案内で確認</div><div>10:40〜12:55を目安に手続きを済ませる</div><div>Terminal 3発。ターミナル間の移動時間を見ておく</div></div></details><details class="fold mt-1"><summary>ラウンジで過ごす（4系統）</summary><div class="fold-body"><div>フランクフルトの対象ラウンジは4系統とも未確認。準備タブの「ラウンジ利用可否」に集約してある</div><div>キャセイはFRAに自社ラウンジが無く契約ラウンジを使う。どこかは未確定</div></div></details>';
     }
     if (id === '1025') {
       // 到着行と乗り継ぎ行が「2時間15分」で二重になっていたので、折り畳みを持つ方に寄せる。
@@ -569,7 +583,7 @@ const transformScript = `
     stack.querySelectorAll(':scope > :not(.day)').forEach(el => { if (!el.closest('.day')) el.classList.add('intro-card'); });
     // 日ヘッダーの色は予定の種類であって、決まっているかどうかではない。
     // 未定はオレンジの帯だけが示す、と凡例で明示しないと10/22のラベンダーが未定色に読まれる。
-    stack.insertAdjacentHTML('afterbegin','<div class="day-kind-legend" aria-label="日付カードの色の意味"><strong>日付カードの色</strong><span><i class="kind-swatch swatch-move"></i>移動・帰着</span><span><i class="kind-swatch swatch-conf"></i>展示会視察</span><span><i class="kind-swatch swatch-visit"></i>工場・企業見学（予約確定）</span><span><i class="kind-swatch swatch-review"></i>要検討（この帯だけが未定）</span></div>');
+    stack.insertAdjacentHTML('afterbegin','<div class="day-kind-legend" aria-label="日付カードの色の意味"><strong>日付カードの色</strong><span><i class="kind-swatch swatch-move"></i>移動・帰着</span><span><i class="kind-swatch swatch-conf"></i>展示会視察</span><span><i class="kind-swatch swatch-visit"></i>工場・企業見学（予約確定）</span><span><i class="kind-swatch swatch-review"></i>要検討（この帯だけが未定）</span><span class="legend-sep"></span><strong>交通行</strong><span><i class="kind-swatch swatch-estimate"></i>点線＝時刻は目安</span><span><i class="kind-swatch swatch-review"></i>オレンジ＝手段や便が未定</span></div>');
   }
   // 本文はエスケープしたうえで **…** だけを強調に戻す。生HTMLは通さない。
   const familyText = value => esc(value).replace(/\\*\\*(.+?)\\*\\*/g, '<b>$1</b>');
