@@ -116,10 +116,57 @@ assert(!/<script\b/i.test(offlineMarkup), 'index_v3_offline.html: desk-print cop
 assert(offline.includes('data-trip-layout="desk-print-v1"') && offline.includes('body.desk-copy #tab-rec'), 'index_v3_offline.html: desk-print layout rules missing');
 
 const family = fs.readFileSync(path.join(here, 'family_print.html'), 'utf8');
-assert((family.match(/<tbody id="fam-days">[\s\S]*?<\/tbody>/) || [''])[0].match(/<tr>/g)?.length === 8, 'family_print.html: family itinerary must have eight rows');
+// 日別は「どこにいて何をしているか」の1ブロックだけ。以前は同じ内容の表が並んでいた。
+assert((family.match(/class="where-day/g) || []).length === 8, 'family_print.html: family itinerary must have eight day rows');
+assert(!family.includes('fam-table') && !family.includes('fam-days'), 'family_print.html: the duplicate day table must not come back');
+// 国旗絵文字の検査は「どこにいるか」ブロックと時差カードだけに絞る。ページ全体を
+// 対象にすると、緊急連絡先の「🇯🇵 万一のとき」（この検査の対象外・意図した表示）を
+// 誤検知して落ちる。
+const familyWhereSection = family.match(/<section class="family-where">[\s\S]*?<\/section>/);
+assert(familyWhereSection, 'family_print.html: family-where section missing');
+assert(!/[\u{1F1E6}-\u{1F1FF}]{2}/u.test(familyWhereSection[0]), 'family_print.html: where-block must not use flag emoji (renders as letters on Windows)');
+const timezoneZoneLabels = [...family.matchAll(/<div class="timezone-card[^"]*"><span>([^<]*)<\/span>/g)].map(m => m[1]);
+assert(timezoneZoneLabels.length === 2, 'family_print.html: expected 2 timezone cards (Japan, Germany)');
+timezoneZoneLabels.forEach(label => assert(!/[\u{1F1E6}-\u{1F1FF}]{2}/u.test(label), 'family_print.html: timezone zone label must not use flag emoji (renders as letters on Windows)'));
+
+// ---------- EuroBLECH（202610_Europe_TechEx_EuroBLECH）と同じ「どこにいるか」構造 ----------
+// section.family-where > .family-section-head + .where-body(.where-lead + .where-grid)、
+// .where-day > .where-people > .where-cell(.place)。人別セルを持たないHRSは、
+// EuroBLECHの合流後表示と同じ.is-sharedを常に付け、.where-peopleの中は常に1セル。
+assert((family.match(/<section class="family-where">/g) || []).length === 1, 'family_print.html: family-where section missing or duplicated');
+assert(family.includes('class="family-section-head"'), 'family_print.html: family-section-head heading missing');
+assert(family.includes('class="where-body"'), 'family_print.html: where-body wrapper missing');
+assert(family.includes('class="where-lead"'), 'family_print.html: where-lead intro missing');
+assert((family.match(/class="where-people"/g) || []).length === 8, 'family_print.html: where-people wrapper must match the eight day rows');
+assert((family.match(/class="where-cell where-\w+"><b class="place"/g) || []).length === 8, 'family_print.html: where-cell must wrap the city name in EuroBLECH\'s <b class="place">');
+assert(!family.includes('class="who"'), 'family_print.html: HRS has no separate-action days, so <span class="who"> must not appear');
+assert(/\.where-cell \.place\{[^}]*font-size:19px/.test(sharedCss), 'family_print.html: city name must stay the dominant type (19px, scoped to .where-cell .place)');
+
+// ---------- EuroBLECHと同じ.timezone-cards構造 ----------
+assert(family.includes('class="timezone-cards"'), 'family_print.html: timezone-cards wrapper missing');
+assert((family.match(/class="tz-diff"/g) || []).length === 2, 'family_print.html: expected 2 tz-diff cards (Japan basis, Germany difference)');
+assert(family.includes('class="timezone-card zone-japan"') && family.includes('class="timezone-card zone-europe"'), 'family_print.html: Japan/Germany timezone cards missing');
+assert(family.includes('日本のほうが7時間進んでいます') && family.includes('例：日本の 21:00 → 現地は同じ日の 14:00'), 'family_print.html: existing timezone supplementary facts must survive the restructure');
 assert(!family.includes('id="fam-clock"'), 'family_print.html: live clock should not be in print-only document');
 assert(family.includes('<link rel="stylesheet" href="v3.css">') && !family.includes('<style>'), 'family_print.html: shared stylesheet link missing or CSS still embedded');
 assert(family.includes('data-trip-layout="family-v1"'), 'family_print.html: shared family layout marker missing');
+
+// ---------- 家族印刷版：5セクション構成 ----------
+// 出張サマリー／時差・気候／家族日程詳細／宿泊先情報／緊急連絡先の順で、
+// すべて同じfamily-section-headの見出し様式であること。
+assert(!/<script\b/i.test(family), 'family_print.html: family copy must have no runtime scripts');
+const familySectionHeadings = [...family.matchAll(/class="family-section-head">([^<]*)</g)].map(m => m[1]);
+assert(
+  JSON.stringify(familySectionHeadings) === JSON.stringify([
+    '🧳 出張サマリー', '🕐 時差・気候', '🗓 どこにいて何をしているか', '🏨 宿泊先情報', '🆘 緊急連絡先',
+  ]),
+  `family_print.html: five sections must appear in the expected order (got ${familySectionHeadings.join(' | ')})`
+);
+assert(family.includes('href="tel:112"'), 'family_print.html: European emergency number 112 must be a tel: link');
+assert(/<a class="place"[^>]*>在ドイツ日本国大使館<\/a>/.test(family), 'family_print.html: embassy name itself must be the map link, not a separate 📍 地図 link');
+const familyEmergencySection = family.match(/<section class="family-section family-emergency">[\s\S]*?<\/section>/);
+assert(familyEmergencySection, 'family_print.html: emergency section missing');
+assert(!/\+49/.test(familyEmergencySection[0]), 'family_print.html: emergency section must not carry an unverified +49 phone number');
 
 const redirect = fs.readFileSync(path.join(here, 'index_v3.html'), 'utf8');
 assert(redirect.includes('http-equiv="refresh"') && redirect.includes('url=./'), 'index_v3.html: legacy URL redirect missing');

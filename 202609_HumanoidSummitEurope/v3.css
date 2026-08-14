@@ -570,24 +570,55 @@ body{line-height:1.62;padding-bottom:24px}
 .family-head h1{margin:2px 0;font-size:22px}
 .family-head p{margin:0;color:var(--tx2);font-size:14px}
 .family-page .tab,.family-page .tab.on{display:block}
-/* どこにいるか：都市名が主役。日付と補足はその手がかりなので小さくする。 */
-.where-grid{display:grid;gap:6px}
-.where-day{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center;padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:#fff}
-.where-day>header{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}
-.where-day>header strong{color:var(--tx2);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
-.where-day>header span{color:var(--mu);font-size:11px}
-.where-city{display:block;color:var(--tx);font-size:19px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
-.where-cell small{display:block;margin-top:2px;color:var(--mu);font-size:13px;font-weight:600}
-.where-work{background:#F2F8F7}
-.where-work .where-city{color:#0B4F5A}
-.where-home{background:#F7F8F8}
-.where-home .where-city{color:var(--tx2)}
-/* 時差：家族が使うのは差の数字なので、そこだけを大きくする。 */
-.timezone-card{display:grid;gap:3px;background:var(--conf-bg);border:1px solid var(--conf);border-radius:10px;padding:12px 14px}
-.timezone-card .tz-label{color:var(--conf-tx);font-size:12px;font-weight:700}
-.timezone-card .tz-diff{color:#0B4F5A;font-size:38px;font-weight:800;line-height:1.05;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
-.timezone-card .tz-diff i{margin-left:3px;font-size:15px;font-style:normal;font-weight:700}
-.timezone-card .tz-note,.timezone-card .tz-ex{color:var(--conf-tx);font-size:12px;line-height:1.5}
+/* どこにいるか：202610_Europe_TechEx_EuroBLECHのv3.cssと同じ構造
+   （section.family-where > .where-body > .where-lead + .where-grid、
+   .where-day > .where-people > .where-cell）。都市名が主役なので、
+   日付と補足はその手がかりに徹して小さくする。HRSは全行程が同一行動なので
+   人別セルを持たず、.where-peopleの中は常に1セル。EuroBLECHの.is-shared
+   （合流後の1セル表示）と同じ扱いにして、1セルでも幅いっぱいに広げる。 */
+/* .family-section は5セクション構成の共通カード枠（出張サマリー／時差・気候／
+   宿泊先情報／緊急連絡先）。.family-whereと同じ枠・見出し様式を再利用し、
+   重複定義しない。 */
+.family-where,.family-section{margin-bottom:14px;overflow:hidden;border:2px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,32,.05)}
+.family-section-head{padding:10px 14px;background:var(--neu-bg);color:var(--tx2);font-size:16px;font-weight:700}
+.where-body,.family-section-body{padding:13px 14px}
+.where-lead{margin:0 0 11px;color:var(--tx2);font-size:13px;line-height:1.6}
+.where-grid{display:grid;gap:8px}
+.where-day{display:grid;grid-template-columns:56px minmax(0,1fr);overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff}
+.where-day>header{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:10px 6px;background:var(--tx2);color:#fff;text-align:center}
+.where-day>header strong{font-size:17px;line-height:1.1;font-variant-numeric:tabular-nums}
+.where-day>header span{font-size:12px;opacity:.85}
+.where-people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));min-width:0}
+.where-day.is-shared .where-people{grid-template-columns:minmax(0,1fr)}
+.where-cell{min-width:0;border-left:1px solid var(--line);padding:9px 11px}
+.where-cell:first-child{border-left:0}
+/* 地図リンク用の.place（shared/trip-field/core.cssで#2A5FA0・太さ600・下線なし）と
+   同じクラス名だが意味が違うので、.where-cellの内側だけ本文色・800・19pxへ上書きする。 */
+.where-cell .place{display:block;color:var(--tx);font-size:19px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
+.where-cell small{display:block;margin-top:4px;color:var(--tx);font-size:13.5px;font-weight:600;line-height:1.5;overflow-wrap:anywhere}
+.where-work small{color:#0B5C60}
+.where-home small{color:var(--mu);font-weight:400}
+.where-work{background:#F2F8F7}.where-work .place{color:#0B4F5A}
+.where-move{background:#F6F7FA}
+.where-home{background:#F7F8F8}.where-home .place{color:var(--mu)}
+/* 時刻の読み方の宣言。EuroBLECHの.timezone-leadと同じ寸法。
+   文面だけHRSの実態に合わせる（HRSは現地時刻と日本時間が混在するため）。 */
+.timezone-lead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0 0 10px;color:var(--tx2);font-size:14px}
+.timezone-lead strong{color:#0B4F5A;font-size:19px;line-height:1.3}
+.timezone-lead span{color:var(--mu);font-size:13px}
+/* 時差：家族が使うのは差の数字なので、そこだけを大きくする（EuroBLECHと同じ.timezone-cards構造）。
+   ゾーン名に国旗絵文字を入れない。国旗の合成外字はWindowsでは合成されず「JP」「DE」という
+   文字のまま表示されることをユーザーが実機で確認済み（EuroBLECHは🇯🇵🇩🇪を使うが、
+   HRSでは意図的に外す。これはEuroBLECHとの意図的な相違）。 */
+.timezone-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.timezone-card{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:2px 8px;min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#F5F8F9;color:var(--tx2)}
+.timezone-card span,.timezone-card small{grid-column:1/3}
+.timezone-card span{font-size:13px;font-weight:700}
+.timezone-card small{color:var(--mu);font-size:12px}
+.timezone-card .tz-diff{grid-column:1/3;color:#0B4F5A;font-size:38px;font-weight:800;line-height:1.05;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.timezone-card .tz-diff i{margin-left:2px;font-size:15px;font-style:normal;font-weight:700}
+.zone-japan .tz-diff{color:var(--mu);font-size:26px}
+.zone-europe{border-color:#78A9A9;background:#E7F3F2}
 @media(max-width:640px){
   .family-head{padding:12px 0 10px}
   .family-head h1{font-size:20px}

@@ -26,6 +26,16 @@ function mustReplace(text, search, replacement, label) {
   return text.replace(search, replacement);
 }
 
+// 正規表現で1件だけ拾う抽出用。mustReplaceの「置換」ではなく「値を取り出す」
+// 版。0件でも2件以上でも、意図しない箇所を拾っている可能性があるので止める。
+function mustExtract(text, regex, label) {
+  const matches = text.match(new RegExp(regex, regex.flags.includes('g') ? regex.flags : regex.flags + 'g'));
+  if (!matches || matches.length !== 1) {
+    throw new Error(`Extraction fragment count mismatch: ${label} (found ${matches ? matches.length : 0})`);
+  }
+  return matches[0];
+}
+
 // EuroBLECH方式の全件置換。同一文字列が複数箇所に出る場合に、件数を数えて
 // 期待値と食い違ったら止める（黙って0件・過剰置換になるのを防ぐ）。
 function replaceAllCounted(text, search, replacement, label, expectedCount) {
@@ -178,24 +188,55 @@ const familyCss = String.raw`
 .family-head h1{margin:2px 0;font-size:22px}
 .family-head p{margin:0;color:var(--tx2);font-size:14px}
 .family-page .tab,.family-page .tab.on{display:block}
-/* どこにいるか：都市名が主役。日付と補足はその手がかりなので小さくする。 */
-.where-grid{display:grid;gap:6px}
-.where-day{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center;padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:#fff}
-.where-day>header{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}
-.where-day>header strong{color:var(--tx2);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
-.where-day>header span{color:var(--mu);font-size:11px}
-.where-city{display:block;color:var(--tx);font-size:19px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
-.where-cell small{display:block;margin-top:2px;color:var(--mu);font-size:13px;font-weight:600}
-.where-work{background:#F2F8F7}
-.where-work .where-city{color:#0B4F5A}
-.where-home{background:#F7F8F8}
-.where-home .where-city{color:var(--tx2)}
-/* 時差：家族が使うのは差の数字なので、そこだけを大きくする。 */
-.timezone-card{display:grid;gap:3px;background:var(--conf-bg);border:1px solid var(--conf);border-radius:10px;padding:12px 14px}
-.timezone-card .tz-label{color:var(--conf-tx);font-size:12px;font-weight:700}
-.timezone-card .tz-diff{color:#0B4F5A;font-size:38px;font-weight:800;line-height:1.05;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
-.timezone-card .tz-diff i{margin-left:3px;font-size:15px;font-style:normal;font-weight:700}
-.timezone-card .tz-note,.timezone-card .tz-ex{color:var(--conf-tx);font-size:12px;line-height:1.5}
+/* どこにいるか：202610_Europe_TechEx_EuroBLECHのv3.cssと同じ構造
+   （section.family-where > .where-body > .where-lead + .where-grid、
+   .where-day > .where-people > .where-cell）。都市名が主役なので、
+   日付と補足はその手がかりに徹して小さくする。HRSは全行程が同一行動なので
+   人別セルを持たず、.where-peopleの中は常に1セル。EuroBLECHの.is-shared
+   （合流後の1セル表示）と同じ扱いにして、1セルでも幅いっぱいに広げる。 */
+/* .family-section は5セクション構成の共通カード枠（出張サマリー／時差・気候／
+   宿泊先情報／緊急連絡先）。.family-whereと同じ枠・見出し様式を再利用し、
+   重複定義しない。 */
+.family-where,.family-section{margin-bottom:14px;overflow:hidden;border:2px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,32,.05)}
+.family-section-head{padding:10px 14px;background:var(--neu-bg);color:var(--tx2);font-size:16px;font-weight:700}
+.where-body,.family-section-body{padding:13px 14px}
+.where-lead{margin:0 0 11px;color:var(--tx2);font-size:13px;line-height:1.6}
+.where-grid{display:grid;gap:8px}
+.where-day{display:grid;grid-template-columns:56px minmax(0,1fr);overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff}
+.where-day>header{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:10px 6px;background:var(--tx2);color:#fff;text-align:center}
+.where-day>header strong{font-size:17px;line-height:1.1;font-variant-numeric:tabular-nums}
+.where-day>header span{font-size:12px;opacity:.85}
+.where-people{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));min-width:0}
+.where-day.is-shared .where-people{grid-template-columns:minmax(0,1fr)}
+.where-cell{min-width:0;border-left:1px solid var(--line);padding:9px 11px}
+.where-cell:first-child{border-left:0}
+/* 地図リンク用の.place（shared/trip-field/core.cssで#2A5FA0・太さ600・下線なし）と
+   同じクラス名だが意味が違うので、.where-cellの内側だけ本文色・800・19pxへ上書きする。 */
+.where-cell .place{display:block;color:var(--tx);font-size:19px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
+.where-cell small{display:block;margin-top:4px;color:var(--tx);font-size:13.5px;font-weight:600;line-height:1.5;overflow-wrap:anywhere}
+.where-work small{color:#0B5C60}
+.where-home small{color:var(--mu);font-weight:400}
+.where-work{background:#F2F8F7}.where-work .place{color:#0B4F5A}
+.where-move{background:#F6F7FA}
+.where-home{background:#F7F8F8}.where-home .place{color:var(--mu)}
+/* 時刻の読み方の宣言。EuroBLECHの.timezone-leadと同じ寸法。
+   文面だけHRSの実態に合わせる（HRSは現地時刻と日本時間が混在するため）。 */
+.timezone-lead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0 0 10px;color:var(--tx2);font-size:14px}
+.timezone-lead strong{color:#0B4F5A;font-size:19px;line-height:1.3}
+.timezone-lead span{color:var(--mu);font-size:13px}
+/* 時差：家族が使うのは差の数字なので、そこだけを大きくする（EuroBLECHと同じ.timezone-cards構造）。
+   ゾーン名に国旗絵文字を入れない。国旗の合成外字はWindowsでは合成されず「JP」「DE」という
+   文字のまま表示されることをユーザーが実機で確認済み（EuroBLECHは🇯🇵🇩🇪を使うが、
+   HRSでは意図的に外す。これはEuroBLECHとの意図的な相違）。 */
+.timezone-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.timezone-card{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:2px 8px;min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#F5F8F9;color:var(--tx2)}
+.timezone-card span,.timezone-card small{grid-column:1/3}
+.timezone-card span{font-size:13px;font-weight:700}
+.timezone-card small{color:var(--mu);font-size:12px}
+.timezone-card .tz-diff{grid-column:1/3;color:#0B4F5A;font-size:38px;font-weight:800;line-height:1.05;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.timezone-card .tz-diff i{margin-left:2px;font-size:15px;font-style:normal;font-weight:700}
+.zone-japan .tz-diff{color:var(--mu);font-size:26px}
+.zone-europe{border-color:#78A9A9;background:#E7F3F2}
 @media(max-width:640px){
   .family-head{padding:12px 0 10px}
   .family-head h1{font-size:20px}
@@ -954,53 +995,73 @@ function buildMain({ offline = false } = {}) {
   return html;
 }
 
-// ---------- 家族印刷版の「どこにいるか」（EUROBLECH方式） ----------
+// ---------- 家族印刷版の「どこにいて何をしているか」（EUROBLECH方式） ----------
 // 家族が最初に知りたいのは「どの日にどこにいるか」なので、都市名を最大文字にし、
-// 日付と補足はその手がかりに徹して小さくする。内容はFAMの記述を短くしただけで、
-// 事実は足していない。HRSは全行程が同一行動なので、EUROBLECHのような人別セルは持たない。
-const WHERE_DAYS = [
-  { date:'9/7',  dow:'月', city:'日本 → 機内',                    note:'夜にセントレア発。機内泊',      kind:'move' },
-  { date:'9/8',  dow:'火', city:'シュトゥットガルト',              note:'朝フランクフルト着。午後は市内', kind:'move' },
-  { date:'9/9',  dow:'水', city:'シュトゥットガルト',              note:'国際会議 1日目',                kind:'work' },
-  { date:'9/10', dow:'木', city:'シュトゥットガルト',              note:'国際会議 2日目',                kind:'work' },
-  { date:'9/11', dow:'金', city:'シュトゥットガルト近郊',          note:'会議3日目・企業訪問',           kind:'work' },
-  { date:'9/12', dow:'土', city:'シュトゥットガルト → フランクフルト', note:'移動日',                     kind:'move' },
-  { date:'9/13', dow:'日', city:'フランクフルト',                  note:'日中は観光。夜の便で出発',      kind:'move' },
-  { date:'9/14', dow:'月', city:'機内 → 日本',                    note:'19:35セントレア着。帰宅',       kind:'home' },
-];
-// 都市名にはmapLinkの.placeを使わない。あちらは地図リンクの見た目（青・太さ600）で、
-// ここは本文色の最大文字。同じクラス名に2つの意味を持たせない。
-const whereDay = d => `<article class="where-day where-${d.kind}"><header><strong>${d.date}</strong><span>${d.dow}</span></header>`
-  + `<div class="where-cell"><b class="where-city">${d.city}</b><small>${d.note}</small></div></article>`;
-const whereBlock = `  <!-- どこにいるか（1日1行・都市名が主役）-->
-  <div class="card family-where">
-    <h2 class="ttl">🗺 どこにいるか — 8日間の全体像</h2>
-    <div class="bd">
-      <div class="where-grid">${WHERE_DAYS.map(whereDay).join('')}</div>
-      <div class="foot">日付と補足は手がかりです。大きい文字がその日にいる場所。</div>
-    </div>
-  </div>
+// 日付と予定はその手がかりに徹して小さくする。文言はFAMのまま。事実は足していない。
+// HRSは全行程が同一行動なので、EUROBLECHのような人別セルは持たない。
+// 日別の場所と予定はFAMが持っている。ここで別に書き起こすと二重管理になり、
+// 「どこにいるか」と「毎日どこで何をしているか」が同じ内容で2つ並ぶ。FAMから作る。
+function whereDays() {
+  const match = source.match(/const FAM = (\{[\s\S]*?\n\});/);
+  if (!match) throw new Error('FAM data not found');
+  const fam = Function(`"use strict"; return (${match[1]});`)();
+  const dowNames = ['日', '月', '火', '水', '木', '金', '土'];
+  const keys = Object.keys(fam).sort();
+  return keys.map((key, i) => {
+    const date = new Date(`${key}T00:00:00Z`);
+    const item = fam[key];
+    // 国旗絵文字はWindowsで「DE」と出るうえ、都市名を最大文字にする妨げになる。
+    // 最終日の`✈️ 帰国日`は場所ではないので、他の行と同じ「どこ→どこ」にそろえる。
+    let city = item.place.replace(/^[\u{1F1E6}-\u{1F1FF}]{2}\s*/u, '').replace(/^✈️\s*/, '');
+    if (city === '帰国日') city = '機内 → 日本';
+    return {
+      date: `${date.getUTCMonth() + 1}/${date.getUTCDate()}`,
+      dow: dowNames[date.getUTCDay()],
+      city,
+      note: item.note,
+      kind: item.conf ? 'work' : (i === keys.length - 1 ? 'home' : 'move'),
+    };
+  });
+}
+// 都市名はEuroBLECHと同じ.placeを使う（地図リンク用の.placeと衝突しないよう、
+// familyCss側で.where-cell .placeだけ本文色・800・19pxへ上書きする）。
+// <span class="who">は入れない。HRSは全行程が同一行動で、人別セルを持たないため。
+const whereCell = d => `<div class="where-cell where-${d.kind}"><b class="place">${d.city}</b><small>${d.note}</small></div>`;
+const whereDay = d => `<article class="where-day is-shared"><header><strong>${d.date}</strong><span>${d.dow}</span></header><div class="where-people">${whereCell(d)}</div></article>`;
+const whereBlock = `  <!-- どこにいるか（1日1行・都市名が主役。FAMが唯一の出どころ。EuroBLECHと同じ
+       section.family-where > .where-body > .where-lead + .where-grid の構造）-->
+  <section class="family-where"><div class="family-section-head">🗓 どこにいて何をしているか</div><div class="where-body"><p class="where-lead">出張期間中、別行動はない。</p><div class="where-grid">${whereDays().map(whereDay).join('')}</div></div></section>
 
 `;
 
 // 時差は、家族が使うのは差の数字なので、そこを最大文字にする。
-// タイムゾーン略号とUTCオフセットは補足に落とす。
+// タイムゾーン略号とUTCオフセットは補足に落とす（EuroBLECHと同じ.timezone-cards構造）。
 const timezoneCardOld = `      <div style="text-align:center;background:var(--conf-bg);border:1px solid var(--conf);border-radius:10px;padding:12px 10px">
         <div style="font-size:var(--f0);font-weight:700;color:var(--conf-tx);line-height:1.45">日本の時刻 <span style="color:var(--conf-tx)">− 7時間</span> ＝ 現地（ドイツ）の時刻</div>
         <div class="small" style="color:var(--conf-tx);margin-top:4px">例：日本の 21:00 → 現地は同じ日の 14:00</div>
       </div>`;
-const timezoneCardNew = `      <div class="timezone-card">
-        <span class="tz-label">日本の時刻から</span>
-        <span class="tz-diff">−7<i>時間</i></span>
-        <span class="tz-note">＝ 現地（ドイツ）の時刻。現地はCEST・UTC+2、日本はJST・UTC+9</span>
-        <span class="tz-ex">例：日本の 21:00 → 現地は同じ日の 14:00</span>
+// ゾーン名に国旗絵文字を入れない（EuroBLECHは🇯🇵🇩🇪を使うが、Windowsでは合成されず
+// 「JP」「DE」という文字のまま表示されることをユーザーが実機で確認済み。意図的な相違）。
+// 「例：日本の21:00→現地は同じ日の14:00」は直後の既存の補足文（日本のほうが7時間
+// 進んでいます…）に事実として残っているため、ここで別途持たせる必要はない。
+const timezoneCardNew = `      <div class="timezone-cards">
+        <div class="timezone-card zone-japan"><span>日本</span><strong class="tz-diff">基準</strong><small>JST・UTC+9</small></div>
+        <div class="timezone-card zone-europe"><span>ドイツ</span><strong class="tz-diff">−7<i>時間</i></strong><small>CEST・UTC+2</small></div>
       </div>`;
+// timezoneCardOldの中にあった「例：21:00→14:00」はEuroBLECHの.timezone-card構造
+// （span/strong/smallの固定3要素）に収まらないため落ちる。事実を落とさないよう、
+// 直後に残る既存の補足文（日本のほうが7時間進んでいます…）の末尾へ移す。
+// 事実は変えず、置き場所だけ移動する。
+const TIMEZONE_EXAMPLE_OLD = `      <div class="small muted" style="margin-top:8px">日本のほうが7時間進んでいます（9月のドイツは夏時間のため7時間。冬は8時間）。<br>
+        つまり <strong>日本の夕方〜深夜が、現地の朝〜夕方</strong>。日本の午前中は、現地はまだ夜中です。</div>`;
+const TIMEZONE_EXAMPLE_NEW = `      <div class="small muted" style="margin-top:8px">日本のほうが7時間進んでいます（9月のドイツは夏時間のため7時間。冬は8時間）。<br>
+        つまり <strong>日本の夕方〜深夜が、現地の朝〜夕方</strong>。日本の午前中は、現地はまだ夜中です。<br>
+        例：日本の 21:00 → 現地は同じ日の 14:00</div>`;
 
 // 家族印刷版はbuildFamily()が変換前のsourceから切り出すので、
 // buildMain()側の置換が届かない。同じ規約をこちら側にも当てる。
 const FAMILY_FIXUPS = [
-  // 帰国日のカラー絵文字を共通のフライトアイコンへ
-  ["✈️ 帰国日", `${flightMarkHtml} 帰国日`],
+  // 帰国日のカラー絵文字はwhereDays()が落とすので、ここでは扱わない。
   // 地図リンクはホテル名そのものへ張る。「（地図）」の別リンクは出さない
   [
     '<strong>9/8〜9/12</strong>　Maritim Stuttgart（シュトゥットガルト）　TEL +49 711 9420 <a href="https://www.google.com/maps/search/?api=1&amp;query=Maritim+Hotel+Stuttgart+Seidenstrasse+34+70174+Stuttgart" target="_blank" rel="noopener">（地図）</a>',
@@ -1012,38 +1073,171 @@ const FAMILY_FIXUPS = [
   ],
 ];
 
-function extractFamilyRows() {
-  const match = source.match(/const FAM = (\{[\s\S]*?\n\});/);
-  if (!match) throw new Error('FAM data not found');
-  const fam = Function(`"use strict"; return (${match[1]});`)();
-  const dow = ['日','月','火','水','木','金','土'];
-  return Object.keys(fam).sort().map(key => {
-    const date = new Date(`${key}T00:00:00Z`);
-    const item = fam[key];
-    return `<tr><td class="t">${date.getUTCMonth()+1}/${date.getUTCDate()}（${dow[date.getUTCDay()]}）</td><td>${item.place}</td><td>${item.note}</td></tr>`;
-  }).join('\n');
-}
+// ---------- 出張サマリー：連絡が取れない時間帯（日本時間） ----------
+// このページ自身の記載（「日本のほうが7時間進んでいます」＝ドイツは日本より
+// 7時間遅い）から算出しただけで、新しい事実ではない。
+//   往路：22:50発（日本時間、NGO発） → 9:20フランクフルト着（現地時間） は
+//         現地9:20＋7時間＝日本時間16:20。
+//   復路：19:20発（現地時間、FRA発） は 日本時間で9/14 2:20。
+//         19:35セントレア着（日本時間）まで機内。
+const FAMILY_BLACKOUT_OUTBOUND = '9/7 22:50 〜 9/8 16:20';
+const FAMILY_BLACKOUT_RETURN = '9/14 2:20 〜 9/14 19:35';
+
+// ---------- 時差・気候：シュトゥットガルトと名古屋の平年値 ----------
+// 数値は一次情報を読んで確認済み（ドイツ側は独語版Wikipediaの気候表、
+// 名古屋側は気象庁の平年値）。ここでは調べ直さず、そのまま使う。
+// 期間・出典が違う概算比較であることは家族印刷版の本文にも明記する。
+const CLIMATE_ROWS = [
+  ['シュトゥットガルト 9月', '21.0℃', '11.0℃', '独語版Wikipediaの気候表（2015–2020、出典表記は wetterdienst.de／wetterkontor.de）'],
+  ['名古屋 10月', '23.3℃', '14.8℃', '気象庁 平年値（1991–2020）'],
+  ['名古屋 11月', '17.3℃', '8.6℃', '気象庁 平年値（1991–2020）'],
+];
 
 function buildFamily() {
   const sectionMatch = source.match(/<section class="tab" id="tab-fam"[\s\S]*?<\/section>/);
   if (!sectionMatch) throw new Error('Family source not found');
   let section = sectionMatch[0]
     .replace('<section class="tab"', '<section class="tab on"')
-    .replace('id="btn-print-fam"', 'onclick="window.print()"')
-    .replace('<tbody id="fam-days"></tbody>', `<tbody id="fam-days">${extractFamilyRows()}</tbody>`);
-  section = section.replace(/<!-- ② いまの状態[\s\S]*?<!-- ③ 毎日どこで何をしているか/, '<!-- 毎日どこで何をしているか');
-  section = section.replace('出張中は<strong>その日の行が色付き</strong>になります。細かい時刻までは載せていません。', '細かい時刻は省き、居場所と大きな予定だけを載せています。');
+    .replace('id="btn-print-fam"', 'onclick="window.print()"');
   FAMILY_FIXUPS.forEach(([search, replacement], i) => {
     if (!section.includes(search)) throw new Error(`Family fixup #${i} not found`);
     section = section.split(search).join(replacement);
   });
-  // 「どこにいるか」は先頭付近に置く。時差カードより前。
-  section = mustReplace(section, '  <!-- ① 時差（紙でも分かる静的な説明）-->', `${whereBlock}  <!-- ① 時差（紙でも分かる静的な説明）-->`, 'family where-block insertion point');
   section = mustReplace(section, timezoneCardOld, timezoneCardNew, 'family timezone card');
+  section = mustReplace(section, TIMEZONE_EXAMPLE_OLD, TIMEZONE_EXAMPLE_NEW, 'family timezone example relocation');
+
+  // ============================================================
+  // 5セクションへ組み替える（出張サマリー／時差・気候／家族日程詳細／
+  // 宿泊先情報／緊急連絡先）。②いまの状態（画面用の時計）と③毎日どこで
+  // 何をしているかの表（fam-table）は、単純に抽出対象から外すことで
+  // 落とす（whereBlockと内容が重複していたため）。
+  // ============================================================
+
+  // 印刷ボタン行はそのまま先頭に残す。
+  const printBlock = mustExtract(section, /<div class="no-print"[\s\S]*?<\/div>\n/, 'family print-button block');
+
+  // ①時差カードのtimezone-cardsと補足説明。
+  const timezoneInner = mustExtract(
+    section,
+    /<div class="timezone-cards">[\s\S]*?<\/div>\s*<div class="small muted" style="margin-top:8px">[\s\S]*?例：日本の 21:00 → 現地は同じ日の 14:00<\/div>/,
+    'family timezone inner block'
+  );
+
+  // ④日本時間で見るとカードの対応表。
+  const japanTimeInner = mustExtract(
+    section,
+    /<div class="scroll-x"><table class="tb">[\s\S]*?<\/table><\/div>\s*<div class="foot">[\s\S]*?<\/div>/,
+    'family japan-time table block'
+  );
+
+  // 🏨宿泊カードの3行（Maritim／BestWestern／機内泊）。地図リンクは
+  // 既にFAMILY_FIXUPSでホテル名そのものへ張り替え済み。
+  let hotelInner = mustExtract(
+    section,
+    /<div class="bd small" style="display:grid;gap:6px">\s*<div><strong>9\/8〜9\/12<\/strong>[\s\S]*?<div><strong>9\/7・9\/13の夜<\/strong>　機内<\/div>/,
+    'family hotel lines block'
+  );
+  hotelInner = mustReplace(hotelInner, /^<div class="bd small" style="display:grid;gap:6px">\s*/, '', 'family hotel lines open-strip');
+
+  // 🇯🇵万一のとき行から、大使館サイトと外務省サイトのURLだけを借りる
+  // （地図リンクは新規に張るが、公式サイトのURLは既存のものをそのまま使う）。
+  const emergencyRaw = mustExtract(
+    section,
+    /<div class="muted" style="padding-top:2px">🇯🇵 万一のとき：[\s\S]*?<\/div>/,
+    'family emergency raw block'
+  );
+  const embassyHrefMatch = emergencyRaw.match(/href="([^"]+)"[^>]*>在ドイツ日本国大使館<\/a>/);
+  const mofaHrefMatch = emergencyRaw.match(/href="([^"]+)"[^>]*>外務省 海外安全ホームページ<\/a>/);
+  if (!embassyHrefMatch) throw new Error('Family emergency embassy link not found');
+  if (!mofaHrefMatch) throw new Error('Family emergency MOFA link not found');
+  const embassyHref = embassyHrefMatch[1];
+  const mofaHref = mofaHrefMatch[1];
+
+  // 出張サマリーで使う事実は、すべて既存ソースの中に既にある（新しい固有名詞・
+  // 数字は持ち込まない）。ソースが変わったら気付けるよう、使う前に確認する。
+  const summaryFacts = [
+    '9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA',
+    'ロボットの国際会議',
+    '9月14日（月）', '中部国際空港（セントレア）着',
+    '入国審査・荷物受取に約40分', '20:35頃 セントレア発（ミュースカイ）',
+    '21:50頃 京都駅', '21:40頃 犬山駅',
+    '9/13（日）19:20 フランクフルト発', '9/14（月）19:35 セントレア着', 'Finnair',
+    '9/7（月）22:50 セントレア発', '9/8（火）9:20 フランクフルト着',
+  ];
+  summaryFacts.forEach(fact => {
+    if (!source.includes(fact)) throw new Error(`Family summary fact missing from source: ${fact}`);
+  });
+
+  // ---------- ① 出張サマリー ----------
+  // 帰りの「19:20 フランクフルト発」は現地時刻、「19:35 セントレア着」は
+  // 日本時刻。元のカードはどちらか書いていなかったので、ここで明示する。
+  // 連絡が取れない時間帯は、ページ自身の時差（7時間）から出しただけの
+  // 機内区間の時刻で、新しい事実ではない。
+  const familySummarySection = String.raw`<section class="family-section family-summary"><div class="family-section-head">🧳 出張サマリー</div><div class="family-section-body" style="display:grid;gap:8px">
+    <p class="where-lead">HRS Europe 2026（ロボットの国際会議）｜2026年9月7日（月）〜9月14日（月）｜ドイツ シュトゥットガルト→フランクフルト｜2名｜Finnair NGO⇔FRA</p>
+    <div class="small"><strong>行きの便</strong>：9/7（月）22:50 セントレア発（日本時刻） → 9/8（火）9:20 フランクフルト着（現地時刻）</div>
+    <div class="small"><strong>帰りの便</strong>：9/13（日）19:20 フランクフルト発（現地時刻） → ヘルシンキ乗継 → 9/14（月）19:35 セントレア着（日本時刻・Finnair）</div>
+    <div class="small" style="font-weight:700">連絡が取れない時間帯（日本時間）：往路の機内 ${FAMILY_BLACKOUT_OUTBOUND}／復路の機内 ${FAMILY_BLACKOUT_RETURN}</div>
+    <div class="small">帰宅の見込み：19:35 セントレア着 → 入国審査・荷物受取に約40分 → 20:35頃セントレア発（ミュースカイ） → 21:50頃京都駅／21:40頃犬山駅</div>
+  </div></section>`;
+
+  // ---------- ② 時差・気候 ----------
+  const climateTableRows = CLIMATE_ROWS.map(([place, hi, lo, src]) =>
+    `<tr><td>${place}</td><td>${hi}</td><td>${lo}</td><td>${src}</td></tr>`
+  ).join('\n        ');
+  const familyTimezoneSection = String.raw`<section class="family-section family-timezone"><div class="family-section-head">🕐 時差・気候</div><div class="family-section-body" style="display:grid;gap:12px">
+    <p class="timezone-lead"><strong>時刻は現地時刻。日本時間には「日本時間」と付けます</strong><span>日本＝JST・UTC+9／ドイツ＝CEST・UTC+2</span></p>
+    ${timezoneInner}
+    ${japanTimeInner}
+    <div>
+      <p class="where-lead" style="margin-bottom:8px">現地の気候（季節感の目安）</p>
+      <div class="scroll-x"><table class="tb">
+        <thead><tr><th>地点・月</th><th>平均最高</th><th>平均最低</th><th>出典・期間</th></tr></thead>
+        <tbody>
+        ${climateTableRows}
+        </tbody>
+      </table></div>
+      <div class="small muted" style="margin-top:6px">季節感でいうと、名古屋の10月下旬〜11月上旬くらい。日中は10月寄り、朝晩は11月寄りで、昼と朝晩の体感がずれる。<br>
+        ※ シュトゥットガルト側は独語版Wikipediaの2015–2020の値（DWDの30年平年値ではない）。名古屋は気象庁の30年平年値（1991–2020）。期間も出典も異なる概算比較。<br>
+        ※ 数値はシュトゥットガルトのもの。フランクフルト（9/12〜9/14）の気候は未確認。</div>
+    </div>
+  </div></section>`;
+
+  // ---------- ④ 宿泊先情報 ----------
+  const familyHotelSection = String.raw`<section class="family-section family-hotel"><div class="family-section-head">🏨 宿泊先情報</div><div class="family-section-body" style="display:grid;gap:6px">
+    ${hotelInner}
+  </div></section>`;
+
+  // ---------- ⑤ 緊急連絡先 ----------
+  // 大使館名そのものが地図リンク（プロジェクトの規約）。電話番号・住所は
+  // 大使館公式サイトが403で確認できていないため載せない。渡航前に確認して
+  // 書き込む欄だけを置く。
+  const familyEmergencySection = String.raw`<section class="family-section family-emergency"><div class="family-section-head">🆘 緊急連絡先</div><div class="family-section-body" style="display:grid;gap:8px">
+    <div class="small"><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Embassy+of+Japan+in+Germany+Berlin" target="_blank" rel="noopener">在ドイツ日本国大使館</a></strong>　（<a href="${embassyHref}" target="_blank" rel="noopener">公式サイト</a>）</div>
+    <div class="small muted">電話番号・住所は未確認です（大使館公式サイトが開けず確認できていません）。渡航前に公式サイトで確認し、下欄に書き込んでください。<br>
+      電話：______________________　住所：______________________</div>
+    <div class="small">欧州共通緊急番号：<a href="tel:112">112</a>（警察・消防・救急）</div>
+    <div class="small"><a href="${mofaHref}" target="_blank" rel="noopener">外務省 海外安全ホームページ</a></div>
+  </div></section>`;
+
+  const openTag = mustExtract(section, /^<section[^>]*>/, 'family section open tag');
+  const newSection = `${openTag}
+
+  ${printBlock}
+  ${familySummarySection}
+
+  ${familyTimezoneSection}
+
+  ${whereBlock}
+  ${familyHotelSection}
+
+  ${familyEmergencySection}
+</section>`;
+
   return `<!DOCTYPE html>
 <html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>HRS Europe 2026 家族向け予定表</title><link rel="stylesheet" href="v3.css"></head>
-<body class="family-page" data-trip-layout="family-v1"><header class="family-head"><div class="wrap"><div class="eyebrow">HRS EUROPE 2026 · FAMILY COPY</div><h1>家族向け予定表</h1><p>2026年9月7日（月）〜9月14日（月）｜ドイツ出張</p></div></header><main class="wrap">${section}</main></body></html>`;
+<body class="family-page" data-trip-layout="family-v1"><header class="family-head"><div class="wrap"><div class="eyebrow">HRS EUROPE 2026 · FAMILY COPY</div><h1>家族向け予定表</h1><p>2026年9月7日（月）〜9月14日（月）｜ドイツ出張</p></div></header><main class="wrap">${newSection}</main></body></html>`;
 }
 
 const outputs = [
