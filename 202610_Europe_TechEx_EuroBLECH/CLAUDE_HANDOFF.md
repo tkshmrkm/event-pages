@@ -8,16 +8,19 @@
 
 このチェックポイントは、ユーザーとの対話で行った体裁・粒度・家族タブの修正を保存したもの。ただし、末尾の「未完了」を反映するまでは完成扱いにしない。
 
+**このファイルが現在の引き継ぎ本体。** `NEXT_SESSION_HANDOFF.md` は初期設計の補足資料であり、内容が異なる場合は本書とユーザーの最新指示を優先する。
+
 ## 最初に全文確認するファイル
 
-1. `NEXT_SESSION_HANDOFF.md` — 初期要件と禁止事項
+1. `NEXT_SESSION_HANDOFF.md` — Git管理済みの初期設計補足。本書と異なる場合は本書を優先
 2. `transport_actual_1017_1018_sample.html` — 4列交通表示の承認サンプル
 3. `../202609_HumanoidSummitEurope/index.html` — HRS公開版の構造
 4. `../202609_HumanoidSummitEurope/v3.css`
-5. `../202609_HumanoidSummitEurope/v3.js`
-6. `index.html` — 旅程内容の元データ。直接編集しない
-7. `index_v2.html` — 家族タブの内容・情報構造の基準
-8. `build_v3.mjs`、`v3.css`、`v3.js`、`validate_v3.mjs` — 現在のv3実装
+5. `../202609_HumanoidSummitEurope/V3_DESIGN_BRIEF.md`
+6. `../shared/trip-field/runtime.js` — HRS共通ランタイム。HRS固有の挙動は `index.html` 内のインラインスクリプトも確認
+7. `index.html` — 旅程内容の元データ。直接編集しない
+8. `index_v2.html` — 家族タブの内容・情報構造の基準
+9. `build_v3.mjs`、`v3.css`、`v3.js`、`validate_v3.mjs` — 現在のv3実装
 
 `references/rejected/transport_layout_sample.html` は無効な旧試作。参考用に隔離しているが、基準にしない。
 
