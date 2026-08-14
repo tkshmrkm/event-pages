@@ -80,13 +80,6 @@ if (todayCard) {
   setTimeout(() => todayCard.scrollIntoView({ block: 'start' }), 80);
 }
 
-document.getElementById('detail-tg')?.addEventListener('click', event => {
-  const details = Array.from(document.querySelectorAll('details.fold, details.topic'));
-  const toOpen = details.some(item => !item.open);
-  details.forEach(item => { item.open = toOpen; });
-  event.currentTarget.textContent = toOpen ? '−詳細' : '＋詳細';
-});
-
 document.addEventListener('click', event => {
   const anchor = event.target.closest('a[href^="#"]');
   if (!anchor || anchor.closest('#day-chips')) return;
