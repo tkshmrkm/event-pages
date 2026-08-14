@@ -25,11 +25,14 @@ const checks = [
   ['nine day topic blocks', count(/class="day-topics"/g) === 9],
   ['all overnight lodging outcomes present', count(/class="stay stay-/g) === 10 && !day1025.includes('class="stay stay-')],
   ['static four-column routes present', count(/class="route-four(?:\s|\")/g) >= 30],
+  // 日跨ぎ便で着いた日は、その日の先頭で「◯◯着」を示す（前日の4列交通しか到着を持たないため）。
+  ['overnight arrivals are marked on the arrival day', ['Amsterdam Airport Schiphol（AMS）着', 'Frankfurt Airport（FRA）着', '香港国際空港（HKG）着'].every(t => itinerary.includes(t))],
   ['three overnight +1 arrivals', count(/<time>\d{2}:\d{2} \+1<\/time>/g) === 3],
   ['no repeated month/day in endpoints', !/class="endpoint"[\s\S]{0,180}<time>\d{1,2}\/\d{1,2}/.test(itinerary)],
   // 交通手段の列は全てアイコン。フライトだけ絵で他が矢印、という不揃いを許さない。
   ['every transport mode uses an icon', !itinerary.includes('class="arrow"') && count(/class="mode-icon mode-icon-/g) === 27 && css.includes('.mode .mode-icon svg')],
-  ['undecided transport is not drawn as a train', count(/mode-icon-unknown/g) === 1 && /mode-icon-unknown[\s\S]{0,400}現地交通を要検討/.test(itinerary)],
+  // 10/22の現地交通はタクシー（Uber）に決まったので unknown は0件。決まった手段は車アイコン。
+  ['decided transport uses its own icon', count(/mode-icon-unknown/g) === 0 && count(/mode-icon-car/g) === 1 && /mode-icon-car[\s\S]{0,900}タクシー（Uber）/.test(itinerary)],
   ['no colored airplane emoji in itinerary', !/[✈🛫🛬]\uFE0F/.test(itinerary)],
   ['flight icons use outlined deterministic SVG mask', count(/class="flight-mark(?: inline-flight-mark)?"/g) >= 20 && css.includes('-webkit-mask:url("data:image/svg+xml') && css.includes("fill='none'") && css.includes('color:#0B5C60')],
   ['itinerary color legend and factory color present', html.includes('class="day-kind-legend"') && /id="day-1022"[^>]*data-kind="visit"/.test(html)],
@@ -46,7 +49,7 @@ const checks = [
   ['pre-departure windows are single blocks', (itinerary.match(/セントレアで出発待ち（約3時間）/g) || []).length === 2 && (itinerary.match(/13:10〜16:10/g) || []).length === 2 && (itinerary.match(/空港到着目安/g) || []).length === 1 && !itinerary.includes('セントレアで昼食') && !itinerary.includes('JALサクララウンジ（国際線・出国審査後）')],
   // 待ち・乗り継ぎの見出しは「地点＋所要」だけ。理由や手順は折り畳みの中に置く。
   // 所要は交通手段と同じ規則で、推定には約を付け、時刻表どおりの区間には付けない。
-  ['wait headings carry only place and duration', ['セントレアで出発待ち（約3時間）', '香港で乗り継ぎ（3時間45分）', '香港で乗り継ぎ（4時間25分）', '香港で乗り継ぎ（2時間15分）'].every(t => itinerary.includes(t)) && !itinerary.includes('— 過ごし方')],
+  ['wait headings carry only place and duration', ['セントレアで出発待ち（約3時間）', '香港で乗り継ぎ（3時間45分）', '香港で乗り継ぎ（4時間25分）', '香港国際空港（HKG）着・乗り継ぎ（2時間15分）'].every(t => itinerary.includes(t)) && !itinerary.includes('— 過ごし方')],
   // CX539の機内食は出発待ちの一行と、16:10発の直後の時系列の両方に出す。
   // 昼をどれだけ食べるかの判断に効くので、折り畳みの中に隠さない。
   ['CX539 meal is visible before departure', count(/機内食は離陸1時間後が目安（17:10頃）。昼は軽く/g) === 2 && count(/機内食（主菜＋デザート）/g) === 2 && /16:10[\s\S]{0,900}17:10頃[\s\S]{0,900}19:30/.test(itinerary)],
@@ -56,10 +59,10 @@ const checks = [
   ['10/19 networking time retained', /<div class="row-time">18:00〜21:00<\/div>[\s\S]{0,700}VIP Networking Drinks/.test(itinerary) && !/<div class="row-time">夕方<\/div>[\s\S]{0,700}VIP Networking Drinks/.test(itinerary)],
   ['10/19 movements use four-column rows', /class="route-four"[^>]*><div class="row-time">12:20頃[\s\S]*?<strong>徒歩<\/strong>[\s\S]*?<time>12:30頃<\/time>/.test(itinerary) && /class="route-four"[^>]*><div class="row-time">17:30頃[\s\S]*?<strong>ICE直通<\/strong>[\s\S]*?<time>18:45頃<\/time>/.test(itinerary)],
   // 復路は文章の2案から、交通行2本＋案の見出しへ変えた。未決なので route-review のまま。
-  ['10/22 decisions and review styling present', day1022.includes('class="choice-head"') && (day1022.match(/class="choice-label"/g) || []).length === 2 && day1022.includes('早帰り案 — ホテル18:05頃着') && day1022.includes('市内滞在案 — ホテル20:05頃着') && (day1022.match(/route-review/g) || []).length === 3],
+  ['10/22 decisions and review styling present', day1022.includes('class="choice-head"') && (day1022.match(/class="choice-label"/g) || []).length === 2 && day1022.includes('早帰り案 — ホテル18:05頃着') && day1022.includes('市内滞在案 — ホテル20:05頃着') && (day1022.match(/route-review/g) || []).length === 2 && day1022.includes('タクシー（Uber）') && day1022.includes('ブレーメンでランチ')],
   ['10/24 return-day sequence aligned', itinerary.includes('07:00〜10:00') && itinerary.includes('10:40〜12:55') && itinerary.includes('フランクフルト出発 → 香港（全員）') && !itinerary.includes('旧T2時代の案内・館内図は使えない')],
   // 到着行と乗り継ぎ行の二重を解消し、他の乗り継ぎと同じ見出しにそろえた。
-  ['10/25 return sequence aligned', day1025.includes('香港で乗り継ぎ（2時間15分）') && (day1025.match(/2時間15分/g) || []).length === 1 && day1025.includes('14:10〜15:00頃') && day1025.includes('15:00頃') && day1025.includes('Visit Japan Web') && !/(?:15:28頃|16:45頃|名鉄ミュースカイ|新幹線 のぞみ)/.test(day1025)],
+  ['10/25 return sequence aligned', day1025.includes('香港国際空港（HKG）着・乗り継ぎ（2時間15分）') && (day1025.match(/2時間15分/g) || []).length === 1 && day1025.includes('14:10〜15:00頃') && day1025.includes('15:00頃') && day1025.includes('Visit Japan Web') && !/(?:15:28頃|16:45頃|名鉄ミュースカイ|新幹線 のぞみ)/.test(day1025)],
   ['baggage terminology aligned', !/手荷物受取|荷物ピックアップ/.test(html) && (itinerary.match(/荷物受取/g) || []).length >= 3],
   ['airport procedures use consistent outline icons', (itinerary.match(/line-icon-procedure/g) || []).length >= 3 && itinerary.includes('入国審査・荷物受取・税関') && itinerary.includes('やること（チェックイン・保安検査・出国審査）')],
   ['itinerary times are zero-padded', !/<div class="row-time">[0-9]:[0-9]{2}/.test(itinerary)],

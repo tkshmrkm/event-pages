@@ -136,7 +136,9 @@ const SOURCE_TEXT_REPLACEMENTS = [
   // 10/25 全員の香港乗継 2時間15分。ここもラウンジを選択肢の一つとして並べる。
   // 昼食の場所は時刻ではなく場所に張り付く常設情報なので、日トップの食事トピック側に置く。
   ['<div>Autostadt内での昼食が遅めになる想定なので、夕食は軽めでも足りる。到着が19時前なのでラストオーダーに注意。</div>', '<div>昼食はAutostadt内か、<strong>ヴォルフスブルク中央駅の周辺</strong>（少し歩けば店がある）。どちらも遅めになる想定なので、夕食は軽めでも足りる。到着が19時前なのでラストオーダーに注意。</div>'],
-  ['<div class="font-semibold">⏱ 乗継2時間15分 — まず搭乗ゲートを確認</div>', '<div class="font-semibold">🕐 香港で乗り継ぎ（2時間15分）</div>'],
+  // 日跨ぎ便で着いた日は、その日の先頭で「◯◯着」を示す。前日の4列交通しか
+  // 到着を持っていないため、その日だけ見ると着いたことが分からなくなる。
+  ['<div class="font-semibold">⏱ 乗継2時間15分 — まず搭乗ゲートを確認</div>', '<div class="font-semibold">🕐 香港国際空港（HKG）着・乗り継ぎ（2時間15分）</div>'],
   ['<div class="text-slate-600 text-xs">セキュリティ再検査と液体物の追加検査があり、<strong>搭乗ゲートのコンコースは搭乗券が出るまで分からない</strong>。ラウンジは<strong>同伴1名まで＝3名のうち1名が入れない</strong>ので、分かれるより3名で店に入る方が無駄がない。<br>⚠️ <strong>土産は往路（10/17・10/18の夜）に済ませておく</strong>。復路の早朝は開いていない店がある。</div>', '<details class="fold mt-1"><summary>やること</summary><div class="fold-body"><div>セキュリティ再検査と液体物の追加検査がある</div><div><strong>搭乗ゲートのコンコースは搭乗券が出るまで分からない</strong>ので、先に確認する</div><div>ラウンジは<strong>同伴1名まで＝3名のうち1名が入れない</strong>。分かれるより3名で店に入る方が無駄がない</div><div>⚠️ <strong>土産は往路（10/17・10/18の夜）に済ませておく</strong>。復路の早朝は開いていない店がある</div></div></details>'],
   ['<summary>コンコース間の移動時間・早朝の営業状況</summary>', '<summary>ラウンジで過ごす（4系統）とコンコース間の移動</summary>'],
   ['<div>村上はSapphireでビジネスクラスラウンジ可（営業時間は未確認）。無料シャワーは L5 の Gate 12付近 / Gate 43付近で24時間。</div>', '<div><strong>エアライン</strong>: 村上はSapphireでキャセイのビジネスクラスラウンジ可（本人＋同伴1名）。07:20着の時点で The Bridge（05:00〜）、The Deck と The Pier, Business（05:30〜）はいずれも営業時間内。</div><div><strong>Priority Pass</strong>: 香港の対象施設は未確認。会員本人のアプリで当日の対象と同伴条件を確認する。</div><div><strong>一般有料</strong>: Plaza Premium Lounge は Gate 60・Gate 1 が24時間。会員資格が無くても買える。</div><div><strong>カード付帯</strong>: 香港での対象は未確認。保有カードの特典ページで当日確認する。</div><div><strong>ラウンジを使わない場合</strong>: 無料シャワーは L5 の Gate 12付近 / Gate 43付近で24時間。</div>'],
@@ -312,10 +314,12 @@ const transformScript = `
   const MODE_ICONS = {
     train: '<rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/>',
     walk: '<circle cx="12" cy="4" r="2"/><path d="m10 8 3 3 3 1m-6-4-2 5-3 2m8-4-1 4 4 5m-4-5-5 6"/>',
+    car: '<path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2m12 0v2h2v-2M6 13h12"/><circle cx="8" cy="15" r=".8"/><circle cx="16" cy="15" r=".8"/>',
     unknown: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.6a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/>',
   };
-  const MODE_LABELS = { train: '鉄道', walk: '徒歩', unknown: '手段は未定' };
-  const modeKind = service => /要検討|未定/.test(service) ? 'unknown'
+  const MODE_LABELS = { train: '鉄道', walk: '徒歩', car: 'タクシー', unknown: '手段は未定' };
+  const modeKind = service => /タクシー|Uber|UBER/i.test(service) ? 'car'
+    : /要検討|未定/.test(service) ? 'unknown'
     : /^徒歩/.test(service) && !/列車|鉄道|バス|メトロ/.test(service) ? 'walk'
     : 'train';
   const modeIcon = service => {
@@ -423,8 +427,10 @@ const transformScript = `
       expo1021?.insertAdjacentHTML('afterend', '<div class="route-four route-estimate">' + routeMarkup(back) + '</div>');
     }
     if (id === '1022') {
+      // 交通手段はタクシー（Uber）で決まり。時刻だけが目安なので route-estimate。
+      // 10:45に着いてから12:45の見学までにランチを挟む。
       const before = rowFor(day, 'Mercedes-Benz Werk Bremen');
-      before?.insertAdjacentHTML('beforebegin', '<div class="route-four route-review">' + routeMarkup(['1022','','10:45以降','CEST','Bremen Hbf','現地交通を要検討','所要時間未確認','12:45まで','CEST','Mercedes-Benz Werk Bremen']) + '</div>');
+      before?.insertAdjacentHTML('beforebegin', '<div class="action"><div class="row-time">10:45〜12:00頃</div><div class="action-body"><div class="font-semibold">🍽 ブレーメンでランチ</div><div class="text-slate-600 text-xs">12:45の見学に間に合うよう、駅周辺で済ませる</div></div></div><div class="route-four route-estimate">' + routeMarkup(['1022','','12:00頃','CEST','Bremen Hbf','タクシー（Uber）','所要は当日確認','12:45まで','CEST','Mercedes-Benz Werk Bremen']) + '</div>');
     }
     if (id === '1017') {
       // 13:10〜16:10は「空港到着目安 13:10」「昼食 13:40」「サクララウンジ 13:10〜15:40」の
