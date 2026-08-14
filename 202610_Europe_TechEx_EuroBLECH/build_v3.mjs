@@ -583,6 +583,7 @@ const transformScript = `
     stack.querySelectorAll(':scope > :not(.day)').forEach(el => { if (!el.closest('.day')) el.classList.add('intro-card'); });
     // 日ヘッダーの色は予定の種類であって、決まっているかどうかではない。
     // 未定はオレンジの帯だけが示す、と凡例で明示しないと10/22のラベンダーが未定色に読まれる。
+    stack.insertAdjacentHTML('afterbegin','<div class="day-toolbar no-print"><span>日付カード</span><button class="btn" id="days-tg" type="button" aria-expanded="true">すべて閉じる</button></div>');
     stack.insertAdjacentHTML('afterbegin','<div class="day-kind-legend" aria-label="日付カードの色の意味"><strong>日付カードの色</strong><span><i class="kind-swatch swatch-move"></i>移動・帰着</span><span><i class="kind-swatch swatch-conf"></i>展示会視察</span><span><i class="kind-swatch swatch-visit"></i>工場・企業見学（予約確定）</span><span><i class="kind-swatch swatch-review"></i>要検討（この帯だけが未定）</span><span class="legend-sep"></span><strong>交通行</strong><span><i class="kind-swatch swatch-estimate"></i>点線＝時刻は目安</span><span><i class="kind-swatch swatch-review"></i>オレンジ＝手段や便が未定</span></div>');
   }
   // 本文はエスケープしたうえで **…** だけを強調に戻す。生HTMLは通さない。

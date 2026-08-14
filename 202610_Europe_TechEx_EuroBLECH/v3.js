@@ -27,10 +27,29 @@ const todayISO = (() => {
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
 })();
 
+// 日付カードの一括開閉。ラベルは今の状態を示すので、
+// 個別に開閉したときや日付チップで開いたときも追随させる。
+const daysToggle = document.getElementById('days-tg');
+function syncDaysToggle() {
+  if (!daysToggle) return;
+  const anyOpen = days.some(day => day.open);
+  daysToggle.textContent = anyOpen ? 'すべて閉じる' : 'すべて開く';
+  daysToggle.setAttribute('aria-expanded', String(anyOpen));
+}
+daysToggle?.addEventListener('click', () => {
+  const closing = days.some(day => day.open);
+  days.forEach(day => { day.open = !closing; });
+  syncDaysToggle();
+  markDay();
+  if (closing) window.scrollTo({ top: 0, behavior: 'auto' });
+});
+days.forEach(day => day.addEventListener('toggle', syncDaysToggle));
+
 function openDay(id) {
   const day = document.getElementById(id);
   if (!day) return;
   day.open = true;
+  syncDaysToggle();
   requestAnimationFrame(() => day.scrollIntoView({ behavior: 'smooth', block: 'start' }));
 }
 

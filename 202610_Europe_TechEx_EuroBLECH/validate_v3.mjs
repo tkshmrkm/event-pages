@@ -89,6 +89,8 @@ const checks = [
   ['family tab drops event-type distinctions', html.includes('schedule-tag kind-work') && !/schedule-legend[\s\S]{0,400}kind-euro/.test(html)],
   ['no nested action bodies', !html.includes('action-body"><div class="action-body')],
   ['HRS final font stack', hrsCss.includes("--font:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif")],
+  // 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーには置かない。
+  ['day cards can be collapsed and expanded together', itinerary.includes('id="days-tg"') && itinerary.includes('class="day-toolbar no-print"') && !html.includes('id="detail-tg"') && js.includes('function syncDaysToggle()') && js.includes('days.forEach(day => { day.open = !closing; })') && css.includes('.day-toolbar{')],
   ['HRS date navigation behavior', js.includes('function markDay()') && js.includes("todayCard.classList.add('today')") && js.includes('day.open = true')],
   ['browser-local records retained', js.includes("const FIELD_KEY = 'eurotrip2026-v3'") && js.includes('localStorage.setItem')],
 ];

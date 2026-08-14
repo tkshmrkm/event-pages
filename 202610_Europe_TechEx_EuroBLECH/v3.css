@@ -32,6 +32,9 @@ button,input,textarea,select{font-family:inherit}
 .lane-team>.lane-head{background:var(--lane-team);color:var(--lane-team-tx)}
 .lane-all>.lane-head{background:var(--neu-bg);color:var(--tx2)}
 .day[data-kind=visit]>.day-head{background:var(--choose);color:var(--choose-tx)}
+/* 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーではなくここに置く */
+.day-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin:9px 0 0;color:var(--mu);font-size:var(--f5)}
+.day-toolbar .btn{padding:5px 11px;font-size:var(--f5)}
 .day-kind-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px 12px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;color:var(--tx2);font-size:var(--f4)}
 .day-kind-legend strong{margin-right:2px;color:var(--tx);font-weight:700}
 .day-kind-legend span{display:inline-flex;align-items:center;gap:5px}
