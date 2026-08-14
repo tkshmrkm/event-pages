@@ -5,8 +5,12 @@ import { fileURLToPath } from 'node:url';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const sharedDir = path.resolve(here, '..', 'shared', 'trip-field');
 const sourcePath = path.join(here, 'index_v2.html');
-const source = fs.readFileSync(sourcePath, 'utf8');
-const sharedCoreCss = fs.readFileSync(path.join(sharedDir, 'core.css'), 'utf8');
+// 置換対象の文字列はLFで書いてある。リポジトリは .gitattributes の `* text=auto` と
+// core.autocrlf=true により作業ツリーがCRLFになるため、読み込み時にLFへそろえる。
+// これを外すと Windows のチェックアウトで Missing source fragment に必ず落ちる。
+const readSource = file => fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+const source = readSource(sourcePath);
+const sharedCoreCss = readSource(path.join(sharedDir, 'core.css'));
 const sourceCssMatch = source.match(/<style>([\s\S]*?)<\/style>/);
 if (!sourceCssMatch) throw new Error('Source CSS not found');
 // Set this to the deployed trip-notes Worker URL. Never put SYNC_TOKEN here.
