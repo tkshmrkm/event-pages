@@ -302,6 +302,22 @@ const transformScript = `
   const routeDay = value => (value.match(/^(\\d{1,2})\\/(\\d{1,2})/) || []).slice(1).join('');
   const mapLink = place => '<a class="place" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(place) + '" target="_blank" rel="noopener">' + esc(place) + '</a>';
   const isFlight = service => /^(?:CX|KL)\\d+/.test(service);
+  // 交通手段は全部アイコンにする。フライトだけ絵で他が矢印、という不揃いをなくす。
+  // 手段そのものが未定の場合だけ unknown。「列車候補を確認」は列車と決まっているので train。
+  const MODE_ICONS = {
+    train: '<rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/>',
+    walk: '<circle cx="12" cy="4" r="2"/><path d="m10 8 3 3 3 1m-6-4-2 5-3 2m8-4-1 4 4 5m-4-5-5 6"/>',
+    unknown: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.6a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/>',
+  };
+  const MODE_LABELS = { train: '鉄道', walk: '徒歩', unknown: '手段は未定' };
+  const modeKind = service => /要検討|未定/.test(service) ? 'unknown'
+    : /^徒歩/.test(service) && !/列車|鉄道|バス|メトロ/.test(service) ? 'walk'
+    : 'train';
+  const modeIcon = service => {
+    if (isFlight(service)) return flightIcon();
+    const kind = modeKind(service);
+    return '<span class="mode-icon mode-icon-' + kind + '" role="img" aria-label="' + MODE_LABELS[kind] + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + MODE_ICONS[kind] + '</svg></span>';
+  };
   const routeMarkup = data => {
     const [dayId,, departWhen, departZone, departPlace, service, duration, arriveWhen, arriveZone, arrivePlace] = data;
     const depart = plainTime(departWhen);
@@ -309,7 +325,7 @@ const transformScript = `
     if (routeDay(arriveWhen) && routeDay(arriveWhen) !== dayId) arrive += ' +1';
     return '<div class="row-time">' + esc(depart) + '</div>' +
       '<div class="endpoint"><span class="label">出発</span><time>' + esc(depart) + '</time><span class="tz">（' + esc(departZone) + '）</span>' + mapLink(departPlace) + '</div>' +
-      '<div class="mode">' + (isFlight(service) ? flightIcon() : '<span class="arrow">→</span>') + '<strong>' + esc(service) + '</strong><small>' + esc(duration.replace('所要時間未確認','時間未確認')) + '</small></div>' +
+      '<div class="mode">' + modeIcon(service) + '<strong>' + esc(service) + '</strong><small>' + esc(duration.replace('所要時間未確認','時間未確認')) + '</small></div>' +
       '<div class="endpoint"><span class="label">到着</span><time>' + esc(arrive) + '</time><span class="tz">（' + esc(arriveZone) + '）</span>' + mapLink(arrivePlace) + '</div>';
   };
   const rows = day => Array.from(day.querySelectorAll('[class*="border-l-4"]'));
@@ -644,16 +660,17 @@ const transformScript = `
     walk: '<circle cx="12" cy="4" r="2"/><path d="m10 8 3 3 3 1m-6-4-2 5-3 2m8-4-1 4 4 5m-4-5-5 6"/>',
     home: '<path d="m3 11 9-8 9 8M5 10v11h14V10m-9 11v-6h4v6"/>',
     event: '<path d="M4 20h16M6 20V9h12v11M5 9l7-5 7 5M9 12v5m6-5v5"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   };
-  const lineIconMap = { '🛋':'lounge', '🛂':'procedure', '🏨':'hotel', '🍽':'meal', '😴':'rest', '🥂':'drinks', '🏭':'factory', '🚶':'walk', '🏠':'home', '🏛':'event' };
+  const lineIconMap = { '🛋':'lounge', '🛂':'procedure', '🏨':'hotel', '🍽':'meal', '😴':'rest', '🥂':'drinks', '🏭':'factory', '🚶':'walk', '🏠':'home', '🏛':'event', '🕐':'clock' };
   const iconNodes = [];
   const iconWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (iconWalker.nextNode()) {
     const node = iconWalker.currentNode;
-    if (!node.parentElement?.closest('script,style,.tabs') && /^[\\s]*(?:🛋|🛂|🏨|🍽|😴|🥂|🏭|🚶|🏠|🏛)/u.test(node.nodeValue)) iconNodes.push(node);
+    if (!node.parentElement?.closest('script,style,.tabs') && /^[\\s]*(?:🛋|🛂|🏨|🍽|😴|🥂|🏭|🚶|🏠|🏛|🕐)/u.test(node.nodeValue)) iconNodes.push(node);
   }
   iconNodes.forEach(node => {
-    const match = node.nodeValue.match(/^(\\s*)(🛋|🛂|🏨|🍽|😴|🥂|🏭|🚶|🏠|🏛)\\s*/u);
+    const match = node.nodeValue.match(/^(\\s*)(🛋|🛂|🏨|🍽|😴|🥂|🏭|🚶|🏠|🏛|🕐)\\s*/u);
     if (!match) return;
     const fragment = document.createDocumentFragment();
     if (match[1]) fragment.appendChild(document.createTextNode(match[1]));

@@ -27,6 +27,9 @@ const checks = [
   ['static four-column routes present', count(/class="route-four(?:\s|\")/g) >= 30],
   ['three overnight +1 arrivals', count(/<time>\d{2}:\d{2} \+1<\/time>/g) === 3],
   ['no repeated month/day in endpoints', !/class="endpoint"[\s\S]{0,180}<time>\d{1,2}\/\d{1,2}/.test(itinerary)],
+  // 交通手段の列は全てアイコン。フライトだけ絵で他が矢印、という不揃いを許さない。
+  ['every transport mode uses an icon', !itinerary.includes('class="arrow"') && count(/class="mode-icon mode-icon-/g) === 25 && css.includes('.mode .mode-icon svg')],
+  ['undecided transport is not drawn as a train', count(/mode-icon-unknown/g) === 1 && /mode-icon-unknown[\s\S]{0,400}現地交通を要検討/.test(itinerary)],
   ['no colored airplane emoji in itinerary', !/[✈🛫🛬]\uFE0F/.test(itinerary)],
   ['flight icons use outlined deterministic SVG mask', count(/class="flight-mark(?: inline-flight-mark)?"/g) >= 20 && css.includes('-webkit-mask:url("data:image/svg+xml') && css.includes("fill='none'") && css.includes('color:#0B5C60')],
   ['itinerary color legend and factory color present', html.includes('class="day-kind-legend"') && /id="day-1022"[^>]*data-kind="visit"/.test(html)],
