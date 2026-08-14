@@ -47,6 +47,9 @@ const checks = [
   // 待ち・乗り継ぎの見出しは「地点＋所要」だけ。理由や手順は折り畳みの中に置く。
   // 所要は交通手段と同じ規則で、推定には約を付け、時刻表どおりの区間には付けない。
   ['wait headings carry only place and duration', ['セントレアで出発待ち（約3時間）', '香港で乗り継ぎ（3時間45分）', '香港で乗り継ぎ（4時間25分）', '香港で乗り継ぎ（2時間15分）'].every(t => itinerary.includes(t)) && !itinerary.includes('— 過ごし方')],
+  // CX539の機内食は出発待ちの一行と、16:10発の直後の時系列の両方に出す。
+  // 昼をどれだけ食べるかの判断に効くので、折り畳みの中に隠さない。
+  ['CX539 meal is visible before departure', count(/機内食は離陸1時間後が目安（17:10頃）。昼は軽く/g) === 2 && count(/機内食（主菜＋デザート）/g) === 2 && /16:10[\s\S]{0,900}17:10頃[\s\S]{0,900}19:30/.test(itinerary)],
   // やることの折り畳みは5件: セントレア2回（10/17・10/18）と香港3回（10/17・10/18・10/25）。
   ['todo lists live inside folds', count(/<summary>やること/g) === 5 && !/text-slate-600 text-xs">[^<]*セキュリティ再検査/.test(itinerary)],
   ['10/19 granularity aligned', itinerary.includes('<div class="row-time">09:45〜16:50</div>') && itinerary.includes('👥 美馬・金築（FRA着・ヴォルフスブルク日帰り）') && itinerary.includes('荷物受取・チェックイン') && !itinerary.includes('なぜ先にゲッティンゲンへ寄るのか')],
