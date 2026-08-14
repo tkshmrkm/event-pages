@@ -145,6 +145,24 @@ const familyCss = String.raw`
 .family-head h1{margin:2px 0;font-size:22px}
 .family-head p{margin:0;color:var(--tx2);font-size:14px}
 .family-page .tab,.family-page .tab.on{display:block}
+/* どこにいるか：都市名が主役。日付と補足はその手がかりなので小さくする。 */
+.where-grid{display:grid;gap:6px}
+.where-day{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center;padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.where-day>header{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}
+.where-day>header strong{color:var(--tx2);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.where-day>header span{color:var(--mu);font-size:11px}
+.where-city{display:block;color:var(--tx);font-size:19px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
+.where-cell small{display:block;margin-top:2px;color:var(--mu);font-size:13px;font-weight:600}
+.where-work{background:#F2F8F7}
+.where-work .where-city{color:#0B4F5A}
+.where-home{background:#F7F8F8}
+.where-home .where-city{color:var(--tx2)}
+/* 時差：家族が使うのは差の数字なので、そこだけを大きくする。 */
+.timezone-card{display:grid;gap:3px;background:var(--conf-bg);border:1px solid var(--conf);border-radius:10px;padding:12px 14px}
+.timezone-card .tz-label{color:var(--conf-tx);font-size:12px;font-weight:700}
+.timezone-card .tz-diff{color:#0B4F5A;font-size:38px;font-weight:800;line-height:1.05;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.timezone-card .tz-diff i{margin-left:3px;font-size:15px;font-style:normal;font-weight:700}
+.timezone-card .tz-note,.timezone-card .tz-ex{color:var(--conf-tx);font-size:12px;line-height:1.5}
 @media(max-width:640px){
   .family-head{padding:12px 0 10px}
   .family-head h1{font-size:20px}
@@ -802,6 +820,48 @@ function buildMain({ offline = false } = {}) {
   return html;
 }
 
+// ---------- 家族印刷版の「どこにいるか」（EUROBLECH方式） ----------
+// 家族が最初に知りたいのは「どの日にどこにいるか」なので、都市名を最大文字にし、
+// 日付と補足はその手がかりに徹して小さくする。内容はFAMの記述を短くしただけで、
+// 事実は足していない。HRSは全行程が同一行動なので、EUROBLECHのような人別セルは持たない。
+const WHERE_DAYS = [
+  { date:'9/7',  dow:'月', city:'日本 → 機内',                    note:'夜にセントレア発。機内泊',      kind:'move' },
+  { date:'9/8',  dow:'火', city:'シュトゥットガルト',              note:'朝フランクフルト着。午後は市内', kind:'move' },
+  { date:'9/9',  dow:'水', city:'シュトゥットガルト',              note:'国際会議 1日目',                kind:'work' },
+  { date:'9/10', dow:'木', city:'シュトゥットガルト',              note:'国際会議 2日目',                kind:'work' },
+  { date:'9/11', dow:'金', city:'シュトゥットガルト近郊',          note:'会議3日目・企業訪問',           kind:'work' },
+  { date:'9/12', dow:'土', city:'シュトゥットガルト → フランクフルト', note:'移動日',                     kind:'move' },
+  { date:'9/13', dow:'日', city:'フランクフルト',                  note:'日中は観光。夜の便で出発',      kind:'move' },
+  { date:'9/14', dow:'月', city:'機内 → 日本',                    note:'19:35セントレア着。帰宅',       kind:'home' },
+];
+// 都市名にはmapLinkの.placeを使わない。あちらは地図リンクの見た目（青・太さ600）で、
+// ここは本文色の最大文字。同じクラス名に2つの意味を持たせない。
+const whereDay = d => `<article class="where-day where-${d.kind}"><header><strong>${d.date}</strong><span>${d.dow}</span></header>`
+  + `<div class="where-cell"><b class="where-city">${d.city}</b><small>${d.note}</small></div></article>`;
+const whereBlock = `  <!-- どこにいるか（1日1行・都市名が主役）-->
+  <div class="card family-where">
+    <h2 class="ttl">🗺 どこにいるか — 8日間の全体像</h2>
+    <div class="bd">
+      <div class="where-grid">${WHERE_DAYS.map(whereDay).join('')}</div>
+      <div class="foot">日付と補足は手がかりです。大きい文字がその日にいる場所。</div>
+    </div>
+  </div>
+
+`;
+
+// 時差は、家族が使うのは差の数字なので、そこを最大文字にする。
+// タイムゾーン略号とUTCオフセットは補足に落とす。
+const timezoneCardOld = `      <div style="text-align:center;background:var(--conf-bg);border:1px solid var(--conf);border-radius:10px;padding:12px 10px">
+        <div style="font-size:var(--f0);font-weight:700;color:var(--conf-tx);line-height:1.45">日本の時刻 <span style="color:var(--conf-tx)">− 7時間</span> ＝ 現地（ドイツ）の時刻</div>
+        <div class="small" style="color:var(--conf-tx);margin-top:4px">例：日本の 21:00 → 現地は同じ日の 14:00</div>
+      </div>`;
+const timezoneCardNew = `      <div class="timezone-card">
+        <span class="tz-label">日本の時刻から</span>
+        <span class="tz-diff">−7<i>時間</i></span>
+        <span class="tz-note">＝ 現地（ドイツ）の時刻。現地はCEST・UTC+2、日本はJST・UTC+9</span>
+        <span class="tz-ex">例：日本の 21:00 → 現地は同じ日の 14:00</span>
+      </div>`;
+
 // 家族印刷版はbuildFamily()が変換前のsourceから切り出すので、
 // buildMain()側の置換が届かない。同じ規約をこちら側にも当てる。
 const FAMILY_FIXUPS = [
@@ -843,6 +903,9 @@ function buildFamily() {
     if (!section.includes(search)) throw new Error(`Family fixup #${i} not found`);
     section = section.split(search).join(replacement);
   });
+  // 「どこにいるか」は先頭付近に置く。時差カードより前。
+  section = mustReplace(section, '  <!-- ① 時差（紙でも分かる静的な説明）-->', `${whereBlock}  <!-- ① 時差（紙でも分かる静的な説明）-->`, 'family where-block insertion point');
+  section = mustReplace(section, timezoneCardOld, timezoneCardNew, 'family timezone card');
   return `<!DOCTYPE html>
 <html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>HRS Europe 2026 家族向け予定表</title><link rel="stylesheet" href="v3.css"></head>

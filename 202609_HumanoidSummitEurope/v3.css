@@ -537,6 +537,24 @@ body{line-height:1.62;padding-bottom:24px}
 .family-head h1{margin:2px 0;font-size:22px}
 .family-head p{margin:0;color:var(--tx2);font-size:14px}
 .family-page .tab,.family-page .tab.on{display:block}
+/* どこにいるか：都市名が主役。日付と補足はその手がかりなので小さくする。 */
+.where-grid{display:grid;gap:6px}
+.where-day{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center;padding:8px 11px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.where-day>header{display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}
+.where-day>header strong{color:var(--tx2);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.where-day>header span{color:var(--mu);font-size:11px}
+.where-city{display:block;color:var(--tx);font-size:19px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
+.where-cell small{display:block;margin-top:2px;color:var(--mu);font-size:13px;font-weight:600}
+.where-work{background:#F2F8F7}
+.where-work .where-city{color:#0B4F5A}
+.where-home{background:#F7F8F8}
+.where-home .where-city{color:var(--tx2)}
+/* 時差：家族が使うのは差の数字なので、そこだけを大きくする。 */
+.timezone-card{display:grid;gap:3px;background:var(--conf-bg);border:1px solid var(--conf);border-radius:10px;padding:12px 14px}
+.timezone-card .tz-label{color:var(--conf-tx);font-size:12px;font-weight:700}
+.timezone-card .tz-diff{color:#0B4F5A;font-size:38px;font-weight:800;line-height:1.05;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.timezone-card .tz-diff i{margin-left:3px;font-size:15px;font-style:normal;font-weight:700}
+.timezone-card .tz-note,.timezone-card .tz-ex{color:var(--conf-tx);font-size:12px;line-height:1.5}
 @media(max-width:640px){
   .family-head{padding:12px 0 10px}
   .family-head h1{font-size:20px}

@@ -9,13 +9,24 @@
     <span class="small muted">画面用の時計は紙には出ません</span>
   </div>
 
+  <!-- どこにいるか（1日1行・都市名が主役）-->
+  <div class="card family-where">
+    <h2 class="ttl">🗺 どこにいるか — 8日間の全体像</h2>
+    <div class="bd">
+      <div class="where-grid"><article class="where-day where-move"><header><strong>9/7</strong><span>月</span></header><div class="where-cell"><b class="where-city">日本 → 機内</b><small>夜にセントレア発。機内泊</small></div></article><article class="where-day where-move"><header><strong>9/8</strong><span>火</span></header><div class="where-cell"><b class="where-city">シュトゥットガルト</b><small>朝フランクフルト着。午後は市内</small></div></article><article class="where-day where-work"><header><strong>9/9</strong><span>水</span></header><div class="where-cell"><b class="where-city">シュトゥットガルト</b><small>国際会議 1日目</small></div></article><article class="where-day where-work"><header><strong>9/10</strong><span>木</span></header><div class="where-cell"><b class="where-city">シュトゥットガルト</b><small>国際会議 2日目</small></div></article><article class="where-day where-work"><header><strong>9/11</strong><span>金</span></header><div class="where-cell"><b class="where-city">シュトゥットガルト近郊</b><small>会議3日目・企業訪問</small></div></article><article class="where-day where-move"><header><strong>9/12</strong><span>土</span></header><div class="where-cell"><b class="where-city">シュトゥットガルト → フランクフルト</b><small>移動日</small></div></article><article class="where-day where-move"><header><strong>9/13</strong><span>日</span></header><div class="where-cell"><b class="where-city">フランクフルト</b><small>日中は観光。夜の便で出発</small></div></article><article class="where-day where-home"><header><strong>9/14</strong><span>月</span></header><div class="where-cell"><b class="where-city">機内 → 日本</b><small>19:35セントレア着。帰宅</small></div></article></div>
+      <div class="foot">日付と補足は手がかりです。大きい文字がその日にいる場所。</div>
+    </div>
+  </div>
+
   <!-- ① 時差（紙でも分かる静的な説明）-->
   <div class="card">
     <h2 class="ttl">⏱ 日本とドイツの時差</h2>
     <div class="bd">
-      <div style="text-align:center;background:var(--conf-bg);border:1px solid var(--conf);border-radius:10px;padding:12px 10px">
-        <div style="font-size:var(--f0);font-weight:700;color:var(--conf-tx);line-height:1.45">日本の時刻 <span style="color:var(--conf-tx)">− 7時間</span> ＝ 現地（ドイツ）の時刻</div>
-        <div class="small" style="color:var(--conf-tx);margin-top:4px">例：日本の 21:00 → 現地は同じ日の 14:00</div>
+      <div class="timezone-card">
+        <span class="tz-label">日本の時刻から</span>
+        <span class="tz-diff">−7<i>時間</i></span>
+        <span class="tz-note">＝ 現地（ドイツ）の時刻。現地はCEST・UTC+2、日本はJST・UTC+9</span>
+        <span class="tz-ex">例：日本の 21:00 → 現地は同じ日の 14:00</span>
       </div>
       <div class="small muted" style="margin-top:8px">日本のほうが7時間進んでいます（9月のドイツは夏時間のため7時間。冬は8時間）。<br>
         つまり <strong>日本の夕方〜深夜が、現地の朝〜夕方</strong>。日本の午前中は、現地はまだ夜中です。</div>
