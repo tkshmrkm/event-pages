@@ -490,10 +490,15 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 .btn{min-height:44px;padding:9px 13px;font-size:13px;border-color:var(--line);color:var(--tx2)}
 .banner{font-size:14px;border-width:2px}
 /* 黒塗りグリフ対策のモノクロSVGアイコン。202610_Europe_TechEx_EuroBLECHの
-   .line-icon／.line-icon-*と同じクラス名・寸法・色（19x19、margin-right 4px、
-   vertical-align -4px、色#0B5C60）にそろえる。個別名（-print／-calendar）は
-   意味づけのためのモディファイアで、EuroBLECH同様スタイルはベースクラスが持つ。 */
-.line-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:19px;height:19px;margin-right:4px;color:#0B5C60;vertical-align:-4px}
+   .line-icon／.line-icon-*と同じクラス名・色（#0B5C60）にそろえる。個別名
+   （-print／-calendar／-map）は意味づけのためのモディファイアで、EuroBLECH同様
+   スタイルはベースクラスが持つ。
+   寸法だけはEuroBLECHの固定19pxを踏襲しない。EuroBLECHはこれを
+   .family-section-head（16px）の中で使うが、HRSでの置き場所は.btn（13px）、
+   .plan-head（14px）、.ttl（16px）で、19pxの箱が文字より大きく見えていた
+   （2026-08-15に実機で確認）。専用の列に入る.flight-mark／.mode-iconと違い、
+   .line-iconは見出しやボタンの文中に置くので、寸法は文字サイズ基準にする。 */
+.line-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:1.15em;height:1.15em;margin-right:.3em;color:#0B5C60;vertical-align:-.2em}
 .line-icon svg{display:block;width:100%;height:100%;overflow:visible}
 .card > .ttl{padding:11px 14px;font-size:16px;color:var(--tx2)}
 .memo > summary{min-height:44px;font-size:14px}
@@ -647,6 +652,18 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 .timezone-card .tz-diff i{margin-left:2px;font-size:15px;font-style:normal;font-weight:700}
 .zone-japan .tz-diff{color:var(--mu);font-size:26px}
 .zone-europe{border-color:#78A9A9;background:#E7F3F2}
+/* 気候：列を持つ表にすると、393px幅で出典列が168pxを占め、見出しが1文字ずつ
+   縦に折り返して気温が押し出された。都市ごとの行にして、家族が見たい気温を
+   大きく、出典・統計期間を小さい補足として下に置く（.timezone-cardと同じ
+   「知りたい数字を大きく」の作り）。出典は消さず、重みだけ下げる。 */
+.climate-list{display:grid;gap:8px}
+.climate-row{min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#F5F8F9}
+.climate-place{margin:0;color:var(--tx2);font-size:15px;font-weight:700;line-height:1.35}
+.climate-temp{display:flex;flex-wrap:wrap;gap:2px 18px;margin:5px 0 0}
+.climate-temp span{display:inline-flex;align-items:baseline;gap:6px}
+.climate-temp i{color:var(--mu);font-size:12px;font-style:normal;font-weight:700}
+.climate-temp b{color:#0B4F5A;font-size:22px;font-weight:800;line-height:1.25;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.climate-src{margin:6px 0 0;color:var(--mu);font-size:11px;line-height:1.5}
 @media(max-width:640px){
   .family-head{padding:12px 0 10px}
   .family-head h1{font-size:20px}

@@ -107,10 +107,15 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 .btn{min-height:44px;padding:9px 13px;font-size:13px;border-color:var(--line);color:var(--tx2)}
 .banner{font-size:14px;border-width:2px}
 /* 黒塗りグリフ対策のモノクロSVGアイコン。202610_Europe_TechEx_EuroBLECHの
-   .line-icon／.line-icon-*と同じクラス名・寸法・色（19x19、margin-right 4px、
-   vertical-align -4px、色#0B5C60）にそろえる。個別名（-print／-calendar）は
-   意味づけのためのモディファイアで、EuroBLECH同様スタイルはベースクラスが持つ。 */
-.line-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:19px;height:19px;margin-right:4px;color:#0B5C60;vertical-align:-4px}
+   .line-icon／.line-icon-*と同じクラス名・色（#0B5C60）にそろえる。個別名
+   （-print／-calendar／-map）は意味づけのためのモディファイアで、EuroBLECH同様
+   スタイルはベースクラスが持つ。
+   寸法だけはEuroBLECHの固定19pxを踏襲しない。EuroBLECHはこれを
+   .family-section-head（16px）の中で使うが、HRSでの置き場所は.btn（13px）、
+   .plan-head（14px）、.ttl（16px）で、19pxの箱が文字より大きく見えていた
+   （2026-08-15に実機で確認）。専用の列に入る.flight-mark／.mode-iconと違い、
+   .line-iconは見出しやボタンの文中に置くので、寸法は文字サイズ基準にする。 */
+.line-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:1.15em;height:1.15em;margin-right:.3em;color:#0B5C60;vertical-align:-.2em}
 .line-icon svg{display:block;width:100%;height:100%;overflow:visible}
 .card > .ttl{padding:11px 14px;font-size:16px;color:var(--tx2)}
 .memo > summary{min-height:44px;font-size:14px}
@@ -265,6 +270,18 @@ const familyCss = String.raw`
 .timezone-card .tz-diff i{margin-left:2px;font-size:15px;font-style:normal;font-weight:700}
 .zone-japan .tz-diff{color:var(--mu);font-size:26px}
 .zone-europe{border-color:#78A9A9;background:#E7F3F2}
+/* 気候：列を持つ表にすると、393px幅で出典列が168pxを占め、見出しが1文字ずつ
+   縦に折り返して気温が押し出された。都市ごとの行にして、家族が見たい気温を
+   大きく、出典・統計期間を小さい補足として下に置く（.timezone-cardと同じ
+   「知りたい数字を大きく」の作り）。出典は消さず、重みだけ下げる。 */
+.climate-list{display:grid;gap:8px}
+.climate-row{min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#F5F8F9}
+.climate-place{margin:0;color:var(--tx2);font-size:15px;font-weight:700;line-height:1.35}
+.climate-temp{display:flex;flex-wrap:wrap;gap:2px 18px;margin:5px 0 0}
+.climate-temp span{display:inline-flex;align-items:baseline;gap:6px}
+.climate-temp i{color:var(--mu);font-size:12px;font-style:normal;font-weight:700}
+.climate-temp b{color:#0B4F5A;font-size:22px;font-weight:800;line-height:1.25;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.climate-src{margin:6px 0 0;color:var(--mu);font-size:11px;line-height:1.5}
 @media(max-width:640px){
   .family-head{padding:12px 0 10px}
   .family-head h1{font-size:20px}
@@ -1364,22 +1381,24 @@ function buildFamily() {
   </div></section>`;
 
   // ---------- ② 時差・気候 ----------
-  const climateTableRows = CLIMATE_ROWS.map(([place, hi, lo, src]) =>
-    `<tr><td>${place}</td><td>${hi}</td><td>${lo}</td><td>${src}</td></tr>`
+  // 気候は表にしない。393px幅では出典列が168pxを占め、見出しが1文字ずつ縦に
+  // 折り返して、家族が最も見たい気温が右へ押し出されていた（2026-08-15に実機で確認）。
+  // 都市ごとの行にして、気温を大きく、出典を小さい補足に落とす。出典は消さない。
+  const climateRowsHtml = CLIMATE_ROWS.map(([place, hi, lo, src]) =>
+    `<div class="climate-row"><p class="climate-place">${place}</p>
+          <p class="climate-temp"><span><i>平均最高</i><b>${hi}</b></span><span><i>平均最低</i><b>${lo}</b></span></p>
+          <p class="climate-src">${src}</p></div>`
   ).join('\n        ');
   const familyTimezoneSection = String.raw`<section class="family-section family-timezone"><div class="family-section-head">🕐 時差・気候</div><div class="family-section-body" style="display:grid;gap:12px">
     <p class="timezone-lead"><strong>時刻は現地時刻。日本時間には「日本時間」と付けます</strong><span>日本＝JST・UTC+9／ドイツ＝CEST・UTC+2</span></p>
     ${timezoneInner}
     <div>
       <p class="where-lead" style="margin-bottom:8px">現地の気候（9月同士の比較）</p>
-      <div class="scroll-x"><table class="tb">
-        <thead><tr><th>地点・月</th><th>平均最高</th><th>平均最低</th><th>出典・期間</th></tr></thead>
-        <tbody>
-        ${climateTableRows}
-        </tbody>
-      </table></div>
+      <div class="climate-list">
+        ${climateRowsHtml}
+      </div>
       <div class="small muted" style="margin-top:6px">9月同士で比べると、シュトゥットガルトは名古屋・京都より日中で約8℃低く、朝晩で約9〜10℃低い。季節感でいうと、名古屋・京都の10月下旬〜11月上旬くらい。日中は10月寄り、朝晩は11月寄りで、昼と朝晩の体感がずれる。<br>
-        各都市の出典・統計期間は表を参照。</div>
+        各都市の出典・統計期間は、その都市の行の下に併記</div>
     </div>
   </div></section>`;
 

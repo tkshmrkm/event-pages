@@ -194,8 +194,11 @@ assert(/外務省 在外公館リスト/.test(familyEmergencySection[0]) && /令
 // ---------- 気候：4都市（名古屋・京都は1行にまとめる）＋各行に出典名と統計期間 ----------
 const climateSection = family.match(/<section class="family-section family-timezone">[\s\S]*?<\/section>/);
 assert(climateSection, 'family_print.html: climate/timezone section missing');
-const climateRows = [...climateSection[0].matchAll(/<tr><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><td>([^<]*)<\/td><\/tr>/g)];
-assert(climateRows.length === 3, `family_print.html: climate table must have three rows, Nagoya+Kyoto merged (got ${climateRows.length})`);
+// 表ではなく都市ごとの行。列を持つ表は393px幅で出典列が168pxを占め、
+// 見出しが1文字ずつ縦に折り返して気温を押し出していた（2026-08-15に実機で確認）。
+assert(!/<table/.test(climateSection[0]), 'family_print.html: climate must not be a table (at 393px the source column crushed the temperatures)');
+const climateRows = [...climateSection[0].matchAll(/<div class="climate-row"><p class="climate-place">([^<]*)<\/p>\s*<p class="climate-temp"><span><i>[^<]*<\/i><b>([^<]*)<\/b><\/span><span><i>[^<]*<\/i><b>([^<]*)<\/b><\/span><\/p>\s*<p class="climate-src">([^<]*)<\/p><\/div>/g)];
+assert(climateRows.length === 3, `family_print.html: climate must have three city rows, Nagoya+Kyoto merged (got ${climateRows.length})`);
 const climatePlaces = climateRows.map(m => m[1]).join(' | ');
 assert(/名古屋/.test(climatePlaces) && /京都/.test(climatePlaces), 'family_print.html: Nagoya and Kyoto must both be named (merged into one row)');
 assert(/シュトゥットガルト/.test(climatePlaces), 'family_print.html: Stuttgart climate row missing');
@@ -219,6 +222,12 @@ for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offl
   assert(!/\u{1F5FA}/u.test(text), `${name}: map glyph U+1F5FA must be replaced by the SVG line-icon`);
 }
 assert(sharedCss.includes('.line-icon{'), 'v3.css: line-icon style missing');
+// .line-iconは.btn（13px）・.plan-head（14px）・.ttl（16px）の文中に置く。
+// 固定19pxの箱は文字より大きく見えたので、寸法は文字サイズ基準（em）で持たせる。
+// 数値検査が通っても画面が読めない例だったため、比率で持っていることを検査する。
+const lineIconRule = (sharedCss.match(/\.line-icon\{[^}]*\}/) || [''])[0];
+assert(/width:[\d.]+em/.test(lineIconRule) && /height:[\d.]+em/.test(lineIconRule),
+  'v3.css: .line-icon must size itself in em so it follows the surrounding 13–16px text (a fixed 19px box read larger than the text)');
 assert((online.match(/class="line-icon line-icon-print"/g) || []).length >= 3, `${onlineName}: expected the print line-icon SVG in the header button, family-print link, and family-tab print button`);
 assert((offlineHtml.match(/class="line-icon line-icon-print"/g) || []).length >= 1, 'index_v3_offline.html: expected the print line-icon SVG in the desk-print banner');
 assert((online.match(/class="line-icon line-icon-calendar"/g) || []).length >= 1, `${onlineName}: expected the calendar line-icon SVG replacing the retired 🗓 glyph`);
