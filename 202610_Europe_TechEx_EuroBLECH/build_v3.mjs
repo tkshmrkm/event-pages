@@ -152,79 +152,97 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['<div class="text-slate-600 text-xs">国際線のため3時間前にチェックイン</div>', '<div class="text-slate-600 text-xs">国際線のため3時間前にチェックイン。自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く</div>', 'all'],
 ];
 
+// 家族タブの「どこにいるか」一覧。都市名を最大文字にして、日と人だけで追えるようにする。
+// cell = [人, 都市, 一言, 種別]。種別は where-* の色分けに使う。
+const WHERE_DAYS = [
+  { date:'10/17', dow:'土', cells:[
+    ['村上','日本 → 香港','移動。機内泊','move'],
+    ['美馬・金築','日本','出発前日','home'],
+  ] },
+  { date:'10/18', dow:'日', cells:[
+    ['村上','アムステルダム','早朝着。時差調整','move'],
+    ['美馬・金築','日本 → 香港','移動。機内泊','move'],
+  ] },
+  { date:'10/19', dow:'月', cells:[
+    ['村上','アムステルダム','TechEx Day 1','work'],
+    ['美馬・金築','ヴォルフスブルク','早朝FRA着。Autostadt見学','work'],
+  ] },
+  { date:'10/20', dow:'火', cells:[
+    ['村上','アムステルダム → ゲッティンゲン','TechEx Day 2。夜に合流地点へ','move'],
+    ['美馬・金築','ハノーファー','EuroBLECH 展示会視察','work'],
+  ] },
+  { date:'10/21', dow:'水', shared:true, cells:[
+    ['全員','ハノーファー','EuroBLECH 展示会視察','work'],
+  ] },
+  { date:'10/22', dow:'木', shared:true, cells:[
+    ['全員','ブレーメン','Mercedes工場見学','work'],
+  ] },
+  { date:'10/23', dow:'金', shared:true, cells:[
+    ['全員','ハノーファー → フランクフルト','EuroBLECH最終日。夕方に移動','move'],
+  ] },
+  { date:'10/24', dow:'土', shared:true, cells:[
+    ['全員','フランクフルト → 香港','昼に出発。機内泊','move'],
+  ] },
+  { date:'10/25', dow:'日', shared:true, cells:[
+    ['全員','香港 → 日本','14:10セントレア着。帰宅','home'],
+  ] },
+];
+
+// 家族向けの日別。駅から駅への細かい移動は載せない。
+// 残すのは、その日の居場所が変わる出来事（フライト、到着、チェックイン）と、
+// 日中なにをしているか、連絡が取りにくい時間帯（機内）だけ。
 const FAMILY_DAYS = [
   { date:'10/17', dow:'土', murakami:[
-    ['11:30頃','move','移動','京都駅 → 名古屋駅 12:06頃 → セントレア 13:03'],
     ['16:10','flight','フライト','CX539 セントレア発 → 香港 19:30着'],
-    ['19:30〜23:15','transfer','乗り継ぎ','香港で夕食・シャワー。23:15にCX271で出発'],
+    ['19:30〜23:15','transfer','乗り継ぎ','香港で3時間45分。23:15発の便へ'],
+    ['23:15〜','flight','機内','CX271 香港発。**翌朝まで連絡がつきにくい**'],
   ], team:[], stays:[['村上','機内']] },
   { date:'10/18', dow:'日', murakami:[
-    ['06:55','procedure','到着・手続き','Amsterdam AMS着。入国審査・荷物受取'],
-    ['07:30頃','move','移動','Schiphol Airport Station → Amsterdam Sloterdijk 07:40頃'],
-    ['07:45頃','stay','荷物','ホテルに荷物を預けて時差調整'],
+    ['06:55','procedure','到着','Amsterdam AMS着。入国審査・荷物受取'],
+    ['日中','stay','時差調整','ホテルに荷物を預けて休息'],
     ['15:00頃','stay','チェックイン','Holiday Inn Express Amsterdam - Sloterdijk Station'],
   ], team:[
-    ['11:30頃','move','移動','京都駅 → 名古屋駅 12:06頃 → セントレア 13:03'],
     ['16:10','flight','フライト','CX539 セントレア発 → 香港 19:30着'],
-    ['19:30〜23:20','transfer','乗り継ぎ','香港で夕食・休憩。23:20頃に搭乗口へ'],
-    ['23:55','flight','フライト','CX289 香港発（機内泊）'],
+    ['19:30〜23:55','transfer','乗り継ぎ','香港で3時間50分'],
+    ['23:55〜','flight','機内','CX289 香港発。**翌朝まで連絡がつきにくい**'],
   ], stays:[['村上','Holiday Inn Express Amsterdam - Sloterdijk Station'],['美馬・金築','機内']] },
   { date:'10/19', dow:'月', murakami:[
-    ['08:30','move','移動','ホテル → RAI Amsterdam 08:55頃'],
-    ['09:45〜16:50','techex','TechEx','TechEx Europe Day 1'],
-    ['18:00〜21:00','techex','交流会','VIP Networking Drinks'],
-    ['21:00頃','move','移動','RAI Amsterdam → ホテル 21:25頃'],
+    ['09:45〜16:50','work','仕事','TechEx Europe Day 1（RAI Amsterdam）'],
+    ['18:00〜21:00','work','交流会','VIP Networking Drinks'],
   ], team:[
-    ['07:15','procedure','到着・手続き','Frankfurt FRA着。入国審査・荷物受取'],
-    ['08:22','move','移動','Frankfurt空港駅 → Göttingen Hbf 10:31'],
-    ['10:35頃','stay','荷物','ホテルに荷物を預ける'],
-    ['11:00頃','move','移動','Göttingen Hbf → Wolfsburg Hbf 12:20頃 → Autostadt 12:30頃'],
-    ['12:30〜17:20頃','visit','見学','Autostadt'],
-    ['17:30頃','move','移動','Wolfsburg Hbf → Göttingen Hbf 18:45頃'],
+    ['07:15','procedure','到着','Frankfurt FRA着。入国審査・荷物受取'],
+    ['12:30〜17:20頃','work','見学','Autostadt（ヴォルフスブルク）'],
     ['18:50頃','stay','チェックイン','Hotel FREIgeist Göttingen Innenstadt'],
   ], stays:[['村上','Holiday Inn Express Amsterdam - Sloterdijk Station'],['美馬・金築','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/20', dow:'火', murakami:[
-    ['08:30頃','move','移動','ホテル → RAI Amsterdam 08:55頃'],
-    ['09:45〜14:55','techex','TechEx','TechEx Europe Day 2'],
-    ['14:55','move','移動','RAI Amsterdam → Schiphol AMS 15:20頃'],
+    ['09:45〜14:55','work','仕事','TechEx Europe Day 2（RAI Amsterdam）'],
     ['16:50','flight','フライト','KL1791 Amsterdam AMS発 → Hannover HAJ 17:45着'],
-    ['19:06','move','移動','Hannover Flughafen → Hannover Hbf 19:23 → Göttingen Hbf 20:25'],
     ['20:30頃','stay','チェックイン','Hotel FREIgeist Göttingen Innenstadt'],
   ], team:[
-    ['07:55','move','移動','Göttingen Hbf → Hannover Messe/Laatzen 08:23'],
-    ['09:00〜17:00','euro','EuroBLECH','Day 1'],
-    ['17:30頃','move','移動目安','Hannover Messe/Laatzen → Göttingen Hbf 18:00頃'],
+    ['09:00〜17:00','work','仕事','EuroBLECH 展示会視察 Day 1（ハノーファー）'],
+    ['18:00頃','stay','戻り目安','ゲッティンゲンのホテルへ'],
   ], stays:[['全員','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/21', dow:'水', shared:[
-    ['07:55','move','移動','Göttingen Hbf → Hannover Messe/Laatzen 08:23'],
-    ['09:00〜17:00','euro','EuroBLECH','全員で終日視察'],
-    ['17:30頃','move','移動目安','Hannover Messe/Laatzen → Göttingen Hbf 18:00頃'],
-    ['19:00頃','meal','夕食','ゲッティンゲン旧市街'],
+    ['09:00〜17:00','work','仕事','EuroBLECH 展示会視察（3名合流。ハノーファー）'],
+    ['19:00頃','stay','夕食','ゲッティンゲン旧市街'],
   ], stays:[['全員','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/22', dow:'木', shared:[
-    ['09:00','move','移動','Göttingen Hbf → Bremen Hbf 10:45'],
-    ['10:45以降','review','要検討','Bremen Hbf → Mercedes-Benz Werk Bremenの交通手段を決める'],
-    ['12:45〜14:00','visit','工場見学','Mercedes-Benz Werk Bremen'],
-    ['16:00頃／18:00頃','review','復路検討','早帰りならホテル18:05頃・資料整理。市内滞在ならホテル20:05頃'],
+    ['12:45〜14:00','work','工場見学','Mercedes-Benz Werk Bremen（予約確定）'],
+    ['18:05頃／20:05頃','review','戻り時刻は未定','早帰り案と市内滞在案のどちらかで決まる'],
   ], stays:[['全員','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/23', dow:'金', shared:[
-    ['07:55','move','移動','Göttingen Hbf → Hannover Messe/Laatzen 08:23'],
-    ['09:00〜14:15頃','euro','EuroBLECH','最終日。14:15頃に退場'],
-    ['14:30','move','移動','Hannover Messe/Laatzen → Hannover Hbf 14:38 → Frankfurt(Main) Hbf 17:14'],
+    ['09:00〜14:15頃','work','仕事','EuroBLECH最終日（ハノーファー）'],
+    ['17:14','move','移動','フランクフルト中央駅着'],
     ['17:30頃','stay','チェックイン','Toyoko Inn Frankfurt am Main Hauptbahnhof'],
-    ['18:30頃','meal','夕食','フランクフルト中央駅周辺'],
   ], stays:[['全員','Toyoko Inn Frankfurt am Main Hauptbahnhof']] },
   { date:'10/24', dow:'土', shared:[
-    ['07:00〜10:00','meal','朝食','ホテルで朝食・チェックアウト'],
-    ['10:15','move','移動','ホテル → Frankfurt Airport Terminal 3 10:40'],
-    ['10:40〜12:55','procedure','出国手続き','チェックイン・保安検査・出国審査'],
-    ['13:40','flight','フライト','CX288 Frankfurt FRA発（機内泊）'],
+    ['10:15','move','移動','ホテル → フランクフルト空港'],
+    ['13:40〜','flight','機内','CX288 Frankfurt FRA発。**翌朝まで連絡がつきにくい**'],
   ], stays:[['全員','機内']] },
   { date:'10/25', dow:'日', shared:[
-    ['07:20','transfer','到着・乗り継ぎ','香港 HKG着 → 09:35 CX536出発'],
-    ['09:35','flight','フライト','香港 HKG発 → セントレア NGO 14:10着'],
-    ['14:10〜15:00頃','procedure','入国手続き','入国審査・荷物受取・税関。Visit Japan Webを用意'],
-    ['15:00頃','move','帰宅','セントレア発 → 各自帰宅'],
+    ['07:20〜09:35','transfer','乗り継ぎ','香港で2時間15分'],
+    ['14:10','flight','帰着','セントレア NGO着'],
+    ['15:00頃','move','帰宅','入国手続きを終えて各自帰宅'],
   ], stays:[['全員','帰宅']] },
 ];
 
@@ -275,6 +293,7 @@ const transformScript = `
   const STAYS = ${JSON.stringify(STAYS)};
   const ROUTES = ${JSON.stringify(ROUTES)};
   const FAMILY_DAYS = ${JSON.stringify(FAMILY_DAYS)};
+  const WHERE_DAYS = ${JSON.stringify(WHERE_DAYS)};
   const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const flightIcon = () => '<span class="flight-mark" role="img" aria-label="フライト"></span>';
   const plainTime = value => value.replace(/^\\d{1,2}\\/\\d{1,2}（.）/, '').trim();
@@ -502,7 +521,9 @@ const transformScript = `
     // 未定はオレンジの帯だけが示す、と凡例で明示しないと10/22のラベンダーが未定色に読まれる。
     stack.insertAdjacentHTML('afterbegin','<div class="day-kind-legend" aria-label="日付カードの色の意味"><strong>日付カードの色</strong><span><i class="kind-swatch swatch-move"></i>移動・帰着</span><span><i class="kind-swatch swatch-conf"></i>展示会視察</span><span><i class="kind-swatch swatch-visit"></i>工場・企業見学（予約確定）</span><span><i class="kind-swatch swatch-review"></i>要検討（この帯だけが未定）</span></div>');
   }
-  const familyEventMarkup = event => '<div class="agenda-line"><time>' + esc(event[0]) + '</time><span class="schedule-tag kind-' + esc(event[1]) + '">' + esc(event[2]) + '</span><p>' + esc(event[3]) + '</p></div>';
+  // 本文はエスケープしたうえで **…** だけを強調に戻す。生HTMLは通さない。
+  const familyText = value => esc(value).replace(/\\*\\*(.+?)\\*\\*/g, '<b>$1</b>');
+  const familyEventMarkup = event => '<div class="agenda-line"><time>' + esc(event[0]) + '</time><span class="schedule-tag kind-' + esc(event[1]) + '">' + esc(event[2]) + '</span><p>' + familyText(event[3]) + '</p></div>';
   const familySectionMarkup = (title, events) => '<section><h3>' + esc(title) + '</h3>' + (events.length ? events.map(familyEventMarkup).join('') : '<div class="agenda-empty">日本</div>') + '</section>';
   const familyStayMarkup = stays => '<aside><h3>宿泊</h3>' + stays.map(stay => '<p>' + esc(stay[1]) + '<br><small>' + esc(stay[0]) + '</small></p>').join('') + '</aside>';
   const familyDayMarkup = day => {
@@ -512,12 +533,24 @@ const transformScript = `
     return '<article class="family-day-row' + (day.shared ? ' shared-day' : '') + '"><header><strong>' + esc(day.date) + '</strong><span>' + esc(day.dow) + '</span></header>' + body + familyStayMarkup(day.stays) + '</article>';
   };
   const familySchedule = family.querySelector('.family-schedule .schedule-body');
-  if (familySchedule) familySchedule.innerHTML = '<div class="schedule-legend" aria-label="色の意味"><strong>表示の区別</strong><span class="schedule-tag kind-flight">フライト</span><span class="schedule-tag kind-move">地上移動</span><span class="schedule-tag kind-transfer">到着・乗り継ぎ</span><span class="schedule-tag kind-procedure">手続き</span><span class="schedule-tag kind-techex">TechEx</span><span class="schedule-tag kind-euro">EuroBLECH</span><span class="schedule-tag kind-visit">工場・企業見学</span><span class="schedule-tag kind-review">要検討</span></div>' + FAMILY_DAYS.map(familyDayMarkup).join('');
+  if (familySchedule) familySchedule.innerHTML = '<div class="schedule-legend" aria-label="色の意味"><strong>表示の区別</strong><span class="schedule-tag kind-flight">フライト</span><span class="schedule-tag kind-move">地上移動</span><span class="schedule-tag kind-transfer">到着・乗り継ぎ</span><span class="schedule-tag kind-procedure">手続き</span><span class="schedule-tag kind-work">仕事</span><span class="schedule-tag kind-stay">滞在・宿</span><span class="schedule-tag kind-review">要検討</span></div>' + FAMILY_DAYS.map(familyDayMarkup).join('');
+  // 「どこにいるか」一覧。サマリーの直後に置き、都市名だけで全体を追えるようにする。
+  const whereCell = cell => '<div class="where-cell where-' + esc(cell[3]) + '"><span class="who">' + esc(cell[0]) + '</span><b class="place">' + esc(cell[1]) + '</b><small>' + esc(cell[2]) + '</small></div>';
+  const whereDay = day => '<article class="where-day' + (day.shared ? ' is-shared' : '') + '"><header><strong>' + esc(day.date) + '</strong><span>' + esc(day.dow) + '</span></header><div class="where-people">' + day.cells.map(whereCell).join('') + '</div></article>';
+  const whereBlock = '<section class="family-where"><div class="family-section-head">🗺 どこにいるか — 9日間の全体像</div><div class="where-body"><p class="where-lead">別行動は10/17〜10/20。<strong>10/21から3名が合流</strong>し、以降は同じ場所にいる。</p><div class="where-grid">' + WHERE_DAYS.map(whereDay).join('') + '</div></div></section>';
+  family.querySelector('.timezone-early')?.insertAdjacentHTML('beforebegin', whereBlock);
   family.querySelector('.flight-fares')?.remove();
   family.querySelectorAll('.flight-status').forEach(status => status.remove());
   family.querySelector('.timezone-note')?.remove();
   const timezoneLead = family.querySelector('.timezone-lead');
   if (timezoneLead) timezoneLead.innerHTML = '<strong>時刻はすべて、その場所の現地時刻</strong><span>日本＝JST／欧州＝CEST／香港＝HKT</span>';
+  // 時差そのものを最大文字にする。タイムゾーン略号とUTCオフセットは補足に落とす。
+  const timezoneCards = family.querySelector('.timezone-cards');
+  if (timezoneCards) timezoneCards.innerHTML = [
+    ['zone-japan','🇯🇵 日本','基準','','JST・UTC+9'],
+    ['zone-europe','🇳🇱🇩🇪 欧州','−7','時間','CEST・UTC+2'],
+    ['zone-hongkong','🇭🇰 香港','−1','時間','HKT・UTC+8'],
+  ].map(([cls,label,diff,unit,note]) => '<div class="timezone-card ' + cls + '"><span>' + label + '</span><strong class="tz-diff">' + diff + (unit ? '<i>' + unit + '</i>' : '') + '</strong><small>' + note + '</small></div>').join('');
   const returnFooter = family.querySelector('.flight-return > footer');
   if (returnFooter) returnFooter.textContent = '総移動 約17時間30分・全員同便';
   [prep, venue, family].forEach(panel => {

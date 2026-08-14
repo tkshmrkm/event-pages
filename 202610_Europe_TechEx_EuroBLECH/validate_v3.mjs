@@ -60,7 +60,15 @@ const checks = [
   ['family schedule avoids redundant date prefixes', !/<article class="family-day-row[\s\S]*?<p>[^<]*10\/(?:17|18|19|20|21|22|23|24|25)/.test(html)],
   ['family tab omits fares and daylight-saving note', !html.includes('class="flight-fares"') && !html.includes('欧州夏時間が終了')],
   ['family times are visually prominent', css.includes('.agenda-line time{color:#0B4F5A;font-size:14px;font-weight:800')],
-  ['family final arrival and airport procedures present', html.includes('香港 HKG着 → 09:35 CX536出発') && html.includes('入国審査・荷物受取・税関。Visit Japan Webを用意') && html.includes('セントレア発 → 各自帰宅')],
+  // 家族タブは2026-08-14に家族視点へ圧縮した。細かい駅間移動は載せないが、
+  // 香港乗継・帰着・帰宅の3点は残す。Visit Japan Webは旅程タブ側で担保する。
+  ['family final arrival and airport procedures present', html.includes('香港で2時間15分') && html.includes('セントレア NGO着') && html.includes('入国手続きを終えて各自帰宅')],
+  ['Visit Japan Web retained in itinerary', itinerary.includes('Visit Japan Web')],
+  ['family where-overview present', count(/class="where-day/g) === 9 && count(/class="where-cell/g) === 13 && html.includes('どこにいるか') && html.includes('class="place">ハノーファー')],
+  ['family time difference is the dominant type', html.includes('class="tz-diff"') && /\.timezone-card \.tz-diff\{[^}]*font-size:38px/.test(css) && html.includes('−7<i>時間</i>') && html.includes('−1<i>時間</i>')],
+  // 圧縮前は52行。現在31行。駅間移動を戻すと再び膨らむので上限で歯止めをかける。
+  ['family day detail stays compressed', count(/class="agenda-line"/g) <= 36],
+  ['family tab drops event-type distinctions', html.includes('schedule-tag kind-work') && !/schedule-legend[\s\S]{0,400}kind-euro/.test(html)],
   ['no nested action bodies', !html.includes('action-body"><div class="action-body')],
   ['HRS final font stack', hrsCss.includes("--font:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif")],
   ['HRS date navigation behavior', js.includes('function markDay()') && js.includes("todayCard.classList.add('today')") && js.includes('day.open = true')],
