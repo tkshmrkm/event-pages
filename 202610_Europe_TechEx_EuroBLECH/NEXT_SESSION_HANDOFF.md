@@ -38,7 +38,9 @@
 - 日単位の説明は「本日のトピックス」に置く。
 - 実行動は人物レーンまたは共通レーンへ置く。
 - 宿泊は人物レーン末尾、合流後は共通レーン末尾に一度だけ置く。
-- 旅程、準備、会場、記録、家族の5タブを維持する。
+- 旅程、準備、会場、記録の4タブを維持する。
+  （2026-08-15に家族タブを廃止し、`family_print.html` を正本にした。
+  ヘッダーのリンクから開く。詳細は `CLAUDE_HANDOFF.md`）
 
 ## 4列交通表示
 
@@ -80,11 +82,12 @@
 - `references/rejected/transport_layout_sample.html`
 - `references/superseded/`（旧旅程・旧スケジュールと `README.md`）
 
-`index.html` は現行の正だが、これは `build_v3.mjs` の生成物なので直接変更しない。
-旅程内容の元データは `index_v1.html`、家族タブの基準は `index_v2.html` であり、
-これらも直接上書きしない。
-フォルダ直下に置くのは、この引き継ぎ2件、`index.html`、`index_v1.html`、`index_v3.html`、
-v2一式、v3一式、承認済み4列サンプル、`references/` だけにする。
+`index.html` と `family_print.html` は現行の正だが、いずれも `build_v3.mjs` の
+生成物なので直接変更しない。旅程内容の元データは `index_v1.html`、
+家族向けの基準は `index_v2.html` であり、これらも直接上書きしない。
+フォルダ直下に置くのは、この引き継ぎ2件、`index.html`、`family_print.html`、
+`index_v1.html`、`index_v3.html`、v2一式、v3一式、承認済み4列サンプル、
+`references/` だけにする。
 旧案が増えたら `references/superseded/` へ移す。
 
 ## 次セッションの開始手順

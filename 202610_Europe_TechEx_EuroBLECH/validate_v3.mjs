@@ -85,7 +85,10 @@ const checks = [
   ['legacy icon placeholders removed', !html.includes('class="fas fa-') && !js.includes('✈︎')],
   ['event naming aligned', html.includes('<title>TechEx Europe・EuroBLECH 2026') && html.includes('TechEx Europe・EuroBLECH 2026 ・ field guide v3') && js.includes('# TechEx Europe・EuroBLECH 2026 記録') && !html.includes('VIP networking drinks')],
   ['Japanese punctuation normalized', !html.includes('·') && !/(?:村上|美馬・金築):/.test(html) && !/\d{1,2}\/\d{1,2} \([月火水木金土日]\)/.test(html)],
-  ['outline action icons replace black-filled emoji', count(/class="line-icon line-icon-/g) >= 20 && css.includes('.line-icon svg') && !itinerary.includes('🛋') && !itinerary.includes('🛂')],
+  ['outline action icons replace black-filled emoji', count(/class="line-icon line-icon-/g) >= 20 && hrsCss.includes('.line-icon svg') && !itinerary.includes('🛋') && !itinerary.includes('🛂')],
+  // .line-iconの寸法は共通（core.css経由でHRSのv3.cssに入る1.15em）に任せる。
+  // EB側で固定pxを持つと、13〜14pxの文字の中に文字より大きい箱が並ぶ。色だけ上書きしてよい。
+  ['line icon size comes from the shared stylesheet', /\.line-icon\{[^}]*width:1\.15em/.test(hrsCss) && !/(^|[^ ])\.line-icon\{/m.test(css) && css.includes('[class*="bg-gray-700"] .line-icon')],
   ['no oversized itinerary time cells', rowTimes.every(value => value.length <= 32)],
   ['four-column mobile contract retained', /@media\(max-width:640px\)[\s\S]*\.route-four,.lanes \.route-four\{grid-template-columns:72px minmax\(0,1fr\) 74px minmax\(0,1fr\)\}/.test(css)],
   // ---------- 家族向け印刷版 ----------
