@@ -157,7 +157,7 @@ h3{font-size:var(--f3);margin:14px 0 6px;color:var(--tx2)}
 .note{margin-top:5px;color:var(--mu);font-size:var(--f4);line-height:1.65;padding-left:9px;border-left:2px solid var(--line2)}
 
 /* イベント種別：絵文字だけ。色は付けない（HRSと要検討のみ例外）
-   交通手段はアイコン（.flight-mark／.mode-icon）。その他は 🛂空港手続き 🏨宿 🍽食事 🏛観光 ⚽観戦 🤖HRS
+   交通手段も行動の区分もモノクロSVG（.flight-mark／.mode-icon／.line-icon）。空港手続き・宿・食事・観光・観戦・HRS
    印を付けないのは「徒歩」と「その場での行動」。
    ⚽は観戦で、HRS（🤖）とは別物なので rose の色は使わない。 */
 .et{margin-right:3px;font-style:normal}

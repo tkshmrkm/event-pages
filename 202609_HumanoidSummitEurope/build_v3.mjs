@@ -372,9 +372,117 @@ const LINE_ICON_PATHS = {
   calendar: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/><path d="M8 13h2m4 0h2m-8 4h2m4 0h2"/>',
   // 🗺 U+1F5FA の置き換え。プランDの見出しと地図リンク集の見出しの2箇所。
   map: '<path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4z"/><path d="M9 4v13m6-10.5V20"/>',
+  // 🚉🚄と🚗は交通手段アイコンと同じ絵を使う。同じものを2度描かない。
+  train: MODE_ICON_PATHS.train,
+  car: MODE_ICON_PATHS.car,
+  // 以下は2026-08-15に追加。それまで絵文字のままだった行動・操作の区分。
+  // すべてviewBox 0 0 24 24・線画のみ・座標は1〜23に収める（14px前後で表示するため
+  // 描き込みすぎない。1つあたり図形4つまでに収めてある）。
+  hotel: '<rect x="5" y="8" width="14" height="13"/><rect x="10" y="16" width="4" height="5"/><rect x="7" y="11" width="3" height="3"/><rect x="14" y="11" width="3" height="3"/>',
+  food: '<path d="M6 3v7M10 3v7M8 3v7M8 10v11"/><path d="M17 3C14 5 14 9 17 11V21"/>',
+  sight: '<path d="M4 9 12 4l8 5"/><path d="M4 9h16M7 9v9M12 9v9M17 9v9"/><path d="M3 21h18"/>',
+  robot: '<rect x="5" y="8" width="14" height="11" rx="2"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M12 8V4M9 17h6"/>',
+  info: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="8" r="1"/><path d="M12 11v6"/>',
+  passport: '<rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M9 17h6"/>',
+  ball: '<circle cx="12" cy="12" r="9"/><path d="M12 8v3l3 2-1 4h-4l-1-4 3-2z"/>',
+  person: '<circle cx="12" cy="8" r="4"/><path d="M6 21v-2l2-7h8l2 7v2"/>',
+  people: '<circle cx="8" cy="8" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 20v-1l2-6h6l1 3"/><path d="M12 20v-1l2-6h6l1 6v1"/>',
+  memo: '<rect x="4" y="3" width="13" height="18" rx="1"/><path d="M7 8h7M7 12h7"/><path d="M15 16l4-4 2 2-4 4h-2z"/>',
+  warning: '<path d="M12 3 21 20H3z"/><path d="M12 9v5"/><circle cx="12" cy="17" r="1"/>',
+  sofa: '<rect x="4" y="12" width="16" height="7" rx="1"/><rect x="3" y="9" width="3" height="9" rx="1"/><rect x="18" y="9" width="3" height="9" rx="1"/><path d="M6 12V8h12v4"/>',
+  bulb: '<circle cx="12" cy="9" r="6"/><path d="M9 18h6M10 21h4"/><path d="M10 11l1-2 2 2 1-2"/>',
+  star: '<path d="M12 3 15 9 21 10 16 14 18 21 12 17 6 21 8 14 3 10 9 9z"/>',
+  speech: '<path d="M4 4h16v11H10l-4 4v-4H4z"/>',
+  clipboard: '<rect x="5" y="4" width="14" height="17" rx="1"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M8 10h8M8 14h8M8 18h5"/>',
+  pin: '<circle cx="12" cy="9" r="6"/><circle cx="12" cy="9" r="2"/><path d="M8 13 12 21 16 13z"/>',
+  download: '<path d="M12 3v12M7 11l5 5 5-5M4 19h16"/>',
+  upload: '<path d="M12 21V9M7 13l5-5 5 5M4 5h16"/>',
+  compass: '<circle cx="12" cy="12" r="9"/><path d="M15 9 13 13 9 15 11 11z"/>',
+  suitcase: '<rect x="4" y="8" width="16" height="12" rx="2"/><rect x="9" y="4" width="6" height="4" rx="1"/><path d="M4 14h16"/>',
+  tag: '<path d="M4 4h9l8 8-9 9-8-8z"/><circle cx="8" cy="8" r="1.5"/>',
+  merge: '<path d="M6 3v6l6 6v6"/><path d="M18 3v6l-6 6"/>',
+  split: '<path d="M12 3v6l-6 6v6"/><path d="M12 9l6 6v6"/>',
+  city: '<rect x="3" y="10" width="5" height="11"/><rect x="10" y="5" width="5" height="16"/><rect x="17" y="13" width="4" height="8"/>',
+  phone: '<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 19h2"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="1"/><path d="M8 11V8C8 5 10 3 12 3C14 3 16 5 16 8V11"/><circle cx="12" cy="15" r="1.5"/>',
+  checkCircle: '<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 6-6"/>',
+  checkbox: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 6-6"/>',
+  checkMark: '<path d="M4 12l6 6 10-12"/>',
+  alarm: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M5 4 2 7M19 4l3 3"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/>',
+  stopwatch: '<circle cx="12" cy="13" r="8"/><path d="M9 3h6M12 3v2"/><path d="M12 9v4l3 2"/>',
+  book: '<rect x="3" y="5" width="8" height="15" rx="1"/><rect x="13" y="5" width="8" height="15" rx="1"/>',
+  factory: '<path d="M3 21V11L8 14V11L13 14V9L19 13V21Z"/><path d="M8 17h2M13 17h2"/>',
+  trash: '<path d="M4 6h16M9 6V4h6v2"/><path d="M6 6l1 15h10l1-15"/><path d="M10 10v7M14 10v7"/>',
+  cloud: '<path d="M7 17C4 17 3 15 3 13C3 11 5 9 7 9C8 6 11 5 14 6C17 5 20 8 19 11C21 11 21 15 18 17H7Z"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+  home: '<path d="M4 11 12 4l8 7"/><path d="M6 10v11h12V10"/><path d="M10 21v-6h4v6"/>',
+  lifebuoy: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/>',
+  // フライトは.flight-markのマスク画像と同じ形。文中に置く場合だけこちらを使う。
+  flight: '<path d="M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z"/>',
 };
-const lineIconHtml = name => `<span class="line-icon line-icon-${name}" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${LINE_ICON_PATHS[name]}</svg></span>`;
+const lineIconHtml = name => {
+  if (!LINE_ICON_PATHS[name]) throw new Error(`Unknown line icon: ${name}`);
+  return `<span class="line-icon line-icon-${name}" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${LINE_ICON_PATHS[name]}</svg></span>`;
+};
 const printIconHtml = lineIconHtml('print');
+
+// ---------- 絵文字をすべてモノクロSVGへ ----------
+// 2026-08-15。それまで置き換えていたのは🖨🗓🗺の3文字だけで、アイコンが
+// 「モノクロSVG」「Windowsで黒い輪郭になる絵文字（🍽🏛ℹなど14種）」
+// 「カラー絵文字（🏨🤖👤など）」の3系統に割れていた。全部.line-iconへそろえる。
+//
+// 国旗（🇩🇪🇯🇵）はアイコンにせず落とす。Windowsでは合成されず「DE」「JP」という
+// 文字のまま出るため。隣に国名・都市名があるので情報は失わない。
+const EMOJI_ICON_MAP = {
+  '🏨': 'hotel', '🍽': 'food', '🏛': 'sight', '🤖': 'robot', 'ℹ': 'info',
+  '🛂': 'passport', '⚽': 'ball', '👤': 'person', '👥': 'people', '📝': 'memo',
+  '⚠': 'warning', '🛋': 'sofa', '💡': 'bulb', '📅': 'calendar', '⭐': 'star',
+  '💬': 'speech', '📋': 'clipboard', '📍': 'pin', '⬇': 'download', '⬆': 'upload',
+  '🧭': 'compass', '🧳': 'suitcase', '🏷': 'tag', '🤝': 'merge', '🔀': 'split',
+  '🚉': 'train', '🚄': 'train', '🚗': 'car', '🏙': 'city', '📱': 'phone',
+  '🔒': 'lock', '✅': 'checkCircle', '☑': 'checkbox', '✔': 'checkMark',
+  '🛫': 'flight', '⏰': 'alarm', '🕐': 'clock', '🕘': 'clock', '⏱': 'stopwatch',
+  '📗': 'book', '📘': 'book', '🏭': 'factory', '🗑': 'trash', '☁': 'cloud',
+  '🎯': 'target', '🏠': 'home', '🆘': 'lifebuoy',
+};
+// JS文字列の中の絵文字。textContentへ入る文言はSVGを置けないので、絵文字だけ落とす。
+// #who-chipsはv3では非表示（人別フィルターを持たない）なので、そこへ渡す絵文字も空にする。
+// 件数を固定しないのは、机上用印刷版が後段でスクリプトごと落とすため、同じ文字列でも
+// 生成物によって件数が変わるから。代わりに、処理後にflash()の中へ絵文字が残っていないかを見る。
+const stripScriptEmoji = (text, label) => {
+  const out = text
+    .replace(/flash\('(?:\p{Extended_Pictographic}️?[ 　]?)+/gu, "flash('")
+    .replace(/flash\(''\s*\+\s*message\)/g, 'flash(message)')
+    .replace(/emoji:'\p{Extended_Pictographic}️?'/gu, "emoji:''")
+    .replace(/whoBtn\('all', '(?:\p{Extended_Pictographic}️?[ 　]?)+/gu, "whoBtn('all', '");
+  const leftover = [...out.matchAll(/flash\('([^']*)'/g)]
+    .filter(match => /\p{Extended_Pictographic}/u.test(match[1]));
+  if (leftover.length) {
+    throw new Error(`Emoji left inside flash() text in ${label}: ${leftover.map(m => m[1]).join(' / ')}`);
+  }
+  return out;
+};
+// 異体字セレクタ（U+FE0F）と直後の空白1つまで一緒に飲み込む。アイコン側が
+// margin-rightを持つので、空白を残すと字間が空きすぎる。
+const PICTOGRAPH = /(\p{Extended_Pictographic}|[\u{1F1E6}-\u{1F1FF}])\uFE0F?[ \u3000]?/gu;
+// 国旗は2文字（地域指示子の対）で1つ。先に落とす。
+const dropFlags = text => text.replace(/[\u{1F1E6}-\u{1F1FF}]{2}[ \u3000]?/gu, '');
+const applyEmojiIcons = (text, label) => {
+  const withoutFlags = dropFlags(text);
+  // 対応表に無い絵文字を黙って通さない。後から絵文字を足したらここで止まる。
+  for (const match of withoutFlags.matchAll(PICTOGRAPH)) {
+    if (!EMOJI_ICON_MAP[match[1]]) {
+      throw new Error(`Unmapped emoji in ${label}: ${match[1]} U+${match[1].codePointAt(0).toString(16).toUpperCase()}`);
+    }
+  }
+  // WORD JOINER（U+2060）でアイコンと語を繋ごうとしたが効かなかった。.line-iconは
+  // inline-flexの原子的インライン箱なので、その手前・直後の改行機会は文字の指定で
+  // 抑えられない。凡例のような「アイコン＋語」の並びでは、アイコンだけが行末に残ることがある。
+  // 絵文字だったときも同じ位置で折り返していたので、今回の変更で悪化した点ではない。
+  // 直すならマークアップ側で「アイコン＋語」をnowrapの箱に入れる必要がある。未着手。
+  return withoutFlags.replace(PICTOGRAPH, (_, ch) => lineIconHtml(EMOJI_ICON_MAP[ch]));
+};
 
 // ---------- フライトの4列表示（EUROBLECH方式） ----------
 // EUROBLECHの.route-fourは「row-time / endpoint / mode / endpoint」の4列を
@@ -535,44 +643,44 @@ const MAP_LINK_FIXUPS = [
 ];
 
 // ---------- 旅程タブの長い補足を折り畳みへ ----------
-// EuroBLECHの規則：常時表示は30字程度の事実まで。理由・判断材料・条件・列挙は
-// 折り畳みへ。61字以上の8件が対象（字数は目安で、内容が単一の事実なら残す判断も
-// あり得るが、この8件はいずれも理由・判断材料・列挙のいずれかに当たる）。
-// 中身（<span class="note">の内側）は書き換えず、置き場所だけ<details class="fold">へ移す。
-// summaryはEuroBLECHの「やること」「過ごし方」と同じ考え方で、中身を示す語にする。
+// 規則：常時表示は30字程度の事実まで。理由・判断材料・条件・列挙は折り畳みへ。
+// **字数は目安であって基準ではない。分けるのは事実か理屈か。** 30字を超えても
+// 単一の事実なら常時表示に残す。実際に残しているのは、対戦カードとキックオフ（76字）、
+// ICEの所要と最短便（40字）、Porscheplatzへの経路（36字）、費用に含む区間（54字）。
+//
+// 本文は書き換えない。leadは対象の`.note`を一意に特定するための先頭文字列で、
+// 一致した`.note`要素をまるごと`<details class="fold">`へ移す。
+// visibleを持つ項目だけ「常時表示の事実 ＋ 折り畳みの理屈」へ分ける。visibleは
+// 元の文の先頭と一致していなければ止める（分割のつもりで書き換えていないことを
+// 機械で確かめる）。visibleの末尾に句点は付けない（常時表示行の規則）ので、
+// 区切りの「。」だけは落とす。
+// summaryは中身を示す語にする（「続きを読む」のような語は使わない）。
 const FOLD_NOTES = [
-  [
-    'Maritim Stuttgart（9/8〜9/12・朝食付・会場まで徒歩約3分）／Best Western Hotel Airport Frankfurt（9/12〜9/13・朝食付）。詳細は準備タブ。',
-    '宿泊の内訳',
-  ],
-  [
-    '入国審査はHELで完了。荷物受取・税関後、T3の<a href="https://www.frankfurt-airport.com/en/locations/b/bread-and-bite/bread-and-bite.html" target="_blank" rel="noopener">Bread &amp; Bite</a>（6:00〜22:00）などでICE車内用のパン／サンドイッチを購入してから長距離駅へ',
-    '朝食の調達',
-  ],
-  [
-    '9:20着から約90分あり、通常ならパン購入を含めて10:51発を目指せる。荷物受取等に時間がかかった場合は次の直通ICEに切り替える。乗換ありの便より直通を優先',
-    '乗る便の判断',
-  ],
-  [
-    '・Markthalle Stuttgart（食品市場内の軽食・惣菜／ホテルから徒歩圏）<br>・Bohnenviertel（旧市街の飲食街／シュヴァーベン料理のカジュアル店多数）<br>・Königstraße周辺のカフェ・ベーカリー',
-    'ランチ候補',
-  ],
-  [
-    'セッション一覧（全11項目のうち、夜の VIP Dinner はVIPパス対象で不参加。実質10項目）と当日の狙いは <a href="#" data-goto="venue">会場タブ</a> に集約。開場9:00・終了17:00頃を想定',
-    '会期の内訳',
-  ],
-  [
-    '公式サイトによれば、Day 1・2（9/9・9/10）がLiederhalle会場での講演・展示（40+社出展）で、Day 3（9/11）はStuttgart近郊の企業を巡るガイド付き訪問日という構成。訪問先企業リストは開催直前に公式発表予定で、現時点では未公開。集合時刻・場所（Liederhalle集合か、送迎の有無等）も公式未発表のため要確認',
-    '会期の構成',
-  ],
-  [
-    'ワンワールド便。JAL/ワンワールドサファイア以上で利用資格あり。FRAのFinnair便は <strong>Terminal 3</strong>（<a href="https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html" target="_blank" rel="noopener">空港公式</a>）。T3には<a href="https://www.frankfurt-airport.com/en/at-the-airport/facilities-services/priority-lounge.html" target="_blank" rel="noopener">Priority Lounge</a>があるが、公式提携航空会社一覧にFinnairの記載がなく、HEL行きでの利用可否・指定ラウンジ名は未確認。オンラインチェックイン時の搭乗券表示またはFinnairで確認する。',
-    'ラウンジの利用資格',
-  ],
-  [
-    'クラシックダブル28㎡・禁煙・チェックイン15:00｜無料キャンセル 9/5 23:00(現地)まで｜TEL +49 711 9420',
-    '予約条件',
-  ],
+  // 2026-08-14に折り畳んだ8件
+  { lead: 'Maritim Stuttgart（9/8〜9/12', summary: '宿泊の内訳' },
+  { lead: '入国審査はHELで完了', summary: '朝食の調達' },
+  { lead: '9:20着から約90分あり', summary: '乗る便の判断' },
+  { lead: '・Markthalle Stuttgart', summary: 'ランチ候補' },
+  { lead: 'セッション一覧（全11項目', summary: '会期の内訳' },
+  { lead: '公式サイトによれば、Day 1・2', summary: '会期の構成' },
+  { lead: 'ワンワールド便。JAL/ワンワールドサファイア', summary: 'ラウンジの利用資格' },
+  { lead: 'クラシックダブル28㎡', summary: '予約条件' },
+
+  // 2026-08-15に追加。前回は`<span class="note">`だけを見ていたため、
+  // `<div class="note">`側（プラン内の補足）が丸ごと残っていた。
+  // 事実が先頭にある4件は、その事実だけを常時表示に残す。
+  { tag: 'div', lead: '時刻はすべて目安', visible: '時刻はすべて目安', summary: '所要時間の置き方' },
+  { tag: 'div', lead: '開館時刻は公式未確認', visible: '開館時刻は公式未確認', summary: '確認しておくこと' },
+  { lead: '※ホテルからHbfは約1.5km', visible: '※ホテルからHbfは約1.5km', summary: '荷物が多いとき' },
+  { lead: 'エコノミーは食事なし', visible: 'エコノミーは食事なし', summary: '機内食と飲み物' },
+  // 全体が理由・判断材料・手順の7件（1件は同じ文が2箇所に出る）
+  { tag: 'div', lead: '<strong>① タクシー（第一候補）：</strong>', summary: '駅からホテルへの行き方' },
+  { tag: 'div', lead: '深夜便明けの体調を見て当日選択', summary: '当日の選び方' },
+  { tag: 'div', lead: '長距離駅（Fernbf）と近郊駅（S-Bahn）', summary: '乗る駅の見分け', count: 2 },
+  { tag: 'div', lead: '大聖堂は駅の目の前なので', summary: 'ケルンでの回り方' },
+  { tag: 'div', lead: 'Xは往復ICEの遅延が', summary: '余裕の取り方' },
+  { lead: 'ラウンジや買物は予定に入れず', summary: '空港での過ごし方' },
+  { lead: 'セッション一覧（全13項目）', summary: '会期の内訳' },
 ];
 
 const dayToolbar = '<div class="day-toolbar no-print"><span>日付カード</span><button class="btn" id="days-tg" type="button" aria-expanded="true">すべて閉じる</button></div>';
@@ -626,7 +734,9 @@ const dayToggleScript = String.raw`  const openDay = id => {
 // v3.css（オンライン版が読む）と机上用印刷版（元CSSをそのまま埋め込む）の
 // 両方に効かせる必要があるので、対にして2箇所で使う。
 const LEGEND_COMMENT_OLD = '   ✈飛行機 🚆鉄道 🚕タクシー 🛂空港手続き 🏨宿 🍽食事 🏛観光 ⚽観戦 🤖HRS';
-const LEGEND_COMMENT_NEW = '   交通手段はアイコン（.flight-mark／.mode-icon）。その他は 🛂空港手続き 🏨宿 🍽食事 🏛観光 ⚽観戦 🤖HRS';
+// 凡例の説明も絵文字を持たない。CSSコメントの中に絵文字が残っていると、
+// 机上用印刷版（元CSSを<style>へ埋め込む）で絵文字の一括置換に巻き込まれる。
+const LEGEND_COMMENT_NEW = '   交通手段も行動の区分もモノクロSVG（.flight-mark／.mode-icon／.line-icon）。空港手続き・宿・食事・観光・観戦・HRS';
 const sourceCss = mustReplace(sourceCssMatch[1], LEGEND_COMMENT_OLD, LEGEND_COMMENT_NEW, 'legend comment in source CSS');
 const compiledSharedCss = `${sourceCss}\n${sharedCoreCss}\n${outdoorCss}\n${familyCss}`.trim() + '\n';
 
@@ -968,15 +1078,35 @@ function buildMain({ offline = false } = {}) {
   });
 
   // ---------- 旅程タブの長い補足を折り畳みへ ----------
-  // <span class="note">の中身はそのまま、置き場所だけ<details class="fold">へ移す。
+  // 本文は書き換えず、置き場所だけ<details class="fold">へ移す。
   // 机上用印刷版は後段の共通処理で全<details>をopenにするため、常時展開で読める。
-  FOLD_NOTES.forEach(([text, summary], i) => {
+  FOLD_NOTES.forEach(({ tag = 'span', lead, summary, visible, count = 1 }, i) => {
+    const label = `itinerary note fold #${i} (${summary})`;
+    const pattern = new RegExp(`<${tag} class="note">(${escapeRe(lead)}[\\s\\S]*?)</${tag}>`, 'g');
+    const found = [...html.matchAll(pattern)];
+    if (found.length !== count) {
+      throw new Error(`Fold match count mismatch: ${label} (expected ${count}, found ${found.length})`);
+    }
+    const body = found[0][1];
+    // 2件以上あるときは、同じ文が繰り返されている場合だけ扱う（別の文を巻き込まない）。
+    if (found.some(match => match[1] !== body)) {
+      throw new Error(`Fold matches differ in content: ${label}`);
+    }
+    let head = '';
+    let rest = body;
+    if (visible) {
+      // 分割は先頭一致でなければ止める。句点で切れているときだけ「。」を落とす。
+      if (body.startsWith(`${visible}。`)) rest = body.slice(visible.length + 1);
+      else if (body.startsWith(visible)) rest = body.slice(visible.length);
+      else throw new Error(`Fold split is not a prefix of the source note: ${label}`);
+      head = `<${tag} class="note">${visible}</${tag}>`;
+    }
     html = replaceAllCounted(
       html,
-      `<span class="note">${text}</span>`,
-      `<details class="fold"><summary>${summary}</summary><div class="fold-body">${text}</div></details>`,
-      `itinerary note fold #${i} (${summary})`,
-      1
+      `<${tag} class="note">${body}</${tag}>`,
+      `${head}<details class="fold"><summary>${summary}</summary><div class="fold-body">${rest}</div></details>`,
+      label,
+      count
     );
   });
 
@@ -1136,6 +1266,14 @@ function buildMain({ offline = false } = {}) {
     html = html.slice(0, lastScript) + '<script src="../shared/trip-field/runtime.js"></script>\n' + html.slice(lastScript);
     html = mustReplace(html, /<style>[\s\S]*?<\/style>/, '<link rel="stylesheet" href="v3.css">', 'online stylesheet extraction');
   }
+
+  // ---------- 絵文字をモノクロSVGへ ----------
+  // 交通手段の変換（✈→.flight-mark）が終わり、机上用印刷版がスクリプトを落とした
+  // あとに走らせる。ここまでの工程が足したり消したりした絵文字も、まとめて拾える。
+  // 先にJS文字列の中を片付ける。flash()はtextContentへ入れるのでSVGを置けない。
+  const documentName = offline ? 'index_v3_offline.html' : 'index.html';
+  html = stripScriptEmoji(html, documentName);
+  html = applyEmojiIcons(html, documentName);
   return html;
 }
 
@@ -1430,10 +1568,11 @@ function buildFamily() {
   ${familyEmergencySection}
 </section>`;
 
-  return `<!DOCTYPE html>
+  // 家族印刷版もオンライン版と同じアイコン規約にそろえる（節見出しの絵文字を含む）。
+  return applyEmojiIcons(`<!DOCTYPE html>
 <html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>HRS Europe 2026 家族向け予定表</title><link rel="stylesheet" href="v3.css"></head>
-<body class="family-page" data-trip-layout="family-v1"><header class="family-head"><div class="wrap"><div class="eyebrow">HRS EUROPE 2026 · FAMILY COPY</div><h1>家族向け予定表</h1><p>2026年9月7日（月）〜9月14日（月）｜ドイツ出張</p></div></header><main class="wrap">${newSection}</main></body></html>`;
+<body class="family-page" data-trip-layout="family-v1"><header class="family-head"><div class="wrap"><div class="eyebrow">HRS EUROPE 2026 · FAMILY COPY</div><h1>家族向け予定表</h1><p>2026年9月7日（月）〜9月14日（月）｜ドイツ出張</p></div></header><main class="wrap">${newSection}</main></body></html>`, 'family_print.html');
 }
 
 const outputs = [

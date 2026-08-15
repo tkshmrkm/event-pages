@@ -142,13 +142,18 @@ assert(family.includes('data-trip-layout="family-v1"'), 'family_print.html: shar
 // 出張サマリー／時差・気候／日程詳細／宿泊先情報／緊急連絡先の順で、
 // すべて同じfamily-section-headの見出し様式であること。
 assert(!/<script\b/i.test(family), 'family_print.html: family copy must have no runtime scripts');
-const familySectionHeadings = [...family.matchAll(/class="family-section-head">([^<]*)</g)].map(m => m[1]);
+// 見出しの先頭はモノクロSVGのアイコン（絵文字ではない）。タグを落として文言で比べる。
+const familySectionHeadings = [...family.matchAll(/class="family-section-head">([\s\S]*?)<\/div>/g)]
+  .map(m => m[1].replace(/<[^>]+>/g, '').trim());
 assert(
   JSON.stringify(familySectionHeadings) === JSON.stringify([
-    '🧳 出張サマリー', '🕐 時差・気候', '📅 日程詳細（家族向け）', '🏨 宿泊先情報', '🆘 緊急連絡先',
+    '出張サマリー', '時差・気候', '日程詳細（家族向け）', '宿泊先情報', '緊急連絡先',
   ]),
   `family_print.html: five sections must appear in the expected order (got ${familySectionHeadings.join(' | ')})`
 );
+// 5つとも見出しにアイコンを持つこと（絵文字から置き換えたので、抜けを検査する）。
+const familyHeadIcons = [...family.matchAll(/class="family-section-head"><span class="line-icon/g)];
+assert(familyHeadIcons.length === 5, `family_print.html: each of the five section heads needs its SVG icon (got ${familyHeadIcons.length})`);
 
 // ---------- 日程詳細（家族向け）：202610_Europe_TechEx_EuroBLECHと同じ構造 ----------
 assert((family.match(/<section class="family-schedule">/g) || []).length === 1, 'family_print.html: family-schedule section missing or duplicated');
@@ -214,12 +219,18 @@ climateRows.forEach(([, place, , , src], i) => {
 assert(!/限界/.test(climateSection[0]) && !/概算比較/.test(climateSection[0]), 'family_print.html: climate section must not frame the period difference as a limitation/defect');
 assert(!/未確認/.test(climateSection[0]), 'family_print.html: all four cities\' climate values are confirmed, so climate section must not call any of them unconfirmed');
 
-// ---------- 印刷アイコン：黒塗りグリフになる🖨（U+1F5A8）と🗓（U+1F5D3）を全生成物から除く ----------
+// ---------- アイコンは全部モノクロSVG。絵文字は1文字も残さない ----------
+// 以前はここで🖨（U+1F5A8）・🗓（U+1F5D3）・🗺（U+1F5FA）の3文字だけを見ていた。
+// そのため、同じくWindowsで黒い輪郭グリフになる🍽🏛ℹ など14種49箇所と、
+// カラー絵文字35種が検査を素通りしていた（2026-08-15にユーザーが画面で発見）。
+// 3文字を数える検査ではなく、Unicodeの性質で数える。
+// 国旗（地域指示子の対）も対象。Windowsでは合成されず「DE」「JP」と出る。
 for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml], ['family_print.html', family]]) {
-  assert(!/\u{1F5A8}/u.test(text), `${name}: printer glyph U+1F5A8 must be replaced by the SVG print-icon`);
-  assert(!/\u{1F5D3}/u.test(text), `${name}: U+1F5D3 must not appear (its section was removed)`);
-  // U+1F5FA も既定表示が文字なので、同じく黒い輪郭グリフになる。
-  assert(!/\u{1F5FA}/u.test(text), `${name}: map glyph U+1F5FA must be replaced by the SVG line-icon`);
+  const pictographs = [...new Set(text.match(/\p{Extended_Pictographic}/gu) || [])];
+  assert(pictographs.length === 0,
+    `${name}: every icon must be a monochrome SVG; found emoji ${pictographs.map(c => `${c}(U+${c.codePointAt(0).toString(16).toUpperCase()})`).join(' ')}`);
+  const flags = [...new Set(text.match(/[\u{1F1E6}-\u{1F1FF}]{2}/gu) || [])];
+  assert(flags.length === 0, `${name}: flag emoji must be dropped (Windows renders them as DE/JP letters); found ${flags.join(' ')}`);
 }
 assert(sharedCss.includes('.line-icon{'), 'v3.css: line-icon style missing');
 // .line-iconは.btn（13px）・.plan-head（14px）・.ttl（16px）の文中に置く。
@@ -233,7 +244,7 @@ assert((offlineHtml.match(/class="line-icon line-icon-print"/g) || []).length >=
 assert((online.match(/class="line-icon line-icon-calendar"/g) || []).length >= 1, `${onlineName}: expected the calendar line-icon SVG replacing the retired 🗓 glyph`);
 
 // ---------- 旅程タブの長い補足を折り畳みへ ----------
-const FOLD_COUNT = 8;
+const FOLD_COUNT = 20;
 for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml]]) {
   // 机上用印刷版は全<details>を強制的にopenへ書き換えるため、class="fold"の前に
   // open属性が挿入される（<details open class="fold">）。属性順に依存しない数え方にする。
