@@ -66,11 +66,16 @@ const checks = [
   // やることの折り畳みは7件: 空港の待ち・乗り継ぎ6回と、10/25の入国手続き1回。
   // 手続き・確認・館内移動・Visit Japan Webは主表示に出さず、すべてここへ入れる。
   ['todo lists live inside folds', count(/<summary>やること<\/summary>/g) === 7 && !/text-slate-600 text-xs">[^<]*セキュリティ再検査/.test(itinerary) && !/text-slate-600 text-xs">Visit Japan Web/.test(itinerary)],
-  ['10/19 granularity aligned', itinerary.includes('<div class="row-time">09:45〜16:50</div>') && itinerary.includes('👥 美馬・金築（FRA着・ヴォルフスブルク日帰り）') && itinerary.includes('荷物受取・チェックイン') && !itinerary.includes('なぜ先にゲッティンゲンへ寄るのか')],
+  // 人物レーンの見出しは絵文字からSVGアイコンへ変わったので、語だけを見る。
+  ['10/19 granularity aligned', itinerary.includes('<div class="row-time">09:45〜16:50</div>') && itinerary.includes('美馬・金築（FRA着・ヴォルフスブルク日帰り）') && itinerary.includes('荷物受取・チェックイン') && !itinerary.includes('なぜ先にゲッティンゲンへ寄るのか')],
   ['10/19 networking time retained', /<div class="row-time">18:00〜21:00<\/div>[\s\S]{0,700}VIP Networking Drinks/.test(itinerary) && !/<div class="row-time">夕方<\/div>[\s\S]{0,700}VIP Networking Drinks/.test(itinerary)],
   ['10/19 movements use four-column rows', /class="route-four"[^>]*><div class="row-time">12:20頃[\s\S]*?<strong>徒歩<\/strong>[\s\S]*?<time>12:30頃<\/time>/.test(itinerary) && /class="route-four"[^>]*><div class="row-time">17:30頃[\s\S]*?<strong>ICE直通<\/strong>[\s\S]*?<time>18:45頃<\/time>/.test(itinerary)],
-  // 復路は文章の2案から、交通行2本＋案の見出しへ変えた。未決なので route-review のまま。
-  ['10/22 decisions and review styling present', day1022.includes('class="choice-head"') && (day1022.match(/class="choice-label"/g) || []).length === 2 && day1022.includes('早帰り案 — ホテル18:05頃着') && day1022.includes('市内滞在案 — ホテル20:05頃着') && (day1022.match(/route-review/g) || []).length === 2 && day1022.includes('タクシー（Uber）') && day1022.includes('ブレーメンでランチ')],
+  // 復路は文章の2案から、交通行2本＋案の見出しへ変えた。未決であることは
+  // 「列車候補を確認」という文字が示す。交通行に色や点線は使わない（2026-08-15）。
+  ['10/22 decisions present', day1022.includes('class="choice-head"') && (day1022.match(/class="choice-label"/g) || []).length === 2 && day1022.includes('早帰り案 — ホテル18:05頃着') && day1022.includes('市内滞在案 — ホテル20:05頃着') && (day1022.match(/列車候補を確認/g) || []).length === 2 && day1022.includes('タクシー（Uber）') && day1022.includes('ブレーメンでランチ')],
+  // 印を全廃した。3行だけ点線・2行だけオレンジという基準の無い状態には戻さない。
+  ['no marker classes on transport rows', !html.includes('route-estimate') && !html.includes('route-review') && !css.includes('.route-estimate{') && !css.includes('.route-review{')],
+  ['transport legend drops the marker rows', !html.includes('点線＝時刻は目安') && !html.includes('オレンジ＝手段や便が未定')],
   ['10/24 return-day sequence aligned', itinerary.includes('07:00〜10:00') && itinerary.includes('10:40〜12:55') && itinerary.includes('フランクフルト出発 → 香港（全員）') && !itinerary.includes('旧T2時代の案内・館内図は使えない')],
   // 到着と乗り継ぎは別の行。日跨ぎ到着なので「◯◯着」を先頭に出したうえで、
   // 乗り継ぎは他日と同じ「地点で乗り継ぎ（所要）」にそろえる。
@@ -121,6 +126,15 @@ const checks = [
   // +49 30 21094-222 は大使館のFAX番号で、緊急連絡先ではない。復活させない。
   ['embassy fax number is not presented as an emergency line', !familyPrint.includes('21094-222') && !html.includes('21094-222')],
   ['verified embassy contacts present', ['+49 30 21094-0', '0800-1822-330', '+1 818 7554 269', '+49 69 238573-0', '+31 70 346-9544', 'Tobias Asserlaan 5', 'tel:112'].every(t => familyPrint.includes(t))],
+  // 絵文字は数えずに、Unicodeの Extended_Pictographic が0件であることを見る。
+  // 特定の3文字だけ数える検査は、残り49箇所を素通りさせた実績がある。
+  // v3.jsも見る。チェックリストは実行時にinnerHTMLへ入るので、HTMLだけ直しても画面に出る。
+  ['no emoji anywhere in the generated pages', [['index.html', html], ['family_print.html', familyPrint], ['v3.js', js]]
+    .every(([, text]) => !/\p{Extended_Pictographic}/u.test(text))],
+  ['no flag emoji anywhere', [['index.html', html], ['family_print.html', familyPrint], ['v3.js', js]]
+    .every(([, text]) => !/[\u{1F1E6}-\u{1F1FF}]{2}/u.test(text))],
+  ['every icon resolves to an svg', count(/class="line-icon line-icon-[a-zA-Z]+"[^>]*><svg /g) === count(/class="line-icon line-icon-/g)
+    && countIn(familyPrint, /class="line-icon line-icon-[a-zA-Z]+"[^>]*><svg /g) === countIn(familyPrint, /class="line-icon line-icon-/g)],
   ['no nested action bodies', !html.includes('action-body"><div class="action-body')],
   ['HRS final font stack', hrsCss.includes("--font:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif")],
   // 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーには置かない。

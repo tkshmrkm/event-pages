@@ -392,13 +392,14 @@ const transformScript = `
     if (id === '1021') {
       const expo1021 = rowFor(day, 'EuroBLECH（Hannover Messe）');
       const back = ROUTES.find(route => route[0] === '1021' && route[1].includes('戻る'));
-      expo1021?.insertAdjacentHTML('afterend', '<div class="route-four route-estimate">' + routeMarkup(back) + '</div>');
+      expo1021?.insertAdjacentHTML('afterend', '<div class="route-four">' + routeMarkup(back) + '</div>');
     }
     if (id === '1022') {
-      // 交通手段はタクシー（Uber）で決まり。時刻だけが目安なので route-estimate。
+      // 交通手段はタクシー（Uber）で決まり。時刻だけが目安。目安であることは
+      // 「12:00頃」「所要は当日確認」と行の中に書いてあるので、枠線では示さない。
       // 10:45に着いてから12:45の見学までにランチを挟む。
       const before = rowFor(day, 'Mercedes-Benz Werk Bremen');
-      before?.insertAdjacentHTML('beforebegin', '<div class="action"><div class="row-time">10:45〜12:00頃</div><div class="action-body"><div class="font-semibold">🍽 ブレーメンでランチ</div><div class="text-slate-600 text-xs">12:45の見学に間に合うよう、駅周辺で済ませる</div></div></div><div class="route-four route-estimate">' + routeMarkup(['1022','','12:00頃','CEST','Bremen Hbf','タクシー（Uber）','所要は当日確認','12:45まで','CEST','Mercedes-Benz Werk Bremen']) + '</div>');
+      before?.insertAdjacentHTML('beforebegin', '<div class="action"><div class="row-time">10:45〜12:00頃</div><div class="action-body"><div class="font-semibold">🍽 ブレーメンでランチ</div><div class="text-slate-600 text-xs">12:45の見学に間に合うよう、駅周辺で済ませる</div></div></div><div class="route-four">' + routeMarkup(['1022','','12:00頃','CEST','Bremen Hbf','タクシー（Uber）','所要は当日確認','12:45まで','CEST','Mercedes-Benz Werk Bremen']) + '</div>');
     }
     if (id === '1017') {
       // 13:10〜16:10は「空港到着目安 13:10」「昼食 13:40」「サクララウンジ 13:10〜15:40」の
@@ -505,17 +506,19 @@ const transformScript = `
       const expo = rowFor(day, 'EuroBLECH Day 1');
       if (expo) expo.innerHTML = '<div class="text-slate-500">09:00頃〜17:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">美馬・金築が終日視察。会場は' + mapLink('ハノーファーメッセ') + '</div>';
       const back = ROUTES.find(route => route[0] === '1020' && route[1].includes('戻る'));
-      expo?.insertAdjacentHTML('afterend', '<div class="route-four route-estimate">' + routeMarkup(back) + '</div>');
+      expo?.insertAdjacentHTML('afterend', '<div class="route-four">' + routeMarkup(back) + '</div>');
     }
     if (id === '1021') {
       const expo = rowFor(day, 'EuroBLECH（Hannover Messe）');
       if (expo) expo.innerHTML = '<div class="text-slate-500">09:00–17:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">全員で終日視察。会場は' + mapLink('ハノーファーメッセ') + '</div>';
-      const back = Array.from(day.querySelectorAll('.route-estimate')).at(-1);
+      const back = Array.from(day.querySelectorAll('.route-four')).at(-1);
       back?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">19:00頃</div><div class="action-body"><div class="font-semibold">🍽 全員で夕食</div><div class="text-slate-600 text-xs">ゲッティンゲン旧市街</div></div></div>');
     }
     if (id === '1022') {
       // 復路は列車が2本あるので、案を文章で並べずに交通行を2本出す。
-      // どちらも未決なので route-review のまま。選んだら片方を消す。
+      // どちらも未決。選んだら片方を消す。未決であることは「列車候補を確認」と
+      // 行の中に書いてある。34行のうち19行が「頃・約」で、印を正しく付けると
+      // 半分以上に付いて区別にならないため、交通行に色や点線は使わない。
       const returnRoute = routeRowFor(day, '列車候補を確認');
       if (returnRoute) {
         const early = ['1022','','16:00頃','CEST','Bremen Hbf','列車候補を確認','約2時間の目安','18:00頃','CEST','Göttingen Hbf'];
@@ -523,9 +526,9 @@ const transformScript = `
         returnRoute.outerHTML =
           '<div class="choice-head"><strong>復路は2案</strong><span>どちらかを選んだら、もう片方の行を消す</span></div>' +
           '<div class="choice-label">早帰り案 — ホテル18:05頃着。夕方を資料整理に使う</div>' +
-          '<div class="route-four route-review">' + routeMarkup(early) + '</div>' +
+          '<div class="route-four">' + routeMarkup(early) + '</div>' +
           '<div class="choice-label">市内滞在案 — ホテル20:05頃着。ブレーメン市内を見る</div>' +
-          '<div class="route-four route-review">' + routeMarkup(late) + '</div>';
+          '<div class="route-four">' + routeMarkup(late) + '</div>';
       }
     }
     if (id === '1023') {
@@ -642,7 +645,7 @@ const transformScript = `
     // 日ヘッダーの色は予定の種類であって、決まっているかどうかではない。
     // 未定はオレンジの帯だけが示す、と凡例で明示しないと10/22のラベンダーが未定色に読まれる。
     stack.insertAdjacentHTML('afterbegin','<div class="day-toolbar no-print"><span>日付カード</span><button class="btn" id="days-tg" type="button" aria-expanded="true">すべて閉じる</button></div>');
-    stack.insertAdjacentHTML('afterbegin','<div class="day-kind-legend" aria-label="日付カードの色の意味"><strong>日付カードの色</strong><span><i class="kind-swatch swatch-move"></i>移動・帰着</span><span><i class="kind-swatch swatch-conf"></i>展示会視察</span><span><i class="kind-swatch swatch-visit"></i>工場・企業見学（予約確定）</span><span><i class="kind-swatch swatch-review"></i>要検討（この帯だけが未定）</span><span class="legend-sep"></span><strong>交通行</strong><span><i class="kind-swatch swatch-estimate"></i>点線＝時刻は目安</span><span><i class="kind-swatch swatch-review"></i>オレンジ＝手段や便が未定</span></div>');
+    stack.insertAdjacentHTML('afterbegin','<div class="day-kind-legend" aria-label="日付カードの色の意味"><strong>日付カードの色</strong><span><i class="kind-swatch swatch-move"></i>移動・帰着</span><span><i class="kind-swatch swatch-conf"></i>展示会視察</span><span><i class="kind-swatch swatch-visit"></i>工場・企業見学（予約確定）</span><span><i class="kind-swatch swatch-review"></i>要検討（この帯だけが未定）</span></div>');
   }
   // 本文はエスケープしたうえで **…** だけを強調に戻す。生HTMLは通さない。
   const familyText = value => esc(value).replace(/\\*\\*(.+?)\\*\\*/g, '<b>$1</b>');
@@ -866,28 +869,83 @@ const transformScript = `
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     car: '<path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2m12 0v2h2v-2M6 13h12"/><circle cx="8" cy="15" r=".8"/><circle cx="16" cy="15" r=".8"/>',
   };
-  const lineIconMap = { '🛋':'lounge', '🛂':'procedure', '🏨':'hotel', '🍽':'meal', '😴':'rest', '🥂':'drinks', '🏭':'factory', '🚶':'walk', '🏠':'home', '🏛':'event', '🕐':'clock', '🚗':'car' };
-  const iconNodes = [];
-  const iconWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-  while (iconWalker.nextNode()) {
-    const node = iconWalker.currentNode;
-    if (!node.parentElement?.closest('script,style,.tabs') && /^[\\s]*(?:🛋|🛂|🏨|🍽|😴|🥂|🏭|🚶|🏠|🏛|🕐|🚗)/u.test(node.nodeValue)) iconNodes.push(node);
-  }
-  iconNodes.forEach(node => {
-    const match = node.nodeValue.match(/^(\\s*)(🛋|🛂|🏨|🍽|😴|🥂|🏭|🚶|🏠|🏛|🕐|🚗)\\s*/u);
-    if (!match) return;
-    const fragment = document.createDocumentFragment();
-    if (match[1]) fragment.appendChild(document.createTextNode(match[1]));
+  // 生成物に絵文字を1文字も残さない。既定表示が文字の絵文字（🍽 🏛 ℹ など）は
+  // Windowsで黒い輪郭グリフになり、カラー絵文字はモノクロSVGと並ぶと不揃いに見える。
+  Object.assign(lineIconPaths, {
+    pin: '<circle cx="12" cy="9" r="6"/><circle cx="12" cy="9" r="2"/><path d="M8 13 12 21 16 13z"/>',
+    target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+    checkCircle: '<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 6-6"/>',
+    people: '<circle cx="8" cy="8" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 20v-1l2-6h6l1 3"/><path d="M12 20v-1l2-6h6l1 6v1"/>',
+    warning: '<path d="M12 3 21 20H3z"/><path d="M12 9v5"/><circle cx="12" cy="17" r="1"/>',
+    star: '<path d="M12 3 15 9 21 10 16 14 18 21 12 17 6 21 8 14 3 10 9 9z"/>',
+    person: '<circle cx="12" cy="8" r="4"/><path d="M6 21v-2l2-7h8l2 7v2"/>',
+    calendar: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/><path d="M8 13h2m4 0h2m-8 4h2m4 0h2"/>',
+    memo: '<rect x="4" y="3" width="13" height="18" rx="1"/><path d="M7 8h7M7 12h7"/><path d="M15 16l4-4 2 2-4 4h-2z"/>',
+    phone: '<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 19h2"/>',
+    map: '<path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4z"/><path d="M9 4v13m6-10.5V20"/>',
+    train: '<rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/>',
+    book: '<rect x="3" y="5" width="8" height="15" rx="1"/><rect x="13" y="5" width="8" height="15" rx="1"/>',
+    clipboard: '<rect x="5" y="4" width="14" height="17" rx="1"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M8 10h8M8 14h8M8 18h5"/>',
+    cart: '<circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/><path d="M2 4h3l2.5 11h11L21 7H6"/>',
+    pen: '<path d="M3 21l1-4L15 6l3 3L7 20z"/><path d="M14 7l3 3"/>',
+    ticket: '<path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z"/><path d="M14 7v2m0 3v2m0 3v0"/>',
+    globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18z"/>',
+    building: '<rect x="5" y="3" width="14" height="18"/><path d="M9 7h2m4 0h-2M9 11h2m4 0h-2M9 15h2m4 0h-2"/><path d="M10 21v-3h4v3"/>',
+    money: '<path d="M9 3h6l-1.5 3h-3z"/><path d="M13.5 6c3 1 5.5 4 5.5 8a7 7 0 0 1-14 0c0-4 2.5-7 5.5-8"/><path d="M12 10v6m-2-4.5h3a1.25 1.25 0 0 1 0 2.5h-2a1.25 1.25 0 0 0 0 2.5h3"/>',
+    folder: '<path d="M3 7a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>',
+    document: '<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h6"/>',
+    laptop: '<rect x="4" y="5" width="16" height="11" rx="1"/><path d="M2 19h20"/>',
+    search: '<circle cx="11" cy="11" r="6"/><path d="M15.5 15.5 21 21"/>',
+    card: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/><path d="M6 14h4"/>',
+    baggage: '<rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V4h6v3"/><path d="M5 12h14"/><path d="M9 20v1M15 20v1"/>',
+    plug: '<path d="M9 3v5M15 3v5"/><path d="M6 8h12v3a6 6 0 0 1-12 0z"/><path d="M12 17v4"/>',
+  });
+  const lineIconMap = {
+    '🛋':'lounge', '🛂':'procedure', '🏨':'hotel', '🍽':'meal', '😴':'rest', '🥂':'drinks',
+    '🏭':'factory', '🚶':'walk', '🏠':'home', '🏛':'event', '🕐':'clock', '🕗':'clock', '🚗':'car',
+    '📍':'pin', '🎯':'target', '✅':'checkCircle', '👥':'people', '⚠':'warning', '⭐':'star',
+    '👤':'person', '📅':'calendar', '📝':'memo', '📱':'phone', '🗺':'map', '🚆':'train', '🚄':'train',
+    '🛒':'cart', '✍':'pen', '🎫':'ticket', '🌐':'globe', '🌍':'globe', '🏢':'building',
+    '💰':'money', '📁':'folder', '📄':'document', '💻':'laptop', '🔍':'search', '💳':'card',
+    '🛄':'baggage', '🔌':'plug', '📋':'clipboard', '📘':'book',
+  };
+  const makeLineIcon = name => {
     const icon = document.createElement('span');
-    const name = lineIconMap[match[2]];
     icon.className = 'line-icon line-icon-' + name;
     icon.setAttribute('aria-hidden','true');
     icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + lineIconPaths[name] + '</svg>';
-    fragment.appendChild(icon);
-    const rest = node.nodeValue.slice(match[0].length);
-    if (rest) fragment.appendChild(document.createTextNode(' ' + rest));
+    return icon;
+  };
+  // 国旗は描かずに落とす。合成されず「DE」「JP」と2文字で出るため。
+  // 直後の空白も一緒に食べる。国名・都市名は前後の文が持っている。
+  const FLAG_RE = /[\\u{1F1E6}-\\u{1F1FF}]{2}[ \\u3000]?/gu;
+  const PICTO_RE = /(\\p{Extended_Pictographic})\\uFE0F?[ \\u3000]?/gu;
+  const unmapped = new Set();
+  const emojiNodes = [];
+  const emojiWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  while (emojiWalker.nextNode()) {
+    const node = emojiWalker.currentNode;
+    if (node.parentElement?.closest('script,style')) continue;
+    if (FLAG_RE.test(node.nodeValue) || PICTO_RE.test(node.nodeValue)) emojiNodes.push(node);
+    FLAG_RE.lastIndex = 0; PICTO_RE.lastIndex = 0;
+  }
+  emojiNodes.forEach(node => {
+    const text = node.nodeValue.replace(FLAG_RE, '');
+    const fragment = document.createDocumentFragment();
+    let last = 0;
+    for (const match of text.matchAll(PICTO_RE)) {
+      const name = lineIconMap[match[1]];
+      if (!name) { unmapped.add(match[1]); continue; }
+      if (match.index > last) fragment.appendChild(document.createTextNode(text.slice(last, match.index)));
+      fragment.appendChild(makeLineIcon(name));
+      last = match.index + match[0].length;
+    }
+    const tail = text.slice(last);
+    if (tail) fragment.appendChild(document.createTextNode(tail));
     node.replaceWith(fragment);
   });
+  // 対応表に無い絵文字を黙って通さない。Node側が読んでビルドを止める。
+  if (unmapped.size) document.documentElement.dataset.unmappedEmoji = [...unmapped].join(' ');
   const wordingWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   while (wordingWalker.nextNode()) {
     const node = wordingWalker.currentNode;
@@ -954,6 +1012,12 @@ try {
   // 変換の後半が丸ごと抜けたまま生成物になる。--dump-domは黙って通すので、ここで止める。
   if (output.includes('v3-build-transform')) {
     throw new Error('Transform script did not remove itself; it threw partway through');
+  }
+  // 対応表に無い絵文字が出たら止める。後から絵文字を足したらここで気づく。
+  const unmappedAttr = output.match(/data-unmapped-emoji="([^"]+)"/);
+  if (unmappedAttr) {
+    const list = unmappedAttr[1].split(' ').map(c => `${c} U+${c.codePointAt(0).toString(16).toUpperCase()}`).join(', ');
+    throw new Error('Unmapped emoji (add to lineIconMap and lineIconPaths): ' + list);
   }
   // ---------- 家族向け印刷版を切り出す ----------
   // 家族向けはオンライン版のタブではなくfamily_print.htmlが正本。ダンプ済みの
