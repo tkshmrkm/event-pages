@@ -206,19 +206,21 @@ assert(climateSection, 'family_print.html: climate/timezone section missing');
 // 見出しが1文字ずつ縦に折り返して気温を押し出していた（2026-08-15に実機で確認）。
 assert(!/<table/.test(climateSection[0]), 'family_print.html: climate must not be a table (at 393px the source column crushed the temperatures)');
 const climateRows = [...climateSection[0].matchAll(/<div class="climate-row"><p class="climate-place">([^<]*)<\/p>\s*<p class="climate-temp"><span><i>[^<]*<\/i><b>([^<]*)<\/b><\/span><span><i>[^<]*<\/i><b>([^<]*)<\/b><\/span><\/p>\s*<p class="climate-src">([^<]*)<\/p><\/div>/g)];
-assert(climateRows.length === 3, `family_print.html: climate must have three city rows, Nagoya+Kyoto merged (got ${climateRows.length})`);
+// 2行構成。日本側（名古屋・京都）とドイツ側（シュトゥットガルト・フランクフルト）。
+// ドイツの2都市は150kmしか離れておらず、実測でも最高21℃で同じ、最低が11℃と12℃の差だけ。
+// しかも統計期間が違う（2015–2020と1981–2010）ので、その1℃を都市差として並べられない。
+assert(climateRows.length === 2, `family_print.html: climate must have two rows, Japan and Germany (got ${climateRows.length})`);
 const climatePlaces = climateRows.map(m => m[1]).join(' | ');
 assert(/名古屋/.test(climatePlaces) && /京都/.test(climatePlaces), 'family_print.html: Nagoya and Kyoto must both be named (merged into one row)');
-assert(/シュトゥットガルト/.test(climatePlaces), 'family_print.html: Stuttgart climate row missing');
-assert(/フランクフルト/.test(climatePlaces), 'family_print.html: Frankfurt climate row missing');
-// 丸めた行（名古屋・京都）は「約」を付けて丸めたと分かる書き方にする。
-const nagoyaKyotoRow = climateRows.find(m => /名古屋/.test(m[1]));
-assert(nagoyaKyotoRow && /^約/.test(nagoyaKyotoRow[2]) && /^約/.test(nagoyaKyotoRow[3]), 'family_print.html: the merged Nagoya/Kyoto row must mark its values as rounded (約)');
-// 各行の出典・期間セルに、統計期間（西暦4桁の年を含む範囲）が入っていること。
-// 「限界」「概算比較」といった欠陥扱いの注記は書かない（ユーザーの訂正）。
-climateRows.forEach(([, place, , , src], i) => {
-  assert(/\d{4}.\d{4}/.test(climateRows[i][4]), `family_print.html: climate row "${place}" must state its statistical period`);
+assert(/シュトゥットガルト/.test(climatePlaces) && /フランクフルト/.test(climatePlaces), 'family_print.html: both German cities must be named in the merged row');
+// まとめた行は「約」を付けて丸めたと分かる書き方にする。
+climateRows.forEach(([, place, hi, lo]) => {
+  assert(/^約/.test(hi) && /^約/.test(lo), `family_print.html: the merged row "${place}" must mark its values as rounded (約)`);
 });
+// 出典・期間セルに統計期間が入っていること。ドイツ行は都市ごとに期間が違うので、
+// 「統計期間は都市により異なる」と書いて、比較できる数字に見せない。
+assert(/\d{4}.\d{4}/.test(climateRows.find(m => /名古屋/.test(m[1]))[4]), 'family_print.html: the Japan climate row must state its statistical period');
+assert(/統計期間は都市により異なる/.test(climateRows.find(m => /シュトゥットガルト/.test(m[1]))[4]), 'family_print.html: the Germany climate row must say its statistical periods differ by city');
 assert(!/限界/.test(climateSection[0]) && !/概算比較/.test(climateSection[0]), 'family_print.html: climate section must not frame the period difference as a limitation/defect');
 assert(!/未確認/.test(climateSection[0]), 'family_print.html: all four cities\' climate values are confirmed, so climate section must not call any of them unconfirmed');
 
