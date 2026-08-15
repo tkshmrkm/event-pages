@@ -775,6 +775,18 @@ const transformScript = `
       + '</div>';
     familyEmergencyBlock.replaceWith(emergency);
   }
+  // text-white は受けが無いので何もしていない。背景がクラス指定のものは背景側も
+  // 効いていないため見た目は成立しているが、背景をインラインstyleで持つ要素だけは
+  // 濃い地に黒文字で残る。宿泊カードの日付バッジ3件がそれで、ほぼ読めなかった。
+  // インライン背景を持つものだけに色を当てる。クラス指定の13件は触らない。
+  family.querySelectorAll('[class*="text-white"]').forEach(el => {
+    const style = el.getAttribute('style') || '';
+    if (!/background/i.test(style)) return;
+    // ティールの開始色 #0d9488 は白文字とのコントラストが3.7:1しかなく、
+    // 12pxの文字では足りない。同系の濃い色へ寄せて4.5:1を超えさせる。
+    if (style.includes('#0d9488')) el.setAttribute('style', style.replace('#0d9488', '#0B6E66'));
+    el.style.color = '#fff';
+  });
   // 地図リンクは場所名そのものに張る。ホテル名の下に「地図で確認」のチップを
   // 別置きしていたが、名前は素のdivでリンクにも見出しにもなっていなかった。
   // 名前をリンクにして、チップ行ごと消す。
