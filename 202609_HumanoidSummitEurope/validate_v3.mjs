@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const files = ['index.html', 'index_v3.html', 'index_v3_offline.html', 'family_print.html'];
+const files = ['index.html', 'index_v3.html', 'index_v3_offline.html', 'family_print.html', 'immigration_print.html'];
 const voidTags = new Set(['area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr']);
 
 function assert(condition, message) {
@@ -84,6 +84,18 @@ assert(sharedCss.includes('.mode-icon{') && sharedCss.includes('.mode-icon-unkno
 assert(!sharedCss.includes('.trip-flight'), 'v3.css: retired .trip-flight rule still present');
 const offlineHtml = fs.readFileSync(path.join(here, 'index_v3_offline.html'), 'utf8');
 const familyHtml = fs.readFileSync(path.join(here, 'family_print.html'), 'utf8');
+// 入国審査用の1枚。審査官はドイツ語か英語しか読まないので英語で書く。
+// 氏名とパスポート番号はどこにも保存しない。localStorageにも同期にも乗せない。
+const immiHtml = fs.readFileSync(path.join(here, 'immigration_print.html'), 'utf8');
+assert(!/<script/i.test(immiHtml), 'immigration_print.html: must stay fully static');
+assert(countIn(immiHtml, /onclick="/g) === 1 && immiHtml.includes('onclick="window.print()"'), 'immigration_print.html: only the print button may be interactive');
+assert(!/localStorage|sessionStorage|TripField|cloudEndpoint/.test(immiHtml), 'immigration_print.html: passport details must never be persisted or synced');
+assert(countIn(immiHtml, /<input/g) === 2, 'immigration_print.html: expected the name and passport fields');
+assert(!/[぀-ヿ一-鿿]/.test(immiHtml), 'immigration_print.html: must be written in English only');
+assert(!/\p{Extended_Pictographic}/u.test(immiHtml), 'immigration_print.html: no emoji');
+for (const fact of ['Liederhalle', 'Maritim Hotel Stuttgart', 'Best Western Hotel Airport Frankfurt', 'AY80', 'AY1416', 'return ticket held', 'Consulate-General of Japan in Frankfurt']) {
+  assert(immiHtml.includes(fact), `immigration_print.html: missing ${fact}`);
+}
 // 冒頭の要約は、ページ自身が未検討の札を付けている日を落とさないこと。
 // 9/11（Day 3・企業訪問）は訪問先リストも集合方法も公式未発表で、9/12・9/13 と同じく未確定。
 // ただし理由は違う（先方が出していない ／ こちらが決める）ので、書き分けたうえで並べる。
@@ -256,7 +268,9 @@ assert(/width:[\d.]+em/.test(lineIconRule) && /height:[\d.]+em/.test(lineIconRul
   'v3.css: .line-icon must size itself in em so it follows the surrounding 13–16px text (a fixed 19px box read larger than the text)');
 // ヘッダーの印刷ボタンと、家族向け印刷版へのリンクの2箇所。
 // 3箇所目だった家族タブ内の印刷ボタンは、#tab-famごと削除した（どこからも開けなかった）。
-assert((online.match(/class="line-icon line-icon-print"/g) || []).length === 2, `${onlineName}: expected the print line-icon SVG in the header button and the family-print link`);
+// ヘッダーの印刷ボタン、家族向け印刷版、入国審査用の3つ。
+assert((online.match(/class="line-icon line-icon-print"/g) || []).length === 3, `${onlineName}: expected the print line-icon SVG in the header button, the family-print link and the immigration link`);
+assert(online.includes('href="immigration_print.html"'), `${onlineName}: immigration print link missing`);
 assert(!online.includes('id="tab-fam"'), `${onlineName}: the unreachable family section must not come back (family_print.html is the family copy)`);
 
 // ---------- 予定の状態は5つだけ ----------

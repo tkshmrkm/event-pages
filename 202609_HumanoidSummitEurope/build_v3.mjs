@@ -208,6 +208,33 @@ const familyCss = String.raw`
 .family-section-body{padding:13px 14px}
 /* .where-leadはどこにいるかブロックの廃止後も、出張サマリー・気候の見出し段落として残る。 */
 .where-lead{margin:0 0 11px;color:var(--tx2);font-size:13px;line-height:1.6}
+/* 入国審査官に見せる1枚。英語で、紙に出したとき1ページに収まることを優先する。
+   氏名・パスポート番号は入力欄で、印刷すると値がそのまま紙に出る。 */
+.immi-page{background:#fff}
+.immi-page .wrap{max-width:720px;margin:0 auto;padding:18px 16px 40px}
+.immi-head{border-bottom:3px solid #0B5C60;padding-bottom:10px;margin-bottom:14px}
+.immi-head h1{margin:2px 0 4px;font-size:24px;letter-spacing:.01em}
+.immi-sub{margin:0 0 8px;color:var(--tx2);font-size:14px;font-weight:600}
+.immi-id{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin-bottom:16px}
+.immi-id label{display:grid;gap:4px}
+.immi-id span{color:var(--mu);font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.immi-id input{border:0;border-bottom:1.5px solid #6B7A82;border-radius:0;padding:5px 2px;background:transparent;color:var(--tx);font-size:17px;font-weight:600}
+.immi-id input:focus{outline:none;border-bottom-color:#0B5C60}
+.immi-note{grid-column:1/-1;margin:2px 0 0;color:var(--mu);font-size:12px;line-height:1.6}
+.immi-table{width:100%;border-collapse:collapse;font-size:13.5px}
+.immi-table th,.immi-table td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top;line-height:1.65}
+.immi-table th{width:150px;background:#EEF4F4;color:var(--tx);font-weight:700;white-space:nowrap}
+.immi-foot{margin-top:14px;color:var(--mu);font-size:12px}
+@media(max-width:560px){
+  .immi-id{grid-template-columns:1fr}
+  .immi-table th{width:auto;display:block;border-bottom:0}
+  .immi-table td{display:block}
+}
+@media print{
+  .immi-page .no-print{display:none!important}
+  .immi-id input{border-bottom:1px solid #000}
+  .immi-table{font-size:11.5pt}
+}
 /* 出張サマリーは面で分ける。白地に文字が続くだけだと、滞在地・日程・連絡不能の
    3種類が1つの塊に見える。EUROBLECHと同じ濃さ・同じ左罫にそろえる（2026-08-15）。 */
 .sum-place,.sum-facts{border-radius:8px;padding:9px 11px;line-height:1.6}
@@ -1246,6 +1273,7 @@ function buildMain({ offline = false } = {}) {
     <div class="bd">
       <a class="btn" href="#" data-goto="prep">✅ 出発前準備を開く</a>
       <a class="btn" href="family_print.html">${printIconHtml} 家族向け印刷版</a>
+      <a class="btn" href="immigration_print.html">${printIconHtml} 入国審査用（英語・氏名と旅券番号を記入して印刷）</a>
       <span class="small muted">現地で頻繁に使わない情報は主要ナビから分離しています。</span>
     </div>
   </details>
@@ -1659,11 +1687,51 @@ function buildFamily() {
 <body class="family-page" data-trip-layout="family-v1"><header class="family-head"><div class="wrap"><div class="eyebrow">HRS EUROPE 2026 · FAMILY COPY</div><h1>家族向け予定表</h1><p>2026年9月7日（月）〜9月14日（月）｜ドイツ出張</p></div></header><main class="wrap">${newSection}</main></body></html>`, 'family_print.html');
 }
 
+// ---------- 入国審査官に見せる1枚 ----------
+// 審査官はドイツ語か英語しか読まないので、このページだけ英語で書く。
+// 氏名とパスポート番号は入力欄にして、どこにも保存しない。localStorageにも
+// Cloudflare同期にも乗せない。閉じれば消える。共用端末で開いても残らないため。
+// 事実はすべてページ内の他の生成物と同じ元データから取っている。
+function buildImmigration() {
+  const rows = [
+    ['Purpose of stay', 'Attending <strong>HRS Europe 2026</strong>, an international conference on humanoid robotics. Business trip, 2 travellers from Japan. No paid work in Germany.'],
+    ['Conference', 'HRS Europe 2026<br>Venue: <strong>Liederhalle</strong>, Berliner Platz 1-3, 70174 Stuttgart<br>Sessions 9–10 Sep 2026; guided company visits near Stuttgart on 11 Sep 2026'],
+    ['Entry / Exit', 'Arrive <strong>8 Sep 2026, 09:20</strong> at Frankfurt (FRA), Finnair AY80 / AY1411 via Helsinki<br>Depart <strong>13 Sep 2026, 19:20</strong> from Frankfurt (FRA), Finnair AY1416 / AY79 via Helsinki<br>Arrive Nagoya (NGO) 14 Sep 2026, 19:35 — <strong>return ticket held</strong>'],
+    ['Length of stay', '<strong>6 nights</strong> in Germany (8–13 Sep 2026). Within the 90-day visa-free limit for Japanese nationals.'],
+    ['Accommodation', '8–12 Sep: <strong>Maritim Hotel Stuttgart</strong><br>Seidenstraße 34, 70174 Stuttgart — Tel +49 711 9420<br><br>12–13 Sep: <strong>Best Western Hotel Airport Frankfurt</strong><br>De-Saint-Exupéry-Straße 6, 60549 Frankfurt am Main'],
+    ['In case of enquiry', 'Consulate-General of Japan in Frankfurt<br>MesseTurm 34, Friedrich-Ebert-Anlage 49, 60327 Frankfurt am Main<br>Tel +49 69 238573-0'],
+  ].map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('\n      ');
+  return `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>HRS Europe 2026 — Traveller Information</title><link rel="stylesheet" href="v3.css"></head>
+<body class="immi-page" data-trip-layout="immigration-v1"><main class="wrap">
+  <header class="immi-head">
+    <div class="eyebrow">FOR BORDER CONTROL · GERMANY</div>
+    <h1>Traveller Information</h1>
+    <p class="immi-sub">HRS Europe 2026 · Stuttgart, Germany · 8–13 September 2026</p>
+    <div class="no-print"><button class="btn" type="button" onclick="window.print()">Print this page</button></div>
+  </header>
+  <section class="immi-id">
+    <label><span>Full name (as in passport)</span><input type="text" autocomplete="off" spellcheck="false"></label>
+    <label><span>Passport number</span><input type="text" autocomplete="off" spellcheck="false"></label>
+    <p class="immi-note no-print">Type these just before printing. Nothing on this page is saved — close the page and the fields are empty again.</p>
+  </section>
+  <table class="immi-table">
+    <tbody>
+      ${rows}
+    </tbody>
+  </table>
+  <p class="immi-foot">Prepared by the traveller. Details match the itinerary and the bookings held.</p>
+</main></body></html>
+`;
+}
+
 const outputs = [
   ['v3.css', compiledSharedCss],
   ['index.html', buildMain()],
   ['index_v3_offline.html', buildMain({ offline:true })],
-  ['family_print.html', buildFamily()]
+  ['family_print.html', buildFamily()],
+  ['immigration_print.html', buildImmigration()]
 ];
 
 for (const [name, contents] of outputs) {
