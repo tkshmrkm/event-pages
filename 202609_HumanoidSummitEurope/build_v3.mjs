@@ -1011,6 +1011,14 @@ function buildMain({ offline = false } = {}) {
     html = mustReplace(html, /<!--[\s\S]*?-->/, '<!-- Self-contained static desk-print copy; no note storage or runtime scripts. -->', 'desk-print document note');
   }
   html = mustReplace(html, '</style>', `${outdoorCss}\n${offline ? deskPrintCss : ''}\n</style>`, 'style end');
+  // 冒頭の要約が「未確定は9/12・9/13だけ」と断定していたが、ページ自身が
+  // 9/11（Day 3・企業訪問）に未検討の札を2枚付けている。訪問先リストも集合方法も
+  // 公式未発表で、こちらが決められる段階にすらない。9/12・9/13（こちらが決める）とは
+  // 未確定の理由が違うので、書き分けたうえで9/11を落とさない。
+  html = mustReplace(html,
+    '未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方だけ。便とホテルは確定済み。',
+    '未確定は <a href="#day-0911">9/11</a> の企業訪問（訪問先・集合とも公式未発表）と、<a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。便とホテルは確定済み。',
+    'undecided summary');
 
   const header = String.raw`<header class="hdr">
   <div class="wrap">

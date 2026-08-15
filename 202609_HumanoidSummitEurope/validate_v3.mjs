@@ -84,6 +84,16 @@ assert(sharedCss.includes('.mode-icon{') && sharedCss.includes('.mode-icon-unkno
 assert(!sharedCss.includes('.trip-flight'), 'v3.css: retired .trip-flight rule still present');
 const offlineHtml = fs.readFileSync(path.join(here, 'index_v3_offline.html'), 'utf8');
 const familyHtml = fs.readFileSync(path.join(here, 'family_print.html'), 'utf8');
+// 冒頭の要約は、ページ自身が未検討の札を付けている日を落とさないこと。
+// 9/11（Day 3・企業訪問）は訪問先リストも集合方法も公式未発表で、9/12・9/13 と同じく未確定。
+// ただし理由は違う（先方が出していない ／ こちらが決める）ので、書き分けたうえで並べる。
+for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml]]) {
+  const flat = text.replace(/<[^>]*>/g, '');
+  assert(/未確定は[^。]*9\/11[^。]*9\/12[^。]*9\/13/.test(flat),
+    `${name}: the lead summary must list 9/11 alongside 9/12 and 9/13 as undecided`);
+  assert(!/9\/13\s*の過ごし方だけ/.test(flat),
+    `${name}: the lead summary must not claim only 9/12 and 9/13 are undecided`);
+}
 for (const [name, text, flights] of [[onlineName, online, ONLINE_FLIGHT_ICONS], ['index_v3_offline.html', offlineHtml, OFFLINE_FLIGHT_ICONS]]) {
   assert(countIn(text, /class="flight-mark"/g) === flights, `${name}: expected ${flights} flight-mark icons`);
   assert(countIn(text, /class="mode-icon mode-icon-train"/g) === 37, `${name}: expected 37 train icons`);
