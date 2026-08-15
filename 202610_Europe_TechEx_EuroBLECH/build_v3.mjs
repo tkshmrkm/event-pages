@@ -740,27 +740,21 @@ const transformScript = `
   const familyStack = family.querySelector('.legacy-stack');
   const familyBlockByText = text => [...familyStack.children].find(el => el.textContent.includes(text));
   const familySummaryBlock = familyBlockByText('ヨーロッパ出張');
+  // サマリーだけ濃さを別に持つ。ページ全体の bg-*-50 は白に近い正規化がかかっていて、
+  // 3ブロックの相対輝度が 0.904 / 0.921 / 0.936 と横並びになり、色相があっても
+  // 面として分かれて見えなかった。国ごとの区別はここが最初に伝える情報なので、
+  // ここだけ濃度を上げる。会場タブや宿泊カードの正規化には触らない。
+  familySummaryBlock?.classList.add('family-summary');
   const familyHotelBlock = familyBlockByText('宿泊先情報');
   const familyEmergencyBlock = familyBlockByText('緊急連絡先');
   const familyTimezoneBlock = family.querySelector('.timezone-early');
   const familyScheduleBlock = family.querySelector('.family-schedule');
   const familyFlightsBlock = family.querySelector('.family-flights');
-  // フライトは独立ブロックのまま残す。2026-08-15に一度サマリーの4行へ畳んだが、
-  // 3名で出発日が割れ香港乗継もある8便を文にすると、かえって読みにくくなった。
-  // 区間ごとに行が分かれている表のほうが、いつ発っていつ着くかを追える。
-  // 落とすのは予約クラスだけ（家族には要らない）。
-  if (familyFlightsBlock) {
-    familyFlightsBlock.querySelectorAll('.flight-route small').forEach(spec => {
-      spec.innerHTML = spec.innerHTML
-        .replace(/(?:村上：)?予約クラス[^<]*<br>\s*/g, '')
-        .replace(/美馬・金築：未確認<br>\s*/g, '');
-    });
-    const specGuide = familyFlightsBlock.querySelector('.flight-spec-guide');
-    if (specGuide) specGuide.innerHTML = '<strong>便名の下：</strong>キャビンクラス ／ 所要時間';
-    // 復路の脚注も予約クラスに触れているので、家族向けから外す。
-    const returnFooter = familyFlightsBlock.querySelector('.flight-return > footer');
-    if (returnFooter) returnFooter.textContent = '総移動 約17時間30分・全員同便';
-  }
+  // フライトブロックは載せない。7区間の出発・到着時刻はすべて日程詳細にあり、
+  // 便名も6/7が日程詳細にある。連絡が取れない時間帯も日程詳細の「機内」が持っている。
+  // 残るのはキャビンクラスと所要時間だけで、家族には使い道がない。
+  // ページの20%（1,644px / 8,354px）を重複が占めていた。
+  familyFlightsBlock?.remove();
   // 緊急連絡先は各公館の公式ページで確認した内容へ置き換える（2026-08-15確認）。
   // これまで「緊急時」として載せていた +49 30 21094-222 は大使館のFAX番号だった。
   // 時間外の緊急連絡は外部委託業者への転送番号が別にある。
@@ -803,9 +797,8 @@ const transformScript = `
       if (row && !row.querySelector('a')) row.remove();
     });
   }
-  // 並び順。フライトは時差表のすぐ後ろに置く。ブロック自身が
-  // 「JST / HKT / CEST は上の時差表を参照」と書いているため。
-  [familySummaryBlock, familyTimezoneBlock, familyFlightsBlock, familyScheduleBlock, familyHotelBlock, family.querySelector('.family-emergency')]
+  // 並び順。出張サマリー / 時差・気候 / 日程詳細 / 宿泊先情報 / 緊急連絡先。
+  [familySummaryBlock, familyTimezoneBlock, familyScheduleBlock, familyHotelBlock, family.querySelector('.family-emergency')]
     .forEach(block => { if (block) familyStack.appendChild(block); });
   // 5列の表は393pxで幅が足りず、カード側の overflow:hidden に当たって右端が切れる。
   // 表だけを横スクロールできる箱へ入れ、切らずに読めるようにする。

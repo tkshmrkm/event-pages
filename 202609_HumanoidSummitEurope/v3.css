@@ -615,6 +615,18 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 .family-section-body{padding:13px 14px}
 /* .where-leadはどこにいるかブロックの廃止後も、出張サマリー・気候の見出し段落として残る。 */
 .where-lead{margin:0 0 11px;color:var(--tx2);font-size:13px;line-height:1.6}
+/* 出張サマリーは面で分ける。白地に文字が続くだけだと、滞在地・日程・連絡不能の
+   3種類が1つの塊に見える。EUROBLECHと同じ濃さ・同じ左罫にそろえる（2026-08-15）。 */
+.sum-place,.sum-facts{border-radius:8px;padding:9px 11px;line-height:1.6}
+.sum-place{border-left:4px solid;font-size:13px}
+.sum-place strong{display:block;color:var(--tx);font-size:15px;font-weight:700}
+.sum-place span{display:block;margin-top:3px;color:var(--tx2)}
+.sum-a{background:#DBE8F6;border-left-color:#6C9BD2}
+.sum-b{background:#D9EDE0;border-left-color:#63A87C}
+.sum-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 8px;background:#E6EAEE;border-left:4px solid #94A3B0;text-align:center;font-size:12px}
+.sum-facts b{display:block;color:var(--tx);font-size:13px;font-weight:700}
+.sum-facts span{display:block;color:var(--tx2)}
+@media(max-width:420px){.sum-facts{grid-template-columns:1fr;text-align:left}}
 /* 日程詳細（家族向け）：202610_Europe_TechEx_EuroBLECHのv3.cssと同一定義
    （.schedule-body／.schedule-legend／.schedule-tag kind-*／.family-day-row／.agenda-line）。
    kind-*はHRSが実際に使う7種類だけを移植する（meal/techex/euro/visit/homeは未使用のため省く）。

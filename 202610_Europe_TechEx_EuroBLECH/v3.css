@@ -149,6 +149,12 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .legacy-tab [class*="bg-blue-50"]{background:#EEF5FB!important}
 .legacy-tab [class*="bg-teal-50"],.legacy-tab [class*="bg-green-50"]{background:#F0F8F2!important}
 .legacy-tab [class*="bg-amber-50"],.legacy-tab [class*="bg-yellow-50"]{background:#FFF8E5!important}
+/* 家族向けサマリーだけ濃度を上げる。上の正規化は白に近く、3ブロックの相対輝度が
+   0.904 / 0.921 / 0.936 と横並びになって面として分かれなかった。
+   国ごとの区別はこのページが最初に伝える情報なので、ここだけ濃くして左罫も足す。 */
+.family-summary [class*="bg-blue-50"]{background:#DBE8F6!important;border-left:4px solid #6C9BD2}
+.family-summary [class*="bg-teal-50"],.family-summary [class*="bg-green-50"]{background:#D9EDE0!important;border-left:4px solid #63A87C}
+.family-summary [class*="bg-slate-50"]{background:#E6EAEE!important;border-left:4px solid #94A3B0}
 .legacy-tab [class*="border"]{border-color:var(--line)!important}
 .legacy-tab .rounded,.legacy-tab .rounded-lg{border-radius:8px}
 .legacy-tab .rounded-xl{border-radius:12px}

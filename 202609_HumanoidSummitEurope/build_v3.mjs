@@ -208,6 +208,18 @@ const familyCss = String.raw`
 .family-section-body{padding:13px 14px}
 /* .where-leadはどこにいるかブロックの廃止後も、出張サマリー・気候の見出し段落として残る。 */
 .where-lead{margin:0 0 11px;color:var(--tx2);font-size:13px;line-height:1.6}
+/* 出張サマリーは面で分ける。白地に文字が続くだけだと、滞在地・日程・連絡不能の
+   3種類が1つの塊に見える。EUROBLECHと同じ濃さ・同じ左罫にそろえる（2026-08-15）。 */
+.sum-place,.sum-facts{border-radius:8px;padding:9px 11px;line-height:1.6}
+.sum-place{border-left:4px solid;font-size:13px}
+.sum-place strong{display:block;color:var(--tx);font-size:15px;font-weight:700}
+.sum-place span{display:block;margin-top:3px;color:var(--tx2)}
+.sum-a{background:#DBE8F6;border-left-color:#6C9BD2}
+.sum-b{background:#D9EDE0;border-left-color:#63A87C}
+.sum-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 8px;background:#E6EAEE;border-left:4px solid #94A3B0;text-align:center;font-size:12px}
+.sum-facts b{display:block;color:var(--tx);font-size:13px;font-weight:700}
+.sum-facts span{display:block;color:var(--tx2)}
+@media(max-width:420px){.sum-facts{grid-template-columns:1fr;text-align:left}}
 /* 日程詳細（家族向け）：202610_Europe_TechEx_EuroBLECHのv3.cssと同一定義
    （.schedule-body／.schedule-legend／.schedule-tag kind-*／.family-day-row／.agenda-line）。
    kind-*はHRSが実際に使う7種類だけを移植する（meal/techex/euro/visit/homeは未使用のため省く）。
@@ -1397,7 +1409,7 @@ const CLIMATE_ROWS = [
   // 実際の値も最高21℃で同じ、最低が11℃と12℃で1℃違うだけだった。
   // しかも統計期間が違う（2015–2020と1981–2010）ので、その1℃差は都市の違いなのか
   // 期間の違いなのか分からない。並べると比較できる数字に見えてしまう。
-  ['ドイツ（シュトゥットガルト・フランクフルト） 9月', '約21℃', '約11〜12℃', '独語版Wikipediaの気候表（統計期間は都市により異なる。出典表記は Deutscher Wetterdienst／wetterdienst.de／wetterkontor.de）'],
+  ['ドイツ（シュトゥットガルト・フランクフルト） 9月', '約21℃', '約11〜12℃', '独語版Wikipediaの気候表（統計期間は都市により異なる）'],
 ];
 // 季節感の換算（本文で使うだけで、表の行にはしない）。10月・11月も名古屋・京都は
 // ほぼ同じ値なので丸めてまとめる。名古屋23.3/14.8・京都23.4/14.4 → 約23℃/約14〜15℃、
@@ -1561,7 +1573,14 @@ function buildFamily() {
   // 連絡が取れない時間帯は、ページ自身の時差（7時間）から出しただけの
   // 機内区間の時刻で、新しい事実ではない。
   const familySummarySection = String.raw`<section class="family-section family-summary"><div class="family-section-head">🧳 出張サマリー</div><div class="family-section-body" style="display:grid;gap:8px">
-    <p class="where-lead">HRS Europe 2026（ロボットの国際会議）｜2026年9月7日（月）〜9月14日（月）｜ドイツ シュトゥットガルト→フランクフルト｜2名｜Finnair NGO⇔FRA</p>
+    <p class="where-lead">HRS Europe 2026（ロボットの国際会議）｜2名｜Finnair NGO⇔FRA</p>
+    <div class="sum-place sum-a"><strong>シュトゥットガルト</strong><span>9/8（火）〜9/12（土）</span><span>HRS Europe 2026。会場はホテルの隣（徒歩約3分）</span></div>
+    <div class="sum-place sum-b"><strong>フランクフルト</strong><span>9/12（土）〜9/13（日）</span><span>帰国前泊。空港近郊</span></div>
+    <div class="sum-facts">
+      <div><b>出発</b><span>9/7（月）</span><span>セントレア発</span></div>
+      <div><b>期間</b><span>8日間</span><span>2名</span></div>
+      <div><b>帰着</b><span>9/14（月）</span><span>セントレア 19:35</span></div>
+    </div>
     <div class="small"><strong>行きの便</strong>：9/7（月）22:50 セントレア発（日本時刻） → 9/8（火）9:20 フランクフルト着（現地時刻）</div>
     <div class="small"><strong>帰りの便</strong>：9/13（日）19:20 フランクフルト発（現地時刻） → ヘルシンキ乗継 → 9/14（月）19:35 セントレア着（日本時刻・Finnair）</div>
     <div class="small" style="font-weight:700">連絡が取れない時間帯（日本時間）：往路の機内 ${FAMILY_BLACKOUT_OUTBOUND}／復路の機内 ${FAMILY_BLACKOUT_RETURN}</div>
@@ -1585,8 +1604,7 @@ function buildFamily() {
       <div class="climate-list">
         ${climateRowsHtml}
       </div>
-      <div class="small muted" style="margin-top:6px">9月同士で比べると、ドイツは名古屋・京都より日中で約8℃低く、朝晩で約9〜10℃低い。季節感でいうと、名古屋・京都の10月下旬〜11月上旬くらい。日中は10月寄り、朝晩は11月寄りで、昼と朝晩の体感がずれる。<br>
-        出典と統計期間は、その行の下に併記</div>
+      <div class="small muted" style="margin-top:6px">季節感は名古屋・京都の10月下旬〜11月上旬。日中は10月寄り、朝晩は11月寄り</div>
     </div>
   </div></section>`;
 
