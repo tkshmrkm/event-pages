@@ -28,11 +28,11 @@
 - HRS v3の生成物を直接編集しない。
   `202609_HumanoidSummitEurope/build_v3.mjs` を変更して再生成する。
 - HRS v3の生成物は `index.html`、`index_v3_offline.html`、
-  `family_print.html`、`v3.css`。
+  `family_print.html`、`immigration_print.html`、`v3.css`。
 - 旧版の `index_v1.html` と元資料の `index_v2.html` は、移行元として保存する。
 - `index_v3.html` は、以前の共有URLを `index.html` へ転送する互換ページ。
 - EUROBLECH（`202610_Europe_TechEx_EuroBLECH`）も2026-08-14に同じ並びへそろえた。
-  生成物は `index.html` と `family_print.html` の2件、`index_v1.html` と
+  生成物は `index.html`、`family_print.html`、`immigration_print.html` の3件、`index_v1.html` と
   `index_v2.html` が入力元、`index_v3.html` が転送ページ。
   詳細は `202610_Europe_TechEx_EuroBLECH/CLAUDE_HANDOFF.md` を読む。
 - EBのオンライン版の主要タブは `旅程 / 準備 / 会場 / 記録` の4つ。
@@ -41,6 +41,18 @@
   宿泊先情報 / 緊急連絡先）へそろえた。
 - 共通機能は `shared/trip-field` に置き、HRS固有の外観はHRS側に残す。
 - 机上用印刷版は静的で、メモ欄、クラウド同期、実行スクリプトを含めない。
+- **入国審査用の1枚（`immigration_print.html`）は英語で書く。**
+  審査官は日本語を読まない。ページ全体を英語にし、日本語を1文字も混ぜない。
+  **氏名とパスポート番号は入力欄にして、どこにも保存しない。**
+  `localStorage` にもCloudflare同期にも乗せない。閉じれば消える。
+  共用端末や紛失時に旅券番号が残らないほうがよい。印刷すると入力値は紙に出る。
+  載せるのは審査で聞かれること。滞在目的（現地で就労しないことを明記）、
+  イベント名と会場、入出国の便と日時、滞在日数（90日枠内であること）、
+  宿泊先の住所、日本の在外公館。**帰りの航空券を持っていることを必ず書く。**
+  入国地点が人によって割れる場合は、全員分を名前付きで載せる
+  （EBは村上がアムステルダム、美馬・金築がフランクフルト）。
+  複数国に入る場合は、その国ぶんの在外公館を載せる。
+  様式は `.immi-*` としてHRSの `v3.css` にあり、EBはそれを読んで使う。
 - 交通手段のアイコンはEUROBLECH方式を標準とする。カラー絵文字と
   モノクロ文字の `✈︎` は、いずれも使わない。
   フライトは共通の `.flight-mark`（SVGマスク）、それ以外は

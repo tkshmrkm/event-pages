@@ -39,11 +39,13 @@ v3をフォルダの公開入口にした。HRS（`202609_HumanoidSummitEurope`�
 | ファイル | 役割 |
 | --- | --- |
 | `index.html` | **v3の生成物。公開入口。** 直接編集しない |
+| `family_print.html` | 家族向け印刷版の生成物 |
+| `immigration_print.html` | 入国審査用の生成物。英語・静的・旅券番号を保存しない |
 | `index_v1.html` | 旧版。`build_v3.mjs` と `build_v2.mjs` の入力元 |
 | `index_v2.html` | 家族タブの内容・情報構造の基準。`build_v2.mjs` の生成物 |
 | `index_v3.html` | 以前の共有URLを `./` へ転送する互換ページ |
-| `build_v3.mjs` | `index_v1.html` ＋ `index_v2.html` から `index.html` を生成 |
-| `validate_v3.mjs` | `index.html` を検査 |
+| `build_v3.mjs` | `index_v1.html` ＋ `index_v2.html` から生成物3件を作る |
+| `validate_v3.mjs` | 生成物3件を検査 |
 
 以前は `index.html` が旧版、`index_v3.html` が生成物だった。**入れ替わっているので、
 古い手順書やメモの `index_v3.html` を生成物と読まないこと。**
@@ -476,6 +478,24 @@ EBが準備タブへ集約しているもの（ラウンジの利用資格など
    セクションを切り出すとき外枠ごと落としていた。クラス名 `bg-blue-50` からは
    祖先に依存していることが読めない。
 
+### 入国審査用の1枚（2026-08-15に追加）
+
+生成物 `immigration_print.html`。英語・静的・保存機構なし。
+共通ルールは `../CLAUDE.md` にある。様式 `.immi-*` はHRSの `v3.css` が持つので
+EB側に新規CSSは無い。ヘッダーの「入国」リンクから開く。
+
+**EB固有の事情はシェンゲンへの入国地点が人によって割れること。**
+
+| | 入国 | 便 | 滞在 |
+|---|---|---|---|
+| MURAKAMI | 10/18 06:55 アムステルダム（AMS） | CX539 / CX271 | 6泊 |
+| MIMA and KANECHIKU | 10/19 07:15 フランクフルト（FRA） | CX539 / CX289 | 5泊 |
+
+出国は3名とも 10/24 13:40 フランクフルト（CX288 / CX536）。
+**どちらの審査官が見ても自分の担当分が読めるよう、両方を名前付きで載せる。**
+オランダとドイツの両方に入るので、在外公館も両国分（在オランダ日本国大使館・
+在フランクフルト日本国総領事館）を載せる。
+
 ### 既存の未決
 
 **10/22 復路の二択 — 当日まで決まらない可能性がある。**
@@ -495,7 +515,7 @@ node .\202610_Europe_TechEx_EuroBLECH\validate_v3.mjs
 git diff --check
 ```
 
-ビルドは `index.html` と `family_print.html` の2件を書き出す。検証は73件。
+ビルドは `index.html`、`family_print.html`、`immigration_print.html` の3件を書き出す。検証は89件。
 
 変換スクリプトが途中で例外を出しても `--dump-dom` は黙って通す。変換の後半が
 丸ごと抜けた生成物ができ、`<script id="v3-build-transform">` の本文がページに

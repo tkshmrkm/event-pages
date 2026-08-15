@@ -32,6 +32,7 @@ HRSが未完のうちにEUROBLECH側の文書やコードを組み替えない�
 | `index.html` | **v3の生成物。フォルダの公開入口。** 直接編集しない |
 | `index_v3_offline.html` | 机上用印刷版の生成物。スクリプト0件を保つ |
 | `family_print.html` | 家族向け印刷版の生成物 |
+| `immigration_print.html` | 入国審査用の生成物。英語・静的・旅券番号を保存しない |
 | `v3.css` | 生成物。`shared/trip-field/core.css` を連結して作る |
 | `index_v1.html` | 旧版の退避 |
 | `index_v2.html` | **生成の入力元。** 旅程・家族データ（`FAM`）の出どころ |
@@ -52,6 +53,30 @@ HRSが未完のうちにEUROBLECH側の文書やコードを組み替えない�
 ## HRS固有の判断と、その理由
 
 理由まで残す。理由が無いと、次の担当者が「揃っていない」と見て戻してしまう。
+
+### 入国審査用の1枚（2026-08-15に追加）
+
+生成物 `immigration_print.html`。審査官に見せる想定なので**英語**で書く。
+日本語を1文字も混ぜない。
+
+**氏名とパスポート番号は入力欄で、どこにも保存しない。**
+`localStorage` にもCloudflare同期にも乗せない。閉じれば消える。
+印刷すると入力値はそのまま紙に出る。ボタンは印刷時に消える。
+
+載せた6項目は、審査で聞かれることに対応させたもの。
+
+- Purpose of stay — HRS Europe 2026 出席。**ドイツで就労しない**ことを明記
+- Conference — Liederhalle（Berliner Platz 1-3, 70174 Stuttgart）、9/9-10、9/11は企業訪問
+- Entry / Exit — 9/8 09:20 FRA着（AY80/AY1411）、9/13 19:20 FRA発（AY1416/AY79）、
+  **return ticket held**
+- Length of stay — 6泊。**90日の査証免除枠内**であることを明記
+- Accommodation — Maritim Hotel Stuttgart（Seidenstraße 34・Tel +49 711 9420）／
+  Best Western Hotel Airport Frankfurt（De-Saint-Exupéry-Straße 6）
+- In case of enquiry — 在フランクフルト日本国総領事館（2026-08-15に公式サイトで確認）
+
+様式は `v3.css` の `.immi-*`。EBもこれを読んで使うので、HRS側に置いてある。
+検証で、静的であること・保存機構を持たないこと・英語のみであること・
+入力欄が2つあること・主要な事実が載っていることを見る。
 
 ### 主要タブは3つ（旅程 / 会場 / 記録）
 

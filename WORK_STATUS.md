@@ -188,6 +188,22 @@ HRS側は2026-08-15で一区切りついた。**EUROBLECHへ戻す作業も同�
   （Day 3・企業訪問）に未検討の札を2枚付けていた。訪問先リストも集合方法も公式未発表。
   9/11 は「未発表」、9/12・9/13 は「要検討」で理由が違うので書き分けた。
 
+### 入国審査用の1枚を両イベントに追加（2026-08-15）
+
+生成物 `immigration_print.html` をHRSとEBの両方に足した。
+**英語・静的・氏名とパスポート番号はどこにも保存しない。**
+共通ルールは `CLAUDE.md` に書いた。様式 `.immi-*` はHRSの `v3.css` にあり、
+EBはそれを読む。次のSIGGRAPH Asia・LOGIMATでも同じ形で作れる。
+
+生成物の数が変わった。HRSは5件（`index.html` / `index_v3_offline.html` /
+`family_print.html` / `immigration_print.html` / `v3.css`）、
+EBは3件（`index.html` / `family_print.html` / `immigration_print.html`）。
+
+EBは入国地点が人によって割れる（村上=アムステルダム、美馬・金築=フランクフルト）ため、
+両方を名前付きで載せた。イベント固有の事情は各引き継ぎにある。
+
+検証はEB 89件、HRSはacceptance checks。
+
 ### Tailwind風マークアップ — 保留
 
 採用も全廃も決めていない。実測（EB `index.html`、絵文字全廃後）:
