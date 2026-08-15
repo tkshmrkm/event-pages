@@ -82,6 +82,13 @@ keys may vary, but should use readable prefixes such as `session:`,
 
 ## Starting a new trip
 
+Two events are already scheduled on this base: SIGGRAPH Asia in December 2026
+and LOGIMAT in March 2027. Treat every fix as a candidate for this folder, not
+for the event you happen to be editing. If a change would otherwise be copied
+from one event to the next, it belongs here first — the icon set, the plan-state
+chip, and the em-based icon sizing all started as one event's local fix and cost
+a second pass to pull back out.
+
 1. Copy `template.html` into the event folder.
 2. Copy `theme-template.css` and set the event palette.
 3. Set a unique `data-trip-key`; never reuse another trip's namespace.
@@ -122,3 +129,13 @@ is open.
 namespace and includes `core.css` in the generated stylesheet. Its HRS-specific
 appearance remains in the HRS builder so adoption does not change the approved
 design.
+
+`202610_Europe_TechEx_EuroBLECH` loads the HRS stylesheet and therefore already
+receives everything in `core.css`, including the plan-state chip and the icon
+set. What it still carries locally — a fixed 19 px `.line-icon`, emoji, and
+Tailwind-shaped markup — is listed in that event's `CLAUDE_HANDOFF.md`.
+
+Before adding a rule to an event builder, check whether it is event-specific
+appearance or a shared contract. Colors, itinerary content, and traveler lanes
+are event-specific. Icon shape and size, state vocabulary, punctuation, fold
+behavior, and the record-and-export contract are shared.
