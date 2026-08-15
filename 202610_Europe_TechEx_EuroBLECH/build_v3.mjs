@@ -781,6 +781,28 @@ const transformScript = `
       + '</div>';
     familyEmergencyBlock.replaceWith(emergency);
   }
+  // 地図リンクは場所名そのものに張る。ホテル名の下に「地図で確認」のチップを
+  // 別置きしていたが、名前は素のdivでリンクにも見出しにもなっていなかった。
+  // 名前をリンクにして、チップ行ごと消す。
+  if (familyHotelBlock) {
+    familyHotelBlock.querySelectorAll('a[href*="maps."]').forEach(link => {
+      if (!/地図/.test(link.textContent)) return;
+      const card = link.closest('div.border');
+      const name = card?.querySelector('.font-bold');
+      if (!name) return;
+      const place = document.createElement('a');
+      place.className = 'place';
+      place.href = link.getAttribute('href');
+      place.target = '_blank';
+      place.rel = 'noopener';
+      place.textContent = name.textContent.trim();
+      name.textContent = '';
+      name.appendChild(place);
+      const row = link.parentElement;
+      link.remove();
+      if (row && !row.querySelector('a')) row.remove();
+    });
+  }
   // HRSの並び順。日程詳細を宿泊先・緊急連絡先より前に置く。
   [familySummaryBlock, familyTimezoneBlock, familyScheduleBlock, familyHotelBlock, family.querySelector('.family-emergency')]
     .forEach(block => { if (block) familyStack.appendChild(block); });

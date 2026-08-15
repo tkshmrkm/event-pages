@@ -107,6 +107,9 @@ const checks = [
   ['family print follows the HRS five-section order', ['ヨーロッパ出張', '現地時刻の見方', '日程詳細', '宿泊先情報', '緊急連絡先'].every(t => familyPrint.includes(t))
     && familyPrint.indexOf('日程詳細') < familyPrint.indexOf('宿泊先情報') && familyPrint.indexOf('宿泊先情報') < familyPrint.indexOf('緊急連絡先')],
   ['family print drops the where-overview', !familyPrint.includes('family-where') && !familyPrint.includes('どこにいるか')],
+  // 地図リンクは場所名そのものに張る。「地図」「地図で確認」の別リンクは作らない。
+  ['map links live on the place name', !familyPrint.includes('地図で確認') && !/>地図<\/a>/.test(familyPrint) && !html.includes('地図で確認')
+    && countIn(familyPrint, /<div class="font-bold[^"]*"><a class="place"/g) === 3],
   // フライト表はサマリーの行き帰りへ畳んだ。便名・キャビン・所要・予約クラスは載せない。
   ['family flights folded into the summary', !familyPrint.includes('class="family-flights"') && countIn(familyPrint, /class="family-flight-line"/g) === 4 && !familyPrint.includes('予約クラス')],
   ['family schedule distinguishes flight and ground movement', ['kind-flight', 'kind-move', 'kind-transfer', 'kind-procedure'].every(k => familyPrint.includes(k))],
