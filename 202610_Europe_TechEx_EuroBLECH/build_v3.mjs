@@ -812,6 +812,22 @@ const transformScript = `
       link.remove();
       if (row && !row.querySelector('a')) row.remove();
     });
+    // 日付バッジは、本文に日付が無いカードにだけ残す。
+    // Göttingenは本文が「美馬・金築 10/19〜（4泊）・村上 10/20〜（3泊）」と人別に
+    // 分かれているのに、バッジは1本の期間に潰していて、村上が1日遅れることが
+    // 消えていた。重複しているうえに本文より情報が少ない。
+    // 区切り文字は入力元がEN DASH（–）で、〜への正規化はこの後に走る。
+    // 判定は区切りに依存させず、日付が2つ並ぶことだけを見る。
+    const DATE = /\\d{1,2}\\/\\d{1,2}/g;
+    familyHotelBlock.querySelectorAll('div.border').forEach(card => {
+      const badge = card.querySelector('[class*="text-white"]');
+      if (!badge) return;
+      const badgeText = badge.textContent.trim();
+      if ((badgeText.match(DATE) || []).length !== 2) return;
+      const body = card.textContent.replace(badgeText, '');
+      if (DATE.test(body)) badge.remove();
+      DATE.lastIndex = 0;
+    });
   }
   // 並び順。出張サマリー / 時差・気候 / 日程詳細 / 宿泊先情報 / 緊急連絡先。
   [familySummaryBlock, familyTimezoneBlock, familyScheduleBlock, familyHotelBlock, family.querySelector('.family-emergency')]
