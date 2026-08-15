@@ -32,8 +32,13 @@
 - 旧版の `index_v1.html` と元資料の `index_v2.html` は、移行元として保存する。
 - `index_v3.html` は、以前の共有URLを `index.html` へ転送する互換ページ。
 - EUROBLECH（`202610_Europe_TechEx_EuroBLECH`）も2026-08-14に同じ並びへそろえた。
-  `index.html` が生成物、`index_v1.html` が入力元、`index_v3.html` が転送ページ。
+  生成物は `index.html` と `family_print.html` の2件、`index_v1.html` と
+  `index_v2.html` が入力元、`index_v3.html` が転送ページ。
   詳細は `202610_Europe_TechEx_EuroBLECH/CLAUDE_HANDOFF.md` を読む。
+- EBのオンライン版の主要タブは `旅程 / 準備 / 会場 / 記録` の4つ。
+  家族向けはタブではなく `family_print.html` が正本で、ヘッダーのリンクから開く。
+  2026-08-15にHRSと同じ5構成（出張サマリー / 時差・気候 / 日程詳細 /
+  宿泊先情報 / 緊急連絡先）へそろえた。
 - 共通機能は `shared/trip-field` に置き、HRS固有の外観はHRS側に残す。
 - 机上用印刷版は静的で、メモ欄、クラウド同期、実行スクリプトを含めない。
 - 交通手段のアイコンはEUROBLECH方式を標準とする。カラー絵文字と

@@ -8,6 +8,7 @@ const html = readFileSync(join(here, 'index.html'), 'utf8');
 const css = readFileSync(join(here, 'v3.css'), 'utf8');
 const js = readFileSync(join(here, 'v3.js'), 'utf8');
 const hrsCss = readFileSync(join(here, '..', '202609_HumanoidSummitEurope', 'v3.css'), 'utf8');
+const familyPrint = readFileSync(join(here, 'family_print.html'), 'utf8');
 const itinerary = html.slice(html.indexOf('id="tab-itinerary"'), html.indexOf('id="tab-prep"'));
 const prep = html.slice(html.indexOf('id="tab-prep"'), html.indexOf('id="tab-venue"'));
 const day1022 = itinerary.slice(itinerary.indexOf('id="day-1022"'), itinerary.indexOf('id="day-1023"'));
@@ -15,11 +16,13 @@ const day1025 = itinerary.slice(itinerary.indexOf('id="day-1025"'));
 const rowTimes = [...itinerary.matchAll(/<div class="row-time">([\s\S]*?)<\/div>/g)].map(match => match[1].replace(/<[^>]+>/g, '').trim());
 
 const count = pattern => (html.match(pattern) || []).length;
+const countIn = (source, pattern) => (source.match(pattern) || []).length;
 const checks = [
   ['HRS public stylesheet linked', html.includes('href="../202609_HumanoidSummitEurope/v3.css"')],
   ['local v3 assets linked', html.includes('href="v3.css"') && html.includes('src="v3.js"')],
   ['no v2 runtime dependency', !/v2\.(?:css|js)/.test(html)],
-  ['five primary tabs', count(/data-tab="(?:itinerary|prep|venue|rec|family)"/g) === 5],
+  // 家族はタブではなくfamily_print.htmlへ分けたので、主要タブは4つ。
+  ['four primary tabs', count(/data-tab="(?:itinerary|prep|venue|rec)"/g) === 4 && count(/data-tab="/g) === 4],
   ['nine HRS detail day cards', count(/<details class="day"/g) === 9],
   ['all day cards initially open', count(/<details class="day"[^>]* open/g) === 9],
   ['nine day topic blocks', count(/class="day-topics"/g) === 9],
@@ -34,7 +37,8 @@ const checks = [
   // 10/22の現地交通はタクシー（Uber）に決まったので unknown は0件。決まった手段は車アイコン。
   ['decided transport uses its own icon', count(/mode-icon-unknown/g) === 0 && count(/mode-icon-car/g) === 1 && /mode-icon-car[\s\S]{0,900}タクシー（Uber）/.test(itinerary)],
   ['no colored airplane emoji in itinerary', !/[✈🛫🛬]\uFE0F/.test(itinerary)],
-  ['flight icons use outlined deterministic SVG mask', count(/class="flight-mark(?: inline-flight-mark)?"/g) >= 20 && css.includes('-webkit-mask:url("data:image/svg+xml') && css.includes("fill='none'") && css.includes('color:#0B5C60')],
+  // 家族向けを別ファイルへ分けた分だけ、index.html側のフライトアイコンは減る（20→13）。
+  ['flight icons use outlined deterministic SVG mask', count(/class="flight-mark(?: inline-flight-mark)?"/g) >= 12 && css.includes('-webkit-mask:url("data:image/svg+xml') && css.includes("fill='none'") && css.includes('color:#0B5C60')],
   ['itinerary color legend and factory color present', html.includes('class="day-kind-legend"') && /id="day-1022"[^>]*data-kind="visit"/.test(html)],
   ['10/19 context moved to topics', itinerary.includes('美馬・金築はEuroBLECH開幕前の自由日') && !itinerary.includes('class="text-xs text-slate-500 px-1">EuroBLECHは10/20開幕')],
   ['lounge candidates are conditional without defensive prose', itinerary.includes('JALサクララウンジ') && itinerary.includes('Plaza Premium Lounge／The Coral Finest Business Class Lounge') && !itinerary.includes('利用不可とは断定せず') && !itinerary.includes('ステータス無し・プライオリティパス無し')],
@@ -84,20 +88,36 @@ const checks = [
   ['outline action icons replace black-filled emoji', count(/class="line-icon line-icon-/g) >= 20 && css.includes('.line-icon svg') && !itinerary.includes('🛋') && !itinerary.includes('🛂')],
   ['no oversized itinerary time cells', rowTimes.every(value => value.length <= 32)],
   ['four-column mobile contract retained', /@media\(max-width:640px\)[\s\S]*\.route-four,.lanes \.route-four\{grid-template-columns:72px minmax\(0,1fr\) 74px minmax\(0,1fr\)\}/.test(css)],
-  ['family information architecture retained', html.includes('class="timezone-early"') && html.includes('class="family-flights"') && count(/class="family-day-row/g) === 9],
-  ['family schedule distinguishes flight and ground movement', html.includes('kind-flight') && html.includes('kind-move') && html.includes('kind-transfer') && html.includes('kind-procedure')],
-  ['family schedule avoids redundant date prefixes', !/<article class="family-day-row[\s\S]*?<p>[^<]*10\/(?:17|18|19|20|21|22|23|24|25)/.test(html)],
-  ['family tab omits fares and daylight-saving note', !html.includes('class="flight-fares"') && !html.includes('欧州夏時間が終了')],
+  // ---------- 家族向け印刷版 ----------
+  // 家族向けの正本はfamily_print.html。オンライン版のタブからは外したので、
+  // 以下はindex.htmlではなくfamily_print.htmlを見る。
+  ['family print page generated', familyPrint.length > 8000],
+  ['family print page is fully static', !/<script/i.test(familyPrint) && !/<textarea/i.test(familyPrint) && !/data-trip-key/.test(familyPrint) && countIn(familyPrint, /onclick="/g) === 1 && familyPrint.includes('onclick="window.print()"')],
+  ['online version no longer carries the family tab', !html.includes('id="tab-family"') && !html.includes('data-tab="family"')],
+  ['online version links the family print page', html.includes('href="family_print.html"')],
+  // HRSと同じ5構成。出張サマリー / 時差・気候 / 日程詳細 / 宿泊先情報 / 緊急連絡先。
+  ['family print follows the HRS five-section order', ['ヨーロッパ出張', '現地時刻の見方', '日程詳細', '宿泊先情報', '緊急連絡先'].every(t => familyPrint.includes(t))
+    && familyPrint.indexOf('日程詳細') < familyPrint.indexOf('宿泊先情報') && familyPrint.indexOf('宿泊先情報') < familyPrint.indexOf('緊急連絡先')],
+  ['family print drops the where-overview', !familyPrint.includes('family-where') && !familyPrint.includes('どこにいるか')],
+  // フライト表はサマリーの行き帰りへ畳んだ。便名・キャビン・所要・予約クラスは載せない。
+  ['family flights folded into the summary', !familyPrint.includes('class="family-flights"') && countIn(familyPrint, /class="family-flight-line"/g) === 4 && !familyPrint.includes('予約クラス')],
+  ['family schedule distinguishes flight and ground movement', ['kind-flight', 'kind-move', 'kind-transfer', 'kind-procedure'].every(k => familyPrint.includes(k))],
+  ['family schedule avoids redundant date prefixes', !/<article class="family-day-row[\s\S]*?<p>[^<]*10\/(?:17|18|19|20|21|22|23|24|25)/.test(familyPrint)],
+  ['family print omits fares and daylight-saving note', !familyPrint.includes('class="flight-fares"') && !familyPrint.includes('欧州夏時間が終了')],
   ['family times are visually prominent', css.includes('.agenda-line time{color:#0B4F5A;font-size:14px;font-weight:800')],
-  // 家族タブは2026-08-14に家族視点へ圧縮した。細かい駅間移動は載せないが、
+  ['nine family day rows', countIn(familyPrint, /class="family-day-row/g) === 9],
+  // 家族向けは2026-08-14に家族視点へ圧縮した。細かい駅間移動は載せないが、
   // 香港乗継・帰着・帰宅の3点は残す。Visit Japan Webは旅程タブ側で担保する。
-  ['family final arrival and airport procedures present', html.includes('香港で2時間15分') && html.includes('セントレア NGO着') && html.includes('入国手続きを終えて各自帰宅')],
+  ['family final arrival and airport procedures present', ['香港で2時間15分', 'セントレア NGO着', '入国手続きを終えて各自帰宅'].every(t => familyPrint.includes(t))],
   ['Visit Japan Web retained in itinerary', itinerary.includes('Visit Japan Web')],
-  ['family where-overview present', count(/class="where-day/g) === 9 && count(/class="where-cell/g) === 13 && html.includes('どこにいるか') && html.includes('class="place">ハノーファー')],
-  ['family time difference is the dominant type', html.includes('class="tz-diff"') && /\.timezone-card \.tz-diff\{[^}]*font-size:38px/.test(css) && html.includes('−7<i>時間</i>') && html.includes('−1<i>時間</i>')],
+  ['family time difference is the dominant type', familyPrint.includes('class="tz-diff"') && /\.timezone-card \.tz-diff\{[^}]*font-size:38px/.test(css) && familyPrint.includes('−7<i>時間</i>') && familyPrint.includes('−1<i>時間</i>')],
   // 圧縮前は52行。現在31行。駅間移動を戻すと再び膨らむので上限で歯止めをかける。
-  ['family day detail stays compressed', count(/class="agenda-line"/g) <= 36],
-  ['family tab drops event-type distinctions', html.includes('schedule-tag kind-work') && !/schedule-legend[\s\S]{0,400}kind-euro/.test(html)],
+  ['family day detail stays compressed', countIn(familyPrint, /class="agenda-line"/g) <= 36],
+  ['family print drops event-type distinctions', familyPrint.includes('schedule-tag kind-work') && !/schedule-legend[\s\S]{0,400}kind-euro/.test(familyPrint)],
+  // 緊急連絡先は各公館の公式サイトで確認した内容（2026-08-15）。
+  // +49 30 21094-222 は大使館のFAX番号で、緊急連絡先ではない。復活させない。
+  ['embassy fax number is not presented as an emergency line', !familyPrint.includes('21094-222') && !html.includes('21094-222')],
+  ['verified embassy contacts present', ['+49 30 21094-0', '0800-1822-330', '+1 818 7554 269', '+49 69 238573-0', '+31 70 346-9544', 'Tobias Asserlaan 5', 'tel:112'].every(t => familyPrint.includes(t))],
   ['no nested action bodies', !html.includes('action-body"><div class="action-body')],
   ['HRS final font stack', hrsCss.includes("--font:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif")],
   // 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーには置かない。

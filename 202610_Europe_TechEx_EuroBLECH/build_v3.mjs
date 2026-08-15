@@ -9,6 +9,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const sourcePath = join(here, 'index_v1.html');
 const familySourcePath = join(here, 'index_v2.html');
 const outputPath = join(here, 'index.html');
+const familyOutputPath = join(here, 'family_print.html');
 const browserPath = [
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
@@ -157,42 +158,6 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['<div class="text-slate-600 text-xs">国際線のため3時間前にチェックイン</div>', '<div class="text-slate-600 text-xs">国際線のため3時間前にチェックイン。自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く</div>', 'all'],
 ];
 
-// 家族タブの「どこにいるか」一覧。都市名を最大文字にして、日と人だけで追えるようにする。
-// cell = [人, 都市, 一言, 種別]。種別は where-* の色分けに使う。
-const WHERE_DAYS = [
-  { date:'10/17', dow:'土', cells:[
-    ['村上','日本 → 香港','移動。機内泊','move'],
-    ['美馬・金築','日本','出発前日','home'],
-  ] },
-  { date:'10/18', dow:'日', cells:[
-    ['村上','アムステルダム','早朝着。時差調整','move'],
-    ['美馬・金築','日本 → 香港','移動。機内泊','move'],
-  ] },
-  { date:'10/19', dow:'月', cells:[
-    ['村上','アムステルダム','TechEx Day 1','work'],
-    ['美馬・金築','ヴォルフスブルク','早朝FRA着。Autostadt見学','work'],
-  ] },
-  { date:'10/20', dow:'火', cells:[
-    ['村上','アムステルダム → ゲッティンゲン','TechEx Day 2。夜に合流地点へ','move'],
-    ['美馬・金築','ハノーファー','EuroBLECH 展示会視察','work'],
-  ] },
-  { date:'10/21', dow:'水', shared:true, cells:[
-    ['全員','ハノーファー','EuroBLECH 展示会視察','work'],
-  ] },
-  { date:'10/22', dow:'木', shared:true, cells:[
-    ['全員','ブレーメン','Mercedes工場見学','work'],
-  ] },
-  { date:'10/23', dow:'金', shared:true, cells:[
-    ['全員','ハノーファー → フランクフルト','EuroBLECH 展示会視察。夕方に移動','move'],
-  ] },
-  { date:'10/24', dow:'土', shared:true, cells:[
-    ['全員','フランクフルト → 香港','昼に出発。機内泊','move'],
-  ] },
-  { date:'10/25', dow:'日', shared:true, cells:[
-    ['全員','香港 → 日本','14:10セントレア着。帰宅','home'],
-  ] },
-];
-
 // 家族向けの日別。駅から駅への細かい移動は載せない。
 // 残すのは、その日の居場所が変わる出来事（フライト、到着、チェックイン）と、
 // 日中なにをしているか、連絡が取りにくい時間帯（機内）だけ。
@@ -298,7 +263,6 @@ const transformScript = `
   const STAYS = ${JSON.stringify(STAYS)};
   const ROUTES = ${JSON.stringify(ROUTES)};
   const FAMILY_DAYS = ${JSON.stringify(FAMILY_DAYS)};
-  const WHERE_DAYS = ${JSON.stringify(WHERE_DAYS)};
   const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const flightIcon = () => '<span class="flight-mark" role="img" aria-label="フライト"></span>';
   const plainTime = value => value.replace(/^\\d{1,2}\\/\\d{1,2}（.）/, '').trim();
@@ -693,11 +657,8 @@ const transformScript = `
   };
   const familySchedule = family.querySelector('.family-schedule .schedule-body');
   if (familySchedule) familySchedule.innerHTML = '<div class="schedule-legend" aria-label="色の意味"><strong>表示の区別</strong><span class="schedule-tag kind-flight">フライト</span><span class="schedule-tag kind-move">地上移動</span><span class="schedule-tag kind-transfer">到着・乗り継ぎ</span><span class="schedule-tag kind-procedure">手続き</span><span class="schedule-tag kind-work">仕事</span><span class="schedule-tag kind-stay">滞在・宿</span><span class="schedule-tag kind-review">要検討</span></div>' + FAMILY_DAYS.map(familyDayMarkup).join('');
-  // 「どこにいるか」一覧。サマリーの直後に置き、都市名だけで全体を追えるようにする。
-  const whereCell = cell => '<div class="where-cell where-' + esc(cell[3]) + '"><span class="who">' + esc(cell[0]) + '</span><b class="place">' + esc(cell[1]) + '</b><small>' + esc(cell[2]) + '</small></div>';
-  const whereDay = day => '<article class="where-day' + (day.shared ? ' is-shared' : '') + '"><header><strong>' + esc(day.date) + '</strong><span>' + esc(day.dow) + '</span></header><div class="where-people">' + day.cells.map(whereCell).join('') + '</div></article>';
-  const whereBlock = '<section class="family-where"><div class="family-section-head">🗺 どこにいるか — 9日間の全体像</div><div class="where-body"><p class="where-lead">別行動は10/17〜10/20。<strong>10/21から3名が合流</strong>し、以降は同じ場所にいる。</p><div class="where-grid">' + WHERE_DAYS.map(whereDay).join('') + '</div></div></section>';
-  family.querySelector('.timezone-early')?.insertAdjacentHTML('beforebegin', whereBlock);
+  // 「どこにいるか」一覧は作らない。9日間の居場所は日程詳細が日ごとに持っており、
+  // HRSでも同じ理由で落とした。家族が2箇所を突き合わせる形にしない。
   family.querySelector('.flight-fares')?.remove();
   family.querySelectorAll('.flight-status').forEach(status => status.remove());
   family.querySelector('.timezone-note')?.remove();
@@ -710,8 +671,6 @@ const transformScript = `
     ['zone-europe','🇳🇱🇩🇪 欧州','−7','時間','CEST・UTC+2'],
     ['zone-hongkong','🇭🇰 香港','−1','時間','HKT・UTC+8'],
   ].map(([cls,label,diff,unit,note]) => '<div class="timezone-card ' + cls + '"><span>' + label + '</span><strong class="tz-diff">' + diff + (unit ? '<i>' + unit + '</i>' : '') + '</strong><small>' + note + '</small></div>').join('');
-  const returnFooter = family.querySelector('.flight-return > footer');
-  if (returnFooter) returnFooter.textContent = '総移動 約17時間30分・全員同便';
   // ラウンジは「空港での過ごし方」なので、置き場所は会場タブではなく準備タブ。
   // 旅程には4系統の名前と営業時間だけを残し、利用資格の確認はここへ集約する。
   // 区間ごとに4系統を必ず並べ、確認できていない系統は消さずに「未確認」で残す。
@@ -771,6 +730,57 @@ const transformScript = `
     const inner = panel.querySelector(':scope > div'); if (inner) inner.className = 'legacy-stack';
   });
   family.classList.add('family-tab');
+  // ---------- 家族向けをHRSの5構成へ組み直す ----------
+  // 出張サマリー / 時差・気候 / 日程詳細 / 宿泊先情報 / 緊急連絡先 の順にそろえる。
+  // 内側のマークアップはここでは触らない。Tailwind風をどこまで寄せるかは別途判断する。
+  // 例外は緊急連絡先で、こちらは中身ごと組み直す（下の familyEmergencyBody）。
+  const familyStack = family.querySelector('.legacy-stack');
+  const familyBlockByText = text => [...familyStack.children].find(el => el.textContent.includes(text));
+  const familySummaryBlock = familyBlockByText('ヨーロッパ出張');
+  const familyHotelBlock = familyBlockByText('宿泊先情報');
+  const familyEmergencyBlock = familyBlockByText('緊急連絡先');
+  const familyTimezoneBlock = family.querySelector('.timezone-early');
+  const familyScheduleBlock = family.querySelector('.family-schedule');
+  const familyFlightsBlock = family.querySelector('.family-flights');
+  // フライト表はサマリーの中の行き帰りへ畳む。便名・キャビンクラス・所要時間は
+  // 家族には要らない。予約クラスを落とすのと同じ理由で、知りたいのは
+  // 「いつ発って、いつ着くか」と「連絡が取りにくいのはいつか」だけ。
+  if (familySummaryBlock) {
+    const flightLines = [
+      ['行きの便（村上）', '10/17（土）16:10 セントレア発（日本時刻） → 香港乗継 → 10/18（日）06:55 アムステルダム着（現地時刻）'],
+      ['行きの便（美馬・金築）', '10/18（日）16:10 セントレア発（日本時刻） → 香港乗継 → 10/19（月）07:15 フランクフルト着（現地時刻）'],
+      ['欧州内（村上）', '10/20（火）16:50 アムステルダム発 → 17:45 ハノーファー着（現地時刻）'],
+      ['帰りの便（全員同便）', '10/24（土）13:40 フランクフルト発（現地時刻） → 香港乗継 → 10/25（日）14:10 セントレア着（日本時刻）'],
+    ].map(([label, text]) => '<div class="family-flight-line"><strong>' + label + '</strong>：' + esc(text) + '</div>').join('');
+    // カード直下ではなく、見出しの下の本文コンテナへ入れる。直下に足すと
+    // 内側の余白が効かず、カードの外に貼り付いたように見える。
+    const summaryBody = familySummaryBlock.querySelector(':scope > .p-4') || familySummaryBlock;
+    summaryBody.insertAdjacentHTML('beforeend', '<div class="family-flight-lines">' + flightLines + '</div>');
+  }
+  familyFlightsBlock?.remove();
+  // 緊急連絡先は各公館の公式ページで確認した内容へ置き換える（2026-08-15確認）。
+  // これまで「緊急時」として載せていた +49 30 21094-222 は大使館のFAX番号だった。
+  // 時間外の緊急連絡は外部委託業者への転送番号が別にある。
+  // オランダ大使館の番地も 2 ではなく 5 が正しい。
+  if (familyEmergencyBlock) {
+    const emergency = document.createElement('section');
+    emergency.className = 'family-section family-emergency';
+    emergency.innerHTML = '<div class="family-section-head">緊急連絡先</div>'
+      + '<div class="family-section-body" style="display:grid;gap:8px">'
+      + '<div class="small"><strong>村上・美馬・金築 携帯（現地ローミング）</strong><br>渡航前に番号を記入</div>'
+      + '<div class="small"><strong>在ドイツ日本国大使館</strong><br>Hiroshimastraße 6, 10785 Berlin｜<a href="tel:+493021094-0">+49 30 21094-0</a>（代表）</div>'
+      + '<div class="small"><strong>在ドイツ日本国大使館 時間外の緊急連絡</strong><br>ドイツ国内から <a href="tel:08001822330">0800-1822-330</a>（無料）／国外から <a href="tel:+18187554269">+1 818 7554 269</a><br><span class="muted">閉館時間・休館日は外部委託業者へ転送される</span></div>'
+      + '<div class="small"><strong>在フランクフルト日本国総領事館</strong><br>MesseTurm 34, Friedrich-Ebert-Anlage 49, 60327 Frankfurt am Main｜<a href="tel:+4969238573-0">+49 69 238573-0</a></div>'
+      + '<div class="small"><strong>在オランダ日本国大使館</strong><br>Tobias Asserlaan 5, 2517KC Den Haag｜<a href="tel:+31703469544">+31 70 346-9544</a>（代表）<br><span class="muted">電話受付 9:00〜17:00。人身事故等の緊急時は時間外も対応</span></div>'
+      + '<div class="small"><strong>欧州共通緊急番号</strong>：<a href="tel:112">112</a>（警察・消防・救急）</div>'
+      + '<div class="small"><a href="https://www.anzen.mofa.go.jp/" target="_blank" rel="noopener">外務省 海外安全ホームページ</a></div>'
+      + '<div class="small muted">出典：在ドイツ日本国大使館・在フランクフルト日本国総領事館・在オランダ日本国大使館の各公式サイト、2026-08-15確認。</div>'
+      + '</div>';
+    familyEmergencyBlock.replaceWith(emergency);
+  }
+  // HRSの並び順。日程詳細を宿泊先・緊急連絡先より前に置く。
+  [familySummaryBlock, familyTimezoneBlock, familyScheduleBlock, familyHotelBlock, family.querySelector('.family-emergency')]
+    .forEach(block => { if (block) familyStack.appendChild(block); });
   // 5列の表は393pxで幅が足りず、カード側の overflow:hidden に当たって右端が切れる。
   // 表だけを横スクロールできる箱へ入れ、切らずに読めるようにする。
   document.querySelectorAll('.legacy-tab table').forEach(table => {
@@ -783,10 +793,13 @@ const transformScript = `
 
   const header = document.createElement('header');
   header.className = 'hdr';
-  header.innerHTML = '<div class="wrap hdr-top"><div><div class="eyebrow">EUROPE BUSINESS TRIP 2026</div><h1>TechEx Europe・EuroBLECH 出張ガイド</h1><div class="subtitle">10/17（土）〜10/25（日）｜3名｜アムステルダム・ハノーファー・ブレーメン</div></div><div class="no-print header-actions"><button class="btn" type="button" onclick="window.print()" aria-label="印刷">印刷</button></div></div>';
+  // 家族向けはfamily_print.htmlが正本なので、タブではなくヘッダーのリンクから開く。
+  // アイコンはlineIconPathsの定義より前で使うため、ここだけ直接書く。
+  const printIcon = '<span class="line-icon line-icon-print" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></span>';
+  header.innerHTML = '<div class="wrap hdr-top"><div><div class="eyebrow">EUROPE BUSINESS TRIP 2026</div><h1>TechEx Europe・EuroBLECH 出張ガイド</h1><div class="subtitle">10/17（土）〜10/25（日）｜3名｜アムステルダム・ハノーファー・ブレーメン</div></div><div class="no-print header-actions"><a class="btn" href="family_print.html">' + printIcon + '家族向け</a><button class="btn" type="button" onclick="window.print()" aria-label="印刷">印刷</button></div></div>';
   const nav = document.createElement('div');
   nav.className = 'field-nav';
-  nav.innerHTML = '<div class="wrap"><nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション"><button data-tab="itinerary" class="on" role="tab" aria-selected="true"><span class="ic">📅</span>旅程</button><button data-tab="prep" role="tab" aria-selected="false"><span class="ic">✅</span>準備</button><button data-tab="venue" role="tab" aria-selected="false"><span class="ic">🏢</span>会場</button><button data-tab="rec" role="tab" aria-selected="false"><span class="ic">📝</span>記録</button><button data-tab="family" role="tab" aria-selected="false"><span class="ic">🏠</span>家族</button></nav><div class="subbar" id="subbar"><div class="chips" id="day-chips"><span class="lbl">日付</span></div></div></div>';
+  nav.innerHTML = '<div class="wrap"><nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション"><button data-tab="itinerary" class="on" role="tab" aria-selected="true"><span class="ic">📅</span>旅程</button><button data-tab="prep" role="tab" aria-selected="false"><span class="ic">✅</span>準備</button><button data-tab="venue" role="tab" aria-selected="false"><span class="ic">🏢</span>会場</button><button data-tab="rec" role="tab" aria-selected="false"><span class="ic">📝</span>記録</button></nav><div class="subbar" id="subbar"><div class="chips" id="day-chips"><span class="lbl">日付</span></div></div></div>';
   document.body.prepend(nav); document.body.prepend(header);
   const main = document.createElement('main'); main.className = 'wrap';
   [itinerary, prep, venue, record, family].forEach(panel => main.appendChild(panel));
@@ -937,6 +950,44 @@ try {
   if (!output.includes('class="route-four"') || !output.includes('class="day"')) {
     throw new Error('Static HRS transformation did not complete');
   }
+  // 変換スクリプトは最後に自分を消す。残っているのは途中で例外が出た証拠で、
+  // 変換の後半が丸ごと抜けたまま生成物になる。--dump-domは黙って通すので、ここで止める。
+  if (output.includes('v3-build-transform')) {
+    throw new Error('Transform script did not remove itself; it threw partway through');
+  }
+  // ---------- 家族向け印刷版を切り出す ----------
+  // 家族向けはオンライン版のタブではなくfamily_print.htmlが正本。ダンプ済みの
+  // DOMから家族セクションを取り出し、静的な骨組みへ入れ直す。
+  // メモ欄・クラウド同期・実行スクリプトは持ち込まない。窓口はwindow.print()だけ。
+  const familyRange = divRangeById(output, 'tab-family');
+  const familySection = output.slice(familyRange[0], familyRange[1]);
+  // 元資料のコメントは並び順を書いたものが多く、5構成へ組み直した今は中身と食い違う。
+  // 生成物に古い順序の説明を残さない。
+  const familyInner = familySection
+    .replace(/^<div\b[^>]*>/, '')
+    .replace(/<\/div>\s*$/, '')
+    .replace(/<!--[\s\S]*?-->/g, '')
+    .replace(/\n{3,}/g, '\n\n');
+  if (/<script|onclick="(?!window\.print)|<textarea|data-trip-key/i.test(familyInner)) {
+    throw new Error('Family print page would carry runtime markup');
+  }
+  let familyPrint = `<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TechEx Europe・EuroBLECH 2026 家族向け予定表</title>
+<link rel="stylesheet" href="../202609_HumanoidSummitEurope/v3.css">
+<link rel="stylesheet" href="v3.css">
+</head>
+<body class="family-page" data-trip-layout="family-v1"><header class="family-head"><div class="wrap"><div class="eyebrow">EUROPE BUSINESS TRIP 2026</div><h1>家族向け予定表</h1><div class="subtitle">TechEx Europe・EuroBLECH 2026｜10/17（土）〜10/25（日）｜村上・美馬・金築</div><div class="no-print"><button class="btn" type="button" onclick="window.print()">印刷</button></div></div></header><main class="wrap">${familyInner}</main></body></html>
+`;
+  familyPrint = familyPrint.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n');
+  writeFileSync(familyOutputPath, familyPrint, 'utf8');
+  console.log(`Generated ${familyOutputPath}`);
+
+  // オンライン版から家族セクションを落とす。正本はfamily_print.htmlで、
+  // タブからも外したので、残しても画面から開く方法が無い。
+  output = output.slice(0, familyRange[0]) + output.slice(familyRange[1]);
+  if (/id="tab-family"/.test(output)) throw new Error('Family section still present after removal');
+  if (!output.includes('href="family_print.html"')) throw new Error('Family print link missing from index.html');
   output = output.replace('<!--V3_SCRIPT-->', '<script src="v3.js"></script>');
   output = output.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n');
   writeFileSync(outputPath, output, 'utf8');
