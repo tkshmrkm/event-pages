@@ -128,6 +128,11 @@ const checks = [
   // 家族向けは2026-08-14に家族視点へ圧縮した。細かい駅間移動は載せないが、
   // 香港乗継・帰着・帰宅の3点は残す。Visit Japan Webは旅程タブ側で担保する。
   ['family final arrival and airport procedures present', ['香港で2時間15分', 'セントレア NGO着', '入国手続きを終えて各自帰宅'].every(t => familyPrint.includes(t))],
+  // フライトブロックを落としたので、便名は日程詳細だけが持つ。7区間すべてに出ること。
+  // 最終区間だけ出発の行が無く（09:35の香港発が乗り継ぎ行に吸収されている）、
+  // 乗り継ぎ行がCX536を指すことで揃えてある。
+  ['every flight number appears in the family schedule', ['CX539', 'CX271', 'CX289', 'KL1791', 'CX288', 'CX536']
+    .every(code => familyPrint.slice(familyPrint.indexOf('family-schedule')).includes(code))],
   ['Visit Japan Web retained in itinerary', itinerary.includes('Visit Japan Web')],
   ['family time difference is the dominant type', familyPrint.includes('class="tz-diff"') && /\.timezone-card \.tz-diff\{[^}]*font-size:38px/.test(css) && familyPrint.includes('−7<i>時間</i>') && familyPrint.includes('−1<i>時間</i>')],
   // 圧縮前は52行。現在31行。駅間移動を戻すと再び膨らむので上限で歯止めをかける。
