@@ -62,7 +62,10 @@ assert(online.includes("cloud.entriesFor('rec:'") && online.includes("cloud.entr
 assert(!/const\s+(?:API_KEY|SYNC_TOKEN)\s*=\s*["'][^"']+["']/.test(online), `${onlineName}: synchronization secret must not be embedded`);
 assert(online.includes('<link rel="stylesheet" href="v3.css">') && !online.includes('<style>'), `${onlineName}: shared stylesheet link missing or CSS still embedded`);
 assert(sharedCss.includes('--bg:#EDF2F3') && sharedCss.includes('.field-nav{position:sticky'), 'v3.css: v3 field styles missing');
-assert(sharedCss.includes('.family-page #fam-table tr') && sharedCss.includes("content:'場所'"), 'v3.css: family mobile-card styles missing');
+// #fam-table（旧「毎日どこで何をしているか」の表）は家族印刷版から削除済みなので、
+// その専用CSSも持たない。家族向けの様式は.family-section／.family-day-rowが持つ。
+assert(!sharedCss.includes('#fam-table'), 'v3.css: dead #fam-table rules must be removed with the table itself');
+assert(sharedCss.includes('.family-section-head{') && sharedCss.includes('.family-day-row{'), 'v3.css: family layout styles missing');
 // data:URIは自己完結しているので外部依存ではない。中のSVGが名前空間として
 // http://www.w3.org/2000/svg を宣言するため、素の正規表現だと誤検知する。
 // data:URIだけを取り除いてから、本当のネットワーク取得が無いかを見る。
@@ -239,7 +242,26 @@ assert(sharedCss.includes('.line-icon{'), 'v3.css: line-icon style missing');
 const lineIconRule = (sharedCss.match(/\.line-icon\{[^}]*\}/) || [''])[0];
 assert(/width:[\d.]+em/.test(lineIconRule) && /height:[\d.]+em/.test(lineIconRule),
   'v3.css: .line-icon must size itself in em so it follows the surrounding 13–16px text (a fixed 19px box read larger than the text)');
-assert((online.match(/class="line-icon line-icon-print"/g) || []).length >= 3, `${onlineName}: expected the print line-icon SVG in the header button, family-print link, and family-tab print button`);
+// ヘッダーの印刷ボタンと、家族向け印刷版へのリンクの2箇所。
+// 3箇所目だった家族タブ内の印刷ボタンは、#tab-famごと削除した（どこからも開けなかった）。
+assert((online.match(/class="line-icon line-icon-print"/g) || []).length === 2, `${onlineName}: expected the print line-icon SVG in the header button and the family-print link`);
+assert(!online.includes('id="tab-fam"'), `${onlineName}: the unreachable family section must not come back (family_print.html is the family copy)`);
+
+// ---------- 予定の状態は5つだけ ----------
+// 未検討／候補あり／仮決め／確定／当日判断。これ以外の語を状態の札に使わない。
+// 以前は .st st-booked（予約済・登録済）、.st st-tbd（要予約・訪問先 未発表）、
+// .et t-tbd（要検討・未発表・ラウンジ名は要確認）と3書式・7語に散っていた。
+const PLAN_STATES = ['未検討', '候補あり', '仮決め', '確定', '当日判断'];
+for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml]]) {
+  const labels = [...text.matchAll(/class="plan-state plan-state-\w+"[^>]*>([^<]*)</g)].map(m => m[1]);
+  assert(labels.length === 9, `${name}: expected 9 plan-state chips (got ${labels.length})`);
+  const unknown = [...new Set(labels)].filter(label => !PLAN_STATES.includes(label));
+  assert(unknown.length === 0, `${name}: plan states must use only ${PLAN_STATES.join('／')} (got ${unknown.join(' ')})`);
+  // 旧書式が復活していないこと。.st-skip（不参加）は進み具合の軸ではないので残す。
+  assert(!/class="st st-tbd|class="et t-tbd|class="st st-booked/.test(text), `${name}: old ad-hoc state chips must not come back`);
+}
+assert(sharedCss.includes('.plan-state{') && PLAN_STATES.length === 5, 'v3.css: shared plan-state component missing');
+assert(!sharedCss.includes('.st-booked{') && !sharedCss.includes('.et.t-tbd{'), 'v3.css: dead state chip rules must be removed with the chips');
 assert((offlineHtml.match(/class="line-icon line-icon-print"/g) || []).length >= 1, 'index_v3_offline.html: expected the print line-icon SVG in the desk-print banner');
 assert((online.match(/class="line-icon line-icon-calendar"/g) || []).length >= 1, `${onlineName}: expected the calendar line-icon SVG replacing the retired 🗓 glyph`);
 

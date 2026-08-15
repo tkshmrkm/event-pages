@@ -292,25 +292,10 @@ const familyCss = String.raw`
   .agenda-line time{grid-row:1/3;font-size:14px}
   .agenda-line .schedule-tag{grid-column:2}
   .agenda-line p{grid-column:2}
-  .family-page #fam-table,.family-page #fam-table tbody,.family-page #fam-table tr,.family-page #fam-table td{display:block;width:100%}
-  .family-page #fam-table thead{display:none}
-  .family-page #fam-table tr{padding:0 0 10px;border:0;border-bottom:2px solid var(--line);background:#fff}
-  .family-page #fam-table tr:last-child{border-bottom:0}
-  .family-page #fam-table td{border:0;padding:5px 12px;white-space:normal;font-size:15px}
-  .family-page #fam-table td:first-child{padding:8px 12px;background:var(--neu-bg);color:var(--tx);font-size:16px;font-weight:700}
-  .family-page #fam-table td:nth-child(2){padding-top:8px;font-weight:700;color:var(--tx2)}
-  .family-page #fam-table td:nth-child(2)::before{content:'場所';display:inline-block;min-width:52px;margin-right:6px;color:var(--mu);font-size:12px;font-weight:700}
-  .family-page #fam-table td:nth-child(3)::before{content:'予定';display:inline-block;min-width:52px;margin-right:6px;color:var(--mu);font-size:12px;font-weight:700;vertical-align:top}
 }
 @media print{
   .family-head{padding-top:0}
   .family-page .tab{padding-top:8px}
-  .family-page #fam-table{display:table;width:100%}
-  .family-page #fam-table thead{display:table-header-group}
-  .family-page #fam-table tbody{display:table-row-group}
-  .family-page #fam-table tr{display:table-row}
-  .family-page #fam-table td{display:table-cell;width:auto;padding:5px 8px;border:1px solid var(--line);font-size:var(--f3);background:transparent}
-  .family-page #fam-table td:nth-child(2)::before,.family-page #fam-table td:nth-child(3)::before{display:none;content:none}
 }
 `;
 
@@ -319,7 +304,6 @@ const deskPrintCss = String.raw`
 body.desk-copy{background:#fff;padding-bottom:0}
 body.desk-copy .field-nav,
 body.desk-copy #tab-rec,
-body.desk-copy #tab-fam,
 body.desk-copy .memo,
 body.desk-copy .secondary-entry,
 body.desk-copy .plans,
@@ -683,6 +667,49 @@ const FOLD_NOTES = [
   { lead: 'セッション一覧（全13項目）', summary: '会期の内訳' },
 ];
 
+// ---------- 予定の状態を5つにそろえる ----------
+// 定義は shared/trip-field/core.css の .plan-state。使う語は
+// 未検討／候補あり／仮決め／確定／当日判断 の5つだけ。
+//
+// それまでは同じ「状態」を .st st-booked（予約済・登録済）、.st st-tbd（要予約）、
+// .et t-tbd（要検討・未発表・ラウンジ名は要確認）と、3種類の札で言い分けていた。
+// 語も粒度もばらばらで、機械で数えられなかった。
+//
+// 元の語が持っていた情報は捨てない。**進み具合**は札へ、**未確定の理由**は
+// すでに折り畳みの中にある（「会期の構成」に未公開の旨、「ラウンジの利用資格」に
+// 指定ラウンジ名が未確認の旨）。理由が本文にしか無かった1件（要予約）は、
+// 札を候補ありにしたうえで語を行の末尾へ残す。
+const PLAN_STATE_LABELS = {
+  unconsidered: '未検討',
+  candidate: '候補あり',
+  tentative: '仮決め',
+  fixed: '確定',
+  onsite: '当日判断',
+};
+const planStateHtml = key => `<span class="plan-state plan-state-${key}">${PLAN_STATE_LABELS[key]}</span>`;
+const PLAN_STATE_FIXUPS = [
+  // 宿泊3件とHRS参加登録。予約・登録が済んでいる＝確定。
+  ['<span class="st st-booked">予約済</span>', planStateHtml('fixed'), 3],
+  ['<span class="st st-booked">登録済</span>', planStateHtml('fixed'), 1],
+  // ランチは候補が3つある（折り畳み「ランチ候補」）。
+  ['<span class="et t-tbd">要検討</span>', planStateHtml('candidate'), 1],
+  // ワインシュトゥーベは候補の1つ。要予約は確定に必要な条件なので語を残す。
+  ['<span class="st st-tbd">要予約</span>', `${planStateHtml('candidate')}<span class="state-note">要予約</span>`, 1],
+  // Day 3の訪問先は先方が未発表で、こちらの案も無い＝未検討。
+  // 「未発表」の意味は折り畳み「会期の構成」に書いてある。
+  ['<span class="et t-tbd">未発表</span>', planStateHtml('unconsidered'), 1],
+  // ラウンジへ行くこと自体は決まっていて、どのラウンジかが未確認＝仮決め。
+  ['<span class="et t-tbd">ラウンジ名は要確認</span>', planStateHtml('tentative'), 1],
+  // 会場タブのDay 3見出しにも同じ状態の札があった（旅程タブとは別の書式で
+  // 「訪問先 未発表」と書かれていた）。同じ予定なので同じ札にする。
+  [
+    '<span class="st st-tbd" style="margin-left:6px">訪問先 未発表</span>',
+    `<span class="plan-state plan-state-unconsidered" style="margin-left:6px">${PLAN_STATE_LABELS.unconsidered}</span>`,
+    1,
+  ],
+];
+// 不参加（VIP Dinner）は5状態に入れない。進み具合ではなく参加の可否だから。
+
 const dayToolbar = '<div class="day-toolbar no-print"><span>日付カード</span><button class="btn" id="days-tg" type="button" aria-expanded="true">すべて閉じる</button></div>';
 
 const dayToggleScript = String.raw`  const openDay = id => {
@@ -737,7 +764,17 @@ const LEGEND_COMMENT_OLD = '   ✈飛行機 🚆鉄道 🚕タクシー 🛂空�
 // 凡例の説明も絵文字を持たない。CSSコメントの中に絵文字が残っていると、
 // 机上用印刷版（元CSSを<style>へ埋め込む）で絵文字の一括置換に巻き込まれる。
 const LEGEND_COMMENT_NEW = '   交通手段も行動の区分もモノクロSVG（.flight-mark／.mode-icon／.line-icon）。空港手続き・宿・食事・観光・観戦・HRS';
-const sourceCss = mustReplace(sourceCssMatch[1], LEGEND_COMMENT_OLD, LEGEND_COMMENT_NEW, 'legend comment in source CSS');
+// 旧い状態札のCSS。中身は .plan-state（共通部品）へ移したので、規則ごと落とす。
+// .st と .st-skip は残す（不参加は進み具合の軸ではないので5状態に入れていない）。
+const DEAD_STATE_CSS = [
+  '.et.t-tbd{display:inline-block;border:1px dashed var(--tbd-bd);background:var(--tbd-bg);color:var(--choose-tx);border-radius:4px;padding:0 5px;font-size:var(--f4);font-weight:700;margin-left:4px}\n',
+  '.st-booked{background:var(--hov);border-color:#CBD3DC;color:var(--tx2)}\n',
+  '.st-tbd{background:var(--tbd-bg);border-color:var(--tbd-bd);color:var(--choose-tx)}\n',
+];
+const sourceCss = DEAD_STATE_CSS.reduce(
+  (css, rule, i) => mustReplace(css, rule, '', `dead state chip rule #${i}`),
+  mustReplace(sourceCssMatch[1], LEGEND_COMMENT_OLD, LEGEND_COMMENT_NEW, 'legend comment in source CSS')
+);
 const compiledSharedCss = `${sourceCss}\n${sharedCoreCss}\n${outdoorCss}\n${familyCss}`.trim() + '\n';
 
 const transferControls = String.raw`
@@ -1266,6 +1303,24 @@ function buildMain({ offline = false } = {}) {
     html = html.slice(0, lastScript) + '<script src="../shared/trip-field/runtime.js"></script>\n' + html.slice(lastScript);
     html = mustReplace(html, /<style>[\s\S]*?<\/style>/, '<link rel="stylesheet" href="v3.css">', 'online stylesheet extraction');
   }
+
+  // ---------- 予定の状態を5つにそろえる ----------
+  PLAN_STATE_FIXUPS.forEach(([search, replacement, expected], i) => {
+    html = replaceAllCounted(html, search, replacement, `plan state fixup #${i}`, expected);
+  });
+  // 置き換え漏れを見る。旧い札の書式が残っていたら止める。
+  const leftoverStateChips = html.match(/class="(?:st st-tbd|et t-tbd)"/g) || [];
+  if (leftoverStateChips.length) {
+    throw new Error(`Old state chips remain: ${leftoverStateChips.length}`);
+  }
+
+  // ---------- オンライン版から家族向けセクションを落とす ----------
+  // #tab-famは主要タブ（旅程・会場・記録）に無く、CSSでも非表示で、画面から開く方法が
+  // 無かった。家族向けはfamily_print.htmlが正本で、そちらはindex_v2.htmlから
+  // 組み直して作る。つまりこのセクションはどこからも使われず、旧v2のまま取り残されて
+  // いた（5セクション構成にも気候の行にも追随していない）。約5,400字ぶんの死蔵。
+  html = mustReplace(html, /\n*<section class="tab" id="tab-fam"[\s\S]*?<\/section>/, '', 'family section removal');
+  if (/id="tab-fam"/.test(html)) throw new Error('family section still present after removal');
 
   // ---------- 絵文字をモノクロSVGへ ----------
   // 交通手段の変換（✈→.flight-mark）が終わり、机上用印刷版がスクリプトを落とした

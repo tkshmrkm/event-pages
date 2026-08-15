@@ -85,6 +85,26 @@
    全イベント共通。イベント側で寸法を上書きしない（色の上書きだけ各イベントに許す）。 */
 .line-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:1.15em;height:1.15em;margin-right:.3em;color:#0B5C60;vertical-align:-.2em}
 .line-icon svg{display:block;width:100%;height:100%;overflow:visible}
+/* 予定の状態。使う語は次の5つだけで、他の言い回しを混ぜない。
+     未検討   まだ案を作っていない
+     候補あり 比較する案がある
+     仮決め   現時点の第一候補
+     確定     予約・発券・公式確認などが終わった
+     当日判断 天候・運休・体調などで現地判断する
+   これは**進み具合の軸**であって、未確定の理由（未発表＝先方が出していない／
+   要確認＝調べれば分かる／要検討＝こちらが決める）とは別の軸。理由のほうは
+   折り畳みや本文に残す。状態の札に理由を書かない。
+   候補を確定しても代替案は消さず、折り畳んで残す。 */
+.plan-state{display:inline-block;flex:0 0 auto;border:1px solid;border-radius:999px;padding:1px 8px;font-size:12px;font-weight:700;line-height:1.5;white-space:nowrap;vertical-align:1px}
+.plan-state-unconsidered{background:#EEF1F3;border-color:#C6D0D6;color:#52616A}
+.plan-state-candidate{background:#EEEAF8;border-color:#A79BCB;color:#302568}
+.plan-state-tentative{background:#FFF3D6;border-color:#DAB864;color:#7A3E08}
+.plan-state-fixed{background:#E3F1F0;border-color:#78A9A9;color:#0B4F5A}
+.plan-state-onsite{background:#E9F2FA;border-color:#8FB4E8;color:#245A85}
+/* 確定に必要な条件を、状態の札の隣に短く添える（「要予約」など）。
+   条件は札の中に書かない。札は状態の語だけを持つ。 */
+.state-note{margin-left:5px;color:#52616A;font-size:12px;font-weight:700}
+
 /* 地図リンクは場所名そのものに張る。「地図」という別リンクは出さない。
    EUROBLECHでは .endpoint / .stay 配下に限定した指定だが、共通基盤では
    構造を前提にできないので単独セレクタで持つ。 */
