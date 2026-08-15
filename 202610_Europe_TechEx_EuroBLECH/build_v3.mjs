@@ -10,6 +10,7 @@ const sourcePath = join(here, 'index_v1.html');
 const familySourcePath = join(here, 'index_v2.html');
 const outputPath = join(here, 'index.html');
 const familyOutputPath = join(here, 'family_print.html');
+const immigrationOutputPath = join(here, 'immigration_print.html');
 const browserPath = [
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
@@ -857,7 +858,7 @@ const transformScript = `
   // 家族向けはfamily_print.htmlが正本なので、タブではなくヘッダーのリンクから開く。
   // アイコンはlineIconPathsの定義より前で使うため、ここだけ直接書く。
   const printIcon = '<span class="line-icon line-icon-print" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></span>';
-  header.innerHTML = '<div class="wrap hdr-top"><div><div class="eyebrow">EUROPE BUSINESS TRIP 2026</div><h1>TechEx Europe・EuroBLECH 出張ガイド</h1><div class="subtitle">10/17（土）〜10/25（日）｜3名｜アムステルダム・ハノーファー・ブレーメン</div></div><div class="no-print header-actions"><a class="btn" href="family_print.html">' + printIcon + '家族</a><button class="btn" type="button" onclick="window.print()" aria-label="印刷">印刷</button></div></div>';
+  header.innerHTML = '<div class="wrap hdr-top"><div><div class="eyebrow">EUROPE BUSINESS TRIP 2026</div><h1>TechEx Europe・EuroBLECH 出張ガイド</h1><div class="subtitle">10/17（土）〜10/25（日）｜3名｜アムステルダム・ハノーファー・ブレーメン</div></div><div class="no-print header-actions"><a class="btn" href="family_print.html">' + printIcon + '家族</a><a class="btn" href="immigration_print.html" title="入国審査用（英語）">' + printIcon + '入国</a><button class="btn" type="button" onclick="window.print()" aria-label="印刷">印刷</button></div></div>';
   const nav = document.createElement('div');
   nav.className = 'field-nav';
   nav.innerHTML = '<div class="wrap"><nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション"><button data-tab="itinerary" class="on" role="tab" aria-selected="true"><span class="ic">📅</span>旅程</button><button data-tab="prep" role="tab" aria-selected="false"><span class="ic">✅</span>準備</button><button data-tab="venue" role="tab" aria-selected="false"><span class="ic">🏢</span>会場</button><button data-tab="rec" role="tab" aria-selected="false"><span class="ic">📝</span>記録</button></nav><div class="subbar" id="subbar"><div class="chips" id="day-chips"><span class="lbl">日付</span></div></div></div>';
@@ -1104,6 +1105,50 @@ try {
   familyPrint = familyPrint.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n');
   writeFileSync(familyOutputPath, familyPrint, 'utf8');
   console.log(`Generated ${familyOutputPath}`);
+
+  // ---------- 入国審査官に見せる1枚 ----------
+  // 審査官はオランダ語・ドイツ語か英語しか読まないので、このページだけ英語で書く。
+  // 氏名とパスポート番号は入力欄にして、どこにも保存しない。localStorageにも
+  // Cloudflare同期にも乗せない。閉じれば消える。共用端末で開いても残らないため。
+  // HRSと違い、シェンゲンへの入国地点が人によって割れる。村上はアムステルダム、
+  // 美馬・金築はフランクフルト。どちらの審査官が見ても自分の分が読めるよう両方載せる。
+  const immiRows = [
+    ['Purpose of stay', 'Attending two industry trade fairs in the Netherlands and Germany: <strong>TechEx Europe 2026</strong> and <strong>EuroBLECH 2026</strong>, plus arranged company visits. Business trip, 3 travellers from Japan. No paid work in the Schengen area.'],
+    ['Events', '<strong>TechEx Europe 2026</strong> — RAI Amsterdam, Netherlands, 19–20 Oct 2026<br><strong>EuroBLECH 2026</strong> — Hannover Messe (Laatzen), Germany, 20–23 Oct 2026<br><strong>Mercedes-Benz Werk Bremen</strong> — guided factory visit, 22 Oct 2026, 12:45–14:00 (booked)<br><strong>Autostadt Wolfsburg</strong> — 19 Oct 2026'],
+    ['Entry into Schengen', '<strong>MURAKAMI</strong>: arrive <strong>18 Oct 2026, 06:55</strong> at Amsterdam (AMS), Cathay Pacific CX539 / CX271 via Hong Kong<br><strong>MIMA and KANECHIKU</strong>: arrive <strong>19 Oct 2026, 07:15</strong> at Frankfurt (FRA), Cathay Pacific CX539 / CX289 via Hong Kong'],
+    ['Exit from Schengen', 'All three depart <strong>24 Oct 2026, 13:40</strong> from Frankfurt (FRA), Cathay Pacific CX288 / CX536 via Hong Kong<br>Arrive Nagoya (NGO) 25 Oct 2026, 14:10 — <strong>return ticket held</strong>'],
+    ['Length of stay', 'MURAKAMI: <strong>6 nights</strong> (18–24 Oct 2026). MIMA and KANECHIKU: <strong>5 nights</strong> (19–24 Oct 2026).<br>Well within the 90-day visa-free limit for Japanese nationals.'],
+    ['Accommodation', '18–20 Oct (MURAKAMI): <strong>Holiday Inn Express Amsterdam — Sloterdijk Station</strong><br>Zaventemweg 3, 1043 EH Amsterdam, Netherlands<br><br>19–23 Oct: <strong>Hotel FREIgeist Göttingen Innenstadt</strong><br>Berliner Strasse 30, 37073 Göttingen, Germany<br><br>23–24 Oct (all three): <strong>Toyoko Inn Frankfurt am Main Hauptbahnhof</strong><br>Stuttgarter Straße 35, 60329 Frankfurt am Main, Germany'],
+    ['In case of enquiry', 'Embassy of Japan in the Netherlands<br>Tobias Asserlaan 5, 2517KC Den Haag — Tel +31 70 346-9544<br><br>Consulate-General of Japan in Frankfurt<br>MesseTurm 34, Friedrich-Ebert-Anlage 49, 60327 Frankfurt am Main — Tel +49 69 238573-0'],
+  ].map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('\n      ');
+  const immigrationPrint = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TechEx Europe / EuroBLECH 2026 — Traveller Information</title>
+<link rel="stylesheet" href="../202609_HumanoidSummitEurope/v3.css">
+<link rel="stylesheet" href="v3.css">
+</head>
+<body class="immi-page" data-trip-layout="immigration-v1"><main class="wrap">
+  <header class="immi-head">
+    <div class="eyebrow">FOR BORDER CONTROL · NETHERLANDS / GERMANY</div>
+    <h1>Traveller Information</h1>
+    <p class="immi-sub">TechEx Europe 2026 · EuroBLECH 2026 · 18–24 October 2026</p>
+    <div class="no-print"><button class="btn" type="button" onclick="window.print()">Print this page</button></div>
+  </header>
+  <section class="immi-id">
+    <label><span>Full name (as in passport)</span><input type="text" autocomplete="off" spellcheck="false"></label>
+    <label><span>Passport number</span><input type="text" autocomplete="off" spellcheck="false"></label>
+    <p class="immi-note no-print">Type these just before printing. Nothing on this page is saved — close the page and the fields are empty again.</p>
+  </section>
+  <table class="immi-table">
+    <tbody>
+      ${immiRows}
+    </tbody>
+  </table>
+  <p class="immi-foot">Prepared by the traveller. Details match the itinerary and the bookings held.</p>
+</main></body></html>
+`;
+  writeFileSync(immigrationOutputPath, immigrationPrint.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n'), 'utf8');
+  console.log(`Generated ${immigrationOutputPath}`);
 
   // オンライン版から家族セクションを落とす。正本はfamily_print.htmlで、
   // タブからも外したので、残しても画面から開く方法が無い。

@@ -9,6 +9,7 @@ const css = readFileSync(join(here, 'v3.css'), 'utf8');
 const js = readFileSync(join(here, 'v3.js'), 'utf8');
 const hrsCss = readFileSync(join(here, '..', '202609_HumanoidSummitEurope', 'v3.css'), 'utf8');
 const familyPrint = readFileSync(join(here, 'family_print.html'), 'utf8');
+const immigration = readFileSync(join(here, 'immigration_print.html'), 'utf8');
 const itinerary = html.slice(html.indexOf('id="tab-itinerary"'), html.indexOf('id="tab-prep"'));
 const prep = html.slice(html.indexOf('id="tab-prep"'), html.indexOf('id="tab-venue"'));
 const day1022 = itinerary.slice(itinerary.indexOf('id="day-1022"'), itinerary.indexOf('id="day-1023"'));
@@ -151,6 +152,20 @@ const checks = [
     .every(([, text]) => !/[\u{1F1E6}-\u{1F1FF}]{2}/u.test(text))],
   ['every icon resolves to an svg', count(/class="line-icon line-icon-[a-zA-Z]+"[^>]*><svg /g) === count(/class="line-icon line-icon-/g)
     && countIn(familyPrint, /class="line-icon line-icon-[a-zA-Z]+"[^>]*><svg /g) === countIn(familyPrint, /class="line-icon line-icon-/g)],
+  // ---------- 入国審査用の1枚 ----------
+  // 審査官は英語（かオランダ語・ドイツ語）しか読まないので英語で書く。
+  // 氏名とパスポート番号はどこにも保存しない。localStorageにも同期にも乗せない。
+  ['immigration page is fully static', !/<script/i.test(immigration) && countIn(immigration, /onclick="/g) === 1 && immigration.includes('onclick="window.print()"')],
+  ['immigration page never persists passport details', !/localStorage|sessionStorage|TripField|cloudEndpoint/.test(immigration) && countIn(immigration, /<input/g) === 2],
+  ['immigration page is English only', !/[぀-ヿ一-鿿]/.test(immigration) && !/\p{Extended_Pictographic}/u.test(immigration)],
+  // シェンゲンへの入国地点が人によって割れる。村上はAMS、美馬・金築はFRA。
+  // どちらの審査官が見ても自分の分が読めるよう、両方を載せる。
+  ['immigration page states both Schengen entry points', immigration.includes('MURAKAMI') && immigration.includes('MIMA and KANECHIKU')
+    && immigration.includes('Amsterdam (AMS)') && immigration.includes('Frankfurt (FRA)')],
+  ['immigration page states the return ticket', immigration.includes('return ticket held') && immigration.includes('CX288') && immigration.includes('CX536')],
+  ['immigration page lists all three hotels', ['Holiday Inn Express Amsterdam', 'Hotel FREIgeist Göttingen Innenstadt', 'Toyoko Inn Frankfurt am Main Hauptbahnhof']
+    .every(hotel => immigration.includes(hotel))],
+  ['online version links the immigration page', html.includes('href="immigration_print.html"')],
   ['no nested action bodies', !html.includes('action-body"><div class="action-body')],
   ['HRS final font stack', hrsCss.includes("--font:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif")],
   // 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーには置かない。
