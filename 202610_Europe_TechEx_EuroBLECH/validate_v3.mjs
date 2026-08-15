@@ -166,6 +166,28 @@ const checks = [
   ['immigration page lists all three hotels', ['Holiday Inn Express Amsterdam', 'Hotel FREIgeist Göttingen Innenstadt', 'Toyoko Inn Frankfurt am Main Hauptbahnhof']
     .every(hotel => immigration.includes(hotel))],
   ['online version links the immigration page', html.includes('href="immigration_print.html"')],
+  // ---------- 効いていないクラスは残さない ----------
+  // Tailwind CDNは読み込んでいないので、受けの無いクラス名は何もしていない。
+  // クラス名を見ても効くかどうか読めない状態が、実害2件（日付バッジの黒文字、
+  // 印刷版で背景色が消えた件）の原因だった。生成物に残っているクラスは
+  // すべてCSS側に受けがある、という状態を保つ。
+  ['every class in the output is received by css', (() => {
+    const known = new Set([...(`${css}\n${hrsCss}`).matchAll(/\.((?:[\w-]|\\.)+)/g)].map(m => m[1].replace(/\\/g, '')));
+    const parts = [...(`${css}\n${hrsCss}`).matchAll(/\[class\*=("|')([^"']+)\1\]/g)].map(m => m[2]);
+    const TW = /^(text|bg|border|px|py|pl|pr|pt|pb|mt|mb|ml|mr|rounded|font|flex|gap|space|hover|shadow|items|justify|w|h|max|min|leading|opacity|inline|grid|truncate|underline|overflow|whitespace|shrink|self)(-|$|:)/;
+    const orphans = new Set();
+    for (const source of [html, familyPrint]) {
+      for (const m of source.matchAll(/class="([^"]+)"/g)) {
+        for (const name of m[1].split(/\s+/)) {
+          if (!name || !TW.test(name)) continue;
+          if (known.has(name) || parts.some(p => name.includes(p))) continue;
+          orphans.add(name);
+        }
+      }
+    }
+    return orphans.size === 0;
+  })()],
+  ['build reports no leftover diagnostics attribute', !html.includes('data-dropped-classes') && !familyPrint.includes('data-dropped-classes')],
   ['no nested action bodies', !html.includes('action-body"><div class="action-body')],
   ['HRS final font stack', hrsCss.includes("--font:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif")],
   // 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーには置かない。

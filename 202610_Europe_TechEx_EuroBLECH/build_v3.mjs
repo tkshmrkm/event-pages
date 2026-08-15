@@ -261,6 +261,21 @@ source = source
   .replace(/<script>[\s\S]*?<\/script>\s*<\/body>/i, '</body>')
   .replace('</head>', '<link rel="stylesheet" href="../202609_HumanoidSummitEurope/v3.css">\n<link rel="stylesheet" href="v3.css">\n</head>');
 
+// 効いているクラスの一覧をCSSから作る。生成物が読み込む2枚を実際に走査する。
+// ブラウザ内のCSSOMは使えない。ビルドは一時ディレクトリでページを開くため、
+// 相対パスのlinkが解決されず document.styleSheets が空になる。
+const cssSources = [
+  readSource(join(here, '..', '202609_HumanoidSummitEurope', 'v3.css')),
+  readSource(join(here, 'v3.css')),
+].join('\n');
+const cssKnownClasses = [...new Set(
+  [...cssSources.matchAll(/\.((?:[\w-]|\\.)+)/g)].map(m => m[1].replace(/\\/g, ''))
+)];
+const cssKnownSubstrings = [...new Set(
+  [...cssSources.matchAll(/\[class\*=("|')([^"']+)\1\]/g)].map(m => m[2])
+)];
+console.log(`CSS classes in use: ${cssKnownClasses.length}, [class*=] substrings: ${cssKnownSubstrings.length}`);
+
 const transformScript = `
 <script id="v3-build-transform">
 (() => {
@@ -1026,6 +1041,38 @@ const transformScript = `
   document.querySelectorAll('#tab-itinerary .day-topics summary').forEach(summary => {
     summary.textContent = summary.textContent.replaceAll(' / ', '／').replace(/・\\s+/g, '・');
   });
+  // ---------- 効いていないクラスを落とす ----------
+  // Tailwind CDNは読み込んでいないので、Tailwind風のクラス名は本来どれも効かない。
+  // 実際にはv3.css側が一部を手書きで受けていて、効くものと効かないものが混在していた。
+  // クラス名を見ても、それが効くかどうか読めない。2026-08-15に2件の不具合を踏んだ。
+  //   日付バッジ … 背景はインラインstyleで効き、text-white は効かず黒文字で残った
+  //   印刷版の背景 … bg-blue-50 が祖先の .legacy-tab に依存していると読めなかった
+  // 読み込み済みのCSSを実際に走査し、どのルールも受けていないものだけを消す。
+  // あとからCSSを足せば次のビルドで自動的に残るので、消し過ぎが固定化しない。
+  // 対象はTailwind風の名前だけ。v3.jsが使うクラス（on/off/today/chip/tab/day/t/d）は
+  // 走査でTailwind風と判定されないため、そもそも対象外。
+  // CSSはNode側で読んで渡す。ビルドは一時ディレクトリでページを開くため、
+  // 相対パスのlinkは解決されず document.styleSheets は空になる。
+  // ブラウザ内でCSSOMを見ると「どのルールも受けていない」が常に真になり、
+  // 効いている40種まで巻き添えで消える（2026-08-15に実際に踏んだ）。
+  const cssClasses = new Set(${JSON.stringify(cssKnownClasses)});
+  const cssSubstrings = ${JSON.stringify(cssKnownSubstrings)};
+  const TAILWINDISH = /^(text|bg|border|px|py|pl|pr|pt|pb|mt|mb|ml|mr|rounded|font|flex|gap|space|hover|shadow|items|justify|w|h|max|min|leading|opacity|inline|grid|truncate|underline|overflow|whitespace|shrink|self)(-|$|:)/;
+  let droppedClasses = 0;
+  document.querySelectorAll('[class]').forEach(el => {
+    const before = [...el.classList];
+    const kept = before.filter(name => {
+      if (!TAILWINDISH.test(name)) return true;
+      if (cssClasses.has(name)) return true;
+      if (cssSubstrings.some(part => name.includes(part))) return true;
+      droppedClasses++;
+      return false;
+    });
+    if (kept.length === before.length) return;
+    if (kept.length) el.className = kept.join(' ');
+    else el.removeAttribute('class');
+  });
+  document.documentElement.dataset.droppedClasses = String(droppedClasses);
   document.querySelectorAll('script').forEach(script => { if (script.id !== 'v3-build-transform') script.remove(); });
   document.getElementById('v3-build-transform')?.remove();
 })();
@@ -1071,6 +1118,12 @@ try {
   // 変換の後半が丸ごと抜けたまま生成物になる。--dump-domは黙って通すので、ここで止める。
   if (output.includes('v3-build-transform')) {
     throw new Error('Transform script did not remove itself; it threw partway through');
+  }
+  // 落としたクラス数を受け取って報告し、属性そのものは生成物へ残さない。
+  const droppedAttr = output.match(/ data-dropped-classes="(\d+)"/);
+  if (droppedAttr) {
+    console.log(`Dropped ${droppedAttr[1]} class tokens that no CSS rule receives`);
+    output = output.replace(droppedAttr[0], '');
   }
   // 対応表に無い絵文字が出たら止める。後から絵文字を足したらここで気づく。
   const unmappedAttr = output.match(/data-unmapped-emoji="([^"]+)"/);
