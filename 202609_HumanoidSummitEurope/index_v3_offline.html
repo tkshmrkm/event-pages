@@ -350,17 +350,9 @@ details.fold[open]>summary::before{content:'▾'}
 details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding-left:9px;color:var(--tx2);font-size:var(--f4);line-height:1.6}
 .btn{min-height:44px;padding:9px 13px;font-size:13px;border-color:var(--line);color:var(--tx2)}
 .banner{font-size:14px;border-width:2px}
-/* 黒塗りグリフ対策のモノクロSVGアイコン。202610_Europe_TechEx_EuroBLECHの
-   .line-icon／.line-icon-*と同じクラス名・色（#0B5C60）にそろえる。個別名
-   （-print／-calendar／-map）は意味づけのためのモディファイアで、EuroBLECH同様
-   スタイルはベースクラスが持つ。
-   寸法だけはEuroBLECHの固定19pxを踏襲しない。EuroBLECHはこれを
-   .family-section-head（16px）の中で使うが、HRSでの置き場所は.btn（13px）、
-   .plan-head（14px）、.ttl（16px）で、19pxの箱が文字より大きく見えていた
-   （2026-08-15に実機で確認）。専用の列に入る.flight-mark／.mode-iconと違い、
-   .line-iconは見出しやボタンの文中に置くので、寸法は文字サイズ基準にする。 */
-.line-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:1.15em;height:1.15em;margin-right:.3em;color:#0B5C60;vertical-align:-.2em}
-.line-icon svg{display:block;width:100%;height:100%;overflow:visible}
+/* .line-iconの定義はshared/trip-field/core.cssにある（全イベント共通）。
+   個別名（-print／-calendar／-map）は意味づけのためのモディファイアで、
+   スタイルはベースクラスが持つ。ここで寸法を上書きしない。 */
 .card > .ttl{padding:11px 14px;font-size:16px;color:var(--tx2)}
 .memo > summary{min-height:44px;font-size:14px}
 .memo textarea,.rec textarea,.ed{font-size:16px;border-color:var(--line)}

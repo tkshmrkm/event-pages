@@ -190,12 +190,17 @@ git diff --check
 
 `.flight-mark` と `.mode-icon`（20px）は専用の列に入るので固定値でよいが、
 `.line-icon` は見出しやボタンの文中に置くので文字サイズに追従させる。
-`width/height:1.15em`、`margin-right:.3em`、`vertical-align:-.2em` へ変更。
+`width/height:1.15em`、`margin-right:.3em`、`vertical-align:-.2em`。
 13pxの `.btn` では14.9pxになる（実測、比1.15）。
 
-EUROBLECHは `family-section-head`（16px）の大きい文字の中で使っているため
-19pxでも成立していた。**HRSがEUROBLECHと意図的に違う点。**
-EUROBLECHへ戻すときは、EUROBLECH側の置き場所の文字サイズを見てから決める。
+**これはHRS固有の外観ではなく全イベントの基準**なので、定義は
+`shared/trip-field/core.css` に置いた。HRS側（`build_v3.mjs` の `outdoorCss`）は
+複製を持たず、共通定義をそのまま使う。規則は `CLAUDE.md` と
+`shared/trip-field/README.md` にも書いた。
+
+EUROBLECHの `v3.css` には固定19pxの複製が残っている。EUROBLECHは
+HRSの `v3.css` を先に読み、自分の `v3.css` を後に読むので、いまはそちらが勝つ。
+**HRSが固まってからの「戻す」作業で削る。**
 
 検証には比率の検査を足した（`validate_v3.mjs`）。
 `.line-icon` が `em` で寸法を持つこと、気候が `<table>` でないことを見る。
