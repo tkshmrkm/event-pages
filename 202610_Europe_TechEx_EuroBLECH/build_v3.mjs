@@ -812,10 +812,12 @@ const transformScript = `
       link.remove();
       if (row && !row.querySelector('a')) row.remove();
     });
-    // 日付バッジは、本文に日付が無いカードにだけ残す。
+    // 日付バッジは使わない。日付は本文が持つ。
     // Göttingenは本文が「美馬・金築 10/19〜（4泊）・村上 10/20〜（3泊）」と人別に
     // 分かれているのに、バッジは1本の期間に潰していて、村上が1日遅れることが
-    // 消えていた。重複しているうえに本文より情報が少ない。
+    // 消えていた。重複しているうえに本文より情報が少なかった。
+    // 残る2枚はバッジが唯一の日付だったので、本文の人数・泊数の行へ移してから消す。
+    // これで3枚とも日付の置き場所が本文にそろい、濃い地に白文字のバッジも無くなる。
     // 区切り文字は入力元がEN DASH（–）で、〜への正規化はこの後に走る。
     // 判定は区切りに依存させず、日付が2つ並ぶことだけを見る。
     const DATE = /\\d{1,2}\\/\\d{1,2}/g;
@@ -823,10 +825,18 @@ const transformScript = `
       const badge = card.querySelector('[class*="text-white"]');
       if (!badge) return;
       const badgeText = badge.textContent.trim();
-      if ((badgeText.match(DATE) || []).length !== 2) return;
-      const body = card.textContent.replace(badgeText, '');
-      if (DATE.test(body)) badge.remove();
       DATE.lastIndex = 0;
+      if ((badgeText.match(DATE) || []).length !== 2) return;
+      DATE.lastIndex = 0;
+      const hasDateInBody = DATE.test(card.textContent.replace(badgeText, ''));
+      DATE.lastIndex = 0;
+      if (!hasDateInBody) {
+        const line = card.querySelector('[class*="text-slate-600"]');
+        if (line) line.textContent = line.textContent.trim() + '（' + badgeText + '）';
+      }
+      const row = badge.parentElement;
+      badge.remove();
+      if (row) row.className = row.className.replace(/justify-between/, '').trim();
     });
   }
   // 並び順。出張サマリー / 時差・気候 / 日程詳細 / 宿泊先情報 / 緊急連絡先。
