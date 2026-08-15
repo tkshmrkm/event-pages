@@ -104,14 +104,20 @@ const checks = [
   ['online version no longer carries the family tab', !html.includes('id="tab-family"') && !html.includes('data-tab="family"')],
   ['online version links the family print page', html.includes('href="family_print.html"')],
   // HRSと同じ5構成。出張サマリー / 時差・気候 / 日程詳細 / 宿泊先情報 / 緊急連絡先。
-  ['family print follows the HRS five-section order', ['ヨーロッパ出張', '現地時刻の見方', '日程詳細', '宿泊先情報', '緊急連絡先'].every(t => familyPrint.includes(t))
+  // 6ブロック。フライトは時差表のすぐ後ろ（ブロック自身が「上の時差表を参照」と書くため）。
+  ['family print section order', ['ヨーロッパ出張', '現地時刻の見方', 'フライト情報', '日程詳細', '宿泊先情報', '緊急連絡先'].every(t => familyPrint.includes(t))
+    && familyPrint.indexOf('現地時刻の見方') < familyPrint.indexOf('フライト情報')
+    && familyPrint.indexOf('フライト情報') < familyPrint.indexOf('日程詳細')
     && familyPrint.indexOf('日程詳細') < familyPrint.indexOf('宿泊先情報') && familyPrint.indexOf('宿泊先情報') < familyPrint.indexOf('緊急連絡先')],
   ['family print drops the where-overview', !familyPrint.includes('family-where') && !familyPrint.includes('どこにいるか')],
   // 地図リンクは場所名そのものに張る。「地図」「地図で確認」の別リンクは作らない。
   ['map links live on the place name', !familyPrint.includes('地図で確認') && !/>地図<\/a>/.test(familyPrint) && !html.includes('地図で確認')
     && countIn(familyPrint, /<div class="font-bold[^"]*"><a class="place"/g) === 3],
-  // フライト表はサマリーの行き帰りへ畳んだ。便名・キャビン・所要・予約クラスは載せない。
-  ['family flights folded into the summary', !familyPrint.includes('class="family-flights"') && countIn(familyPrint, /class="family-flight-line"/g) === 4 && !familyPrint.includes('予約クラス')],
+  // フライトは独立ブロックのまま。3名で出発日が割れ乗継もある8便を文に畳むと
+  // かえって読みにくくなったので、区間ごとに行が分かれた表に戻した（2026-08-15）。
+  // 落とすのは予約クラスだけ。家族には要らない。
+  ['family flights stay a separate block', familyPrint.includes('class="family-flights"') && countIn(familyPrint, /class="flight-route"/g) === 7],
+  ['family flights drop the fare class', !familyPrint.includes('予約クラス') && familyPrint.includes('キャビンクラス ／ 所要時間')],
   ['family schedule distinguishes flight and ground movement', ['kind-flight', 'kind-move', 'kind-transfer', 'kind-procedure'].every(k => familyPrint.includes(k))],
   ['family schedule avoids redundant date prefixes', !/<article class="family-day-row[\s\S]*?<p>[^<]*10\/(?:17|18|19|20|21|22|23|24|25)/.test(familyPrint)],
   ['family print omits fares and daylight-saving note', !familyPrint.includes('class="flight-fares"') && !familyPrint.includes('欧州夏時間が終了')],

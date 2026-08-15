@@ -745,22 +745,22 @@ const transformScript = `
   const familyTimezoneBlock = family.querySelector('.timezone-early');
   const familyScheduleBlock = family.querySelector('.family-schedule');
   const familyFlightsBlock = family.querySelector('.family-flights');
-  // フライト表はサマリーの中の行き帰りへ畳む。便名・キャビンクラス・所要時間は
-  // 家族には要らない。予約クラスを落とすのと同じ理由で、知りたいのは
-  // 「いつ発って、いつ着くか」と「連絡が取りにくいのはいつか」だけ。
-  if (familySummaryBlock) {
-    const flightLines = [
-      ['行きの便（村上）', '10/17（土）16:10 セントレア発（日本時刻） → 香港乗継 → 10/18（日）06:55 アムステルダム着（現地時刻）'],
-      ['行きの便（美馬・金築）', '10/18（日）16:10 セントレア発（日本時刻） → 香港乗継 → 10/19（月）07:15 フランクフルト着（現地時刻）'],
-      ['欧州内（村上）', '10/20（火）16:50 アムステルダム発 → 17:45 ハノーファー着（現地時刻）'],
-      ['帰りの便（全員同便）', '10/24（土）13:40 フランクフルト発（現地時刻） → 香港乗継 → 10/25（日）14:10 セントレア着（日本時刻）'],
-    ].map(([label, text]) => '<div class="family-flight-line"><strong>' + label + '</strong>：' + esc(text) + '</div>').join('');
-    // カード直下ではなく、見出しの下の本文コンテナへ入れる。直下に足すと
-    // 内側の余白が効かず、カードの外に貼り付いたように見える。
-    const summaryBody = familySummaryBlock.querySelector(':scope > .p-4') || familySummaryBlock;
-    summaryBody.insertAdjacentHTML('beforeend', '<div class="family-flight-lines">' + flightLines + '</div>');
+  // フライトは独立ブロックのまま残す。2026-08-15に一度サマリーの4行へ畳んだが、
+  // 3名で出発日が割れ香港乗継もある8便を文にすると、かえって読みにくくなった。
+  // 区間ごとに行が分かれている表のほうが、いつ発っていつ着くかを追える。
+  // 落とすのは予約クラスだけ（家族には要らない）。
+  if (familyFlightsBlock) {
+    familyFlightsBlock.querySelectorAll('.flight-route small').forEach(spec => {
+      spec.innerHTML = spec.innerHTML
+        .replace(/(?:村上：)?予約クラス[^<]*<br>\s*/g, '')
+        .replace(/美馬・金築：未確認<br>\s*/g, '');
+    });
+    const specGuide = familyFlightsBlock.querySelector('.flight-spec-guide');
+    if (specGuide) specGuide.innerHTML = '<strong>便名の下：</strong>キャビンクラス ／ 所要時間';
+    // 復路の脚注も予約クラスに触れているので、家族向けから外す。
+    const returnFooter = familyFlightsBlock.querySelector('.flight-return > footer');
+    if (returnFooter) returnFooter.textContent = '総移動 約17時間30分・全員同便';
   }
-  familyFlightsBlock?.remove();
   // 緊急連絡先は各公館の公式ページで確認した内容へ置き換える（2026-08-15確認）。
   // これまで「緊急時」として載せていた +49 30 21094-222 は大使館のFAX番号だった。
   // 時間外の緊急連絡は外部委託業者への転送番号が別にある。
@@ -803,8 +803,9 @@ const transformScript = `
       if (row && !row.querySelector('a')) row.remove();
     });
   }
-  // HRSの並び順。日程詳細を宿泊先・緊急連絡先より前に置く。
-  [familySummaryBlock, familyTimezoneBlock, familyScheduleBlock, familyHotelBlock, family.querySelector('.family-emergency')]
+  // 並び順。フライトは時差表のすぐ後ろに置く。ブロック自身が
+  // 「JST / HKT / CEST は上の時差表を参照」と書いているため。
+  [familySummaryBlock, familyTimezoneBlock, familyFlightsBlock, familyScheduleBlock, familyHotelBlock, family.querySelector('.family-emergency')]
     .forEach(block => { if (block) familyStack.appendChild(block); });
   // 5列の表は393pxで幅が足りず、カード側の overflow:hidden に当たって右端が切れる。
   // 表だけを横スクロールできる箱へ入れ、切らずに読めるようにする。
@@ -1063,7 +1064,7 @@ try {
 <link rel="stylesheet" href="../202609_HumanoidSummitEurope/v3.css">
 <link rel="stylesheet" href="v3.css">
 </head>
-<body class="family-page" data-trip-layout="family-v1"><header class="family-head"><div class="wrap"><div class="eyebrow">EUROPE BUSINESS TRIP 2026</div><h1>家族向け予定表</h1><div class="subtitle">TechEx Europe・EuroBLECH 2026｜10/17（土）〜10/25（日）｜村上・美馬・金築</div><div class="no-print"><button class="btn" type="button" onclick="window.print()">印刷</button></div></div></header><main class="wrap">${familyInner}</main></body></html>
+<body class="family-page" data-trip-layout="family-v1"><header class="family-head"><div class="wrap"><div class="eyebrow">EUROPE BUSINESS TRIP 2026</div><h1>家族向け予定表</h1><div class="subtitle">TechEx Europe・EuroBLECH 2026｜10/17（土）〜10/25（日）｜村上・美馬・金築</div><div class="no-print"><button class="btn" type="button" onclick="window.print()">印刷</button></div></div></header><main class="wrap"><div class="legacy-tab family-tab">${familyInner}</div></main></body></html>
 `;
   familyPrint = familyPrint.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n');
   writeFileSync(familyOutputPath, familyPrint, 'utf8');
