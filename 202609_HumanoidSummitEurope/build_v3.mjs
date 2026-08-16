@@ -200,7 +200,7 @@ const familyCss = String.raw`
 .family-head p{margin:0;color:var(--tx2);font-size:14px}
 .family-page .tab,.family-page .tab.on{display:block}
 /* .family-section は5セクション構成の共通カード枠（出張サマリー／時差・気候／
-   日程詳細／宿泊先情報／緊急連絡先）。「🗓 どこにいて何をしているか」は
+   日程詳細／宿泊先情報／緊急連絡先）。「どこにいて何をしているか」は
    日程詳細と内容が重複するため削除済み（.family-whereと.where-*一式も廃止）。
    .family-scheduleも同じ枠を使う（202610_Europe_TechEx_EuroBLECHと同じ）。 */
 .family-section,.family-schedule{margin-bottom:14px;overflow:hidden;border:2px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,32,.05)}
@@ -290,8 +290,10 @@ const familyCss = String.raw`
 .timezone-lead span{color:var(--mu);font-size:13px}
 /* 時差：家族が使うのは差の数字なので、そこだけを大きくする（EuroBLECHと同じ.timezone-cards構造）。
    ゾーン名に国旗絵文字を入れない。国旗の合成外字はWindowsでは合成されず「JP」「DE」という
-   文字のまま表示されることをユーザーが実機で確認済み（EuroBLECHは🇯🇵🇩🇪を使うが、
-   HRSでは意図的に外す。これはEuroBLECHとの意図的な相違）。 */
+   文字のまま表示されることをユーザーが実機で確認済み（EuroBLECHは日本・ドイツの国旗を
+   使うが、HRSでは意図的に外す。これはEuroBLECHとの意図的な相違）。
+   このコメント自身にも国旗を書かない。v3.cssは絵文字の一括置換を通らないので、
+   説明のつもりで書いた1文字がそのまま生成物に残る。 */
 .timezone-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .timezone-card{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:2px 8px;min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#F5F8F9;color:var(--tx2)}
 .timezone-card span,.timezone-card small{grid-column:1/3}
@@ -338,6 +340,46 @@ const familyCss = String.raw`
 }
 `;
 
+/* 概要タブ。各ブロックは索引であって内容ではない。1行の事実と詳細タブへの
+   導線だけを置き、理由や候補の中身は旅程・会場・準備が持つ。ここが長くなると
+   「ひと目で俯瞰する場所」でなくなる（2026-08-16）。 */
+// 冒頭バナーの未確定サマリー。概要タブの日程概要も、どの日に札を付けるかを
+// この1文から決める。未確定の日付を2か所で別々に持つと、片方だけ古くなる。
+const UNDECIDED_BANNER = '未確定は <a href="#day-0911">9/11</a> の企業訪問（訪問先・集合とも公式未発表）と、<a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。便とホテルは確定済み。';
+
+const overviewCss = String.raw`
+.ov-days{width:100%;border-collapse:collapse;font-size:13px}
+.ov-days th{background:var(--line2);border-bottom:1px solid var(--line);padding:5px 8px;color:var(--mu);font-size:12px;font-weight:700;text-align:left;white-space:nowrap}
+.ov-days td{border-top:1px solid var(--line2);padding:7px 8px;vertical-align:top;line-height:1.55}
+.ov-days td.ov-date{width:64px;color:var(--tx);font-weight:700;white-space:nowrap}
+/* 宿泊列は190px。150pxだと最長の「Best Western Hotel Airport Frankfurt」が3行に
+   割れていた（1行に必要な幅は267pxと実測、2026-08-16）。267pxまで広げると主な内容が
+   痩せるので、2行に収まる190pxで止める。 */
+.ov-days td.ov-stay{width:190px;color:var(--tx2)}
+/* 未確定の理由。宿泊と同じ小さい灰色にすると、9/11のように理由と宿泊が続く行で
+   2つが同じ列の値に見えた。左罫を付けて、主な内容への注記だと分かるようにする。 */
+.ov-note{display:block;margin-top:3px;padding-left:7px;border-left:2px solid var(--line);color:var(--mu);font-size:12px}
+.ov-facility{display:grid;gap:7px}
+.ov-facility>div{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:start;font-size:13px;line-height:1.55}
+.ov-facility b{color:var(--mu);font-size:12px;font-weight:700}
+.ov-more{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+@media(max-width:430px){
+  /* 393pxでは3列のうち宿泊地が押し潰れて1文字ずつ折り返すので、日付を見出し行に
+     昇格させて2段にする。家族向け気候表で同じ失敗をしている（2026-08-15）。 */
+  .ov-days,.ov-days tbody,.ov-days tr,.ov-days td{display:block;width:auto}
+  .ov-days thead{display:none}
+  .ov-days tr{border-top:1px solid var(--line2);padding:8px 2px}
+  .ov-days tr:first-child{border-top:0}
+  .ov-days td{border:0;padding:0}
+  .ov-days td.ov-date{width:auto;margin-bottom:2px}
+  /* 見出し行を消すので、宿泊セルだけ値の意味が分からなくなる。ラベルを付ける
+     （セッション表の.session-field-labelと同じ考え方）。 */
+  .ov-days td.ov-stay{width:auto;margin-top:3px;color:var(--mu);font-size:12px}
+  .ov-days td.ov-stay::before{content:'宿 ';color:var(--tx2);font-weight:700}
+  .ov-facility>div{grid-template-columns:44px minmax(0,1fr)}
+}
+`;
+
 const deskPrintCss = String.raw`
 /* Static desk-print copy: itinerary, preparation, and venue reference only. */
 body.desk-copy{background:#fff;padding-bottom:0}
@@ -348,9 +390,11 @@ body.desk-copy .secondary-entry,
 body.desk-copy .plans,
 body.desk-copy .no-print,
 body.desk-copy .transfer-help{display:none!important}
+body.desk-copy #tab-overview,
 body.desk-copy #tab-plan,
 body.desk-copy #tab-prep,
 body.desk-copy #tab-venue{display:block!important}
+body.desk-copy #tab-plan,
 body.desk-copy #tab-prep,
 body.desk-copy #tab-venue{margin-top:20px;padding-top:12px;border-top:3px solid var(--line)}
 body.desk-copy .note,
@@ -363,9 +407,11 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
 @media print{
   body.desk-copy .desk-print-trigger{display:none!important}
   body.desk-copy .hdr{border-bottom:1px solid #555}
+  body.desk-copy #tab-plan,
   body.desk-copy #tab-prep,
   body.desk-copy #tab-venue{break-before:page}
   body.desk-copy .tab{display:none!important}
+  body.desk-copy #tab-overview,
   body.desk-copy #tab-plan,
   body.desk-copy #tab-prep,
   body.desk-copy #tab-venue{display:block!important}
@@ -537,6 +583,88 @@ const routeFour = (rowTime, from, to, carrier, detail, depart, arrival) =>
   + `<div class="mode">${flightMarkHtml}<strong>${carrier}</strong><small>${detail}</small></div>`
   + endpoint('到着', arrival, to)
   + '</div>';
+// ---------- 利用フライト：表からカードへ（2026-08-16） ----------
+// 準備タブの「利用フライト」は3列の表だった。時刻・空港・便名が同じ大きさの升目に
+// 並ぶので、どれが出発でどれが到着なのかが読み取れない。1区間を
+// 「出発 → 便名 → 到着」の三つ組にする。様式はshared/trip-field/core.cssの.flight-card。
+// 値はすべて元の表に書かれているものをそのまま移す。新しい時刻・便名・数値は足さない。
+// 移し漏れを検出するため、使う文字列は元のHTMLに存在することを確認してから使う。
+const FLIGHT_JOURNEYS = [
+  {
+    label: '往路', dates: '9/7（月）〜9/8（火）', total: '総所要17時間30分',
+    footer: 'Finnair・エコノミー／CO₂e 約661kg',
+    legs: [
+      { no: 'AY80', aircraft: 'A350', duration: '13時間5分', note: '深夜便',
+        from: ['NGO', '9/7（月）', '22:50'], to: ['HEL', '9/8（火）', '5:55'] },
+      { no: 'AY1411', aircraft: 'A321', duration: '2時間40分',
+        note: '食事なし（有料軽食あり／水・ブルーベリージュース無料）',
+        from: ['HEL', '9/8（火）', '7:40'], to: ['FRA', '9/8（火）', '9:20'] },
+    ],
+    layovers: [['ヘルシンキ', '1時間45分']],
+  },
+  {
+    label: '復路', dates: '9/13（日）〜9/14（月）', total: '総所要17時間15分',
+    footer: 'Finnair・エコノミー／CO₂e 約658kg',
+    legs: [
+      { no: 'AY1416', aircraft: 'A321', duration: '2時間25分',
+        from: ['FRA', '9/13（日）', '19:20'], to: ['HEL', '9/13（日）', '22:45'] },
+      { no: 'AY79', aircraft: 'A350', duration: '12時間50分', note: '深夜便',
+        from: ['HEL', '9/14（月）', '0:45'], to: ['NGO', '9/14（月）', '19:35'] },
+    ],
+    layovers: [['ヘルシンキ', '2時間']],
+  },
+];
+
+function flightPoint(kind, label, [code, date, time]) {
+  const [name, tz, query] = AIRPORTS[code];
+  return `<div class="flight-point ${kind}"><span class="point-label">${label}</span>`
+    + `<time><span class="flight-date">${date}</span><strong>${time}</strong><em>${tz}</em></time>`
+    + `<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=${query}" target="_blank" rel="noopener">${name}</a></div>`;
+}
+
+function buildFlightCards(source) {
+  // 表の中に書かれていた値であることを、組み立てる前に確かめる。
+  FLIGHT_JOURNEYS.forEach(j => {
+    const facts = [j.dates, j.total, j.footer, ...j.layovers.flat()];
+    j.legs.forEach(leg => facts.push(leg.no, leg.aircraft, leg.duration, ...(leg.note ? [leg.note] : []),
+      leg.from[2], leg.to[2]));
+    facts.forEach(fact => {
+      if (!source.includes(fact)) throw new Error(`Flight card fact missing from source: ${fact}`);
+    });
+    if (j.legs.length - 1 !== j.layovers.length) {
+      throw new Error(`Flight card ${j.label}: ${j.legs.length} legs need ${j.legs.length - 1} layovers`);
+    }
+  });
+
+  return FLIGHT_JOURNEYS.map(j => {
+    const legs = j.legs.map((leg, i) => {
+      // 中央列は96pxしかないので、機材と所要だけを置く。機内食のような長い注記を
+      // 入れると3行に潰れて到着側へ迫る（2026-08-16にPC幅で確認）。注記は
+      // 経路の仕様ではないので、区間の下に全幅で出す。
+      const body = `<div class="flight-leg">`
+        + flightPoint('depart', '出発', leg.from)
+        + `<div class="flight-route"><strong>${leg.no}</strong>`
+        + `<span class="flight-rule">${flightMarkHtml}</span>`
+        + `<small>${leg.aircraft}<br>${leg.duration}</small></div>`
+        + flightPoint('arrive', '到着', leg.to)
+        + `</div>`
+        + (leg.note ? `<p class="flight-note">${leg.note}</p>` : '');
+      const layover = i < j.layovers.length
+        ? `<div class="layover"><span>乗り継ぎ</span><strong>${j.layovers[i][0]} ${j.layovers[i][1]}</strong></div>`
+        : '';
+      return body + layover;
+    }).join('\n        ');
+    return `<article class="flight-card">
+        <header class="flight-card-head">
+          <div><span class="flight-label">${j.label}</span><h3>${j.dates}</h3></div>
+          <span class="flight-total">${j.total}</span>
+        </header>
+        ${legs}
+        <footer>${j.footer}</footer>
+      </article>`;
+  }).join('\n      ');
+}
+
 const escapeRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 // 便名・機材・所要は元の丸括弧の中身をそのまま分解しただけ。到着時刻は
 // 各区間の直後にある到着行の値。いずれもこちらで足した数字はない。
@@ -803,6 +931,15 @@ const LEGEND_COMMENT_OLD = '   ✈飛行機 🚆鉄道 🚕タクシー 🛂空�
 // 凡例の説明も絵文字を持たない。CSSコメントの中に絵文字が残っていると、
 // 机上用印刷版（元CSSを<style>へ埋め込む）で絵文字の一括置換に巻き込まれる。
 const LEGEND_COMMENT_NEW = '   交通手段も行動の区分もモノクロSVG（.flight-mark／.mode-icon／.line-icon）。空港手続き・宿・食事・観光・観戦・HRS';
+// 同じコメント段落の残り2行。「絵文字だけ」という説明も、⚽と🤖を名指しする行も、
+// 全部SVGへ移した今は事実と違ううえ、v3.cssへそのまま出る（v3.cssは絵文字の
+// 一括置換を通らないので、コメントの中の絵文字だけが生成物に残っていた）。
+const KIND_COMMENT_FIXUPS = [
+  ['/* イベント種別：絵文字だけ。色は付けない（HRSと要検討のみ例外）',
+   '/* イベント種別：モノクロSVGアイコン。色は付けない（HRSと要検討のみ例外）'],
+  ['   ⚽は観戦で、HRS（🤖）とは別物なので rose の色は使わない。 */',
+   '   観戦はHRSとは別物なので rose の色は使わない。 */'],
+];
 // 旧い状態札のCSS。中身は .plan-state（共通部品）へ移したので、規則ごと落とす。
 // .st と .st-skip は残す（不参加は進み具合の軸ではないので5状態に入れていない）。
 const DEAD_STATE_CSS = [
@@ -812,9 +949,11 @@ const DEAD_STATE_CSS = [
 ];
 const sourceCss = DEAD_STATE_CSS.reduce(
   (css, rule, i) => mustReplace(css, rule, '', `dead state chip rule #${i}`),
-  mustReplace(sourceCssMatch[1], LEGEND_COMMENT_OLD, LEGEND_COMMENT_NEW, 'legend comment in source CSS')
+  KIND_COMMENT_FIXUPS.reduce(
+    (css, [oldText, newText], i) => mustReplace(css, oldText, newText, `kind comment in source CSS #${i}`),
+    mustReplace(sourceCssMatch[1], LEGEND_COMMENT_OLD, LEGEND_COMMENT_NEW, 'legend comment in source CSS'))
 );
-const compiledSharedCss = `${sourceCss}\n${sharedCoreCss}\n${outdoorCss}\n${familyCss}`.trim() + '\n';
+const compiledSharedCss = `${sourceCss}\n${sharedCoreCss}\n${outdoorCss}\n${overviewCss}\n${familyCss}`.trim() + '\n';
 
 const transferControls = String.raw`
     <button class="btn" id="btn-download-md">⬇ メモをMarkdownでDL</button>
@@ -1037,14 +1176,23 @@ function buildMain({ offline = false } = {}) {
   if (offline) {
     html = mustReplace(html, /<!--[\s\S]*?-->/, '<!-- Self-contained static desk-print copy; no note storage or runtime scripts. -->', 'desk-print document note');
   }
-  html = mustReplace(html, '</style>', `${outdoorCss}\n${offline ? deskPrintCss : ''}\n</style>`, 'style end');
+  // 机上用印刷版は1ファイルで完結させる約束なので、v3.cssと同じ中身を<style>へ入れる。
+  // 従来はsharedCoreCssとfamilyCssが抜けたまま配っていた。つまり.line-icon／
+  // .flight-mark／.plan-state／.sum-*の規則が無い。アイコンのSVGは寸法規則が無いと
+  // 親の幅いっぱいに広がるので、見出しのアイコン1つでページが崩れる
+  // （2026-08-16に画面で確認。概要タブを先頭に置いて初めて目に付いた）。
+  // オンライン版はこの<style>ごとv3.cssのlinkへ差し替わるため、offline時だけ足す。
+  // 連結順はcompiledSharedCss（v3.css）と同じにする。順が違うと打ち消しがずれる。
+  html = mustReplace(html, '</style>',
+    `${offline ? sharedCoreCss : ''}\n${outdoorCss}\n${overviewCss}\n${offline ? familyCss : ''}\n${offline ? deskPrintCss : ''}\n</style>`,
+    'style end');
   // 冒頭の要約が「未確定は9/12・9/13だけ」と断定していたが、ページ自身が
   // 9/11（Day 3・企業訪問）に未検討の札を2枚付けている。訪問先リストも集合方法も
   // 公式未発表で、こちらが決められる段階にすらない。9/12・9/13（こちらが決める）とは
   // 未確定の理由が違うので、書き分けたうえで9/11を落とさない。
   html = mustReplace(html,
     '未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方だけ。便とホテルは確定済み。',
-    '未確定は <a href="#day-0911">9/11</a> の企業訪問（訪問先・集合とも公式未発表）と、<a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。便とホテルは確定済み。',
+    UNDECIDED_BANNER,
     'undecided summary');
 
   const header = String.raw`<header class="hdr">
@@ -1064,6 +1212,7 @@ function buildMain({ offline = false } = {}) {
 <div class="field-nav">
   <div class="wrap">
     <nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション">
+      <button data-tab="overview" role="tab" aria-controls="tab-overview" aria-selected="false"><span class="ic">${lineIconHtml('compass')}</span>概要</button>
       <button data-tab="plan" class="on" role="tab" aria-controls="tab-plan" aria-selected="true"><span class="ic">📅</span>旅程</button>
       <button data-tab="venue" role="tab" aria-controls="tab-venue" aria-selected="false"><span class="ic">🤖</span>会場</button>
       <button data-tab="rec" role="tab" aria-controls="tab-rec" aria-selected="false"><span class="ic">📝</span>記録</button>
@@ -1155,6 +1304,11 @@ function buildMain({ offline = false } = {}) {
   html = replaceAllCounted(html, '<div>🚆 鉄道は事前購入せず', `<div>${modeIconHtml('train')} 鉄道は事前購入せず`, 'rail ticket bullet', 1);
   // 机上用印刷版は元CSSをそのまま<style>へ埋め込むため、v3.css側とは別にここでも当てる。
   html = mustReplace(html, LEGEND_COMMENT_OLD, LEGEND_COMMENT_NEW, 'legend comment in embedded CSS');
+  // 机上用印刷版は元CSSを<style>へそのまま埋め込むので、同じ段落をここでも直す。
+  // 直さないと、絵文字の一括置換がCSSコメントの中の⚽と🤖をSVGへ変えてしまう。
+  html = KIND_COMMENT_FIXUPS.reduce(
+    (text, [oldText, newText], i) => mustReplace(text, oldText, newText, `kind comment in embedded CSS #${i}`),
+    html);
 
   // ---------- 地図リンクを場所名そのものへ ----------
   MAP_LINK_FIXUPS.forEach(([search, replacement, expectedCount], i) => {
@@ -1307,6 +1461,15 @@ function buildMain({ offline = false } = {}) {
   );
   html = mustReplace(html, '<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">', '<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">\n  <div class="no-print" style="margin-bottom:10px"><button class="btn" data-goto="plan">← 旅程へ戻る</button></div>', 'prep section');
 
+  // ---------- 利用フライトの2つの表をカードへ差し替える ----------
+  // 往路の<h3>から復路の表の終わりまでをまとめて置き換える。表の値は
+  // FLIGHT_JOURNEYSへ移してあり、buildFlightCardsが元HTMLとの一致を確認する。
+  html = mustReplace(html,
+    /<h3>往路 9\/7（月）[\s\S]*?<\/table><\/div>\s*(?=<div class="banner)/,
+    buildFlightCards(html) + '\n\n      ',
+    'flight tables to cards');
+  if (/<h3>復路 9\/13（日）/.test(html)) throw new Error('flight tables remain after the card replacement');
+
   html = mustReplace(html, '<button class="btn" id="btn-export">📋 Markdownでコピー</button>', '<button class="btn" id="btn-export">📋 Markdownでコピー</button>\n' + transferControls, 'record buttons');
   html = mustReplace(html, '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>', '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>\n' + cloudPanel, 'cloud sync panel');
   html = mustReplace(html, "  document.getElementById('btn-clear').addEventListener('click', () => {", transferScript + "  document.getElementById('btn-clear').addEventListener('click', () => {", 'JSON script insertion');
@@ -1335,7 +1498,15 @@ function buildMain({ offline = false } = {}) {
 
   html = html.replace('レイアウト v2（タブ × 日カード × レーン）', `レイアウト v3（屋外スマホ・連続旅程・3セクション）${offline ? '｜机上用印刷版' : ''}`);
   html = html.replace('更新日：2026年8月13日', '更新日：2026年8月13日（v3フィールド版）');
-  html = html.replace('  showTab(store.get(\'tab\', \'plan\'));', "  showTab(['plan','venue','rec','prep'].includes(store.get('tab','plan')) ? store.get('tab','plan') : 'plan');");
+  // ---------- 概要タブを旅程の手前へ差し込む ----------
+  // 既定タブはplanのまま。概要は出発前と机上で効くもので、現地で開くのは旅程。
+  // 起動時にいきなり概要が出ると、現地では毎回1タップ余分になる。
+  html = mustReplace(html,
+    '<section class="tab on" id="tab-plan" role="tabpanel" aria-label="旅程">',
+    buildOverviewSection(html, UNDECIDED_BANNER) + '\n\n<section class="tab on" id="tab-plan" role="tabpanel" aria-label="旅程">',
+    'overview section');
+
+  html = html.replace('  showTab(store.get(\'tab\', \'plan\'));', "  showTab(['overview','plan','venue','rec','prep'].includes(store.get('tab','plan')) ? store.get('tab','plan') : 'plan');");
   html = mustReplace(html, '<body>', offline
     ? '<body class="detail desk-copy" data-trip-layout="desk-print-v1" data-trip-copy="desk-print">'
     : '<body data-trip-layout="field-v1" data-trip-key="hrs2026-v3">', 'layout marker');
@@ -1503,6 +1674,157 @@ const FAMILY_STAY_MAP_LINKS = {
   'Best Western Hotel Airport Frankfurt': 'https://www.google.com/maps/search/?api=1&query=Best+Western+Hotel+Airport+Frankfurt+De-Saint-Exupery-Strasse+6+60549+Frankfurt',
 };
 const NON_PLACE_STAYS = ['機内', '帰宅'];
+
+// ============================================================
+// 概要タブ（2026-08-16）
+// ============================================================
+// 出張概要／日程概要／イベント概要／施設概要の4ブロック。
+// どのブロックも「1行の事実 ＋ 詳細タブへの導線」に留める。理由・候補の中身・
+// リンク集は旅程・会場・準備が持つ。ここに周辺レストランや観光地やラウンジを
+// 集めると、全タブ中で最も長いタブになり「ひと目で俯瞰する場所」でなくなる。
+//
+// 日程概要はFAMILY_DAYSから組む。手で書くと、日程を1回直した時点で概要だけが
+// 古くなる。概要は全体を見る場所なので、ズレたときの実害が最も大きい。
+// flightはmoveより上。moveを上にすると9/14が「入国審査…各自帰宅」を拾い、その日の
+// 主役である19:35のセントレア着が概要から消えた（2026-08-16に生成物で確認）。
+// 到着地は宿泊列が持つので、移動日はフライトを出すほうが日ごとの粒度がそろう。
+const OVERVIEW_MAIN_KIND_ORDER = ['work', 'review', 'flight', 'move', 'procedure', 'transfer', 'stay'];
+// 「。」以降は補足なので落とす。「（）」は残す。'中部国際空港（セントレア）着' の
+// ように、括弧の後ろに述語が続く行があり、括弧で切ると意味が変わる。
+const overviewHeadline = text => text.replace(/<[^>]+>/g, '').split('。')[0].trim();
+// 未確定の日だけ、「。」の後ろに残した理由を小さく添える（9/11の「訪問先は未発表」）。
+// 状態の札は付けない。CLAUDE.mdの「状態を持つ単位は予定1件」に従い、札の所有者は
+// 旅程・会場に置く。同じ予定の札を概要にも複製すると、片方だけ古くなる。
+const overviewTail = text => text.replace(/<[^>]+>/g, '').split('。').slice(1).join('。').trim();
+// 未確定の日は自分で判定しない。ページ冒頭の警告バナーが名指ししている日付を
+// そのまま使い、バナー側が変わったらビルドで気付けるようにする。
+const OVERVIEW_UNDECIDED_DATES = ['9/11', '9/12', '9/13'];
+
+function overviewDayRows() {
+  return FAMILY_DAYS.map(day => {
+    const pick = OVERVIEW_MAIN_KIND_ORDER
+      .map(kind => day.events.find(ev => ev[1] === kind))
+      .find(Boolean);
+    if (!pick) throw new Error(`Overview: no representative event for ${day.date}`);
+    const main = overviewHeadline(pick[3]);
+    if (!main) throw new Error(`Overview: empty headline for ${day.date}`);
+    const undecided = OVERVIEW_UNDECIDED_DATES.includes(day.date);
+    return {
+      date: `${day.date}（${day.dow}）`,
+      main,
+      note: undecided ? overviewTail(pick[3]) : '',
+      stay: day.stays.map(s => s[1]).join('／'),
+    };
+  });
+}
+
+function buildOverviewSection(source, undecidedBanner) {
+  // 使う事実はすべて既存ソースの中にある。新しい固有名詞・数字は持ち込まない。
+  // ソースが変わったら気付けるよう、使う前に確認する（家族サマリーと同じ規律）。
+  // 主催・規模・前回開催だけは、このリポジトリのどこにも無かった外部の事実。
+  // 2026-08-16にhumanoidrobotssummit.comとacgrobot.comを実際に開いて確認した。
+  //   主催   ACG Events Global（両サイトの表記。ページ内の「主催 acgrobot」リンクとも一致）
+  //   規模   参加1,000名超・500社超・出展40社超（いずれも主催者の見込み値）
+  //   前回   HRS Europe 2025 ベルリン、参加500名超（acgrobot.comの記載）
+  // 登壇者数は同一ページ内で「30+」と「40」が食い違っていたので載せない。
+  // 見込み値を実績のように書かないこと。画面にも主催者発表である旨と出典を出す。
+  // これらはソース照合の対象外（元のHTMLに無いのが当然のため）。
+  const overviewFacts = [
+    '9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA',
+    'Liederhalle', 'Berliner Platz 1-3', 'ホテルから徒歩約3分',
+    '9/9・9/10 は講演＋展示（40+社）／9/11 は近郊企業訪問',
+    'Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA',
+    'Maritim Stuttgart', 'Best Western Hotel Airport Frankfurt',
+    // 各日のテーマ。会場タブの日別プレースホルダーが持っている文字列をそのまま使う。
+    '政策・市場・量産・Embodied AI・モーター技術',
+    '医療応用・センサー・GDPR・フレキシブル生産ライン',
+    '近郊企業へのガイド付き訪問（訪問先は開催直前に公式発表）',
+  ];
+  overviewFacts.forEach(fact => {
+    if (!source.includes(fact)) throw new Error(`Overview fact missing from source: ${fact}`);
+  });
+  // 未確定の日付は警告バナーが正本。バナーに無い日付へ札を付けない。
+  OVERVIEW_UNDECIDED_DATES.forEach(date => {
+    if (!undecidedBanner.includes(date)) {
+      throw new Error(`Overview: ${date} is marked undecided but the warning banner does not name it`);
+    }
+  });
+
+  // 日ごとの件数はセッション表から数える。見出しに書いてある数を書き写すと、
+  // 表が増減したときに概要だけ古い数を出す。
+  const sessionCount = day => (source.match(new RegExp(`data-k="${day}-\\d+"`, 'g')) || []).length;
+  const [d1, d2, d3] = ['d1', 'd2', 'd3'].map(sessionCount);
+  if (!d1 || !d2 || !d3) throw new Error(`Overview: session rows not found (d1=${d1} d2=${d2} d3=${d3})`);
+
+  const rows = overviewDayRows();
+  if (rows.length !== 8) throw new Error(`Overview: expected 8 day rows, got ${rows.length}`);
+  const dayRowsHtml = rows.map(r =>
+    `<tr><td class="ov-date">${r.date}</td><td>${r.main}${r.note ? `<span class="ov-note">${r.note}</span>` : ''}</td><td class="ov-stay">${r.stay}</td></tr>`
+  ).join('\n          ');
+
+  return String.raw`<section class="tab" id="tab-overview" role="tabpanel" aria-label="概要">
+  <div class="card">
+    <h2 class="ttl">${lineIconHtml('suitcase')}出張概要</h2>
+    <div class="bd" style="display:grid;gap:8px">
+      <p class="where-lead" style="margin:0">HRS Europe 2026（ヒューマノイドの国際会議）の視察｜9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA</p>
+      <div class="sum-place sum-a"><strong>シュトゥットガルト</strong><span>9/8（火）〜9/12（土）</span><span>HRS Europe 2026。会場はホテルの隣（徒歩約3分）</span></div>
+      <div class="sum-place sum-b"><strong>フランクフルト</strong><span>9/12（土）〜9/13（日）</span><span>帰国前泊。空港近郊</span></div>
+      <div class="sum-facts">
+        <div><b>会期</b><span>9/9〜9/11</span><span>3日間</span></div>
+        <div><b>全日程</b><span>8日間</span><span>2名</span></div>
+        <div><b>帰着</b><span>9/14（月）</span><span>セントレア 19:35</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="ttl">${lineIconHtml('calendar')}日程概要</h2>
+    <div class="bd">
+      <table class="ov-days">
+        <thead><tr><th>日付</th><th>主な内容</th><th>宿泊</th></tr></thead>
+        <tbody>
+          ${dayRowsHtml}
+        </tbody>
+      </table>
+      <div class="ov-more no-print"><button class="btn" data-goto="plan">${lineIconHtml('calendar')}日ごとの旅程へ</button></div>
+    </div>
+    <div class="foot">${lineIconHtml('bulb')}時刻・便名・候補の中身は旅程タブが持ちます。ここは1日1行の俯瞰だけです</div>
+  </div>
+
+  <div class="card">
+    <h2 class="ttl">${lineIconHtml('robot')}イベント概要</h2>
+    <div class="bd small" style="display:grid;gap:7px">
+      <div>ヒューマノイドの国際会議。9/9〜9/11の3日間で、Day 1・Day 2に全${d1 + d2}項目と展示40+社、最終日は企業訪問</div>
+      <div class="ov-facility">
+        <div><b>Day 1</b><span>9/9（水）全${d1}項目 — 政策・市場・量産・Embodied AI・モーター技術</span></div>
+        <div><b>Day 2</b><span>9/10（木）全${d2}セッション — 医療応用・センサー・GDPR・フレキシブル生産ライン</span></div>
+        <div><b>Day 3</b><span>9/11（金）近郊企業へのガイド付き訪問（訪問先は開催直前に公式発表）</span></div>
+      </div>
+      <div class="ov-facility">
+        <div><b>主催</b><span><a class="place" href="https://acgrobot.com/" target="_blank" rel="noopener">ACG Events Global</a></span></div>
+        <div><b>規模</b><span>参加1,000名超・500社超・出展40社超の見込み（主催者発表）</span></div>
+        <div><b>前回</b><span>HRS Europe 2025（ベルリン）参加500名超。今回がシュトゥットガルトへの移転初回</span></div>
+      </div>
+      <div>${lineIconHtml('star')}主要出展社：Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA</div>
+      <div class="small muted">規模と前回実績は主催者の公表値で、第三者による検証はされていない。出典：<a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">humanoidrobotssummit.com</a>・<a href="https://acgrobot.com/" target="_blank" rel="noopener">acgrobot.com</a>（2026-08-16 閲覧）</div>
+      <div class="ov-more no-print"><button class="btn" data-goto="venue">${lineIconHtml('book')}セッション表と当日メモへ</button></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="ttl">${lineIconHtml('hotel')}施設概要</h2>
+    <div class="bd">
+      <div class="ov-facility">
+        <div><b>会場</b><span>Liederhalle（Berliner Platz 1-3）。Maritim Stuttgartから徒歩約3分</span></div>
+        <div><b>宿</b><span>Maritim Stuttgart 9/8〜9/12 ／ Best Western Hotel Airport Frankfurt 9/12〜9/13</span></div>
+        <div><b>空港</b><span>往路 NGO → HEL → FRA ／ 復路 FRA → HEL → NGO（ヘルシンキ乗継）</span></div>
+      </div>
+      <div class="ov-more no-print"><button class="btn" data-goto="prep">${lineIconHtml('clipboard')}フライト・宿泊の詳細と地図リンク集へ</button></div>
+    </div>
+    <div class="foot">${lineIconHtml('bulb')}周辺の食事・観光・ラウンジは、日付に紐づくものが旅程タブ、参照用が準備タブの地図リンク集にあります</div>
+  </div>
+</section>`;
+}
 function familyStayPlace(name) {
   if (NON_PLACE_STAYS.includes(name)) return name;
   const href = FAMILY_STAY_MAP_LINKS[name];

@@ -43,7 +43,21 @@ for (const name of files) {
 const onlineName = 'index.html';
 const online = fs.readFileSync(path.join(here, onlineName), 'utf8');
 const sharedCss = fs.readFileSync(path.join(here, 'v3.css'), 'utf8');
-assert((online.match(/data-tab="(?:plan|venue|rec)"/g) || []).length === 3, `${onlineName}: primary navigation is not exactly three sections`);
+assert((online.match(/data-tab="(?:overview|plan|venue|rec)"/g) || []).length === 4, `${onlineName}: primary navigation is not exactly four sections`);
+// 概要タブ（2026-08-16）。索引であって内容ではないので、4ブロックが揃っていること、
+// 日程概要が8日ぶんあること、既定タブが旅程のままであることを見る。
+assert(online.includes('<section class="tab" id="tab-overview"') && online.includes('data-tab="overview"'), `${onlineName}: overview tab missing`);
+['出張概要', '日程概要', 'イベント概要', '施設概要'].forEach(block => {
+  assert(online.includes(`</span>${block}</h2>`), `${onlineName}: overview block missing: ${block}`);
+});
+assert((online.match(/<td class="ov-date">/g) || []).length === 8, `${onlineName}: overview itinerary must carry all eight days`);
+assert(online.includes('<section class="tab on" id="tab-plan"') && !online.includes('<section class="tab on" id="tab-overview"'), `${onlineName}: itinerary must stay the default tab`);
+assert(online.includes("['overview','plan','venue','rec','prep'].includes(store.get('tab','plan'))"), `${onlineName}: overview missing from the restored-tab whitelist`);
+// 概要は詳細を持たない。各ブロックから詳細タブへ戻れること。
+['data-goto="plan"', 'data-goto="venue"', 'data-goto="prep"'].forEach(link => {
+  assert(online.includes(link), `${onlineName}: overview cross-link missing: ${link}`);
+});
+assert(sharedCss.includes('.ov-days{') && sharedCss.includes('.ov-facility{'), 'v3.css: overview styles missing');
 assert((online.match(/<details class="day" open/g) || []).length === 8, `${onlineName}: all eight days must start open`);
 assert(!online.includes('data-tab="prep"') && !online.includes('data-tab="fam"'), `${onlineName}: secondary content leaked into primary navigation`);
 assert(online.includes('id="btn-export-json"') && online.includes('id="import-json"'), `${onlineName}: JSON transfer controls missing`);
@@ -73,11 +87,13 @@ const cssWithoutDataUris = sharedCss.replace(/url\(\s*(["']?)data:[\s\S]*?\1\s*\
 assert(!/@import\s+url|https?:\/\//i.test(cssWithoutDataUris), 'v3.css: remote dependency found');
 
 // ---------- 交通手段アイコン（EUROBLECH方式） ----------
-// 内訳: 旅程行のフライト8 ＋ 合流バー1 ＋ フライトカード見出し1 ＋ 凡例1 ＝ 11。
-// オンライン版はFAMデータ（帰国日）の分がスクリプト内にあるので+1で12。
-// 机上用印刷版はスクリプトを持たないため11。鉄道は旅程35＋凡例1＋準備タブ1＝37、タクシー1＋凡例1＝2。
-const ONLINE_FLIGHT_ICONS = 12;
-const OFFLINE_FLIGHT_ICONS = 11;
+// 内訳: 旅程行のフライト8 ＋ 合流バー1 ＋ 利用フライト見出し1 ＋ 凡例1 ＝ 11。
+// 2026-08-16に「利用フライト」を表からカードへ替え、区間ごとに中央列の印が付いた。
+// 往路2区間＋復路2区間＝4本ぶん増えて15。
+// オンライン版はFAMデータ（帰国日）の分がスクリプト内にあるので+1で16。
+// 机上用印刷版はスクリプトを持たないため15。鉄道は旅程35＋凡例1＋準備タブ1＝37、タクシー1＋凡例1＝2。
+const ONLINE_FLIGHT_ICONS = 16;
+const OFFLINE_FLIGHT_ICONS = 15;
 const countIn = (text, pattern) => (text.match(pattern) || []).length;
 assert(sharedCss.includes('.flight-mark{') && sharedCss.includes('-webkit-mask:url("data:image/svg+xml'), 'v3.css: shared flight-mark icon missing');
 assert(sharedCss.includes('.mode-icon{') && sharedCss.includes('.mode-icon-unknown{'), 'v3.css: shared mode-icon styles missing');
@@ -92,7 +108,6 @@ assert(countIn(immiHtml, /onclick="/g) === 1 && immiHtml.includes('onclick="wind
 assert(!/localStorage|sessionStorage|TripField|cloudEndpoint/.test(immiHtml), 'immigration_print.html: passport details must never be persisted or synced');
 assert(countIn(immiHtml, /<input/g) === 2, 'immigration_print.html: expected the name and passport fields');
 assert(!/[぀-ヿ一-鿿]/.test(immiHtml), 'immigration_print.html: must be written in English only');
-assert(!/\p{Extended_Pictographic}/u.test(immiHtml), 'immigration_print.html: no emoji');
 for (const fact of ['Liederhalle', 'Maritim Hotel Stuttgart', 'Best Western Hotel Airport Frankfurt', 'AY80', 'AY1416', 'return ticket held', 'Consulate-General of Japan in Frankfurt']) {
   assert(immiHtml.includes(fact), `immigration_print.html: missing ${fact}`);
 }
@@ -252,7 +267,10 @@ assert(!/未確認/.test(climateSection[0]), 'family_print.html: all four cities
 // カラー絵文字35種が検査を素通りしていた（2026-08-15にユーザーが画面で発見）。
 // 3文字を数える検査ではなく、Unicodeの性質で数える。
 // 国旗（地域指示子の対）も対象。Windowsでは合成されず「DE」「JP」と出る。
-for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml], ['family_print.html', family]]) {
+// v3.cssも生成物。ここを対象から外していたため、CSSコメントの中の⚽🤖🖨🗓🗺と
+// 国旗🇯🇵🇩🇪が2026-08-16まで残っていた。v3.cssはHTMLと違って絵文字の一括置換を
+// 通らないので、素通りすると誰も気付かない。immigration_print.htmlもここでまとめて見る。
+for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml], ['family_print.html', family], ['immigration_print.html', immiHtml], ['v3.css', sharedCss]]) {
   const pictographs = [...new Set(text.match(/\p{Extended_Pictographic}/gu) || [])];
   assert(pictographs.length === 0,
     `${name}: every icon must be a monochrome SVG; found emoji ${pictographs.map(c => `${c}(U+${c.codePointAt(0).toString(16).toUpperCase()})`).join(' ')}`);
@@ -289,6 +307,17 @@ for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offl
 assert(sharedCss.includes('.plan-state{') && PLAN_STATES.length === 5, 'v3.css: shared plan-state component missing');
 assert(!sharedCss.includes('.st-booked{') && !sharedCss.includes('.et.t-tbd{'), 'v3.css: dead state chip rules must be removed with the chips');
 assert((offlineHtml.match(/class="line-icon line-icon-print"/g) || []).length >= 1, 'index_v3_offline.html: expected the print line-icon SVG in the desk-print banner');
+// ---------- 机上用印刷版は本当に1ファイルで完結しているか ----------
+// アイコンのマークアップがあることは上で見ていたが、それを表示する規則が
+// 埋め込まれているかは誰も見ていなかった。sharedCoreCssとfamilyCssが<style>から
+// 抜けていて、.line-icon／.flight-mark／.plan-state／.sum-*が丸ごと無いまま
+// 配られていた。寸法規則を失ったSVGは親の幅いっぱいに広がるので、見出しの
+// アイコン1つでページが崩れる（2026-08-16に画面で発見）。
+// マークアップと規則は対にして検査する。v3.css側だけ見ても机上版は守れない。
+for (const rule of ['.line-icon{', '.flight-mark{', '.plan-state{', '.sum-place,', '.ov-days{']) {
+  assert(sharedCss.includes(rule), `v3.css: missing the ${rule} rule`);
+  assert(offlineHtml.includes(rule), `index_v3_offline.html: the desk-print copy must embed the ${rule} rule that v3.css has, or the markup falls back to unstyled HTML`);
+}
 assert((online.match(/class="line-icon line-icon-calendar"/g) || []).length >= 1, `${onlineName}: expected the calendar line-icon SVG replacing the retired 🗓 glyph`);
 
 // ---------- 旅程タブの長い補足を折り畳みへ ----------
