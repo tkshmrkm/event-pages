@@ -125,9 +125,9 @@
         <div><b>宿</b><span>Maritim Stuttgart 9/8〜9/12 ／ Best Western Hotel Airport Frankfurt 9/12〜9/13</span></div>
         <div><b>空港</b><span>往路 NGO → HEL → FRA ／ 復路 FRA → HEL → NGO（ヘルシンキ乗継）</span></div>
       </div>
-      <div class="ov-more no-print"><button class="btn" data-goto="prep"><span class="line-icon line-icon-clipboard" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="1"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M8 10h8M8 14h8M8 18h5"/></svg></span>フライト・宿泊の詳細と地図リンク集へ</button></div>
+      <div class="ov-more no-print"><button class="btn" data-goto="plan"><span class="line-icon line-icon-calendar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/><path d="M8 13h2m4 0h2m-8 4h2m4 0h2"/></svg></span>フライト・宿泊の詳細と地図リンク集へ</button></div>
     </div>
-    <div class="foot"><span class="line-icon line-icon-bulb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M9 18h6M10 21h4"/><path d="M10 11l1-2 2 2 1-2"/></svg></span>周辺の食事・観光・ラウンジは、日付に紐づくものが旅程タブ、参照用が準備タブの地図リンク集にあります</div>
+    <div class="foot"><span class="line-icon line-icon-bulb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M9 18h6M10 21h4"/><path d="M10 11l1-2 2 2 1-2"/></svg></span>詳細も周辺の食事・観光・ラウンジも旅程タブの末尾にあります。準備タブは出発前のToDoだけ</div>
   </div>
 </section>
 
@@ -541,30 +541,8 @@
     </div>
   </details>
 
-</section>
 
-<!-- ==================== タブ：準備 ==================== -->
-<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">
-  <div class="banner b-info no-print" style="margin-bottom:10px"><span class="line-icon line-icon-checkCircle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 6-6"/></svg></span><div><strong>出発前に埋めるタブ</strong>。全部そろったら、このタブは畳んで構わない</div></div>
-
-  <div class="card">
-    <h2 class="ttl"><span class="line-icon line-icon-clipboard" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="1"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M8 10h8M8 14h8M8 18h5"/></svg></span>要対応タスク <span id="todo-count" style="font-weight:400;opacity:.8"></span></h2>
-    <div class="bd" id="todo-list">
-      <div class="todo" data-k="t1"><input type="checkbox" id="cb-t1" data-done="1"><label for="cb-t1">フライト確定：Finnair NGO⇔FRA（HEL経由）</label></div>
-      <div class="todo" data-k="t2"><input type="checkbox" id="cb-t2" data-done="1"><label for="cb-t2">Stuttgart宿泊：Maritim Stuttgart（9/8〜9/12・4泊・朝食付）予約完了</label></div>
-      <div class="todo" data-k="t3"><input type="checkbox" id="cb-t3" data-done="1"><label for="cb-t3">BestWestern Frankfurt空港ホテル予約（完了）</label></div>
-      <div class="todo" data-k="t4"><input type="checkbox" id="cb-t4"><label for="cb-t4">9/12をA（Mainz観戦・キックオフ15:30）／B（ケルン観光）／C（ポルシェ博物館）／D（ポルシェ＋ケルン）から選ぶ</label></div>
-      <div class="todo" data-k="t5"><input type="checkbox" id="cb-t5"><label for="cb-t5">Mainz観戦チケット購入（<strong>発売は試合4〜5週間前＝8月上〜中旬見込み</strong>・午前10時〜／mainz05.de・ファンショップ・電話）<span class="note">Mainz 05 対 Eintracht Frankfurt、9/12（土）15:30 キックオフ</span></label></div>
-      <div class="todo" data-k="t6"><input type="checkbox" id="cb-t6" data-done="1"><label for="cb-t6">対戦カード・キックオフ時刻を確認（Mainz 05 対 Eintracht Frankfurt、9/12（土）15:30・Bundesliga 2026/7/15発表）</label></div>
-      <div class="todo" data-k="t7"><input type="checkbox" id="cb-t7"><label for="cb-t7">9/13の日中を条件に応じて選ぶ（9/12がA・CならX：ケルンも候補、9/12がB・DならY：フランクフルト市内／Z：Mainz。FRA空港16:20着基準）</label></div>
-      <div class="todo" data-k="t8"><input type="checkbox" id="cb-t8"><label for="cb-t8">帰国便の出発前に <a href="https://services.digital.go.jp/visit-japan-web/" target="_blank" rel="noopener">Visit Japan Web（デジタル庁公式）</a> へ9/14の帰国予定・税関申告を登録（二人とも各自／二次元コードの表示まで確認）</label></div>
-      <div class="todo" data-k="t9"><input type="checkbox" id="cb-t9" data-done="1"><label for="cb-t9">鉄道チケット方針を決定：現地で乗車時にDB Navigatorから都度購入（Stuttgart→Frankfurt空港、プランB・D・X選択時のFrankfurt⇔Kölnを含む）</label></div>
-      <div class="todo" data-k="t10"><input type="checkbox" id="cb-t10"><label for="cb-t10">ラウンジ最終確認（<strong>ワンワールド前提</strong>：JAL/ワンワールドサファイア資格の有無を二人分／NGO=JALサクララウンジ／HEL=復路乗継時のみFinnair Business Lounge候補、往路は乗継優先で使わない／FRAはT3、Finnair指定ラウンジ名とPriority Lounge利用可否をオンラインチェックイン時またはFinnairで確認）<span class="note">スターアライアンス(ANA/SFC)は本Finnair便では利用不可</span></label></div>
-    </div>
-    <div class="foot"><span class="line-icon line-icon-checkbox" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 6-6"/></svg></span>のチェック状態はこの端末に保存されます（サーバーには送信されません）。</div>
-  </div>
-
-  <div class="card">
+<div class="card">
     <h2 class="ttl"><span class="flight-mark" role="img" aria-label="フライト"></span> 利用フライト（NGO⇔FRA Finnair）</h2>
     <div class="bd">
       <div class="banner b-info" style="margin-bottom:10px"><span class="line-icon line-icon-flight" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z"/></svg></span><div>NGO発着・HEL経由の往復エコノミー。<strong>前日入りができ、犬山からの空港アクセスが短い旅程。</strong></div></div>
@@ -669,6 +647,28 @@
       </div>
     </div>
   </details>
+</section>
+
+<!-- ==================== タブ：準備 ==================== -->
+<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">
+  <div class="banner b-info no-print" style="margin-bottom:10px"><span class="line-icon line-icon-checkCircle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 6-6"/></svg></span><div><strong>出発前に埋めるタブ</strong>。全部そろったら、このタブは畳んで構わない</div></div>
+
+  <div class="card">
+    <h2 class="ttl"><span class="line-icon line-icon-clipboard" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="1"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M8 10h8M8 14h8M8 18h5"/></svg></span>要対応タスク <span id="todo-count" style="font-weight:400;opacity:.8"></span></h2>
+    <div class="bd" id="todo-list">
+      <div class="todo" data-k="t1"><input type="checkbox" id="cb-t1" data-done="1"><label for="cb-t1">フライト確定：Finnair NGO⇔FRA（HEL経由）</label></div>
+      <div class="todo" data-k="t2"><input type="checkbox" id="cb-t2" data-done="1"><label for="cb-t2">Stuttgart宿泊：Maritim Stuttgart（9/8〜9/12・4泊・朝食付）予約完了</label></div>
+      <div class="todo" data-k="t3"><input type="checkbox" id="cb-t3" data-done="1"><label for="cb-t3">BestWestern Frankfurt空港ホテル予約（完了）</label></div>
+      <div class="todo" data-k="t4"><input type="checkbox" id="cb-t4"><label for="cb-t4">9/12をA（Mainz観戦・キックオフ15:30）／B（ケルン観光）／C（ポルシェ博物館）／D（ポルシェ＋ケルン）から選ぶ</label></div>
+      <div class="todo" data-k="t5"><input type="checkbox" id="cb-t5"><label for="cb-t5">Mainz観戦チケット購入（<strong>発売は試合4〜5週間前＝8月上〜中旬見込み</strong>・午前10時〜／mainz05.de・ファンショップ・電話）<span class="note">Mainz 05 対 Eintracht Frankfurt、9/12（土）15:30 キックオフ</span></label></div>
+      <div class="todo" data-k="t6"><input type="checkbox" id="cb-t6" data-done="1"><label for="cb-t6">対戦カード・キックオフ時刻を確認（Mainz 05 対 Eintracht Frankfurt、9/12（土）15:30・Bundesliga 2026/7/15発表）</label></div>
+      <div class="todo" data-k="t7"><input type="checkbox" id="cb-t7"><label for="cb-t7">9/13の日中を条件に応じて選ぶ（9/12がA・CならX：ケルンも候補、9/12がB・DならY：フランクフルト市内／Z：Mainz。FRA空港16:20着基準）</label></div>
+      <div class="todo" data-k="t8"><input type="checkbox" id="cb-t8"><label for="cb-t8">帰国便の出発前に <a href="https://services.digital.go.jp/visit-japan-web/" target="_blank" rel="noopener">Visit Japan Web（デジタル庁公式）</a> へ9/14の帰国予定・税関申告を登録（二人とも各自／二次元コードの表示まで確認）</label></div>
+      <div class="todo" data-k="t9"><input type="checkbox" id="cb-t9" data-done="1"><label for="cb-t9">鉄道チケット方針を決定：現地で乗車時にDB Navigatorから都度購入（Stuttgart→Frankfurt空港、プランB・D・X選択時のFrankfurt⇔Kölnを含む）</label></div>
+      <div class="todo" data-k="t10"><input type="checkbox" id="cb-t10"><label for="cb-t10">ラウンジ最終確認（<strong>ワンワールド前提</strong>：JAL/ワンワールドサファイア資格の有無を二人分／NGO=JALサクララウンジ／HEL=復路乗継時のみFinnair Business Lounge候補、往路は乗継優先で使わない／FRAはT3、Finnair指定ラウンジ名とPriority Lounge利用可否をオンラインチェックイン時またはFinnairで確認）<span class="note">スターアライアンス(ANA/SFC)は本Finnair便では利用不可</span></label></div>
+    </div>
+    <div class="foot"><span class="line-icon line-icon-checkbox" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 6-6"/></svg></span>のチェック状態はこの端末に保存されます（サーバーには送信されません）。</div>
+  </div>
 </section>
 
 

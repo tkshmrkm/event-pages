@@ -331,6 +331,20 @@ assert((online.match(/class="line-icon line-icon-calendar"/g) || []).length >= 1
 // 規模と前回実績は主催者の公表値なので、断り書きと出典は落とさない。ただし
 // 90字の地の文を常時表示に置くのはフィールドガイドの作法に反するので折り畳む
 // （常時表示に残すのは「（主催者発表）」の一言だけ、2026-08-16）。
+// ---------- 準備タブは畳めるままにしておく ----------
+// 準備は出発前に埋め切ったら畳む前提のタブ。現地で使うもの（空港で見る便、宿の
+// 住所、ラウンジと緊急連絡先のリンク集）がここにしか無いと、畳んだ瞬間に失われる。
+// だから準備に残すのは要対応タスクだけで、3枚は旅程が持つ。この配置が崩れたら止める。
+for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml]]) {
+  const prep = (text.match(/<section class="tab" id="tab-prep"[\s\S]*?\n<\/section>/) || [''])[0];
+  const plan = (text.match(/<section class="tab on" id="tab-plan"[\s\S]*?\n<\/section>/) || [''])[0];
+  assert(prep.includes('要対応タスク'), `${name}: the todo list must stay in the preparation tab`);
+  for (const card of ['利用フライト', '宿泊（2拠点）', '地図・その他リンク集']) {
+    assert(!prep.includes(card), `${name}: ${card} must not live in the preparation tab, which is meant to be removed before departure`);
+    assert(plan.includes(card), `${name}: ${card} must be reachable from the itinerary once preparation is gone`);
+  }
+}
+
 const FOLD_COUNT = 21;
 for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml]]) {
   // 机上用印刷版は全<details>を強制的にopenへ書き換えるため、class="fold"の前に
