@@ -333,6 +333,116 @@ function overviewDayRows() {
   });
 }
 
+// 出張概要が答えるのは「誰が何に行くか」である。経由地や便名ではない
+// （2026-08-16にユーザーが指定）。村上はTechEx・EuroBLECH・ベンツ工場見学、
+// 美馬・金築はAutostadt・EuroBLECH・ベンツ工場見学で、重なるのは後ろ2つ。
+// この違いは日カードを開かないと分からないので、概要が持つ。
+//
+// イベント名は work の行から起こす。手で並べると、日程からイベントを1つ
+// 落としたときに概要だけが古くなる。VIP Networking Drinks は TechEx の
+// 一部なので TechEx へ寄せる（別のイベントとして数えない）。
+// 4つは種類が違う。名前だけ並べても、何をしに行くのかが読めない。
+// 語は「用語の決定」（CLAUDE.md）のとおりに使う。ここで別の言い回しを作らない。
+//   TechEx Europe             … 参加（会議・展示。村上のみ）
+//   Autostadt                 … 見学（美馬・金築のみ）
+//   EuroBLECH                 … 展示会視察（本命。3名）
+//   Mercedes-Benz Werk Bremen … 工場見学（予約確定。3名）
+const OVERVIEW_EVENTS = [
+  ['TechEx Europe', '参加', ['TechEx Europe', 'VIP Networking Drinks']],
+  ['Autostadt', '見学', ['Autostadt']],
+  ['EuroBLECH', '展示会視察', ['EuroBLECH']],
+  ['Mercedes-Benz Werk Bremen', '工場見学', ['Mercedes-Benz Werk Bremen']],
+];
+// 場所と手配状況。日付と参加者はFAMILY_DAYSから数えるので、ここには持たせない。
+// 二重管理になるものを固定文へ書かない。
+const OVERVIEW_EVENT_NOTES = {
+  'TechEx Europe': 'RAI Amsterdam。Gold Pass 取得済み（無償）',
+  'Autostadt': 'ヴォルフスブルク。Wolfsburg Hbfから徒歩約10分',
+  'EuroBLECH': 'ハノーファーメッセ。入場券はベッコフ経由で発行',
+  'Mercedes-Benz Werk Bremen': 'ブレーメン。12:45〜14:00の枠は予約確定',
+};
+const overviewEvent = text => {
+  const hit = OVERVIEW_EVENTS.filter(([, , keys]) => keys.some(key => text.includes(key)));
+  // 知らない行事が増えたら止める。黙って落とすと、概要から1つ消えたことに
+  // 誰も気付けない。増えたらこの表に足す。
+  if (hit.length !== 1) throw new Error(`Overview: cannot name the event in "${text}" (matched ${hit.length})`);
+  return { name: hit[0][0], kind: hit[0][1] };
+};
+
+// イベントごとの日付と参加者。出張概要とイベント概要が同じ表から出るので、
+// 片方だけ古くなることがない。4つとも必ず出す（2026-08-16にAutostadtが
+// イベント概要から抜けていた）。
+function overviewEventRows() {
+  const seen = new Map();
+  FAMILY_DAYS.forEach(day => {
+    const lanes = day.shared
+      ? [['全員', day.shared]]
+      : [['村上', day.murakami || []], ['美馬・金築', day.team || []]];
+    lanes.forEach(([who, events]) => {
+      events.filter(ev => ev[1] === 'work').forEach(ev => {
+        const { name, kind } = overviewEvent(ev[3]);
+        if (!seen.has(name)) seen.set(name, { name, kind, dates: [], byDay: new Map() });
+        const row = seen.get(name);
+        if (!row.dates.includes(day.date)) row.dates.push(day.date);
+        // 日ごとに誰が行くかを持つ。会期のあいだ人数が変わるイベントがある
+        // （EuroBLECHの10/20は美馬・金築だけ。村上はTechEx Day 2のため翌日合流）。
+        // 「10/20〜10/23・3名」と書くと、初日に村上が居たことになってしまう。
+        if (!row.byDay.has(day.date)) row.byDay.set(day.date, new Set());
+        row.byDay.get(day.date).add(who);
+      });
+    });
+  });
+  if (seen.size !== OVERVIEW_EVENTS.length) {
+    throw new Error(`Overview: expected ${OVERVIEW_EVENTS.length} events, found ${seen.size}`);
+  }
+  // 並びは日付順。OVERVIEW_EVENTSの並びではなく、実際に行く順で出す。
+  return OVERVIEW_EVENTS.map(([name]) => seen.get(name))
+    .sort((a, b) => a.dates[0].localeCompare(b.dates[0]))
+    .map(row => {
+      const label = date => {
+        const who = [...row.byDay.get(date)];
+        return who.includes('全員') ? '3名' : who.join('・');
+      };
+      const all = [...new Set(row.dates.map(label))];
+      // 全日おなじ顔ぶれなら1つ。割れている日があれば、その日だけ但し書きにする。
+      const who = all.length === 1
+        ? all[0]
+        : `3名（${row.dates.filter(date => label(date) !== '3名').map(date => `${date}は${label(date)}のみ`).join('・')}）`;
+      return {
+        name: row.name,
+        kind: row.kind,
+        span: row.dates.length > 1 ? `${row.dates[0]}〜${row.dates[row.dates.length - 1]}` : row.dates[0],
+        who,
+      };
+    });
+}
+
+// 人ごとの「行く先」。合流後の shared は両方に足す。
+function overviewPeople() {
+  const people = [
+    { who: '村上', tone: 'murakami', key: 'murakami' },
+    { who: '美馬・金築', tone: 'team', key: 'team' },
+  ];
+  return people.map(person => {
+    const events = [];
+    let departure = '';
+    let entry = '';
+    FAMILY_DAYS.forEach(day => {
+      const mine = day.shared || day[person.key] || [];
+      mine.forEach(ev => {
+        if (ev[1] === 'flight' && !departure) departure = day.date;
+        if (ev[1] === 'procedure' && !entry && !day.shared) entry = overviewHeadline(ev[3]);
+        if (ev[1] !== 'work') return;
+        const event = overviewEvent(ev[3]);
+        if (!events.some(e => e.name === event.name)) events.push(event);
+      });
+    });
+    if (!departure) throw new Error(`Overview: no departure found for ${person.who}`);
+    if (!events.length) throw new Error(`Overview: no events found for ${person.who}`);
+    return { ...person, events, departure, entry };
+  });
+}
+
 // 合流した日。レーンが1本になるのは10/21だが、実際に3名が同じ街で寝るのは
 // 10/20の夜である（村上が20:30頃にゲッティンゲンへ着く）。印は動きが合流した日に
 // 付ける。日中の行動がまだ別なので day.shared では拾えない。
@@ -369,6 +479,11 @@ function buildOverviewSection(source) {
   // ここだけ古くなる。
   const mergeIndex = rows.findIndex(r => r.date === mergeDate);
   const mergeCity = rows[mergeIndex].lanes[0].stay;
+  const people = overviewPeople();
+  const eventRows = overviewEventRows();
+  eventRows.forEach(row => {
+    if (!OVERVIEW_EVENT_NOTES[row.name]) throw new Error(`Overview: no note for the event ${row.name}`);
+  });
 
   const esc = value => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const laneHtml = lane =>
@@ -391,17 +506,20 @@ function buildOverviewSection(source) {
   <div class="ov-card">
     <div class="ov-head">🧳 出張概要</div>
     <div class="ov-body">
-      <p class="ov-lead">TechEx Europe と EuroBLECH の視察｜10/17（土）発 〜 10/25（日）着｜3名</p>
+      <p class="ov-lead">10/17（土）発 〜 10/25（日）着｜${rows.length}日間｜3名</p>
       <div class="ov-split">
-        <div class="ov-split-lane ov-lane-murakami"><strong>村上</strong><span>10/17発・アムステルダム経由</span><span>TechEx Europe に1人で参加してから合流</span></div>
-        <div class="ov-split-lane ov-lane-team"><strong>美馬・金築</strong><span>10/18発・フランクフルト経由</span><span>Autostadt を見てから EuroBLECH へ</span></div>
+        ${people.map(person => `<div class="ov-split-lane ov-lane-${person.tone}">`
+          + `<strong>${esc(person.who)}</strong>`
+          + `<span class="ov-goes">${person.events.map(e => `<i><b>${esc(e.name)}</b>${esc(e.kind)}</i>`).join('')}</span>`
+          + `</div>`).join('\n        ')}
       </div>
       <div class="ov-facts">
-        <div><b>全日程</b><span>${rows.length}日間</span><span>3名</span></div>
+        <div><b>出国</b><span>村上が1日早い</span><span>${people.map(p => `${esc(p.who)} ${esc(p.departure)}`).join('／')}</span></div>
         <div><b>合流</b><span>${esc(mergeDate)}の夜</span><span>${esc(mergeCity)}</span></div>
-        <div><b>帰着</b><span>10/25（日）</span><span>セントレア 14:10</span></div>
+        <div><b>帰国</b><span>10/25（日）全員</span><span>セントレア 14:10</span></div>
       </div>
     </div>
+    <div class="ov-foot">💡 重なるのは EuroBLECH と Mercedes-Benz Werk Bremen の2つ。TechEx は村上だけ、Autostadt は美馬・金築だけ</div>
   </div>
 
   <div class="ov-card">
@@ -419,13 +537,13 @@ function buildOverviewSection(source) {
   <div class="ov-card">
     <div class="ov-head">🏛 イベント概要</div>
     <div class="ov-body">
-      <!-- ラベルは .ov-facility の44px枠に入る語にする。「TechEx」「EuroBLECH」は
-           393pxで5px・32pxはみ出した（2026-08-16に実測）。イベント名は値の側が
-           持っているので、ラベルには用語の決定どおりの行動名を置く。 -->
-      <div class="ov-facility">
-        <div><b>参加</b><span>TechEx Europe 2026（RAI Amsterdam）10/19〜10/20・村上のみ。Gold Pass 取得済み（無償）</span></div>
-        <div><b>視察</b><span>EuroBLECH 2026（Hannover Messe）10/20〜10/23・3名。入場券はベッコフ経由で発行</span></div>
-        <div><b>見学</b><span>Mercedes-Benz Werk Bremen 10/22 12:45〜14:00・3名。予約確定済み</span></div>
+      <!-- 4つとも出す。日付と参加者は overviewEventRows() が FAMILY_DAYS から
+           数えるので、日程を直せばここも一緒に動く。場所と手配状況だけが
+           元データ由来の固定文で、上の facts で在ることを確認している。 -->
+      <div class="ov-events">
+        ${eventRows.map(row => `<div class="ov-event">`
+          + `<div class="ov-event-head"><span class="ov-kind"><span>${esc(row.kind)}</span></span><strong>${esc(row.name)}</strong></div>`
+          + `<span>${esc(row.span)}・${esc(row.who)}｜${esc(OVERVIEW_EVENT_NOTES[row.name])}</span></div>`).join('\n        ')}
       </div>
       <div class="ov-more no-print"><button class="btn" type="button" data-goto="venue">📖 セッション表と当日メモへ</button></div>
     </div>

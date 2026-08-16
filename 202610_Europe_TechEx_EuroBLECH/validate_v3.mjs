@@ -128,6 +128,36 @@ const checks = [
   // 周辺情報を集め始めた合図なので止める。
   ['the overview stays an index rather than a second itinerary',
     overview.length < itinerary.length / 4 && countIn(overview, /class="ov-card"/g) === 4],
+  // 出張概要が答えるのは「誰が何に行くか」。経由地や便名ではない。
+  // 重なるのはEuroBLECHとベンツ工場見学の2つで、TechExは村上だけ、
+  // Autostadtは美馬・金築だけ。この違いは日カードを開かないと分からない。
+  // レーンは1行に収まるので、`.` で切り出して行をまたがないようにする。
+  // `[\s\S]*?` で書くと、村上のレーンの否定形が美馬・金築のAutostadtを拾って落ちる。
+  ['the summary says who goes to what', (() => {
+    const lane = tone => (overview.match(new RegExp(`ov-lane-${tone}">.*?</div>`)) || [''])[0];
+    const murakami = lane('murakami');
+    const team = lane('team');
+    const goes = (text, names) => names.every(n => text.includes(`<b>${n}</b>`));
+    return goes(murakami, ['TechEx Europe', 'EuroBLECH', 'Mercedes-Benz Werk Bremen'])
+      && goes(team, ['Autostadt', 'EuroBLECH', 'Mercedes-Benz Werk Bremen'])
+      && !murakami.includes('Autostadt') && !team.includes('TechEx Europe');
+  })()],
+  // 出国のずれ・合流・帰国の3つ。ここが無いと出張の形が読めない。
+  ['the summary carries the departure gap, the merge and the return',
+    /<b>出国<\/b><span>村上が1日早い<\/span><span>村上 10\/17／美馬・金築 10\/18<\/span>/.test(overview)
+    && /<b>合流<\/b><span>10\/20（火）の夜<\/span>/.test(overview)
+    && /<b>帰国<\/b><span>10\/25（日）全員<\/span>/.test(overview)],
+  // イベント概要は4件すべて。2026-08-16にAutostadtが抜けていた。
+  // 種類（参加・見学・展示会視察・工場見学）は用語の決定のとおりで、別の言い回しを作らない。
+  ['the event overview lists all four with what kind each one is',
+    countIn(overview, /class="ov-event"/g) === 4
+    && [['TechEx Europe', '参加'], ['Autostadt', '見学'], ['EuroBLECH', '展示会視察'],
+      ['Mercedes-Benz Werk Bremen', '工場見学']]
+      .every(([name, kind]) => new RegExp(`<span>${kind}</span></span><strong>${name}</strong>`).test(overview))],
+  // 会期中に顔ぶれが変わるイベントは、変わる日を名指しする。
+  // 「10/20〜10/23・3名」と書くと、初日に村上が居たことになる（実際はTechEx Day 2）。
+  ['the event overview names the day the attendance differs',
+    overview.includes('10/20〜10/23・3名（10/20は美馬・金築のみ）')],
   // 導線が無いと索引として使えない。data-goto はv3.jsが受ける。
   ['the overview links to the detail tabs',
     countIn(overview, /data-goto="/g) === 3 && js.includes('data-goto')],

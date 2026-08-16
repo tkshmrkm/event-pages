@@ -148,9 +148,25 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .ov-split-lane{display:grid;gap:2px;border-left:4px solid currentColor;border-radius:0 8px 8px 0;padding:8px 11px;font-size:var(--f4);line-height:1.5}
 .ov-split-lane strong{font-size:var(--f3)}
 .ov-split-lane span{color:var(--tx2)}
+/* 誰が何に行くか。名前だけ並べても何をしに行くのか読めないので、
+   種類（参加・見学・展示会視察・工場見学）を名前の下に添える。
+   語は「用語の決定」のとおりで、ここで別の言い回しを作らない。 */
+.ov-goes{display:grid;gap:5px;margin-top:3px}
+.ov-goes>i{display:grid;gap:1px;border-left:2px solid currentColor;padding-left:8px;font-style:normal;line-height:1.4}
+.ov-goes>i>b{color:var(--tx);font-size:var(--f4);font-weight:700;overflow-wrap:anywhere}
+.ov-goes>i{color:inherit;font-size:var(--f5)}
 .ov-lane-murakami{background:#EEF5FB;color:var(--lane-murakami-tx)}
 .ov-lane-team{background:#F0F8F2;color:var(--lane-team-tx)}
 .ov-lane-shared{background:var(--neu-bg);color:var(--tx2)}
+/* イベント概要。4件を種類の札つきで並べる。HRSの .ov-facility は44pxのラベル枠で、
+   「Mercedes-Benz Werk Bremen」が入らない。名前は値の側に置く。 */
+.ov-events{display:grid;gap:9px}
+/* 札と名前は2列にしない。札は nowrap なので列にすると名前に押されて潰れる
+   （393pxで最大74pxはみ出した）。同じ行に置いて、入らなければ折り返させる。 */
+.ov-event{display:grid;gap:2px}
+.ov-event-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;min-width:0}
+.ov-event strong{color:var(--tx);font-size:var(--f3);line-height:1.4;overflow-wrap:anywhere}
+.ov-event span{color:var(--tx2);font-size:var(--f5);line-height:1.5;overflow-wrap:anywhere}
 .ov-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .ov-facts>div{min-width:0;border:1px solid var(--line);border-radius:9px;padding:7px 9px;background:#FAFCFD}
 .ov-facts b{display:block;color:var(--mu);font-size:var(--f5);font-weight:700}
