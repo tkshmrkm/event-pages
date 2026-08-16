@@ -9,7 +9,9 @@ html{scroll-behavior:smooth}
 body{padding-bottom:0}
 button,input,textarea,select{font-family:inherit}
 .header-actions{display:flex;gap:6px;flex:0 0 auto}
-.field-nav .tabs{grid-template-columns:repeat(4,1fr)}
+/* 概要を足して5タブ（2026-08-16）。393pxでの溢れはビルド後に数値で見る。
+   .tabs は overflow-x:auto かつ scrollbar-width:none なので目では気付けない。 */
+.field-nav .tabs{grid-template-columns:repeat(5,1fr)}
 .field-nav .tabs button{min-width:0}
 .tab{padding-bottom:34px}
 .itinerary-stack,.legacy-stack{display:grid;gap:12px;padding-top:14px}
@@ -133,6 +135,76 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .legacy-stack>.bg-white,.legacy-stack>[class*="bg-white"]{overflow:hidden;margin:0;border:2px solid var(--line)!important;border-radius:12px!important;background:#fff!important;box-shadow:0 1px 2px rgba(16,24,32,.05)!important}
 .legacy-stack>.bg-white>[class*="bg-gray-700"],.legacy-stack>.bg-white>[class*="bg-gradient"],.legacy-stack>[class*="bg-white"]>[class*="bg-gray-700"]{padding:10px 14px!important;background:var(--neu-bg)!important;color:var(--tx2)!important;font-size:16px!important;font-weight:700!important}
 .legacy-stack>.bg-white>.p-4,.legacy-stack>.bg-white>.p-3,.legacy-stack>[class*="bg-white"]>.p-4,.legacy-stack>[class*="bg-white"]>.p-3{padding:12px 14px!important}
+/* 概要タブ（2026-08-16）。HRSの .ov-days は1日1行の表だが、EBは村上と美馬・金築が
+   10/20の夜まで別に動くので、1日に最大2本のレーンを持つ。レーンの色は旅程の
+   人物レーンと同じ変数を使う。**色が2本から1本になることが合流の合図**なので、
+   ここだけ別の色を作らない。HRS側へ持っていくなら、HRSに別行動が出てから。 */
+.ov-card{overflow:hidden;border:2px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,32,.05)}
+.ov-head{padding:10px 14px;background:var(--neu-bg);color:var(--tx2);font-size:16px;font-weight:700}
+.ov-body{padding:12px 14px;display:grid;gap:10px}
+.ov-lead{margin:0;color:var(--tx2);font-size:var(--f4);line-height:1.55}
+.ov-foot{border-top:1px solid var(--line2);padding:8px 14px;background:#F7F9FA;color:var(--mu);font-size:var(--f5);line-height:1.5}
+.ov-split{display:grid;gap:8px}
+.ov-split-lane{display:grid;gap:2px;border-left:4px solid currentColor;border-radius:0 8px 8px 0;padding:8px 11px;font-size:var(--f4);line-height:1.5}
+.ov-split-lane strong{font-size:var(--f3)}
+.ov-split-lane span{color:var(--tx2)}
+/* 誰が何に行くか。名前だけ並べても何をしに行くのか読めないので、
+   種類（参加・見学・展示会視察・工場見学）を名前の下に添える。
+   語は「用語の決定」のとおりで、ここで別の言い回しを作らない。 */
+.ov-goes{display:grid;gap:5px;margin-top:3px}
+.ov-goes>i{display:grid;gap:1px;border-left:2px solid currentColor;padding-left:8px;font-style:normal;line-height:1.4}
+.ov-goes>i>b{color:var(--tx);font-size:var(--f4);font-weight:700;overflow-wrap:anywhere}
+.ov-goes>i{color:inherit;font-size:var(--f5)}
+.ov-lane-murakami{background:#EEF5FB;color:var(--lane-murakami-tx)}
+.ov-lane-team{background:#F0F8F2;color:var(--lane-team-tx)}
+.ov-lane-shared{background:var(--neu-bg);color:var(--tx2)}
+/* イベント概要。4件を種類の札つきで並べる。HRSの .ov-facility は44pxのラベル枠で、
+   「Mercedes-Benz Werk Bremen」が入らない。名前は値の側に置く。 */
+.ov-events{display:grid;gap:9px}
+/* 札と名前は2列にしない。札は nowrap なので列にすると名前に押されて潰れる
+   （393pxで最大74pxはみ出した）。同じ行に置いて、入らなければ折り返させる。 */
+.ov-event{display:grid;gap:2px}
+.ov-event-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;min-width:0}
+.ov-event strong{color:var(--tx);font-size:var(--f3);line-height:1.4;overflow-wrap:anywhere}
+.ov-event span{color:var(--tx2);font-size:var(--f5);line-height:1.5;overflow-wrap:anywhere}
+.ov-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ov-facts>div{min-width:0;border:1px solid var(--line);border-radius:9px;padding:7px 9px;background:#FAFCFD}
+.ov-facts b{display:block;color:var(--mu);font-size:var(--f5);font-weight:700}
+.ov-facts span{display:block;color:var(--tx);font-size:var(--f4);font-weight:700;line-height:1.45}
+.ov-facts span+span{color:var(--mu);font-weight:600}
+/* 日ごとの流れ。日付が見出し、その下にレーンが1〜2本ぶら下がる。 */
+.ov-flow{display:grid;gap:7px}
+.ov-day{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff}
+.ov-day>header{padding:5px 10px;background:var(--line2);color:var(--tx);font-size:var(--f4);font-weight:700}
+.ov-lane{display:grid;grid-template-columns:74px 62px minmax(0,1fr) 96px;gap:8px;align-items:start;padding:8px 10px;border-top:1px solid var(--line2);font-size:var(--f4);line-height:1.5}
+.ov-day>header+.ov-lane{border-top:0}
+.ov-who{font-weight:700;overflow-wrap:anywhere}
+.ov-main{min-width:0;color:var(--tx2);overflow-wrap:anywhere}
+/* まだ発っていないレーンは内容が空。1行ぶんの高さを取らせない。
+   消えた分だけ後ろがずれないよう、居場所には列を明示しておく。 */
+.ov-main:empty{display:none}
+.ov-city{grid-column:4;min-width:0;color:var(--tx);font-weight:600;text-align:right;overflow-wrap:anywhere}
+/* 合流した日。ここだけ枠を強め、レーンの下に一言添える。 */
+.ov-day-merge{border-color:var(--move-tx)}
+.ov-join{padding:6px 10px;border-top:1px solid var(--move-tx);background:var(--move);color:var(--move-tx);font-size:var(--f5);font-weight:700}
+@media(max-width:430px){
+  /* 393pxでは4列のうち主な内容が1文字ずつ折り返す。誰・区分・宿を1行目に置き、
+     内容を2行目へ落とす。家族向け気候表と概要表で同じ失敗をしている（2026-08-15/16）。 */
+  .ov-lane{grid-template-columns:auto auto minmax(0,1fr);gap:4px 7px;padding:7px 9px}
+  .ov-who{grid-column:1}
+  .ov-kind{grid-column:2}
+  .ov-city{grid-column:3;text-align:right}
+  .ov-main{grid-column:1/4}
+  .ov-facts{grid-template-columns:1fr}
+  .ov-facts>div{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
+  .ov-facts b{width:100%}
+}
+
+/* 準備から旅程へ移した現地用カード（宿・ラウンジ・便利リンク）。様式は .legacy-tab と
+   .legacy-stack に紐づいているので、箱ごと持ってきて両方のクラスを同じ要素に付ける。
+   #tab-itinerary 側へ .legacy-tab を付けると日カードの字送りまで変わるので付けない。
+   .itinerary-stack の中に入るぶん、上の余白は外側が持っている。 */
+.onsite-stack{padding-top:0;padding-bottom:0}
 /* Wide tables scroll inside their own box instead of being clipped by the card. */
 .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .legacy-tab table{width:100%;border-collapse:collapse;font-size:var(--f3)}
@@ -217,20 +289,14 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .timezone-note{margin:9px 0 0;border-left:4px solid #9B7A2E;padding:5px 0 5px 9px;color:#5A4511;font-size:13px}
 .timezone-guide{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:12px;border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:#F1F6F7;color:var(--tx2);font-size:13px}
 .timezone-guide strong{margin-right:auto;color:var(--tx)}.timezone-guide span{border-radius:999px;padding:3px 8px;background:#fff}
-.flight-spec-guide,.carrier-guide{margin:-4px 2px 8px;color:var(--mu);font-size:12px;line-height:1.5}.carrier-guide{margin-bottom:12px;color:var(--tx2)}.carrier-guide strong{color:var(--tx)}.carrier-guide span{color:var(--line)}
-.flight-card{overflow:hidden;margin-top:12px;border:2px solid var(--line);border-radius:11px;background:#fff}.flight-card:first-of-type{margin-top:0}
-.flight-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 13px;background:var(--lane-murakami);color:var(--lane-murakami-tx)}
-.flight-team .flight-card-head{background:var(--lane-team);color:var(--lane-team-tx)}.flight-europe .flight-card-head{background:var(--move);color:var(--move-tx)}.flight-return .flight-card-head{background:var(--neu-bg);color:var(--tx2)}
-.flight-label{display:inline-block;margin-bottom:2px;font-size:12px;font-weight:700;letter-spacing:.06em}.flight-card h3{margin:0;font-size:16px;line-height:1.35}.flight-status{flex:none;border:1px solid currentColor;border-radius:999px;padding:3px 8px;font-size:12px;font-weight:700;white-space:nowrap}
-.flight-leg{display:grid;grid-template-columns:minmax(0,1fr) 92px minmax(0,1fr);align-items:stretch;padding:12px 13px}.flight-point,.flight-route{min-width:0}.point-label{display:block;color:var(--mu);font-size:12px;font-weight:700;letter-spacing:.06em}
-.flight-point time{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px}.flight-date{flex-basis:100%;color:var(--tx2);font-size:13px;font-weight:700}.flight-point time strong{color:var(--tx);font-size:25px;line-height:1.1}.flight-point time em{border-radius:4px;padding:1px 4px;background:var(--tx2);color:#fff;font-size:11px;font-style:normal;font-weight:700}
-.flight-point>a{display:inline-block;margin-top:5px;color:#075F70!important;font-size:14px;font-weight:700}.flight-point>a b{color:var(--tx)}
-.flight-route{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--mu);text-align:center}.flight-route strong{color:var(--tx);font-size:13px}.flight-route span{width:100%;margin:2px 0;color:var(--move-tx);font-size:17px;line-height:1}.flight-route small{color:var(--tx2);font-size:11px;line-height:1.35}
-.flight-route>.flight-mark{width:22px;height:22px;margin:3px auto;color:var(--move-tx)}.flight-route>.flight-mark::before,.flight-route>.flight-mark::after{content:none}
-.layover{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:9px;margin:0 13px;border:1px dashed #9B7A2E;border-radius:8px;padding:7px 10px;background:#FFF4CE;color:#4D3B0F;font-size:13px}.layover span{border-radius:999px;padding:2px 7px;background:#705615;color:#fff;font-weight:700}.layover strong{font-size:14px}.layover small{color:#705615}
-.flight-card>footer{border-top:1px solid var(--line2);padding:7px 13px;background:#F7F9FA;color:var(--mu);font-size:12px;text-align:right}
-.flight-fares{margin-top:14px;border:2px solid var(--line);border-radius:11px;padding:12px;background:#F7FAFB}.flight-fares>header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:9px}.flight-fares>header span{display:block;color:var(--mu);font-size:11px;font-weight:700}.flight-fares h3{margin:1px 0 0;color:var(--tx);font-size:17px}.flight-fares>header>strong{color:#7A3616;font-size:18px;white-space:nowrap}
-.fare-card{margin-top:8px;border:1px solid var(--line);border-radius:9px;padding:10px;background:#fff}.fare-title{display:flex;align-items:baseline;gap:8px;margin-bottom:7px}.fare-title strong{color:var(--tx);font-size:14px}.fare-title span{color:var(--mu);font-size:11px}.fare-card dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0}.fare-card dl>div{min-width:0;border-left:1px solid var(--line2);padding:0 7px}.fare-card dl>div:first-child{border-left:0;padding-left:0}.fare-card dt{color:var(--mu);font-size:11px}.fare-card dd{margin:2px 0 0;color:var(--tx);font-size:13px;font-weight:700}.fare-card dd small{color:var(--mu);font-size:10px;font-weight:600}.fare-card .fare-total dd{color:#8B2F16;font-size:14px}.flight-fares>p{margin:9px 1px 0;color:#715515;font-size:12px;line-height:1.5}
+/* 家族向けのフライトカードの様式は 2026-08-16 に削除した。ブロックそのものを
+   2026-08-15 に落としており（時刻も便名も日程詳細が持っていて重複だった）、
+   規則だけが取り残されていた。生成物3件での使用は0で、内訳は
+   .flight-card 系7種・.flight-leg 系6種・.layover・.flight-fares 系4種・
+   .flight-spec-guide・.carrier-guide の20種、通常規則14行＋メディアクエリ4行。
+   1区間を「出発 → 便名 → 到着」で見せるカードを使いたくなったら、
+   shared/trip-field/core.css の .flight-card を読む（EBはHRSのv3.css経由で
+   すでに読み込んでいる）。ここへ書き戻さない。 */
 .schedule-body{padding:12px}.schedule-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:10px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#F5F8F9}.schedule-legend>strong{margin-right:3px;color:var(--tx2);font-size:13px}
 .schedule-tag{display:inline-flex;align-items:center;width:fit-content;min-height:24px;border:1px solid currentColor;border-radius:999px;padding:2px 7px;font-size:11px;font-weight:700;white-space:nowrap}.kind-flight{background:#E8E7FA;color:#40378A}.kind-move{background:var(--move);color:var(--move-tx)}.kind-transfer{background:#E9F2FA;color:#245A85}.kind-procedure{background:#F1F3F4;color:#45545D}.kind-stay{background:#EEF5FB;color:#245A85}.kind-meal{background:#F8EEDF;color:#734812}.kind-review{background:#FFF0C2;color:#7A3E08}.kind-techex{background:var(--lane-murakami);color:var(--lane-murakami-tx)}.kind-euro{background:var(--conf);color:var(--conf-tx)}.kind-work{background:var(--conf);color:var(--conf-tx)}.kind-visit{background:var(--choose);color:var(--choose-tx)}.kind-home{background:var(--neu-bg);color:var(--tx2)}
 .family-day-row{display:grid;grid-template-columns:72px minmax(0,1fr) minmax(0,1fr) 170px;overflow:hidden;margin-top:8px;border:1px solid var(--line);border-radius:9px;background:#fff}.family-day-row>header{padding:11px 9px;background:var(--tx2);color:#fff;text-align:center}.family-day-row>header strong,.family-day-row>header span{display:block}.family-day-row>header strong{font-size:16px}.family-day-row>header span{font-size:12px;opacity:.85}
@@ -289,10 +355,6 @@ details.fold>.fold-body>div+div{margin-top:5px}
   .timezone-card .tz-diff{font-size:32px}
   .zone-japan .tz-diff{font-size:23px}
   .timezone-contact{grid-template-columns:1fr 1fr}.timezone-contact strong{grid-column:1/3}.timezone-contact span{border-left:0;border-top:1px solid var(--line);padding:7px 0 0}
-  .flight-card-head{display:block}.flight-status{display:inline-block;margin-top:6px}
-  .flight-leg{grid-template-columns:minmax(0,1fr) 70px minmax(0,1fr);padding:10px 9px}.flight-point time strong{font-size:22px}.flight-point>a{font-size:13px}.flight-route small{font-size:10px}
-  .layover{grid-template-columns:auto minmax(0,1fr);margin:0 9px}.layover small{grid-column:2}
-  .flight-fares>header{display:block}.flight-fares>header>strong{display:block;margin-top:3px}.fare-card dl{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 0}.fare-card dl>div:nth-child(odd){border-left:0;padding-left:0}
   .family-day-row{grid-template-columns:64px minmax(0,1fr)}.family-day-row>header{grid-row:1/4}.family-day-row>section,.family-day-row>aside{grid-column:2;border-left:1px solid var(--line);border-top:1px solid var(--line)}.family-day-row>section:first-of-type{border-top:0}.shared-day .family-shared{grid-column:2}.agenda-line{grid-template-columns:82px minmax(0,1fr);gap:3px 7px}.agenda-line time{grid-row:1/3;font-size:14px}.agenda-line .schedule-tag{grid-column:2}.agenda-line p{grid-column:2}
 }
 

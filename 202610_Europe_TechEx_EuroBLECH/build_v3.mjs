@@ -221,6 +221,351 @@ const FAMILY_DAYS = [
   ], stays:[['全員','帰宅']] },
 ];
 
+// ============================================================
+// 概要タブ（2026-08-16）
+// ============================================================
+// 概要は「動きが分かる」ためにある。EBは村上と美馬・金築が別の日に別の空港から
+// 出て、別の街に泊まり、10/20の夜にゲッティンゲンで合流する。この形は日カードを
+// 9枚めくらないと掴めない。**日程が割れていることは概要を作らない理由ではなく、
+// 概要が要る理由である。**HRSは全員が同じ動きなので1本の表で足りたが、
+// EBは合流するまで2本のレーンで見せる。レーンの色は旅程の人物レーンと同じものを
+// 使う。色が2本から1本になることが、そのまま合流の合図になる。
+//
+// 中身はすべてFAMILY_DAYSとSTAYSから導く。手で書くと、日程を1日ずらした時点で
+// 概要だけが古くなる。概要は全体を見る場所なので、ズレたときの実害が最も大きい。
+
+// 宿の名前ではなく街の名前で動きを見せる。「どこで寝るか」が「どこにいるか」なので、
+// 街が変われば動いたことが分かる。対応表に無い宿が出たらビルドを止める。
+const STAY_CITY = {
+  'Holiday Inn Express Amsterdam - Sloterdijk Station': 'アムステルダム',
+  'Hotel FREIgeist Göttingen Innenstadt': 'ゲッティンゲン',
+  'Toyoko Inn Frankfurt am Main Hauptbahnhof': 'フランクフルト',
+  '機内': '機内',
+  '帰宅': '帰宅',
+};
+const stayCity = name => {
+  const city = STAY_CITY[name];
+  if (!city) throw new Error(`Overview: no city for the stay "${name}"`);
+  return city;
+};
+
+// 「。」以降は補足なので落とす。ただし括弧の中の「。」では切らない。
+// 'EuroBLECH 展示会視察（3名合流。ハノーファー）' を素直に split すると
+// '（3名合流' で終わって括弧が閉じない（2026-08-16に生成物で確認）。
+const overviewHeadline = text => {
+  const plain = text.replace(/<[^>]+>/g, '').replace(/\*\*/g, '');
+  let depth = 0;
+  for (let i = 0; i < plain.length; i++) {
+    const ch = plain[i];
+    if (ch === '（' || ch === '(') depth++;
+    else if (ch === '）' || ch === ')') depth--;
+    else if (ch === '。' && depth === 0) return plain.slice(0, i).trim();
+  }
+  return plain.trim();
+};
+
+// レーンごとの区分。1行の内容だけだと便名や会議名が並ぶばかりで、その日が
+// そのレーンにとって何の日なのかが読めない。判定は上から順に最初に当たったものを採る。
+//   出国    … そのレーンが最初に飛ぶ日。村上は10/17、美馬・金築は10/18でずれる
+//   帰国    … 全日程の最終日
+//   帰国便  … 機内泊（そのレーンの初日を除く）
+//   イベント… work がある
+//   移動    … flight / move / transfer / procedure がある
+//   休日    … それ以外
+//   日本    … 行事が無い。まだ発っていない（10/17の美馬・金築）
+const overviewLaneKind = (events, { first, last, stay }) => {
+  if (!events.length) return '日本';
+  if (first) return '出国';
+  if (last) return '帰国';
+  if (stay === '機内') return '帰国便';
+  if (events.some(e => e[1] === 'work')) return 'イベント';
+  if (events.some(e => ['flight', 'move', 'transfer', 'procedure'].includes(e[1]))) return '移動';
+  return '休日';
+};
+// 代表の1件を選ぶ順。work を先に見るのは、イベント日に「チェックイン」が
+// 主役として出てしまうのを避けるため。flight は move より上（HRSと同じ理由で、
+// 10/25が「入国手続きを終えて各自帰宅」を拾うと14:10のセントレア着が消える）。
+const OVERVIEW_MAIN_KIND_ORDER = ['work', 'review', 'flight', 'procedure', 'move', 'transfer', 'stay'];
+const overviewMain = events => {
+  const pick = OVERVIEW_MAIN_KIND_ORDER.map(kind => events.find(ev => ev[1] === kind)).find(Boolean);
+  return pick ? overviewHeadline(pick[3]) : '';
+};
+
+// レーンの並びは、その日に何本あるかで決まる。合流後は1本。
+function overviewDayRows() {
+  // 各レーンが最初に飛ぶ日を先に求める。「出国」はレーンごとに違う日になる。
+  const firstFlight = {};
+  FAMILY_DAYS.forEach(day => {
+    [['murakami', day.murakami], ['team', day.team]].forEach(([who, events]) => {
+      if (firstFlight[who]) return;
+      if ((events || []).some(e => e[1] === 'flight')) firstFlight[who] = day.date;
+    });
+  });
+  return FAMILY_DAYS.map((day, i, all) => {
+    const last = i === all.length - 1;
+    const rawStayOf = who => (day.stays.find(s => s[0] === who) || day.stays.find(s => s[0] === '全員') || [])[1];
+    // 泊まりの行が無いレーンは、まだ日本にいる（10/17の美馬・金築）。空欄にすると
+    // 「書き漏らし」に見えるので、居場所として日本と書く。
+    const stayOf = who => { const name = rawStayOf(who); return name ? stayCity(name) : '日本'; };
+    const lanes = day.shared
+      ? [{ who: '全員', tone: 'shared', events: day.shared, stay: stayOf('全員') }]
+      : [
+        { who: '村上', tone: 'murakami', events: day.murakami || [], stay: stayOf('村上') },
+        { who: '美馬・金築', tone: 'team', events: day.team || [], stay: stayOf('美馬・金築') },
+      ];
+    return {
+      date: `${day.date}（${day.dow}）`,
+      lanes: lanes.map(lane => ({
+        ...lane,
+        kind: overviewLaneKind(lane.events, {
+          first: firstFlight[lane.tone] === day.date,
+          last,
+          stay: rawStayOf(lane.who),
+        }),
+        // まだ発っていないレーンは行事が無い。区分と居場所の両方が「日本」と
+        // 言っているので、内容の行は出さない（'—' だけの行が1本増えるだけ）。
+        main: overviewMain(lane.events),
+        // 未確定が残る日はその理由を1行添える。札は付けない。状態を持つ単位は
+        // 予定1件で、札の持ち主は旅程タブにある（同じ札を概要にも複製しない）。
+        note: overviewHeadline((lane.events.find(e => e[1] === 'review') || [])[3] || ''),
+      })),
+    };
+  });
+}
+
+// 出張概要が答えるのは「誰が何に行くか」である。経由地や便名ではない
+// （2026-08-16にユーザーが指定）。村上はTechEx・EuroBLECH・ベンツ工場見学、
+// 美馬・金築はAutostadt・EuroBLECH・ベンツ工場見学で、重なるのは後ろ2つ。
+// この違いは日カードを開かないと分からないので、概要が持つ。
+//
+// イベント名は work の行から起こす。手で並べると、日程からイベントを1つ
+// 落としたときに概要だけが古くなる。VIP Networking Drinks は TechEx の
+// 一部なので TechEx へ寄せる（別のイベントとして数えない）。
+// 4つは種類が違う。名前だけ並べても、何をしに行くのかが読めない。
+// 語は「用語の決定」（CLAUDE.md）のとおりに使う。ここで別の言い回しを作らない。
+//   TechEx Europe             … 参加（会議・展示。村上のみ）
+//   Autostadt                 … 見学（美馬・金築のみ）
+//   EuroBLECH                 … 展示会視察（本命。3名）
+//   Mercedes-Benz Werk Bremen … 工場見学（予約確定。3名）
+const OVERVIEW_EVENTS = [
+  ['TechEx Europe', '参加', ['TechEx Europe', 'VIP Networking Drinks']],
+  ['Autostadt', '見学', ['Autostadt']],
+  ['EuroBLECH', '展示会視察', ['EuroBLECH']],
+  ['Mercedes-Benz Werk Bremen', '工場見学', ['Mercedes-Benz Werk Bremen']],
+];
+// 場所と手配状況。日付と参加者はFAMILY_DAYSから数えるので、ここには持たせない。
+// 二重管理になるものを固定文へ書かない。
+const OVERVIEW_EVENT_NOTES = {
+  'TechEx Europe': 'RAI Amsterdam。Gold Pass 取得済み（無償）',
+  'Autostadt': 'ヴォルフスブルク。Wolfsburg Hbfから徒歩約10分',
+  'EuroBLECH': 'ハノーファーメッセ。入場券はベッコフ経由で発行',
+  'Mercedes-Benz Werk Bremen': 'ブレーメン。12:45〜14:00の枠は予約確定',
+};
+const overviewEvent = text => {
+  const hit = OVERVIEW_EVENTS.filter(([, , keys]) => keys.some(key => text.includes(key)));
+  // 知らない行事が増えたら止める。黙って落とすと、概要から1つ消えたことに
+  // 誰も気付けない。増えたらこの表に足す。
+  if (hit.length !== 1) throw new Error(`Overview: cannot name the event in "${text}" (matched ${hit.length})`);
+  return { name: hit[0][0], kind: hit[0][1] };
+};
+
+// イベントごとの日付と参加者。出張概要とイベント概要が同じ表から出るので、
+// 片方だけ古くなることがない。4つとも必ず出す（2026-08-16にAutostadtが
+// イベント概要から抜けていた）。
+function overviewEventRows() {
+  const seen = new Map();
+  FAMILY_DAYS.forEach(day => {
+    const lanes = day.shared
+      ? [['全員', day.shared]]
+      : [['村上', day.murakami || []], ['美馬・金築', day.team || []]];
+    lanes.forEach(([who, events]) => {
+      events.filter(ev => ev[1] === 'work').forEach(ev => {
+        const { name, kind } = overviewEvent(ev[3]);
+        if (!seen.has(name)) seen.set(name, { name, kind, dates: [], byDay: new Map() });
+        const row = seen.get(name);
+        if (!row.dates.includes(day.date)) row.dates.push(day.date);
+        // 日ごとに誰が行くかを持つ。会期のあいだ人数が変わるイベントがある
+        // （EuroBLECHの10/20は美馬・金築だけ。村上はTechEx Day 2のため翌日合流）。
+        // 「10/20〜10/23・3名」と書くと、初日に村上が居たことになってしまう。
+        if (!row.byDay.has(day.date)) row.byDay.set(day.date, new Set());
+        row.byDay.get(day.date).add(who);
+      });
+    });
+  });
+  if (seen.size !== OVERVIEW_EVENTS.length) {
+    throw new Error(`Overview: expected ${OVERVIEW_EVENTS.length} events, found ${seen.size}`);
+  }
+  // 並びは日付順。OVERVIEW_EVENTSの並びではなく、実際に行く順で出す。
+  return OVERVIEW_EVENTS.map(([name]) => seen.get(name))
+    .sort((a, b) => a.dates[0].localeCompare(b.dates[0]))
+    .map(row => {
+      const label = date => {
+        const who = [...row.byDay.get(date)];
+        return who.includes('全員') ? '3名' : who.join('・');
+      };
+      const all = [...new Set(row.dates.map(label))];
+      // 全日おなじ顔ぶれなら1つ。割れている日があれば、その日だけ但し書きにする。
+      const who = all.length === 1
+        ? all[0]
+        : `3名（${row.dates.filter(date => label(date) !== '3名').map(date => `${date}は${label(date)}のみ`).join('・')}）`;
+      return {
+        name: row.name,
+        kind: row.kind,
+        span: row.dates.length > 1 ? `${row.dates[0]}〜${row.dates[row.dates.length - 1]}` : row.dates[0],
+        who,
+      };
+    });
+}
+
+// 人ごとの「行く先」。合流後の shared は両方に足す。
+function overviewPeople() {
+  const people = [
+    { who: '村上', tone: 'murakami', key: 'murakami' },
+    { who: '美馬・金築', tone: 'team', key: 'team' },
+  ];
+  return people.map(person => {
+    const events = [];
+    let departure = '';
+    let entry = '';
+    FAMILY_DAYS.forEach(day => {
+      const mine = day.shared || day[person.key] || [];
+      mine.forEach(ev => {
+        if (ev[1] === 'flight' && !departure) departure = day.date;
+        if (ev[1] === 'procedure' && !entry && !day.shared) entry = overviewHeadline(ev[3]);
+        if (ev[1] !== 'work') return;
+        const event = overviewEvent(ev[3]);
+        if (!events.some(e => e.name === event.name)) events.push(event);
+      });
+    });
+    if (!departure) throw new Error(`Overview: no departure found for ${person.who}`);
+    if (!events.length) throw new Error(`Overview: no events found for ${person.who}`);
+    return { ...person, events, departure, entry };
+  });
+}
+
+// 合流した日。レーンが1本になるのは10/21だが、実際に3名が同じ街で寝るのは
+// 10/20の夜である（村上が20:30頃にゲッティンゲンへ着く）。印は動きが合流した日に
+// 付ける。日中の行動がまだ別なので day.shared では拾えない。
+// 判定は「全レーンの宿の街が同じで、前日は違った最初の日」。
+function overviewMergeDate(rows) {
+  for (let i = 1; i < rows.length; i++) {
+    const cities = [...new Set(rows[i].lanes.map(l => l.stay))];
+    const before = [...new Set(rows[i - 1].lanes.map(l => l.stay))];
+    if (cities.length === 1 && before.length > 1) return rows[i].date;
+  }
+  throw new Error('Overview: the trip never converges — check FAMILY_DAYS stays');
+}
+
+// 概要タブのHTML。アイコンはtransformScript側の対応表を通るので、ここでは
+// 絵文字で書いておく（生成物には1文字も残らない）。
+function buildOverviewSection(source) {
+  // 使う固有名詞はすべて元データの中にある。新しい事実を概要で作らない。
+  // 元データが変わったら気付けるよう、使う前に在ることを確認する。
+  const facts = [
+    'RAI Amsterdam', 'ハノーファーメッセ', 'Hannover Messe', 'Mercedes-Benz Werk Bremen',
+    'Gold Pass', 'ベッコフ', 'TechEx Europe 2026', 'EuroBLECH 2026',
+    'Holiday Inn Express Amsterdam - Sloterdijk Station',
+    'Hotel FREIgeist Göttingen Innenstadt',
+    'Toyoko Inn Frankfurt am Main Hauptbahnhof',
+  ];
+  facts.forEach(fact => {
+    if (!source.includes(fact)) throw new Error(`Overview fact missing from source: ${fact}`);
+  });
+
+  const rows = overviewDayRows();
+  if (rows.length !== FAMILY_DAYS.length) throw new Error('Overview: day row count drifted from FAMILY_DAYS');
+  const mergeDate = overviewMergeDate(rows);
+  // 合流までに何日かかるかも導出する。手で「4日目」と書くと日程をずらしたとき
+  // ここだけ古くなる。
+  const mergeIndex = rows.findIndex(r => r.date === mergeDate);
+  const mergeCity = rows[mergeIndex].lanes[0].stay;
+  const people = overviewPeople();
+  const eventRows = overviewEventRows();
+  eventRows.forEach(row => {
+    if (!OVERVIEW_EVENT_NOTES[row.name]) throw new Error(`Overview: no note for the event ${row.name}`);
+  });
+
+  const esc = value => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const laneHtml = lane =>
+    `<div class="ov-lane ov-lane-${lane.tone}">`
+    + `<span class="ov-who">${esc(lane.who)}</span>`
+    + `<span class="ov-kind"><span>${esc(lane.kind)}</span></span>`
+    + `<span class="ov-main">${esc(lane.main)}${lane.note ? `<span class="ov-note">${esc(lane.note)}</span>` : ''}</span>`
+    + `<span class="ov-city">${esc(lane.stay)}</span>`
+    + '</div>';
+  const dayHtml = row =>
+    `<article class="ov-day${row.date === mergeDate ? ' ov-day-merge' : ''}">`
+    + `<header>${esc(row.date)}</header>`
+    + row.lanes.map(laneHtml).join('')
+    + (row.date === mergeDate ? `<div class="ov-join">この夜から${esc(mergeCity)}で3名合流</div>` : '')
+    + '</article>';
+
+  return `<div class="tab" id="tab-overview" role="tabpanel" aria-label="概要">
+  <div class="legacy-stack">
+
+  <div class="ov-card">
+    <div class="ov-head">🧳 出張概要</div>
+    <div class="ov-body">
+      <p class="ov-lead">10/17（土）発 〜 10/25（日）着｜${rows.length}日間｜3名</p>
+      <div class="ov-split">
+        ${people.map(person => `<div class="ov-split-lane ov-lane-${person.tone}">`
+          + `<strong>${esc(person.who)}</strong>`
+          + `<span class="ov-goes">${person.events.map(e => `<i><b>${esc(e.name)}</b>${esc(e.kind)}</i>`).join('')}</span>`
+          + `</div>`).join('\n        ')}
+      </div>
+      <div class="ov-facts">
+        <div><b>出国</b><span>村上が1日早い</span><span>${people.map(p => `${esc(p.who)} ${esc(p.departure)}`).join('／')}</span></div>
+        <div><b>合流</b><span>${esc(mergeDate)}の夜</span><span>${esc(mergeCity)}</span></div>
+        <div><b>帰国</b><span>10/25（日）全員</span><span>セントレア 14:10</span></div>
+      </div>
+    </div>
+    <div class="ov-foot">💡 重なるのは EuroBLECH と Mercedes-Benz Werk Bremen の2つ。TechEx は村上だけ、Autostadt は美馬・金築だけ</div>
+  </div>
+
+  <div class="ov-card">
+    <div class="ov-head">📅 日程概要</div>
+    <div class="ov-body">
+      <p class="ov-lead">出発から${mergeIndex + 1}日目まで村上と美馬・金築は別行動。色が2本から1本になる日が合流</p>
+      <div class="ov-flow">
+        ${rows.map(dayHtml).join('\n        ')}
+      </div>
+      <div class="ov-more no-print"><button class="btn" type="button" data-goto="itinerary">📅 日ごとの旅程へ</button></div>
+    </div>
+    <div class="ov-foot">💡 時刻・便名・乗り継ぎ・宿の住所は旅程タブが持ちます。ここは1日1行の俯瞰だけです</div>
+  </div>
+
+  <div class="ov-card">
+    <div class="ov-head">🏛 イベント概要</div>
+    <div class="ov-body">
+      <!-- 4つとも出す。日付と参加者は overviewEventRows() が FAMILY_DAYS から
+           数えるので、日程を直せばここも一緒に動く。場所と手配状況だけが
+           元データ由来の固定文で、上の facts で在ることを確認している。 -->
+      <div class="ov-events">
+        ${eventRows.map(row => `<div class="ov-event">`
+          + `<div class="ov-event-head"><span class="ov-kind"><span>${esc(row.kind)}</span></span><strong>${esc(row.name)}</strong></div>`
+          + `<span>${esc(row.span)}・${esc(row.who)}｜${esc(OVERVIEW_EVENT_NOTES[row.name])}</span></div>`).join('\n        ')}
+      </div>
+      <div class="ov-more no-print"><button class="btn" type="button" data-goto="venue">📖 セッション表と当日メモへ</button></div>
+    </div>
+  </div>
+
+  <div class="ov-card">
+    <div class="ov-head">🏨 施設概要</div>
+    <div class="ov-body">
+      <div class="ov-facility">
+        <div><b>会場</b><span>RAI Amsterdam ／ ハノーファーメッセ ／ Mercedes-Benz Werk Bremen</span></div>
+        <div><b>宿</b><span>Holiday Inn Express Amsterdam - Sloterdijk Station ／ Hotel FREIgeist Göttingen Innenstadt ／ Toyoko Inn Frankfurt am Main Hauptbahnhof</span></div>
+        <div><b>空港</b><span>往路 村上 NGO→HKG→AMS ／ 美馬・金築 NGO→HKG→FRA。復路 全員 FRA→HKG→NGO</span></div>
+      </div>
+      <div class="ov-more no-print"><button class="btn" type="button" data-goto="itinerary">📅 宿の住所・ラウンジ・便利リンクへ</button></div>
+    </div>
+    <div class="ov-foot">💡 準備タブは出発前に埋め切るものだけです。現地で開くものは旅程タブの末尾にあります</div>
+  </div>
+
+  </div>
+</div>`;
+}
+
 function divRangeById(html, id) {
   const start = html.search(new RegExp(`<div\\b[^>]*\\bid=["']${id}["'][^>]*>`, 'i'));
   if (start < 0) throw new Error(`Missing #${id}`);
@@ -283,6 +628,7 @@ const transformScript = `
   const STAYS = ${JSON.stringify(STAYS)};
   const ROUTES = ${JSON.stringify(ROUTES)};
   const FAMILY_DAYS = ${JSON.stringify(FAMILY_DAYS)};
+  const OVERVIEW_SECTION = ${JSON.stringify(buildOverviewSection(source))};
   const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const flightIcon = () => '<span class="flight-mark" role="img" aria-label="フライト"></span>';
   const plainTime = value => value.replace(/^\\d{1,2}\\/\\d{1,2}（.）/, '').trim();
@@ -322,8 +668,10 @@ const transformScript = `
   // 手続き・確認・館内移動は、過ごし方ではなく「やること」に入れる。
   const todoFold = items => '<details class="fold mt-1"><summary>やること</summary><div class="fold-body">' + items.map(item => '<div>' + item + '</div>').join('') + '</div></details>';
   const spendFold = blocks => '<details class="fold mt-1"><summary>過ごし方</summary><div class="fold-body">' + blocks.join('') + '</div></details>';
-  // ラウンジは4系統を必ず並べる。確認できていない系統も消さずに残す。資格は準備タブが持つ。
-  const loungeOption = systems => '<div><strong>ラウンジ</strong>: 次の4系統のいずれか。利用資格は準備タブの「ラウンジ利用可否」に集約してある</div>' +
+  // ラウンジは4系統を必ず並べる。確認できていない系統も消さずに残す。
+  // 資格の置き場所は2026-08-16に準備から旅程末尾へ移した（準備は畳めるタブなので、
+  // 乗り継ぎ中に見るものを置かない）。この文の行き先も一緒に直す。
+  const loungeOption = systems => '<div><strong>ラウンジ</strong>: 次の4系統のいずれか。利用資格は旅程末尾の「ラウンジ利用可否」に集約してある</div>' +
     systems.map(([label, body]) => '<div class="opt-sub"><strong>' + label + '</strong>: ' + body + '</div>').join('');
   const rows = day => Array.from(day.querySelectorAll('[class*="border-l-4"]'));
   const rowFor = (day, text) => rows(day).find(row => row.textContent.replace(/\\s+/g, ' ').includes(text));
@@ -753,6 +1101,71 @@ const transformScript = `
     const inner = panel.querySelector(':scope > div'); if (inner) inner.className = 'legacy-stack';
   });
   family.classList.add('family-tab');
+
+  // ---------- 現地で使うものを準備から旅程へ移す（2026-08-16） ----------
+  // 準備は出発前に埋め切ったら畳む前提のタブである。ところが中身の性質が2つに
+  // 割れていた。畳んで困らないのは、出発前チェックリスト・航空券状況（未購入か
+  // どうかの管理）・予算概算・書類の取得状況の4枚。困るのは次の3つで、いずれも
+  // 出発したあとに開くものしかない。
+  //   ホテル予約状況 … 住所・駅からの行き方・朝食時間・チェックアウト時刻。
+  //                    ホテル名は日カードにあるが、住所はここにしか無い
+  //   ラウンジ利用可否 … 4系統の利用資格と、その下の「ラウンジ利用の詳細」
+  //                    「香港（HKG）乗継の共通メモ」。乗り継ぎ中に読むもの
+  //   便利リンク      … DB Navigator・各社の予約管理・会場の公式サイト
+  // 注意書きで守らず、畳んでも何も失われない配置にする。
+  //
+  // 移した先で見た目を保つために legacy-tab と legacy-stack を同じ箱に付ける。
+  // このカード群の様式（bg-white の枠、bg-gray-700 の見出し、text-xs の字送り）は
+  // すべて .legacy-tab / .legacy-stack に紐づいていて、クラス名からは読めない。
+  // 箱ごと移さずに中身だけ移すと、静かに素のHTMLへ落ちる。
+  // #tab-itinerary 側へ legacy-tab を付けるのではない。付けると日カードの
+  // text-slate-600 や p-4 まで .legacy-tab の規則に当たって旅程の見た目が変わる。
+  const itineraryStack = itinerary.querySelector('.itinerary-stack');
+  if (!itineraryStack) throw new Error('itinerary stack not found for the on-site card move');
+  const prepCardByTitle = title => Array.from(prepStack ? prepStack.children : [])
+    .find(card => card.firstElementChild && card.firstElementChild.textContent.includes(title));
+  const onSite = document.createElement('div');
+  onSite.className = 'legacy-tab legacy-stack onsite-stack';
+  onSite.setAttribute('aria-label', '現地で開く参照情報');
+  ['ホテル予約状況', 'ラウンジ利用可否'].forEach(title => {
+    const card = prepCardByTitle(title);
+    if (!card) throw new Error('on-site card missing from the prep tab: ' + title);
+    onSite.appendChild(card);
+  });
+  // 便利リンクは「重要書類・リンク集」カードの中の1ブロックでしかない。同じカードの
+  // 他の3ブロック（Eチケット・ホテル確認書・イベントパスの取得状況）は出発前のもの
+  // なので、リンクだけを外へ出し、残ったカードの名前から「・リンク集」を落とす。
+  const docsCard = prepCardByTitle('重要書類');
+  if (!docsCard) throw new Error('the documents card is missing from the prep tab');
+  const linkBlock = Array.from(docsCard.querySelectorAll('.p-4 > div'))
+    .find(block => block.firstElementChild && block.firstElementChild.textContent.includes('便利リンク'));
+  if (!linkBlock) throw new Error('the useful-links block is missing from the documents card');
+  const linkCard = document.createElement('div');
+  linkCard.className = 'bg-white rounded-xl border border-slate-200/80';
+  const linkHead = docsCard.firstElementChild.cloneNode(true);
+  linkHead.innerHTML = linkBlock.firstElementChild.innerHTML;
+  const linkBody = document.createElement('div');
+  linkBody.className = 'p-4';
+  linkBlock.firstElementChild.remove();
+  while (linkBlock.firstChild) linkBody.appendChild(linkBlock.firstChild);
+  linkBlock.remove();
+  linkCard.appendChild(linkHead);
+  linkCard.appendChild(linkBody);
+  onSite.appendChild(linkCard);
+  const docsHead = docsCard.firstElementChild;
+  docsHead.innerHTML = docsHead.innerHTML.replace('重要書類・リンク集', '重要書類の取得状況');
+  if (docsCard.textContent.includes('便利リンク')) throw new Error('the useful-links block stayed in the prep tab');
+  // 元データはカードの前に <!-- ホテル予約状況 --> のような位置の目印を置いている。
+  // カードだけ動かすと目印が何も指さないまま準備に残り、次に読む人が「まだ在る」と読む。
+  ['ホテル予約状況', 'ラウンジ利用可否'].forEach(title => {
+    Array.from(prepStack.childNodes)
+      .filter(node => node.nodeType === 8 && node.nodeValue.includes(title))
+      .forEach(node => node.remove());
+  });
+  itineraryStack.appendChild(onSite);
+  if (prep.textContent.includes('ラウンジ利用可否') || prep.textContent.includes('ホテル予約状況')) {
+    throw new Error('an on-site card is still inside the preparation tab');
+  }
   // ---------- 家族向けをHRSの5構成へ組み直す ----------
   // 出張サマリー / 時差・気候 / 日程詳細 / 宿泊先情報 / 緊急連絡先 の順にそろえる。
   // 内側のマークアップはここでは触らない。Tailwind風をどこまで寄せるかは別途判断する。
@@ -876,10 +1289,29 @@ const transformScript = `
   header.innerHTML = '<div class="wrap hdr-top"><div><div class="eyebrow">EUROPE BUSINESS TRIP 2026</div><h1>TechEx Europe・EuroBLECH 出張ガイド</h1><div class="subtitle">10/17（土）〜10/25（日）｜3名｜アムステルダム・ハノーファー・ブレーメン</div></div><div class="no-print header-actions"><a class="btn" href="family_print.html">' + printIcon + '家族</a><a class="btn" href="immigration_print.html" title="入国審査用（英語）">' + printIcon + '入国</a><button class="btn" type="button" onclick="window.print()" aria-label="印刷">印刷</button></div></div>';
   const nav = document.createElement('div');
   nav.className = 'field-nav';
-  nav.innerHTML = '<div class="wrap"><nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション"><button data-tab="itinerary" class="on" role="tab" aria-selected="true"><span class="ic">📅</span>旅程</button><button data-tab="prep" role="tab" aria-selected="false"><span class="ic">✅</span>準備</button><button data-tab="venue" role="tab" aria-selected="false"><span class="ic">🏢</span>会場</button><button data-tab="rec" role="tab" aria-selected="false"><span class="ic">📝</span>記録</button></nav><div class="subbar" id="subbar"><div class="chips" id="day-chips"><span class="lbl">日付</span></div></div></div>';
+  // 「会場」ではなく「視察」。そのタブに書くのは何を見に来たか・何を見たかであって、
+  // 場所ではない。展示会・工場見学・企業訪問を全部覆うので、次のイベントでも使える。
+  // 変えるのは表示名だけ。data-tab / id / ストレージの ses: キーは venue のままにする
+  // （変えると保存済みのタブ状態と記録が読めなくなる）。2026-08-16、HRSに合わせた。
+  //
+  // 並びは 旅程 / 視察 / 準備 / 記録。HRSと同じ理屈で、現地で開くもの（旅程・視察）を
+  // 先に固め、出発前に埋め切って畳む準備を後ろへ置く。準備が消えても並びが崩れない。
+  // 概要を先頭に足して5タブ。概要は「動きが分かる」ためのタブで、EBは村上と
+  // 美馬・金築が別々に出て10/20の夜に合流する。この形は日カードを9枚めくらないと
+  // 掴めないので、俯瞰の置き場所が要る。
+  nav.innerHTML = '<div class="wrap"><nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション"><button data-tab="overview" role="tab" aria-selected="false"><span class="ic">🧭</span>概要</button><button data-tab="itinerary" class="on" role="tab" aria-selected="true"><span class="ic">📅</span>旅程</button><button data-tab="venue" role="tab" aria-selected="false"><span class="ic">🏢</span>視察</button><button data-tab="prep" role="tab" aria-selected="false"><span class="ic">✅</span>準備</button><button data-tab="rec" role="tab" aria-selected="false"><span class="ic">📝</span>記録</button></nav><div class="subbar" id="subbar"><div class="chips" id="day-chips"><span class="lbl">日付</span></div></div></div>';
   document.body.prepend(nav); document.body.prepend(header);
   const main = document.createElement('main'); main.className = 'wrap';
-  [itinerary, prep, venue, record, family].forEach(panel => main.appendChild(panel));
+  // 概要のマークアップはNode側で組んである（FAMILY_DAYSとSTAYSから導出するため）。
+  const overviewHost = document.createElement('div');
+  overviewHost.innerHTML = OVERVIEW_SECTION;
+  const overview = overviewHost.firstElementChild;
+  if (!overview || overview.id !== 'tab-overview') throw new Error('Overview section did not parse');
+  // パネルの並びもタブに合わせる。印刷はタブを全部開いて縦に並べるので、
+  // ここが逆だと紙の上で準備が視察より前に出る。
+  // 既定タブは旅程のまま。現地で開くのは旅程なので、起動でいきなり概要を出すと
+  // 毎回1タップ余分になる。概要が効くのは出発前と机上。
+  [overview, itinerary, venue, prep, record, family].forEach(panel => main.appendChild(panel));
   nav.after(main);
   document.body.insertAdjacentHTML('beforeend','<footer class="field-footer">TechEx Europe・EuroBLECH 2026 ・ field guide v3</footer><!--V3_SCRIPT-->');
   const legacyIconMap = { 'fa-train':'🚆', 'fa-industry':'🏭', 'fa-landmark':'🏛', 'fa-laptop':'💻', 'fa-building':'🏢', 'fa-hotel':'🏨' };
@@ -973,6 +1405,11 @@ const transformScript = `
     card: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/><path d="M6 14h4"/>',
     baggage: '<rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V4h6v3"/><path d="M5 12h14"/><path d="M9 20v1M15 20v1"/>',
     plug: '<path d="M9 3v5M15 3v5"/><path d="M6 8h12v3a6 6 0 0 1-12 0z"/><path d="M12 17v4"/>',
+    // 概要タブで使う3種。HRSが2026-08-16に描いたものをそのまま使う。
+    // 同じ絵を2度描かない（形が微妙に違うと、同じ意味なのに別物に見える）。
+    compass: '<circle cx="12" cy="12" r="9"/><path d="M15 9 13 13 9 15 11 11z"/>',
+    suitcase: '<rect x="4" y="8" width="16" height="12" rx="2"/><rect x="9" y="4" width="6" height="4" rx="1"/><path d="M4 14h16"/>',
+    bulb: '<circle cx="12" cy="9" r="6"/><path d="M9 18h6M10 21h4"/><path d="M10 11l1-2 2 2 1-2"/>',
   });
   const lineIconMap = {
     '🛋':'lounge', '🛂':'procedure', '🏨':'hotel', '🍽':'meal', '😴':'rest', '🥂':'drinks',
@@ -982,6 +1419,7 @@ const transformScript = `
     '🛒':'cart', '✍':'pen', '🎫':'ticket', '🌐':'globe', '🌍':'globe', '🏢':'building',
     '💰':'money', '📁':'folder', '📄':'document', '💻':'laptop', '🔍':'search', '💳':'card',
     '🛄':'baggage', '🔌':'plug', '📋':'clipboard', '📘':'book',
+    '🧭':'compass', '🧳':'suitcase', '💡':'bulb', '📖':'book',
   };
   const makeLineIcon = name => {
     const icon = document.createElement('span');

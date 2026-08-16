@@ -6,14 +6,22 @@ import vm from 'node:vm';
 const here = dirname(fileURLToPath(import.meta.url));
 const html = readFileSync(join(here, 'index.html'), 'utf8');
 const css = readFileSync(join(here, 'v3.css'), 'utf8');
+const cssRules = css.replace(/\/\*[\s\S]*?\*\//g, '');
 const js = readFileSync(join(here, 'v3.js'), 'utf8');
 const hrsCss = readFileSync(join(here, '..', '202609_HumanoidSummitEurope', 'v3.css'), 'utf8');
 const familyPrint = readFileSync(join(here, 'family_print.html'), 'utf8');
 const immigration = readFileSync(join(here, 'immigration_print.html'), 'utf8');
-const itinerary = html.slice(html.indexOf('id="tab-itinerary"'), html.indexOf('id="tab-prep"'));
-const prep = html.slice(html.indexOf('id="tab-prep"'), html.indexOf('id="tab-venue"'));
-const day1022 = itinerary.slice(itinerary.indexOf('id="day-1022"'), itinerary.indexOf('id="day-1023"'));
-const day1025 = itinerary.slice(itinerary.indexOf('id="day-1025"'));
+// パネルの並びは 旅程 / 視察 / 準備 / 記録。切り出しの終端は隣のタブで決まるので、
+// 並べ替えたらここも一緒に直す（2026-08-16に 準備 と 視察 を入れ替えた）。
+const itinerary = html.slice(html.indexOf('id="tab-itinerary"'), html.indexOf('id="tab-venue"'));
+const prep = html.slice(html.indexOf('id="tab-prep"'), html.indexOf('id="tab-rec"'));
+// 旅程タブの末尾には、2026-08-16に準備から移した現地用カードが付く。日カードの
+// 検査に混ぜない（ラウンジのカードが「2時間15分」を持つので、10/25の数え方が狂う）。
+const onSite = itinerary.slice(itinerary.indexOf('class="legacy-tab legacy-stack onsite-stack"'));
+const dayCards = itinerary.slice(0, itinerary.indexOf('class="legacy-tab legacy-stack onsite-stack"'));
+const day1022 = dayCards.slice(dayCards.indexOf('id="day-1022"'), dayCards.indexOf('id="day-1023"'));
+const day1025 = dayCards.slice(dayCards.indexOf('id="day-1025"'));
+const overview = html.slice(html.indexOf('id="tab-overview"'), html.indexOf('id="tab-itinerary"'));
 const rowTimes = [...itinerary.matchAll(/<div class="row-time">([\s\S]*?)<\/div>/g)].map(match => match[1].replace(/<[^>]+>/g, '').trim());
 
 const count = pattern => (html.match(pattern) || []).length;
@@ -22,8 +30,8 @@ const checks = [
   ['HRS public stylesheet linked', html.includes('href="../202609_HumanoidSummitEurope/v3.css"')],
   ['local v3 assets linked', html.includes('href="v3.css"') && html.includes('src="v3.js"')],
   ['no v2 runtime dependency', !/v2\.(?:css|js)/.test(html)],
-  // 家族はタブではなくfamily_print.htmlへ分けたので、主要タブは4つ。
-  ['four primary tabs', count(/data-tab="(?:itinerary|prep|venue|rec)"/g) === 4 && count(/data-tab="/g) === 4],
+  // 家族はタブではなくfamily_print.htmlへ分けた。2026-08-16に概要を足して5つ。
+  ['five primary tabs', count(/data-tab="(?:overview|itinerary|prep|venue|rec)"/g) === 5 && count(/data-tab="/g) === 5],
   ['nine HRS detail day cards', count(/<details class="day"/g) === 9],
   ['all day cards initially open', count(/<details class="day"[^>]* open/g) === 9],
   ['nine day topic blocks', count(/class="day-topics"/g) === 9],
@@ -97,6 +105,105 @@ const checks = [
   ['line icon size comes from the shared stylesheet', /\.line-icon\{[^}]*width:1\.15em/.test(hrsCss) && !/(^|[^ ])\.line-icon\{/m.test(css) && css.includes('[class*="bg-gray-700"] .line-icon')],
   ['no oversized itinerary time cells', rowTimes.every(value => value.length <= 32)],
   ['four-column mobile contract retained', /@media\(max-width:640px\)[\s\S]*\.route-four,.lanes \.route-four\{grid-template-columns:72px minmax\(0,1fr\) 74px minmax\(0,1fr\)\}/.test(css)],
+  // ---------- 概要タブは動きが分かることが役目（2026-08-16） ----------
+  // EBは村上と美馬・金築が別の日に別の空港から出て、10/20の夜に合流する。
+  // 概要はその形をひと目で見せるためにある。レーンが2本から1本になることが
+  // 合流の合図なので、**別行動の4日が2本、合流後の5日が1本**を数える。
+  // 崩れたら、概要が「動きの分かる場所」でなくなったということ。
+  ['the overview shows two lanes until the trip converges',
+    countIn(overview, /class="ov-day\b/g) === 9
+    && countIn(overview, /class="ov-lane ov-lane-murakami"/g) === 4
+    && countIn(overview, /class="ov-lane ov-lane-team"/g) === 4
+    && countIn(overview, /class="ov-lane ov-lane-shared"/g) === 5],
+  // 合流の印は1日だけ。日中の行動がまだ別なので day.shared では拾えず、
+  // 「全レーンの宿の街が同じになった最初の日」で判定している。10/21ではなく10/20。
+  ['the overview marks the day the two lanes converge',
+    countIn(overview, /class="ov-join"/g) === 1
+    && /10\/20（火）[\s\S]*?ov-join[^>]*>この夜からゲッティンゲンで3名合流/.test(overview)],
+  // 街の名前で動きを見せる。宿の名前だと長すぎて、変わったことが読み取れない。
+  ['the overview tracks movement by city',
+    ['日本', '機内', 'アムステルダム', 'ゲッティンゲン', 'フランクフルト', '帰宅']
+      .every(city => new RegExp(`class="ov-city">${city}<`).test(overview))],
+  // 概要は索引であって内容ではない。長さで担保する。旅程より長くなったら、
+  // 周辺情報を集め始めた合図なので止める。
+  ['the overview stays an index rather than a second itinerary',
+    overview.length < itinerary.length / 4 && countIn(overview, /class="ov-card"/g) === 4],
+  // 出張概要が答えるのは「誰が何に行くか」。経由地や便名ではない。
+  // 重なるのはEuroBLECHとベンツ工場見学の2つで、TechExは村上だけ、
+  // Autostadtは美馬・金築だけ。この違いは日カードを開かないと分からない。
+  // レーンは1行に収まるので、`.` で切り出して行をまたがないようにする。
+  // `[\s\S]*?` で書くと、村上のレーンの否定形が美馬・金築のAutostadtを拾って落ちる。
+  ['the summary says who goes to what', (() => {
+    const lane = tone => (overview.match(new RegExp(`ov-lane-${tone}">.*?</div>`)) || [''])[0];
+    const murakami = lane('murakami');
+    const team = lane('team');
+    const goes = (text, names) => names.every(n => text.includes(`<b>${n}</b>`));
+    return goes(murakami, ['TechEx Europe', 'EuroBLECH', 'Mercedes-Benz Werk Bremen'])
+      && goes(team, ['Autostadt', 'EuroBLECH', 'Mercedes-Benz Werk Bremen'])
+      && !murakami.includes('Autostadt') && !team.includes('TechEx Europe');
+  })()],
+  // 出国のずれ・合流・帰国の3つ。ここが無いと出張の形が読めない。
+  ['the summary carries the departure gap, the merge and the return',
+    /<b>出国<\/b><span>村上が1日早い<\/span><span>村上 10\/17／美馬・金築 10\/18<\/span>/.test(overview)
+    && /<b>合流<\/b><span>10\/20（火）の夜<\/span>/.test(overview)
+    && /<b>帰国<\/b><span>10\/25（日）全員<\/span>/.test(overview)],
+  // イベント概要は4件すべて。2026-08-16にAutostadtが抜けていた。
+  // 種類（参加・見学・展示会視察・工場見学）は用語の決定のとおりで、別の言い回しを作らない。
+  ['the event overview lists all four with what kind each one is',
+    countIn(overview, /class="ov-event"/g) === 4
+    && [['TechEx Europe', '参加'], ['Autostadt', '見学'], ['EuroBLECH', '展示会視察'],
+      ['Mercedes-Benz Werk Bremen', '工場見学']]
+      .every(([name, kind]) => new RegExp(`<span>${kind}</span></span><strong>${name}</strong>`).test(overview))],
+  // 会期中に顔ぶれが変わるイベントは、変わる日を名指しする。
+  // 「10/20〜10/23・3名」と書くと、初日に村上が居たことになる（実際はTechEx Day 2）。
+  ['the event overview names the day the attendance differs',
+    overview.includes('10/20〜10/23・3名（10/20は美馬・金築のみ）')],
+  // 導線が無いと索引として使えない。data-goto はv3.jsが受ける。
+  ['the overview links to the detail tabs',
+    countIn(overview, /data-goto="/g) === 3 && js.includes('data-goto')],
+  // 既定タブは旅程のまま。現地で開くのは旅程で、概要が効くのは出発前と机上。
+  ['the itinerary stays the tab that opens first',
+    /<button data-tab="itinerary" class="on"/.test(html)
+    && /id="tab-itinerary" class="tab on"/.test(html)
+    && !/id="tab-overview"[^>]*class="tab on"/.test(html)],
+  // ---------- 準備タブは畳めるままにしておく（2026-08-16） ----------
+  // 準備は出発前に埋め切ったら畳む前提のタブ。現地でしか使い道が無いものがここに
+  // しか無いと、畳んだ瞬間に失われる。宿の住所は日カードに無く、ラウンジの資格は
+  // 乗り継ぎ中に読み、DB Navigatorは駅で開く。どれも出発前に用が済まない。
+  // 在り処だけでなく無い場所も対で見る。片側だけだと、増やしただけの状態が通る。
+  ['on-site cards live in the itinerary, not in preparation',
+    ['ホテル予約状況', 'ラウンジ利用可否', '便利リンク', 'ラウンジ利用の詳細', '香港（HKG）乗継の共通メモ']
+      .every(title => onSite.includes(title) && !prep.includes(title))],
+  // 逆向き。出発前に埋め切るものを旅程へ流さない。旅程は現地で毎日開くので、
+  // 未購入かどうかの管理表や費用の見積もりが混ざると日付を探す邪魔になる。
+  ['preparation keeps what is finished before departure',
+    ['出発前チェックリスト', '航空券状況', '予算概算', '重要書類の取得状況']
+      .every(title => prep.includes(title) && !onSite.includes(title))],
+  // 移した先で様式が生きていること。このカード群の見た目は .legacy-tab と
+  // .legacy-stack に紐づいていて、クラス名からは読めない。箱を落とすと静かに素へ落ちる。
+  ['the moved cards keep the stylesheet that dresses them',
+    /class="legacy-tab legacy-stack onsite-stack"/.test(itinerary)
+    && css.includes('.onsite-stack{') && !/#tab-itinerary[^"]*legacy-tab/.test(html)
+    && countIn(onSite, /class="bg-white rounded-xl border/g) === 3],
+  // 旅程側の案内文の行き先も一緒に直す。6箇所とも同じ文で、準備を指したままにしない。
+  ['the lounge folds point at the new location',
+    !html.includes('準備タブの「ラウンジ利用可否」')
+    && countIn(itinerary, /利用資格は旅程末尾の「ラウンジ利用可否」に集約してある/g) === 6],
+  // ---------- 会場ではなく視察（2026-08-16） ----------
+  // 入力するのは「何を見に来たか」と「何を見たか」であって場所ではない。
+  // 変えるのは表示名だけ。data-tab / id / ストレージのキーは venue のまま。
+  ['the venue tab is labelled by what is done there',
+    html.includes('</span>視察</button>') && !html.includes('</span>会場</button>')
+    && html.includes('data-tab="venue"') && html.includes('id="tab-venue"') && js.includes("venue: 'venue'")],
+  // ---------- 家族向けのフライトカードの死蔵CSS（2026-08-16に削除） ----------
+  // ブロックは2026-08-15に落とした。規則だけ残ると、次に触る人が使われていると読む。
+  // 使いたくなったら core.css の .flight-card を読む。ここへ書き戻さない。
+  // 消えたことを説明するコメントが本文に残るので、コメントを外してから探す。
+  ['the retired flight-card rules are gone from the event stylesheet',
+    ['.flight-card', '.flight-leg', '.flight-point', '.flight-route', '.layover', '.flight-fares',
+      '.fare-card', '.flight-status', '.flight-label', '.carrier-guide', '.flight-spec-guide']
+      .every(rule => !cssRules.includes(rule))
+    && hrsCss.includes('.flight-card{')],
   // ---------- 家族向け印刷版 ----------
   // 家族向けの正本はfamily_print.html。オンライン版のタブからは外したので、
   // 以下はindex.htmlではなくfamily_print.htmlを見る。
