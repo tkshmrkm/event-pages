@@ -301,13 +301,15 @@ HRSの5タブ化で決まったことをEBへ戻した。ブランチは `claude
 1. **ルート直下の13イベントフォルダ。** 今日Archiveへ移したのは各フォルダの中身で、
    ルート自体は未整理。終了済み10イベントをフォルダごと動かすとGitHub Pagesの
    公開URLが変わるため、転送ページの要否とセットで決める
-2. **`202604_Taiwan_Malaysia/index.html`。** 旅程ページの重複だが、
-   `/202604_Taiwan_Malaysia/` を開いたときに出るページなので残した
-3. **worktreeとブランチの後片付け。** `claude/euroblech-backport` と
+2. **worktreeとブランチの後片付け。** `claude/euroblech-backport` と
    `claude/travel-top-sample-page-53fe93` はmainに入っており削除可。
    `claude/hrs-update-check-6671f7` には未マージのコミット1件
    （`59f912e` 推測ベースの登壇者対応表）があるが、生成物を直接編集しており
    次のビルドで消えるため**マージしない**と判断した
+
+**`202604_Taiwan_Malaysia/index.html` は対応不要。** 旅程ページと重複しているが、
+`/202604_Taiwan_Malaysia/` を開いたときに出るページなのでこのまま残す。
+2026-08-16にユーザーが決定した。判断待ちとして蒸し返さない。
 
 ## 未完了
 
