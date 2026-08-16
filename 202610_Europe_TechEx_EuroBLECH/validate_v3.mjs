@@ -11,8 +11,10 @@ const js = readFileSync(join(here, 'v3.js'), 'utf8');
 const hrsCss = readFileSync(join(here, '..', '202609_HumanoidSummitEurope', 'v3.css'), 'utf8');
 const familyPrint = readFileSync(join(here, 'family_print.html'), 'utf8');
 const immigration = readFileSync(join(here, 'immigration_print.html'), 'utf8');
-const itinerary = html.slice(html.indexOf('id="tab-itinerary"'), html.indexOf('id="tab-prep"'));
-const prep = html.slice(html.indexOf('id="tab-prep"'), html.indexOf('id="tab-venue"'));
+// パネルの並びは 旅程 / 視察 / 準備 / 記録。切り出しの終端は隣のタブで決まるので、
+// 並べ替えたらここも一緒に直す（2026-08-16に 準備 と 視察 を入れ替えた）。
+const itinerary = html.slice(html.indexOf('id="tab-itinerary"'), html.indexOf('id="tab-venue"'));
+const prep = html.slice(html.indexOf('id="tab-prep"'), html.indexOf('id="tab-rec"'));
 // 旅程タブの末尾には、2026-08-16に準備から移した現地用カードが付く。日カードの
 // 検査に混ぜない（ラウンジのカードが「2時間15分」を持つので、10/25の数え方が狂う）。
 const onSite = itinerary.slice(itinerary.indexOf('class="legacy-tab legacy-stack onsite-stack"'));
@@ -125,6 +127,12 @@ const checks = [
   ['the lounge folds point at the new location',
     !html.includes('準備タブの「ラウンジ利用可否」')
     && countIn(itinerary, /利用資格は旅程末尾の「ラウンジ利用可否」に集約してある/g) === 6],
+  // ---------- 会場ではなく視察（2026-08-16） ----------
+  // 入力するのは「何を見に来たか」と「何を見たか」であって場所ではない。
+  // 変えるのは表示名だけ。data-tab / id / ストレージのキーは venue のまま。
+  ['the venue tab is labelled by what is done there',
+    html.includes('</span>視察</button>') && !html.includes('</span>会場</button>')
+    && html.includes('data-tab="venue"') && html.includes('id="tab-venue"') && js.includes("venue: 'venue'")],
   // ---------- 家族向けのフライトカードの死蔵CSS（2026-08-16に削除） ----------
   // ブロックは2026-08-15に落とした。規則だけ残ると、次に触る人が使われていると読む。
   // 使いたくなったら core.css の .flight-card を読む。ここへ書き戻さない。

@@ -943,10 +943,19 @@ const transformScript = `
   header.innerHTML = '<div class="wrap hdr-top"><div><div class="eyebrow">EUROPE BUSINESS TRIP 2026</div><h1>TechEx Europe・EuroBLECH 出張ガイド</h1><div class="subtitle">10/17（土）〜10/25（日）｜3名｜アムステルダム・ハノーファー・ブレーメン</div></div><div class="no-print header-actions"><a class="btn" href="family_print.html">' + printIcon + '家族</a><a class="btn" href="immigration_print.html" title="入国審査用（英語）">' + printIcon + '入国</a><button class="btn" type="button" onclick="window.print()" aria-label="印刷">印刷</button></div></div>';
   const nav = document.createElement('div');
   nav.className = 'field-nav';
-  nav.innerHTML = '<div class="wrap"><nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション"><button data-tab="itinerary" class="on" role="tab" aria-selected="true"><span class="ic">📅</span>旅程</button><button data-tab="prep" role="tab" aria-selected="false"><span class="ic">✅</span>準備</button><button data-tab="venue" role="tab" aria-selected="false"><span class="ic">🏢</span>会場</button><button data-tab="rec" role="tab" aria-selected="false"><span class="ic">📝</span>記録</button></nav><div class="subbar" id="subbar"><div class="chips" id="day-chips"><span class="lbl">日付</span></div></div></div>';
+  // 「会場」ではなく「視察」。そのタブに書くのは何を見に来たか・何を見たかであって、
+  // 場所ではない。展示会・工場見学・企業訪問を全部覆うので、次のイベントでも使える。
+  // 変えるのは表示名だけ。data-tab / id / ストレージの ses: キーは venue のままにする
+  // （変えると保存済みのタブ状態と記録が読めなくなる）。2026-08-16、HRSに合わせた。
+  //
+  // 並びは 旅程 / 視察 / 準備 / 記録。HRSと同じ理屈で、現地で開くもの（旅程・視察）を
+  // 先に固め、出発前に埋め切って畳む準備を後ろへ置く。準備が消えても並びが崩れない。
+  nav.innerHTML = '<div class="wrap"><nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション"><button data-tab="itinerary" class="on" role="tab" aria-selected="true"><span class="ic">📅</span>旅程</button><button data-tab="venue" role="tab" aria-selected="false"><span class="ic">🏢</span>視察</button><button data-tab="prep" role="tab" aria-selected="false"><span class="ic">✅</span>準備</button><button data-tab="rec" role="tab" aria-selected="false"><span class="ic">📝</span>記録</button></nav><div class="subbar" id="subbar"><div class="chips" id="day-chips"><span class="lbl">日付</span></div></div></div>';
   document.body.prepend(nav); document.body.prepend(header);
   const main = document.createElement('main'); main.className = 'wrap';
-  [itinerary, prep, venue, record, family].forEach(panel => main.appendChild(panel));
+  // パネルの並びもタブに合わせる。印刷はタブを全部開いて縦に並べるので、
+  // ここが逆だと紙の上で準備が視察より前に出る。
+  [itinerary, venue, prep, record, family].forEach(panel => main.appendChild(panel));
   nav.after(main);
   document.body.insertAdjacentHTML('beforeend','<footer class="field-footer">TechEx Europe・EuroBLECH 2026 ・ field guide v3</footer><!--V3_SCRIPT-->');
   const legacyIconMap = { 'fa-train':'🚆', 'fa-industry':'🏭', 'fa-landmark':'🏛', 'fa-laptop':'💻', 'fa-building':'🏢', 'fa-hotel':'🏨' };
