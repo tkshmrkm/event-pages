@@ -43,7 +43,21 @@ for (const name of files) {
 const onlineName = 'index.html';
 const online = fs.readFileSync(path.join(here, onlineName), 'utf8');
 const sharedCss = fs.readFileSync(path.join(here, 'v3.css'), 'utf8');
-assert((online.match(/data-tab="(?:plan|venue|rec)"/g) || []).length === 3, `${onlineName}: primary navigation is not exactly three sections`);
+assert((online.match(/data-tab="(?:overview|plan|venue|rec)"/g) || []).length === 4, `${onlineName}: primary navigation is not exactly four sections`);
+// 概要タブ（2026-08-16）。索引であって内容ではないので、4ブロックが揃っていること、
+// 日程概要が8日ぶんあること、既定タブが旅程のままであることを見る。
+assert(online.includes('<section class="tab" id="tab-overview"') && online.includes('data-tab="overview"'), `${onlineName}: overview tab missing`);
+['出張概要', '日程概要', 'イベント概要', '施設概要'].forEach(block => {
+  assert(online.includes(`</span>${block}</h2>`), `${onlineName}: overview block missing: ${block}`);
+});
+assert((online.match(/<td class="ov-date">/g) || []).length === 8, `${onlineName}: overview itinerary must carry all eight days`);
+assert(online.includes('<section class="tab on" id="tab-plan"') && !online.includes('<section class="tab on" id="tab-overview"'), `${onlineName}: itinerary must stay the default tab`);
+assert(online.includes("['overview','plan','venue','rec','prep'].includes(store.get('tab','plan'))"), `${onlineName}: overview missing from the restored-tab whitelist`);
+// 概要は詳細を持たない。各ブロックから詳細タブへ戻れること。
+['data-goto="plan"', 'data-goto="venue"', 'data-goto="prep"'].forEach(link => {
+  assert(online.includes(link), `${onlineName}: overview cross-link missing: ${link}`);
+});
+assert(sharedCss.includes('.ov-days{') && sharedCss.includes('.ov-facility{'), 'v3.css: overview styles missing');
 assert((online.match(/<details class="day" open/g) || []).length === 8, `${onlineName}: all eight days must start open`);
 assert(!online.includes('data-tab="prep"') && !online.includes('data-tab="fam"'), `${onlineName}: secondary content leaked into primary navigation`);
 assert(online.includes('id="btn-export-json"') && online.includes('id="import-json"'), `${onlineName}: JSON transfer controls missing`);
@@ -92,7 +106,6 @@ assert(countIn(immiHtml, /onclick="/g) === 1 && immiHtml.includes('onclick="wind
 assert(!/localStorage|sessionStorage|TripField|cloudEndpoint/.test(immiHtml), 'immigration_print.html: passport details must never be persisted or synced');
 assert(countIn(immiHtml, /<input/g) === 2, 'immigration_print.html: expected the name and passport fields');
 assert(!/[぀-ヿ一-鿿]/.test(immiHtml), 'immigration_print.html: must be written in English only');
-assert(!/\p{Extended_Pictographic}/u.test(immiHtml), 'immigration_print.html: no emoji');
 for (const fact of ['Liederhalle', 'Maritim Hotel Stuttgart', 'Best Western Hotel Airport Frankfurt', 'AY80', 'AY1416', 'return ticket held', 'Consulate-General of Japan in Frankfurt']) {
   assert(immiHtml.includes(fact), `immigration_print.html: missing ${fact}`);
 }
@@ -252,7 +265,10 @@ assert(!/未確認/.test(climateSection[0]), 'family_print.html: all four cities
 // カラー絵文字35種が検査を素通りしていた（2026-08-15にユーザーが画面で発見）。
 // 3文字を数える検査ではなく、Unicodeの性質で数える。
 // 国旗（地域指示子の対）も対象。Windowsでは合成されず「DE」「JP」と出る。
-for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml], ['family_print.html', family]]) {
+// v3.cssも生成物。ここを対象から外していたため、CSSコメントの中の⚽🤖🖨🗓🗺と
+// 国旗🇯🇵🇩🇪が2026-08-16まで残っていた。v3.cssはHTMLと違って絵文字の一括置換を
+// 通らないので、素通りすると誰も気付かない。immigration_print.htmlもここでまとめて見る。
+for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml], ['family_print.html', family], ['immigration_print.html', immiHtml], ['v3.css', sharedCss]]) {
   const pictographs = [...new Set(text.match(/\p{Extended_Pictographic}/gu) || [])];
   assert(pictographs.length === 0,
     `${name}: every icon must be a monochrome SVG; found emoji ${pictographs.map(c => `${c}(U+${c.codePointAt(0).toString(16).toUpperCase()})`).join(' ')}`);

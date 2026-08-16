@@ -156,10 +156,10 @@ h3{font-size:var(--f3);margin:14px 0 6px;color:var(--tx2)}
 .opt > b{display:block;font-weight:600;color:var(--tx2)}
 .note{margin-top:5px;color:var(--mu);font-size:var(--f4);line-height:1.65;padding-left:9px;border-left:2px solid var(--line2)}
 
-/* イベント種別：絵文字だけ。色は付けない（HRSと要検討のみ例外）
+/* イベント種別：モノクロSVGアイコン。色は付けない（HRSと要検討のみ例外）
    交通手段も行動の区分もモノクロSVG（.flight-mark／.mode-icon／.line-icon）。空港手続き・宿・食事・観光・観戦・HRS
    印を付けないのは「徒歩」と「その場での行動」。
-   ⚽は観戦で、HRS（🤖）とは別物なので rose の色は使わない。 */
+   観戦はHRSとは別物なので rose の色は使わない。 */
 .et{margin-right:3px;font-style:normal}
 .legend{font-size:var(--f4);letter-spacing:.01em}
 .legend .muted{margin-left:2px}
@@ -359,7 +359,7 @@ h3{font-size:var(--f3);margin:14px 0 6px;color:var(--tx2)}
 .mode-icon{display:flex;flex:0 0 auto;align-items:center;justify-content:center;width:20px;height:20px;color:#0B5C60}
 .mode-icon svg{display:block;width:100%;height:100%;overflow:visible}
 .mode-icon-unknown{color:#B96B16}
-/* 文中に置くモノクロSVGアイコン（黒塗りグリフになる🖨🗓🗺などの置き換え）。
+/* 文中に置くモノクロSVGアイコン（Windowsで黒塗りグリフになる絵文字の置き換え）。
    .flight-mark／.mode-iconが固定20pxなのは、専用の列に入って行の高さを決める側だから。
    .line-iconは見出し・ボタン・本文の中に置くので、寸法を固定pxで持つと文字より
    大きくなる。2026-08-15に実機で確認したときは19px固定で、13〜14pxの文字の中に
@@ -600,6 +600,30 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 }
 
 
+.ov-days{width:100%;border-collapse:collapse;font-size:13px}
+.ov-days th{background:var(--line2);border-bottom:1px solid var(--line);padding:5px 8px;color:var(--mu);font-size:12px;font-weight:700;text-align:left;white-space:nowrap}
+.ov-days td{border-top:1px solid var(--line2);padding:7px 8px;vertical-align:top;line-height:1.55}
+.ov-days td.ov-date{width:64px;color:var(--tx);font-weight:700;white-space:nowrap}
+.ov-days td.ov-stay{width:150px;color:var(--tx2)}
+.ov-note{display:block;margin-top:2px;color:var(--mu);font-size:12px}
+.ov-facility{display:grid;gap:7px}
+.ov-facility>div{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:start;font-size:13px;line-height:1.55}
+.ov-facility b{color:var(--mu);font-size:12px;font-weight:700}
+.ov-more{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+@media(max-width:430px){
+  /* 393pxでは3列のうち宿泊地が押し潰れて1文字ずつ折り返すので、日付を見出し行に
+     昇格させて2段にする。家族向け気候表で同じ失敗をしている（2026-08-15）。 */
+  .ov-days,.ov-days tbody,.ov-days tr,.ov-days td{display:block;width:auto}
+  .ov-days thead{display:none}
+  .ov-days tr{border-top:1px solid var(--line2);padding:8px 2px}
+  .ov-days tr:first-child{border-top:0}
+  .ov-days td{border:0;padding:0}
+  .ov-days td.ov-date{width:auto;margin-bottom:2px}
+  .ov-days td.ov-stay{width:auto;margin-top:3px;color:var(--mu);font-size:12px}
+  .ov-facility>div{grid-template-columns:44px minmax(0,1fr)}
+}
+
+
 /* Family page: compact cards on phones, normal table on paper. */
 .family-page{padding:0 0 24px}
 .family-head{background:#fff;border-bottom:2px solid var(--line);padding:16px 0 12px}
@@ -607,7 +631,7 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 .family-head p{margin:0;color:var(--tx2);font-size:14px}
 .family-page .tab,.family-page .tab.on{display:block}
 /* .family-section は5セクション構成の共通カード枠（出張サマリー／時差・気候／
-   日程詳細／宿泊先情報／緊急連絡先）。「🗓 どこにいて何をしているか」は
+   日程詳細／宿泊先情報／緊急連絡先）。「どこにいて何をしているか」は
    日程詳細と内容が重複するため削除済み（.family-whereと.where-*一式も廃止）。
    .family-scheduleも同じ枠を使う（202610_Europe_TechEx_EuroBLECHと同じ）。 */
 .family-section,.family-schedule{margin-bottom:14px;overflow:hidden;border:2px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,32,.05)}
@@ -697,8 +721,10 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 .timezone-lead span{color:var(--mu);font-size:13px}
 /* 時差：家族が使うのは差の数字なので、そこだけを大きくする（EuroBLECHと同じ.timezone-cards構造）。
    ゾーン名に国旗絵文字を入れない。国旗の合成外字はWindowsでは合成されず「JP」「DE」という
-   文字のまま表示されることをユーザーが実機で確認済み（EuroBLECHは🇯🇵🇩🇪を使うが、
-   HRSでは意図的に外す。これはEuroBLECHとの意図的な相違）。 */
+   文字のまま表示されることをユーザーが実機で確認済み（EuroBLECHは日本・ドイツの国旗を
+   使うが、HRSでは意図的に外す。これはEuroBLECHとの意図的な相違）。
+   このコメント自身にも国旗を書かない。v3.cssは絵文字の一括置換を通らないので、
+   説明のつもりで書いた1文字がそのまま生成物に残る。 */
 .timezone-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .timezone-card{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:2px 8px;min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#F5F8F9;color:var(--tx2)}
 .timezone-card span,.timezone-card small{grid-column:1/3}
