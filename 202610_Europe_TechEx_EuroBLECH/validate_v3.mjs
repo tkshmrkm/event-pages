@@ -21,6 +21,7 @@ const onSite = itinerary.slice(itinerary.indexOf('class="legacy-tab legacy-stack
 const dayCards = itinerary.slice(0, itinerary.indexOf('class="legacy-tab legacy-stack onsite-stack"'));
 const day1022 = dayCards.slice(dayCards.indexOf('id="day-1022"'), dayCards.indexOf('id="day-1023"'));
 const day1025 = dayCards.slice(dayCards.indexOf('id="day-1025"'));
+const overview = html.slice(html.indexOf('id="tab-overview"'), html.indexOf('id="tab-itinerary"'));
 const rowTimes = [...itinerary.matchAll(/<div class="row-time">([\s\S]*?)<\/div>/g)].map(match => match[1].replace(/<[^>]+>/g, '').trim());
 
 const count = pattern => (html.match(pattern) || []).length;
@@ -29,8 +30,8 @@ const checks = [
   ['HRS public stylesheet linked', html.includes('href="../202609_HumanoidSummitEurope/v3.css"')],
   ['local v3 assets linked', html.includes('href="v3.css"') && html.includes('src="v3.js"')],
   ['no v2 runtime dependency', !/v2\.(?:css|js)/.test(html)],
-  // 家族はタブではなくfamily_print.htmlへ分けたので、主要タブは4つ。
-  ['four primary tabs', count(/data-tab="(?:itinerary|prep|venue|rec)"/g) === 4 && count(/data-tab="/g) === 4],
+  // 家族はタブではなくfamily_print.htmlへ分けた。2026-08-16に概要を足して5つ。
+  ['five primary tabs', count(/data-tab="(?:overview|itinerary|prep|venue|rec)"/g) === 5 && count(/data-tab="/g) === 5],
   ['nine HRS detail day cards', count(/<details class="day"/g) === 9],
   ['all day cards initially open', count(/<details class="day"[^>]* open/g) === 9],
   ['nine day topic blocks', count(/class="day-topics"/g) === 9],
@@ -104,6 +105,37 @@ const checks = [
   ['line icon size comes from the shared stylesheet', /\.line-icon\{[^}]*width:1\.15em/.test(hrsCss) && !/(^|[^ ])\.line-icon\{/m.test(css) && css.includes('[class*="bg-gray-700"] .line-icon')],
   ['no oversized itinerary time cells', rowTimes.every(value => value.length <= 32)],
   ['four-column mobile contract retained', /@media\(max-width:640px\)[\s\S]*\.route-four,.lanes \.route-four\{grid-template-columns:72px minmax\(0,1fr\) 74px minmax\(0,1fr\)\}/.test(css)],
+  // ---------- 概要タブは動きが分かることが役目（2026-08-16） ----------
+  // EBは村上と美馬・金築が別の日に別の空港から出て、10/20の夜に合流する。
+  // 概要はその形をひと目で見せるためにある。レーンが2本から1本になることが
+  // 合流の合図なので、**別行動の4日が2本、合流後の5日が1本**を数える。
+  // 崩れたら、概要が「動きの分かる場所」でなくなったということ。
+  ['the overview shows two lanes until the trip converges',
+    countIn(overview, /class="ov-day\b/g) === 9
+    && countIn(overview, /class="ov-lane ov-lane-murakami"/g) === 4
+    && countIn(overview, /class="ov-lane ov-lane-team"/g) === 4
+    && countIn(overview, /class="ov-lane ov-lane-shared"/g) === 5],
+  // 合流の印は1日だけ。日中の行動がまだ別なので day.shared では拾えず、
+  // 「全レーンの宿の街が同じになった最初の日」で判定している。10/21ではなく10/20。
+  ['the overview marks the day the two lanes converge',
+    countIn(overview, /class="ov-join"/g) === 1
+    && /10\/20（火）[\s\S]*?ov-join[^>]*>この夜からゲッティンゲンで3名合流/.test(overview)],
+  // 街の名前で動きを見せる。宿の名前だと長すぎて、変わったことが読み取れない。
+  ['the overview tracks movement by city',
+    ['日本', '機内', 'アムステルダム', 'ゲッティンゲン', 'フランクフルト', '帰宅']
+      .every(city => new RegExp(`class="ov-city">${city}<`).test(overview))],
+  // 概要は索引であって内容ではない。長さで担保する。旅程より長くなったら、
+  // 周辺情報を集め始めた合図なので止める。
+  ['the overview stays an index rather than a second itinerary',
+    overview.length < itinerary.length / 4 && countIn(overview, /class="ov-card"/g) === 4],
+  // 導線が無いと索引として使えない。data-goto はv3.jsが受ける。
+  ['the overview links to the detail tabs',
+    countIn(overview, /data-goto="/g) === 3 && js.includes('data-goto')],
+  // 既定タブは旅程のまま。現地で開くのは旅程で、概要が効くのは出発前と机上。
+  ['the itinerary stays the tab that opens first',
+    /<button data-tab="itinerary" class="on"/.test(html)
+    && /id="tab-itinerary" class="tab on"/.test(html)
+    && !/id="tab-overview"[^>]*class="tab on"/.test(html)],
   // ---------- 準備タブは畳めるままにしておく（2026-08-16） ----------
   // 準備は出発前に埋め切ったら畳む前提のタブ。現地でしか使い道が無いものがここに
   // しか無いと、畳んだ瞬間に失われる。宿の住所は日カードに無く、ラウンジの資格は

@@ -9,7 +9,9 @@ html{scroll-behavior:smooth}
 body{padding-bottom:0}
 button,input,textarea,select{font-family:inherit}
 .header-actions{display:flex;gap:6px;flex:0 0 auto}
-.field-nav .tabs{grid-template-columns:repeat(4,1fr)}
+/* 概要を足して5タブ（2026-08-16）。393pxでの溢れはビルド後に数値で見る。
+   .tabs は overflow-x:auto かつ scrollbar-width:none なので目では気付けない。 */
+.field-nav .tabs{grid-template-columns:repeat(5,1fr)}
 .field-nav .tabs button{min-width:0}
 .tab{padding-bottom:34px}
 .itinerary-stack,.legacy-stack{display:grid;gap:12px;padding-top:14px}
@@ -133,6 +135,55 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .legacy-stack>.bg-white,.legacy-stack>[class*="bg-white"]{overflow:hidden;margin:0;border:2px solid var(--line)!important;border-radius:12px!important;background:#fff!important;box-shadow:0 1px 2px rgba(16,24,32,.05)!important}
 .legacy-stack>.bg-white>[class*="bg-gray-700"],.legacy-stack>.bg-white>[class*="bg-gradient"],.legacy-stack>[class*="bg-white"]>[class*="bg-gray-700"]{padding:10px 14px!important;background:var(--neu-bg)!important;color:var(--tx2)!important;font-size:16px!important;font-weight:700!important}
 .legacy-stack>.bg-white>.p-4,.legacy-stack>.bg-white>.p-3,.legacy-stack>[class*="bg-white"]>.p-4,.legacy-stack>[class*="bg-white"]>.p-3{padding:12px 14px!important}
+/* 概要タブ（2026-08-16）。HRSの .ov-days は1日1行の表だが、EBは村上と美馬・金築が
+   10/20の夜まで別に動くので、1日に最大2本のレーンを持つ。レーンの色は旅程の
+   人物レーンと同じ変数を使う。**色が2本から1本になることが合流の合図**なので、
+   ここだけ別の色を作らない。HRS側へ持っていくなら、HRSに別行動が出てから。 */
+.ov-card{overflow:hidden;border:2px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,32,.05)}
+.ov-head{padding:10px 14px;background:var(--neu-bg);color:var(--tx2);font-size:16px;font-weight:700}
+.ov-body{padding:12px 14px;display:grid;gap:10px}
+.ov-lead{margin:0;color:var(--tx2);font-size:var(--f4);line-height:1.55}
+.ov-foot{border-top:1px solid var(--line2);padding:8px 14px;background:#F7F9FA;color:var(--mu);font-size:var(--f5);line-height:1.5}
+.ov-split{display:grid;gap:8px}
+.ov-split-lane{display:grid;gap:2px;border-left:4px solid currentColor;border-radius:0 8px 8px 0;padding:8px 11px;font-size:var(--f4);line-height:1.5}
+.ov-split-lane strong{font-size:var(--f3)}
+.ov-split-lane span{color:var(--tx2)}
+.ov-lane-murakami{background:#EEF5FB;color:var(--lane-murakami-tx)}
+.ov-lane-team{background:#F0F8F2;color:var(--lane-team-tx)}
+.ov-lane-shared{background:var(--neu-bg);color:var(--tx2)}
+.ov-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ov-facts>div{min-width:0;border:1px solid var(--line);border-radius:9px;padding:7px 9px;background:#FAFCFD}
+.ov-facts b{display:block;color:var(--mu);font-size:var(--f5);font-weight:700}
+.ov-facts span{display:block;color:var(--tx);font-size:var(--f4);font-weight:700;line-height:1.45}
+.ov-facts span+span{color:var(--mu);font-weight:600}
+/* 日ごとの流れ。日付が見出し、その下にレーンが1〜2本ぶら下がる。 */
+.ov-flow{display:grid;gap:7px}
+.ov-day{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff}
+.ov-day>header{padding:5px 10px;background:var(--line2);color:var(--tx);font-size:var(--f4);font-weight:700}
+.ov-lane{display:grid;grid-template-columns:74px 62px minmax(0,1fr) 96px;gap:8px;align-items:start;padding:8px 10px;border-top:1px solid var(--line2);font-size:var(--f4);line-height:1.5}
+.ov-day>header+.ov-lane{border-top:0}
+.ov-who{font-weight:700;overflow-wrap:anywhere}
+.ov-main{min-width:0;color:var(--tx2);overflow-wrap:anywhere}
+/* まだ発っていないレーンは内容が空。1行ぶんの高さを取らせない。
+   消えた分だけ後ろがずれないよう、居場所には列を明示しておく。 */
+.ov-main:empty{display:none}
+.ov-city{grid-column:4;min-width:0;color:var(--tx);font-weight:600;text-align:right;overflow-wrap:anywhere}
+/* 合流した日。ここだけ枠を強め、レーンの下に一言添える。 */
+.ov-day-merge{border-color:var(--move-tx)}
+.ov-join{padding:6px 10px;border-top:1px solid var(--move-tx);background:var(--move);color:var(--move-tx);font-size:var(--f5);font-weight:700}
+@media(max-width:430px){
+  /* 393pxでは4列のうち主な内容が1文字ずつ折り返す。誰・区分・宿を1行目に置き、
+     内容を2行目へ落とす。家族向け気候表と概要表で同じ失敗をしている（2026-08-15/16）。 */
+  .ov-lane{grid-template-columns:auto auto minmax(0,1fr);gap:4px 7px;padding:7px 9px}
+  .ov-who{grid-column:1}
+  .ov-kind{grid-column:2}
+  .ov-city{grid-column:3;text-align:right}
+  .ov-main{grid-column:1/4}
+  .ov-facts{grid-template-columns:1fr}
+  .ov-facts>div{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
+  .ov-facts b{width:100%}
+}
+
 /* 準備から旅程へ移した現地用カード（宿・ラウンジ・便利リンク）。様式は .legacy-tab と
    .legacy-stack に紐づいているので、箱ごと持ってきて両方のクラスを同じ要素に付ける。
    #tab-itinerary 側へ .legacy-tab を付けると日カードの字送りまで変わるので付けない。

@@ -221,6 +221,233 @@ const FAMILY_DAYS = [
   ], stays:[['全員','帰宅']] },
 ];
 
+// ============================================================
+// 概要タブ（2026-08-16）
+// ============================================================
+// 概要は「動きが分かる」ためにある。EBは村上と美馬・金築が別の日に別の空港から
+// 出て、別の街に泊まり、10/20の夜にゲッティンゲンで合流する。この形は日カードを
+// 9枚めくらないと掴めない。**日程が割れていることは概要を作らない理由ではなく、
+// 概要が要る理由である。**HRSは全員が同じ動きなので1本の表で足りたが、
+// EBは合流するまで2本のレーンで見せる。レーンの色は旅程の人物レーンと同じものを
+// 使う。色が2本から1本になることが、そのまま合流の合図になる。
+//
+// 中身はすべてFAMILY_DAYSとSTAYSから導く。手で書くと、日程を1日ずらした時点で
+// 概要だけが古くなる。概要は全体を見る場所なので、ズレたときの実害が最も大きい。
+
+// 宿の名前ではなく街の名前で動きを見せる。「どこで寝るか」が「どこにいるか」なので、
+// 街が変われば動いたことが分かる。対応表に無い宿が出たらビルドを止める。
+const STAY_CITY = {
+  'Holiday Inn Express Amsterdam - Sloterdijk Station': 'アムステルダム',
+  'Hotel FREIgeist Göttingen Innenstadt': 'ゲッティンゲン',
+  'Toyoko Inn Frankfurt am Main Hauptbahnhof': 'フランクフルト',
+  '機内': '機内',
+  '帰宅': '帰宅',
+};
+const stayCity = name => {
+  const city = STAY_CITY[name];
+  if (!city) throw new Error(`Overview: no city for the stay "${name}"`);
+  return city;
+};
+
+// 「。」以降は補足なので落とす。ただし括弧の中の「。」では切らない。
+// 'EuroBLECH 展示会視察（3名合流。ハノーファー）' を素直に split すると
+// '（3名合流' で終わって括弧が閉じない（2026-08-16に生成物で確認）。
+const overviewHeadline = text => {
+  const plain = text.replace(/<[^>]+>/g, '').replace(/\*\*/g, '');
+  let depth = 0;
+  for (let i = 0; i < plain.length; i++) {
+    const ch = plain[i];
+    if (ch === '（' || ch === '(') depth++;
+    else if (ch === '）' || ch === ')') depth--;
+    else if (ch === '。' && depth === 0) return plain.slice(0, i).trim();
+  }
+  return plain.trim();
+};
+
+// レーンごとの区分。1行の内容だけだと便名や会議名が並ぶばかりで、その日が
+// そのレーンにとって何の日なのかが読めない。判定は上から順に最初に当たったものを採る。
+//   出国    … そのレーンが最初に飛ぶ日。村上は10/17、美馬・金築は10/18でずれる
+//   帰国    … 全日程の最終日
+//   帰国便  … 機内泊（そのレーンの初日を除く）
+//   イベント… work がある
+//   移動    … flight / move / transfer / procedure がある
+//   休日    … それ以外
+//   日本    … 行事が無い。まだ発っていない（10/17の美馬・金築）
+const overviewLaneKind = (events, { first, last, stay }) => {
+  if (!events.length) return '日本';
+  if (first) return '出国';
+  if (last) return '帰国';
+  if (stay === '機内') return '帰国便';
+  if (events.some(e => e[1] === 'work')) return 'イベント';
+  if (events.some(e => ['flight', 'move', 'transfer', 'procedure'].includes(e[1]))) return '移動';
+  return '休日';
+};
+// 代表の1件を選ぶ順。work を先に見るのは、イベント日に「チェックイン」が
+// 主役として出てしまうのを避けるため。flight は move より上（HRSと同じ理由で、
+// 10/25が「入国手続きを終えて各自帰宅」を拾うと14:10のセントレア着が消える）。
+const OVERVIEW_MAIN_KIND_ORDER = ['work', 'review', 'flight', 'procedure', 'move', 'transfer', 'stay'];
+const overviewMain = events => {
+  const pick = OVERVIEW_MAIN_KIND_ORDER.map(kind => events.find(ev => ev[1] === kind)).find(Boolean);
+  return pick ? overviewHeadline(pick[3]) : '';
+};
+
+// レーンの並びは、その日に何本あるかで決まる。合流後は1本。
+function overviewDayRows() {
+  // 各レーンが最初に飛ぶ日を先に求める。「出国」はレーンごとに違う日になる。
+  const firstFlight = {};
+  FAMILY_DAYS.forEach(day => {
+    [['murakami', day.murakami], ['team', day.team]].forEach(([who, events]) => {
+      if (firstFlight[who]) return;
+      if ((events || []).some(e => e[1] === 'flight')) firstFlight[who] = day.date;
+    });
+  });
+  return FAMILY_DAYS.map((day, i, all) => {
+    const last = i === all.length - 1;
+    const rawStayOf = who => (day.stays.find(s => s[0] === who) || day.stays.find(s => s[0] === '全員') || [])[1];
+    // 泊まりの行が無いレーンは、まだ日本にいる（10/17の美馬・金築）。空欄にすると
+    // 「書き漏らし」に見えるので、居場所として日本と書く。
+    const stayOf = who => { const name = rawStayOf(who); return name ? stayCity(name) : '日本'; };
+    const lanes = day.shared
+      ? [{ who: '全員', tone: 'shared', events: day.shared, stay: stayOf('全員') }]
+      : [
+        { who: '村上', tone: 'murakami', events: day.murakami || [], stay: stayOf('村上') },
+        { who: '美馬・金築', tone: 'team', events: day.team || [], stay: stayOf('美馬・金築') },
+      ];
+    return {
+      date: `${day.date}（${day.dow}）`,
+      lanes: lanes.map(lane => ({
+        ...lane,
+        kind: overviewLaneKind(lane.events, {
+          first: firstFlight[lane.tone] === day.date,
+          last,
+          stay: rawStayOf(lane.who),
+        }),
+        // まだ発っていないレーンは行事が無い。区分と居場所の両方が「日本」と
+        // 言っているので、内容の行は出さない（'—' だけの行が1本増えるだけ）。
+        main: overviewMain(lane.events),
+        // 未確定が残る日はその理由を1行添える。札は付けない。状態を持つ単位は
+        // 予定1件で、札の持ち主は旅程タブにある（同じ札を概要にも複製しない）。
+        note: overviewHeadline((lane.events.find(e => e[1] === 'review') || [])[3] || ''),
+      })),
+    };
+  });
+}
+
+// 合流した日。レーンが1本になるのは10/21だが、実際に3名が同じ街で寝るのは
+// 10/20の夜である（村上が20:30頃にゲッティンゲンへ着く）。印は動きが合流した日に
+// 付ける。日中の行動がまだ別なので day.shared では拾えない。
+// 判定は「全レーンの宿の街が同じで、前日は違った最初の日」。
+function overviewMergeDate(rows) {
+  for (let i = 1; i < rows.length; i++) {
+    const cities = [...new Set(rows[i].lanes.map(l => l.stay))];
+    const before = [...new Set(rows[i - 1].lanes.map(l => l.stay))];
+    if (cities.length === 1 && before.length > 1) return rows[i].date;
+  }
+  throw new Error('Overview: the trip never converges — check FAMILY_DAYS stays');
+}
+
+// 概要タブのHTML。アイコンはtransformScript側の対応表を通るので、ここでは
+// 絵文字で書いておく（生成物には1文字も残らない）。
+function buildOverviewSection(source) {
+  // 使う固有名詞はすべて元データの中にある。新しい事実を概要で作らない。
+  // 元データが変わったら気付けるよう、使う前に在ることを確認する。
+  const facts = [
+    'RAI Amsterdam', 'ハノーファーメッセ', 'Hannover Messe', 'Mercedes-Benz Werk Bremen',
+    'Gold Pass', 'ベッコフ', 'TechEx Europe 2026', 'EuroBLECH 2026',
+    'Holiday Inn Express Amsterdam - Sloterdijk Station',
+    'Hotel FREIgeist Göttingen Innenstadt',
+    'Toyoko Inn Frankfurt am Main Hauptbahnhof',
+  ];
+  facts.forEach(fact => {
+    if (!source.includes(fact)) throw new Error(`Overview fact missing from source: ${fact}`);
+  });
+
+  const rows = overviewDayRows();
+  if (rows.length !== FAMILY_DAYS.length) throw new Error('Overview: day row count drifted from FAMILY_DAYS');
+  const mergeDate = overviewMergeDate(rows);
+  // 合流までに何日かかるかも導出する。手で「4日目」と書くと日程をずらしたとき
+  // ここだけ古くなる。
+  const mergeIndex = rows.findIndex(r => r.date === mergeDate);
+  const mergeCity = rows[mergeIndex].lanes[0].stay;
+
+  const esc = value => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const laneHtml = lane =>
+    `<div class="ov-lane ov-lane-${lane.tone}">`
+    + `<span class="ov-who">${esc(lane.who)}</span>`
+    + `<span class="ov-kind"><span>${esc(lane.kind)}</span></span>`
+    + `<span class="ov-main">${esc(lane.main)}${lane.note ? `<span class="ov-note">${esc(lane.note)}</span>` : ''}</span>`
+    + `<span class="ov-city">${esc(lane.stay)}</span>`
+    + '</div>';
+  const dayHtml = row =>
+    `<article class="ov-day${row.date === mergeDate ? ' ov-day-merge' : ''}">`
+    + `<header>${esc(row.date)}</header>`
+    + row.lanes.map(laneHtml).join('')
+    + (row.date === mergeDate ? `<div class="ov-join">この夜から${esc(mergeCity)}で3名合流</div>` : '')
+    + '</article>';
+
+  return `<div class="tab" id="tab-overview" role="tabpanel" aria-label="概要">
+  <div class="legacy-stack">
+
+  <div class="ov-card">
+    <div class="ov-head">🧳 出張概要</div>
+    <div class="ov-body">
+      <p class="ov-lead">TechEx Europe と EuroBLECH の視察｜10/17（土）発 〜 10/25（日）着｜3名</p>
+      <div class="ov-split">
+        <div class="ov-split-lane ov-lane-murakami"><strong>村上</strong><span>10/17発・アムステルダム経由</span><span>TechEx Europe に1人で参加してから合流</span></div>
+        <div class="ov-split-lane ov-lane-team"><strong>美馬・金築</strong><span>10/18発・フランクフルト経由</span><span>Autostadt を見てから EuroBLECH へ</span></div>
+      </div>
+      <div class="ov-facts">
+        <div><b>全日程</b><span>${rows.length}日間</span><span>3名</span></div>
+        <div><b>合流</b><span>${esc(mergeDate)}の夜</span><span>${esc(mergeCity)}</span></div>
+        <div><b>帰着</b><span>10/25（日）</span><span>セントレア 14:10</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ov-card">
+    <div class="ov-head">📅 日程概要</div>
+    <div class="ov-body">
+      <p class="ov-lead">出発から${mergeIndex + 1}日目まで村上と美馬・金築は別行動。色が2本から1本になる日が合流</p>
+      <div class="ov-flow">
+        ${rows.map(dayHtml).join('\n        ')}
+      </div>
+      <div class="ov-more no-print"><button class="btn" type="button" data-goto="itinerary">📅 日ごとの旅程へ</button></div>
+    </div>
+    <div class="ov-foot">💡 時刻・便名・乗り継ぎ・宿の住所は旅程タブが持ちます。ここは1日1行の俯瞰だけです</div>
+  </div>
+
+  <div class="ov-card">
+    <div class="ov-head">🏛 イベント概要</div>
+    <div class="ov-body">
+      <!-- ラベルは .ov-facility の44px枠に入る語にする。「TechEx」「EuroBLECH」は
+           393pxで5px・32pxはみ出した（2026-08-16に実測）。イベント名は値の側が
+           持っているので、ラベルには用語の決定どおりの行動名を置く。 -->
+      <div class="ov-facility">
+        <div><b>参加</b><span>TechEx Europe 2026（RAI Amsterdam）10/19〜10/20・村上のみ。Gold Pass 取得済み（無償）</span></div>
+        <div><b>視察</b><span>EuroBLECH 2026（Hannover Messe）10/20〜10/23・3名。入場券はベッコフ経由で発行</span></div>
+        <div><b>見学</b><span>Mercedes-Benz Werk Bremen 10/22 12:45〜14:00・3名。予約確定済み</span></div>
+      </div>
+      <div class="ov-more no-print"><button class="btn" type="button" data-goto="venue">📖 セッション表と当日メモへ</button></div>
+    </div>
+  </div>
+
+  <div class="ov-card">
+    <div class="ov-head">🏨 施設概要</div>
+    <div class="ov-body">
+      <div class="ov-facility">
+        <div><b>会場</b><span>RAI Amsterdam ／ ハノーファーメッセ ／ Mercedes-Benz Werk Bremen</span></div>
+        <div><b>宿</b><span>Holiday Inn Express Amsterdam - Sloterdijk Station ／ Hotel FREIgeist Göttingen Innenstadt ／ Toyoko Inn Frankfurt am Main Hauptbahnhof</span></div>
+        <div><b>空港</b><span>往路 村上 NGO→HKG→AMS ／ 美馬・金築 NGO→HKG→FRA。復路 全員 FRA→HKG→NGO</span></div>
+      </div>
+      <div class="ov-more no-print"><button class="btn" type="button" data-goto="itinerary">📅 宿の住所・ラウンジ・便利リンクへ</button></div>
+    </div>
+    <div class="ov-foot">💡 準備タブは出発前に埋め切るものだけです。現地で開くものは旅程タブの末尾にあります</div>
+  </div>
+
+  </div>
+</div>`;
+}
+
 function divRangeById(html, id) {
   const start = html.search(new RegExp(`<div\\b[^>]*\\bid=["']${id}["'][^>]*>`, 'i'));
   if (start < 0) throw new Error(`Missing #${id}`);
@@ -283,6 +510,7 @@ const transformScript = `
   const STAYS = ${JSON.stringify(STAYS)};
   const ROUTES = ${JSON.stringify(ROUTES)};
   const FAMILY_DAYS = ${JSON.stringify(FAMILY_DAYS)};
+  const OVERVIEW_SECTION = ${JSON.stringify(buildOverviewSection(source))};
   const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const flightIcon = () => '<span class="flight-mark" role="img" aria-label="フライト"></span>';
   const plainTime = value => value.replace(/^\\d{1,2}\\/\\d{1,2}（.）/, '').trim();
@@ -950,12 +1178,22 @@ const transformScript = `
   //
   // 並びは 旅程 / 視察 / 準備 / 記録。HRSと同じ理屈で、現地で開くもの（旅程・視察）を
   // 先に固め、出発前に埋め切って畳む準備を後ろへ置く。準備が消えても並びが崩れない。
-  nav.innerHTML = '<div class="wrap"><nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション"><button data-tab="itinerary" class="on" role="tab" aria-selected="true"><span class="ic">📅</span>旅程</button><button data-tab="venue" role="tab" aria-selected="false"><span class="ic">🏢</span>視察</button><button data-tab="prep" role="tab" aria-selected="false"><span class="ic">✅</span>準備</button><button data-tab="rec" role="tab" aria-selected="false"><span class="ic">📝</span>記録</button></nav><div class="subbar" id="subbar"><div class="chips" id="day-chips"><span class="lbl">日付</span></div></div></div>';
+  // 概要を先頭に足して5タブ。概要は「動きが分かる」ためのタブで、EBは村上と
+  // 美馬・金築が別々に出て10/20の夜に合流する。この形は日カードを9枚めくらないと
+  // 掴めないので、俯瞰の置き場所が要る。
+  nav.innerHTML = '<div class="wrap"><nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション"><button data-tab="overview" role="tab" aria-selected="false"><span class="ic">🧭</span>概要</button><button data-tab="itinerary" class="on" role="tab" aria-selected="true"><span class="ic">📅</span>旅程</button><button data-tab="venue" role="tab" aria-selected="false"><span class="ic">🏢</span>視察</button><button data-tab="prep" role="tab" aria-selected="false"><span class="ic">✅</span>準備</button><button data-tab="rec" role="tab" aria-selected="false"><span class="ic">📝</span>記録</button></nav><div class="subbar" id="subbar"><div class="chips" id="day-chips"><span class="lbl">日付</span></div></div></div>';
   document.body.prepend(nav); document.body.prepend(header);
   const main = document.createElement('main'); main.className = 'wrap';
+  // 概要のマークアップはNode側で組んである（FAMILY_DAYSとSTAYSから導出するため）。
+  const overviewHost = document.createElement('div');
+  overviewHost.innerHTML = OVERVIEW_SECTION;
+  const overview = overviewHost.firstElementChild;
+  if (!overview || overview.id !== 'tab-overview') throw new Error('Overview section did not parse');
   // パネルの並びもタブに合わせる。印刷はタブを全部開いて縦に並べるので、
   // ここが逆だと紙の上で準備が視察より前に出る。
-  [itinerary, venue, prep, record, family].forEach(panel => main.appendChild(panel));
+  // 既定タブは旅程のまま。現地で開くのは旅程なので、起動でいきなり概要を出すと
+  // 毎回1タップ余分になる。概要が効くのは出発前と机上。
+  [overview, itinerary, venue, prep, record, family].forEach(panel => main.appendChild(panel));
   nav.after(main);
   document.body.insertAdjacentHTML('beforeend','<footer class="field-footer">TechEx Europe・EuroBLECH 2026 ・ field guide v3</footer><!--V3_SCRIPT-->');
   const legacyIconMap = { 'fa-train':'🚆', 'fa-industry':'🏭', 'fa-landmark':'🏛', 'fa-laptop':'💻', 'fa-building':'🏢', 'fa-hotel':'🏨' };
@@ -1049,6 +1287,11 @@ const transformScript = `
     card: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/><path d="M6 14h4"/>',
     baggage: '<rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V4h6v3"/><path d="M5 12h14"/><path d="M9 20v1M15 20v1"/>',
     plug: '<path d="M9 3v5M15 3v5"/><path d="M6 8h12v3a6 6 0 0 1-12 0z"/><path d="M12 17v4"/>',
+    // 概要タブで使う3種。HRSが2026-08-16に描いたものをそのまま使う。
+    // 同じ絵を2度描かない（形が微妙に違うと、同じ意味なのに別物に見える）。
+    compass: '<circle cx="12" cy="12" r="9"/><path d="M15 9 13 13 9 15 11 11z"/>',
+    suitcase: '<rect x="4" y="8" width="16" height="12" rx="2"/><rect x="9" y="4" width="6" height="4" rx="1"/><path d="M4 14h16"/>',
+    bulb: '<circle cx="12" cy="9" r="6"/><path d="M9 18h6M10 21h4"/><path d="M10 11l1-2 2 2 1-2"/>',
   });
   const lineIconMap = {
     '🛋':'lounge', '🛂':'procedure', '🏨':'hotel', '🍽':'meal', '😴':'rest', '🥂':'drinks',
@@ -1058,6 +1301,7 @@ const transformScript = `
     '🛒':'cart', '✍':'pen', '🎫':'ticket', '🌐':'globe', '🌍':'globe', '🏢':'building',
     '💰':'money', '📁':'folder', '📄':'document', '💻':'laptop', '🔍':'search', '💳':'card',
     '🛄':'baggage', '🔌':'plug', '📋':'clipboard', '📘':'book',
+    '🧭':'compass', '🧳':'suitcase', '💡':'bulb', '📖':'book',
   };
   const makeLineIcon = name => {
     const icon = document.createElement('span');

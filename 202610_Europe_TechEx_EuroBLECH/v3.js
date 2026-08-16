@@ -1,5 +1,5 @@
 const FIELD_KEY = 'eurotrip2026-v3';
-const TAB_ALIASES = { events: 'venue', docs: 'prep', itinerary: 'itinerary', prep: 'prep', venue: 'venue', rec: 'rec', family: 'family' };
+const TAB_ALIASES = { events: 'venue', docs: 'prep', overview: 'overview', itinerary: 'itinerary', prep: 'prep', venue: 'venue', rec: 'rec', family: 'family' };
 const days = Array.from(document.querySelectorAll('#tab-itinerary .day'));
 const tabs = Array.from(document.querySelectorAll('#tabs [data-tab]'));
 const subbar = document.getElementById('subbar');
@@ -98,6 +98,15 @@ if (todayCard) {
   todayCard.classList.add('today');
   setTimeout(() => todayCard.scrollIntoView({ block: 'start' }), 80);
 }
+
+// 概要タブから各詳細タブへの導線。概要は索引なので、そこから先へ行けないと
+// 「1行の事実と導線に留める」の導線側が無いことになる。
+document.addEventListener('click', event => {
+  const goto = event.target.closest('[data-goto]');
+  if (!goto) return;
+  event.preventDefault();
+  showTab(goto.dataset.goto);
+});
 
 document.addEventListener('click', event => {
   const anchor = event.target.closest('a[href^="#"]');
