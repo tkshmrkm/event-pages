@@ -363,6 +363,10 @@ const overviewCss = String.raw`
 /* 未確定の理由。宿泊と同じ小さい灰色にすると、9/11のように理由と宿泊が続く行で
    2つが同じ列の値に見えた。左罫を付けて、主な内容への注記だと分かるようにする。 */
 .ov-note{display:block;margin-top:3px;padding-left:7px;border-left:2px solid var(--line);color:var(--mu);font-size:12px}
+/* 区分。便名や会議名が並ぶだけでは、その日が何の日かが読み取れない。
+   進み具合の札（.plan-state）ではないので、そちらと見た目を分ける。 */
+.ov-days td.ov-kind{width:74px}
+.ov-kind>span{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:0 6px;background:var(--hov);color:var(--tx2);font-size:11px;font-weight:700;white-space:nowrap}
 .ov-facility{display:grid;gap:7px}
 .ov-facility>div{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:start;font-size:13px;line-height:1.55}
 .ov-facility b{color:var(--mu);font-size:12px;font-weight:700}
@@ -375,7 +379,9 @@ const overviewCss = String.raw`
   .ov-days tr{border-top:1px solid var(--line2);padding:8px 2px}
   .ov-days tr:first-child{border-top:0}
   .ov-days td{border:0;padding:0}
-  .ov-days td.ov-date{width:auto;margin-bottom:2px}
+  /* 狭い幅では日付と区分を同じ行に並べる。区分だけで1行使うと8日で8行増える。 */
+  .ov-days td.ov-date{display:inline;width:auto;margin-bottom:2px}
+  .ov-days td.ov-kind{display:inline;width:auto;margin-left:6px}
   /* 見出し行を消すので、宿泊セルだけ値の意味が分からなくなる。ラベルを付ける
      （セッション表の.session-field-labelと同じ考え方）。 */
   .ov-days td.ov-stay{width:auto;margin-top:3px;color:var(--mu);font-size:12px}
@@ -1218,7 +1224,7 @@ function buildMain({ offline = false } = {}) {
     <nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション">
       <button data-tab="overview" role="tab" aria-controls="tab-overview" aria-selected="false"><span class="ic">${lineIconHtml('compass')}</span>概要</button>
       <button data-tab="plan" class="on" role="tab" aria-controls="tab-plan" aria-selected="true"><span class="ic">📅</span>旅程</button>
-      <button data-tab="venue" role="tab" aria-controls="tab-venue" aria-selected="false"><span class="ic">🤖</span>会場</button>
+      <button data-tab="venue" role="tab" aria-controls="tab-venue" aria-selected="false"><span class="ic">🤖</span>視察</button>
       <button data-tab="prep" role="tab" aria-controls="tab-prep" aria-selected="false"><span class="ic">✅</span>準備</button>
       <button data-tab="rec" role="tab" aria-controls="tab-rec" aria-selected="false"><span class="ic">📝</span>記録</button>
     </nav>
@@ -1417,7 +1423,17 @@ function buildMain({ offline = false } = {}) {
     <span class="i">📝</span>
     <div><strong>講演ごとに、事前の狙い・質問と当日メモを入力できます。</strong>当日メモは「＋ 時刻付きで追記」で既存内容の末尾へ追加でき、入力のたび自動保存します。</div>
   </div>`;
-  html = mustReplace(html, '<section class="tab" id="tab-venue" role="tabpanel" aria-label="会場">', '<section class="tab" id="tab-venue" role="tabpanel" aria-label="会場">\n' + venueStorageNotice, 'venue storage notice');
+  // タブ名は「会場」から「視察」へ（2026-08-16）。中身の35KBはほぼ全部が
+  // セッション表と講演ごとの記入欄で、会場情報は冒頭の1枚だけだった。名前のせいで
+  // フライト・宿泊・地図をここで探されていた。入力するのは「何を見に来たか」と
+  // 「何を見たか」で、場所ではなく行為。視察なら展示会・講演会・工場見学・企業訪問を
+  // すべて覆うので、次のイベントでもそのまま使える。
+  // 内部キー（data-tab="venue" / id="tab-venue"）は変えない。保存済みのタブ状態と
+  // ストレージのキーが壊れる。表示名だけを替える。
+  html = mustReplace(html,
+    '<section class="tab" id="tab-venue" role="tabpanel" aria-label="会場">',
+    '<section class="tab" id="tab-venue" role="tabpanel" aria-label="視察">\n' + venueStorageNotice,
+    'venue storage notice');
   html = html.replace(/<th>狙い・聞くこと<\/th><th>担当<\/th>/g, '<th>事前の狙い・質問</th><th>当日メモ</th>');
   html = mustReplace(
     html,
@@ -1535,7 +1551,24 @@ function buildMain({ offline = false } = {}) {
     sessionFieldsScript + '  /* ---------- 家族タブ：毎日の予定',
     'session input fields'
   );
-  html = html.replace('会場タブの「狙い・聞くこと」「担当」をすべて消します。', '会場タブの「事前の狙い・質問」「当日メモ」をすべて消します。');
+  html = html.replace('会場タブの「狙い・聞くこと」「担当」をすべて消します。', '視察タブの「事前の狙い・質問」「当日メモ」をすべて消します。');
+  // 旅程のDay 1・Day 2の行から視察タブへ送るリンク。タブ名を替えたので文言もそろえる。
+  html = replaceAllCounted(html, '<a href="#" data-goto="venue">会場タブ</a>',
+    '<a href="#" data-goto="venue">視察タブ</a>', 'venue tab link label', 2);
+  // ページ冒頭のレイアウト説明コメント。3タブ時代のまま取り残されていた。
+  // 机上用印刷版は先頭のコメントを丸ごと差し替えるので、あちらには存在しない。
+  if (!offline) {
+    html = mustReplace(html, '    タブ    : 旅程 / 準備 / 会場 / 記録 / 家族',
+      '    タブ    : 概要 / 旅程 / 視察 / 準備 / 記録（家族と入国審査は別ページ）',
+      'layout comment tab list');
+  }
+  // 残りの「会場タブ」はHTMLコメントとJSコメントの中だけ。画面には出ないが、
+  // 次に読む人が古い名前で探すので一緒にそろえる。Liederhalleそのものを指す
+  // 「会場」は本物なので触らない（「会場タブ」という並びだけを置き換える）。
+  html = html.split('会場タブ').join('視察タブ');
+  html = html.replace('==================== タブ：会場 ====================',
+    '==================== タブ：視察 ====================');
+
   html = html.replace("    document.querySelectorAll('.ses .ow').forEach(bt => { bt.dataset.v = ''; bt.textContent = '—'; });\n", '');
   html = html.replace('入力はこの端末に自動保存されます（サーバー送信なし）。', '入力はまずこの端末・このブラウザ内に自動保存されます。Cloudflare同期を使う場合は、複数端末での同時編集を避けてください。');
   html = html.replace('下のボタンで全文を Markdown にしてコピーでき、そのまま出張報告や <code>CHANGELOG.md</code> の材料になります。', 'PCでクラウド側の記録を読み込んだ後、全文をMarkdownファイルとしてダウンロードできます。コピーは出張報告や <code>CHANGELOG.md</code> の下書きに使えます。');
@@ -1744,8 +1777,29 @@ const overviewTail = text => text.replace(/<[^>]+>/g, '').split('。').slice(1).
 // そのまま使い、バナー側が変わったらビルドで気付けるようにする。
 const OVERVIEW_UNDECIDED_DATES = ['9/11', '9/12', '9/13'];
 
+// 日ごとの区分。1行の内容だけだと便名や会議名が並ぶばかりで、その日が何の日なのかが
+// 読み取れない（2026-08-16にユーザーが指摘）。ここもFAMILY_DAYSから導出する。
+// 手で並べると、日程を1日ずらしたときに区分だけ古くなる。
+// 順序が判定順。上から最初に当たったものを採る。
+//   初日      … 出国。機内泊でも「帰国日」ではない
+//   最終日    … 帰国
+//   機内泊    … 帰国日（初日でない機内泊は復路の夜）
+//   仕事あり  … イベント
+//   移動あり  … 移動。到着日・国内移動日
+//   それ以外  … 休日
+const overviewDayKind = (day, i, all) => {
+  if (i === 0) return '出国';
+  if (i === all.length - 1) return '帰国';
+  if (day.stays.some(s => s[1] === '機内')) return '帰国日';
+  if (day.events.some(e => e[1] === 'work')) return 'イベント';
+  if (day.events.some(e => ['flight', 'move', 'transfer'].includes(e[1]))) return '移動';
+  return '休日';
+};
+// 導出結果が変わったら気付けるように、期待値を並べて突き合わせる。
+const OVERVIEW_DAY_KINDS = ['出国', '移動', 'イベント', 'イベント', 'イベント', '休日', '帰国日', '帰国'];
+
 function overviewDayRows() {
-  return FAMILY_DAYS.map(day => {
+  return FAMILY_DAYS.map((day, i, all) => {
     const pick = OVERVIEW_MAIN_KIND_ORDER
       .map(kind => day.events.find(ev => ev[1] === kind))
       .find(Boolean);
@@ -1755,6 +1809,7 @@ function overviewDayRows() {
     const undecided = OVERVIEW_UNDECIDED_DATES.includes(day.date);
     return {
       date: `${day.date}（${day.dow}）`,
+      kind: overviewDayKind(day, i, all),
       main,
       note: undecided ? overviewTail(pick[3]) : '',
       stay: day.stays.map(s => s[1]).join('／'),
@@ -1802,8 +1857,14 @@ function buildOverviewSection(source, undecidedBanner) {
 
   const rows = overviewDayRows();
   if (rows.length !== 8) throw new Error(`Overview: expected 8 day rows, got ${rows.length}`);
+  const kinds = rows.map(r => r.kind);
+  if (kinds.join('／') !== OVERVIEW_DAY_KINDS.join('／')) {
+    throw new Error(`Overview: day kinds changed. got ${kinds.join('／')}, expected ${OVERVIEW_DAY_KINDS.join('／')}`);
+  }
   const dayRowsHtml = rows.map(r =>
-    `<tr><td class="ov-date">${r.date}</td><td>${r.main}${r.note ? `<span class="ov-note">${r.note}</span>` : ''}</td><td class="ov-stay">${r.stay}</td></tr>`
+    `<tr><td class="ov-date">${r.date}</td><td class="ov-kind"><span>${r.kind}</span></td>`
+    + `<td>${r.main}${r.note ? `<span class="ov-note">${r.note}</span>` : ''}</td>`
+    + `<td class="ov-stay">${r.stay}</td></tr>`
   ).join('\n          ');
 
   return String.raw`<section class="tab" id="tab-overview" role="tabpanel" aria-label="概要">
@@ -1825,7 +1886,7 @@ function buildOverviewSection(source, undecidedBanner) {
     <h2 class="ttl">${lineIconHtml('calendar')}日程概要</h2>
     <div class="bd">
       <table class="ov-days">
-        <thead><tr><th>日付</th><th>主な内容</th><th>宿泊</th></tr></thead>
+        <thead><tr><th>日付</th><th>区分</th><th>主な内容</th><th>宿泊</th></tr></thead>
         <tbody>
           ${dayRowsHtml}
         </tbody>

@@ -10,7 +10,7 @@
   ============================================================
   構造：タブ（役割）× 日カード（時間）× レーン（人）
 
-    タブ    : 旅程 / 準備 / 会場 / 記録 / 家族
+    タブ    : 概要 / 旅程 / 視察 / 準備 / 記録（家族と入国審査は別ページ）
     日カード: .day（1日 = 1カード）
     レーン  : .lane[data-who]  … 全員一緒の日は1本、別行動の日はN本
     合流/分岐: .joinbar[data-type="merge"|"split"]
@@ -47,7 +47,7 @@
     <nav class="tabs" id="tabs" role="tablist" aria-label="主要セクション">
       <button data-tab="overview" role="tab" aria-controls="tab-overview" aria-selected="false"><span class="ic"><span class="line-icon line-icon-compass" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9 13 13 9 15 11 11z"/></svg></span></span>概要</button>
       <button data-tab="plan" class="on" role="tab" aria-controls="tab-plan" aria-selected="true"><span class="ic"><span class="line-icon line-icon-calendar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/><path d="M8 13h2m4 0h2m-8 4h2m4 0h2"/></svg></span></span>旅程</button>
-      <button data-tab="venue" role="tab" aria-controls="tab-venue" aria-selected="false"><span class="ic"><span class="line-icon line-icon-robot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="2"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M12 8V4M9 17h6"/></svg></span></span>会場</button>
+      <button data-tab="venue" role="tab" aria-controls="tab-venue" aria-selected="false"><span class="ic"><span class="line-icon line-icon-robot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="2"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M12 8V4M9 17h6"/></svg></span></span>視察</button>
       <button data-tab="prep" role="tab" aria-controls="tab-prep" aria-selected="false"><span class="ic"><span class="line-icon line-icon-checkCircle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 6-6"/></svg></span></span>準備</button>
       <button data-tab="rec" role="tab" aria-controls="tab-rec" aria-selected="false"><span class="ic"><span class="line-icon line-icon-memo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="13" height="18" rx="1"/><path d="M7 8h7M7 12h7"/><path d="M15 16l4-4 2 2-4 4h-2z"/></svg></span></span>記録</button>
     </nav>
@@ -80,16 +80,16 @@
     <h2 class="ttl"><span class="line-icon line-icon-calendar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/><path d="M8 13h2m4 0h2m-8 4h2m4 0h2"/></svg></span>日程概要</h2>
     <div class="bd">
       <table class="ov-days">
-        <thead><tr><th>日付</th><th>主な内容</th><th>宿泊</th></tr></thead>
+        <thead><tr><th>日付</th><th>区分</th><th>主な内容</th><th>宿泊</th></tr></thead>
         <tbody>
-          <tr><td class="ov-date">9/7（月）</td><td>NGO発 → HEL（Finnair AY80／A350・13時間5分）</td><td class="ov-stay">機内</td></tr>
-          <tr><td class="ov-date">9/8（火）</td><td>HEL発 → FRA（AY1411／A321・2時間40分）9:20着</td><td class="ov-stay">Maritim Stuttgart</td></tr>
-          <tr><td class="ov-date">9/9（水）</td><td>HRS Europe 2026 Day 1（Liederhalle）</td><td class="ov-stay">Maritim Stuttgart</td></tr>
-          <tr><td class="ov-date">9/10（木）</td><td>HRS Europe 2026 Day 2（Liederhalle）</td><td class="ov-stay">Maritim Stuttgart</td></tr>
-          <tr><td class="ov-date">9/11（金）</td><td>HRS Europe 2026 Day 3：近郊企業への訪問（Company Visits）<span class="ov-note">訪問先は未発表</span></td><td class="ov-stay">Maritim Stuttgart</td></tr>
-          <tr><td class="ov-date">9/12（土）</td><td>A：Mainz観戦／B：ケルン／C：ポルシェ／D：ポルシェ＋ケルンの4案から検討中</td><td class="ov-stay">Best Western Hotel Airport Frankfurt</td></tr>
-          <tr><td class="ov-date">9/13（日）</td><td>X：ケルン／Y：市内／Z：Mainzの3案から検討中</td><td class="ov-stay">機内</td></tr>
-          <tr><td class="ov-date">9/14（月）</td><td>中部国際空港（セントレア）着</td><td class="ov-stay">帰宅</td></tr>
+          <tr><td class="ov-date">9/7（月）</td><td class="ov-kind"><span>出国</span></td><td>NGO発 → HEL（Finnair AY80／A350・13時間5分）</td><td class="ov-stay">機内</td></tr>
+          <tr><td class="ov-date">9/8（火）</td><td class="ov-kind"><span>移動</span></td><td>HEL発 → FRA（AY1411／A321・2時間40分）9:20着</td><td class="ov-stay">Maritim Stuttgart</td></tr>
+          <tr><td class="ov-date">9/9（水）</td><td class="ov-kind"><span>イベント</span></td><td>HRS Europe 2026 Day 1（Liederhalle）</td><td class="ov-stay">Maritim Stuttgart</td></tr>
+          <tr><td class="ov-date">9/10（木）</td><td class="ov-kind"><span>イベント</span></td><td>HRS Europe 2026 Day 2（Liederhalle）</td><td class="ov-stay">Maritim Stuttgart</td></tr>
+          <tr><td class="ov-date">9/11（金）</td><td class="ov-kind"><span>イベント</span></td><td>HRS Europe 2026 Day 3：近郊企業への訪問（Company Visits）<span class="ov-note">訪問先は未発表</span></td><td class="ov-stay">Maritim Stuttgart</td></tr>
+          <tr><td class="ov-date">9/12（土）</td><td class="ov-kind"><span>休日</span></td><td>A：Mainz観戦／B：ケルン／C：ポルシェ／D：ポルシェ＋ケルンの4案から検討中</td><td class="ov-stay">Best Western Hotel Airport Frankfurt</td></tr>
+          <tr><td class="ov-date">9/13（日）</td><td class="ov-kind"><span>帰国日</span></td><td>X：ケルン／Y：市内／Z：Mainzの3案から検討中</td><td class="ov-stay">機内</td></tr>
+          <tr><td class="ov-date">9/14（月）</td><td class="ov-kind"><span>帰国</span></td><td>中部国際空港（セントレア）着</td><td class="ov-stay">帰宅</td></tr>
         </tbody>
       </table>
       <div class="ov-more no-print"><button class="btn" data-goto="plan"><span class="line-icon line-icon-calendar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/><path d="M8 13h2m4 0h2m-8 4h2m4 0h2"/></svg></span>日ごとの旅程へ</button></div>
@@ -228,7 +228,7 @@
       <div class="tl-stack">
         <div class="action"><div class="row-time">7:30</div><div class="action-body"><span class="et t-food"><span class="line-icon line-icon-food" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7M10 3v7M8 3v7M8 10v11"/><path d="M17 3C14 5 14 9 17 11V21"/></svg></span></span>ホテル朝食</div></div>
         <div class="action"><div class="row-time">8:50</div><div class="action-body">ホテル → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Kultur-+und+Kongresszentrum+Liederhalle+Berliner+Platz+1-3+70174+Stuttgart" target="_blank" rel="noopener">Liederhalle</a>（徒歩約3分）</div></div>
-        <div class="action"><div class="row-time">9:00〜17:00</div><div class="action-body"><span class="et t-conf"><span class="line-icon line-icon-robot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="2"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M12 8V4M9 17h6"/></svg></span>Day 1</span>政策・市場・量産・Embodied AI・モーター技術<details class="fold"><summary>会期の内訳</summary><div class="fold-body">セッション一覧（全11項目のうち、夜の VIP Dinner はVIPパス対象で不参加。実質10項目）と当日の狙いは <a href="#" data-goto="venue">会場タブ</a> に集約。開場9:00・終了17:00頃を想定</div></details></div></div>
+        <div class="action"><div class="row-time">9:00〜17:00</div><div class="action-body"><span class="et t-conf"><span class="line-icon line-icon-robot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="2"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M12 8V4M9 17h6"/></svg></span>Day 1</span>政策・市場・量産・Embodied AI・モーター技術<details class="fold"><summary>会期の内訳</summary><div class="fold-body">セッション一覧（全11項目のうち、夜の VIP Dinner はVIPパス対象で不参加。実質10項目）と当日の狙いは <a href="#" data-goto="venue">視察タブ</a> に集約。開場9:00・終了17:00頃を想定</div></details></div></div>
         <div class="action"><div class="row-time">17:00〜18:00</div><div class="action-body">Networking／展示ブース（40+社）</div></div>
         <div class="action"><div class="row-time">夜</div><div class="action-body"><span class="et t-food"><span class="line-icon line-icon-food" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7M10 3v7M8 3v7M8 10v11"/><path d="M17 3C14 5 14 9 17 11V21"/></svg></span></span>夕食（<a href="#dinner">候補リスト</a>）→ <span class="et t-hotel"><span class="line-icon line-icon-hotel" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="13"/><rect x="10" y="16" width="4" height="5"/><rect x="7" y="11" width="3" height="3"/><rect x="14" y="11" width="3" height="3"/></svg></span></span>Maritim Stuttgart泊</div></div>
       </div>
@@ -242,7 +242,7 @@
       <div class="tl-stack">
         <div class="action"><div class="row-time">7:30</div><div class="action-body"><span class="et t-food"><span class="line-icon line-icon-food" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7M10 3v7M8 3v7M8 10v11"/><path d="M17 3C14 5 14 9 17 11V21"/></svg></span></span>ホテル朝食</div></div>
         <div class="action"><div class="row-time">8:50</div><div class="action-body">ホテル → Liederhalle（徒歩約3分）</div></div>
-        <div class="action"><div class="row-time">9:00〜17:00</div><div class="action-body"><span class="et t-conf"><span class="line-icon line-icon-robot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="2"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M12 8V4M9 17h6"/></svg></span>Day 2</span>医療応用・センサー・GDPR・フレキシブル生産ライン・展示ブース（40+社）<details class="fold"><summary>会期の内訳</summary><div class="fold-body">セッション一覧（全13項目）と当日の狙いは <a href="#" data-goto="venue">会場タブ</a> に集約。詳細タイムテーブルは公式プログラム確認</div></details></div></div>
+        <div class="action"><div class="row-time">9:00〜17:00</div><div class="action-body"><span class="et t-conf"><span class="line-icon line-icon-robot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="2"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M12 8V4M9 17h6"/></svg></span>Day 2</span>医療応用・センサー・GDPR・フレキシブル生産ライン・展示ブース（40+社）<details class="fold"><summary>会期の内訳</summary><div class="fold-body">セッション一覧（全13項目）と当日の狙いは <a href="#" data-goto="venue">視察タブ</a> に集約。詳細タイムテーブルは公式プログラム確認</div></details></div></div>
         <div class="action"><div class="row-time">夜</div><div class="action-body"><span class="et t-food"><span class="line-icon line-icon-food" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7M10 3v7M8 3v7M8 10v11"/><path d="M17 3C14 5 14 9 17 11V21"/></svg></span></span>夕食（<a href="#dinner">候補リスト</a>）→ <span class="et t-hotel"><span class="line-icon line-icon-hotel" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="13"/><rect x="10" y="16" width="4" height="5"/><rect x="7" y="11" width="3" height="3"/><rect x="14" y="11" width="3" height="3"/></svg></span></span>Maritim Stuttgart泊</div></div>
       </div>
     </div>
@@ -672,8 +672,8 @@
 </section>
 
 
-<!-- ==================== タブ：会場 ==================== -->
-<section class="tab" id="tab-venue" role="tabpanel" aria-label="会場">
+<!-- ==================== タブ：視察 ==================== -->
+<section class="tab" id="tab-venue" role="tabpanel" aria-label="視察">
 <div class="banner b-info">
     <span class="i"><span class="line-icon line-icon-memo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="13" height="18" rx="1"/><path d="M7 8h7M7 12h7"/><path d="M15 16l4-4 2 2-4 4h-2z"/></svg></span></span>
     <div><strong>講演ごとに、事前の狙い・質問と当日メモを入力できます。</strong>当日メモは「＋ 時刻付きで追記」で既存内容の末尾へ追加でき、入力のたび自動保存します。</div>
@@ -1185,7 +1185,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (c) L.push('- **所感**：' + c);
       L.push('');
     });
-    /* 会場タブに書いた講演ごとの事前準備と当日メモ */
+    /* 視察タブに書いた講演ごとの事前準備と当日メモ */
     const ses = [];
     document.querySelectorAll('.ses tr[data-k]').forEach(tr => {
       const prep = store.get('ses:' + tr.dataset.k + ':aim', '').trim();
@@ -1295,7 +1295,7 @@ document.addEventListener('DOMContentLoaded', () => {
   mountSharedDayNotes(cloud);
 
   document.getElementById('btn-clear').addEventListener('click', () => {
-    if (!confirm('この端末に保存した記録（狙い・当日メモ・所感）と、会場タブの「事前の狙い・質問」「当日メモ」をすべて消します。よろしいですか？')) return;
+    if (!confirm('この端末に保存した記録（狙い・当日メモ・所感）と、視察タブの「事前の狙い・質問」「当日メモ」をすべて消します。よろしいですか？')) return;
     store.keys()
       .filter(k => k.indexOf(EVENT_KEY + ':rec:') === 0 || k.indexOf(EVENT_KEY + ':ses:') === 0)
       .forEach(k => localStorage.removeItem(k));
@@ -1305,7 +1305,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  /* ---------- 会場タブ：講演ごとの事前準備と当日メモ ----------
+  /* ---------- 視察タブ：講演ごとの事前準備と当日メモ ----------
      どちらもこの端末の localStorage に入力のたび保存する。
      従来の :aim キーは事前準備として引き継ぐ。                  */
   document.querySelectorAll('.ses tr[data-k]').forEach(tr => {
