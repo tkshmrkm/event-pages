@@ -1632,6 +1632,25 @@ function buildMain({ offline = false } = {}) {
   const documentName = offline ? 'index_v3_offline.html' : 'index.html';
   html = stripScriptEmoji(html, documentName);
   html = applyEmojiIcons(html, documentName);
+
+  // ---------- 机上用印刷版から記録タブを落とす ----------
+  // 机上用印刷版は静的な紙で、メモ欄・記録の受け渡し・クラウド同期を持たない。
+  // 記録タブの中身はその3つしかない（空のtextarea 2つ、DL／読込／全消しのボタン、
+  // 同期パネル）。スクリプトを丸ごと落とす版なので、どれも動かないまま配られていた。
+  // CSSの body.desk-copy #tab-rec が非表示にしていたため画面にも紙にも出ず、
+  // スクリプト0件の検査も通っていて、誰も気付かなかった（2026-08-17）。
+  // 消すのは絵文字変換のあと。ここまでの置換はどれも完全なDOMを前提にしている。
+  if (offline) {
+    html = mustReplace(html, /\n*<section class="tab" id="tab-rec"[\s\S]*?\n<\/section>/, '', 'record tab removal');
+    // タブバーは desk-copy では非表示だが、消したセクションを指すボタンは残さない。
+    html = mustReplace(html, /\n?\s*<button data-tab="rec"[\s\S]*?<\/button>/, '', 'record tab button removal');
+    // 見るのは<style>を外したマークアップ。v3.cssは表示しない部分の規則も含めて
+    // 丸ごと埋め込む決まりなので、.cloud-syncのCSSが残るのは想定どおり。
+    const markup = html.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
+    const leftovers = ['id="tab-rec"', 'data-tab="rec"', 'data-goto="rec"', '<textarea', 'data-rec=', 'data-trip-cloud']
+      .filter(mark => markup.includes(mark));
+    if (leftovers.length) throw new Error(`Desk print still carries record UI: ${leftovers.join(' ')}`);
+  }
   return html;
 }
 

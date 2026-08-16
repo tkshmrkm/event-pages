@@ -159,16 +159,24 @@ assert(offline.includes('DESK PRINT') && offline.includes('机上用印刷版'),
 assert(offline.includes('<style>') && !offline.includes('href="v3.css"'), 'index_v3_offline.html: CSS must remain embedded');
 const offlineMarkup = offline.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
 assert(!/<script\b/i.test(offlineMarkup), 'index_v3_offline.html: desk-print copy must have no runtime scripts');
-assert(offline.includes('data-trip-layout="desk-print-v1"') && offline.includes('body.desk-copy #tab-rec'), 'index_v3_offline.html: desk-print layout rules missing');
-// クラウド同期の在り処と、無い場所を対で見る（online側は上の77〜81行）。
-// 机上用印刷版はスクリプトを落とすので、パネルを残しても同期キーの入力欄と
-// 死んだボタンがDOMに積まれるだけだった（2026-08-17に発見。スクリプト0件の検査は
-// 通っていたが、マークアップ側を見ていなかったので素通りしていた）。
+// 目印は実在する要素に効く規則にする。body.desk-copy #tab-rec を目印にしていたが、
+// 記録タブ自体を落としたので、あれは今や誰にも当たらない防御規則（.memoや
+// .secondary-entryと同じ）。当たらない規則を「規則がある証拠」に使わない。
+assert(offline.includes('data-trip-layout="desk-print-v1"') && offline.includes('body.desk-copy .field-nav'), 'index_v3_offline.html: desk-print layout rules missing');
+// ---------- 机上用印刷版は記録の仕組みを一切持たない ----------
+// CLAUDE.mdの「机上用印刷版は静的で、メモ欄、クラウド同期、実行スクリプトを含めない」を
+// ここで検査する。スクリプト0件だけを見ていたので、動かないメモ欄・DLボタン・同期キーの
+// 入力欄が#tab-recの中に丸ごと残っていた（2026-08-17に発見）。CSSが#tab-recを非表示に
+// していたため画面にも紙にも出ず、スクリプトの検査も通り、誰も気付かなかった。
+// マークアップと、それを動かす仕組みは対にして検査する。在り処（online）と無い場所
+// （机上版）を並べて見ないと、片側だけ直した状態が通ってしまう。
 // 見るのは<style>を外したマークアップ。机上版は表示しない部分の規則も含めてv3.cssを
 // 丸ごと埋め込む決まりなので（.memoも.field-navも同じ）、.cloud-syncのCSSが残るのは
-// この検査の対象外。配ってはいけないのは入力欄と同期先URLのほう。
-assert(!/data-trip-cloud|trip-field-sync/.test(offlineMarkup),
-  'index_v3_offline.html: the desk-print copy must not carry the Cloudflare sync panel (it has no runtime to drive it)');
+// この検査の対象外。配ってはいけないのは入力欄・ボタン・同期先URLのほう。
+assert(online.includes('id="tab-rec"') && online.includes('data-tab="rec"'), `${onlineName}: the record tab is where the notes live and must stay`);
+for (const mark of ['id="tab-rec"', 'data-tab="rec"', 'data-goto="rec"', '<textarea', 'data-rec=', 'data-trip-cloud', 'trip-field-sync', 'id="btn-export-json"', 'id="import-json"', 'id="btn-download-md"', 'id="btn-clear"']) {
+  assert(!offlineMarkup.includes(mark), `index_v3_offline.html: the desk-print copy must not carry ${mark} (it has no runtime to drive it)`);
+}
 
 const family = fs.readFileSync(path.join(here, 'family_print.html'), 'utf8');
 // 「🗓 どこにいて何をしているか」は「📅 日程詳細（家族向け）」と内容が重複していたため
