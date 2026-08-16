@@ -619,7 +619,11 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
   .hdr-top .no-print{align-self:center}
   .hdr .eyebrow{font-size:11px}
   .hdr h1{font-size:18px}
-  .tabs button{min-width:0;padding-left:8px;padding-right:8px}
+  /* 5タブ（概要・旅程・会場・準備・記録）だと8pxでは393pxに12px足りず、記録の右端が
+     切れる。スクロールバーはCSSで消してあるので、切れていることに気付けない。
+     6pxで5×68=340pxに収まる。min-height:48pxは触らないので指で押せる高さは変わらない
+     （2026-08-16に実測）。 */
+  .tabs button{min-width:0;padding-left:6px;padding-right:6px}
   .day-head .t{padding-right:64px}
   .action{grid-template-columns:82px minmax(0,1fr)}
   .action>div{padding:10px 9px}
