@@ -668,6 +668,10 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 /* 未確定の理由。宿泊と同じ小さい灰色にすると、9/11のように理由と宿泊が続く行で
    2つが同じ列の値に見えた。左罫を付けて、主な内容への注記だと分かるようにする。 */
 .ov-note{display:block;margin-top:3px;padding-left:7px;border-left:2px solid var(--line);color:var(--mu);font-size:12px}
+/* 区分。便名や会議名が並ぶだけでは、その日が何の日かが読み取れない。
+   進み具合の札（.plan-state）ではないので、そちらと見た目を分ける。 */
+.ov-days td.ov-kind{width:74px}
+.ov-kind>span{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:0 6px;background:var(--hov);color:var(--tx2);font-size:11px;font-weight:700;white-space:nowrap}
 .ov-facility{display:grid;gap:7px}
 .ov-facility>div{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:start;font-size:13px;line-height:1.55}
 .ov-facility b{color:var(--mu);font-size:12px;font-weight:700}
@@ -680,7 +684,9 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
   .ov-days tr{border-top:1px solid var(--line2);padding:8px 2px}
   .ov-days tr:first-child{border-top:0}
   .ov-days td{border:0;padding:0}
-  .ov-days td.ov-date{width:auto;margin-bottom:2px}
+  /* 狭い幅では日付と区分を同じ行に並べる。区分だけで1行使うと8日で8行増える。 */
+  .ov-days td.ov-date{display:inline;width:auto;margin-bottom:2px}
+  .ov-days td.ov-kind{display:inline;width:auto;margin-left:6px}
   /* 見出し行を消すので、宿泊セルだけ値の意味が分からなくなる。ラベルを付ける
      （セッション表の.session-field-labelと同じ考え方）。 */
   .ov-days td.ov-stay{width:auto;margin-top:3px;color:var(--mu);font-size:12px}
@@ -929,16 +935,16 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
     <h2 class="ttl"><span class="line-icon line-icon-calendar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/><path d="M8 13h2m4 0h2m-8 4h2m4 0h2"/></svg></span>日程概要</h2>
     <div class="bd">
       <table class="ov-days">
-        <thead><tr><th>日付</th><th>主な内容</th><th>宿泊</th></tr></thead>
+        <thead><tr><th>日付</th><th>区分</th><th>主な内容</th><th>宿泊</th></tr></thead>
         <tbody>
-          <tr><td class="ov-date">9/7（月）</td><td>NGO発 → HEL（Finnair AY80／A350・13時間5分）</td><td class="ov-stay">機内</td></tr>
-          <tr><td class="ov-date">9/8（火）</td><td>HEL発 → FRA（AY1411／A321・2時間40分）9:20着</td><td class="ov-stay">Maritim Stuttgart</td></tr>
-          <tr><td class="ov-date">9/9（水）</td><td>HRS Europe 2026 Day 1（Liederhalle）</td><td class="ov-stay">Maritim Stuttgart</td></tr>
-          <tr><td class="ov-date">9/10（木）</td><td>HRS Europe 2026 Day 2（Liederhalle）</td><td class="ov-stay">Maritim Stuttgart</td></tr>
-          <tr><td class="ov-date">9/11（金）</td><td>HRS Europe 2026 Day 3：近郊企業への訪問（Company Visits）<span class="ov-note">訪問先は未発表</span></td><td class="ov-stay">Maritim Stuttgart</td></tr>
-          <tr><td class="ov-date">9/12（土）</td><td>A：Mainz観戦／B：ケルン／C：ポルシェ／D：ポルシェ＋ケルンの4案から検討中</td><td class="ov-stay">Best Western Hotel Airport Frankfurt</td></tr>
-          <tr><td class="ov-date">9/13（日）</td><td>X：ケルン／Y：市内／Z：Mainzの3案から検討中</td><td class="ov-stay">機内</td></tr>
-          <tr><td class="ov-date">9/14（月）</td><td>中部国際空港（セントレア）着</td><td class="ov-stay">帰宅</td></tr>
+          <tr><td class="ov-date">9/7（月）</td><td class="ov-kind"><span>出国</span></td><td>NGO発 → HEL（Finnair AY80／A350・13時間5分）</td><td class="ov-stay">機内</td></tr>
+          <tr><td class="ov-date">9/8（火）</td><td class="ov-kind"><span>移動</span></td><td>HEL発 → FRA（AY1411／A321・2時間40分）9:20着</td><td class="ov-stay">Maritim Stuttgart</td></tr>
+          <tr><td class="ov-date">9/9（水）</td><td class="ov-kind"><span>イベント</span></td><td>HRS Europe 2026 Day 1（Liederhalle）</td><td class="ov-stay">Maritim Stuttgart</td></tr>
+          <tr><td class="ov-date">9/10（木）</td><td class="ov-kind"><span>イベント</span></td><td>HRS Europe 2026 Day 2（Liederhalle）</td><td class="ov-stay">Maritim Stuttgart</td></tr>
+          <tr><td class="ov-date">9/11（金）</td><td class="ov-kind"><span>イベント</span></td><td>HRS Europe 2026 Day 3：近郊企業への訪問（Company Visits）<span class="ov-note">訪問先は未発表</span></td><td class="ov-stay">Maritim Stuttgart</td></tr>
+          <tr><td class="ov-date">9/12（土）</td><td class="ov-kind"><span>休日</span></td><td>A：Mainz観戦／B：ケルン／C：ポルシェ／D：ポルシェ＋ケルンの4案から検討中</td><td class="ov-stay">Best Western Hotel Airport Frankfurt</td></tr>
+          <tr><td class="ov-date">9/13（日）</td><td class="ov-kind"><span>帰国日</span></td><td>X：ケルン／Y：市内／Z：Mainzの3案から検討中</td><td class="ov-stay">機内</td></tr>
+          <tr><td class="ov-date">9/14（月）</td><td class="ov-kind"><span>帰国</span></td><td>中部国際空港（セントレア）着</td><td class="ov-stay">帰宅</td></tr>
         </tbody>
       </table>
       <div class="ov-more no-print"><button class="btn" data-goto="plan"><span class="line-icon line-icon-calendar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/><path d="M8 13h2m4 0h2m-8 4h2m4 0h2"/></svg></span>日ごとの旅程へ</button></div>
