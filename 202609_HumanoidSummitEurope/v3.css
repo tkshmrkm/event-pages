@@ -454,6 +454,49 @@ h3{font-size:var(--f3);margin:14px 0 6px;color:var(--tx2)}
   .trip-card,.trip-day,.trip-record{break-inside:avoid;box-shadow:none}
 }
 
+/* フライトカード。1区間を「出発 → 便名 → 到着」の三つ組で見せる。表にすると
+   時刻・空港・便名が同じ大きさの升目に並んで、どれが出発でどれが到着か読み取れない。
+   2026-10 EuroBLECHの家族向けで一度作り、家族には過剰として外した様式を、
+   本人が見る「利用フライト」へ移した（2026-08-16）。EB側のv3.cssには規則だけが
+   マークアップ無しで残っていたので、ここへ引き取る。
+   中央列は共通の.flight-markを使う。飛行機の文字はWindowsで黒い輪郭グリフになるので、
+   このコメント自身にも書かない（机上用印刷版はcore.cssを<style>へ埋め込む）。 */
+.flight-card{overflow:hidden;margin-top:12px;border:2px solid var(--trip-border);border-radius:11px;background:#fff}
+.flight-card:first-of-type{margin-top:0}
+.flight-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 13px;background:var(--trip-neutral);color:var(--trip-subtext)}
+.flight-label{display:block;margin-bottom:2px;font-size:11px;font-weight:900;letter-spacing:.07em}
+.flight-card h3{margin:0;font-size:16px;line-height:1.35;font-weight:800;color:var(--trip-text)}
+.flight-total{flex:none;border:1px solid currentColor;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800;white-space:nowrap}
+.flight-leg{display:grid;grid-template-columns:minmax(0,1fr) 96px minmax(0,1fr);align-items:stretch;padding:12px 13px}
+.flight-point{min-width:0}
+.point-label{display:block;color:var(--trip-muted);font-size:11px;font-weight:900;letter-spacing:.08em}
+.flight-point time{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px}
+.flight-date{flex-basis:100%;color:var(--trip-subtext);font-size:13px;font-weight:700}
+.flight-point time strong{color:var(--trip-text);font-size:26px;line-height:1.1;letter-spacing:-.02em}
+.flight-point time em{border-radius:4px;padding:1px 4px;color:#fff;background:var(--trip-subtext);font-size:10px;font-style:normal;font-weight:800}
+.flight-point>a{display:inline-block;margin-top:5px;font-size:13px;font-weight:700;line-height:1.4}
+.flight-route{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;color:var(--trip-muted);text-align:center}
+.flight-route strong{color:var(--trip-text);font-size:13px}
+.flight-rule{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;margin:3px 0}
+.flight-rule::before,.flight-rule::after{content:'';flex:1 1 auto;border-top:2px solid #8DA4AD}
+.flight-route small{color:var(--trip-muted);font-size:10px;line-height:1.4}
+/* 深夜便・機内食など、その区間に付く注記。中央列に入れると潰れるので全幅で持つ。 */
+.flight-note{margin:-4px 13px 8px;color:var(--trip-muted);font-size:12px;line-height:1.5}
+.layover{display:flex;align-items:center;gap:9px;margin:0 13px;border:1px dashed #9B7A2E;border-radius:8px;padding:7px 10px;color:#4D3B0F;background:#FFF4CE;font-size:12px}
+.layover span{flex:none;border-radius:999px;padding:2px 7px;color:#fff;background:#705615;font-weight:800}
+.layover strong{font-size:14px}
+.flight-card>footer{border-top:1px solid #E1E8EB;padding:7px 13px;color:var(--trip-muted);background:#F7F9FA;font-size:12px}
+/* 393pxでは中央96pxを引くと出発・到着が各120px弱になり、空港名が1文字ずつ折り返す。
+   縦積みにして、矢印の列は区切りの横罫に変える。 */
+@media(max-width:520px){
+  .flight-leg{grid-template-columns:minmax(0,1fr);gap:9px}
+  .flight-route{flex-direction:row;flex-wrap:wrap;justify-content:flex-start;gap:5px;text-align:left}
+  .flight-rule{width:auto;flex:0 0 auto;margin:0}
+  .flight-rule::before,.flight-rule::after{display:none}
+  .flight-route small{flex-basis:100%}
+  .flight-point time strong{font-size:23px}
+}
+
 
 /* ============================================================
    v3 field-use overrides — direct-sunlight mobile operation
@@ -604,8 +647,13 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 .ov-days th{background:var(--line2);border-bottom:1px solid var(--line);padding:5px 8px;color:var(--mu);font-size:12px;font-weight:700;text-align:left;white-space:nowrap}
 .ov-days td{border-top:1px solid var(--line2);padding:7px 8px;vertical-align:top;line-height:1.55}
 .ov-days td.ov-date{width:64px;color:var(--tx);font-weight:700;white-space:nowrap}
-.ov-days td.ov-stay{width:150px;color:var(--tx2)}
-.ov-note{display:block;margin-top:2px;color:var(--mu);font-size:12px}
+/* 宿泊列は190px。150pxだと最長の「Best Western Hotel Airport Frankfurt」が3行に
+   割れていた（1行に必要な幅は267pxと実測、2026-08-16）。267pxまで広げると主な内容が
+   痩せるので、2行に収まる190pxで止める。 */
+.ov-days td.ov-stay{width:190px;color:var(--tx2)}
+/* 未確定の理由。宿泊と同じ小さい灰色にすると、9/11のように理由と宿泊が続く行で
+   2つが同じ列の値に見えた。左罫を付けて、主な内容への注記だと分かるようにする。 */
+.ov-note{display:block;margin-top:3px;padding-left:7px;border-left:2px solid var(--line);color:var(--mu);font-size:12px}
 .ov-facility{display:grid;gap:7px}
 .ov-facility>div{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:start;font-size:13px;line-height:1.55}
 .ov-facility b{color:var(--mu);font-size:12px;font-weight:700}
@@ -619,7 +667,10 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
   .ov-days tr:first-child{border-top:0}
   .ov-days td{border:0;padding:0}
   .ov-days td.ov-date{width:auto;margin-bottom:2px}
+  /* 見出し行を消すので、宿泊セルだけ値の意味が分からなくなる。ラベルを付ける
+     （セッション表の.session-field-labelと同じ考え方）。 */
   .ov-days td.ov-stay{width:auto;margin-top:3px;color:var(--mu);font-size:12px}
+  .ov-days td.ov-stay::before{content:'宿 ';color:var(--tx2);font-weight:700}
   .ov-facility>div{grid-template-columns:44px minmax(0,1fr)}
 }
 

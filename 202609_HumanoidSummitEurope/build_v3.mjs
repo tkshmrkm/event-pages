@@ -352,8 +352,13 @@ const overviewCss = String.raw`
 .ov-days th{background:var(--line2);border-bottom:1px solid var(--line);padding:5px 8px;color:var(--mu);font-size:12px;font-weight:700;text-align:left;white-space:nowrap}
 .ov-days td{border-top:1px solid var(--line2);padding:7px 8px;vertical-align:top;line-height:1.55}
 .ov-days td.ov-date{width:64px;color:var(--tx);font-weight:700;white-space:nowrap}
-.ov-days td.ov-stay{width:150px;color:var(--tx2)}
-.ov-note{display:block;margin-top:2px;color:var(--mu);font-size:12px}
+/* 宿泊列は190px。150pxだと最長の「Best Western Hotel Airport Frankfurt」が3行に
+   割れていた（1行に必要な幅は267pxと実測、2026-08-16）。267pxまで広げると主な内容が
+   痩せるので、2行に収まる190pxで止める。 */
+.ov-days td.ov-stay{width:190px;color:var(--tx2)}
+/* 未確定の理由。宿泊と同じ小さい灰色にすると、9/11のように理由と宿泊が続く行で
+   2つが同じ列の値に見えた。左罫を付けて、主な内容への注記だと分かるようにする。 */
+.ov-note{display:block;margin-top:3px;padding-left:7px;border-left:2px solid var(--line);color:var(--mu);font-size:12px}
 .ov-facility{display:grid;gap:7px}
 .ov-facility>div{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:start;font-size:13px;line-height:1.55}
 .ov-facility b{color:var(--mu);font-size:12px;font-weight:700}
@@ -367,7 +372,10 @@ const overviewCss = String.raw`
   .ov-days tr:first-child{border-top:0}
   .ov-days td{border:0;padding:0}
   .ov-days td.ov-date{width:auto;margin-bottom:2px}
+  /* 見出し行を消すので、宿泊セルだけ値の意味が分からなくなる。ラベルを付ける
+     （セッション表の.session-field-labelと同じ考え方）。 */
   .ov-days td.ov-stay{width:auto;margin-top:3px;color:var(--mu);font-size:12px}
+  .ov-days td.ov-stay::before{content:'宿 ';color:var(--tx2);font-weight:700}
   .ov-facility>div{grid-template-columns:44px minmax(0,1fr)}
 }
 `;
@@ -575,6 +583,88 @@ const routeFour = (rowTime, from, to, carrier, detail, depart, arrival) =>
   + `<div class="mode">${flightMarkHtml}<strong>${carrier}</strong><small>${detail}</small></div>`
   + endpoint('到着', arrival, to)
   + '</div>';
+// ---------- 利用フライト：表からカードへ（2026-08-16） ----------
+// 準備タブの「利用フライト」は3列の表だった。時刻・空港・便名が同じ大きさの升目に
+// 並ぶので、どれが出発でどれが到着なのかが読み取れない。1区間を
+// 「出発 → 便名 → 到着」の三つ組にする。様式はshared/trip-field/core.cssの.flight-card。
+// 値はすべて元の表に書かれているものをそのまま移す。新しい時刻・便名・数値は足さない。
+// 移し漏れを検出するため、使う文字列は元のHTMLに存在することを確認してから使う。
+const FLIGHT_JOURNEYS = [
+  {
+    label: '往路', dates: '9/7（月）〜9/8（火）', total: '総所要17時間30分',
+    footer: 'Finnair・エコノミー／CO₂e 約661kg',
+    legs: [
+      { no: 'AY80', aircraft: 'A350', duration: '13時間5分', note: '深夜便',
+        from: ['NGO', '9/7（月）', '22:50'], to: ['HEL', '9/8（火）', '5:55'] },
+      { no: 'AY1411', aircraft: 'A321', duration: '2時間40分',
+        note: '食事なし（有料軽食あり／水・ブルーベリージュース無料）',
+        from: ['HEL', '9/8（火）', '7:40'], to: ['FRA', '9/8（火）', '9:20'] },
+    ],
+    layovers: [['ヘルシンキ', '1時間45分']],
+  },
+  {
+    label: '復路', dates: '9/13（日）〜9/14（月）', total: '総所要17時間15分',
+    footer: 'Finnair・エコノミー／CO₂e 約658kg',
+    legs: [
+      { no: 'AY1416', aircraft: 'A321', duration: '2時間25分',
+        from: ['FRA', '9/13（日）', '19:20'], to: ['HEL', '9/13（日）', '22:45'] },
+      { no: 'AY79', aircraft: 'A350', duration: '12時間50分', note: '深夜便',
+        from: ['HEL', '9/14（月）', '0:45'], to: ['NGO', '9/14（月）', '19:35'] },
+    ],
+    layovers: [['ヘルシンキ', '2時間']],
+  },
+];
+
+function flightPoint(kind, label, [code, date, time]) {
+  const [name, tz, query] = AIRPORTS[code];
+  return `<div class="flight-point ${kind}"><span class="point-label">${label}</span>`
+    + `<time><span class="flight-date">${date}</span><strong>${time}</strong><em>${tz}</em></time>`
+    + `<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=${query}" target="_blank" rel="noopener">${name}</a></div>`;
+}
+
+function buildFlightCards(source) {
+  // 表の中に書かれていた値であることを、組み立てる前に確かめる。
+  FLIGHT_JOURNEYS.forEach(j => {
+    const facts = [j.dates, j.total, j.footer, ...j.layovers.flat()];
+    j.legs.forEach(leg => facts.push(leg.no, leg.aircraft, leg.duration, ...(leg.note ? [leg.note] : []),
+      leg.from[2], leg.to[2]));
+    facts.forEach(fact => {
+      if (!source.includes(fact)) throw new Error(`Flight card fact missing from source: ${fact}`);
+    });
+    if (j.legs.length - 1 !== j.layovers.length) {
+      throw new Error(`Flight card ${j.label}: ${j.legs.length} legs need ${j.legs.length - 1} layovers`);
+    }
+  });
+
+  return FLIGHT_JOURNEYS.map(j => {
+    const legs = j.legs.map((leg, i) => {
+      // 中央列は96pxしかないので、機材と所要だけを置く。機内食のような長い注記を
+      // 入れると3行に潰れて到着側へ迫る（2026-08-16にPC幅で確認）。注記は
+      // 経路の仕様ではないので、区間の下に全幅で出す。
+      const body = `<div class="flight-leg">`
+        + flightPoint('depart', '出発', leg.from)
+        + `<div class="flight-route"><strong>${leg.no}</strong>`
+        + `<span class="flight-rule">${flightMarkHtml}</span>`
+        + `<small>${leg.aircraft}<br>${leg.duration}</small></div>`
+        + flightPoint('arrive', '到着', leg.to)
+        + `</div>`
+        + (leg.note ? `<p class="flight-note">${leg.note}</p>` : '');
+      const layover = i < j.layovers.length
+        ? `<div class="layover"><span>乗り継ぎ</span><strong>${j.layovers[i][0]} ${j.layovers[i][1]}</strong></div>`
+        : '';
+      return body + layover;
+    }).join('\n        ');
+    return `<article class="flight-card">
+        <header class="flight-card-head">
+          <div><span class="flight-label">${j.label}</span><h3>${j.dates}</h3></div>
+          <span class="flight-total">${j.total}</span>
+        </header>
+        ${legs}
+        <footer>${j.footer}</footer>
+      </article>`;
+  }).join('\n      ');
+}
+
 const escapeRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 // 便名・機材・所要は元の丸括弧の中身をそのまま分解しただけ。到着時刻は
 // 各区間の直後にある到着行の値。いずれもこちらで足した数字はない。
@@ -1086,7 +1176,16 @@ function buildMain({ offline = false } = {}) {
   if (offline) {
     html = mustReplace(html, /<!--[\s\S]*?-->/, '<!-- Self-contained static desk-print copy; no note storage or runtime scripts. -->', 'desk-print document note');
   }
-  html = mustReplace(html, '</style>', `${outdoorCss}\n${overviewCss}\n${offline ? deskPrintCss : ''}\n</style>`, 'style end');
+  // 机上用印刷版は1ファイルで完結させる約束なので、v3.cssと同じ中身を<style>へ入れる。
+  // 従来はsharedCoreCssとfamilyCssが抜けたまま配っていた。つまり.line-icon／
+  // .flight-mark／.plan-state／.sum-*の規則が無い。アイコンのSVGは寸法規則が無いと
+  // 親の幅いっぱいに広がるので、見出しのアイコン1つでページが崩れる
+  // （2026-08-16に画面で確認。概要タブを先頭に置いて初めて目に付いた）。
+  // オンライン版はこの<style>ごとv3.cssのlinkへ差し替わるため、offline時だけ足す。
+  // 連結順はcompiledSharedCss（v3.css）と同じにする。順が違うと打ち消しがずれる。
+  html = mustReplace(html, '</style>',
+    `${offline ? sharedCoreCss : ''}\n${outdoorCss}\n${overviewCss}\n${offline ? familyCss : ''}\n${offline ? deskPrintCss : ''}\n</style>`,
+    'style end');
   // 冒頭の要約が「未確定は9/12・9/13だけ」と断定していたが、ページ自身が
   // 9/11（Day 3・企業訪問）に未検討の札を2枚付けている。訪問先リストも集合方法も
   // 公式未発表で、こちらが決められる段階にすらない。9/12・9/13（こちらが決める）とは
@@ -1362,6 +1461,15 @@ function buildMain({ offline = false } = {}) {
   );
   html = mustReplace(html, '<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">', '<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">\n  <div class="no-print" style="margin-bottom:10px"><button class="btn" data-goto="plan">← 旅程へ戻る</button></div>', 'prep section');
 
+  // ---------- 利用フライトの2つの表をカードへ差し替える ----------
+  // 往路の<h3>から復路の表の終わりまでをまとめて置き換える。表の値は
+  // FLIGHT_JOURNEYSへ移してあり、buildFlightCardsが元HTMLとの一致を確認する。
+  html = mustReplace(html,
+    /<h3>往路 9\/7（月）[\s\S]*?<\/table><\/div>\s*(?=<div class="banner)/,
+    buildFlightCards(html) + '\n\n      ',
+    'flight tables to cards');
+  if (/<h3>復路 9\/13（日）/.test(html)) throw new Error('flight tables remain after the card replacement');
+
   html = mustReplace(html, '<button class="btn" id="btn-export">📋 Markdownでコピー</button>', '<button class="btn" id="btn-export">📋 Markdownでコピー</button>\n' + transferControls, 'record buttons');
   html = mustReplace(html, '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>', '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>\n' + cloudPanel, 'cloud sync panel');
   html = mustReplace(html, "  document.getElementById('btn-clear').addEventListener('click', () => {", transferScript + "  document.getElementById('btn-clear').addEventListener('click', () => {", 'JSON script insertion');
@@ -1619,6 +1727,10 @@ function buildOverviewSection(source, undecidedBanner) {
     '9/9・9/10 は講演＋展示（40+社）／9/11 は近郊企業訪問',
     'Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA',
     'Maritim Stuttgart', 'Best Western Hotel Airport Frankfurt',
+    // 各日のテーマ。会場タブの日別プレースホルダーが持っている文字列をそのまま使う。
+    '政策・市場・量産・Embodied AI・モーター技術',
+    '医療応用・センサー・GDPR・フレキシブル生産ライン',
+    '近郊企業へのガイド付き訪問（訪問先は開催直前に公式発表）',
   ];
   overviewFacts.forEach(fact => {
     if (!source.includes(fact)) throw new Error(`Overview fact missing from source: ${fact}`);
@@ -1629,6 +1741,12 @@ function buildOverviewSection(source, undecidedBanner) {
       throw new Error(`Overview: ${date} is marked undecided but the warning banner does not name it`);
     }
   });
+
+  // 日ごとの件数はセッション表から数える。見出しに書いてある数を書き写すと、
+  // 表が増減したときに概要だけ古い数を出す。
+  const sessionCount = day => (source.match(new RegExp(`data-k="${day}-\\d+"`, 'g')) || []).length;
+  const [d1, d2, d3] = ['d1', 'd2', 'd3'].map(sessionCount);
+  if (!d1 || !d2 || !d3) throw new Error(`Overview: session rows not found (d1=${d1} d2=${d2} d3=${d3})`);
 
   const rows = overviewDayRows();
   if (rows.length !== 8) throw new Error(`Overview: expected 8 day rows, got ${rows.length}`);
@@ -1667,10 +1785,14 @@ function buildOverviewSection(source, undecidedBanner) {
 
   <div class="card">
     <h2 class="ttl">${lineIconHtml('robot')}イベント概要</h2>
-    <div class="bd small" style="display:grid;gap:5px">
-      <div>${lineIconHtml('pin')}<strong>Liederhalle</strong>（Berliner Platz 1-3） — ホテルから徒歩約3分</div>
-      <div>${lineIconHtml('calendar')}9/9・9/10 は講演＋展示（40+社）／9/11 は近郊企業訪問</div>
-      <div>${lineIconHtml('star')}Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA</div>
+    <div class="bd small" style="display:grid;gap:7px">
+      <div>ヒューマノイドの国際会議。9/9〜9/11の3日間で、Day 1・Day 2に全${d1 + d2}項目と展示40+社、最終日は企業訪問</div>
+      <div class="ov-facility">
+        <div><b>Day 1</b><span>9/9（水）全${d1}項目 — 政策・市場・量産・Embodied AI・モーター技術</span></div>
+        <div><b>Day 2</b><span>9/10（木）全${d2}セッション — 医療応用・センサー・GDPR・フレキシブル生産ライン</span></div>
+        <div><b>Day 3</b><span>9/11（金）近郊企業へのガイド付き訪問（訪問先は開催直前に公式発表）</span></div>
+      </div>
+      <div>${lineIconHtml('star')}主要出展社：Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA</div>
       <div class="ov-more no-print"><button class="btn" data-goto="venue">${lineIconHtml('book')}セッション表と当日メモへ</button></div>
     </div>
   </div>

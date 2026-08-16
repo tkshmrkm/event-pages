@@ -87,11 +87,13 @@ const cssWithoutDataUris = sharedCss.replace(/url\(\s*(["']?)data:[\s\S]*?\1\s*\
 assert(!/@import\s+url|https?:\/\//i.test(cssWithoutDataUris), 'v3.css: remote dependency found');
 
 // ---------- 交通手段アイコン（EUROBLECH方式） ----------
-// 内訳: 旅程行のフライト8 ＋ 合流バー1 ＋ フライトカード見出し1 ＋ 凡例1 ＝ 11。
-// オンライン版はFAMデータ（帰国日）の分がスクリプト内にあるので+1で12。
-// 机上用印刷版はスクリプトを持たないため11。鉄道は旅程35＋凡例1＋準備タブ1＝37、タクシー1＋凡例1＝2。
-const ONLINE_FLIGHT_ICONS = 12;
-const OFFLINE_FLIGHT_ICONS = 11;
+// 内訳: 旅程行のフライト8 ＋ 合流バー1 ＋ 利用フライト見出し1 ＋ 凡例1 ＝ 11。
+// 2026-08-16に「利用フライト」を表からカードへ替え、区間ごとに中央列の印が付いた。
+// 往路2区間＋復路2区間＝4本ぶん増えて15。
+// オンライン版はFAMデータ（帰国日）の分がスクリプト内にあるので+1で16。
+// 机上用印刷版はスクリプトを持たないため15。鉄道は旅程35＋凡例1＋準備タブ1＝37、タクシー1＋凡例1＝2。
+const ONLINE_FLIGHT_ICONS = 16;
+const OFFLINE_FLIGHT_ICONS = 15;
 const countIn = (text, pattern) => (text.match(pattern) || []).length;
 assert(sharedCss.includes('.flight-mark{') && sharedCss.includes('-webkit-mask:url("data:image/svg+xml'), 'v3.css: shared flight-mark icon missing');
 assert(sharedCss.includes('.mode-icon{') && sharedCss.includes('.mode-icon-unknown{'), 'v3.css: shared mode-icon styles missing');
@@ -305,6 +307,17 @@ for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offl
 assert(sharedCss.includes('.plan-state{') && PLAN_STATES.length === 5, 'v3.css: shared plan-state component missing');
 assert(!sharedCss.includes('.st-booked{') && !sharedCss.includes('.et.t-tbd{'), 'v3.css: dead state chip rules must be removed with the chips');
 assert((offlineHtml.match(/class="line-icon line-icon-print"/g) || []).length >= 1, 'index_v3_offline.html: expected the print line-icon SVG in the desk-print banner');
+// ---------- 机上用印刷版は本当に1ファイルで完結しているか ----------
+// アイコンのマークアップがあることは上で見ていたが、それを表示する規則が
+// 埋め込まれているかは誰も見ていなかった。sharedCoreCssとfamilyCssが<style>から
+// 抜けていて、.line-icon／.flight-mark／.plan-state／.sum-*が丸ごと無いまま
+// 配られていた。寸法規則を失ったSVGは親の幅いっぱいに広がるので、見出しの
+// アイコン1つでページが崩れる（2026-08-16に画面で発見）。
+// マークアップと規則は対にして検査する。v3.css側だけ見ても机上版は守れない。
+for (const rule of ['.line-icon{', '.flight-mark{', '.plan-state{', '.sum-place,', '.ov-days{']) {
+  assert(sharedCss.includes(rule), `v3.css: missing the ${rule} rule`);
+  assert(offlineHtml.includes(rule), `index_v3_offline.html: the desk-print copy must embed the ${rule} rule that v3.css has, or the markup falls back to unstyled HTML`);
+}
 assert((online.match(/class="line-icon line-icon-calendar"/g) || []).length >= 1, `${onlineName}: expected the calendar line-icon SVG replacing the retired 🗓 glyph`);
 
 // ---------- 旅程タブの長い補足を折り畳みへ ----------

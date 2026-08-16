@@ -290,6 +290,223 @@ h3{font-size:var(--f3);margin:14px 0 6px;color:var(--tx2)}
   .day,.card,.rec{break-inside:avoid}
   .tl td{padding:3px 6px;font-size:8pt}
 }
+/* Overseas Trip Field Layout — neutral reusable shell */
+:root{
+  --trip-font:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif;
+  --trip-page:#EEF2F3;
+  --trip-card:#FFFFFF;
+  --trip-text:#101820;
+  --trip-subtext:#263640;
+  --trip-muted:#52616A;
+  --trip-border:#AEBCC3;
+  --trip-neutral:#D8E2E6;
+  --trip-primary:#176B75;
+  --trip-primary-soft:#B8DEE2;
+  --trip-event:#94513D;
+  --trip-event-soft:#F0C2B1;
+  --trip-pending:#403574;
+  --trip-pending-soft:#D4CEEA;
+  --trip-warning:#6B4A0C;
+  --trip-warning-soft:#FCE9BE;
+  --trip-radius:12px;
+  --trip-shadow:0 1px 3px rgba(16,24,32,.10);
+  --trip-sticky-height:104px;
+}
+
+.trip-page{
+  margin:0;
+  padding:0 0 24px;
+  background:var(--trip-page);
+  color:var(--trip-text);
+  font-family:var(--trip-font);
+  font-size:16px;
+  line-height:1.62;
+  -webkit-text-size-adjust:100%;
+}
+.trip-page *{box-sizing:border-box}
+.trip-wrap{width:min(940px,100%);margin:0 auto;padding:0 12px}
+.trip-page a{color:#175E92}
+
+.trip-header{position:static;background:#fff;border-bottom:1px solid var(--trip-border)}
+.trip-header-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 0 10px}
+.trip-eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--trip-muted)}
+.trip-title{margin:2px 0;font-size:20px;line-height:1.3}
+.trip-subtitle{margin:0;color:var(--trip-subtext);font-size:13px}
+
+.trip-field-nav{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.98);border-bottom:2px solid var(--trip-border);box-shadow:0 2px 6px rgba(16,24,32,.12)}
+.trip-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-top:4px}
+.trip-tabs::-webkit-scrollbar,.trip-date-rail::-webkit-scrollbar{display:none}
+.trip-tab{flex:1 0 auto;min-width:0;min-height:48px;padding:6px 12px;border:0;border-bottom:4px solid transparent;background:transparent;color:var(--trip-muted);font:700 14px/1.3 var(--trip-font);cursor:pointer}
+.trip-tab[aria-selected=true],.trip-tab.is-active{border-bottom-color:var(--trip-primary);color:var(--trip-text)}
+.trip-date-rail{display:flex;gap:7px;align-items:center;overflow-x:auto;scrollbar-width:none;padding:6px 0 7px;border-top:1px solid #E2E9EC}
+.trip-date-label{flex:0 0 auto;color:var(--trip-subtext);font-size:12px;font-weight:700}
+.trip-date-link{flex:0 0 auto;min-height:44px;padding:10px 14px;border:1px solid var(--trip-border);border-radius:999px;background:#fff;color:var(--trip-subtext);font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap}
+.trip-date-link.is-active{background:var(--trip-text);border-color:var(--trip-text);color:#fff}
+
+.trip-main{padding-top:12px}
+.trip-panel{display:none}
+.trip-panel.is-active{display:block}
+.trip-card,.trip-day,.trip-record{margin:0 0 12px;overflow:hidden;border:2px solid var(--trip-border);border-radius:var(--trip-radius);background:var(--trip-card);box-shadow:var(--trip-shadow)}
+.trip-card-title,.trip-day-title{margin:0;padding:11px 14px;background:var(--trip-neutral);color:var(--trip-subtext);font-size:16px;font-weight:700}
+.trip-card-body{padding:12px 14px}
+.trip-day{scroll-margin-top:calc(var(--trip-sticky-height) + 8px)}
+.trip-day-title{background:var(--trip-primary-soft);color:var(--trip-primary)}
+.trip-day[data-kind=event] .trip-day-title{background:var(--trip-event-soft);color:var(--trip-event)}
+.trip-day[data-kind=pending] .trip-day-title{background:var(--trip-pending-soft);color:var(--trip-pending)}
+.trip-day-date{display:block;font-size:18px}
+.trip-day-summary{display:block;margin-top:2px;font-size:14px;font-weight:400}
+
+.trip-row{display:grid;grid-template-columns:98px minmax(0,1fr);border-top:1px solid #E1E8EB}
+.trip-row:first-child{border-top:0}
+.trip-time{padding:11px 12px;background:#F4F7F8;color:var(--trip-subtext);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.trip-action{min-width:0;padding:11px 12px}
+.trip-detail{display:block;margin-top:4px;color:var(--trip-muted);font-size:13px}
+/* 交通手段アイコン。色・寸法・stroke幅は202610_Europe_TechEx_EuroBLECH/v3.cssと同一にそろえる。
+   フライトはmask画像、鉄道・徒歩・車・手段未定は呼び出し側がSVGを差し込む。
+   `.mode`配下に限定せず単独セレクタにして、`.mode`という構造を持たないイベントでも使えるようにする。 */
+.flight-mark{display:inline-block;flex:0 0 auto;width:20px;height:20px;color:#0B5C60;background:currentColor;vertical-align:-4px;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.inline-flight-mark{margin-right:5px}
+.mode-icon{display:flex;flex:0 0 auto;align-items:center;justify-content:center;width:20px;height:20px;color:#0B5C60}
+.mode-icon svg{display:block;width:100%;height:100%;overflow:visible}
+.mode-icon-unknown{color:#B96B16}
+/* 文中に置くモノクロSVGアイコン（Windowsで黒塗りグリフになる絵文字の置き換え）。
+   .flight-mark／.mode-iconが固定20pxなのは、専用の列に入って行の高さを決める側だから。
+   .line-iconは見出し・ボタン・本文の中に置くので、寸法を固定pxで持つと文字より
+   大きくなる。2026-08-15に実機で確認したときは19px固定で、13〜14pxの文字の中に
+   比1.36〜1.46の箱が並んでいた。寸法は文字サイズ基準で持つ。
+   全イベント共通。イベント側で寸法を上書きしない（色の上書きだけ各イベントに許す）。 */
+.line-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:1.15em;height:1.15em;margin-right:.3em;color:#0B5C60;vertical-align:-.2em}
+.line-icon svg{display:block;width:100%;height:100%;overflow:visible}
+/* 予定の状態。使う語は次の5つだけで、他の言い回しを混ぜない。
+     未検討   まだ案を作っていない
+     候補あり 比較する案がある
+     仮決め   現時点の第一候補
+     確定     予約・発券・公式確認などが終わった
+     当日判断 天候・運休・体調などで現地判断する
+   これは**進み具合の軸**であって、未確定の理由（未発表＝先方が出していない／
+   要確認＝調べれば分かる／要検討＝こちらが決める）とは別の軸。理由のほうは
+   折り畳みや本文に残す。状態の札に理由を書かない。
+   候補を確定しても代替案は消さず、折り畳んで残す。 */
+.plan-state{display:inline-block;flex:0 0 auto;border:1px solid;border-radius:999px;padding:1px 8px;font-size:12px;font-weight:700;line-height:1.5;white-space:nowrap;vertical-align:1px}
+.plan-state-unconsidered{background:#EEF1F3;border-color:#C6D0D6;color:#52616A}
+.plan-state-candidate{background:#EEEAF8;border-color:#A79BCB;color:#302568}
+.plan-state-tentative{background:#FFF3D6;border-color:#DAB864;color:#7A3E08}
+.plan-state-fixed{background:#E3F1F0;border-color:#78A9A9;color:#0B4F5A}
+.plan-state-onsite{background:#E9F2FA;border-color:#8FB4E8;color:#245A85}
+/* 確定に必要な条件を、状態の札の隣に短く添える（「要予約」など）。
+   条件は札の中に書かない。札は状態の語だけを持つ。 */
+.state-note{margin-left:5px;color:#52616A;font-size:12px;font-weight:700}
+
+/* 地図リンクは場所名そのものに張る。「地図」という別リンクは出さない。
+   EUROBLECHでは .endpoint / .stay 配下に限定した指定だが、共通基盤では
+   構造を前提にできないので単独セレクタで持つ。 */
+.place{color:#2A5FA0;font-weight:600;text-decoration:none}
+
+.trip-banner{display:flex;gap:8px;align-items:flex-start;margin:0 0 12px;padding:10px 12px;border:2px solid var(--trip-border);border-radius:10px;background:#fff;color:var(--trip-subtext);font-size:14px}
+.trip-banner[data-kind=warning]{border-color:#DAB864;background:var(--trip-warning-soft);color:var(--trip-warning)}
+.trip-secondary{margin-top:14px}
+
+.trip-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 13px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-subtext);font:700 13px/1.3 var(--trip-font);text-decoration:none;cursor:pointer}
+.trip-button:hover,.trip-button:focus-visible{background:#E7EEF0;color:var(--trip-text)}
+.trip-actions{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+
+.trip-field{padding:10px 12px;border-top:1px solid #E1E8EB}
+.trip-field:first-child{border-top:0}
+.trip-field label{display:block;margin-bottom:5px;color:var(--trip-subtext);font-size:13px;font-weight:700}
+.trip-field textarea,.trip-field input[type=text],.trip-field select{
+  width:100%;min-height:52px;padding:8px 10px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-text);font:16px/1.55 var(--trip-font);resize:vertical
+}
+.trip-field textarea[data-trip-note=day]{min-height:84px}
+.trip-field textarea:focus,.trip-field input:focus,.trip-field select:focus{outline:3px solid rgba(23,107,117,.22);border-color:var(--trip-primary)}
+.trip-timestamp-row{display:flex;justify-content:flex-end;margin-top:7px}
+.trip-timestamp-button{min-height:44px;padding:8px 12px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-primary);font:700 13px/1.3 var(--trip-font);cursor:pointer}
+.trip-timestamp-button:hover{background:var(--trip-soft)}
+.trip-timestamp-button:focus-visible{outline:3px solid rgba(23,107,117,.22);outline-offset:2px}
+.trip-shared-notes{margin-top:8px}
+.trip-shared-log{display:grid;gap:7px;margin-bottom:8px}
+.trip-shared-entry{padding:8px 10px;border-left:3px solid var(--trip-primary);border-radius:4px;background:var(--trip-soft)}
+.trip-shared-meta{margin-bottom:3px;color:var(--trip-muted);font-size:12px;font-weight:700}
+.trip-shared-text{color:var(--trip-text);font-size:14px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.trip-shared-composer{display:grid;gap:7px;margin-top:8px;padding:9px;border:1px solid var(--trip-border);border-radius:9px;background:#fff}
+.trip-shared-composer[hidden]{display:none}
+.trip-shared-draft{width:100%;min-height:70px;padding:8px 10px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-text);font:16px/1.55 var(--trip-font);resize:vertical}
+.trip-shared-actions{display:flex;flex-wrap:wrap;gap:7px}
+.trip-shared-cancel{color:var(--trip-muted)}
+.trip-shared-status{min-height:1.4em;color:var(--trip-muted);font-size:12px}
+.trip-status{min-height:1.5em;color:var(--trip-muted);font-size:13px}
+.trip-cloud-help{margin:0 0 10px;color:var(--trip-muted);font-size:13px}
+.trip-cloud-key{display:grid;gap:5px;margin-bottom:8px;color:var(--trip-subtext);font-size:13px;font-weight:700}
+.trip-cloud-key input{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-text);font:16px/1.4 var(--trip-font)}
+.trip-cloud-remember{display:flex;gap:7px;align-items:flex-start;margin:8px 0 12px;color:var(--trip-subtext);font-size:13px}
+.trip-cloud-remember input{width:18px;height:18px;margin:1px 0 0}
+.trip-cloud .trip-actions{margin-bottom:8px}
+
+.trip-split{display:grid;grid-template-columns:1fr 1fr}
+.trip-split > * + *{border-left:1px solid var(--trip-border)}
+.trip-lane-title{padding:7px 12px;border-bottom:1px solid var(--trip-border);font-size:13px;font-weight:700}
+.trip-merge{display:flex;gap:8px;align-items:center;padding:10px 14px;border-block:1px solid var(--trip-border);background:var(--trip-neutral);color:var(--trip-subtext);font-size:14px;font-weight:700}
+
+@media(max-width:640px){
+  .trip-wrap{padding-inline:10px}
+  .trip-header-inner{gap:8px}
+  .trip-title{font-size:18px}
+  .trip-tab{padding-inline:8px}
+  .trip-row{grid-template-columns:82px minmax(0,1fr)}
+  .trip-time,.trip-action{padding:10px 9px}
+  .trip-split{grid-template-columns:1fr}
+  .trip-split > * + *{border-left:0;border-top:1px solid var(--trip-border)}
+}
+
+@media print{
+  .trip-page{padding:0;background:#fff;font-size:9pt}
+  .trip-field-nav,.trip-actions,.trip-no-print{display:none!important}
+  .trip-panel{display:block!important}
+  .trip-card,.trip-day,.trip-record{break-inside:avoid;box-shadow:none}
+}
+
+/* フライトカード。1区間を「出発 → 便名 → 到着」の三つ組で見せる。表にすると
+   時刻・空港・便名が同じ大きさの升目に並んで、どれが出発でどれが到着か読み取れない。
+   2026-10 EuroBLECHの家族向けで一度作り、家族には過剰として外した様式を、
+   本人が見る「利用フライト」へ移した（2026-08-16）。EB側のv3.cssには規則だけが
+   マークアップ無しで残っていたので、ここへ引き取る。
+   中央列は共通の.flight-markを使う。飛行機の文字はWindowsで黒い輪郭グリフになるので、
+   このコメント自身にも書かない（机上用印刷版はcore.cssを<style>へ埋め込む）。 */
+.flight-card{overflow:hidden;margin-top:12px;border:2px solid var(--trip-border);border-radius:11px;background:#fff}
+.flight-card:first-of-type{margin-top:0}
+.flight-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 13px;background:var(--trip-neutral);color:var(--trip-subtext)}
+.flight-label{display:block;margin-bottom:2px;font-size:11px;font-weight:900;letter-spacing:.07em}
+.flight-card h3{margin:0;font-size:16px;line-height:1.35;font-weight:800;color:var(--trip-text)}
+.flight-total{flex:none;border:1px solid currentColor;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800;white-space:nowrap}
+.flight-leg{display:grid;grid-template-columns:minmax(0,1fr) 96px minmax(0,1fr);align-items:stretch;padding:12px 13px}
+.flight-point{min-width:0}
+.point-label{display:block;color:var(--trip-muted);font-size:11px;font-weight:900;letter-spacing:.08em}
+.flight-point time{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px}
+.flight-date{flex-basis:100%;color:var(--trip-subtext);font-size:13px;font-weight:700}
+.flight-point time strong{color:var(--trip-text);font-size:26px;line-height:1.1;letter-spacing:-.02em}
+.flight-point time em{border-radius:4px;padding:1px 4px;color:#fff;background:var(--trip-subtext);font-size:10px;font-style:normal;font-weight:800}
+.flight-point>a{display:inline-block;margin-top:5px;font-size:13px;font-weight:700;line-height:1.4}
+.flight-route{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;color:var(--trip-muted);text-align:center}
+.flight-route strong{color:var(--trip-text);font-size:13px}
+.flight-rule{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;margin:3px 0}
+.flight-rule::before,.flight-rule::after{content:'';flex:1 1 auto;border-top:2px solid #8DA4AD}
+.flight-route small{color:var(--trip-muted);font-size:10px;line-height:1.4}
+/* 深夜便・機内食など、その区間に付く注記。中央列に入れると潰れるので全幅で持つ。 */
+.flight-note{margin:-4px 13px 8px;color:var(--trip-muted);font-size:12px;line-height:1.5}
+.layover{display:flex;align-items:center;gap:9px;margin:0 13px;border:1px dashed #9B7A2E;border-radius:8px;padding:7px 10px;color:#4D3B0F;background:#FFF4CE;font-size:12px}
+.layover span{flex:none;border-radius:999px;padding:2px 7px;color:#fff;background:#705615;font-weight:800}
+.layover strong{font-size:14px}
+.flight-card>footer{border-top:1px solid #E1E8EB;padding:7px 13px;color:var(--trip-muted);background:#F7F9FA;font-size:12px}
+/* 393pxでは中央96pxを引くと出発・到着が各120px弱になり、空港名が1文字ずつ折り返す。
+   縦積みにして、矢印の列は区切りの横罫に変える。 */
+@media(max-width:520px){
+  .flight-leg{grid-template-columns:minmax(0,1fr);gap:9px}
+  .flight-route{flex-direction:row;flex-wrap:wrap;justify-content:flex-start;gap:5px;text-align:left}
+  .flight-rule{width:auto;flex:0 0 auto;margin:0}
+  .flight-rule::before,.flight-rule::after{display:none}
+  .flight-route small{flex-basis:100%}
+  .flight-point time strong{font-size:23px}
+}
+
 
 /* ============================================================
    v3 field-use overrides — direct-sunlight mobile operation
@@ -440,8 +657,13 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 .ov-days th{background:var(--line2);border-bottom:1px solid var(--line);padding:5px 8px;color:var(--mu);font-size:12px;font-weight:700;text-align:left;white-space:nowrap}
 .ov-days td{border-top:1px solid var(--line2);padding:7px 8px;vertical-align:top;line-height:1.55}
 .ov-days td.ov-date{width:64px;color:var(--tx);font-weight:700;white-space:nowrap}
-.ov-days td.ov-stay{width:150px;color:var(--tx2)}
-.ov-note{display:block;margin-top:2px;color:var(--mu);font-size:12px}
+/* 宿泊列は190px。150pxだと最長の「Best Western Hotel Airport Frankfurt」が3行に
+   割れていた（1行に必要な幅は267pxと実測、2026-08-16）。267pxまで広げると主な内容が
+   痩せるので、2行に収まる190pxで止める。 */
+.ov-days td.ov-stay{width:190px;color:var(--tx2)}
+/* 未確定の理由。宿泊と同じ小さい灰色にすると、9/11のように理由と宿泊が続く行で
+   2つが同じ列の値に見えた。左罫を付けて、主な内容への注記だと分かるようにする。 */
+.ov-note{display:block;margin-top:3px;padding-left:7px;border-left:2px solid var(--line);color:var(--mu);font-size:12px}
 .ov-facility{display:grid;gap:7px}
 .ov-facility>div{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:start;font-size:13px;line-height:1.55}
 .ov-facility b{color:var(--mu);font-size:12px;font-weight:700}
@@ -455,8 +677,158 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
   .ov-days tr:first-child{border-top:0}
   .ov-days td{border:0;padding:0}
   .ov-days td.ov-date{width:auto;margin-bottom:2px}
+  /* 見出し行を消すので、宿泊セルだけ値の意味が分からなくなる。ラベルを付ける
+     （セッション表の.session-field-labelと同じ考え方）。 */
   .ov-days td.ov-stay{width:auto;margin-top:3px;color:var(--mu);font-size:12px}
+  .ov-days td.ov-stay::before{content:'宿 ';color:var(--tx2);font-weight:700}
   .ov-facility>div{grid-template-columns:44px minmax(0,1fr)}
+}
+
+
+/* Family page: compact cards on phones, normal table on paper. */
+.family-page{padding:0 0 24px}
+.family-head{background:#fff;border-bottom:2px solid var(--line);padding:16px 0 12px}
+.family-head h1{margin:2px 0;font-size:22px}
+.family-head p{margin:0;color:var(--tx2);font-size:14px}
+.family-page .tab,.family-page .tab.on{display:block}
+/* .family-section は5セクション構成の共通カード枠（出張サマリー／時差・気候／
+   日程詳細／宿泊先情報／緊急連絡先）。「どこにいて何をしているか」は
+   日程詳細と内容が重複するため削除済み（.family-whereと.where-*一式も廃止）。
+   .family-scheduleも同じ枠を使う（202610_Europe_TechEx_EuroBLECHと同じ）。 */
+.family-section,.family-schedule{margin-bottom:14px;overflow:hidden;border:2px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 1px 2px rgba(16,24,32,.05)}
+.family-section-head{padding:10px 14px;background:var(--neu-bg);color:var(--tx2);font-size:16px;font-weight:700}
+.family-section-body{padding:13px 14px}
+/* .where-leadはどこにいるかブロックの廃止後も、出張サマリー・気候の見出し段落として残る。 */
+.where-lead{margin:0 0 11px;color:var(--tx2);font-size:13px;line-height:1.6}
+/* 入国審査官に見せる1枚。英語で、紙に出したとき1ページに収まることを優先する。
+   氏名・パスポート番号は入力欄で、印刷すると値がそのまま紙に出る。 */
+.immi-page{background:#fff}
+.immi-page .wrap{max-width:720px;margin:0 auto;padding:18px 16px 40px}
+.immi-head{border-bottom:3px solid #0B5C60;padding-bottom:10px;margin-bottom:14px}
+.immi-head h1{margin:2px 0 4px;font-size:24px;letter-spacing:.01em}
+.immi-sub{margin:0 0 8px;color:var(--tx2);font-size:14px;font-weight:600}
+.immi-id{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin-bottom:16px}
+.immi-id label{display:grid;gap:4px}
+.immi-id span{color:var(--mu);font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.immi-id input{border:0;border-bottom:1.5px solid #6B7A82;border-radius:0;padding:5px 2px;background:transparent;color:var(--tx);font-size:17px;font-weight:600}
+.immi-id input:focus{outline:none;border-bottom-color:#0B5C60}
+.immi-note{grid-column:1/-1;margin:2px 0 0;color:var(--mu);font-size:12px;line-height:1.6}
+.immi-table{width:100%;border-collapse:collapse;font-size:13.5px}
+.immi-table th,.immi-table td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top;line-height:1.65}
+.immi-table th{width:150px;background:#EEF4F4;color:var(--tx);font-weight:700;white-space:nowrap}
+.immi-foot{margin-top:14px;color:var(--mu);font-size:12px}
+@media(max-width:560px){
+  .immi-id{grid-template-columns:1fr}
+  .immi-table th{width:auto;display:block;border-bottom:0}
+  .immi-table td{display:block}
+}
+@media print{
+  .immi-page .no-print{display:none!important}
+  .immi-id input{border-bottom:1px solid #000}
+  .immi-table{font-size:11.5pt}
+}
+/* 出張サマリーは面で分ける。白地に文字が続くだけだと、滞在地・日程・連絡不能の
+   3種類が1つの塊に見える。EUROBLECHと同じ濃さ・同じ左罫にそろえる（2026-08-15）。 */
+.sum-place,.sum-facts{border-radius:8px;padding:9px 11px;line-height:1.6}
+.sum-place{border-left:4px solid;font-size:13px}
+.sum-place strong{display:block;color:var(--tx);font-size:15px;font-weight:700}
+.sum-place span{display:block;margin-top:3px;color:var(--tx2)}
+.sum-a{background:#DBE8F6;border-left-color:#6C9BD2}
+.sum-b{background:#D9EDE0;border-left-color:#63A87C}
+.sum-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 8px;background:#E6EAEE;border-left:4px solid #94A3B0;text-align:center;font-size:12px}
+.sum-facts b{display:block;color:var(--tx);font-size:13px;font-weight:700}
+.sum-facts span{display:block;color:var(--tx2)}
+@media(max-width:420px){.sum-facts{grid-template-columns:1fr;text-align:left}}
+/* 日程詳細（家族向け）：202610_Europe_TechEx_EuroBLECHのv3.cssと同一定義
+   （.schedule-body／.schedule-legend／.schedule-tag kind-*／.family-day-row／.agenda-line）。
+   kind-*はHRSが実際に使う7種類だけを移植する（meal/techex/euro/visit/homeは未使用のため省く）。
+   kind-moveとkind-workは共通トークン（--move/--move-tx/--conf/--conf-tx）を使うので、
+   このファイル冒頭のHRS配色（outdoorCss）をそのまま継承する。
+   .family-day-row aside .placeは個別に色指定しない。shared/trip-field/core.cssの
+   既定.place（#2A5FA0・太さ600・下線なし）がEuroBLECHと同じ値のため重複させない。 */
+.schedule-body{padding:12px}
+.schedule-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:10px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#F5F8F9}
+.schedule-legend>strong{margin-right:3px;color:var(--tx2);font-size:13px}
+.schedule-tag{display:inline-flex;align-items:center;width:fit-content;min-height:24px;border:1px solid currentColor;border-radius:999px;padding:2px 7px;font-size:11px;font-weight:700;white-space:nowrap}
+.kind-flight{background:#E8E7FA;color:#40378A}
+.kind-move{background:var(--move);color:var(--move-tx)}
+.kind-transfer{background:#E9F2FA;color:#245A85}
+.kind-procedure{background:#F1F3F4;color:#45545D}
+.kind-work{background:var(--conf);color:var(--conf-tx)}
+.kind-stay{background:#EEF5FB;color:#245A85}
+.kind-review{background:#FFF0C2;color:#7A3E08}
+/* HRSは全行程が同一行動なので、EuroBLECHの.family-shared（合流後の1枠表示）を
+   毎日使う。人別の2枠は使わないため、grid-template-columnsはheader/section/asideの
+   3列で足りる（EuroBLECHは人別2枠を持つため4列）。 */
+.family-day-row{display:grid;grid-template-columns:72px minmax(0,1fr) 170px;overflow:hidden;margin-top:8px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.family-day-row>header{padding:11px 9px;background:var(--tx2);color:#fff;text-align:center}
+.family-day-row>header strong,.family-day-row>header span{display:block}
+.family-day-row>header strong{font-size:16px}
+.family-day-row>header span{font-size:12px;opacity:.85}
+.family-day-row>section,.family-day-row>aside{min-width:0;border-left:1px solid var(--line);padding:9px 10px}
+.family-day-row h3{margin:0 0 7px;color:var(--mu);font-size:12px;font-weight:700;letter-spacing:.04em}
+.agenda-line{display:grid;grid-template-columns:82px auto minmax(0,1fr);align-items:start;gap:6px;padding:7px 0;border-top:1px solid var(--line2)}
+.agenda-line:first-of-type{border-top:0;padding-top:0}
+.agenda-line time{color:#0B4F5A;font-size:14px;font-weight:800;line-height:1.35;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.agenda-line p,.family-day-row aside p{margin:0;color:var(--tx2);font-size:13px;line-height:1.55;overflow-wrap:anywhere}
+.agenda-line p b{color:var(--tx)}
+.family-day-row aside{background:#F7F9FA}
+.family-day-row aside p+p{margin-top:8px;border-top:1px solid var(--line2);padding-top:8px}
+.family-day-row aside small{color:var(--mu);font-size:11px}
+/* 時刻の読み方の宣言。EuroBLECHの.timezone-leadと同じ寸法。
+   文面だけHRSの実態に合わせる（HRSは現地時刻と日本時間が混在するため）。 */
+.timezone-lead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0 0 10px;color:var(--tx2);font-size:14px}
+.timezone-lead strong{color:#0B4F5A;font-size:19px;line-height:1.3}
+.timezone-lead span{color:var(--mu);font-size:13px}
+/* 時差：家族が使うのは差の数字なので、そこだけを大きくする（EuroBLECHと同じ.timezone-cards構造）。
+   ゾーン名に国旗絵文字を入れない。国旗の合成外字はWindowsでは合成されず「JP」「DE」という
+   文字のまま表示されることをユーザーが実機で確認済み（EuroBLECHは日本・ドイツの国旗を
+   使うが、HRSでは意図的に外す。これはEuroBLECHとの意図的な相違）。
+   このコメント自身にも国旗を書かない。v3.cssは絵文字の一括置換を通らないので、
+   説明のつもりで書いた1文字がそのまま生成物に残る。 */
+.timezone-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.timezone-card{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:2px 8px;min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#F5F8F9;color:var(--tx2)}
+.timezone-card span,.timezone-card small{grid-column:1/3}
+.timezone-card span{font-size:13px;font-weight:700}
+.timezone-card small{color:var(--mu);font-size:12px}
+.timezone-card .tz-diff{grid-column:1/3;color:#0B4F5A;font-size:38px;font-weight:800;line-height:1.05;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.timezone-card .tz-diff i{margin-left:2px;font-size:15px;font-style:normal;font-weight:700}
+.zone-japan .tz-diff{color:var(--mu);font-size:26px}
+.zone-europe{border-color:#78A9A9;background:#E7F3F2}
+/* 気候：列を持つ表にすると、393px幅で出典列が168pxを占め、見出しが1文字ずつ
+   縦に折り返して気温が押し出された。都市ごとの行にして、家族が見たい気温を
+   大きく、出典・統計期間を小さい補足として下に置く（.timezone-cardと同じ
+   「知りたい数字を大きく」の作り）。出典は消さず、重みだけ下げる。 */
+.climate-list{display:grid;gap:8px}
+.climate-row{min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#F5F8F9}
+.climate-place{margin:0;color:var(--tx2);font-size:15px;font-weight:700;line-height:1.35}
+.climate-temp{display:flex;flex-wrap:wrap;gap:2px 18px;margin:5px 0 0}
+.climate-temp span{display:inline-flex;align-items:baseline;gap:6px}
+.climate-temp i{color:var(--mu);font-size:12px;font-style:normal;font-weight:700}
+.climate-temp b{color:#0B4F5A;font-size:22px;font-weight:800;line-height:1.25;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.climate-src{margin:6px 0 0;color:var(--mu);font-size:11px;line-height:1.5}
+@media(max-width:640px){
+  .family-head{padding:12px 0 10px}
+  .family-head h1{font-size:20px}
+  /* 日程詳細：header/section/asideの3列を2列（見出し＋本文）へ畳む。
+     HRSは人別セクションを持たないので、本文列はsection・asideの2段だけでよい
+     （EuroBLECHは人別2枠＋asideの3段）。202610_Europe_TechEx_EuroBLECHのv3.css
+     と同じ考え方だが、段数がHRSの実態に合わせて少ない。 */
+  /* EuroBLECHの58pxそのままだと、HRSの2桁日付（9/10・9/12・9/13・9/14）が
+     見出しの<strong>内で42px要り、40pxの余白（58px−左右padding18px）に収まらず
+     折り返す。64pxへ広げて1行に収める。 */
+  .family-day-row{grid-template-columns:64px minmax(0,1fr)}
+  .family-day-row>header{grid-row:1/3}
+  .family-day-row>section,.family-day-row>aside{grid-column:2;border-left:1px solid var(--line);border-top:1px solid var(--line)}
+  .family-day-row>section{border-top:0}
+  .agenda-line{grid-template-columns:82px minmax(0,1fr);gap:3px 7px}
+  .agenda-line time{grid-row:1/3;font-size:14px}
+  .agenda-line .schedule-tag{grid-column:2}
+  .agenda-line p{grid-column:2}
+}
+@media print{
+  .family-head{padding-top:0}
+  .family-page .tab{padding-top:8px}
 }
 
 
@@ -571,10 +943,14 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
 
   <div class="card">
     <h2 class="ttl"><span class="line-icon line-icon-robot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="2"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M12 8V4M9 17h6"/></svg></span>イベント概要</h2>
-    <div class="bd small" style="display:grid;gap:5px">
-      <div><span class="line-icon line-icon-pin" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><circle cx="12" cy="9" r="2"/><path d="M8 13 12 21 16 13z"/></svg></span><strong>Liederhalle</strong>（Berliner Platz 1-3） — ホテルから徒歩約3分</div>
-      <div><span class="line-icon line-icon-calendar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/><path d="M8 13h2m4 0h2m-8 4h2m4 0h2"/></svg></span>9/9・9/10 は講演＋展示（40+社）／9/11 は近郊企業訪問</div>
-      <div><span class="line-icon line-icon-star" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 15 9 21 10 16 14 18 21 12 17 6 21 8 14 3 10 9 9z"/></svg></span>Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA</div>
+    <div class="bd small" style="display:grid;gap:7px">
+      <div>ヒューマノイドの国際会議。9/9〜9/11の3日間で、Day 1・Day 2に全24項目と展示40+社、最終日は企業訪問</div>
+      <div class="ov-facility">
+        <div><b>Day 1</b><span>9/9（水）全11項目 — 政策・市場・量産・Embodied AI・モーター技術</span></div>
+        <div><b>Day 2</b><span>9/10（木）全13セッション — 医療応用・センサー・GDPR・フレキシブル生産ライン</span></div>
+        <div><b>Day 3</b><span>9/11（金）近郊企業へのガイド付き訪問（訪問先は開催直前に公式発表）</span></div>
+      </div>
+      <div><span class="line-icon line-icon-star" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 15 9 21 10 16 14 18 21 12 17 6 21 8 14 3 10 9 9z"/></svg></span>主要出展社：Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA</div>
       <div class="ov-more no-print"><button class="btn" data-goto="venue"><span class="line-icon line-icon-book" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="8" height="15" rx="1"/><rect x="13" y="5" width="8" height="15" rx="1"/></svg></span>セッション表と当日メモへ</button></div>
     </div>
   </div>
@@ -1031,21 +1407,24 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
     <div class="bd">
       <div class="banner b-info" style="margin-bottom:10px"><span class="line-icon line-icon-flight" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z"/></svg></span><div>NGO発着・HEL経由の往復エコノミー。<strong>前日入りができ、犬山からの空港アクセスが短い旅程。</strong></div></div>
 
-      <h3>往路 9/7（月）〜9/8（火） <span class="muted small">総所要17時間30分</span></h3>
-      <div class="scroll-x"><table class="tb">
-        <tr><td class="t">22:50</td><td><strong>NGO 中部</strong>発 → HEL</td><td class="muted">AY80／A350／13時間5分（深夜便）</td></tr>
-        <tr><td class="t">9/8 5:55</td><td><strong>HEL ヘルシンキ</strong>着</td><td class="muted">乗継 <strong>1時間45分</strong></td></tr>
-        <tr><td class="t">9/8 7:40</td><td><strong>HEL</strong>発 → FRA</td><td class="muted">AY1411／A321／2時間40分／食事なし（有料軽食あり／水・ブルーベリージュース無料）</td></tr>
-        <tr><td class="t">9/8 9:20</td><td><strong>FRA フランクフルト</strong>着</td><td class="muted">Finnair・エコノミー／CO₂e 約661kg</td></tr>
-      </table></div>
-
-      <h3>復路 9/13（日）〜9/14（月） <span class="muted small">総所要17時間15分</span></h3>
-      <div class="scroll-x"><table class="tb">
-        <tr><td class="t">19:20</td><td><strong>FRA フランクフルト</strong>発 → HEL</td><td class="muted">AY1416／A321／2時間25分</td></tr>
-        <tr><td class="t">22:45</td><td><strong>HEL ヘルシンキ</strong>着</td><td class="muted">乗継 <strong>2時間</strong></td></tr>
-        <tr><td class="t">9/14 0:45</td><td><strong>HEL</strong>発 → NGO</td><td class="muted">AY79／A350／12時間50分（深夜便）</td></tr>
-        <tr><td class="t">9/14 19:35</td><td><strong>NGO 中部</strong>着</td><td class="muted">Finnair・エコノミー／CO₂e 約658kg</td></tr>
-      </table></div>
+      <article class="flight-card">
+        <header class="flight-card-head">
+          <div><span class="flight-label">往路</span><h3>9/7（月）〜9/8（火）</h3></div>
+          <span class="flight-total">総所要17時間30分</span>
+        </header>
+        <div class="flight-leg"><div class="flight-point depart"><span class="point-label">出発</span><time><span class="flight-date">9/7（月）</span><strong>22:50</strong><em>JST</em></time><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=中部国際空港+セントレア" target="_blank" rel="noopener">中部国際空港（NGO）</a></div><div class="flight-route"><strong>AY80</strong><span class="flight-rule"><span class="flight-mark" role="img" aria-label="フライト"></span></span><small>A350<br>13時間5分</small></div><div class="flight-point arrive"><span class="point-label">到着</span><time><span class="flight-date">9/8（火）</span><strong>5:55</strong><em>EEST</em></time><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Helsinki+Airport" target="_blank" rel="noopener">ヘルシンキ空港（HEL）</a></div></div><p class="flight-note">深夜便</p><div class="layover"><span>乗り継ぎ</span><strong>ヘルシンキ 1時間45分</strong></div>
+        <div class="flight-leg"><div class="flight-point depart"><span class="point-label">出発</span><time><span class="flight-date">9/8（火）</span><strong>7:40</strong><em>EEST</em></time><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Helsinki+Airport" target="_blank" rel="noopener">ヘルシンキ空港（HEL）</a></div><div class="flight-route"><strong>AY1411</strong><span class="flight-rule"><span class="flight-mark" role="img" aria-label="フライト"></span></span><small>A321<br>2時間40分</small></div><div class="flight-point arrive"><span class="point-label">到着</span><time><span class="flight-date">9/8（火）</span><strong>9:20</strong><em>CEST</em></time><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Frankfurt+Airport" target="_blank" rel="noopener">フランクフルト空港（FRA）</a></div></div><p class="flight-note">食事なし（有料軽食あり／水・ブルーベリージュース無料）</p>
+        <footer>Finnair・エコノミー／CO₂e 約661kg</footer>
+      </article>
+      <article class="flight-card">
+        <header class="flight-card-head">
+          <div><span class="flight-label">復路</span><h3>9/13（日）〜9/14（月）</h3></div>
+          <span class="flight-total">総所要17時間15分</span>
+        </header>
+        <div class="flight-leg"><div class="flight-point depart"><span class="point-label">出発</span><time><span class="flight-date">9/13（日）</span><strong>19:20</strong><em>CEST</em></time><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Frankfurt+Airport" target="_blank" rel="noopener">フランクフルト空港（FRA）</a></div><div class="flight-route"><strong>AY1416</strong><span class="flight-rule"><span class="flight-mark" role="img" aria-label="フライト"></span></span><small>A321<br>2時間25分</small></div><div class="flight-point arrive"><span class="point-label">到着</span><time><span class="flight-date">9/13（日）</span><strong>22:45</strong><em>EEST</em></time><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Helsinki+Airport" target="_blank" rel="noopener">ヘルシンキ空港（HEL）</a></div></div><div class="layover"><span>乗り継ぎ</span><strong>ヘルシンキ 2時間</strong></div>
+        <div class="flight-leg"><div class="flight-point depart"><span class="point-label">出発</span><time><span class="flight-date">9/14（月）</span><strong>0:45</strong><em>EEST</em></time><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Helsinki+Airport" target="_blank" rel="noopener">ヘルシンキ空港（HEL）</a></div><div class="flight-route"><strong>AY79</strong><span class="flight-rule"><span class="flight-mark" role="img" aria-label="フライト"></span></span><small>A350<br>12時間50分</small></div><div class="flight-point arrive"><span class="point-label">到着</span><time><span class="flight-date">9/14（月）</span><strong>19:35</strong><em>JST</em></time><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=中部国際空港+セントレア" target="_blank" rel="noopener">中部国際空港（NGO）</a></div></div><p class="flight-note">深夜便</p>
+        <footer>Finnair・エコノミー／CO₂e 約658kg</footer>
+      </article>
 
       <div class="banner b-info" style="margin:10px 0 0"><span class="line-icon line-icon-alarm" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M5 4 2 7M19 4l3 3"/></svg></span><div>復路19:20発 → 国際線チェックインは出発 <strong>3時間前目安</strong> で、<strong>16:20頃までにFRA空港到着</strong> を目標に、9/13日中の予定を組む。</div></div>
     </div>
