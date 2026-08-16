@@ -1806,7 +1806,7 @@ function buildOverviewSection(source, undecidedBanner) {
         <div><b>前回</b><span>HRS Europe 2025（ベルリン）参加500名超。今回がシュトゥットガルトへの移転初回</span></div>
       </div>
       <div>${lineIconHtml('star')}主要出展社：Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA</div>
-      <div class="small muted">規模と前回実績は主催者の公表値で、第三者による検証はされていない。出典：<a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">humanoidrobotssummit.com</a>・<a href="https://acgrobot.com/" target="_blank" rel="noopener">acgrobot.com</a>（2026-08-16 閲覧）</div>
+      <details class="fold"><summary>数字の出どころ</summary><div class="fold-body">規模の3つと前回の参加者数は主催者の公表値で、第三者による検証はされていない。参加1,000名超・500社超は開催前の見込み、前回500名超は主催者が実績として書いているもの。登壇者数は公式サイトの同一ページに「30+」と「40」の2つが載っていて判断できないため、ここには出していない。出典は<a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">humanoidrobotssummit.com</a>と<a href="https://acgrobot.com/" target="_blank" rel="noopener">acgrobot.com</a>（2026-08-16 閲覧）。</div></details>
       <div class="ov-more no-print"><button class="btn" data-goto="venue">${lineIconHtml('book')}セッション表と当日メモへ</button></div>
     </div>
   </div>

@@ -321,7 +321,11 @@ for (const rule of ['.line-icon{', '.flight-mark{', '.plan-state{', '.sum-place,
 assert((online.match(/class="line-icon line-icon-calendar"/g) || []).length >= 1, `${onlineName}: expected the calendar line-icon SVG replacing the retired 🗓 glyph`);
 
 // ---------- 旅程タブの長い補足を折り畳みへ ----------
-const FOLD_COUNT = 20;
+// 旅程タブの20件に、概要タブ「イベント概要」の『数字の出どころ』を足して21。
+// 規模と前回実績は主催者の公表値なので、断り書きと出典は落とさない。ただし
+// 90字の地の文を常時表示に置くのはフィールドガイドの作法に反するので折り畳む
+// （常時表示に残すのは「（主催者発表）」の一言だけ、2026-08-16）。
+const FOLD_COUNT = 21;
 for (const [name, text] of [[onlineName, online], ['index_v3_offline.html', offlineHtml]]) {
   // 机上用印刷版は全<details>を強制的にopenへ書き換えるため、class="fold"の前に
   // open属性が挿入される（<details open class="fold">）。属性順に依存しない数え方にする。
