@@ -1531,7 +1531,14 @@ function buildMain({ offline = false } = {}) {
   }
 
   html = mustReplace(html, '<button class="btn" id="btn-export">📋 Markdownでコピー</button>', '<button class="btn" id="btn-export">📋 Markdownでコピー</button>\n' + transferControls, 'record buttons');
-  html = mustReplace(html, '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>', '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>\n' + cloudPanel, 'cloud sync panel');
+  // クラウド同期はオンライン版だけが持つ。机上用印刷版はこのあとスクリプトを丸ごと
+  // 落とすので、パネルを残しても同期キーの入力欄と押しても何も起きないボタンが
+  // #tab-recの中に積まれるだけになる（#tab-recはdesk-copyで非表示なので画面にも紙にも
+  // 出ない。出ないものを配る理由がない）。CLAUDE.mdの「机上用印刷版はクラウド同期を
+  // 含めない」はここで守る。
+  if (!offline) {
+    html = mustReplace(html, '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>', '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>\n' + cloudPanel, 'cloud sync panel');
+  }
   html = mustReplace(html, "  document.getElementById('btn-clear').addEventListener('click', () => {", transferScript + "  document.getElementById('btn-clear').addEventListener('click', () => {", 'JSON script insertion');
   html = mustReplace(html, '  /* ---------- ToDo ---------- */', confirmationScript + '  /* ---------- ToDo ---------- */', 'confirmation script insertion');
   html = mustReplace(html, '  /* ---------- 記録の書き出し（Markdown） ---------- */', timestampAppendScript + '  /* ---------- 記録の書き出し（Markdown） ---------- */', 'timestamp append controls');

@@ -160,6 +160,15 @@ assert(offline.includes('<style>') && !offline.includes('href="v3.css"'), 'index
 const offlineMarkup = offline.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
 assert(!/<script\b/i.test(offlineMarkup), 'index_v3_offline.html: desk-print copy must have no runtime scripts');
 assert(offline.includes('data-trip-layout="desk-print-v1"') && offline.includes('body.desk-copy #tab-rec'), 'index_v3_offline.html: desk-print layout rules missing');
+// クラウド同期の在り処と、無い場所を対で見る（online側は上の77〜81行）。
+// 机上用印刷版はスクリプトを落とすので、パネルを残しても同期キーの入力欄と
+// 死んだボタンがDOMに積まれるだけだった（2026-08-17に発見。スクリプト0件の検査は
+// 通っていたが、マークアップ側を見ていなかったので素通りしていた）。
+// 見るのは<style>を外したマークアップ。机上版は表示しない部分の規則も含めてv3.cssを
+// 丸ごと埋め込む決まりなので（.memoも.field-navも同じ）、.cloud-syncのCSSが残るのは
+// この検査の対象外。配ってはいけないのは入力欄と同期先URLのほう。
+assert(!/data-trip-cloud|trip-field-sync/.test(offlineMarkup),
+  'index_v3_offline.html: the desk-print copy must not carry the Cloudflare sync panel (it has no runtime to drive it)');
 
 const family = fs.readFileSync(path.join(here, 'family_print.html'), 'utf8');
 // 「🗓 どこにいて何をしているか」は「📅 日程詳細（家族向け）」と内容が重複していたため

@@ -1624,22 +1624,6 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
     <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>
   </div>
 
-  <details open class="card cloud-sync no-print" data-trip-cloud data-endpoint="https://trip-field-sync.mrkn55.workers.dev">
-    <summary class="ttl"><span class="line-icon line-icon-cloud" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17C4 17 3 15 3 13C3 11 5 9 7 9C8 6 11 5 14 6C17 5 20 8 19 11C21 11 21 15 18 17H7Z"/></svg></span>Cloudflare同期</summary>
-    <div class="bd">
-      <p class="small muted">二人の共同メモは1件ずつ追加保存され、同時に送っても上書きしません。旅程選択や自由編集欄は最後の保存が優先されます。</p>
-      <label class="cloud-key">記入者名<input type="text" autocomplete="name" data-trip-cloud-author placeholder="例：村上"></label>
-      <label class="cloud-key">同期キー<input type="password" autocomplete="current-password" data-trip-cloud-key></label>
-      <label class="cloud-remember"><input type="checkbox" data-trip-cloud-remember> この端末に同期キーを保存</label>
-      <div class="cloud-actions">
-        <button class="btn" type="button" data-trip-cloud-pull>クラウドから読込</button>
-        <button class="btn" type="button" data-trip-cloud-push>今すぐ保存</button>
-      </div>
-      <div data-trip-cloud-status role="status" aria-live="polite"></div>
-    </div>
-  </details>
-
-
   <div class="card">
     <h2 class="ttl"><span class="line-icon line-icon-target" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></span>出張全体の目的（この1件で何を持ち帰るか）</h2>
     <div class="bd" style="padding:0">
