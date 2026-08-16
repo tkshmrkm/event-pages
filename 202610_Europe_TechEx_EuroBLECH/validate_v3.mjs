@@ -13,8 +13,12 @@ const familyPrint = readFileSync(join(here, 'family_print.html'), 'utf8');
 const immigration = readFileSync(join(here, 'immigration_print.html'), 'utf8');
 const itinerary = html.slice(html.indexOf('id="tab-itinerary"'), html.indexOf('id="tab-prep"'));
 const prep = html.slice(html.indexOf('id="tab-prep"'), html.indexOf('id="tab-venue"'));
-const day1022 = itinerary.slice(itinerary.indexOf('id="day-1022"'), itinerary.indexOf('id="day-1023"'));
-const day1025 = itinerary.slice(itinerary.indexOf('id="day-1025"'));
+// 旅程タブの末尾には、2026-08-16に準備から移した現地用カードが付く。日カードの
+// 検査に混ぜない（ラウンジのカードが「2時間15分」を持つので、10/25の数え方が狂う）。
+const onSite = itinerary.slice(itinerary.indexOf('class="legacy-tab legacy-stack onsite-stack"'));
+const dayCards = itinerary.slice(0, itinerary.indexOf('class="legacy-tab legacy-stack onsite-stack"'));
+const day1022 = dayCards.slice(dayCards.indexOf('id="day-1022"'), dayCards.indexOf('id="day-1023"'));
+const day1025 = dayCards.slice(dayCards.indexOf('id="day-1025"'));
 const rowTimes = [...itinerary.matchAll(/<div class="row-time">([\s\S]*?)<\/div>/g)].map(match => match[1].replace(/<[^>]+>/g, '').trim());
 
 const count = pattern => (html.match(pattern) || []).length;
@@ -98,6 +102,29 @@ const checks = [
   ['line icon size comes from the shared stylesheet', /\.line-icon\{[^}]*width:1\.15em/.test(hrsCss) && !/(^|[^ ])\.line-icon\{/m.test(css) && css.includes('[class*="bg-gray-700"] .line-icon')],
   ['no oversized itinerary time cells', rowTimes.every(value => value.length <= 32)],
   ['four-column mobile contract retained', /@media\(max-width:640px\)[\s\S]*\.route-four,.lanes \.route-four\{grid-template-columns:72px minmax\(0,1fr\) 74px minmax\(0,1fr\)\}/.test(css)],
+  // ---------- 準備タブは畳めるままにしておく（2026-08-16） ----------
+  // 準備は出発前に埋め切ったら畳む前提のタブ。現地でしか使い道が無いものがここに
+  // しか無いと、畳んだ瞬間に失われる。宿の住所は日カードに無く、ラウンジの資格は
+  // 乗り継ぎ中に読み、DB Navigatorは駅で開く。どれも出発前に用が済まない。
+  // 在り処だけでなく無い場所も対で見る。片側だけだと、増やしただけの状態が通る。
+  ['on-site cards live in the itinerary, not in preparation',
+    ['ホテル予約状況', 'ラウンジ利用可否', '便利リンク', 'ラウンジ利用の詳細', '香港（HKG）乗継の共通メモ']
+      .every(title => onSite.includes(title) && !prep.includes(title))],
+  // 逆向き。出発前に埋め切るものを旅程へ流さない。旅程は現地で毎日開くので、
+  // 未購入かどうかの管理表や費用の見積もりが混ざると日付を探す邪魔になる。
+  ['preparation keeps what is finished before departure',
+    ['出発前チェックリスト', '航空券状況', '予算概算', '重要書類の取得状況']
+      .every(title => prep.includes(title) && !onSite.includes(title))],
+  // 移した先で様式が生きていること。このカード群の見た目は .legacy-tab と
+  // .legacy-stack に紐づいていて、クラス名からは読めない。箱を落とすと静かに素へ落ちる。
+  ['the moved cards keep the stylesheet that dresses them',
+    /class="legacy-tab legacy-stack onsite-stack"/.test(itinerary)
+    && css.includes('.onsite-stack{') && !/#tab-itinerary[^"]*legacy-tab/.test(html)
+    && countIn(onSite, /class="bg-white rounded-xl border/g) === 3],
+  // 旅程側の案内文の行き先も一緒に直す。6箇所とも同じ文で、準備を指したままにしない。
+  ['the lounge folds point at the new location',
+    !html.includes('準備タブの「ラウンジ利用可否」')
+    && countIn(itinerary, /利用資格は旅程末尾の「ラウンジ利用可否」に集約してある/g) === 6],
   // ---------- 家族向けのフライトカードの死蔵CSS（2026-08-16に削除） ----------
   // ブロックは2026-08-15に落とした。規則だけ残ると、次に触る人が使われていると読む。
   // 使いたくなったら core.css の .flight-card を読む。ここへ書き戻さない。

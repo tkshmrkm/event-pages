@@ -322,8 +322,10 @@ const transformScript = `
   // 手続き・確認・館内移動は、過ごし方ではなく「やること」に入れる。
   const todoFold = items => '<details class="fold mt-1"><summary>やること</summary><div class="fold-body">' + items.map(item => '<div>' + item + '</div>').join('') + '</div></details>';
   const spendFold = blocks => '<details class="fold mt-1"><summary>過ごし方</summary><div class="fold-body">' + blocks.join('') + '</div></details>';
-  // ラウンジは4系統を必ず並べる。確認できていない系統も消さずに残す。資格は準備タブが持つ。
-  const loungeOption = systems => '<div><strong>ラウンジ</strong>: 次の4系統のいずれか。利用資格は準備タブの「ラウンジ利用可否」に集約してある</div>' +
+  // ラウンジは4系統を必ず並べる。確認できていない系統も消さずに残す。
+  // 資格の置き場所は2026-08-16に準備から旅程末尾へ移した（準備は畳めるタブなので、
+  // 乗り継ぎ中に見るものを置かない）。この文の行き先も一緒に直す。
+  const loungeOption = systems => '<div><strong>ラウンジ</strong>: 次の4系統のいずれか。利用資格は旅程末尾の「ラウンジ利用可否」に集約してある</div>' +
     systems.map(([label, body]) => '<div class="opt-sub"><strong>' + label + '</strong>: ' + body + '</div>').join('');
   const rows = day => Array.from(day.querySelectorAll('[class*="border-l-4"]'));
   const rowFor = (day, text) => rows(day).find(row => row.textContent.replace(/\\s+/g, ' ').includes(text));
@@ -753,6 +755,71 @@ const transformScript = `
     const inner = panel.querySelector(':scope > div'); if (inner) inner.className = 'legacy-stack';
   });
   family.classList.add('family-tab');
+
+  // ---------- 現地で使うものを準備から旅程へ移す（2026-08-16） ----------
+  // 準備は出発前に埋め切ったら畳む前提のタブである。ところが中身の性質が2つに
+  // 割れていた。畳んで困らないのは、出発前チェックリスト・航空券状況（未購入か
+  // どうかの管理）・予算概算・書類の取得状況の4枚。困るのは次の3つで、いずれも
+  // 出発したあとに開くものしかない。
+  //   ホテル予約状況 … 住所・駅からの行き方・朝食時間・チェックアウト時刻。
+  //                    ホテル名は日カードにあるが、住所はここにしか無い
+  //   ラウンジ利用可否 … 4系統の利用資格と、その下の「ラウンジ利用の詳細」
+  //                    「香港（HKG）乗継の共通メモ」。乗り継ぎ中に読むもの
+  //   便利リンク      … DB Navigator・各社の予約管理・会場の公式サイト
+  // 注意書きで守らず、畳んでも何も失われない配置にする。
+  //
+  // 移した先で見た目を保つために legacy-tab と legacy-stack を同じ箱に付ける。
+  // このカード群の様式（bg-white の枠、bg-gray-700 の見出し、text-xs の字送り）は
+  // すべて .legacy-tab / .legacy-stack に紐づいていて、クラス名からは読めない。
+  // 箱ごと移さずに中身だけ移すと、静かに素のHTMLへ落ちる。
+  // #tab-itinerary 側へ legacy-tab を付けるのではない。付けると日カードの
+  // text-slate-600 や p-4 まで .legacy-tab の規則に当たって旅程の見た目が変わる。
+  const itineraryStack = itinerary.querySelector('.itinerary-stack');
+  if (!itineraryStack) throw new Error('itinerary stack not found for the on-site card move');
+  const prepCardByTitle = title => Array.from(prepStack ? prepStack.children : [])
+    .find(card => card.firstElementChild && card.firstElementChild.textContent.includes(title));
+  const onSite = document.createElement('div');
+  onSite.className = 'legacy-tab legacy-stack onsite-stack';
+  onSite.setAttribute('aria-label', '現地で開く参照情報');
+  ['ホテル予約状況', 'ラウンジ利用可否'].forEach(title => {
+    const card = prepCardByTitle(title);
+    if (!card) throw new Error('on-site card missing from the prep tab: ' + title);
+    onSite.appendChild(card);
+  });
+  // 便利リンクは「重要書類・リンク集」カードの中の1ブロックでしかない。同じカードの
+  // 他の3ブロック（Eチケット・ホテル確認書・イベントパスの取得状況）は出発前のもの
+  // なので、リンクだけを外へ出し、残ったカードの名前から「・リンク集」を落とす。
+  const docsCard = prepCardByTitle('重要書類');
+  if (!docsCard) throw new Error('the documents card is missing from the prep tab');
+  const linkBlock = Array.from(docsCard.querySelectorAll('.p-4 > div'))
+    .find(block => block.firstElementChild && block.firstElementChild.textContent.includes('便利リンク'));
+  if (!linkBlock) throw new Error('the useful-links block is missing from the documents card');
+  const linkCard = document.createElement('div');
+  linkCard.className = 'bg-white rounded-xl border border-slate-200/80';
+  const linkHead = docsCard.firstElementChild.cloneNode(true);
+  linkHead.innerHTML = linkBlock.firstElementChild.innerHTML;
+  const linkBody = document.createElement('div');
+  linkBody.className = 'p-4';
+  linkBlock.firstElementChild.remove();
+  while (linkBlock.firstChild) linkBody.appendChild(linkBlock.firstChild);
+  linkBlock.remove();
+  linkCard.appendChild(linkHead);
+  linkCard.appendChild(linkBody);
+  onSite.appendChild(linkCard);
+  const docsHead = docsCard.firstElementChild;
+  docsHead.innerHTML = docsHead.innerHTML.replace('重要書類・リンク集', '重要書類の取得状況');
+  if (docsCard.textContent.includes('便利リンク')) throw new Error('the useful-links block stayed in the prep tab');
+  // 元データはカードの前に <!-- ホテル予約状況 --> のような位置の目印を置いている。
+  // カードだけ動かすと目印が何も指さないまま準備に残り、次に読む人が「まだ在る」と読む。
+  ['ホテル予約状況', 'ラウンジ利用可否'].forEach(title => {
+    Array.from(prepStack.childNodes)
+      .filter(node => node.nodeType === 8 && node.nodeValue.includes(title))
+      .forEach(node => node.remove());
+  });
+  itineraryStack.appendChild(onSite);
+  if (prep.textContent.includes('ラウンジ利用可否') || prep.textContent.includes('ホテル予約状況')) {
+    throw new Error('an on-site card is still inside the preparation tab');
+  }
   // ---------- 家族向けをHRSの5構成へ組み直す ----------
   // 出張サマリー / 時差・気候 / 日程詳細 / 宿泊先情報 / 緊急連絡先 の順にそろえる。
   // 内側のマークアップはここでは触らない。Tailwind風をどこまで寄せるかは別途判断する。

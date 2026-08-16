@@ -133,6 +133,11 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .legacy-stack>.bg-white,.legacy-stack>[class*="bg-white"]{overflow:hidden;margin:0;border:2px solid var(--line)!important;border-radius:12px!important;background:#fff!important;box-shadow:0 1px 2px rgba(16,24,32,.05)!important}
 .legacy-stack>.bg-white>[class*="bg-gray-700"],.legacy-stack>.bg-white>[class*="bg-gradient"],.legacy-stack>[class*="bg-white"]>[class*="bg-gray-700"]{padding:10px 14px!important;background:var(--neu-bg)!important;color:var(--tx2)!important;font-size:16px!important;font-weight:700!important}
 .legacy-stack>.bg-white>.p-4,.legacy-stack>.bg-white>.p-3,.legacy-stack>[class*="bg-white"]>.p-4,.legacy-stack>[class*="bg-white"]>.p-3{padding:12px 14px!important}
+/* 準備から旅程へ移した現地用カード（宿・ラウンジ・便利リンク）。様式は .legacy-tab と
+   .legacy-stack に紐づいているので、箱ごと持ってきて両方のクラスを同じ要素に付ける。
+   #tab-itinerary 側へ .legacy-tab を付けると日カードの字送りまで変わるので付けない。
+   .itinerary-stack の中に入るぶん、上の余白は外側が持っている。 */
+.onsite-stack{padding-top:0;padding-bottom:0}
 /* Wide tables scroll inside their own box instead of being clipped by the card. */
 .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .legacy-tab table{width:100%;border-collapse:collapse;font-size:var(--f3)}
