@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="出張、学会、展示会、家族旅行のイベントページをまとめたポータル。">
+<meta name="theme-color" content="#102a2a">
+<title>Event Pages — 03+07+08 統合案</title>
+<style>
+:root{
+  --ink:#15201f; --paper:#f4f0e7; --paper-2:#ebe4d6; --white:#fffdf8;
+  --forest:#102a2a; --forest-2:#173d39;
+  --orange:#e36c38; --teal:#4fa99a; --plum:#8a6a9c;
+  --line:rgba(21,32,31,.16); --muted:#66716e;
+  --shadow:0 14px 40px rgba(21,32,31,.10);
+  --radius:16px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; color:var(--ink); background:var(--paper);
+  font-family:"Yu Gothic","Hiragino Kaku Gothic ProN",system-ui,sans-serif;
+  line-height:1.7; -webkit-text-size-adjust:100%;
+}
+a{color:inherit}
+button,input{font:inherit}
+h1,h2,h3{margin:0; line-height:1.25}
+p{margin:0}
+
+.shell{width:min(1160px,calc(100% - 40px)); margin-inline:auto}
+.line-icon{width:1.15em; height:1.15em; flex:none; fill:currentColor; vertical-align:-.15em}
+
+.skip-link{position:fixed;top:.6rem;left:.6rem;z-index:40;padding:.6rem 1rem;color:#fff;background:var(--forest);border-radius:999px;transform:translateY(-200%)}
+.skip-link:focus{transform:translateY(0)}
+
+/* ---------- header ---------- */
+.site-header{display:flex;align-items:center;justify-content:space-between;padding-block:22px;gap:16px}
+.brand{display:inline-flex;align-items:center;gap:11px;text-decoration:none;font-weight:800;letter-spacing:.08em;font-size:.85rem}
+.brand-mark{width:34px;aspect-ratio:1;display:grid;place-items:center;border:1px solid currentColor;border-radius:50%;font-family:Georgia,serif;font-size:1rem}
+.site-nav{display:flex;gap:22px}
+.site-nav a{color:#40504d;text-decoration:none;font-size:.85rem;font-weight:700}
+.site-nav a:hover{color:var(--orange)}
+
+/* ---------- hero ---------- */
+.hero{background:var(--forest);color:var(--white);border-radius:var(--radius);overflow:hidden;position:relative;isolation:isolate}
+.hero::after{content:"";position:absolute;inset:auto -60px -90px auto;width:230px;height:230px;background:var(--orange);border-radius:52% 48% 43% 57%;opacity:.85;z-index:-1}
+.hero-inner{display:grid;grid-template-columns:1.4fr .9fr;gap:28px;align-items:end;padding:34px 34px 30px}
+.eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,253,248,.6);margin-bottom:10px}
+.hero h1{font-size:clamp(1.9rem,4.4vw,2.9rem);font-weight:800;letter-spacing:.01em}
+.hero-sub{margin-top:12px;color:rgba(255,253,248,.78);font-size:.93rem}
+.hero-open{display:inline-flex;align-items:center;gap:9px;margin-top:20px;padding:11px 20px;border-radius:999px;background:var(--white);color:var(--forest);text-decoration:none;font-weight:800;font-size:.9rem}
+.hero-open:hover{background:var(--orange);color:var(--white)}
+.countdown{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+.countdown b{font-size:3.4rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.countdown span{font-size:.8rem;letter-spacing:.14em;color:rgba(255,253,248,.65);text-transform:uppercase}
+.countdown .rule{width:64px;height:1px;background:rgba(255,253,248,.3);margin:14px 0}
+
+/* ---------- section frame ---------- */
+.section{padding-block:52px}
+.section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:26px}
+.kicker{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);font-weight:800;margin-bottom:6px}
+.section-head h2{font-size:1.5rem;font-weight:800}
+.section-lead{color:var(--muted);font-size:.86rem;max-width:44ch}
+
+/* ---------- 03: timeline ---------- */
+.plan{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:start}
+.timeline{position:relative;padding-left:26px}
+.timeline::before{content:"";position:absolute;left:6px;top:14px;bottom:26px;width:2px;background:var(--line)}
+.trip{position:relative;display:block;width:100%;text-align:left;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
+.trip::before{content:"";position:absolute;left:-26px;top:24px;width:14px;height:14px;border-radius:50%;background:var(--white);border:3px solid var(--accent,var(--orange))}
+.trip:hover,.trip:focus-visible{border-color:var(--accent,var(--orange));box-shadow:var(--shadow);outline:none}
+.trip.is-active{border-color:var(--accent);box-shadow:var(--shadow);transform:translateX(2px)}
+.trip.is-active::before{background:var(--accent)}
+.trip-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.trip-date{font-size:.76rem;letter-spacing:.1em;font-weight:800;color:var(--accent)}
+.trip-nights{font-size:.72rem;color:var(--muted);background:var(--paper-2);border-radius:999px;padding:2px 9px}
+.trip h3{font-size:1.12rem;font-weight:800}
+.trip-place{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:.82rem;margin-top:5px}
+.trip-note{margin-top:9px;color:#3d4a48;font-size:.84rem}
+.trip-open{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:.82rem;font-weight:800;color:var(--forest);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
+.trip-open:hover{color:var(--orange);border-color:var(--orange)}
+
+/* ---------- 07: map ---------- */
+.map-panel{position:sticky;top:18px;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.map-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.map-title h3{font-size:.92rem;font-weight:800}
+.map-hint{font-size:.72rem;color:var(--muted)}
+.map{position:relative;aspect-ratio:18/11;border-radius:12px;background:var(--paper);border:1px solid var(--line);overflow:hidden}
+.map .grid-line{position:absolute;background:rgba(21,32,31,.09)}
+.map .grid-line.v{top:0;bottom:0;width:1px}
+.map .grid-line.h{left:0;right:0;height:1px}
+.map .grid-label{position:absolute;font-size:9px;letter-spacing:.06em;color:var(--muted);background:var(--paper);padding:0 3px}
+.pin{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:5px;white-space:nowrap}
+.pin i{width:9px;height:9px;border-radius:50%;background:var(--muted);border:2px solid var(--white);box-shadow:0 0 0 1px var(--line);transition:transform .15s,background .15s}
+.pin b{font-size:10.5px;font-weight:700;color:var(--muted);transition:color .15s}
+.pin.is-active i{background:var(--accent);transform:scale(1.5)}
+.pin.is-active b{color:var(--ink)}
+.map-far{position:absolute;right:8px;bottom:8px;display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--muted);background:var(--white);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.map-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:.74rem;color:var(--muted)}
+.map-legend span{display:inline-flex;align-items:center;gap:6px}
+.map-legend i{width:8px;height:8px;border-radius:50%;background:currentColor}
+
+/* ---------- 08: calendar band ---------- */
+.calendar{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px 14px;overflow-x:auto}
+.cal-row{display:grid;grid-template-columns:52px repeat(31,1fr);gap:3px;align-items:center;min-width:560px;margin-bottom:5px}
+.cal-month{font-size:.74rem;font-weight:800;letter-spacing:.08em;color:var(--muted)}
+.cal-head .cal-day{font-size:9px;color:var(--muted);text-align:center;line-height:1.4}
+.cal-cell{height:22px;border-radius:4px;background:var(--paper);position:relative}
+.cal-cell.weekend{background:var(--paper-2)}
+.cal-cell.void{background:transparent}
+.cal-cell.today{outline:2px solid var(--forest);outline-offset:-2px}
+.cal-cell.trip{background:var(--accent);opacity:.34}
+.cal-cell.trip.is-active{opacity:1}
+.cal-note{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px;font-size:.74rem;color:var(--muted)}
+.cal-note span{display:inline-flex;align-items:center;gap:6px}
+.cal-note i{width:12px;height:12px;border-radius:3px;background:currentColor;opacity:.5}
+.cal-note i.now{background:transparent;border:2px solid var(--forest);opacity:1}
+
+/* ---------- reference strip ---------- */
+.resource{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:22px;padding:20px 24px;background:var(--forest);color:var(--white);border-radius:var(--radius);text-decoration:none}
+.resource .kicker{color:var(--orange-soft,#f3b28d)}
+.resource h3{font-size:1.05rem;font-weight:800}
+.resource .section-lead{color:rgba(255,253,248,.72)}
+.resource:hover{background:var(--forest-2)}
+.resource .line-icon{width:1.6em;height:1.6em}
+
+/* ---------- library ---------- */
+.library{background:var(--paper-2);border-radius:var(--radius)}
+.library .shell{padding-block:44px}
+.tools{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-bottom:16px}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filter{border:1px solid var(--line);background:var(--white);border-radius:999px;padding:7px 15px;font-size:.8rem;font-weight:700;cursor:pointer}
+.filter[aria-pressed="true"]{background:var(--forest);color:var(--white);border-color:var(--forest)}
+.search-wrap{position:relative;display:flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--line);border-radius:999px;padding:7px 15px;min-width:min(280px,100%)}
+.search{border:0;background:transparent;outline:none;width:100%;font-size:.85rem}
+.result-meta{font-size:.78rem;color:var(--muted);margin-bottom:14px}
+.event-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:14px}
+.event-card{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.event-top{display:flex;justify-content:space-between;font-size:.72rem;letter-spacing:.1em;color:var(--muted);font-weight:700}
+.event-card h3{font-size:1rem;font-weight:800}
+.event-card h3 a{text-decoration:none}
+.event-card h3 a:hover{color:var(--orange)}
+.event-desc{font-size:.83rem;color:#3d4a48}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.7rem;background:var(--paper);border-radius:999px;padding:3px 9px;color:var(--muted)}
+.event-footer{margin-top:auto;padding-top:6px;display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;font-weight:700}
+.event-footer a{text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
+.event-footer a:hover{color:var(--orange);border-color:var(--orange)}
+.empty{display:none;padding:30px;text-align:center;color:var(--muted);font-size:.88rem}
+.empty.is-shown{display:block}
+
+.site-footer{padding-block:34px;color:var(--muted);font-size:.8rem}
+.footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;padding:26px 22px 24px;align-items:start}
+  .countdown{align-items:flex-start;text-align:left;flex-direction:row;gap:14px;align-items:baseline}
+  .countdown .rule{display:none}
+  .plan{grid-template-columns:1fr}
+  .map-panel{position:static;order:-1}
+}
+@media(max-width:520px){
+  .shell{width:calc(100% - 28px)}
+  .section{padding-block:38px}
+  .site-nav{display:none}
+  .event-list{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">本文へ移動</a>
+
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></symbol>
+  <symbol id="i-plane" viewBox="0 0 24 24"><path d="M21 15.5v-2l-8-4.5V3.6a1.6 1.6 0 0 0-3.2 0V9l-8 4.5v2l8-2.4v4l-2.4 1.6v1.7l3.9-1.1 3.9 1.1v-1.7L13 17.1v-4z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><path d="M7 2v2H5.5A2.5 2.5 0 0 0 3 6.5v13A2.5 2.5 0 0 0 5.5 22h13a2.5 2.5 0 0 0 2.5-2.5v-13A2.5 2.5 0 0 0 18.5 4H17V2h-2v2H9V2H7zm12 8v9.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V10h14z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><path d="M10.5 3a7.5 7.5 0 1 0 4.6 13.4l4.2 4.3 1.5-1.5-4.3-4.2A7.5 7.5 0 0 0 10.5 3zm0 2a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M13.2 4.6 11.8 6l5 5H3v2h13.8l-5 5 1.4 1.4L21 12z"/></symbol>
+</svg>
+
+<div class="shell">
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Event Pages トップ">
+      <span class="brand-mark">E</span>EVENT PAGES
+    </a>
+    <nav class="site-nav">
+      <a href="#upcoming">今後の予定</a>
+      <a href="#calendar">カレンダー</a>
+      <a href="#library">すべてのページ</a>
+    </nav>
+  </header>
+
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-inner">
+      <div>
+        <p class="eyebrow">Next departure</p>
+        <h1 id="hero-title">Humanoid Robots<br>Summit Europe</h1>
+        <p class="hero-sub" id="hero-sub">2026.09.07 — 09.14 · Stuttgart / Frankfurt</p>
+        <a class="hero-open" href="202609_HumanoidSummitEurope/">
+          旅程を開く <svg class="line-icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+        </a>
+      </div>
+      <div class="countdown">
+        <b id="cd-days">—</b>
+        <span>days to go</span>
+        <div class="rule"></div>
+        <span id="cd-sub">出発まで</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<main id="main">
+
+  <!-- ============ 03 timeline × 07 map ============ -->
+  <section class="section" id="upcoming">
+    <div class="shell">
+      <div class="section-head">
+        <div>
+          <p class="kicker">Upcoming</p>
+          <h2>これからの予定</h2>
+        </div>
+        <p class="section-lead">左の予定を選ぶと、右の地図と下のカレンダーが連動します</p>
+      </div>
+
+      <div class="plan">
+        <div class="timeline" id="timeline">
+          <article class="trip is-active" data-trip="hrs" style="--accent:var(--orange)" tabindex="0">
+            <div class="trip-top">
+              <span class="trip-date">2026.09.07 — 09.14</span>
+              <span class="trip-nights">7泊8日</span>
+            </div>
+            <h3>Humanoid Robots Summit Europe</h3>
+            <p class="trip-place"><svg class="line-icon" aria-hidden="true"><use href="#i-pin"/></svg>Stuttgart · Frankfurt</p>
+            <p class="trip-note">本体は9/9〜9/11、会場はLiederhalle。往復はFinnair（NGO⇔FRA・HEL経由）</p>
+            <a class="trip-open" href="202609_HumanoidSummitEurope/">旅程を開く <svg class="line-icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </article>
+
+          <article class="trip" data-trip="tokyo" style="--accent:var(--teal)" tabindex="0">
+            <div class="trip-top">
+              <span class="trip-date">2026.09.22 — 09.23</span>
+              <span class="trip-nights">1泊2日</span>
+            </div>
+            <h3>東京・千葉 家族旅行</h3>
+            <p class="trip-place"><svg class="line-icon" aria-hidden="true"><use href="#i-pin"/></svg>Tokyo · Chiba</p>
+            <p class="trip-note">移動、訪問先、待機プラン、直前チェックリストをまとめた2日間</p>
+            <a class="trip-open" href="202609_tokyo-family-trip/">旅程を開く <svg class="line-icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </article>
+
+          <article class="trip" data-trip="euroblech" style="--accent:var(--plum)" tabindex="0">
+            <div class="trip-top">
+              <span class="trip-date">2026.10.17 — 10.25</span>
+              <span class="trip-nights">8泊9日</span>
+            </div>
+            <h3>TechEx Europe × EuroBLECH</h3>
+            <p class="trip-place"><svg class="line-icon" aria-hidden="true"><use href="#i-pin"/></svg>Amsterdam · Göttingen · Hannover · Bremen</p>
+            <p class="trip-note">展示会2件と工場見学を含む欧州出張</p>
+            <a class="trip-open" href="202610_Europe_TechEx_EuroBLECH/">旅程を開く <svg class="line-icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </article>
+        </div>
+
+        <aside class="map-panel" aria-label="行き先の位置">
+          <div class="map-title">
+            <h3>行き先</h3>
+            <span class="map-hint">経度・緯度の概略配置</span>
+          </div>
+          <div class="map" id="map">
+            <div class="grid-line v" style="left:11.1%"></div>
+            <div class="grid-line v" style="left:38.9%"></div>
+            <div class="grid-line v" style="left:66.7%"></div>
+            <div class="grid-line v" style="left:94.4%"></div>
+            <div class="grid-line h" style="top:11.1%"></div>
+            <div class="grid-line h" style="top:33.3%"></div>
+            <div class="grid-line h" style="top:55.6%"></div>
+            <div class="grid-line h" style="top:77.8%"></div>
+            <span class="grid-label" style="left:11.1%;bottom:4px;transform:translateX(-50%)">0°</span>
+            <span class="grid-label" style="left:38.9%;bottom:4px;transform:translateX(-50%)">E5°</span>
+            <span class="grid-label" style="left:66.7%;bottom:4px;transform:translateX(-50%)">E10°</span>
+            <span class="grid-label" style="left:4px;top:33.3%;transform:translateY(-50%)">N52°</span>
+            <span class="grid-label" style="left:4px;top:77.8%;transform:translateY(-50%)">N48°</span>
+
+            <div class="pin" data-city="euroblech" style="left:38.3%;top:29.2%;--accent:var(--plum)"><i></i><b>Amsterdam</b></div>
+            <div class="pin" data-city="euroblech" style="left:60.1%;top:21.3%;--accent:var(--plum)"><i></i><b>Bremen</b></div>
+            <div class="pin" data-city="euroblech" style="left:65.2%;top:29.2%;--accent:var(--plum)"><i></i><b>Hannover</b></div>
+            <div class="pin" data-city="euroblech" style="left:66.3%;top:38.6%;--accent:var(--plum)"><i></i><b>Göttingen</b></div>
+            <div class="pin" data-city="hrs" style="left:59.3%;top:54.3%;--accent:var(--orange)"><i></i><b>Frankfurt</b></div>
+            <div class="pin" data-city="hrs" style="left:62.1%;top:69.1%;--accent:var(--orange)"><i></i><b>Stuttgart</b></div>
+
+            <span class="map-far" id="map-far">
+              <svg class="line-icon" aria-hidden="true"><use href="#i-plane"/></svg>名古屋から約9,300km
+            </span>
+          </div>
+          <div class="map-legend">
+            <span style="color:var(--orange)"><i></i>HRS Europe</span>
+            <span style="color:var(--teal)"><i></i>東京・千葉</span>
+            <span style="color:var(--plum)"><i></i>TechEx × EuroBLECH</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 08 calendar band ============ -->
+  <section class="section" id="calendar" style="padding-top:0">
+    <div class="shell">
+      <div class="section-head">
+        <div>
+          <p class="kicker">Calendar</p>
+          <h2>家を空ける日</h2>
+        </div>
+        <p class="section-lead">2026年8月から11月まで。色の付いた日が出発から帰国まで</p>
+      </div>
+      <div class="calendar" id="cal"></div>
+      <div class="cal-note">
+        <span style="color:var(--forest)"><i class="now"></i>今日</span>
+        <span style="color:var(--orange)"><i></i>HRS Europe</span>
+        <span style="color:var(--teal)"><i></i>東京・千葉</span>
+        <span style="color:var(--plum)"><i></i>TechEx × EuroBLECH</span>
+      </div>
+
+      <a class="resource" id="overview" href="physical_ai_full_overview_2026_2027_v96_sortable.html">
+        <div>
+          <p class="kicker">Reference</p>
+          <h3>Physical AI関連 国際会議・展示会 俯瞰資料</h3>
+          <p class="section-lead" style="margin-top:4px">2026〜2028年の国際会議・展示会を、時期・地域・分野で並べ替えて比較できる一覧</p>
+        </div>
+        <svg class="line-icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ library ============ -->
+  <section class="section library" id="library">
+    <div class="shell">
+      <div class="section-head">
+        <div>
+          <p class="kicker">Library</p>
+          <h2>イベント一覧</h2>
+        </div>
+        <p class="section-lead">学会名、都市名、年などで検索できます。完了したイベントもここから参照できます</p>
+      </div>
+
+      <div class="tools">
+        <div class="filters" role="group" aria-label="イベントの絞り込み">
+          <button class="filter" type="button" data-filter="all" aria-pressed="true">すべて</button>
+          <button class="filter" type="button" data-filter="upcoming" aria-pressed="false">今後</button>
+          <button class="filter" type="button" data-filter="2026" aria-pressed="false">2026</button>
+          <button class="filter" type="button" data-filter="2025" aria-pressed="false">2025</button>
+        </div>
+        <label class="search-wrap">
+          <svg class="line-icon" aria-hidden="true" style="color:var(--muted)"><use href="#i-search"/></svg>
+          <span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">イベントを検索</span>
+          <input class="search" id="search" type="search" placeholder="イベント・都市を検索" autocomplete="off">
+        </label>
+      </div>
+
+      <p class="result-meta" id="result-meta" aria-live="polite">13件を表示中</p>
+
+      <div class="event-list" id="event-list">
+        <article class="event-card" data-year="2026" data-status="upcoming" data-search="Humanoid Robots Summit Europe HRS Stuttgart Liederhalle Frankfurt Finnair シュトゥットガルト フランクフルト ドイツ ヒューマノイド ロボット 2026 9月">
+          <div class="event-top"><span>01</span><span>SEP 2026</span></div>
+          <h3><a href="202609_HumanoidSummitEurope/">Humanoid Robots Summit Europe 2026</a></h3>
+          <p class="event-desc">9月7日〜14日。HRS Europe本体は9/9〜9/11（Liederhalle）。フライト・宿泊・週末の行動案までまとめた2名分の出張ガイド。</p>
+          <div class="tags"><span class="tag">Stuttgart</span><span class="tag">Frankfurt</span><span class="tag">Humanoid</span></div>
+          <div class="event-footer"><a href="202609_HumanoidSummitEurope/">旅程ページ →</a></div>
+        </article>
+
+        <article class="event-card" data-year="2026" data-status="upcoming" data-search="東京 千葉 家族旅行 2026 9月">
+          <div class="event-top"><span>02</span><span>SEP 2026</span></div>
+          <h3><a href="202609_tokyo-family-trip/">東京・千葉 家族旅行</a></h3>
+          <p class="event-desc">9月22日〜23日。東京・千葉を巡る2日間の家族旅行プラン。</p>
+          <div class="tags"><span class="tag">東京</span><span class="tag">千葉</span><span class="tag">家族旅行</span></div>
+          <div class="event-footer"><a href="202609_tokyo-family-trip/">旅程ページ →</a></div>
+        </article>
+
+        <article class="event-card" data-year="2026" data-status="upcoming" data-search="TechEx EuroBLECH Europe ヨーロッパ ドイツ オランダ 展示会 2026 10月">
+          <div class="event-top"><span>03</span><span>OCT 2026</span></div>
+          <h3><a href="202610_Europe_TechEx_EuroBLECH/">TechEx Europe × EuroBLECH</a></h3>
+          <p class="event-desc">10月17日〜25日。TechEx Europe、EuroBLECH、工場見学を含む欧州出張。</p>
+          <div class="tags"><span class="tag">Amsterdam</span><span class="tag">Germany</span><span class="tag">展示会</span></div>
+          <div class="event-footer"><a href="202610_Europe_TechEx_EuroBLECH/">旅程ページ →</a></div>
+        </article>
+
+        <article class="event-card" data-year="2026" data-status="completed" data-search="RSS 2026 Robotics Science Systems Sydney シドニー 学会 ロボット 7月">
+          <div class="event-top"><span>04</span><span>JUL 2026</span></div>
+          <h3><a href="202607_RSS/">RSS 2026 · Sydney</a></h3>
+          <p class="event-desc">7月11日〜18日。シドニーで開催された Robotics: Science and Systems の日別旅程と参加計画。</p>
+          <div class="tags"><span class="tag">Sydney</span><span class="tag">Robotics</span><span class="tag">国際会議</span></div>
+          <div class="event-footer">
+            <a href="202607_RSS/">日別旅程 →</a>
+            <a href="202607_RSS/rss_2026_family_overview_html.html">家族向け概要</a>
+          </div>
+        </article>
+
+        <article class="event-card" data-year="2026" data-status="completed" data-search="ICRA Robotics Summit Boston Vienna ボストン ウィーン 学会 展示会 ロボット 2026 5月 6月">
+          <div class="event-top"><span>05</span><span>MAY — JUN 2026</span></div>
+          <h3><a href="202605_RoboticsSummit_ICRA/robotics_icra/trip_overview.html">Robotics Summit × ICRA 2026</a></h3>
+          <p class="event-desc">5月25日〜6月7日。ボストンの Robotics Summit &amp; Expo とウィーンの ICRA 2026を巡る旅程。</p>
+          <div class="tags"><span class="tag">Boston</span><span class="tag">Vienna</span><span class="tag">Robotics</span></div>
+          <div class="event-footer">
+            <a href="202605_RoboticsSummit_ICRA/robotics_icra/trip_overview.html">旅程概観 →</a>
+            <a href="202605_RoboticsSummit_ICRA/robotics_icra/robotics_summit_schedule.html">Robotics Summit</a>
+            <a href="202605_RoboticsSummit_ICRA/robotics_icra/icra2026_schedule.html">ICRA 2026</a>
+          </div>
+        </article>
+
+        <article class="event-card" data-year="2026" data-status="completed" data-search="Taiwan Malaysia 台湾 マレーシア SEMICON SEA 出張 展示会 2026 4月 5月">
+          <div class="event-top"><span>06</span><span>APR — MAY 2026</span></div>
+          <h3><a href="202604_Taiwan_Malaysia/01_行程管理_Itinerary/台湾～マレーシア_travel_itinerary_complete.html">台湾 × マレーシア出張</a></h3>
+          <p class="event-desc">4月28日〜5月7日。台湾での実験とマレーシアでの市場視察・SEMICON SEAをまとめた旅程。</p>
+          <div class="tags"><span class="tag">Taiwan</span><span class="tag">Malaysia</span><span class="tag">SEMICON SEA</span></div>
+          <div class="event-footer">
+            <a href="202604_Taiwan_Malaysia/01_行程管理_Itinerary/台湾～マレーシア_travel_itinerary_complete.html">出張旅程 →</a>
+            <a href="202604_Taiwan_Malaysia/02_視察_SEMICON_SEA/SEMICON_SEA_2026/SEMICON_SEA_2026_共同調査ダッシュボード.html">視察ダッシュボード</a>
+          </div>
+        </article>
+
+        <article class="event-card" data-year="2026" data-status="completed" data-search="東京 家族旅行 日帰り 2026 3月">
+          <div class="event-top"><span>07</span><span>MAR 2026</span></div>
+          <h3><a href="202603_Tokyo_Family/tokyo_family_trip_2026_complete.html">東京 日帰り家族旅行</a></h3>
+          <p class="event-desc">3月28日。東京を巡る日帰り家族旅行の完成版プラン。</p>
+          <div class="tags"><span class="tag">東京</span><span class="tag">日帰り</span><span class="tag">家族旅行</span></div>
+          <div class="event-footer"><a href="202603_Tokyo_Family/tokyo_family_trip_2026_complete.html">旅程ページ →</a></div>
+        </article>
+
+        <article class="event-card" data-year="2025" data-status="completed" data-search="Germany ドイツ 出張 2025 12月">
+          <div class="event-top"><span>08</span><span>DEC 2025</span></div>
+          <h3><a href="202512_ICNAP/Trip_Itinerary_Germany_2025.html">ICNAP・ドイツ出張 2025</a></h3>
+          <p class="event-desc">12月8日〜13日。ドイツ出張から帰宅までの移動と予定をまとめた旅程表。</p>
+          <div class="tags"><span class="tag">Germany</span><span class="tag">出張</span><span class="tag">Archive</span></div>
+          <div class="event-footer"><a href="202512_ICNAP/Trip_Itinerary_Germany_2025.html">旅程ページ →</a></div>
+        </article>
+
+        <article class="event-card" data-year="2025" data-status="completed" data-search="Humanoid China 中国 蘇州 上海 深セン ヒューマノイド 視察 2025 11月">
+          <div class="event-top"><span>09</span><span>NOV 2025</span></div>
+          <h3><a href="202511_HumanoidChina/humanoidsChina_itinerary_withConversation.html">中国ヒューマノイド視察</a></h3>
+          <p class="event-desc">11月16日〜21日。蘇州・上海・深センを巡るヒューマノイド関連企業の視察旅程。</p>
+          <div class="tags"><span class="tag">Suzhou</span><span class="tag">Shanghai</span><span class="tag">Shenzhen</span></div>
+          <div class="event-footer"><a href="202511_HumanoidChina/humanoidsChina_itinerary_withConversation.html">旅程ページ →</a></div>
+        </article>
+
+        <article class="event-card" data-year="2025" data-status="completed" data-search="EMO Hannover ドイツ ハノーバー 工作機械 展示会 2025 9月">
+          <div class="event-top"><span>10</span><span>SEP 2025</span></div>
+          <h3><a href="202509_EMO/">EMO Hannover 2025</a></h3>
+          <p class="event-desc">9月20日〜26日。ハノーバーでのEMO視察とベルリン移動をまとめた出張旅程。</p>
+          <div class="tags"><span class="tag">Hannover</span><span class="tag">Berlin</span><span class="tag">展示会</span></div>
+          <div class="event-footer">
+            <a href="202509_EMO/">旅程ページ →</a>
+            <a href="202509_EMO/emo_itinerary.html">詳細版</a>
+          </div>
+        </article>
+
+        <article class="event-card" data-year="2025" data-status="completed" data-search="Fraunhofer IFA Sweden Germany スウェーデン ドイツ ベルリン 視察 2025 8月 9月">
+          <div class="event-top"><span>11</span><span>AUG — SEP 2025</span></div>
+          <h3><a href="202508_Fraunhofer/ForFamily.html">Fraunhofer・IFA視察</a></h3>
+          <p class="event-desc">8月30日〜9月10日。スウェーデンとドイツを巡る技術視察・IFA出張の旅程。</p>
+          <div class="tags"><span class="tag">Sweden</span><span class="tag">Germany</span><span class="tag">IFA</span></div>
+          <div class="event-footer">
+            <a href="202508_Fraunhofer/ForFamily.html">旅程ページ →</a>
+            <a href="202508_Fraunhofer/ifa_2025_inspection_guide.html">IFA視察ガイド</a>
+          </div>
+        </article>
+
+        <article class="event-card" data-year="2025" data-status="completed" data-search="Humanoids Summit AI Big Data Expo London San Francisco ロンドン サンフランシスコ 2025 5月 6月">
+          <div class="event-top"><span>12</span><span>MAY — JUN 2025</span></div>
+          <h3><a href="202505_HumanoidsSummit_AI_BIGDATA_EXPO/LondonSanFrancisco2025_Expanded.html">Humanoids Summit × AI &amp; Big Data Expo</a></h3>
+          <p class="event-desc">5月27日〜6月7日。ロンドンとサンフランシスコを巡る国際イベント出張。</p>
+          <div class="tags"><span class="tag">London</span><span class="tag">San Francisco</span><span class="tag">AI</span></div>
+          <div class="event-footer">
+            <a href="202505_HumanoidsSummit_AI_BIGDATA_EXPO/LondonSanFrancisco2025_Expanded.html">旅程ページ →</a>
+            <a href="202505_HumanoidsSummit_AI_BIGDATA_EXPO/london_oxford_trip_cost.html">費用概算</a>
+          </div>
+        </article>
+
+        <article class="event-card" data-year="2025" data-status="completed" data-search="GITEX Asia Singapore シンガポール AI ロボティクス 企業 展示会 2025 4月">
+          <div class="event-top"><span>13</span><span>APR 2025</span></div>
+          <h3><a href="202504_GITEX-ASIA/GITEX_AI_Robotics_Companies_Alphabetical_Corrected.html">GITEX Asia 2025</a></h3>
+          <p class="event-desc">シンガポールで開催されたGITEX AsiaのAI・ロボティクス関連企業リスト。</p>
+          <div class="tags"><span class="tag">Singapore</span><span class="tag">AI</span><span class="tag">Robotics</span></div>
+          <div class="event-footer"><a href="202504_GITEX-ASIA/GITEX_AI_Robotics_Companies_Alphabetical_Corrected.html">企業一覧 →</a></div>
+        </article>
+      </div>
+
+      <div class="empty" id="empty">該当するイベントが見つかりませんでした。</div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <div>
+      <strong>Event Pages</strong> — 旅程とイベント資料のインデックス
+    </div>
+    <div>03 Timeline + 07 Map + 08 Calendar</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var TRIPS = [
+    { id: 'hrs',       name: 'HRS Europe',          from: '2026-09-07', to: '2026-09-14', color: 'var(--orange)' },
+    { id: 'tokyo',     name: '東京・千葉',           from: '2026-09-22', to: '2026-09-23', color: 'var(--teal)' },
+    { id: 'euroblech', name: 'TechEx × EuroBLECH',  from: '2026-10-17', to: '2026-10-25', color: 'var(--plum)' }
+  ];
+  var MONTHS = [[2026, 7], [2026, 8], [2026, 9], [2026, 10]];
+  var MON_LABEL = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+
+  function ymd(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  /* ---- countdown ---- */
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+  var next = TRIPS.filter(function (t) { return new Date(t.to + 'T00:00:00') >= today; })[0] || TRIPS[0];
+  var start = new Date(next.from + 'T00:00:00');
+  var diff = Math.round((start - today) / 86400000);
+  var cdDays = document.getElementById('cd-days');
+  var cdSub = document.getElementById('cd-sub');
+  if (diff > 0) { cdDays.textContent = diff; cdSub.textContent = '出発まで'; }
+  else if (diff === 0) { cdDays.textContent = '0'; cdSub.textContent = '本日出発'; }
+  else { cdDays.textContent = Math.abs(diff); cdSub.textContent = '出発から'; }
+
+  /* ---- calendar band (08) ---- */
+  var cal = document.getElementById('cal');
+  var head = document.createElement('div');
+  head.className = 'cal-row cal-head';
+  head.appendChild(document.createElement('span'));
+  for (var d = 1; d <= 31; d++) {
+    var s = document.createElement('span');
+    s.className = 'cal-day';
+    s.textContent = d;
+    head.appendChild(s);
+  }
+  cal.appendChild(head);
+
+  MONTHS.forEach(function (m) {
+    var row = document.createElement('div');
+    row.className = 'cal-row';
+    var label = document.createElement('span');
+    label.className = 'cal-month';
+    label.textContent = MON_LABEL[m[1]] + ' ' + String(m[0]).slice(2);
+    row.appendChild(label);
+
+    var last = new Date(m[0], m[1] + 1, 0).getDate();
+    for (var day = 1; day <= 31; day++) {
+      var cell = document.createElement('span');
+      cell.className = 'cal-cell';
+      if (day > last) {
+        cell.className += ' void';
+        row.appendChild(cell);
+        continue;
+      }
+      var date = new Date(m[0], m[1], day);
+      var key = ymd(date);
+      var dow = date.getDay();
+      if (dow === 0 || dow === 6) cell.className += ' weekend';
+      TRIPS.forEach(function (t) {
+        if (key >= t.from && key <= t.to) {
+          cell.className += ' trip';
+          cell.dataset.trip = t.id;
+          cell.style.setProperty('--accent', t.color);
+          cell.title = t.name + '（' + key + '）';
+        }
+      });
+      if (key === ymd(today)) cell.className += ' today';
+      row.appendChild(cell);
+    }
+    cal.appendChild(row);
+  });
+
+  /* ---- focus sync: timeline (03) / map (07) / calendar (08) ---- */
+  var trips = Array.prototype.slice.call(document.querySelectorAll('.trip'));
+  var pins = Array.prototype.slice.call(document.querySelectorAll('.pin'));
+  var bars = Array.prototype.slice.call(document.querySelectorAll('.cal-cell.trip'));
+  var far = document.getElementById('map-far');
+
+  function focus(id) {
+    trips.forEach(function (el) { el.classList.toggle('is-active', el.dataset.trip === id); });
+    pins.forEach(function (el) { el.classList.toggle('is-active', el.dataset.city === id); });
+    bars.forEach(function (el) { el.classList.toggle('is-active', el.dataset.trip === id); });
+    far.style.visibility = (id === 'tokyo') ? 'hidden' : 'visible';
+  }
+
+  trips.forEach(function (el) {
+    el.addEventListener('click', function () { focus(el.dataset.trip); });
+    el.addEventListener('mouseenter', function () { focus(el.dataset.trip); });
+    el.addEventListener('focus', function () { focus(el.dataset.trip); });
+    el.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); focus(el.dataset.trip); }
+    });
+  });
+  focus(next.id);
+
+  /* ---- library filter + search ---- */
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.event-card'));
+  var filters = Array.prototype.slice.call(document.querySelectorAll('.filter'));
+  var search = document.getElementById('search');
+  var meta = document.getElementById('result-meta');
+  var empty = document.getElementById('empty');
+  var mode = 'all';
+
+  function apply() {
+    var q = search.value.trim().toLowerCase();
+    var shown = 0;
+    cards.forEach(function (card) {
+      var okMode =
+        mode === 'all' ||
+        (mode === 'upcoming' && card.dataset.status === 'upcoming') ||
+        mode === card.dataset.year;
+      var hay = (card.dataset.search + ' ' + card.textContent).toLowerCase();
+      var okQ = !q || hay.indexOf(q) !== -1;
+      var ok = okMode && okQ;
+      card.style.display = ok ? '' : 'none';
+      if (ok) shown++;
+    });
+    meta.textContent = shown + '件を表示中';
+    empty.classList.toggle('is-shown', shown === 0);
+  }
+
+  filters.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      mode = btn.dataset.filter;
+      filters.forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+      apply();
+    });
+  });
+  search.addEventListener('input', apply);
+  apply();
+})();
+</script>
+</body>
+</html>

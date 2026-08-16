@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ja">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>07 Map + Trips</title>
+<style>
+:root{
+  --bg:#f6f7fb; --panel:#ffffff; --ink:#172033; --muted:#6b7280; --line:#e7eaf0;
+  --blue:#315efb; --green:#12a66a; --amber:#e69b16; --red:#d64b4b; --shadow:0 10px 30px rgba(24,32,51,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Yu Gothic UI","Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+a{text-decoration:none;color:inherit}
+.shell{max-width:1240px;margin:0 auto;padding:24px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.brand{font-weight:800;letter-spacing:.08em}
+.sub{color:var(--muted);font-size:13px}
+.pill{display:inline-flex;gap:7px;align-items:center;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-size:13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.grid{display:grid;gap:16px}
+.h1{font-size:34px;font-weight:850;line-height:1.1}
+.h2{font-size:20px;font-weight:800}
+.small{font-size:13px;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:10px;background:#172033;color:#fff;font-weight:700;font-size:13px}
+.btn.ghost{background:#fff;color:#172033;border:1px solid var(--line)}
+.progress{height:8px;border-radius:999px;background:#edf0f6;overflow:hidden}
+.progress>span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#315efb,#6b8cff)}
+.tag{display:inline-flex;padding:6px 9px;border-radius:8px;background:#f0f3ff;color:#315efb;font-size:12px;font-weight:700}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.back{position:fixed;right:18px;bottom:18px;background:#172033;color:#fff;padding:10px 14px;border-radius:999px;box-shadow:var(--shadow);font-size:12px}
+@media(max-width:800px){.shell{padding:14px}.h1{font-size:28px}}
+
+.map{background:radial-gradient(circle at 40% 40%,#eef3ff 0,#eef3ff 28%,#f9fbff 29%,#f9fbff 100%)}.continent{position:absolute;font-weight:900;color:#c4ccdc;letter-spacing:.18em}.eur{left:28%;top:36%}.asia{right:18%;top:42%}.pin{position:absolute;color:#315efb;font-size:20px}.pin span{display:block;background:#fff;border:1px solid var(--line);padding:5px 8px;border-radius:8px;font-size:11px;color:#172033;white-space:nowrap;box-shadow:var(--shadow)}</style></head>
+<body>
+<div class="shell">
+
+<div class="topbar"><div><div class="brand">TRAVEL MAP</div><div class="sub">Where next?</div></div><span class="pill">Map + list</span></div>
+<div class="grid" style="grid-template-columns:1.3fr .7fr">
+  <div class="card map" style="min-height:520px;position:relative;overflow:hidden">
+    <div class="continent eur">EUROPE</div><div class="continent asia">ASIA</div>
+    <div class="pin" style="left:37%;top:34%">●<span>Stuttgart</span></div>
+    <div class="pin" style="left:31%;top:27%">●<span>Amsterdam</span></div>
+    <div class="pin" style="left:38%;top:27%">●<span>Hannover</span></div>
+    <div class="pin" style="left:45%;top:46%">●<span>Athens</span></div>
+  </div>
+  <aside class="card" style="padding:22px"><div class="h2">Upcoming trips</div>
+    <div style="display:grid;gap:18px;margin-top:18px">
+      <div><b>🇩🇪 Stuttgart</b><div class="small">Sep 7–14</div></div>
+      <div><b>🇳🇱 Amsterdam</b><div class="small">Oct 19–20</div></div>
+      <div><b>🇩🇪 Hannover</b><div class="small">Oct 21–24</div></div>
+      <div><b>🇬🇷 Athens</b><div class="small">Jul 2027</div></div>
+    </div>
+  </aside>
+</div>
+
+</div>
+<a class="back" href="index.html">← 10案一覧</a>
+</body></html>
