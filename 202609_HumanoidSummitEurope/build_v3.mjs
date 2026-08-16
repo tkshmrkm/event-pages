@@ -168,7 +168,11 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
   .hdr-top .no-print{align-self:center}
   .hdr .eyebrow{font-size:11px}
   .hdr h1{font-size:18px}
-  .tabs button{min-width:0;padding-left:8px;padding-right:8px}
+  /* 5タブ（概要・旅程・会場・準備・記録）だと8pxでは393pxに12px足りず、記録の右端が
+     切れる。スクロールバーはCSSで消してあるので、切れていることに気付けない。
+     6pxで5×68=340pxに収まる。min-height:48pxは触らないので指で押せる高さは変わらない
+     （2026-08-16に実測）。 */
+  .tabs button{min-width:0;padding-left:6px;padding-right:6px}
   .day-head .t{padding-right:64px}
   .action{grid-template-columns:82px minmax(0,1fr)}
   .action>div{padding:10px 9px}
@@ -1215,6 +1219,7 @@ function buildMain({ offline = false } = {}) {
       <button data-tab="overview" role="tab" aria-controls="tab-overview" aria-selected="false"><span class="ic">${lineIconHtml('compass')}</span>概要</button>
       <button data-tab="plan" class="on" role="tab" aria-controls="tab-plan" aria-selected="true"><span class="ic">📅</span>旅程</button>
       <button data-tab="venue" role="tab" aria-controls="tab-venue" aria-selected="false"><span class="ic">🤖</span>会場</button>
+      <button data-tab="prep" role="tab" aria-controls="tab-prep" aria-selected="false"><span class="ic">✅</span>準備</button>
       <button data-tab="rec" role="tab" aria-controls="tab-rec" aria-selected="false"><span class="ic">📝</span>記録</button>
     </nav>
     <div class="subbar" id="subbar">
@@ -1459,7 +1464,18 @@ function buildMain({ offline = false } = {}) {
     `${secondaryEntry}\n</section>\n\n$1`,
     'prep boundary'
   );
-  html = mustReplace(html, '<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">', '<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">\n  <div class="no-print" style="margin-bottom:10px"><button class="btn" data-goto="plan">← 旅程へ戻る</button></div>', 'prep section');
+  // 準備はナビに出す（2026-08-16）。それまでは旅程タブのボタンからしか開けない
+  // 隠し部屋で、中の「利用フライト」がオンライン版では事実上たどり着けなかった。
+  // このタブには寿命がある。出発前に中身が全部埋まったことを確認したら、タブごと
+  // 外す。そのとき現地で要る情報（便の時刻など）が準備にしか無い状態にしないこと。
+  // 旅程の日カードが同じ便を持っているかを、外す前に必ず確かめる。
+  // タブになったので「← 旅程へ戻る」は不要。隠し部屋だったころの導線。
+  html = mustReplace(html,
+    '<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">',
+    '<section class="tab" id="tab-prep" role="tabpanel" aria-label="準備">\n  <div class="banner b-info no-print" style="margin-bottom:10px">'
+    + lineIconHtml('checkCircle')
+    + '<div><strong>出発前に埋めるタブ</strong>。全部そろったら、このタブは畳んで構わない</div></div>',
+    'prep section');
 
   // ---------- 利用フライトの2つの表をカードへ差し替える ----------
   // 往路の<h3>から復路の表の終わりまでをまとめて置き換える。表の値は

@@ -59,7 +59,13 @@ assert(online.includes("['overview','plan','venue','rec','prep'].includes(store.
 });
 assert(sharedCss.includes('.ov-days{') && sharedCss.includes('.ov-facility{'), 'v3.css: overview styles missing');
 assert((online.match(/<details class="day" open/g) || []).length === 8, `${onlineName}: all eight days must start open`);
-assert(!online.includes('data-tab="prep"') && !online.includes('data-tab="fam"'), `${onlineName}: secondary content leaked into primary navigation`);
+// 準備は2026-08-16に正式タブへ。それまでは旅程タブのボタンからしか開けず、中の
+// 「利用フライト」へオンライン版から事実上たどり着けなかった。EBは先に4タブ化済み。
+// 家族はタブにしない。family_print.htmlが正本で、そちらを直接共有する。
+assert(!online.includes('data-tab="fam"'), `${onlineName}: the family copy must stay a separate page, not a tab`);
+assert(online.includes('data-tab="prep"') && online.includes('id="tab-prep"'), `${onlineName}: preparation must be reachable from the primary navigation`);
+// 隠し部屋だったころの戻り導線。タブになった以上は残さない。
+assert(!online.includes('data-goto="plan">← 旅程へ戻る'), `${onlineName}: the back-to-itinerary button belonged to the hidden prep tab`);
 assert(online.includes('id="btn-export-json"') && online.includes('id="import-json"'), `${onlineName}: JSON transfer controls missing`);
 assert(online.includes('id="btn-download-md"') && online.includes('buildRecordMarkdown()') && online.includes('text/markdown;charset=utf-8'), `${onlineName}: final Markdown download missing`);
 assert(online.includes("plan-confirmed:"), `${onlineName}: plan confirmation state missing`);
