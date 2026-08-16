@@ -1721,6 +1721,14 @@ function overviewDayRows() {
 function buildOverviewSection(source, undecidedBanner) {
   // 使う事実はすべて既存ソースの中にある。新しい固有名詞・数字は持ち込まない。
   // ソースが変わったら気付けるよう、使う前に確認する（家族サマリーと同じ規律）。
+  // 主催・規模・前回開催だけは、このリポジトリのどこにも無かった外部の事実。
+  // 2026-08-16にhumanoidrobotssummit.comとacgrobot.comを実際に開いて確認した。
+  //   主催   ACG Events Global（両サイトの表記。ページ内の「主催 acgrobot」リンクとも一致）
+  //   規模   参加1,000名超・500社超・出展40社超（いずれも主催者の見込み値）
+  //   前回   HRS Europe 2025 ベルリン、参加500名超（acgrobot.comの記載）
+  // 登壇者数は同一ページ内で「30+」と「40」が食い違っていたので載せない。
+  // 見込み値を実績のように書かないこと。画面にも主催者発表である旨と出典を出す。
+  // これらはソース照合の対象外（元のHTMLに無いのが当然のため）。
   const overviewFacts = [
     '9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA',
     'Liederhalle', 'Berliner Platz 1-3', 'ホテルから徒歩約3分',
@@ -1792,7 +1800,13 @@ function buildOverviewSection(source, undecidedBanner) {
         <div><b>Day 2</b><span>9/10（木）全${d2}セッション — 医療応用・センサー・GDPR・フレキシブル生産ライン</span></div>
         <div><b>Day 3</b><span>9/11（金）近郊企業へのガイド付き訪問（訪問先は開催直前に公式発表）</span></div>
       </div>
+      <div class="ov-facility">
+        <div><b>主催</b><span><a class="place" href="https://acgrobot.com/" target="_blank" rel="noopener">ACG Events Global</a></span></div>
+        <div><b>規模</b><span>参加1,000名超・500社超・出展40社超の見込み（主催者発表）</span></div>
+        <div><b>前回</b><span>HRS Europe 2025（ベルリン）参加500名超。今回がシュトゥットガルトへの移転初回</span></div>
+      </div>
       <div>${lineIconHtml('star')}主要出展社：Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA</div>
+      <div class="small muted">規模と前回実績は主催者の公表値で、第三者による検証はされていない。出典：<a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">humanoidrobotssummit.com</a>・<a href="https://acgrobot.com/" target="_blank" rel="noopener">acgrobot.com</a>（2026-08-16 閲覧）</div>
       <div class="ov-more no-print"><button class="btn" data-goto="venue">${lineIconHtml('book')}セッション表と当日メモへ</button></div>
     </div>
   </div>
