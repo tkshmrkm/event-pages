@@ -6,6 +6,7 @@ import vm from 'node:vm';
 const here = dirname(fileURLToPath(import.meta.url));
 const html = readFileSync(join(here, 'index.html'), 'utf8');
 const css = readFileSync(join(here, 'v3.css'), 'utf8');
+const cssRules = css.replace(/\/\*[\s\S]*?\*\//g, '');
 const js = readFileSync(join(here, 'v3.js'), 'utf8');
 const hrsCss = readFileSync(join(here, '..', '202609_HumanoidSummitEurope', 'v3.css'), 'utf8');
 const familyPrint = readFileSync(join(here, 'family_print.html'), 'utf8');
@@ -97,6 +98,15 @@ const checks = [
   ['line icon size comes from the shared stylesheet', /\.line-icon\{[^}]*width:1\.15em/.test(hrsCss) && !/(^|[^ ])\.line-icon\{/m.test(css) && css.includes('[class*="bg-gray-700"] .line-icon')],
   ['no oversized itinerary time cells', rowTimes.every(value => value.length <= 32)],
   ['four-column mobile contract retained', /@media\(max-width:640px\)[\s\S]*\.route-four,.lanes \.route-four\{grid-template-columns:72px minmax\(0,1fr\) 74px minmax\(0,1fr\)\}/.test(css)],
+  // ---------- 家族向けのフライトカードの死蔵CSS（2026-08-16に削除） ----------
+  // ブロックは2026-08-15に落とした。規則だけ残ると、次に触る人が使われていると読む。
+  // 使いたくなったら core.css の .flight-card を読む。ここへ書き戻さない。
+  // 消えたことを説明するコメントが本文に残るので、コメントを外してから探す。
+  ['the retired flight-card rules are gone from the event stylesheet',
+    ['.flight-card', '.flight-leg', '.flight-point', '.flight-route', '.layover', '.flight-fares',
+      '.fare-card', '.flight-status', '.flight-label', '.carrier-guide', '.flight-spec-guide']
+      .every(rule => !cssRules.includes(rule))
+    && hrsCss.includes('.flight-card{')],
   // ---------- 家族向け印刷版 ----------
   // 家族向けの正本はfamily_print.html。オンライン版のタブからは外したので、
   // 以下はindex.htmlではなくfamily_print.htmlを見る。
