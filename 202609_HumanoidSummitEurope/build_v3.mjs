@@ -1214,7 +1214,10 @@ function buildMain({ offline = false } = {}) {
         <h1>HRS Europe 2026 フィールドガイド${offline ? '<span class="offline-mark">DESK PRINT</span>' : ''}</h1>
         <div class="subtitle">9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA</div>
       </div>
-      <div class="${offline ? 'desk-print-trigger' : 'no-print'}" style="display:flex;gap:5px;flex-shrink:0">
+      <div class="${offline ? 'desk-print-trigger' : 'no-print header-actions'}" style="display:flex;gap:5px;flex-shrink:0">
+        <a class="btn" href="family_print.html">${printIconHtml}家族</a>
+        <a class="btn" href="immigration_print.html" title="入国審査用（英語）">${printIconHtml}入国</a>
+        <a class="btn" href="session_speaker_notes.html" title="セッション×登壇者の予想・Day3訪問先の詳細（別ページ）">${lineIconHtml('book')}レポ</a>
         <button class="btn" onclick="window.print()" aria-label="印刷">${printIconHtml}</button>
       </div>
     </div>
@@ -1445,12 +1448,10 @@ function buildMain({ offline = false } = {}) {
 
   const secondaryEntry = String.raw`
   <details class="card secondary-entry">
-    <summary class="ttl" style="cursor:pointer;list-style:none"><h2 style="display:inline;font:inherit;margin:0">出発前の準備・家族向け資料</h2></summary>
+    <summary class="ttl" style="cursor:pointer;list-style:none"><h2 style="display:inline;font:inherit;margin:0">出発前の準備</h2></summary>
     <div class="bd">
       <a class="btn" href="#" data-goto="prep">✅ 出発前準備を開く</a>
-      <a class="btn" href="family_print.html">${printIconHtml} 家族向け印刷版</a>
-      <a class="btn" href="immigration_print.html">${printIconHtml} 入国審査用（英語・氏名と旅券番号を記入して印刷）</a>
-      <span class="small muted">現地で頻繁に使わない情報は主要ナビから分離しています。</span>
+      <span class="small muted">家族向け印刷版・入国審査用・セッション×登壇者レポはヘッダーの「家族／入国／レポ」から開けます。</span>
     </div>
   </details>
 `;
