@@ -593,7 +593,7 @@ for (const [from, to, scope] of SOURCE_TEXT_REPLACEMENTS) {
   source = scope === 'all' ? source.split(from).join(to) : source.replace(from, to);
 }
 source = source
-  .replace(/<title>[\s\S]*?<\/title>/i, '<title>TechEx Europe・EuroBLECH 2026 フィールドガイド v3</title>')
+  .replace(/<title>[\s\S]*?<\/title>/i, '<title>TechEx Europe・EuroBLECH 2026 出張ガイド</title>')
   .replace(/<link[^>]+font-awesome[^>]*>/gi, '')
   .replace(/<script[^>]+cdn\.tailwindcss\.com[^>]*><\/script>/gi, '')
   .replace(/<style>[\s\S]*?<\/style>/i, '')

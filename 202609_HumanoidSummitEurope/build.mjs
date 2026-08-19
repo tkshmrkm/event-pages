@@ -349,7 +349,7 @@ const familyCss = String.raw`
    「ひと目で俯瞰する場所」でなくなる（2026-08-16）。 */
 // 冒頭バナーの未確定サマリー。概要タブの日程概要も、どの日に札を付けるかを
 // この1文から決める。未確定の日付を2か所で別々に持つと、片方だけ古くなる。
-const UNDECIDED_BANNER = '未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。便とホテルは確定済み。';
+const UNDECIDED_BANNER = '未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。';
 
 const overviewCss = String.raw`
 .ov-days{width:100%;border-collapse:collapse;font-size:13px}
@@ -1198,7 +1198,7 @@ const markdownDownloadHandlers = String.raw`    return L.join('\n');
 
 function buildMain({ offline = false } = {}) {
   let html = source;
-  html = mustReplace(html, '<title>HRS Europe 2026 出張ガイド（v2・標準形）</title>', `<title>HRS Europe 2026 フィールドガイド v3${offline ? '（机上用印刷版）' : ''}</title>`, 'title');
+  html = mustReplace(html, '<title>HRS Europe 2026 出張ガイド（v2・標準形）</title>', `<title>HRS Europe 2026 出張ガイド${offline ? '（机上用印刷版）' : ''}</title>`, 'title');
   if (offline) {
     html = mustReplace(html, /<!--[\s\S]*?-->/, '<!-- Self-contained static desk-print copy; no note storage or runtime scripts. -->', 'desk-print document note');
   }
@@ -1226,9 +1226,9 @@ function buildMain({ offline = false } = {}) {
   <div class="wrap">
     <div class="hdr-top">
       <div>
-        <div class="eyebrow">🇩🇪 HRS EUROPE 2026 · STUTTGART</div>
-        <h1>HRS Europe 2026 フィールドガイド${offline ? '<span class="offline-mark">DESK PRINT</span>' : ''}</h1>
-        <div class="subtitle">9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA</div>
+        <div class="eyebrow">GERMANY BUSINESS TRIP 2026</div>
+        <h1>HRS Europe 2026 出張ガイド${offline ? '<span class="offline-mark">DESK PRINT</span>' : ''}</h1>
+        <div class="subtitle">9/7（月）〜9/14（月）｜2名｜シュトゥットガルト・フランクフルト</div>
       </div>
       <div class="${offline ? 'desk-print-trigger' : 'no-print header-actions'}" style="display:flex;gap:5px;flex-shrink:0">
         <a class="btn" href="family_print.html">${printIconHtml}家族</a>
@@ -1847,7 +1847,7 @@ function buildOverviewSection(source, undecidedBanner) {
   // 見込み値を実績のように書かないこと。画面にも主催者発表である旨と出典を出す。
   // これらはソース照合の対象外（元のHTMLに無いのが当然のため）。
   const overviewFacts = [
-    '9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA',
+    '9/7（月）〜9/14（月）｜2名｜シュトゥットガルト・フランクフルト',
     'Liederhalle', 'Berliner Platz 1-3', 'ホテルから徒歩約3分',
     '9/9・9/10 は講演＋展示（40+社）／9/11 は近郊企業訪問',
     'Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA',
@@ -2036,7 +2036,7 @@ function buildFamily() {
   // 出張サマリーで使う事実は、すべて既存ソースの中に既にある（新しい固有名詞・
   // 数字は持ち込まない）。ソースが変わったら気付けるよう、使う前に確認する。
   const summaryFacts = [
-    '9/7（月）発 〜 9/14（月）着 ｜ 2名 ｜ Finnair NGO⇔FRA',
+    '9/7（月）〜9/14（月）｜2名｜シュトゥットガルト・フランクフルト',
     'ロボットの国際会議',
     '9月14日（月）', '中部国際空港（セントレア）着',
     '入国審査・荷物受取に約40分', '20:35頃 セントレア発（ミュースカイ）',
