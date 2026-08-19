@@ -824,6 +824,7 @@ const FOLD_NOTES = [
   { lead: '・Markthalle Stuttgart', summary: 'ランチ候補' },
   { lead: 'セッション一覧（全11項目', summary: '会期の内訳' },
   { lead: 'Liederhalle前からチャーターバスで出発', summary: '訪問の詳細' },
+  { lead: 'Universität駅からS1直通で乗り換えなし', visible: 'Universität駅からS1直通で乗り換えなし', summary: '見どころと未確認事項' },
   { lead: 'ワンワールド便。JAL/ワンワールドサファイア', summary: 'ラウンジの利用資格' },
   { lead: 'クラシックダブル28㎡', summary: '予約条件' },
 
@@ -869,7 +870,9 @@ const PLAN_STATE_FIXUPS = [
   ['<span class="st st-booked">予約済</span>', planStateHtml('fixed'), 3],
   ['<span class="st st-booked">登録済</span>', planStateHtml('fixed'), 1],
   // ランチは候補が3つある（折り畳み「ランチ候補」）。
-  ['<span class="et t-tbd">要検討</span>', planStateHtml('candidate'), 1],
+  // 2026-08-19に2件へ。9/11の企業訪問が12:00で終わることが公式発表され、空いた午後に
+  // エスリンゲン観光を候補として置いたため（行くこと自体がまだ決まっていない＝候補あり）。
+  ['<span class="et t-tbd">要検討</span>', planStateHtml('candidate'), 2],
   // ワインシュトゥーベは候補の1つ。要予約は確定に必要な条件なので語を残す。
   ['<span class="st st-tbd">要予約</span>', `${planStateHtml('candidate')}<span class="state-note">要予約</span>`, 1],
   // Day 3の訪問先はFraunhofer IPA・ARENA2036の2社に確定。グループ分け（1／2）だけ
@@ -1314,7 +1317,9 @@ function buildMain({ offline = false } = {}) {
     return converted;
   });
   if (stacks !== 18) throw new Error(`Expected 18 itinerary tables, converted ${stacks}`);
-  if (actions !== 106) throw new Error(`Expected 106 itinerary rows, converted ${actions}`);
+  // 2026-08-19に106→107。9/11の企業訪問が12:00で終わると公式発表され、
+  // 空いた午後にエスリンゲン観光の行を1本足したぶん。
+  if (actions !== 107) throw new Error(`Expected 107 itinerary rows, converted ${actions}`);
 
   // ---------- フライトを4列にする ----------
   // 到着行（「HEL 着」など）は乗継や入国手続きを持つ別の出来事なのでまとめない。

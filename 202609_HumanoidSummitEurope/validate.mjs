@@ -305,7 +305,9 @@ assert(!online.includes('id="tab-fam"'), `${onlineName}: the unreachable family 
 const PLAN_STATES = ['未検討', '候補あり', '仮決め', '確定', '当日判断'];
 for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtml]]) {
   const labels = [...text.matchAll(/class="plan-state plan-state-\w+"[^>]*>([^<]*)</g)].map(m => m[1]);
-  assert(labels.length === 9, `${name}: expected 9 plan-state chips (got ${labels.length})`);
+  // 2026-08-19に9→10。9/11の企業訪問が12:00で終わることが公式発表され、
+  // 空いた午後にエスリンゲン観光を「候補あり」で1件足したぶん。
+  assert(labels.length === 10, `${name}: expected 10 plan-state chips (got ${labels.length})`);
   const unknown = [...new Set(labels)].filter(label => !PLAN_STATES.includes(label));
   assert(unknown.length === 0, `${name}: plan states must use only ${PLAN_STATES.join('／')} (got ${unknown.join(' ')})`);
   // 旧書式が復活していないこと。.st-skip（不参加）は進み具合の軸ではないので残す。
@@ -346,7 +348,9 @@ for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtm
   }
 }
 
-const FOLD_COUNT = 21;
+// 2026-08-19に21→22。9/11午後のエスリンゲン観光を足し、その見どころと
+// 未確認事項を折り畳み（見どころと未確認事項）へ入れたぶん。
+const FOLD_COUNT = 22;
 for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtml]]) {
   // 机上用印刷版は全<details>を強制的にopenへ書き換えるため、class="fold"の前に
   // open属性が挿入される（<details open class="fold">）。属性順に依存しない数え方にする。
