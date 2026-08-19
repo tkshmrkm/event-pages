@@ -349,7 +349,7 @@ const familyCss = String.raw`
    「ひと目で俯瞰する場所」でなくなる（2026-08-16）。 */
 // 冒頭バナーの未確定サマリー。概要タブの日程概要も、どの日に札を付けるかを
 // この1文から決める。未確定の日付を2か所で別々に持つと、片方だけ古くなる。
-const UNDECIDED_BANNER = '未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。便とホテルは確定済み。<a href="#day-0911">9/11</a> の企業訪問先は Fraunhofer IPA・ARENA2036 の2社（訪問順は未案内）。';
+const UNDECIDED_BANNER = '未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。便とホテルは確定済み。';
 
 const overviewCss = String.raw`
 .ov-days{width:100%;border-collapse:collapse;font-size:13px}

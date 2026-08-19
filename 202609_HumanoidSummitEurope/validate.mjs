@@ -117,20 +117,16 @@ assert(!/[぀-ヿ一-鿿]/.test(immiHtml), 'immigration_print.html: must be writ
 for (const fact of ['Liederhalle', 'Maritim Hotel Stuttgart', 'Best Western Hotel Airport Frankfurt', 'AY80', 'AY1416', 'return ticket held', 'Consulate-General of Japan in Frankfurt']) {
   assert(immiHtml.includes(fact), `immigration_print.html: missing ${fact}`);
 }
-// 冒頭の要約は、ページ自身が未検討の札を付けている日を落とさないこと。
-// 9/12・9/13（過ごし方）はこちらが決める段階で未確定。
-// 9/11（Day 3・企業訪問）は2026-08-19に訪問先（Fraunhofer IPA・ARENA2036）と
-// 集合方法（Liederhalle発のチャーターバス）が公式発表され、残るのはグループ分けだけに
-// なったため、「未確定は…の過ごし方」からは外した。ただし決定事項として要約から
-// 落とさないよう、別文でFraunhofer IPA・ARENA2036が名指しされていることを確かめる。
+// 冒頭の要約は「まだ決まっていないもの」だけを挙げる場所。決まった事実はここに
+// 書かず、その予定を持つ日カードとタブに置く（9/11の訪問先は旅程と視察が持つ）。
+// 残る未確定は9/12・9/13の過ごし方で、どちらもこちらが決める段階のもの。
 for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtml]]) {
   const flat = text.replace(/<[^>]*>/g, '');
   assert(/未確定は[^。]*9\/12[^。]*9\/13[^。]*の過ごし方/.test(flat),
     `${name}: the lead summary must list 9/12 and 9/13 as undecided`);
-  assert(!/9\/13\s*の過ごし方だけ/.test(flat),
-    `${name}: the lead summary must not claim only 9/12 and 9/13 are undecided`);
-  assert(/9\/11[^。]*Fraunhofer IPA[^。]*ARENA2036/.test(flat),
-    `${name}: the lead summary must still name 9/11's confirmed site-visit destinations`);
+  const lead = flat.slice(flat.indexOf('未確定は'), flat.indexOf('未確定は') + 120);
+  assert(!/Fraunhofer IPA|ARENA2036/.test(lead),
+    `${name}: settled facts belong in the day card, not in the undecided summary`);
 }
 for (const [name, text, flights] of [[onlineName, online, ONLINE_FLIGHT_ICONS], ['desk_print.html', offlineHtml, OFFLINE_FLIGHT_ICONS]]) {
   assert(countIn(text, /class="flight-mark"/g) === flights, `${name}: expected ${flights} flight-mark icons`);
