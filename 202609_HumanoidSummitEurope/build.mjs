@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const sharedDir = path.resolve(here, '..', 'shared', 'trip-field');
-const sourcePath = path.join(here, 'index_v2.html');
+const sourcePath = path.join(here, 'source.html');
 // 置換対象の文字列はLFで書いてある。リポジトリは .gitattributes の `* text=auto` と
 // core.autocrlf=true により作業ツリーがCRLFになるため、読み込み時にLFへそろえる。
 // これを外すと Windows のチェックアウトで Missing source fragment に必ず落ちる。
@@ -129,7 +129,7 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 .cloud-sync .cloud-remember input{width:18px;height:18px;margin:1px 0 0}
 .cloud-sync .cloud-actions{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:7px}
 .cloud-sync [data-trip-cloud-status]{min-height:1.5em;color:var(--mu);font-size:var(--f3)}
-/* 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーではなくここに置く（202610_Europe_TechEx_EuroBLECHのv3.cssと同一） */
+/* 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーではなくここに置く（202610_Europe_TechEx_EuroBLECHのstyle.cssと同一） */
 .day-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin:9px 0 0;color:var(--mu);font-size:var(--f5)}
 .day-toolbar .btn{padding:5px 11px;font-size:var(--f5)}
 /* 「＋詳細」トグルは廃止した。EUROBLECHにも無い。補足は常に出す。
@@ -251,7 +251,7 @@ const familyCss = String.raw`
 .sum-facts b{display:block;color:var(--tx);font-size:13px;font-weight:700}
 .sum-facts span{display:block;color:var(--tx2)}
 @media(max-width:420px){.sum-facts{grid-template-columns:1fr;text-align:left}}
-/* 日程詳細（家族向け）：202610_Europe_TechEx_EuroBLECHのv3.cssと同一定義
+/* 日程詳細（家族向け）：202610_Europe_TechEx_EuroBLECHのstyle.cssと同一定義
    （.schedule-body／.schedule-legend／.schedule-tag kind-*／.family-day-row／.agenda-line）。
    kind-*はHRSが実際に使う7種類だけを移植する（meal/techex/euro/visit/homeは未使用のため省く）。
    kind-moveとkind-workは共通トークン（--move/--move-tx/--conf/--conf-tx）を使うので、
@@ -296,7 +296,7 @@ const familyCss = String.raw`
    ゾーン名に国旗絵文字を入れない。国旗の合成外字はWindowsでは合成されず「JP」「DE」という
    文字のまま表示されることをユーザーが実機で確認済み（EuroBLECHは日本・ドイツの国旗を
    使うが、HRSでは意図的に外す。これはEuroBLECHとの意図的な相違）。
-   このコメント自身にも国旗を書かない。v3.cssは絵文字の一括置換を通らないので、
+   このコメント自身にも国旗を書かない。style.cssは絵文字の一括置換を通らないので、
    説明のつもりで書いた1文字がそのまま生成物に残る。 */
 .timezone-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .timezone-card{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:2px 8px;min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#F5F8F9;color:var(--tx2)}
@@ -324,7 +324,7 @@ const familyCss = String.raw`
   .family-head h1{font-size:20px}
   /* 日程詳細：header/section/asideの3列を2列（見出し＋本文）へ畳む。
      HRSは人別セクションを持たないので、本文列はsection・asideの2段だけでよい
-     （EuroBLECHは人別2枠＋asideの3段）。202610_Europe_TechEx_EuroBLECHのv3.css
+     （EuroBLECHは人別2枠＋asideの3段）。202610_Europe_TechEx_EuroBLECHのstyle.css
      と同じ考え方だが、段数がHRSの実態に合わせて少ない。 */
   /* EuroBLECHの58pxそのままだと、HRSの2桁日付（9/10・9/12・9/13・9/14）が
      見出しの<strong>内で42px要り、40pxの余白（58px−左右padding18px）に収まらず
@@ -428,7 +428,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
 }
 `;
 
-// ---------- 交通手段アイコン（202610_Europe_TechEx_EuroBLECHのbuild_v3.mjs 303〜325行目付近と同一） ----------
+// ---------- 交通手段アイコン（202610_Europe_TechEx_EuroBLECHのbuild.mjs 303〜325行目付近と同一） ----------
 // フライトは.flight-mark（core.cssのmaskアイコン）、それ以外は.mode-icon配下にSVGを差し込む。
 const MODE_ICON_PATHS = {
   train: '<rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/>',
@@ -915,7 +915,7 @@ const dayToggleScript = String.raw`  const openDay = id => {
 
   /* ---------- 日付カードの一括開閉 ----------
      ラベルは今の状態を示すので、個別に開閉したときや日付チップで
-     開いたときも追随させる（202610_Europe_TechEx_EuroBLECHのv3.jsと同一の判定）。
+     開いたときも追随させる（202610_Europe_TechEx_EuroBLECHのpage.jsと同一の判定）。
      開閉状態は保存しない（既定は全部開く）。                                */
   const daysToggle = document.getElementById('days-tg');
   const syncDaysToggle = () => {
@@ -935,14 +935,14 @@ const dayToggleScript = String.raw`  const openDay = id => {
 
 // 元CSSのコメントが旧アイコン方式（✈/🚆/🚕）のままだと、机上用印刷版に埋め込まれた
 // ときに廃止済みの記号が残る。説明を現行方式へ書き換えてから連結する。
-// v3.css（オンライン版が読む）と机上用印刷版（元CSSをそのまま埋め込む）の
+// style.css（オンライン版が読む）と机上用印刷版（元CSSをそのまま埋め込む）の
 // 両方に効かせる必要があるので、対にして2箇所で使う。
 const LEGEND_COMMENT_OLD = '   ✈飛行機 🚆鉄道 🚕タクシー 🛂空港手続き 🏨宿 🍽食事 🏛観光 ⚽観戦 🤖HRS';
 // 凡例の説明も絵文字を持たない。CSSコメントの中に絵文字が残っていると、
 // 机上用印刷版（元CSSを<style>へ埋め込む）で絵文字の一括置換に巻き込まれる。
 const LEGEND_COMMENT_NEW = '   交通手段も行動の区分もモノクロSVG（.flight-mark／.mode-icon／.line-icon）。空港手続き・宿・食事・観光・観戦・HRS';
 // 同じコメント段落の残り2行。「絵文字だけ」という説明も、⚽と🤖を名指しする行も、
-// 全部SVGへ移した今は事実と違ううえ、v3.cssへそのまま出る（v3.cssは絵文字の
+// 全部SVGへ移した今は事実と違ううえ、style.cssへそのまま出る（style.cssは絵文字の
 // 一括置換を通らないので、コメントの中の絵文字だけが生成物に残っていた）。
 const KIND_COMMENT_FIXUPS = [
   ['/* イベント種別：絵文字だけ。色は付けない（HRSと要検討のみ例外）',
@@ -1186,13 +1186,13 @@ function buildMain({ offline = false } = {}) {
   if (offline) {
     html = mustReplace(html, /<!--[\s\S]*?-->/, '<!-- Self-contained static desk-print copy; no note storage or runtime scripts. -->', 'desk-print document note');
   }
-  // 机上用印刷版は1ファイルで完結させる約束なので、v3.cssと同じ中身を<style>へ入れる。
+  // 机上用印刷版は1ファイルで完結させる約束なので、style.cssと同じ中身を<style>へ入れる。
   // 従来はsharedCoreCssとfamilyCssが抜けたまま配っていた。つまり.line-icon／
   // .flight-mark／.plan-state／.sum-*の規則が無い。アイコンのSVGは寸法規則が無いと
   // 親の幅いっぱいに広がるので、見出しのアイコン1つでページが崩れる
   // （2026-08-16に画面で確認。概要タブを先頭に置いて初めて目に付いた）。
-  // オンライン版はこの<style>ごとv3.cssのlinkへ差し替わるため、offline時だけ足す。
-  // 連結順はcompiledSharedCss（v3.css）と同じにする。順が違うと打ち消しがずれる。
+  // オンライン版はこの<style>ごとstyle.cssのlinkへ差し替わるため、offline時だけ足す。
+  // 連結順はcompiledSharedCss（style.css）と同じにする。順が違うと打ち消しがずれる。
   html = mustReplace(html, '</style>',
     `${offline ? sharedCoreCss : ''}\n${outdoorCss}\n${overviewCss}\n${offline ? familyCss : ''}\n${offline ? deskPrintCss : ''}\n</style>`,
     'style end');
@@ -1317,7 +1317,7 @@ function buildMain({ offline = false } = {}) {
 
   // 準備タブの鉄道チケットの行も交通手段の印なので、絵文字ではなくアイコンにそろえる。
   html = replaceAllCounted(html, '<div>🚆 鉄道は事前購入せず', `<div>${modeIconHtml('train')} 鉄道は事前購入せず`, 'rail ticket bullet', 1);
-  // 机上用印刷版は元CSSをそのまま<style>へ埋め込むため、v3.css側とは別にここでも当てる。
+  // 机上用印刷版は元CSSをそのまま<style>へ埋め込むため、style.css側とは別にここでも当てる。
   html = mustReplace(html, LEGEND_COMMENT_OLD, LEGEND_COMMENT_NEW, 'legend comment in embedded CSS');
   // 机上用印刷版は元CSSを<style>へそのまま埋め込むので、同じ段落をここでも直す。
   // 直さないと、絵文字の一括置換がCSSコメントの中の⚽と🤖をSVGへ変えてしまう。
@@ -1575,8 +1575,6 @@ function buildMain({ offline = false } = {}) {
   html = html.replace('入力はこの端末に自動保存されます（サーバー送信なし）。', '入力はまずこの端末・このブラウザ内に自動保存されます。Cloudflare同期を使う場合は、複数端末での同時編集を避けてください。');
   html = html.replace('下のボタンで全文を Markdown にしてコピーでき、そのまま出張報告や <code>CHANGELOG.md</code> の材料になります。', 'PCでクラウド側の記録を読み込んだ後、全文をMarkdownファイルとしてダウンロードできます。コピーは出張報告や <code>CHANGELOG.md</code> の下書きに使えます。');
 
-  html = html.replace('レイアウト v2（タブ × 日カード × レーン）', `レイアウト v3（屋外スマホ・連続旅程・3セクション）${offline ? '｜机上用印刷版' : ''}`);
-  html = html.replace('更新日：2026年8月13日', '更新日：2026年8月13日（v3フィールド版）');
   // ---------- 概要タブを旅程の手前へ差し込む ----------
   // 既定タブはplanのまま。概要は出発前と机上で効くもので、現地で開くのは旅程。
   // 起動時にいきなり概要が出ると、現地では毎回1タップ余分になる。
@@ -1599,7 +1597,7 @@ function buildMain({ offline = false } = {}) {
     html = html.replace(/<details(?![^>]*\bopen\b)/g, '<details open');
   } else {
     html = html.slice(0, lastScript) + '<script src="../shared/trip-field/runtime.js"></script>\n' + html.slice(lastScript);
-    html = mustReplace(html, /<style>[\s\S]*?<\/style>/, '<link rel="stylesheet" href="v3.css">', 'online stylesheet extraction');
+    html = mustReplace(html, /<style>[\s\S]*?<\/style>/, '<link rel="stylesheet" href="style.css">', 'online stylesheet extraction');
   }
 
   // ---------- 予定の状態を5つにそろえる ----------
@@ -1614,7 +1612,7 @@ function buildMain({ offline = false } = {}) {
 
   // ---------- オンライン版から家族向けセクションを落とす ----------
   // #tab-famは主要タブ（旅程・会場・記録）に無く、CSSでも非表示で、画面から開く方法が
-  // 無かった。家族向けはfamily_print.htmlが正本で、そちらはindex_v2.htmlから
+  // 無かった。家族向けはfamily_print.htmlが正本で、そちらはsource.htmlから
   // 組み直して作る。つまりこのセクションはどこからも使われず、旧v2のまま取り残されて
   // いた（5セクション構成にも気候の行にも追随していない）。約5,400字ぶんの死蔵。
   html = mustReplace(html, /\n*<section class="tab" id="tab-fam"[\s\S]*?<\/section>/, '', 'family section removal');
@@ -1624,7 +1622,7 @@ function buildMain({ offline = false } = {}) {
   // 交通手段の変換（✈→.flight-mark）が終わり、机上用印刷版がスクリプトを落とした
   // あとに走らせる。ここまでの工程が足したり消したりした絵文字も、まとめて拾える。
   // 先にJS文字列の中を片付ける。flash()はtextContentへ入れるのでSVGを置けない。
-  const documentName = offline ? 'index_v3_offline.html' : 'index.html';
+  const documentName = offline ? 'desk_print.html' : 'index.html';
   html = stripScriptEmoji(html, documentName);
   html = applyEmojiIcons(html, documentName);
   return html;
@@ -1704,7 +1702,7 @@ const CLIMATE_ROWS = [
 // ---------- 家族印刷版：日程詳細（EUROBLECH方式） ----------
 // 202610_Europe_TechEx_EuroBLECHのsection.family-schedule（schedule-body内に
 // schedule-legend＋family-day-row×日数、各日はagenda-line＋asideの宿泊）と
-// 同じ構造をそのまま踏襲する。出どころはindex_v2.htmlの旅程タブ（#tab-plan、
+// 同じ構造をそのまま踏襲する。出どころはsource.htmlの旅程タブ（#tab-plan、
 // 8日分）だけで、時刻・便名・地名はすべてそこに書かれている値をそのまま使う。
 // 新しい時刻・場所は足していない。9/12・9/13の日中は本人たちもまだ未決なので、
 // 特定の案を先取りせず「要検討」として案の名前だけを載せる。
@@ -2114,7 +2112,7 @@ function buildFamily() {
   // 家族印刷版もオンライン版と同じアイコン規約にそろえる（節見出しの絵文字を含む）。
   return applyEmojiIcons(`<!DOCTYPE html>
 <html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>HRS Europe 2026 家族向け予定表</title><link rel="stylesheet" href="v3.css"></head>
+<title>HRS Europe 2026 家族向け予定表</title><link rel="stylesheet" href="style.css"></head>
 <body class="family-page" data-trip-layout="family-v1"><header class="family-head"><div class="wrap"><div class="eyebrow">HRS EUROPE 2026 · FAMILY COPY</div><h1>家族向け予定表</h1><p>2026年9月7日（月）〜9月14日（月）｜ドイツ出張</p></div></header><main class="wrap">${newSection}</main></body></html>`, 'family_print.html');
 }
 
@@ -2134,7 +2132,7 @@ function buildImmigration() {
   ].map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('\n      ');
   return `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>HRS Europe 2026 — Traveller Information</title><link rel="stylesheet" href="v3.css"></head>
+<title>HRS Europe 2026 — Traveller Information</title><link rel="stylesheet" href="style.css"></head>
 <body class="immi-page" data-trip-layout="immigration-v1"><main class="wrap">
   <header class="immi-head">
     <div class="eyebrow">FOR BORDER CONTROL · GERMANY</div>
@@ -2158,9 +2156,9 @@ function buildImmigration() {
 }
 
 const outputs = [
-  ['v3.css', compiledSharedCss],
+  ['style.css', compiledSharedCss],
   ['index.html', buildMain()],
-  ['index_v3_offline.html', buildMain({ offline:true })],
+  ['desk_print.html', buildMain({ offline:true })],
   ['family_print.html', buildFamily()],
   ['immigration_print.html', buildImmigration()]
 ];

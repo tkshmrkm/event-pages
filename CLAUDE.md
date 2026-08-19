@@ -65,15 +65,21 @@
 
 ## 編集上の重要事項
 
-- HRS v3の生成物を直接編集しない。
-  `202609_HumanoidSummitEurope/build_v3.mjs` を変更して再生成する。
-- HRS v3の生成物は `index.html`、`index_v3_offline.html`、
-  `family_print.html`、`immigration_print.html`、`v3.css`。
-- 旧版の `index_v1.html` と元資料の `index_v2.html` は、移行元として保存する。
-- `index_v3.html` は、以前の共有URLを `index.html` へ転送する互換ページ。
+- HRSの生成物を直接編集しない。
+  `202609_HumanoidSummitEurope/build.mjs` を変更して再生成する。
+- HRSの生成物は `index.html`、`desk_print.html`、
+  `family_print.html`、`immigration_print.html`、`style.css`。
+  入力元は手で書く `source.html` の1枚だけで、`validate.mjs` が生成物を検査する。
+- **両フォルダのファイル構成は同一にする。** `source.html`（入力）、`build.mjs`、
+  `validate.mjs`、`style.css`、生成物の `index.html` / `family_print.html` /
+  `immigration_print.html`。HRSだけが `desk_print.html` を、EBだけが実行時スクリプトの
+  `page.js` を持つ。2026-08-19にファイル名からv2・v3の版番号を外してそろえた。
 - EUROBLECH（`202610_Europe_TechEx_EuroBLECH`）も2026-08-14に同じ並びへそろえた。
-  生成物は `index.html`、`family_print.html`、`immigration_print.html` の3件、`index_v1.html` と
-  `index_v2.html` が入力元、`index_v3.html` が転送ページ。
+  生成物は `index.html`、`family_print.html`、`immigration_print.html` の3件、
+  入力元は `source.html` の1枚。**家族タブ専用の第2入力（旧 `index_v2.html`）は廃止した。**
+  その中身は `source.html` の `#tab-family` へ取り込み済みで、`build.mjs` は
+  入力を1枚しか読まない。以前の共有URLを転送していた `index_v3.html` は
+  両フォルダとも削除した。
   詳細は `202610_Europe_TechEx_EuroBLECH/CLAUDE_HANDOFF.md` を読む。
 - EBのオンライン版の主要タブは `概要 / 旅程 / 視察 / 準備 / 記録` の5つ。
   家族向けはタブではなく `family_print.html` が正本で、ヘッダーのリンクから開く。
@@ -92,7 +98,7 @@
   入国地点が人によって割れる場合は、全員分を名前付きで載せる
   （EBは村上がアムステルダム、美馬・金築がフランクフルト）。
   複数国に入る場合は、その国ぶんの在外公館を載せる。
-  様式は `.immi-*` としてHRSの `v3.css` にあり、EBはそれを読んで使う。
+  様式は `.immi-*` としてHRSの `style.css` にあり、EBはそれを読んで使う。
 - 交通手段のアイコンはEUROBLECH方式を標準とする。カラー絵文字と
   モノクロ文字の `✈︎` は、いずれも使わない。
   フライトは共通の `.flight-mark`（SVGマスク）、それ以外は
@@ -163,10 +169,10 @@ Cloudflareコードは `cloudflare/trip-notes-worker` にある。
 ```powershell
 node .\cloudflare\trip-notes-worker\validate-worker.mjs
 node .\shared\trip-field\validate-template.mjs
-node .\202609_HumanoidSummitEurope\build_v3.mjs
-node .\202609_HumanoidSummitEurope\validate_v3.mjs
-node .\202610_Europe_TechEx_EuroBLECH\build_v3.mjs
-node .\202610_Europe_TechEx_EuroBLECH\validate_v3.mjs
+node .\202609_HumanoidSummitEurope\build.mjs
+node .\202609_HumanoidSummitEurope\validate.mjs
+node .\202610_Europe_TechEx_EuroBLECH\build.mjs
+node .\202610_Europe_TechEx_EuroBLECH\validate.mjs
 git diff --check
 ```
 
@@ -174,7 +180,7 @@ git diff --check
 `**/*immigration*` で追跡されないので、checkout直後は存在しない。検査だけ先に
 走らせると、EBは必ず落ちる（2026-08-16に踏んだ）。
 
-`shared/trip-field` を触ったらEB側も回す。EBはHRSの `v3.css` を読んでいる。
+`shared/trip-field` を触ったらEB側も回す。EBはHRSの `style.css` を読んでいる。
 
 生成後はローカルサーバーで、393px、412px、PC幅をブラウザー確認する。
 DOM構造、横あふれ、コンソールエラー、表示内容、机上用印刷版のスクリプト0件を
@@ -198,12 +204,12 @@ document.documentElement.scrollWidth - window.innerWidth  // 0 でなければ�
   入っていることは見ていたが、`.line-icon` の寸法規則が机上用印刷版に埋め込まれて
   いるかは見ていなかった。規則を失ったSVGは親の幅いっぱいに広がり、見出しの
   アイコン1つでページが崩れる。
-- **生成物はHTMLだけではない。** 絵文字検査が `v3.css` を対象外にしていたため、
-  CSSコメントの中の絵文字5種と国旗2種が残っていた。v3.cssはHTMLと違って絵文字の
+- **生成物はHTMLだけではない。** 絵文字検査が `style.css` を対象外にしていたため、
+  CSSコメントの中の絵文字5種と国旗2種が残っていた。style.cssはHTMLと違って絵文字の
   一括置換を通らないので、置換もされず検査もされない唯一の生成物だった。
 - **机上用印刷版は1ファイルで完結させる。** `<style>` へは
   `sourceCss + sharedCoreCss + outdoorCss + overviewCss + familyCss + deskPrintCss` を
-  v3.cssと同じ順で入れる。抜けた分だけ静かに素のHTMLへ落ちる。
+  style.cssと同じ順で入れる。抜けた分だけ静かに素のHTMLへ落ちる。
 - **数を数える検査は、増えた理由をコメントに書いてから直す。** 期待値だけ書き換えると
   次の人に増減の理由が伝わらない。
 

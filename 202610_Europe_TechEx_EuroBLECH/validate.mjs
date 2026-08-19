@@ -5,10 +5,10 @@ import vm from 'node:vm';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const html = readFileSync(join(here, 'index.html'), 'utf8');
-const css = readFileSync(join(here, 'v3.css'), 'utf8');
+const css = readFileSync(join(here, 'style.css'), 'utf8');
 const cssRules = css.replace(/\/\*[\s\S]*?\*\//g, '');
-const js = readFileSync(join(here, 'v3.js'), 'utf8');
-const hrsCss = readFileSync(join(here, '..', '202609_HumanoidSummitEurope', 'v3.css'), 'utf8');
+const js = readFileSync(join(here, 'page.js'), 'utf8');
+const hrsCss = readFileSync(join(here, '..', '202609_HumanoidSummitEurope', 'style.css'), 'utf8');
 const familyPrint = readFileSync(join(here, 'family_print.html'), 'utf8');
 const immigration = readFileSync(join(here, 'immigration_print.html'), 'utf8');
 // パネルの並びは 旅程 / 視察 / 準備 / 記録。切り出しの終端は隣のタブで決まるので、
@@ -27,8 +27,8 @@ const rowTimes = [...itinerary.matchAll(/<div class="row-time">([\s\S]*?)<\/div>
 const count = pattern => (html.match(pattern) || []).length;
 const countIn = (source, pattern) => (source.match(pattern) || []).length;
 const checks = [
-  ['HRS public stylesheet linked', html.includes('href="../202609_HumanoidSummitEurope/v3.css"')],
-  ['local v3 assets linked', html.includes('href="v3.css"') && html.includes('src="v3.js"')],
+  ['HRS public stylesheet linked', html.includes('href="../202609_HumanoidSummitEurope/style.css"')],
+  ['local stylesheet and script linked', html.includes('href="style.css"') && html.includes('src="page.js"')],
   ['no v2 runtime dependency', !/v2\.(?:css|js)/.test(html)],
   // 家族はタブではなくfamily_print.htmlへ分けた。2026-08-16に概要を足して5つ。
   ['five primary tabs', count(/data-tab="(?:overview|itinerary|prep|venue|rec)"/g) === 5 && count(/data-tab="/g) === 5],
@@ -97,10 +97,10 @@ const checks = [
   ['Bremen return stays a decision rather than a confirmed booking', day1022.includes('列車候補を確認') && day1022.includes('約2時間の目安') && !day1022.includes('予約確定済み')],
   ['Bremen topic has no Hannover carryover', !day1022.includes('会場（メッセ）到着後') && day1022.includes('ゲッティンゲン駅・車内・ブレーメン到着後')],
   ['legacy icon placeholders removed', !html.includes('class="fas fa-') && !js.includes('✈︎')],
-  ['event naming aligned', html.includes('<title>TechEx Europe・EuroBLECH 2026') && html.includes('TechEx Europe・EuroBLECH 2026 ・ field guide v3') && js.includes('# TechEx Europe・EuroBLECH 2026 記録') && !html.includes('VIP networking drinks')],
+  ['event naming aligned', html.includes('<title>TechEx Europe・EuroBLECH 2026') && html.includes('TechEx Europe・EuroBLECH 2026 ・ field guide') && js.includes('# TechEx Europe・EuroBLECH 2026 記録') && !html.includes('VIP networking drinks')],
   ['Japanese punctuation normalized', !html.includes('·') && !/(?:村上|美馬・金築):/.test(html) && !/\d{1,2}\/\d{1,2} \([月火水木金土日]\)/.test(html)],
   ['outline action icons replace black-filled emoji', count(/class="line-icon line-icon-/g) >= 20 && hrsCss.includes('.line-icon svg') && !itinerary.includes('🛋') && !itinerary.includes('🛂')],
-  // .line-iconの寸法は共通（core.css経由でHRSのv3.cssに入る1.15em）に任せる。
+  // .line-iconの寸法は共通（core.css経由でHRSのstyle.cssに入る1.15em）に任せる。
   // EB側で固定pxを持つと、13〜14pxの文字の中に文字より大きい箱が並ぶ。色だけ上書きしてよい。
   ['line icon size comes from the shared stylesheet', /\.line-icon\{[^}]*width:1\.15em/.test(hrsCss) && !/(^|[^ ])\.line-icon\{/m.test(css) && css.includes('[class*="bg-gray-700"] .line-icon')],
   ['no oversized itinerary time cells', rowTimes.every(value => value.length <= 32)],
@@ -158,7 +158,7 @@ const checks = [
   // 「10/20〜10/23・3名」と書くと、初日に村上が居たことになる（実際はTechEx Day 2）。
   ['the event overview names the day the attendance differs',
     overview.includes('10/20〜10/23・3名（10/20は美馬・金築のみ）')],
-  // 導線が無いと索引として使えない。data-goto はv3.jsが受ける。
+  // 導線が無いと索引として使えない。data-goto はpage.jsが受ける。
   ['the overview links to the detail tabs',
     countIn(overview, /data-goto="/g) === 3 && js.includes('data-goto')],
   // 既定タブは旅程のまま。現地で開くのは旅程で、概要が効くのは出発前と机上。
@@ -252,10 +252,10 @@ const checks = [
   ['verified embassy contacts present', ['+49 30 21094-0', '0800-1822-330', '+1 818 7554 269', '+49 69 238573-0', '+31 70 346-9544', 'Tobias Asserlaan 5', 'tel:112'].every(t => familyPrint.includes(t))],
   // 絵文字は数えずに、Unicodeの Extended_Pictographic が0件であることを見る。
   // 特定の3文字だけ数える検査は、残り49箇所を素通りさせた実績がある。
-  // v3.jsも見る。チェックリストは実行時にinnerHTMLへ入るので、HTMLだけ直しても画面に出る。
-  ['no emoji anywhere in the generated pages', [['index.html', html], ['family_print.html', familyPrint], ['v3.js', js]]
+  // page.jsも見る。チェックリストは実行時にinnerHTMLへ入るので、HTMLだけ直しても画面に出る。
+  ['no emoji anywhere in the generated pages', [['index.html', html], ['family_print.html', familyPrint], ['page.js', js]]
     .every(([, text]) => !/\p{Extended_Pictographic}/u.test(text))],
-  ['no flag emoji anywhere', [['index.html', html], ['family_print.html', familyPrint], ['v3.js', js]]
+  ['no flag emoji anywhere', [['index.html', html], ['family_print.html', familyPrint], ['page.js', js]]
     .every(([, text]) => !/[\u{1F1E6}-\u{1F1FF}]{2}/u.test(text))],
   ['every icon resolves to an svg', count(/class="line-icon line-icon-[a-zA-Z]+"[^>]*><svg /g) === count(/class="line-icon line-icon-/g)
     && countIn(familyPrint, /class="line-icon line-icon-[a-zA-Z]+"[^>]*><svg /g) === countIn(familyPrint, /class="line-icon line-icon-/g)],
@@ -303,7 +303,7 @@ const checks = [
   ['browser-local records retained', js.includes("const FIELD_KEY = 'eurotrip2026-v3'") && js.includes('localStorage.setItem')],
 ];
 
-new vm.Script(js, { filename: 'v3.js' });
+new vm.Script(js, { filename: 'page.js' });
 const failed = checks.filter(([, ok]) => !ok);
 checks.forEach(([label, ok]) => console.log(`${ok ? 'PASS' : 'FAIL'} ${label}`));
 if (failed.length) process.exit(1);

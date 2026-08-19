@@ -24,7 +24,7 @@ CRLF正規化はHRS側にも適用済み。
 「2026-08-16にHRSから戻した分」にある。概要タブも同日に新設したので、
 このときの戻し項目に未着手は残っていない。
 
-**編集の注意**: `build_v3.mjs` は上部の `SOURCE_TEXT_REPLACEMENTS`（置換定義の配列）と
+**編集の注意**: `build.mjs` は上部の `SOURCE_TEXT_REPLACEMENTS`（置換定義の配列）と
 下部の `transformScript`（ブラウザで走るテンプレートリテラル）に同じ文言のコメントが
 入ることがある。アンカーを決めたら**出現回数が1件であることを確認してから**当てる。
 テンプレートリテラル内では `\n` や `\*` は二重にエスケープする（`\\n` / `\\*`）。
@@ -42,26 +42,28 @@ v3をフォルダの公開入口にした。HRS（`202609_HumanoidSummitEurope`�
 | `index.html` | **v3の生成物。公開入口。** 直接編集しない |
 | `family_print.html` | 家族向け印刷版の生成物 |
 | `immigration_print.html` | 入国審査用の生成物。英語・静的・旅券番号を保存しない |
-| `index_v1.html` | 旧版。`build_v3.mjs` と `build_v2.mjs` の入力元 |
-| `index_v2.html` | 家族タブの内容・情報構造の基準。`build_v2.mjs` の生成物 |
-| `index_v3.html` | 以前の共有URLを `./` へ転送する互換ページ |
-| `build_v3.mjs` | `index_v1.html` ＋ `index_v2.html` から生成物3件を作る |
-| `validate_v3.mjs` | 生成物3件を検査 |
+| `source.html` | **手で書く唯一の入力元。** 旅程も家族タブ（`#tab-family`）もここ |
+| `page.js` | 生成された `index.html` が読む実行時スクリプト |
+| `style.css` | EB固有の様式。HRSの `style.css` を先に読んだうえで重ねる |
+| `build.mjs` | `source.html` から生成物3件を作る |
+| `validate.mjs` | 生成物3件を検査 |
 
-以前は `index.html` が旧版、`index_v3.html` が生成物だった。**入れ替わっているので、
-古い手順書やメモの `index_v3.html` を生成物と読まないこと。**
+2026-08-19にファイル名から版番号を外し、HRSと同一構成にした。
+**家族タブ専用の第2入力（旧 `index_v2.html`）は廃止した。** その中身は
+`source.html` の `#tab-family` へ取り込み済みで、`build.mjs` は入力を1枚しか読まない。
+転送ページの `index_v3.html` も削除した。**古い手順書やメモの `index_v3.html` を
+生成物と読まないこと。**
 
 ## 最初に全文確認するファイル
 
 1. `NEXT_SESSION_HANDOFF.md` — Git管理済みの初期設計補足。本書と異なる場合は本書を優先
 2. `transport_actual_1017_1018_sample.html` — 4列交通表示の承認サンプル
 3. `../202609_HumanoidSummitEurope/index.html` — HRS公開版の構造
-4. `../202609_HumanoidSummitEurope/v3.css`
-5. `../202609_HumanoidSummitEurope/V3_DESIGN_BRIEF.md`
+4. `../202609_HumanoidSummitEurope/style.css`
+5. `../202609_HumanoidSummitEurope/DESIGN_BRIEF.md`
 6. `../shared/trip-field/runtime.js` — HRS共通ランタイム。HRS固有の挙動は `index.html` 内のインラインスクリプトも確認
-7. `index_v1.html` — 旅程内容の元データ。生成の入力なので直接編集しない
-8. `index_v2.html` — 家族タブの内容・情報構造の基準
-9. `build_v3.mjs`、`v3.css`、`v3.js`、`validate_v3.mjs` — 現在のv3実装
+7. `source.html` — 旅程と家族タブの元データ。生成の入力なので直接編集しない
+8. `build.mjs`、`style.css`、`page.js`、`validate.mjs` — 現在の実装
 
 `references/rejected/transport_layout_sample.html` は無効な旧試作。参考用に隔離しているが、基準にしない。
 
@@ -70,8 +72,8 @@ v3をフォルダの公開入口にした。HRS（`202609_HumanoidSummitEurope`�
 
 ## 編集ルール
 
-- 原則として `build_v3.mjs` を修正し、`node build_v3.mjs` で `index.html` を再生成する。
-- `index_v1.html`、`index_v2.html`、各サンプルを直接上書きしない。
+- 原則として `build.mjs` を修正し、`node build.mjs` で `index.html` を再生成する。
+- `source.html`、各サンプルを直接上書きしない。
 - 交通はスマートフォンでも必ず4列のままにする。
 - 日付ナビ、タブ、フォントはHRS方式を維持する。
 - フォントは `BIZ UDPGothic`, `Yu Gothic UI`, `Meiryo`, `system-ui`, `sans-serif`。
@@ -99,7 +101,7 @@ v3をフォルダの公開入口にした。HRS（`202609_HumanoidSummitEurope`�
 
 2026-08-14の実測: 日別詳細は52行→31行、家族タブ全体は393px幅で
 10350px→9708pxになり、`どこにいるか`（1283px）を追加した。
-`validate_v3.mjs` で行数の上限と、都市名・時差の文字サイズを検査している。
+`validate.mjs` で行数の上限と、都市名・時差の文字サイズを検査している。
 
 ## 文章の調子（今後の共通ルール）
 
@@ -146,7 +148,7 @@ v3をフォルダの公開入口にした。HRS（`202609_HumanoidSummitEurope`�
   カードが持つ。** このカードは2026-08-16に準備から旅程の末尾へ移した。
   乗り継ぎ中に読むもので、準備タブごと畳んだら失われるため。
   確認できていない系統は、系統ごと消さずに「未確認」と書いて残す。
-- 生成は `build_v3.mjs` の `todoFold()` / `spendFold()` / `loungeOption()` の3つだけを使う。
+- 生成は `build.mjs` の `todoFold()` / `spendFold()` / `loungeOption()` の3つだけを使う。
   同じ形のHTMLを別の場所に手書きしない。
 
 2026-08-14時点で、この形にしてあるのは次の6箇所。
@@ -199,7 +201,7 @@ v3をフォルダの公開入口にした。HRS（`202609_HumanoidSummitEurope`�
 
 ## 未完了だった6項目 — 2026-08-14に全件反映
 
-引き継ぎ作成時の「未完了」6項目は、すべて `build_v3.mjs` 側で反映して再生成済み。
+引き継ぎ作成時の「未完了」6項目は、すべて `build.mjs` 側で反映して再生成済み。
 以下は反映内容と、次に触る人が前提を取り違えないための注記。
 
 ### 1. 10/17 香港ラウンジ（反映済み）
@@ -252,7 +254,7 @@ Priority Pass側でも確認していない。ページ上は「一般有料ラ�
 
 - `展示会` → `展示会視察`
 - `工場・企業見学` → `工場・企業見学（予約確定）`
-- オレンジの `要検討（この帯だけが未定）` を凡例に追加（`.swatch-review` を `v3.css` に追加）
+- オレンジの `要検討（この帯だけが未定）` を凡例に追加（`.swatch-review` を `style.css` に追加）
 
 未定色の手がかりが凡例に無かったことが、ラベンダーを未定色と読ませていた原因。
 10/22の未定は、復路2案のオレンジの `.route-review` 2本だけが示す。
@@ -320,7 +322,7 @@ Priority Pass側でも確認していない。ページ上は「一般有料ラ�
 - 内容は移しただけで、事実は足していない。Priority Passの対象施設は依然として
   セントレア・香港・フランクフルトとも未確認。**Plaza PremiumをPP対象と断定しないこと。**
 - 表のセルを直接書き換えていた `SOURCE_TEXT_REPLACEMENTS` の6件は、二重管理になるため削除した。
-  ブロックの定義元は `build_v3.mjs` の `LOUNGE_SEGMENTS`。
+  ブロックの定義元は `build.mjs` の `LOUNGE_SEGMENTS`。
   カードか表が見つからない場合はビルドが `Lounge card is missing` / `Lounge table is missing` で止まる。
 
 ## 会場そのものへの地図リンク（2026-08-14に実施）
@@ -343,7 +345,7 @@ Priority Pass側でも確認していない。ページ上は「一般有料ラ�
 - 切れていたのは「ラウンジ利用可否」ではなく**「航空券状況」の5列表**。
 - 原因は `div.bg-white.rounded-xl` のTailwind由来 `overflow-x: hidden` ではない。
   Tailwindは読み込んでいないのでそれらのクラス名は効いていない。実際は
-  `v3.css` の `.legacy-stack>.bg-white{overflow:hidden}`（角丸を保つための指定）。
+  `style.css` の `.legacy-stack>.bg-white{overflow:hidden}`（角丸を保つための指定）。
 - 「412px以上では発生しない」も誤り。表の最小幅は389pxで、412px幅でも
   内側の実効幅は360pxしかないため切れていた。
 
@@ -402,7 +404,7 @@ SIGGRAPH AsiaとLOGIMATでもそのまま使える。
 パネルのDOM順も同じにした。印刷はタブを全部開いて縦に並べるので、ここが逆だと
 紙の上で準備が視察より前に出る。
 
-**`validate_v3.mjs` の切り出しは終端が隣のタブで決まる。** 並べ替えたら
+**`validate.mjs` の切り出しは終端が隣のタブで決まる。** 並べ替えたら
 `itinerary` と `prep` の slice も一緒に直す。放置すると旅程の範囲に視察が丸ごと
 入り、検査が通ったまま意味を失う。
 
@@ -418,7 +420,7 @@ SIGGRAPH AsiaとLOGIMATでもそのまま使える。
 `family_print.html` は1バイトも動かない。**これが死蔵だった証拠になる。
 
 **使いたくなったら `shared/trip-field/core.css` の `.flight-card` を読む。**
-EBはHRSの `v3.css` 経由ですでに読み込んでいる。ここへ書き戻さない。
+EBはHRSの `style.css` 経由ですでに読み込んでいる。ここへ書き戻さない。
 EBは復路が村上とチームで分かれるので、1区間を「出発 → 便名 → 到着」で見せる
 カードは効きが大きいはず。中央列は96pxしかないので、機材と所要だけを入れる。
 長い注記は `.flight-note` で区間の下に全幅で出す。
@@ -467,7 +469,7 @@ HRSと同じ4ブロック（`出張概要 / 日程概要 / イベント概要 / 
 **出張の目的は、意図して書いていない。** 2026-08-16の作業でユーザーが
 「いまはいい」と決めた。**推測で埋めないこと。**
 
-`目的` という語は `index_v1.html` にも `index_v2.html` にも0件で、
+`目的` という語は `source.html`（旧 `index_v1.html` / `index_v2.html`）に0件で、
 リポジトリのどこにも業務上の狙いが書かれていない。唯一それらしいのは
 `immigration_print.html` の Purpose of stay だが、これは審査官向けに
 「就労しない」ことを述べたもので、何を見に行くのかとは別物である。
@@ -484,24 +486,24 @@ HRSと同じ4ブロック（`出張概要 / 日程概要 / イベント概要 / 
 
 ### 5. EBには無かった問題（確認済み・対応不要）
 
-- **絵文字**: `index.html` / `v3.css` / `family_print.html` /
-  `immigration_print.html` / `v3.js` すべて0件。HRSはv3.cssのコメントに
+- **絵文字**: `index.html` / `style.css` / `family_print.html` /
+  `immigration_print.html` / `page.js` すべて0件。HRSはstyle.cssのコメントに
   絵文字5種と国旗2種が残っていたが、EBは汚染されていない
-- **机上用印刷版のCSS欠落**: EBは `index_v3_offline.html` を持たないので該当しない
+- **机上用印刷版のCSS欠落**: EBは `desk_print.html` を持たないので該当しない
 
 ### 6. 検査を走らせる順番
 
-**必ず `build_v3.mjs` を先に実行する。** `immigration_print.html` は
+**必ず `build.mjs` を先に実行する。** `immigration_print.html` は
 `.gitignore` の `**/*immigration*` で追跡されないので、checkout直後は存在せず、
-`validate_v3.mjs` だけ先に走らせると必ず落ちる。2026-08-16に踏んだ。
+`validate.mjs` だけ先に走らせると必ず落ちる。2026-08-16に踏んだ。
 
-EBは `../202609_HumanoidSummitEurope/v3.css` を読む。HRS側やcore.cssを触ったら
+EBは `../202609_HumanoidSummitEurope/style.css` を読む。HRS側やcore.cssを触ったら
 EBの検査（103件）も回すこと。
 
 ## 次にやること — HRSからEBへ戻す（2026-08-15に棚卸し）
 
 2026-08-15までHRS側を作り込んだ。ここからEBへ戻す段階に入る。
-下の数値は**同日に `index.html` と `v3.css` を実際に数えた実測値**である。
+下の数値は**同日に `index.html` と `style.css` を実際に数えた実測値**である。
 着手前に数え直すこと。数えずに「完了」と書かない。
 
 **この作業はEBだけのものではない。** 2026年12月のSIGGRAPH Asia、2027年3月のLOGIMATを
@@ -523,13 +525,13 @@ EB側のファイルに書いた分は、次の2イベントで同じ作業を�
 | | HRS | EB |
 |---|---|---|
 | タブ | `旅程 / 会場 / 記録` の3つ | `旅程 / 準備 / 会場 / 記録` の4つ（2026-08-15に家族を分離） |
-| 生成物 | 4件（`index.html` / 机上用印刷版 / 家族向け印刷版 / `v3.css`） | 2件（`index.html` / `family_print.html`） |
-| CSS | 自前の `v3.css`（`core.css` を連結） | HRSの `v3.css` を読み込み ＋ 自前の `v3.css` |
+| 生成物 | 4件（`index.html` / 机上用印刷版 / 家族向け印刷版 / `style.css`） | 2件（`index.html` / `family_print.html`） |
+| CSS | 自前の `style.css`（`core.css` を連結） | HRSの `style.css` を読み込み ＋ 自前の `style.css` |
 | 補足の折り畳み | `.note` → `details.fold` 20件 | `details.fold` 21件（やること7・過ごし方6・食事メモ8）。**EBが元祖なので移植不要** |
 | 補足のマークアップ | `.note` | Tailwind風（`text-slate-500 text-xs` など）。`.note` は0件 |
 | 予定の状態 | `.plan-state` 9件 | **札が無い。** 語が地の文に散る（候補12・確定11・未定5・要検討2・要確認5） |
 
-**EBはHRSの `v3.css` を読むので、`.plan-state`・`.line-icon`（`1.15em`）・アイコン41種は
+**EBはHRSの `style.css` を読むので、`.plan-state`・`.line-icon`（`1.15em`）・アイコン41種は
 すでに届いている。** 必要なのはマークアップの変更と、EB側の上書き削除だけ。
 
 **タブ構成が違うので、丸ごと寄せる作業ではない。** HRSに準備タブが無いため、
@@ -578,11 +580,11 @@ EBが準備タブへ集約しているもの（ラウンジの利用資格など
 
 1. **絵文字の全廃 — 済。** 生成物2件とも Extended_Pictographic は0件、国旗も0件。
    `index.html` 110箇所24種、`family_print.html` 5箇所3種、国旗15組を処理した。
-   `v3.js` にも23件あった（チェックリストが実行時に innerHTML へ入るため、
+   `page.js` にも23件あった（チェックリストが実行時に innerHTML へ入るため、
    HTMLだけ直しても画面には絵文字が出ていた）。
    既存12種に加えてHRSから14種を移植し、11種を新規に描いた（cart / pen / ticket /
    globe / building / money / folder / document / laptop / search / card / baggage / plug）。
-   仕組みは `build_v3.mjs` の transformScript にある。HRSは文字列置換だがEBは
+   仕組みは `build.mjs` の transformScript にある。HRSは文字列置換だがEBは
    ヘッドレスDOM方式なので、データ表だけ移植してDOMウォーカーとして実装した。
    **対応表に無い絵文字が出るとビルドが止まる。**
 2. **`.line-icon` 固定19pxの削除 — 済。** `core.css` の `1.15em` に任せた。
@@ -617,7 +619,7 @@ EBが準備タブへ集約しているもの（ラウンジの利用資格など
 
 **使わない。** 生成物に残すのは、CSS側に受けがあるクラスだけにする。
 
-ビルドが `v3.css` 2枚（HRS＋EB）を走査して、どのルールも受けていない
+ビルドが `style.css` 2枚（HRS＋EB）を走査して、どのルールも受けていない
 Tailwind風のクラスを落とす。**346トークンを削除した。**
 `index.html` は 151,476 bytes、Tailwind風は933件61種が残る（すべて受けがある）。
 
@@ -629,7 +631,7 @@ Tailwind風のクラスを落とす。**346トークンを削除した。**
 受けていない」が常に真になり、効いている40種まで巻き添えで消える。実際に一度踏んだ。
 CSSはNode側で読んで `cssKnownClasses` / `cssKnownSubstrings` として渡す。
 
-`v3.js` はTailwind風クラスを一切使っていないので、JS側の巻き添えは無い
+`page.js` はTailwind風クラスを一切使っていないので、JS側の巻き添えは無い
 （使うのは on / off / today / chip / tab / day / t / d）。
 
 あとからCSSを足せば次のビルドで自動的に残るので、消し過ぎが固定化しない。
@@ -659,8 +661,8 @@ CSSはNode側で読んで `cssKnownClasses` / `cssKnownSubstrings` として渡�
 変更後は次を実行する。
 
 ```powershell
-node .\202610_Europe_TechEx_EuroBLECH\build_v3.mjs
-node .\202610_Europe_TechEx_EuroBLECH\validate_v3.mjs
+node .\202610_Europe_TechEx_EuroBLECH\build.mjs
+node .\202610_Europe_TechEx_EuroBLECH\validate.mjs
 git diff --check
 ```
 
@@ -674,8 +676,8 @@ git diff --check
 
 `scripts/validate_event_page.mjs` はこのチェックアウトには存在しない。追加されている環境では併用する。
 
-`build_v3.mjs` の置換文字列はLFで書いてある。リポジトリは `.gitattributes` の `* text=auto` と
-`core.autocrlf=true` により作業ツリーがCRLFになるため、`index_v1.html` と `index_v2.html` は
+`build.mjs` の置換文字列はLFで書いてある。リポジトリは `.gitattributes` の `* text=auto` と
+`core.autocrlf=true` により作業ツリーがCRLFになるため、`source.html` は
 読み込み時にLFへ正規化してから照合する。この正規化を外すと `Missing source text replacement` で
 ビルドが止まる。生成物はLFで書き出されるので、直後の `git status` に `index.html` が
 修正扱いで出ることがあるが、`git diff --numstat` が0行なら内容の差分はない。
@@ -699,5 +701,5 @@ git diff --check
   改行コードだけで modified 扱いになる。`git diff --numstat` が0行なら
   `git checkout --` で戻してよい。EUROBLECHのコミットに巻き込まない。
 - `references/rejected/transport_layout_sample.html` は無効な旧試作として隔離。対象フォルダ直下へ戻さない。
-- `index_v1.html` は変更しない。
+- `source.html` は変更しない。
 - ワークツリーに別作業の変更があれば巻き込まない。

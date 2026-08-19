@@ -295,7 +295,7 @@ details.fold>.fold-body>div+div{margin-top:5px}
    .flight-card 系7種・.flight-leg 系6種・.layover・.flight-fares 系4種・
    .flight-spec-guide・.carrier-guide の20種、通常規則14行＋メディアクエリ4行。
    1区間を「出発 → 便名 → 到着」で見せるカードを使いたくなったら、
-   shared/trip-field/core.css の .flight-card を読む（EBはHRSのv3.css経由で
+   shared/trip-field/core.css の .flight-card を読む（EBはHRSのstyle.css経由で
    すでに読み込んでいる）。ここへ書き戻さない。 */
 .schedule-body{padding:12px}.schedule-legend{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-bottom:10px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#F5F8F9}.schedule-legend>strong{margin-right:3px;color:var(--tx2);font-size:13px}
 .schedule-tag{display:inline-flex;align-items:center;width:fit-content;min-height:24px;border:1px solid currentColor;border-radius:999px;padding:2px 7px;font-size:11px;font-weight:700;white-space:nowrap}.kind-flight{background:#E8E7FA;color:#40378A}.kind-move{background:var(--move);color:var(--move-tx)}.kind-transfer{background:#E9F2FA;color:#245A85}.kind-procedure{background:#F1F3F4;color:#45545D}.kind-stay{background:#EEF5FB;color:#245A85}.kind-meal{background:#F8EEDF;color:#734812}.kind-review{background:#FFF0C2;color:#7A3E08}.kind-techex{background:var(--lane-murakami);color:var(--lane-murakami-tx)}.kind-euro{background:var(--conf);color:var(--conf-tx)}.kind-work{background:var(--conf);color:var(--conf-tx)}.kind-visit{background:var(--choose);color:var(--choose-tx)}.kind-home{background:var(--neu-bg);color:var(--tx2)}

@@ -351,7 +351,7 @@ h3{font-size:var(--f3);margin:14px 0 6px;color:var(--tx2)}
 .trip-time{padding:11px 12px;background:#F4F7F8;color:var(--trip-subtext);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
 .trip-action{min-width:0;padding:11px 12px}
 .trip-detail{display:block;margin-top:4px;color:var(--trip-muted);font-size:13px}
-/* 交通手段アイコン。色・寸法・stroke幅は202610_Europe_TechEx_EuroBLECH/v3.cssと同一にそろえる。
+/* 交通手段アイコン。色・寸法・stroke幅は202610_Europe_TechEx_EuroBLECH/style.cssと同一にそろえる。
    フライトはmask画像、鉄道・徒歩・車・手段未定は呼び出し側がSVGを差し込む。
    `.mode`配下に限定せず単独セレクタにして、`.mode`という構造を持たないイベントでも使えるようにする。 */
 .flight-mark{display:inline-block;flex:0 0 auto;width:20px;height:20px;color:#0B5C60;background:currentColor;vertical-align:-4px;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
@@ -457,7 +457,7 @@ h3{font-size:var(--f3);margin:14px 0 6px;color:var(--tx2)}
 /* フライトカード。1区間を「出発 → 便名 → 到着」の三つ組で見せる。表にすると
    時刻・空港・便名が同じ大きさの升目に並んで、どれが出発でどれが到着か読み取れない。
    2026-10 EuroBLECHの家族向けで一度作り、家族には過剰として外した様式を、
-   本人が見る「利用フライト」へ移した（2026-08-16）。EB側のv3.cssには規則だけが
+   本人が見る「利用フライト」へ移した（2026-08-16）。EB側のstyle.cssには規則だけが
    マークアップ無しで残っていたので、ここへ引き取る。
    中央列は共通の.flight-markを使う。飛行機の文字はWindowsで黒い輪郭グリフになるので、
    このコメント自身にも書かない（机上用印刷版はcore.cssを<style>へ埋め込む）。 */
@@ -580,7 +580,7 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 .cloud-sync .cloud-remember input{width:18px;height:18px;margin:1px 0 0}
 .cloud-sync .cloud-actions{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:7px}
 .cloud-sync [data-trip-cloud-status]{min-height:1.5em;color:var(--mu);font-size:var(--f3)}
-/* 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーではなくここに置く（202610_Europe_TechEx_EuroBLECHのv3.cssと同一） */
+/* 日付カードの一括開閉。旅程タブ専用の操作なのでヘッダーではなくここに置く（202610_Europe_TechEx_EuroBLECHのstyle.cssと同一） */
 .day-toolbar{display:flex;align-items:center;justify-content:flex-end;gap:9px;margin:9px 0 0;color:var(--mu);font-size:var(--f5)}
 .day-toolbar .btn{padding:5px 11px;font-size:var(--f5)}
 /* 「＋詳細」トグルは廃止した。EUROBLECHにも無い。補足は常に出す。
@@ -739,7 +739,7 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 .sum-facts b{display:block;color:var(--tx);font-size:13px;font-weight:700}
 .sum-facts span{display:block;color:var(--tx2)}
 @media(max-width:420px){.sum-facts{grid-template-columns:1fr;text-align:left}}
-/* 日程詳細（家族向け）：202610_Europe_TechEx_EuroBLECHのv3.cssと同一定義
+/* 日程詳細（家族向け）：202610_Europe_TechEx_EuroBLECHのstyle.cssと同一定義
    （.schedule-body／.schedule-legend／.schedule-tag kind-*／.family-day-row／.agenda-line）。
    kind-*はHRSが実際に使う7種類だけを移植する（meal/techex/euro/visit/homeは未使用のため省く）。
    kind-moveとkind-workは共通トークン（--move/--move-tx/--conf/--conf-tx）を使うので、
@@ -784,7 +784,7 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
    ゾーン名に国旗絵文字を入れない。国旗の合成外字はWindowsでは合成されず「JP」「DE」という
    文字のまま表示されることをユーザーが実機で確認済み（EuroBLECHは日本・ドイツの国旗を
    使うが、HRSでは意図的に外す。これはEuroBLECHとの意図的な相違）。
-   このコメント自身にも国旗を書かない。v3.cssは絵文字の一括置換を通らないので、
+   このコメント自身にも国旗を書かない。style.cssは絵文字の一括置換を通らないので、
    説明のつもりで書いた1文字がそのまま生成物に残る。 */
 .timezone-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .timezone-card{display:grid;grid-template-columns:1fr auto;align-items:baseline;gap:2px 8px;min-width:0;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:#F5F8F9;color:var(--tx2)}
@@ -812,7 +812,7 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
   .family-head h1{font-size:20px}
   /* 日程詳細：header/section/asideの3列を2列（見出し＋本文）へ畳む。
      HRSは人別セクションを持たないので、本文列はsection・asideの2段だけでよい
-     （EuroBLECHは人別2枠＋asideの3段）。202610_Europe_TechEx_EuroBLECHのv3.css
+     （EuroBLECHは人別2枠＋asideの3段）。202610_Europe_TechEx_EuroBLECHのstyle.css
      と同じ考え方だが、段数がHRSの実態に合わせて少ない。 */
   /* EuroBLECHの58pxそのままだと、HRSの2桁日付（9/10・9/12・9/13・9/14）が
      見出しの<strong>内で42px要り、40pxの余白（58px−左右padding18px）に収まらず

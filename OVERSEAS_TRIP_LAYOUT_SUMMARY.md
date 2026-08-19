@@ -204,13 +204,12 @@ Workers KVの旅程選択と自由編集欄は、同じ出張スナップショ�
 実装済みの主なファイル:
 
 - `202609_HumanoidSummitEurope/index.html`: 正式なスマートフォン用オンライン版
-- `202609_HumanoidSummitEurope/index_v3.html`: 旧v3 URLから正式入口への転送
-- `202609_HumanoidSummitEurope/index_v1.html`: v3以前の旧オンライン版
-- `202609_HumanoidSummitEurope/index_v3_offline.html`: 机上用印刷版
+- `202609_HumanoidSummitEurope/source.html`: 手で書く唯一の入力元
+- `202609_HumanoidSummitEurope/desk_print.html`: 机上用印刷版
 - `202609_HumanoidSummitEurope/family_print.html`: 家族向け予定表
-- `202609_HumanoidSummitEurope/v3.css`: オンライン版と家族版のCSS
-- `202609_HumanoidSummitEurope/build_v3.mjs`: 生成処理
-- `202609_HumanoidSummitEurope/validate_v3.mjs`: 受入検証
+- `202609_HumanoidSummitEurope/style.css`: オンライン版と家族版のCSS
+- `202609_HumanoidSummitEurope/build.mjs`: 生成処理
+- `202609_HumanoidSummitEurope/validate.mjs`: 受入検証
 
 HRSは休日である9/12・9/13の過ごし方など、まだ決まっていない部分を候補として
 残し、当日までに第一候補と確定条件を詰めていく。便とホテルが確定していても、

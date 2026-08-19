@@ -1,6 +1,6 @@
 # WORK STATUS — overseas trip layout
 
-更新日: 2026-08-16
+更新日: 2026-08-19
 
 ## 文書の役割
 
@@ -103,7 +103,7 @@ EUROBLECHで固めた表示規約を標準に格上げし、HRSと共通基盤�
 
 - 交通手段のアイコン。カラー絵文字とモノクロ文字 `✈︎` は両方とも廃止。
   フライトは `.flight-mark`（SVGマスク）、それ以外は `.mode-icon`。
-  定義は `shared/trip-field/core.css` にあり、`v3.css` へ連結される。
+  定義は `shared/trip-field/core.css` にあり、`style.css` へ連結される。
 - 地図リンクは場所名そのものに張る。`地図` `（地図）` の別リンクは作らない。
   `.place` も `core.css` が持つ（`#2A5FA0`・太さ600・下線なし）。
 - 日付カードの一括開閉。ラベルは現在の状態を示し、個別開閉にも追随する。
@@ -182,7 +182,7 @@ HRS側は2026-08-15で一区切りついた。**EUROBLECHへ戻す作業も同�
    在オランダ日本国大使館の番地も `2` ではなく `5` が正しかった。
 
 判断済みの作業5項目も全件完了。絵文字の全廃（生成物2件とも0件、国旗も0件、
-`v3.js` の23件も処理）、`.line-icon` 19px複製の削除、日付列58→64px、
+`page.js` の23件も処理）、`.line-icon` 19px複製の削除、日付列58→64px、
 `予約クラス` の削除、緊急連絡先の様式。
 
 **交通行の印（点線・オレンジ）は全廃した。** 34行中19行が「頃・約」なのに点線は3行、
@@ -206,11 +206,11 @@ HRS側は2026-08-15で一区切りついた。**EUROBLECHへ戻す作業も同�
 
 生成物 `immigration_print.html` をHRSとEBの両方に足した。
 **英語・静的・氏名とパスポート番号はどこにも保存しない。**
-共通ルールは `CLAUDE.md` に書いた。様式 `.immi-*` はHRSの `v3.css` にあり、
+共通ルールは `CLAUDE.md` に書いた。様式 `.immi-*` はHRSの `style.css` にあり、
 EBはそれを読む。次のSIGGRAPH Asia・LOGIMATでも同じ形で作れる。
 
-生成物の数が変わった。HRSは5件（`index.html` / `index_v3_offline.html` /
-`family_print.html` / `immigration_print.html` / `v3.css`）、
+生成物の数が変わった。HRSは5件（`index.html` / `desk_print.html` /
+`family_print.html` / `immigration_print.html` / `style.css`）、
 EBは3件（`index.html` / `family_print.html` / `immigration_print.html`）。
 
 EBは入国地点が人によって割れる（村上=アムステルダム、美馬・金築=フランクフルト）ため、
@@ -220,7 +220,7 @@ EBは入国地点が人によって割れる（村上=アムステルダム、�
 
 ### Tailwind風マークアップ — 使わない（2026-08-15に決定）
 
-生成物に残すのはCSS側に受けがあるクラスだけ。ビルドが `v3.css` 2枚を走査して、
+生成物に残すのはCSS側に受けがあるクラスだけ。ビルドが `style.css` 2枚を走査して、
 どのルールも受けていないTailwind風のクラスを落とす。**346トークンを削除した。**
 
 **計算後スタイルは削除前と完全に一致する。** 393要素分のハッシュも文書高さも同じで、
@@ -258,8 +258,8 @@ CSSはNode側で読んで渡す。詳細はEBの引き継ぎにある。
   `.line-icon` / `.flight-mark` / `.plan-state` / `.sum-*` が丸ごと無かった。
   寸法規則を失ったSVGは親の幅いっぱいに広がるので、見出しのアイコン1つで
   ページが崩れる。概要タブを先頭に置いて初めて目に付いた
-- 絵文字検査が `v3.css` を対象外にしていて、CSSコメントに絵文字5種と国旗2種が
-  残っていた。v3.cssは絵文字の一括置換も通らない唯一の生成物だった
+- 絵文字検査が `style.css` を対象外にしていて、CSSコメントに絵文字5種と国旗2種が
+  残っていた。style.cssは絵文字の一括置換も通らない唯一の生成物だった
 
 ## 2026-08-16の作業（EBへの戻し）
 
@@ -321,6 +321,25 @@ HRSの5タブ化で決まったことをEBへ戻した。ブランチは `claude
 
 いずれも判断待ちとして蒸し返さない。事情が変わったときだけ開き直す。
 
+## 2026-08-19の作業（ファイル名から版番号を外した）
+
+HRSとEUROBLECHのファイル構成を同一にし、名前から生成物と入力元が読めるようにした。
+両フォルダとも `source.html`（入力）/ `build.mjs` / `validate.mjs` / `style.css` /
+生成物の `index.html`・`family_print.html`・`immigration_print.html` を持つ。
+HRSだけが `desk_print.html`、EBだけが実行時スクリプトの `page.js` を持つ。
+旧名との対応は各フォルダの `CHANGELOG.md` 冒頭にある。
+
+- 削除: 両フォルダの `index_v3.html`（転送ページ）、HRSの `index_v1.html`、
+  EBの `index_v2.html` / `build_v2.mjs` / `v2.css` / `v2.js`
+- **EBの入力元を1枚に統合した。** これまで `build.mjs` は `index_v1.html` に加えて
+  `index_v2.html` を読み、その `#tab-family` だけを抜いて差し込んでいた。
+  家族ブロックは `source.html` の `#tab-family` へ取り込み済みで、差し込み処理と
+  `replaceDivById` を削除した。`divRangeById` は別の用途で使うので残す。
+- `SOURCE_TEXT_REPLACEMENTS` から1件（`EuroBLECH フル参加（全員合流・ハノーファーメッセ）`）を
+  削除した。旧 `index_v1.html` の家族向け表にしか無い文で、直後の差し込みで
+  ブロックごと捨てられていたため、置換結果は元から出力に出ていなかった。
+  数量の検査は1件も変更していない（EB 107件・HRSともに全PASS）。
+
 ## 未完了
 
 ### 1. 予定状態の共通部品 — 札は実装済み（2026-08-15）、残りは「次に決めること」
@@ -355,7 +374,7 @@ EUROBLECHの別行動（10/17〜10/20）は、いまの静的なレーン表示
 
 `index.html` の `#tab-fam`。主要タブ（旅程・会場・記録）に無く、CSSでも非表示で、
 **画面から開く方法が無かった。** 家族向けの正本は `family_print.html` で、そちらは
-`index_v2.html` から組み直して作る。つまり旧v2のまま取り残された死蔵で、
+`source.html`（当時の `index_v2.html`）から組み直して作る。つまり旧v2のまま取り残された死蔵で、
 5セクション構成にも気候の行にも追随していなかった。約5,400字。
 
 道連れで、家族印刷版から消えた表の残骸（`.family-page #fam-table` 一式）も削除。
@@ -372,7 +391,7 @@ EUROBLECHの別行動（10/17〜10/20）は、いまの静的なレーン表示
 **検証は3文字の有無しか見ていなかったので、全部素通りしていた。**
 Unicodeの `Extended_Pictographic` で数える検査へ変えた。いまは3生成物とも0件。
 
-`build_v3.mjs` の `LINE_ICON_PATHS` に41種を追加し、`EMOJI_ICON_MAP` で対応付ける。
+`build.mjs` の `LINE_ICON_PATHS` に41種を追加し、`EMOJI_ICON_MAP` で対応付ける。
 対応表に無い絵文字が現れたらビルドが止まる。国旗は落とす（`dropFlags`）。
 `flash()` はtextContentなのでSVGを置けない。その中の絵文字は文言だけ残す。
 
@@ -407,7 +426,7 @@ Porscheplatzへの経路36字、費用に含む区間54字）。
 **検証の反省**: 横あふれ0件・文字切れ0件だけを見ていた。
 数値検査は通るのに読めない状態は捕まえられない。
 幅と高さの比、文字サイズとの相対関係も測ること。実機の目視も省かない。
-`validate_v3.mjs` に比率の検査を足した（`.line-icon` が `em` を持つこと、
+`validate.mjs` に比率の検査を足した（`.line-icon` が `em` を持つこと、
 気候が `<table>` でないこと）。
 
 ## 推奨する次の着手順
@@ -424,14 +443,14 @@ Porscheplatzへの経路36字、費用に含む区間54字）。
 - `shared/trip-field/core.css`: 共通UI
 - `shared/trip-field/template.html`: 新規イベント用雛形
 - `202609_HumanoidSummitEurope/CLAUDE_HANDOFF.md`: **HRSの引き継ぎ本体**
-- `202609_HumanoidSummitEurope/index.html`: HRS v3の正式公開入口
-- `202609_HumanoidSummitEurope/index_v1.html`: HRS旧版の退避ファイル
-- `202609_HumanoidSummitEurope/build_v3.mjs`: HRS v3の編集元
-- `202609_HumanoidSummitEurope/validate_v3.mjs`: HRS受入検証
+- `202609_HumanoidSummitEurope/index.html`: HRSの正式公開入口（生成物）
+- `202609_HumanoidSummitEurope/source.html`: HRSの入力元（手で書く唯一の原本）
+- `202609_HumanoidSummitEurope/build.mjs`: HRS v3の編集元
+- `202609_HumanoidSummitEurope/validate.mjs`: HRS受入検証
 - `cloudflare/trip-notes-worker/src/index.js`: Worker本体
-- `202610_Europe_TechEx_EuroBLECH/index.html`: EUROBLECH v3の正式公開入口
-- `202610_Europe_TechEx_EuroBLECH/index_v1.html`: EUROBLECH旧版の退避ファイル
-- `202610_Europe_TechEx_EuroBLECH/build_v3.mjs`: EUROBLECH v3の編集元
+- `202610_Europe_TechEx_EuroBLECH/index.html`: EUROBLECHの正式公開入口（生成物）
+- `202610_Europe_TechEx_EuroBLECH/source.html`: EUROBLECHの入力元（手で書く唯一の原本）
+- `202610_Europe_TechEx_EuroBLECH/build.mjs`: EUROBLECH v3の編集元
 - `202610_Europe_TechEx_EuroBLECH/CLAUDE_HANDOFF.md`: EUROBLECHの引き継ぎ本体
 
 ## 検証
@@ -441,8 +460,8 @@ Porscheplatzへの経路36字、費用に含む区間54字）。
 ```powershell
 node .\cloudflare\trip-notes-worker\validate-worker.mjs
 node .\shared\trip-field\validate-template.mjs
-node .\202609_HumanoidSummitEurope\build_v3.mjs
-node .\202609_HumanoidSummitEurope\validate_v3.mjs
+node .\202609_HumanoidSummitEurope\build.mjs
+node .\202609_HumanoidSummitEurope\validate.mjs
 git diff --check
 ```
 

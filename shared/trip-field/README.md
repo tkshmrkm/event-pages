@@ -125,7 +125,7 @@ is open.
 
 ## Current adoption
 
-`202609_HumanoidSummitEurope/build_v3.mjs` uses `runtime.js` for its storage
+`202609_HumanoidSummitEurope/build.mjs` uses `runtime.js` for its storage
 namespace and includes `core.css` in the generated stylesheet. Its HRS-specific
 appearance remains in the HRS builder so adoption does not change the approved
 design.

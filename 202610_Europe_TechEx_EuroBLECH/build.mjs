@@ -6,8 +6,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const sourcePath = join(here, 'index_v1.html');
-const familySourcePath = join(here, 'index_v2.html');
+const sourcePath = join(here, 'source.html');
 const outputPath = join(here, 'index.html');
 const familyOutputPath = join(here, 'family_print.html');
 const immigrationOutputPath = join(here, 'immigration_print.html');
@@ -149,7 +148,10 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['<i class="fas fa-industry"></i> EuroBLECH 公式サイト', '<i class="fas fa-landmark"></i> EuroBLECH 公式サイト'],
   ['EuroBLECH フル参加 — 全員合流', 'EuroBLECH 展示会視察 — 全員合流'],
   ['<!-- Day 5: 10/21 EuroBLECH フル参加（全員合流） -->', '<!-- Day 5: 10/21 EuroBLECH 展示会視察（全員合流） -->'],
-  ['EuroBLECH フル参加（全員合流・ハノーファーメッセ）', 'EuroBLECH 展示会視察（全員合流・ハノーファーメッセ）'],
+  // 「EuroBLECH フル参加（全員合流・ハノーファーメッセ）」への置換はここから外した。
+  // その文はindex_v1.html側の旧家族向け表にしか無く、直後に家族向けブロックごと
+  // index_v2.htmlの内容で差し替えられるため、置換結果は元から捨てられていた。
+  // 家族向けブロックはsource.htmlへ取り込み済みで、二重の入力元は無くなった。
   ['<div class="text-sm text-slate-600 mt-1">村上・美馬・金築 全員参加</div>', '<div class="text-sm text-slate-600 mt-1">村上・美馬・金築 全員で終日視察</div>'],
   ['Hannover Messe · 10/20（火）– 10/23（金）· 全員参加', 'Hannover Messe ・ 10/20（火）– 10/23（金）・ 全員で展示会視察'],
   ['美馬・金築が20日朝ハノーファーへ移動して参加', '美馬・金築が20日朝ハノーファーへ移動して視察'],
@@ -580,11 +582,6 @@ function divRangeById(html, id) {
   throw new Error(`Unclosed #${id}`);
 }
 
-function replaceDivById(html, id, replacement) {
-  const [start, end] = divRangeById(html, id);
-  return html.slice(0, start) + replacement + html.slice(end);
-}
-
 // 置換文字列はLFで書いてある。core.autocrlf=trueのWindowsチェックアウトでは
 // 作業ツリーがCRLFになるため、読み込み時にLFへそろえてから照合する。
 const readSource = (file) => readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
@@ -595,23 +592,20 @@ for (const [from, to, scope] of SOURCE_TEXT_REPLACEMENTS) {
   // 第3要素 'all' は、同一文が複数人・複数日に出る場合にすべて置き換える指定。
   source = scope === 'all' ? source.split(from).join(to) : source.replace(from, to);
 }
-const familySource = readSource(familySourcePath);
-const [familyStart, familyEnd] = divRangeById(familySource, 'tab-family');
-source = replaceDivById(source, 'tab-family', familySource.slice(familyStart, familyEnd));
 source = source
   .replace(/<title>[\s\S]*?<\/title>/i, '<title>TechEx Europe・EuroBLECH 2026 フィールドガイド v3</title>')
   .replace(/<link[^>]+font-awesome[^>]*>/gi, '')
   .replace(/<script[^>]+cdn\.tailwindcss\.com[^>]*><\/script>/gi, '')
   .replace(/<style>[\s\S]*?<\/style>/i, '')
   .replace(/<script>[\s\S]*?<\/script>\s*<\/body>/i, '</body>')
-  .replace('</head>', '<link rel="stylesheet" href="../202609_HumanoidSummitEurope/v3.css">\n<link rel="stylesheet" href="v3.css">\n</head>');
+  .replace('</head>', '<link rel="stylesheet" href="../202609_HumanoidSummitEurope/style.css">\n<link rel="stylesheet" href="style.css">\n</head>');
 
 // 効いているクラスの一覧をCSSから作る。生成物が読み込む2枚を実際に走査する。
 // ブラウザ内のCSSOMは使えない。ビルドは一時ディレクトリでページを開くため、
 // 相対パスのlinkが解決されず document.styleSheets が空になる。
 const cssSources = [
-  readSource(join(here, '..', '202609_HumanoidSummitEurope', 'v3.css')),
-  readSource(join(here, 'v3.css')),
+  readSource(join(here, '..', '202609_HumanoidSummitEurope', 'style.css')),
+  readSource(join(here, 'style.css')),
 ].join('\n');
 const cssKnownClasses = [...new Set(
   [...cssSources.matchAll(/\.((?:[\w-]|\\.)+)/g)].map(m => m[1].replace(/\\/g, ''))
@@ -1313,7 +1307,7 @@ const transformScript = `
   // 毎回1タップ余分になる。概要が効くのは出発前と机上。
   [overview, itinerary, venue, prep, record, family].forEach(panel => main.appendChild(panel));
   nav.after(main);
-  document.body.insertAdjacentHTML('beforeend','<footer class="field-footer">TechEx Europe・EuroBLECH 2026 ・ field guide v3</footer><!--V3_SCRIPT-->');
+  document.body.insertAdjacentHTML('beforeend','<footer class="field-footer">TechEx Europe・EuroBLECH 2026 ・ field guide</footer><!--V3_SCRIPT-->');
   const legacyIconMap = { 'fa-train':'🚆', 'fa-industry':'🏭', 'fa-landmark':'🏛', 'fa-laptop':'💻', 'fa-building':'🏢', 'fa-hotel':'🏨' };
   document.querySelectorAll('i.fas').forEach(icon => {
     if (icon.classList.contains('fa-plane')) {
@@ -1481,13 +1475,13 @@ const transformScript = `
   });
   // ---------- 効いていないクラスを落とす ----------
   // Tailwind CDNは読み込んでいないので、Tailwind風のクラス名は本来どれも効かない。
-  // 実際にはv3.css側が一部を手書きで受けていて、効くものと効かないものが混在していた。
+  // 実際にはstyle.css側が一部を手書きで受けていて、効くものと効かないものが混在していた。
   // クラス名を見ても、それが効くかどうか読めない。2026-08-15に2件の不具合を踏んだ。
   //   日付バッジ … 背景はインラインstyleで効き、text-white は効かず黒文字で残った
   //   印刷版の背景 … bg-blue-50 が祖先の .legacy-tab に依存していると読めなかった
   // 読み込み済みのCSSを実際に走査し、どのルールも受けていないものだけを消す。
   // あとからCSSを足せば次のビルドで自動的に残るので、消し過ぎが固定化しない。
-  // 対象はTailwind風の名前だけ。v3.jsが使うクラス（on/off/today/chip/tab/day/t/d）は
+  // 対象はTailwind風の名前だけ。page.jsが使うクラス（on/off/today/chip/tab/day/t/d）は
   // 走査でTailwind風と判定されないため、そもそも対象外。
   // CSSはNode側で読んで渡す。ビルドは一時ディレクトリでページを開くため、
   // 相対パスのlinkは解決されず document.styleSheets は空になる。
@@ -1588,8 +1582,8 @@ try {
   let familyPrint = `<!DOCTYPE html>
 <html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>TechEx Europe・EuroBLECH 2026 家族向け予定表</title>
-<link rel="stylesheet" href="../202609_HumanoidSummitEurope/v3.css">
-<link rel="stylesheet" href="v3.css">
+<link rel="stylesheet" href="../202609_HumanoidSummitEurope/style.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body class="family-page" data-trip-layout="family-v1"><header class="family-head"><div class="wrap"><div class="eyebrow">EUROPE BUSINESS TRIP 2026</div><h1>家族向け予定表</h1><div class="subtitle">TechEx Europe・EuroBLECH 2026｜10/17（土）〜10/25（日）｜村上・美馬・金築</div><div class="no-print"><button class="btn" type="button" onclick="window.print()">印刷</button></div></div></header><main class="wrap"><div class="legacy-tab family-tab">${familyInner}</div></main></body></html>
 `;
@@ -1615,8 +1609,8 @@ try {
   const immigrationPrint = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>TechEx Europe / EuroBLECH 2026 — Traveller Information</title>
-<link rel="stylesheet" href="../202609_HumanoidSummitEurope/v3.css">
-<link rel="stylesheet" href="v3.css">
+<link rel="stylesheet" href="../202609_HumanoidSummitEurope/style.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body class="immi-page" data-trip-layout="immigration-v1"><main class="wrap">
   <header class="immi-head">
@@ -1646,7 +1640,7 @@ try {
   output = output.slice(0, familyRange[0]) + output.slice(familyRange[1]);
   if (/id="tab-family"/.test(output)) throw new Error('Family section still present after removal');
   if (!output.includes('href="family_print.html"')) throw new Error('Family print link missing from index.html');
-  output = output.replace('<!--V3_SCRIPT-->', '<script src="v3.js"></script>');
+  output = output.replace('<!--V3_SCRIPT-->', '<script src="page.js"></script>');
   output = output.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n');
   writeFileSync(outputPath, output, 'utf8');
   console.log(`Generated ${outputPath}`);

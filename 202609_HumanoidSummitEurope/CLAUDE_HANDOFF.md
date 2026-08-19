@@ -22,7 +22,7 @@ HRSが未完のうちにEUROBLECH側の文書やコードを組み替えない�
 - `family-schedule`（日程詳細）— 俯瞰ブロックを日程詳細と取り違えていた
 
 いずれも「EUROBLECHの数値だけ合わせて構造が違う」という同じ誤りである。
-`202610_Europe_TechEx_EuroBLECH/index.html` の該当セクションと `v3.css` の
+`202610_Europe_TechEx_EuroBLECH/index.html` の該当セクションと `style.css` の
 定義を実際に開き、要素構成・クラス名・寸法を写すこと。
 
 ## ファイル構成
@@ -30,22 +30,20 @@ HRSが未完のうちにEUROBLECH側の文書やコードを組み替えない�
 | ファイル | 役割 |
 | --- | --- |
 | `index.html` | **v3の生成物。フォルダの公開入口。** 直接編集しない |
-| `index_v3_offline.html` | 机上用印刷版の生成物。スクリプト0件を保つ |
+| `desk_print.html` | 机上用印刷版の生成物。スクリプト0件を保つ |
 | `family_print.html` | 家族向け印刷版の生成物 |
 | `immigration_print.html` | 入国審査用の生成物。英語・静的・旅券番号を保存しない |
-| `v3.css` | 生成物。`shared/trip-field/core.css` を連結して作る |
-| `index_v1.html` | 旧版の退避 |
-| `index_v2.html` | **生成の入力元。** 旅程・家族データ（`FAM`）の出どころ |
-| `index_v3.html` | 以前の共有URLを `./` へ転送する互換ページ。生成物ではない |
-| `build_v3.mjs` | 生成コード。**編集するのはここ** |
-| `validate_v3.mjs` | 受入検査 |
-| `V3_DESIGN_BRIEF.md` | 設計文書（英語） |
+| `style.css` | 生成物。`shared/trip-field/core.css` を連結して作る |
+| `source.html` | **生成の入力元。** 旅程・家族データ（`FAM`）の出どころ |
+| `build.mjs` | 生成コード。**編集するのはここ** |
+| `validate.mjs` | 受入検査 |
+| `DESIGN_BRIEF.md` | 設計文書（英語） |
 | `references/design-samples/` | v3を決めるまでの比較サンプル。基準にしない |
 
 ## 編集ルール
 
-- **生成物を直接編集しない。** `build_v3.mjs` を直して `node build_v3.mjs` で再生成する。
-- `index_v1.html`、`index_v2.html` を上書きしない。
+- **生成物を直接編集しない。** `build.mjs` を直して `node build.mjs` で再生成する。
+- `source.html` を生成物として上書きしない。手で書く唯一の入力元。
 - 置換のアンカーは、当てる前に出現回数が1件であることを確認する。`mustReplace` を使い、
   見つからなければ例外で止める。件数が変わったら気づける形にする。
 - 共通機能は `../shared/trip-field` に置く。HRS固有の外観はHRS側に残す。
@@ -74,7 +72,7 @@ HRSが未完のうちにEUROBLECH側の文書やコードを組み替えない�
   Best Western Hotel Airport Frankfurt（De-Saint-Exupéry-Straße 6）
 - In case of enquiry — 在フランクフルト日本国総領事館（2026-08-15に公式サイトで確認）
 
-様式は `v3.css` の `.immi-*`。EBもこれを読んで使うので、HRS側に置いてある。
+様式は `style.css` の `.immi-*`。EBもこれを読んで使うので、HRS側に置いてある。
 検証で、静的であること・保存機構を持たないこと・英語のみであること・
 入力欄が2つあること・主要な事実が載っていることを見る。
 
@@ -86,7 +84,7 @@ HRSが未完のうちにEUROBLECH側の文書やコードを組み替えない�
 **準備タブには寿命がある。** 出発前に要対応タスクが埋まったら、タブごと畳んでよい。
 畳めるようにするため、中身は要対応タスク1枚だけにしてある。利用フライト・宿泊・
 地図とリンク集は現地で使うので旅程へ移した（空港で便を引けなくなるため）。
-`validate_v3.mjs` が、要対応タスクが準備にあること・3枚が準備に無く旅程にあることを
+`validate.mjs` が、要対応タスクが準備にあること・3枚が準備に無く旅程にあることを
 見ている。**準備に現地用のものを戻さないこと。**
 
 畳んだあとは `概要 / 旅程 / 視察 / 記録` の4つになる。
@@ -138,7 +136,7 @@ humanoidrobotssummit.com と acgrobot.com を開いて確認した。参加1,000
 
 1区間を「出発 → 便名 → 到着」の三つ組にし、間に乗り継ぎ、見出しの右に総所要。
 様式は `shared/trip-field/core.css` の `.flight-card`。EBの家族向けで一度作り、
-家族には過剰として外したもので、EBのv3.cssにマークアップ無しの規則だけが
+家族には過剰として外したもので、EBのstyle.cssにマークアップ無しの規則だけが
 残っていたのを共通基盤へ引き取った。
 
 値は `FLIGHT_JOURNEYS`。`buildFlightCards` が組み立て前に元HTMLとの一致を確認し、
@@ -208,7 +206,7 @@ EUROBLECHは `🇯🇵 日本` としているが、Windowsでは国旗に合成
 規則の本体は `../CLAUDE.md`、`../OVERSEAS_TRIP_LAYOUT_SUMMARY.md` の4.5節、
 `../shared/trip-field/README.md` にある。
 
-`build_v3.mjs` の `FOLD_NOTES` が対象一覧。`lead`（先頭の一致文字列）で
+`build.mjs` の `FOLD_NOTES` が対象一覧。`lead`（先頭の一致文字列）で
 `.note` を特定し、まるごと折り畳みへ移す。`visible` を持つ項目だけ
 「常時表示の事実 ＋ 折り畳みの理屈」へ分ける。`visible` が元の文の先頭と
 一致しなければビルドが止まるので、分割のつもりで書き換えることはできない。
@@ -222,7 +220,7 @@ EUROBLECHは `🇯🇵 日本` としているが、Windowsでは国旗に合成
 ## 予定の状態は5つ（2026-08-15）
 
 共通部品は `../shared/trip-field/core.css` の `.plan-state`。対応付けは
-`build_v3.mjs` の `PLAN_STATE_FIXUPS`。HRSでの内訳と、そう決めた理由。
+`build.mjs` の `PLAN_STATE_FIXUPS`。HRSでの内訳と、そう決めた理由。
 
 | 元の札 | 新しい状態 | 理由 |
 |---|---|---|
@@ -263,8 +261,8 @@ SVGを置けず、`stripScriptEmoji` が絵文字だけ落とす。
 ## 検証
 
 ```powershell
-node .\202609_HumanoidSummitEurope\build_v3.mjs
-node .\202609_HumanoidSummitEurope\validate_v3.mjs
+node .\202609_HumanoidSummitEurope\build.mjs
+node .\202609_HumanoidSummitEurope\validate.mjs
 node .\shared\trip-field\validate-template.mjs
 node .\cloudflare\trip-notes-worker\validate-worker.mjs
 git diff --check
@@ -274,7 +272,7 @@ git diff --check
 
 - 横あふれ0件、セル内の文字切れ0件
 - コンソールエラー0件
-- 机上用印刷版（`index_v3_offline.html`）のスクリプト0件、外部依存0件
+- 机上用印刷版（`desk_print.html`）のスクリプト0件、外部依存0件
 - 家族印刷版のスクリプト0件
 - 日付カードの一括開閉が動き、ラベルが個別開閉に追随する
 
@@ -334,15 +332,15 @@ git diff --check
 13pxの `.btn` では14.9pxになる（実測、比1.15）。
 
 **これはHRS固有の外観ではなく全イベントの基準**なので、定義は
-`shared/trip-field/core.css` に置いた。HRS側（`build_v3.mjs` の `outdoorCss`）は
+`shared/trip-field/core.css` に置いた。HRS側（`build.mjs` の `outdoorCss`）は
 複製を持たず、共通定義をそのまま使う。規則は `CLAUDE.md` と
 `shared/trip-field/README.md` にも書いた。
 
-EUROBLECHの `v3.css` には固定19pxの複製が残っている。EUROBLECHは
-HRSの `v3.css` を先に読み、自分の `v3.css` を後に読むので、いまはそちらが勝つ。
+EUROBLECHの `style.css` には固定19pxの複製が残っている。EUROBLECHは
+HRSの `style.css` を先に読み、自分の `style.css` を後に読むので、いまはそちらが勝つ。
 **HRSが固まってからの「戻す」作業で削る。**
 
-検証には比率の検査を足した（`validate_v3.mjs`）。
+検証には比率の検査を足した（`validate.mjs`）。
 `.line-icon` が `em` で寸法を持つこと、気候が `<table>` でないことを見る。
 
 ## 進行中・次にやること

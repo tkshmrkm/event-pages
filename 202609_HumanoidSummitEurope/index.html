@@ -23,7 +23,7 @@
   入力（ToDo・案の選択・メモ）は localStorage に保存。
   ============================================================
 -->
-<link rel="stylesheet" href="v3.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body data-trip-layout="field-v1" data-trip-key="hrs2026-v3">
 
@@ -810,7 +810,7 @@
 
 <div class="credit">
   作成日：2026年6月13日 ｜ 更新日：2026年8月19日 ｜ 出典：<a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">humanoidrobotssummit.com</a>（2026-08-19 閲覧）・<a href="https://acgrobot.com/" target="_blank" rel="noopener">acgrobot.com</a>（2026-08-19 閲覧）<br>
-  レイアウト v3（屋外スマホ・連続旅程・3セクション）｜ 変更履歴は CHANGELOG.md
+  変更履歴は CHANGELOG.md
 </div>
 
 </div><!-- /wrap -->
@@ -950,7 +950,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ---------- 日付カードの一括開閉 ----------
      ラベルは今の状態を示すので、個別に開閉したときや日付チップで
-     開いたときも追随させる（202610_Europe_TechEx_EuroBLECHのv3.jsと同一の判定）。
+     開いたときも追随させる（202610_Europe_TechEx_EuroBLECHのpage.jsと同一の判定）。
      開閉状態は保存しない（既定は全部開く）。                                */
   const daysToggle = document.getElementById('days-tg');
   const syncDaysToggle = () => {

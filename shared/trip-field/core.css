@@ -69,7 +69,7 @@
 .trip-time{padding:11px 12px;background:#F4F7F8;color:var(--trip-subtext);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
 .trip-action{min-width:0;padding:11px 12px}
 .trip-detail{display:block;margin-top:4px;color:var(--trip-muted);font-size:13px}
-/* 交通手段アイコン。色・寸法・stroke幅は202610_Europe_TechEx_EuroBLECH/v3.cssと同一にそろえる。
+/* 交通手段アイコン。色・寸法・stroke幅は202610_Europe_TechEx_EuroBLECH/style.cssと同一にそろえる。
    フライトはmask画像、鉄道・徒歩・車・手段未定は呼び出し側がSVGを差し込む。
    `.mode`配下に限定せず単独セレクタにして、`.mode`という構造を持たないイベントでも使えるようにする。 */
 .flight-mark{display:inline-block;flex:0 0 auto;width:20px;height:20px;color:#0B5C60;background:currentColor;vertical-align:-4px;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
@@ -175,7 +175,7 @@
 /* フライトカード。1区間を「出発 → 便名 → 到着」の三つ組で見せる。表にすると
    時刻・空港・便名が同じ大きさの升目に並んで、どれが出発でどれが到着か読み取れない。
    2026-10 EuroBLECHの家族向けで一度作り、家族には過剰として外した様式を、
-   本人が見る「利用フライト」へ移した（2026-08-16）。EB側のv3.cssには規則だけが
+   本人が見る「利用フライト」へ移した（2026-08-16）。EB側のstyle.cssには規則だけが
    マークアップ無しで残っていたので、ここへ引き取る。
    中央列は共通の.flight-markを使う。飛行機の文字はWindowsで黒い輪郭グリフになるので、
    このコメント自身にも書かない（机上用印刷版はcore.cssを<style>へ埋め込む）。 */
