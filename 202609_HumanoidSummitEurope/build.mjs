@@ -1241,7 +1241,6 @@ function buildMain({ offline = false } = {}) {
       <div class="${offline ? 'desk-print-trigger' : 'no-print header-actions'}" style="display:flex;gap:5px;flex-shrink:0">
         <a class="btn" href="family_print.html">${printIconHtml}家族</a>
         <a class="btn" href="immigration_print.html" title="入国審査用（英語）">${printIconHtml}入国</a>
-        <a class="btn" href="session_speaker_notes.html" title="セッション×登壇者の予想・Day3訪問先の詳細（別ページ）">${lineIconHtml('book')}レポ</a>
         <button class="btn" onclick="window.print()" aria-label="印刷">${printIconHtml}</button>
       </div>
     </div>
