@@ -349,7 +349,7 @@ const familyCss = String.raw`
    「ひと目で俯瞰する場所」でなくなる（2026-08-16）。 */
 // 冒頭バナーの未確定サマリー。概要タブの日程概要も、どの日に札を付けるかを
 // この1文から決める。未確定の日付を2か所で別々に持つと、片方だけ古くなる。
-const UNDECIDED_BANNER = '未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。便とホテルは確定済み。<a href="#day-0911">9/11</a> の企業訪問はFraunhofer IPA・ARENA2036の2社に決定（グループ分けは公式未案内）。';
+const UNDECIDED_BANNER = '未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。便とホテルは確定済み。<a href="#day-0911">9/11</a> の企業訪問先は Fraunhofer IPA・ARENA2036 の2社（訪問順は未案内）。';
 
 const overviewCss = String.raw`
 .ov-days{width:100%;border-collapse:collapse;font-size:13px}
@@ -910,6 +910,22 @@ const dayToggleScript = String.raw`  const openDay = id => {
     a.dataset.for = d.id;
     if (d.dataset.date === todayISO) a.classList.add('today');
     a.addEventListener('click', () => openDay(d.id));   /* 畳んだ日へ飛ぶときは開く */
+    dayBox.appendChild(a);
+  });
+
+  /* 日付の後ろに、旅程タブ末尾の資料カードへの導線を足す。
+     日カードだけを並べていたので、便・宿・地図はスクロールしないと辿り着けなかった。
+     日付と混ざらないよう区切りのラベルを1つ挟む。畳む対象ではないのでopenDayは呼ばない。 */
+  const refLbl = document.createElement('span');
+  refLbl.className = 'lbl'; refLbl.textContent = '資料';
+  dayBox.appendChild(refLbl);
+  [['flights','フライト'], ['stays','宿泊'], ['maplinks','地図']].forEach(([id, label]) => {
+    const target = document.getElementById(id);
+    if (!target) return;
+    const a = document.createElement('a');
+    a.className = 'chip'; a.href = '#' + id; a.textContent = label;
+    /* 折り畳みカード（地図）は開いてから飛ばないと中身が見えない。 */
+    a.addEventListener('click', () => { if (target.tagName === 'DETAILS') target.open = true; });
     dayBox.appendChild(a);
   });
 
@@ -1514,7 +1530,7 @@ function buildMain({ offline = false } = {}) {
   // のと同じ理屈。タブは増やさない。
   const prepSection = (html.match(/<section class="tab" id="tab-prep"[\s\S]*?\n<\/section>/) || [])[0];
   if (!prepSection) throw new Error('prep section not found for the on-site card move');
-  const cut = prepSection.search(/<div class="card">\s*<h2 class="ttl"><span class="flight-mark"/);
+  const cut = prepSection.search(/<div class="card"[^>]*>\s*<h2 class="ttl"><span class="flight-mark"/);
   if (cut < 0) throw new Error('flight card not found inside the prep section');
   const onSiteCards = prepSection.slice(cut).replace(/\s*<\/section>\s*$/, '');
   ['利用フライト', '宿泊（2拠点）', '地図・その他リンク集'].forEach(title => {

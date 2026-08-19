@@ -139,7 +139,7 @@
 
   <div class="banner b-warn">
     <span class="i"><span class="line-icon line-icon-warning" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 21 20H3z"/><path d="M12 9v5"/><circle cx="12" cy="17" r="1"/></svg></span></span>
-    <div>未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。便とホテルは確定済み。<a href="#day-0911">9/11</a> の企業訪問はFraunhofer IPA・ARENA2036の2社に決定（グループ分けは公式未案内）。</div>
+    <div>未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。便とホテルは確定済み。<a href="#day-0911">9/11</a> の企業訪問先は Fraunhofer IPA・ARENA2036 の2社（訪問順は未案内）。</div>
   </div>
 
   <div class="card">
@@ -543,7 +543,7 @@
   </details>
 
 
-<div class="card">
+<div class="card" id="flights">
     <h2 class="ttl"><span class="flight-mark" role="img" aria-label="フライト"></span> 利用フライト（NGO⇔FRA Finnair）</h2>
     <div class="bd">
       <div class="banner b-info" style="margin-bottom:10px"><span class="line-icon line-icon-flight" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z"/></svg></span><div>NGO発着・HEL経由の往復エコノミー。<strong>前日入りができ、犬山からの空港アクセスが短い旅程。</strong></div></div>
@@ -571,7 +571,7 @@
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" id="stays">
     <h2 class="ttl"><span class="line-icon line-icon-hotel" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="13"/><rect x="10" y="16" width="4" height="5"/><rect x="7" y="11" width="3" height="3"/><rect x="14" y="11" width="3" height="3"/></svg></span>宿泊（2拠点）</h2>
     <div class="bd small" style="display:grid;gap:10px">
       <div>
@@ -585,7 +585,7 @@
     </div>
   </div>
 
-  <details class="card">
+  <details class="card" id="maplinks">
     <summary class="ttl" style="cursor:pointer;list-style:none"><h2 style="display:inline;font:inherit;margin:0"><span class="line-icon line-icon-map" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4z"/><path d="M9 4v13m6-10.5V20"/></svg></span> 地図・その他リンク集（タップで開く）</h2></summary>
     <div class="bd">
       <div class="links">
@@ -945,6 +945,22 @@ document.addEventListener('DOMContentLoaded', () => {
     a.dataset.for = d.id;
     if (d.dataset.date === todayISO) a.classList.add('today');
     a.addEventListener('click', () => openDay(d.id));   /* 畳んだ日へ飛ぶときは開く */
+    dayBox.appendChild(a);
+  });
+
+  /* 日付の後ろに、旅程タブ末尾の資料カードへの導線を足す。
+     日カードだけを並べていたので、便・宿・地図はスクロールしないと辿り着けなかった。
+     日付と混ざらないよう区切りのラベルを1つ挟む。畳む対象ではないのでopenDayは呼ばない。 */
+  const refLbl = document.createElement('span');
+  refLbl.className = 'lbl'; refLbl.textContent = '資料';
+  dayBox.appendChild(refLbl);
+  [['flights','フライト'], ['stays','宿泊'], ['maplinks','地図']].forEach(([id, label]) => {
+    const target = document.getElementById(id);
+    if (!target) return;
+    const a = document.createElement('a');
+    a.className = 'chip'; a.href = '#' + id; a.textContent = label;
+    /* 折り畳みカード（地図）は開いてから飛ばないと中身が見えない。 */
+    a.addEventListener('click', () => { if (target.tagName === 'DETAILS') target.open = true; });
     dayBox.appendChild(a);
   });
 
