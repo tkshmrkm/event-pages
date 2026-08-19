@@ -74,6 +74,7 @@
   .facility dt{color:var(--mu); font-weight:700}
   .facility dd{margin:0}
   .facility ul{margin:8px 0 0; padding-left:18px; font-size:13.5px}
+  .facility h4{font-size:12.5px; color:var(--mu); margin:12px 0 4px; font-weight:700}
   .src{font-size:12px; color:var(--mu2); margin-top:10px; padding-top:8px; border-top:1px dashed var(--line)}
   .src a{color:var(--mu)}
   footer{margin-top:32px; padding-top:12px; border-top:1px solid var(--line); font-size:12px; color:var(--mu2)}
@@ -341,6 +342,10 @@
 
   <h2 id="day3">Day 3（9/11 金）— 訪問先施設の情報</h2>
   <p class="sub">当日訪問する2社について、各公式サイトで確認できた事実のみ記載（未確認情報は書かない）。</p>
+  <div class="banner">
+    <b>撮影・録画は禁止</b>
+    プロジェクトのNDA（秘密保持契約）により、訪問中の撮影・録画はできない（acgrobot.com公式発表・2026-08-19閲覧）。以下の「見どころ」は当日その場で探す目印として予習用に使うもので、写真に残すことは想定していない。
+  </div>
 
   <div class="facility">
     <h3>Fraunhofer IPA（Fraunhofer Institute for Manufacturing Engineering and Automation）</h3>
@@ -354,7 +359,15 @@
     <ul>
       <li>2026-05-27付の公式ニュースで「ヒューマノイドロボットのベンチマーク」を開発したと発表。産業応用に向けてエネルギー効率・クリーンルーム適合性・データセキュリティ等を第三者機関として評価する仕組み。今回のHRS訪問と直接関連する可能性が高い。</li>
     </ul>
-    <div class="src">出典：<a href="https://www.ipa.fraunhofer.de/en.html" target="_blank" rel="noopener">ipa.fraunhofer.de</a>（About us / Institute Profile / Contact 各ページ、2026-08-19 閲覧）</div>
+    <h4>見どころ</h4>
+    <ul>
+      <li>ヒューマノイドベンチマークの実機：初回評価対象はUnitree G1 EDU-4（Dex3-1 3指ハンド、ファームウェア1.04）。技術・基本能力／複合能力／クリーンルーム適合性／機能安全性／サイバーセキュリティ／エネルギー効率の6基準で評価。衝突力が安全基準の500Nを超えた点やBluetoothの脆弱性（後日修正）も指摘された。登壇予定のWerner Kraus氏（Automation and Robotics部門長）のコメントあり。</li>
+      <li>IPAnema 3：大型部材のハンドリング・検査・組立・3Dプリントに対応するケーブル駆動パラレルロボット。</li>
+      <li>Care-O-bot 4：同研究所発の家庭用アシスタントロボットのシリーズ第4世代。Robotics Testing Facilityのページに現行のテストベッドとして掲載されている。</li>
+      <li>介助・見守り系デモンストレーター群：SERODI（インテリジェント看護カート）、ELEVON（移乗リフト）、sens@home（転倒検知）、MobiNa（移動式緊急アシスタント）。</li>
+      <li>Application Center Industrie 4.0：AGV・移動サービスロボット向けナビゲーションソフトウェアのテスト環境。</li>
+    </ul>
+    <div class="src">出典：<a href="https://www.ipa.fraunhofer.de/en.html" target="_blank" rel="noopener">ipa.fraunhofer.de</a>（About us / Institute Profile / Contact 各ページ、2026-08-19 閲覧）。<a href="https://www.ipa.fraunhofer.de/en/press-media/press_releases/benchmark-for-humanoid-robots.html" target="_blank" rel="noopener">ヒューマノイドベンチマークのプレスリリース</a>、<a href="https://www.ipa.fraunhofer.de/en/about-us/laboratories_and_testing_facilities/Robotics_Testing_Facility.html" target="_blank" rel="noopener">Robotics Testing Facilityのページ</a>（いずれも2026-08-19 閲覧）</div>
   </div>
 
   <div class="facility">
@@ -370,7 +383,14 @@
       <li>ロボティクス関連の一例として「AutoGBA」プロジェクトがある。Daimler TruckとAgile Robots（HRS登壇のSven Parusel氏の所属）が共同で自動化ソリューションを開発し、ARENA2036を共同ラボとして利用している。</li>
       <li>Fraunhofer IPAとは同じVaihingen地区にあり、近距離（同じ70569エリア）。1回のバス移動で2施設を回れる立地的な近さがある。</li>
     </ul>
-    <div class="src">出典：<a href="https://arena2036.de/en/" target="_blank" rel="noopener">arena2036.de</a>（Start / Overview of projects / Contact &amp; Directions 各ページ、2026-08-19 閲覧）</div>
+    <h4>見どころ</h4>
+    <ul>
+      <li>Physical AI &amp; Humanoid Robotics：単純な搬送台車から認知能力を持つヒューマノイドロボットまでを対象とするプラットフォームプロジェクト。ロボット支援の組立セルに必要なセンサー・周辺機器・コントローラーと、誤り回避などAIベースの運用手法を扱う。</li>
+      <li>Interactive Bosch floor：床面自体がセンサー化された物流・生産インフラのデモンストレーター（"スマートフロア"）。リアルタイムで物流動線を分析・最適化する。担当はJavier Stillig氏（Bosch Rexroth）。</li>
+      <li>HyMatFlow：Premium Roboticsのピッキングロボットと自律走行ロボット（AMR）の連携による、マテリアルフロー効率化の検証。</li>
+      <li>AutoGBA（前掲）：Daimler TruckとAgile Robots（HRS登壇のSven Parusel氏の所属）による自動化ソリューション開発。</li>
+    </ul>
+    <div class="src">出典：<a href="https://arena2036.de/en/" target="_blank" rel="noopener">arena2036.de</a>（Start / Overview of projects / Contact &amp; Directions 各ページ、2026-08-19 閲覧）。<a href="https://arena2036.de/en/uebersicht-projekte/" target="_blank" rel="noopener">Overview of projects（Robotics &amp; Intralogistics / Artificial Intelligence フィルター）</a>、<a href="https://arena2036.de/en/bosch-boden/" target="_blank" rel="noopener">Interactive Bosch floorのプロジェクトページ</a>（いずれも2026-08-19 閲覧）</div>
   </div>
   <p class="back-to-nav"><a href="#top">▲ 日付ナビへ</a></p>
 
