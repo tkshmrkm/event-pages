@@ -66,6 +66,9 @@ body{line-height:1.62;padding-bottom:24px}
 .wrap{max-width:940px;padding-left:12px;padding-right:12px}
 .hdr{position:static;background:#fff;box-shadow:none;border-bottom:1px solid var(--line)}
 .hdr-top{padding:12px 0 10px}
+/* ヘッダーの家族／入国／レポ／印刷。EUROBLECHのstyle.cssと同じ規則をHRSにも持たせる
+   （2026-08-19。クラスだけ出して規則が無く、393pxで見出しが4行に潰れていた）。 */
+.header-actions{display:flex;gap:6px;flex:0 0 auto}
 .hdr h1{font-size:20px}
 .hdr .subtitle{font-size:13px;color:var(--tx2)}
 .field-nav{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.98);border-bottom:2px solid var(--line);box-shadow:0 2px 6px rgba(16,24,32,.12)}
@@ -164,8 +167,10 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
 .legend .mode-icon{display:inline-flex}
 @media(max-width:640px){
   .wrap{padding-left:10px;padding-right:10px}
-  .hdr-top{gap:8px}
+  .hdr-top{gap:8px;align-items:center}
   .hdr-top .no-print{align-self:center}
+  .header-actions{gap:4px}
+  .header-actions .btn{padding-left:8px;padding-right:8px}
   .hdr .eyebrow{font-size:11px}
   .hdr h1{font-size:18px}
   /* 5タブ（概要・旅程・会場・準備・記録）だと8pxでは393pxに12px足りず、記録の右端が
@@ -349,7 +354,7 @@ const familyCss = String.raw`
    「ひと目で俯瞰する場所」でなくなる（2026-08-16）。 */
 // 冒頭バナーの未確定サマリー。概要タブの日程概要も、どの日に札を付けるかを
 // この1文から決める。未確定の日付を2か所で別々に持つと、片方だけ古くなる。
-const UNDECIDED_BANNER = '未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。';
+const UNDECIDED_BANNER = '未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方';
 
 const overviewCss = String.raw`
 .ov-days{width:100%;border-collapse:collapse;font-size:13px}

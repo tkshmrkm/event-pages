@@ -124,9 +124,12 @@ for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtm
   const flat = text.replace(/<[^>]*>/g, '');
   assert(/未確定は[^。]*9\/12[^。]*9\/13[^。]*の過ごし方/.test(flat),
     `${name}: the lead summary must list 9/12 and 9/13 as undecided`);
-  const lead = flat.slice(flat.indexOf('未確定は'), flat.indexOf('未確定は') + 120);
-  assert(!/Fraunhofer IPA|ARENA2036/.test(lead),
+  const warn = (text.match(/<div class="banner b-warn"[\s\S]*?<\/div>\s*<\/div>/) || [''])[0].replace(/<[^>]*>/g, '');
+  assert(warn.includes('未確定は'), `${name}: the undecided banner is missing`);
+  assert(!/Fraunhofer IPA|ARENA2036/.test(warn),
     `${name}: settled facts belong in the day card, not in the undecided summary`);
+  // 常時表示行なので末尾に句点を付けない（複数文になったときだけ文間に使う）。
+  assert(!/。\s*$/.test(warn.trim()), `${name}: the undecided banner must not end with 。`);
 }
 for (const [name, text, flights] of [[onlineName, online, ONLINE_FLIGHT_ICONS], ['desk_print.html', offlineHtml, OFFLINE_FLIGHT_ICONS]]) {
   assert(countIn(text, /class="flight-mark"/g) === flights, `${name}: expected ${flights} flight-mark icons`);
@@ -313,6 +316,22 @@ for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtm
   // 旧書式が復活していないこと。.st-skip（不参加）は進み具合の軸ではないので残す。
   assert(!/class="st st-tbd|class="et t-tbd|class="st st-booked/.test(text), `${name}: old ad-hoc state chips must not come back`);
 }
+// 旅程タブ末尾の資料カードへの導線（2026-08-19）。チップだけ、飛び先だけ、の
+// 片側が欠けても画面では気付けないので、在り処と行き先を対で見る。
+// 行き先のカードは両方が持つ。チップは実行時に組むので、スクリプトを持たない
+// 机上用印刷版には無い（あちらは全カードが展開済みで並ぶので導線が要らない）。
+const REFERENCE_CARDS = [['flights','フライト'], ['stays','宿泊'], ['maplinks','地図']];
+for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtml]]) {
+  REFERENCE_CARDS.forEach(([id]) => {
+    assert(text.includes(`id="${id}"`), `${name}: the itinerary reference card #${id} is missing`);
+  });
+}
+REFERENCE_CARDS.forEach(([id, label]) => {
+  assert(online.includes(`['${id}','${label}']`), `${onlineName}: the nav chip for #${id} (${label}) is missing`);
+});
+// 地図カードは<details>。開いてから飛ばないと中身が畳まれたまま着地する。
+assert(/const target = document\.getElementById\(id\)[\s\S]{0,400}target\.tagName === 'DETAILS'/.test(online),
+  `${onlineName}: the map chip must open the folded card before jumping`);
 assert(sharedCss.includes('.plan-state{') && PLAN_STATES.length === 5, 'style.css: shared plan-state component missing');
 assert(!sharedCss.includes('.st-booked{') && !sharedCss.includes('.et.t-tbd{'), 'style.css: dead state chip rules must be removed with the chips');
 assert((offlineHtml.match(/class="line-icon line-icon-print"/g) || []).length >= 1, 'desk_print.html: expected the print line-icon SVG in the desk-print banner');
