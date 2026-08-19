@@ -349,7 +349,7 @@ const familyCss = String.raw`
    「ひと目で俯瞰する場所」でなくなる（2026-08-16）。 */
 // 冒頭バナーの未確定サマリー。概要タブの日程概要も、どの日に札を付けるかを
 // この1文から決める。未確定の日付を2か所で別々に持つと、片方だけ古くなる。
-const UNDECIDED_BANNER = '未確定は <a href="#day-0911">9/11</a> の企業訪問（訪問先・集合とも公式未発表）と、<a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。便とホテルは確定済み。';
+const UNDECIDED_BANNER = '未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方。便とホテルは確定済み。<a href="#day-0911">9/11</a> の企業訪問はFraunhofer IPA・ARENA2036の2社に決定（グループ分けは公式未案内）。';
 
 const overviewCss = String.raw`
 .ov-days{width:100%;border-collapse:collapse;font-size:13px}
@@ -823,7 +823,7 @@ const FOLD_NOTES = [
   { lead: '9:20着から約90分あり', summary: '乗る便の判断' },
   { lead: '・Markthalle Stuttgart', summary: 'ランチ候補' },
   { lead: 'セッション一覧（全11項目', summary: '会期の内訳' },
-  { lead: '公式サイトによれば、Day 1・2', summary: '会期の構成' },
+  { lead: 'Liederhalle前からチャーターバスで出発', summary: '訪問の詳細' },
   { lead: 'ワンワールド便。JAL/ワンワールドサファイア', summary: 'ラウンジの利用資格' },
   { lead: 'クラシックダブル28㎡', summary: '予約条件' },
 
@@ -872,16 +872,16 @@ const PLAN_STATE_FIXUPS = [
   ['<span class="et t-tbd">要検討</span>', planStateHtml('candidate'), 1],
   // ワインシュトゥーベは候補の1つ。要予約は確定に必要な条件なので語を残す。
   ['<span class="st st-tbd">要予約</span>', `${planStateHtml('candidate')}<span class="state-note">要予約</span>`, 1],
-  // Day 3の訪問先は先方が未発表で、こちらの案も無い＝未検討。
-  // 「未発表」の意味は折り畳み「会期の構成」に書いてある。
-  ['<span class="et t-tbd">未発表</span>', planStateHtml('unconsidered'), 1],
+  // Day 3の訪問先はFraunhofer IPA・ARENA2036の2社に確定。グループ分け（1／2）だけ
+  // 公式未案内＝仮決め（行くこと自体は決まっている）。詳細は折り畳み「訪問の詳細」。
+  ['<span class="et t-tbd">訪問順は未案内</span>', `${planStateHtml('tentative')}<span class="state-note">訪問順は未案内</span>`, 1],
   // ラウンジへ行くこと自体は決まっていて、どのラウンジかが未確認＝仮決め。
   ['<span class="et t-tbd">ラウンジ名は要確認</span>', planStateHtml('tentative'), 1],
   // 会場タブのDay 3見出しにも同じ状態の札があった（旅程タブとは別の書式で
-  // 「訪問先 未発表」と書かれていた）。同じ予定なので同じ札にする。
+  // 「訪問順は未案内」と書かれていた）。同じ予定なので同じ札にする。
   [
-    '<span class="st st-tbd" style="margin-left:6px">訪問先 未発表</span>',
-    `<span class="plan-state plan-state-unconsidered" style="margin-left:6px">${PLAN_STATE_LABELS.unconsidered}</span>`,
+    '<span class="st st-tbd" style="margin-left:6px">訪問順は未案内</span>',
+    `<span class="plan-state plan-state-tentative" style="margin-left:6px">${PLAN_STATE_LABELS.tentative}</span><span class="state-note">訪問順は未案内</span>`,
     1,
   ],
 ];
@@ -1197,9 +1197,10 @@ function buildMain({ offline = false } = {}) {
     `${offline ? sharedCoreCss : ''}\n${outdoorCss}\n${overviewCss}\n${offline ? familyCss : ''}\n${offline ? deskPrintCss : ''}\n</style>`,
     'style end');
   // 冒頭の要約が「未確定は9/12・9/13だけ」と断定していたが、ページ自身が
-  // 9/11（Day 3・企業訪問）に未検討の札を2枚付けている。訪問先リストも集合方法も
-  // 公式未発表で、こちらが決められる段階にすらない。9/12・9/13（こちらが決める）とは
-  // 未確定の理由が違うので、書き分けたうえで9/11を落とさない。
+  // 9/11（Day 3・企業訪問）に仮決めの札を2枚付けている。訪問先（Fraunhofer IPA・
+  // ARENA2036）と集合方法（Liederhalle発のチャーターバス）は公式発表済みで、
+  // 残るのはグループ分けだけ。9/12・9/13（こちらが決める）とは未確定の理由が
+  // 違うので、書き分けたうえで9/11を落とさない。
   html = mustReplace(html,
     '未確定は <a href="#day-0912">9/12</a>・<a href="#day-0913">9/13</a> の過ごし方だけ。便とホテルは確定済み。',
     UNDECIDED_BANNER,
@@ -1727,7 +1728,7 @@ const FAMILY_DAYS = [
     ['9:00〜17:00','work','仕事','HRS Europe 2026 Day 2（Liederhalle）'],
   ], stays:[['全員','Maritim Stuttgart']] },
   { date:'9/11', dow:'金', events:[
-    ['終日','work','仕事','HRS Europe 2026 Day 3：近郊企業への訪問（Company Visits）。訪問先は未発表'],
+    ['8:30〜12:00','work','仕事','HRS Europe 2026 Day 3：企業訪問（Fraunhofer IPA・ARENA2036）。Liederhalle前からチャーターバスで出発、午後は自由行動'],
   ], stays:[['全員','Maritim Stuttgart']] },
   { date:'9/12', dow:'土', events:[
     ['日中','review','過ごし方は未定','A：Mainz観戦／B：ケルン／C：ポルシェ／D：ポルシェ＋ケルンの4案から検討中'],
@@ -1769,13 +1770,15 @@ const OVERVIEW_MAIN_KIND_ORDER = ['work', 'review', 'flight', 'move', 'procedure
 // 「。」以降は補足なので落とす。「（）」は残す。'中部国際空港（セントレア）着' の
 // ように、括弧の後ろに述語が続く行があり、括弧で切ると意味が変わる。
 const overviewHeadline = text => text.replace(/<[^>]+>/g, '').split('。')[0].trim();
-// 未確定の日だけ、「。」の後ろに残した理由を小さく添える（9/11の「訪問先は未発表」）。
+// 未確定の日だけ、「。」の後ろに残した理由を小さく添える（9/12・9/13の過ごし方案）。
 // 状態の札は付けない。CLAUDE.mdの「状態を持つ単位は予定1件」に従い、札の所有者は
 // 旅程・会場に置く。同じ予定の札を概要にも複製すると、片方だけ古くなる。
+// 9/11は訪問先・集合方法とも確定済み（残るのはグループ分けのみ）なので、
+// 2026-08-19にこの一覧から外した。バナー本文には9/11の決定事項として残す。
 const overviewTail = text => text.replace(/<[^>]+>/g, '').split('。').slice(1).join('。').trim();
 // 未確定の日は自分で判定しない。ページ冒頭の警告バナーが名指ししている日付を
 // そのまま使い、バナー側が変わったらビルドで気付けるようにする。
-const OVERVIEW_UNDECIDED_DATES = ['9/11', '9/12', '9/13'];
+const OVERVIEW_UNDECIDED_DATES = ['9/12', '9/13'];
 
 // 日ごとの区分。1行の内容だけだと便名や会議名が並ぶばかりで、その日が何の日なのかが
 // 読み取れない（2026-08-16にユーザーが指摘）。ここもFAMILY_DAYSから導出する。
@@ -1837,7 +1840,7 @@ function buildOverviewSection(source, undecidedBanner) {
     // 各日のテーマ。会場タブの日別プレースホルダーが持っている文字列をそのまま使う。
     '政策・市場・量産・Embodied AI・モーター技術',
     '医療応用・センサー・GDPR・フレキシブル生産ライン',
-    '近郊企業へのガイド付き訪問（訪問先は開催直前に公式発表）',
+    '企業訪問（Fraunhofer IPA・ARENA2036、8:30〜12:00）',
   ];
   overviewFacts.forEach(fact => {
     if (!source.includes(fact)) throw new Error(`Overview fact missing from source: ${fact}`);
@@ -1903,7 +1906,7 @@ function buildOverviewSection(source, undecidedBanner) {
       <div class="ov-facility">
         <div><b>Day 1</b><span>9/9（水）全${d1}項目 — 政策・市場・量産・Embodied AI・モーター技術</span></div>
         <div><b>Day 2</b><span>9/10（木）全${d2}セッション — 医療応用・センサー・GDPR・フレキシブル生産ライン</span></div>
-        <div><b>Day 3</b><span>9/11（金）近郊企業へのガイド付き訪問（訪問先は開催直前に公式発表）</span></div>
+        <div><b>Day 3</b><span>9/11（金）企業訪問（Fraunhofer IPA・ARENA2036、8:30〜12:00）</span></div>
       </div>
       <div class="ov-facility">
         <div><b>主催</b><span><a class="place" href="https://acgrobot.com/" target="_blank" rel="noopener">ACG Events Global</a></span></div>

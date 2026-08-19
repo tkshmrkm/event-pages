@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HRS Europe 2026 — セッション×登壇者 予想メモ／Day3 施設情報</title>
+<style>
+  :root{
+    --bg:#fcfcfc; --card:#fff; --line:#e2e8f0; --line2:#f1f5f9;
+    --tx:#1e293b; --mu:#64748b; --mu2:#94a3b8;
+    --accent:#4f46e5; --accent-bg:#eef2ff; --accent-line:#c7d2fe;
+    --warn:#92400e; --warn-bg:#fef3c7; --warn-line:#fde68a;
+    --hi:#0f766e; --hi-bg:#f0fdfa; --hi-line:#99f6e4;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:16px; background:var(--bg); color:var(--tx);
+    font-family:'Yu Gothic','Meiryo','Hiragino Sans',sans-serif;
+    line-height:1.6; font-size:15px;
+  }
+  .wrap{max-width:920px;margin:0 auto}
+  h1{font-size:20px;margin:0 0 4px}
+  .sub{color:var(--mu);font-size:13px;margin:0 0 16px}
+  .banner{
+    background:var(--warn-bg); border:1px solid var(--warn-line); color:var(--warn);
+    border-radius:8px; padding:10px 14px; font-size:13.5px; margin-bottom:20px;
+  }
+  .banner b{display:block;margin-bottom:2px}
+  h2{font-size:18px; margin:28px 0 4px; padding-bottom:6px; border-bottom:2px solid var(--tx); scroll-margin-top:12px}
+  .daynav{display:flex; gap:8px; flex-wrap:wrap; margin:0 0 18px}
+  .daynav a{
+    display:inline-block; padding:6px 14px; border-radius:999px; background:var(--accent-bg);
+    border:1px solid var(--accent-line); color:var(--accent); font-size:13px; font-weight:700; text-decoration:none;
+  }
+  .daynav a:hover{background:var(--accent-line)}
+  .back-to-nav{display:inline-block; margin-top:10px; font-size:12px}
+  .back-to-nav a{color:var(--mu); text-decoration:none}
+  .back-to-nav a:hover{text-decoration:underline}
+  h3{font-size:14px; margin:18px 0 8px; color:var(--mu)}
+  table{width:100%; border-collapse:collapse; font-size:13.5px; margin-bottom:6px}
+  th{background:#334155; color:#fff; text-align:left; padding:6px 8px; font-weight:700; font-size:12.5px}
+  td{border-top:1px solid var(--line); padding:8px 8px; vertical-align:top}
+  tr:nth-child(even) td{background:var(--line2)}
+  .n{width:26px; color:var(--mu2); font-weight:700; text-align:center}
+  .en{font-weight:600}
+  .ja{color:var(--mu); font-size:12.5px; margin-top:2px}
+  .kind{
+    display:inline-block; font-size:11px; font-weight:700; padding:1px 6px;
+    border-radius:999px; background:#fce7f3; color:#9d174d; margin-right:6px; vertical-align:middle;
+  }
+  .speaker{width:230px}
+  .sp-name{font-weight:700}
+  .sp-co{color:var(--mu); font-size:12.5px}
+  .conf{
+    display:inline-block; font-size:11px; font-weight:700; padding:1px 6px;
+    border-radius:999px; margin-left:4px; vertical-align:middle;
+  }
+  .conf-high{background:var(--hi-bg); color:var(--hi); border:1px solid var(--hi-line)}
+  .conf-low{background:var(--line2); color:var(--mu); border:1px solid var(--line)}
+  .bio{
+    margin-top:6px; padding:8px 10px; background:var(--accent-bg); border-left:3px solid var(--accent);
+    border-radius:0 6px 6px 0; font-size:12.5px; color:#3730a3;
+  }
+  .bio b{display:block; font-size:11.5px; color:var(--accent); margin-bottom:3px; text-transform:uppercase; letter-spacing:.03em}
+  .reason{font-size:12.5px; color:var(--mu); margin-top:4px}
+  .unmatched{color:var(--mu2); font-style:italic}
+  .facility{
+    background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:16px;
+  }
+  .facility h3{margin-top:0; font-size:16px; color:var(--tx)}
+  .facility .meta{font-size:12.5px; color:var(--mu); margin-bottom:10px}
+  .facility .meta a{color:var(--accent)}
+  .facility dl{display:grid; grid-template-columns:90px 1fr; gap:6px 10px; font-size:13.5px; margin:0}
+  .facility dt{color:var(--mu); font-weight:700}
+  .facility dd{margin:0}
+  .facility ul{margin:8px 0 0; padding-left:18px; font-size:13.5px}
+  .src{font-size:12px; color:var(--mu2); margin-top:10px; padding-top:8px; border-top:1px dashed var(--line)}
+  .src a{color:var(--mu)}
+  footer{margin-top:32px; padding-top:12px; border-top:1px solid var(--line); font-size:12px; color:var(--mu2)}
+  .crumbs{font-size:12.5px; color:var(--mu2); margin:0 0 14px; display:flex; align-items:center; flex-wrap:wrap; gap:4px}
+  .crumbs a{color:var(--accent); text-decoration:none}
+  .crumbs a:hover{text-decoration:underline}
+  .crumbs .sep{color:var(--mu2)}
+  .crumbs .here{color:var(--mu)}
+  @media print{ body{padding:0} .facility,{break-inside:avoid} .crumbs{display:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="crumbs" aria-label="パンくずリスト">
+    <a href="index.html">HRS Europe 2026 出張ガイド</a>
+    <span class="sep">›</span>
+    <span class="here">セッション×登壇者 予想メモ／Day 3 施設情報</span>
+  </nav>
+
+  <h1>HRS Europe 2026 — セッション×登壇者 予想メモ／Day 3 施設情報</h1>
+  <p class="sub">出張ガイド（index.html）本体とは別の参考資料。旅程には組み込まない。</p>
+
+  <div class="banner">
+    <b>これは推測を含む資料です</b>
+    公式サイト（humanoidrobotssummit.com・acgrobot.com）に「誰がどのセッションで話すか」の対応表は無い。Day1・Day2の「予想される登壇者」は、公式アジェンダの項目名と登壇者の肩書き・経歴を突き合わせた<strong>私（Claude）の推測</strong>で、公式の割り当てではない。会場配布のプログラムで答え合わせすること。Day3の施設情報は各社・機関の公式サイトを確認した事実。
+  </div>
+
+  <nav class="daynav" id="top" aria-label="日付ジャンプ">
+    <a href="#day1">Day 1（9/9）</a>
+    <a href="#day2">Day 2（9/10）</a>
+    <a href="#day3">Day 3（9/11）</a>
+  </nav>
+
+  <h2 id="day1">Day 1（9/9 水）— 全11項目</h2>
+  <table>
+    <thead><tr><th class="n">#</th><th>セッション</th><th class="speaker">予想される登壇者（推測）</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="n">1</td>
+        <td><div class="en">Policy Framework, Market Access Standards &amp; Compliance Process</div><div class="ja">政策枠組み・市場アクセス基準・コンプライアンス</div></td>
+        <td>
+          <div class="sp-name">Patrick Schwarzkopf<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">Managing Director, VDMA Robotics + Automation Association</div>
+          <div class="reason">業界団体（ドイツ機械工業連盟のロボティクス部会）のトップという肩書きが、規制・標準化というテーマに直結する。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">2</td>
+        <td><div class="en">A New Paradigm — Opportunities and Challenges in the Mass Production Era</div><div class="ja">量産時代の新パラダイム</div></td>
+        <td>
+          <div class="sp-name">Zhang Min<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">Director, Unitree Robotics</div>
+          <div class="reason">中国発の量産先行企業。「量産の機会と課題」という語り口に最も近い立場。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">3</td>
+        <td><div class="en">Deep Integration of Embodied Intelligence and Large Models: Synchronous Awakening of the "Brain" and "Cerebellum" of Humanoid Robots</div><div class="ja">Embodied Intelligenceと大規模モデルの統合</div></td>
+        <td>
+          <div class="sp-name">Nicolas Heess<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">Director of Robotics, Google DeepMind</div>
+          <div class="reason">AI・強化学習とロボット身体制御の統合がそのまま専門領域。DeepMindのロボティクス部門トップ。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">4</td>
+        <td><div class="en">Application Software in the Mass Production Era: The Last Mile for Large-Scale Deployment of General-Purpose Humanoid Robots</div><div class="ja">量産時代のアプリケーションソフトウェア</div></td>
+        <td>
+          <div class="sp-name">Timo Kistner<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">EMEA Industry Lead, AI for Manufacturing, NVIDIA</div>
+          <div class="reason">NVIDIAの製造業向けAIリード。ソフトウェアスタック（Isaac等）による量産展開というテーマに合う。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">5</td>
+        <td><div class="en"><span class="kind">Panel</span>A New Era of Generalist Robotics — The Rise of Humanoids</div><div class="ja">ジェネラリストロボティクスの新時代</div></td>
+        <td>
+          <div class="sp-name">Aya Durbin<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">Humanoid Director of Product, Boston Dynamics</div>
+          <div class="reason">Francesco Ferro（PAL Robotics CEO）、Jochen Rudat（Humanoid社 Chief Growth &amp; Revenue Officer）も同席するパネル向きの顔ぶれ。</div>
+          <div class="bio"><b>公式プロフィール（Francesco Ferro）</b>“With over two decades of experience pioneering service robotics, Francesco Ferro focuses on humanoid and service robot commercialisation… He was named CEO of the Year in Robotics by European CEO in 2024.”</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">6</td>
+        <td><div class="en">Innovative Motor Technology Helps the Rapid Development of Humanoid Robots</div><div class="ja">モーター技術の革新</div></td>
+        <td>
+          <div class="sp-name">Andreas P. Friedrich<span class="conf conf-low">確度：中</span></div>
+          <div class="sp-co">Managing Director Technology &amp; Strategy, Allegro MicroSystems</div>
+          <div class="reason">磁気センサー・モーター制御ICのメーカー。モーター技術セッションとの親和性は高いが、企業規模的に他の候補もあり得る。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">7</td>
+        <td><div class="en">Advanced Joint and Movement Control Technology</div><div class="ja">関節・動作制御技術</div></td>
+        <td>
+          <div class="sp-name">Michael Gienger<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">Chief Scientist, Honda Research Institute Europe</div>
+          <div class="reason">ASIMO以来の二足歩行・関節制御研究の系譜。公式プロフィールが専門領域を明記している。</div>
+          <div class="bio"><b>公式プロフィール</b>“…specializes in bipedal locomotion, human-robot interaction and cognitive robotic systems. As Chief Scientist at Honda Research Institute Europe GmbH, he leads cutting-edge R&amp;D in intelligent robotics.”</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">8</td>
+        <td><div class="en"><span class="kind">Panel</span>Investing in the Humanoid Robotics Ecosystem in Europe: A Venture Capital Perspective</div><div class="ja">欧州ヒューマノイドへの投資（VC視点）</div></td>
+        <td>
+          <div class="sp-name">Zeo Nam<span class="conf conf-low">確度：中</span></div>
+          <div class="sp-co">Venture Partner, Universe Ventures</div>
+          <div class="reason">登壇者中で唯一「Venture Partner」の肩書き。Katrin J. Yuan（Swiss Future Institute AG CEO）、Balázs Barta（PBN Germany MD）も投資・戦略寄りでパネル候補。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">9</td>
+        <td><div class="en">Collaborative Robots for Commercial Use: Safe, Flexible and Easy to Deploy</div><div class="ja">商用協働ロボット</div></td>
+        <td>
+          <div class="sp-name">Sven Parusel<span class="conf conf-low">確度：中</span></div>
+          <div class="sp-co">SVP Academia &amp; Research, Agile Robots</div>
+          <div class="reason">協働ロボット（Agile Robots）の研究部門トップ。Fabio Puglia（Oversonic Robotics President &amp; CTO）も候補。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">10</td>
+        <td><div class="en">Challenges and Opportunities in the Transformation of the Automotive Industry — From Electric Vehicles to Humanoid Robots</div><div class="ja">自動車産業の変革（EVからヒューマノイドへ）</div></td>
+        <td>
+          <div class="sp-name">Nikita Aleshin<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">Global Project Lead for Multi-Purpose Robotics, BMW Group</div>
+          <div class="reason">Laurent Duthoit（Renault Group, Head of Next Robotics）、Hagen Stübing・Ehsan Sharafian Ardakani（Porsche Engineering）も揃う、自動車3社が名を連ねる最有力セッション。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">11</td>
+        <td><div class="en"><span class="kind">VIP</span>VIP Dinner</div><div class="ja">VIPパス対象。今回は取得しないので出張ガイド側は不参加扱い</div></td>
+        <td class="unmatched">トークセッションではないため対象外</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="back-to-nav"><a href="#top">▲ 日付ナビへ</a></p>
+
+  <h2 id="day2">Day 2（9/10 木）— 全13項目</h2>
+  <table>
+    <thead><tr><th class="n">#</th><th>セッション</th><th class="speaker">予想される登壇者（推測）</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="n">1</td>
+        <td><div class="en">Humanoid Robots: The AI Accelerator</div><div class="ja">AIアクセラレーター</div></td>
+        <td>
+          <div class="sp-name">Jürgen Müller<span class="conf conf-low">確度：中</span></div>
+          <div class="sp-co">CEO, Robert Bosch Robotics</div>
+          <div class="reason">Bosch社内で「Physical AI」を軸としたヒューマノイド事業を統括。Timo Kistner（NVIDIA）も候補。</div>
+          <div class="bio"><b>公式プロフィール</b>“…serves as CEO of Robert Bosch Robotics GmbH and Bosch's Business Owner for Humanoid Robotics. He… shapes the product and technology roadmap for next-generation humanoid systems including Physical AI, perception and control.”</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">2</td>
+        <td><div class="en">Application of Humanoid Robots in the Medical and Health Field</div><div class="ja">医療・ヘルスケア分野への応用</div></td>
+        <td>
+          <div class="sp-name">Christian Gräff<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">Managing Director, Smart Living &amp; Health Center e.V.</div>
+          <div class="reason">肩書きも実績もそのままヘルスケア領域。介護分野へのヒューマノイド導入が専門。</div>
+          <div class="bio"><b>公式プロフィール</b>“…focused on deploying humanoid robots in elderly care. He led a high-level German delegation… to Shanghai's Humanoid Robot Innovation Incubator… His team contributed to the research paper 'Humanoid Robots, A Future Health Care Service?'”</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">3</td>
+        <td><div class="en">Force Sensors — From Accurate Sensing to Intelligent Decision-Making</div><div class="ja">力覚センサー：高精度センシングから知的判断へ</div></td>
+        <td>
+          <div class="sp-name">Mo Maghsoudnia<span class="conf conf-low">確度：中</span></div>
+          <div class="sp-co">Founder/CEO, UltraSense Systems</div>
+          <div class="reason">タッチ・力覚センサー半導体の創業者。Andreas P. Friedrich（Allegro MicroSystems）も候補。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">4</td>
+        <td><div class="en"><span class="kind">Dialogue</span>Investors, Engineers, and Ethicists — An Introduction to Building Humanoid Robots</div><div class="ja">投資家・エンジニア・倫理学者による構築入門</div></td>
+        <td>
+          <div class="sp-name">Christian Souche<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">MD, Head of Robotics Innovation, Accenture</div>
+          <div class="reason">コンサルティング企業として技術・ビジネス・社会実装の交点に立つ立場が、投資家・エンジニア・倫理学者を橋渡しする対話形式に合う。</div>
+          <div class="bio"><b>公式プロフィール</b>“Christian leads Robotics activities at Accenture Innovation, working at the intersection of human, business and technology trends… fosters innovation, sustainability, inclusion and positive impact for society through robotics.”</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">5</td>
+        <td><div class="en">High-Performance Specialty Engineering Plastic — Weight Reduction Enhances Humanoid Robot Locomotion and Manipulation Precision</div><div class="ja">高性能特殊エンジニアリングプラスチック（軽量化）</div></td>
+        <td class="unmatched">登壇者リストに素材メーカーの担当者名が見当たらず、対応不明（ゴールドスポンサーのEnvalior社が樹脂メーカーだが、登壇者としては未確認）</td>
+      </tr>
+      <tr>
+        <td class="n">6</td>
+        <td><div class="en">Compliance-Oriented Privacy Protection Architecture for Humanoid Robots in Home Service Environments</div><div class="ja">家庭用サービス環境向けプライバシー保護</div></td>
+        <td>
+          <div class="sp-name">Christian Gräff<span class="conf conf-low">確度：中</span></div>
+          <div class="sp-co">Managing Director, Smart Living &amp; Health Center e.V.</div>
+          <div class="reason">家庭内サービス（介護含む）の文脈で同一人物が2セッションを担当する可能性。確証は無い。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">7</td>
+        <td><div class="en">The Practice and Development of Flexible Production Lines for Humanoid Robots in the Automotive Industry</div><div class="ja">自動車産業向けフレキシブル生産ライン</div></td>
+        <td>
+          <div class="sp-name">Dr. André Scholz<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">Head of Innovation Department Autonomous Factory, Siemens</div>
+          <div class="reason">Siemensの「自律工場」革新部門トップという肩書きが、セッション名とほぼ一致。</div>
+          <div class="bio"><b>公式プロフィール</b>“Dr. André Scholz leads the 'Autonomous Factory' innovation department within Factory Automation at Siemens AG… focuses on developing modular software components that enable customers to achieve the vision of an autonomous factory.”</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">8</td>
+        <td><div class="en">GDPR-Compliant Edge-Cloud Collaborative Computing Architecture with Localized Data Governance for Humanoid Robotics</div><div class="ja">GDPR準拠エッジ・クラウド協調コンピューティング</div></td>
+        <td>
+          <div class="sp-name">Ronald Stärz<span class="conf conf-low">確度：中</span></div>
+          <div class="sp-co">Head of System Architecture Humanoid Robots, Infineon Technologies</div>
+          <div class="reason">半導体メーカーのヒューマノイド向けシステムアーキテクチャ責任者。Philip Fischer（Microsoft, Industry Advisor）もクラウド側の候補。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">9</td>
+        <td><div class="en">Low-Power Motion Control Algorithm Innovations for Humanoid Robots under EU Carbon Neutrality Targets</div><div class="ja">低消費電力モーション制御アルゴリズム</div></td>
+        <td>
+          <div class="sp-name">Ricard Picas<span class="conf conf-low">確度：中</span></div>
+          <div class="sp-co">Systems Architect and Functional Safety Lead, Novanta</div>
+          <div class="reason">モーション制御システムの安全設計責任者。Allegro MicroSystemsの担当者も候補。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">10</td>
+        <td><div class="en">Multidimensional Haptic Dexterous Hand: Fueling the Haptic Revolution for Embodied Intelligence</div><div class="ja">多次元触覚デクスタラスハンド</div></td>
+        <td>
+          <div class="sp-name">Maarten Witteveen<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">Cofounder &amp; CTO, MANUS</div>
+          <div class="reason">MANUSはモーションキャプチャー・グローブ／触覚デバイスの企業。セッション名とほぼ直結。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">11</td>
+        <td><div class="en">Ethical Governance and Policy Coordination — Social Norms for Human-Robot Coexistence, Regulation of Cross-Border Data Flows</div><div class="ja">倫理的ガバナンスと政策協調</div></td>
+        <td>
+          <div class="sp-name">Katrin J. Yuan<span class="conf conf-low">確度：中</span></div>
+          <div class="sp-co">CEO, Swiss Future Institute AG</div>
+          <div class="reason">「未来研究所」という社名から政策・未来予測寄りの立場と推測。確証は無い。</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">12</td>
+        <td><div class="en">Penetration Pathways of Humanoid Robots in Industrial Scenarios</div><div class="ja">産業シーンにおける浸透経路</div></td>
+        <td>
+          <div class="sp-name">Ercan Gündüz<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">Head of Production Engineering &amp; Automation Department, Arçelik-LG</div>
+          <div class="reason">全登壇者の中で最も直接的に一致。公式プロフィールが「実際の製造現場へのヒューマノイド導入」を明記。</div>
+          <div class="bio"><b>公式プロフィール</b>“…currently leading one of Türkiye's pioneering initiatives to deploy humanoid robots in real manufacturing environments. His work focuses on transforming pilot projects into scalable production solutions.”</div>
+        </td>
+      </tr>
+      <tr>
+        <td class="n">13</td>
+        <td><div class="en"><span class="kind">Panel</span>Humanoid Robotics' Industrial Breakthrough in Europe in the Medical and Health Field: Technological Adaptation and Business Model Closure</div><div class="ja">欧州の医療分野における産業ブレイクスルー</div></td>
+        <td>
+          <div class="sp-name">Christian Gräff<span class="conf conf-high">確度：高</span></div>
+          <div class="sp-co">Managing Director, Smart Living &amp; Health Center e.V.</div>
+          <div class="reason">医療・ヘルスケアのパネルなので#2と同一人物が中心と推測。</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="back-to-nav"><a href="#top">▲ 日付ナビへ</a></p>
+
+  <h2 id="day3">Day 3（9/11 金）— 訪問先施設の情報</h2>
+  <p class="sub">当日訪問する2社について、各公式サイトで確認できた事実のみ記載（未確認情報は書かない）。</p>
+
+  <div class="facility">
+    <h3>Fraunhofer IPA（Fraunhofer Institute for Manufacturing Engineering and Automation）</h3>
+    <div class="meta">Nobelstraße 12, 70569 Stuttgart（Vaihingen地区・University of Stuttgart隣接）</div>
+    <dl>
+      <dt>設立</dt><dd>1959年</dd>
+      <dt>規模</dt><dd>フラウンホーファー協会の中でも最大級の研究所の1つ、職員約1,150名</dd>
+      <dt>分野</dt><dd>製造・自動化技術の研究開発。11の研究領域（Digital Industries、Health Industry、Automated Intralogistics/Manufacturing/Assembly Systems、Battery and Hydrogen Systems 等）を持つ</dd>
+      <dt>登壇者</dt><dd>Werner Kraus（Head of Research Division Automation and Robotics）がHRS Europe 2026に登壇予定</dd>
+    </dl>
+    <ul>
+      <li>2026-05-27付の公式ニュースで「ヒューマノイドロボットのベンチマーク」を開発したと発表。産業応用に向けてエネルギー効率・クリーンルーム適合性・データセキュリティ等を第三者機関として評価する仕組み。今回のHRS訪問と直接関連する可能性が高い。</li>
+    </ul>
+    <div class="src">出典：<a href="https://www.ipa.fraunhofer.de/en.html" target="_blank" rel="noopener">ipa.fraunhofer.de</a>（About us / Institute Profile / Contact 各ページ、2026-08-19 閲覧）</div>
+  </div>
+
+  <div class="facility">
+    <h3>ARENA2036</h3>
+    <div class="meta">ARENA2036 e.V., Pfaffenwaldring 19, 70569 Stuttgart（University of Stuttgart Vaihingenキャンパス内・S-Bahn「Universität」駅すぐ）</div>
+    <dl>
+      <dt>形態</dt><dd>官民の会員制「研究キャンパス」（Forschungscampus）。自動車企業・部品メーカー・大学・研究機関が同じ建屋に集まり、共同プロジェクトを行う</dd>
+      <dt>テーマ</dt><dd>モビリティと生産の未来（"innovation platform for mobility and production of the future"）</dd>
+      <dt>分野</dt><dd>プロジェクトは Robotics &amp; Intralogistics／Connectivity／Artificial Intelligence／Sustainability／Mobility／Data Interoperability／Production 等のカテゴリーに分かれる</dd>
+      <dt>登壇者</dt><dd>Dr.-Ing. Muhammad Saeed（Research Coordinator）がHRS Europe 2026に登壇予定</dd>
+    </dl>
+    <ul>
+      <li>ロボティクス関連の一例として「AutoGBA」プロジェクトがある。Daimler TruckとAgile Robots（HRS登壇のSven Parusel氏の所属）が共同で自動化ソリューションを開発し、ARENA2036を共同ラボとして利用している。</li>
+      <li>Fraunhofer IPAとは同じVaihingen地区にあり、近距離（同じ70569エリア）。1回のバス移動で2施設を回れる立地的な近さがある。</li>
+    </ul>
+    <div class="src">出典：<a href="https://arena2036.de/en/" target="_blank" rel="noopener">arena2036.de</a>（Start / Overview of projects / Contact &amp; Directions 各ページ、2026-08-19 閲覧）</div>
+  </div>
+  <p class="back-to-nav"><a href="#top">▲ 日付ナビへ</a></p>
+
+  <footer>
+    作成：2026-08-19。出典：<a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">humanoidrobotssummit.com</a>、<a href="https://acgrobot.com/" target="_blank" rel="noopener">acgrobot.com</a>、<a href="https://www.ipa.fraunhofer.de/en.html" target="_blank" rel="noopener">ipa.fraunhofer.de</a>、<a href="https://arena2036.de/en/" target="_blank" rel="noopener">arena2036.de</a>（いずれも2026-08-19閲覧）。<br>
+    Day1・Day2の「予想される登壇者」列は公式の割り当てではなく推測。会場配布のプログラムで確認すること。
+  </footer>
+
+</div>
+</body>
+</html>
