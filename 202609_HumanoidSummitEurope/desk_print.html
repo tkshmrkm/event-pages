@@ -677,6 +677,15 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
    進み具合の札（.plan-state）ではないので、そちらと見た目を分ける。 */
 .ov-days td.ov-kind{width:74px}
 .ov-kind>span{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:0 6px;background:var(--hov);color:var(--tx2);font-size:11px;font-weight:700;white-space:nowrap}
+/* フライトは1区間1行。日程概要は1日1行が原則だが、便だけは例外にする。復路が
+   「過ごし方は未定」に隠れて、帰国便が概要のどこにも出ていなかった（2026-08-23）。
+   横に並べ、入りきらなければ折り返す。393pxで2行、PC幅で1行に収まる分量に留める。 */
+.ov-leg{display:flex;flex-wrap:wrap;align-items:baseline;gap:1px 7px;margin-top:4px;font-size:12px;line-height:1.5;color:var(--tx2)}
+.ov-leg:first-child{margin-top:0}
+.ov-leg .line-icon{color:var(--mu)}
+.ov-leg-no,.ov-leg-code,.ov-leg-pt b{color:var(--tx);font-weight:700}
+.ov-leg-pt{display:inline-flex;align-items:baseline;gap:3px;white-space:nowrap}
+.ov-leg-day,.ov-leg-tz,.ov-leg-pt em,.ov-leg-dur{color:var(--mu);font-size:11px;font-style:normal}
 .ov-facility{display:grid;gap:7px}
 .ov-facility>div{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:start;font-size:13px;line-height:1.55}
 .ov-facility b{color:var(--mu);font-size:12px;font-weight:700}
@@ -933,7 +942,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
       <div class="sum-facts">
         <div><b>会期</b><span>9/9〜9/11</span><span>3日間</span></div>
         <div><b>全日程</b><span>8日間</span><span>2名</span></div>
-        <div><b>帰着</b><span>9/14（月）</span><span>セントレア 19:35</span></div>
+        <div><b>帰着</b><span>9/14（月）</span><span>中部国際空港 19:35</span></div>
       </div>
     </div>
   </div>
@@ -944,19 +953,19 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
       <table class="ov-days">
         <thead><tr><th>日付</th><th>区分</th><th>主な内容</th><th>宿泊</th></tr></thead>
         <tbody>
-          <tr><td class="ov-date">9/7（月）</td><td class="ov-kind"><span>出国</span></td><td>NGO発 → HEL（Finnair AY80／A350・13時間5分）</td><td class="ov-stay">機内</td></tr>
-          <tr><td class="ov-date">9/8（火）</td><td class="ov-kind"><span>移動</span></td><td>HEL発 → FRA（AY1411／A321・2時間40分）9:20着</td><td class="ov-stay">Maritim Stuttgart</td></tr>
+          <tr><td class="ov-date">9/7（月）</td><td class="ov-kind"><span>出国</span></td><td><div class="ov-leg"><span class="line-icon line-icon-flight" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z"/></svg></span><span class="ov-leg-no">AY80</span><span class="ov-leg-pt"><b>22:50</b><span class="ov-leg-tz">JST</span><span class="ov-leg-code">NGO</span><em>発</em></span><span class="ov-leg-pt"><span class="ov-leg-day">9/8</span><b>5:55</b><span class="ov-leg-tz">EEST</span><span class="ov-leg-code">HEL</span><em>着</em></span><span class="ov-leg-dur">13時間5分</span></div></td><td class="ov-stay">機内</td></tr>
+          <tr><td class="ov-date">9/8（火）</td><td class="ov-kind"><span>到着</span></td><td>Stuttgart Hbf着 → Maritim Stuttgartに荷物を預ける（正式チェックインは15:00〜）<div class="ov-leg"><span class="line-icon line-icon-flight" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z"/></svg></span><span class="ov-leg-no">AY1411</span><span class="ov-leg-pt"><b>7:40</b><span class="ov-leg-tz">EEST</span><span class="ov-leg-code">HEL</span><em>発</em></span><span class="ov-leg-pt"><b>9:20</b><span class="ov-leg-tz">CEST</span><span class="ov-leg-code">FRA</span><em>着</em></span><span class="ov-leg-dur">2時間40分</span></div></td><td class="ov-stay">Maritim Stuttgart</td></tr>
           <tr><td class="ov-date">9/9（水）</td><td class="ov-kind"><span>イベント</span></td><td>HRS Europe 2026 Day 1（Liederhalle）</td><td class="ov-stay">Maritim Stuttgart</td></tr>
           <tr><td class="ov-date">9/10（木）</td><td class="ov-kind"><span>イベント</span></td><td>HRS Europe 2026 Day 2（Liederhalle）</td><td class="ov-stay">Maritim Stuttgart</td></tr>
           <tr><td class="ov-date">9/11（金）</td><td class="ov-kind"><span>イベント</span></td><td>HRS Europe 2026 Day 3：企業訪問（Fraunhofer IPA・ARENA2036）</td><td class="ov-stay">Maritim Stuttgart</td></tr>
           <tr><td class="ov-date">9/12（土）</td><td class="ov-kind"><span>休日</span></td><td>A：Mainz観戦／B：ケルン／C：ポルシェ／D：ポルシェ＋ケルンの4案から検討中</td><td class="ov-stay">Best Western Hotel Airport Frankfurt</td></tr>
-          <tr><td class="ov-date">9/13（日）</td><td class="ov-kind"><span>帰国日</span></td><td>X：ケルン／Y：市内／Z：Mainzの3案から検討中</td><td class="ov-stay">機内</td></tr>
-          <tr><td class="ov-date">9/14（月）</td><td class="ov-kind"><span>帰国</span></td><td>中部国際空港（セントレア）着</td><td class="ov-stay">帰宅</td></tr>
+          <tr><td class="ov-date">9/13（日）</td><td class="ov-kind"><span>帰路</span></td><td>X：ケルン／Y：市内／Z：Mainzの3案から検討中<div class="ov-leg"><span class="line-icon line-icon-flight" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z"/></svg></span><span class="ov-leg-no">AY1416</span><span class="ov-leg-pt"><b>19:20</b><span class="ov-leg-tz">CEST</span><span class="ov-leg-code">FRA</span><em>発</em></span><span class="ov-leg-pt"><b>22:45</b><span class="ov-leg-tz">EEST</span><span class="ov-leg-code">HEL</span><em>着</em></span><span class="ov-leg-dur">2時間25分</span></div></td><td class="ov-stay">機内</td></tr>
+          <tr><td class="ov-date">9/14（月）</td><td class="ov-kind"><span>帰国</span></td><td>入国審査・荷物受取・税関を終え、名鉄名古屋で分岐して各自帰宅<div class="ov-leg"><span class="line-icon line-icon-flight" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z"/></svg></span><span class="ov-leg-no">AY79</span><span class="ov-leg-pt"><b>0:45</b><span class="ov-leg-tz">EEST</span><span class="ov-leg-code">HEL</span><em>発</em></span><span class="ov-leg-pt"><b>19:35</b><span class="ov-leg-tz">JST</span><span class="ov-leg-code">NGO</span><em>着</em></span><span class="ov-leg-dur">12時間50分</span></div></td><td class="ov-stay">帰宅</td></tr>
         </tbody>
       </table>
       <div class="ov-more no-print"><button class="btn" data-goto="plan"><span class="line-icon line-icon-calendar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/><path d="M8 13h2m4 0h2m-8 4h2m4 0h2"/></svg></span>日ごとの旅程へ</button></div>
     </div>
-    <div class="foot"><span class="line-icon line-icon-bulb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M9 18h6M10 21h4"/><path d="M10 11l1-2 2 2 1-2"/></svg></span>時刻・便名・候補の中身は旅程タブが持ちます。ここは1日1行の俯瞰だけです</div>
+    <div class="foot"><span class="line-icon line-icon-bulb" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6"/><path d="M9 18h6M10 21h4"/><path d="M10 11l1-2 2 2 1-2"/></svg></span>フライトは全4区間を1行ずつ出します。候補の中身と地図リンクは旅程タブが持ちます</div>
   </div>
 
   <div class="card">
@@ -1017,7 +1026,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
 
   <!-- ---------- 9/7 ---------- -->
   <details class="day" open id="day-0907" data-label="9/7" data-dow="月" data-date="2026-09-07" data-kind="move">
-    <summary class="day-head"><span class="d">9/7（月）</span><span class="t">日本出発 — 京都／犬山から名古屋へ、合流してNGOへ</span></summary>
+    <summary class="day-head"><span class="d">9/7（月）</span><span class="t">日本出発 — 京都／犬山から名古屋へ、合流して中部国際空港へ</span></summary>
 
     <div class="lanes">
       <div class="lane" data-who="kyoto">
@@ -1042,8 +1051,8 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
 
     <div class="lane" data-who="all">
       <div class="tl-stack">
-        <div class="action"><div class="row-time">19:30頃</div><div class="action-body"><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span>名鉄名古屋駅発 ミュースカイ → セントレア（約28分）</div></div>
-        <div class="action"><div class="row-time">20:00頃</div><div class="action-body"><strong>セントレア着</strong>
+        <div class="action"><div class="row-time">19:30頃</div><div class="action-body"><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span>名鉄名古屋駅発 ミュースカイ → 中部国際空港（約28分）</div></div>
+        <div class="action"><div class="row-time">20:00頃</div><div class="action-body"><strong>中部国際空港着</strong>
           <div class="sub"><span class="et t-gate"><span class="line-icon line-icon-passport" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M9 17h6"/></svg></span></span>チェックイン・保安検査・出国審査 → <span class="line-icon line-icon-sofa" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="12" width="16" height="7" rx="1"/><rect x="3" y="9" width="3" height="9" rx="1"/><rect x="18" y="9" width="3" height="9" rx="1"/><path d="M6 12V8h12v4"/></svg></span>JALサクララウンジ（国際線）</div>
           <div class="note">出発の約2時間50分前に到着する想定。</div></div></div>
         <div class="route-four"><div class="row-time">22:50発</div><div class="endpoint"><span class="label">出発</span><time>22:50</time><span class="tz">（JST）</span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=中部国際空港+セントレア" target="_blank" rel="noopener">中部国際空港（NGO）</a></div><div class="mode"><span class="flight-mark" role="img" aria-label="フライト"></span><strong>Finnair AY80</strong><small>A350・13時間5分</small></div><div class="endpoint"><span class="label">到着</span><time>5:55</time><span class="tz">（EEST）</span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Helsinki+Airport" target="_blank" rel="noopener">ヘルシンキ空港（HEL）</a></div></div><div class="action no-time"><div class="row-time"></div><div class="action-body"><span class="note">機内泊</span></div></div>
@@ -1350,7 +1359,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         <div class="route-four"><div class="row-time">19:20発</div><div class="endpoint"><span class="label">出発</span><time>19:20</time><span class="tz">（CEST）</span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Frankfurt+Airport" target="_blank" rel="noopener">フランクフルト空港（FRA）</a></div><div class="mode"><span class="flight-mark" role="img" aria-label="フライト"></span><strong>Finnair AY1416</strong><small>A321・2時間25分</small></div><div class="endpoint"><span class="label">到着</span><time>22:45</time><span class="tz">（EEST）</span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Helsinki+Airport" target="_blank" rel="noopener">ヘルシンキ空港（HEL）</a></div></div>
         <div class="action"><div class="row-time">22:45</div><div class="action-body"><span class="flight-mark" role="img" aria-label="フライト"></span><strong>HEL 着</strong>
           <div class="sub">乗継 2時間 → 搭乗口へ</div></div></div>
-        <div class="route-four"><div class="row-time">0:45発</div><div class="endpoint"><span class="label">出発</span><time>0:45</time><span class="tz">（EEST）</span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Helsinki+Airport" target="_blank" rel="noopener">ヘルシンキ空港（HEL）</a></div><div class="mode"><span class="flight-mark" role="img" aria-label="フライト"></span><strong>AY79</strong><small>A350・12時間50分</small></div><div class="endpoint"><span class="label">到着</span><time>19:35</time><span class="tz">（JST）</span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=中部国際空港+セントレア" target="_blank" rel="noopener">中部国際空港（NGO）</a></div></div><div class="action no-time"><div class="row-time"></div><div class="action-body"><span class="note">機内泊。翌9/14 19:35 セントレア着</span></div></div>
+        <div class="route-four"><div class="row-time">0:45発</div><div class="endpoint"><span class="label">出発</span><time>0:45</time><span class="tz">（EEST）</span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=Helsinki+Airport" target="_blank" rel="noopener">ヘルシンキ空港（HEL）</a></div><div class="mode"><span class="flight-mark" role="img" aria-label="フライト"></span><strong>AY79</strong><small>A350・12時間50分</small></div><div class="endpoint"><span class="label">到着</span><time>19:35</time><span class="tz">（JST）</span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=中部国際空港+セントレア" target="_blank" rel="noopener">中部国際空港（NGO）</a></div></div><div class="action no-time"><div class="row-time"></div><div class="action-body"><span class="note">機内泊。翌9/14 19:35 中部国際空港着</span></div></div>
       </div>
     </div>
   </details>
@@ -1360,12 +1369,12 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
     <summary class="day-head"><span class="d">9/14（月）</span><span class="t">日本着 → 京都／犬山の自宅まで</span></summary>
     <div class="lane" data-who="all">
       <div class="tl-stack">
-        <div class="action"><div class="row-time">19:35</div><div class="action-body"><span class="flight-mark" role="img" aria-label="フライト"></span><strong>中部国際空港（セントレア）着</strong>
+        <div class="action"><div class="row-time">19:35</div><div class="action-body"><span class="flight-mark" role="img" aria-label="フライト"></span><strong>中部国際空港着</strong>
         <div class="sub">現地日付 +1</div></div></div>
         <div class="action"><div class="row-time">19:35〜20:15</div><div class="action-body"><span class="et t-gate"><span class="line-icon line-icon-passport" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M9 17h6"/></svg></span></span>入国審査・荷物受取・税関
           <div class="sub"><a href="https://services.digital.go.jp/visit-japan-web/" target="_blank" rel="noopener">Visit Japan Web</a> の二次元コードをすぐ表示できるよう準備</div></div></div>
         <div class="action"><div class="row-time">20:20頃</div><div class="action-body">到着口出発（二人一緒）</div></div>
-        <div class="action"><div class="row-time">20:35頃</div><div class="action-body"><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span>セントレア発 ミュースカイ（二人一緒）→ 名鉄名古屋（約28分）</div></div>
+        <div class="action"><div class="row-time">20:35頃</div><div class="action-body"><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span>中部国際空港発 ミュースカイ（二人一緒）→ 名鉄名古屋（約28分）</div></div>
       </div>
     </div>
 
@@ -1470,7 +1479,7 @@ body.desk-copy .desk-print-trigger{display:flex;gap:5px;flex-shrink:0}
         </div>
         <div>
           <h3 class="lnk">空港・ラウンジ</h3>
-          <a href="https://www.google.com/maps/search/?api=1&amp;query=中部国際空港+セントレア" target="_blank" rel="noopener">NGO 中部（地図）</a>
+          <a href="https://www.google.com/maps/search/?api=1&amp;query=中部国際空港+セントレア" target="_blank" rel="noopener">NGO 地図</a>
           <a href="https://www.centrair.jp/" target="_blank" rel="noopener">NGO 案内図</a>
           <a href="https://www.frankfurt-airport.com/en.html" target="_blank" rel="noopener">FRA 案内図</a>
           <a href="https://www.google.com/maps/search/?api=1&amp;query=JAL+サクララウンジ+中部国際空港" target="_blank" rel="noopener">JALサクララウンジ @NGO</a>

@@ -372,6 +372,15 @@ const overviewCss = String.raw`
    進み具合の札（.plan-state）ではないので、そちらと見た目を分ける。 */
 .ov-days td.ov-kind{width:74px}
 .ov-kind>span{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:0 6px;background:var(--hov);color:var(--tx2);font-size:11px;font-weight:700;white-space:nowrap}
+/* フライトは1区間1行。日程概要は1日1行が原則だが、便だけは例外にする。復路が
+   「過ごし方は未定」に隠れて、帰国便が概要のどこにも出ていなかった（2026-08-23）。
+   横に並べ、入りきらなければ折り返す。393pxで2行、PC幅で1行に収まる分量に留める。 */
+.ov-leg{display:flex;flex-wrap:wrap;align-items:baseline;gap:1px 7px;margin-top:4px;font-size:12px;line-height:1.5;color:var(--tx2)}
+.ov-leg:first-child{margin-top:0}
+.ov-leg .line-icon{color:var(--mu)}
+.ov-leg-no,.ov-leg-code,.ov-leg-pt b{color:var(--tx);font-weight:700}
+.ov-leg-pt{display:inline-flex;align-items:baseline;gap:3px;white-space:nowrap}
+.ov-leg-day,.ov-leg-tz,.ov-leg-pt em,.ov-leg-dur{color:var(--mu);font-size:11px;font-style:normal}
 .ov-facility{display:grid;gap:7px}
 .ov-facility>div{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:start;font-size:13px;line-height:1.55}
 .ov-facility b{color:var(--mu);font-size:12px;font-weight:700}
@@ -1698,7 +1707,7 @@ const FAMILY_FIXUPS = [
 //   往路：22:50発（日本時間、NGO発） → 9:20フランクフルト着（現地時間） は
 //         現地9:20＋7時間＝日本時間16:20。
 //   復路：19:20発（現地時間、FRA発） は 日本時間で9/14 2:20。
-//         19:35セントレア着（日本時間）まで機内。
+//         19:35中部国際空港着（日本時間）まで機内。
 const FAMILY_BLACKOUT_OUTBOUND = '9/7 22:50 〜 9/8 16:20';
 const FAMILY_BLACKOUT_RETURN = '9/14 2:20 〜 9/14 19:35';
 
@@ -1761,10 +1770,10 @@ const FAMILY_DAYS = [
     ['日中','review','過ごし方は未定','X：ケルン／Y：市内／Z：Mainzの3案から検討中'],
     ['19:20発','flight','フライト','FRA発 → HEL（Finnair AY1416／A321・2時間25分）22:45着'],
     ['22:45〜0:45','transfer','乗り継ぎ','ヘルシンキで2時間'],
-    ['0:45発','flight','機内','HEL発 → NGO（AY79／A350・12時間50分）。<b>翌9/14 19:35セントレア着まで連絡がつきにくい</b>'],
+    ['0:45発','flight','機内','HEL発 → NGO（AY79／A350・12時間50分）。<b>翌9/14 19:35中部国際空港着まで連絡がつきにくい</b>'],
   ], stays:[['全員','機内']] },
   { date:'9/14', dow:'月', events:[
-    ['19:35','flight','帰着','中部国際空港（セントレア）着'],
+    ['19:35','flight','帰着','中部国際空港着'],
     ['21:05頃','move','帰宅','入国審査・荷物受取・税関を終え、名鉄名古屋で分岐して各自帰宅'],
   ], stays:[['全員','帰宅']] },
 ];
@@ -1787,12 +1796,17 @@ const NON_PLACE_STAYS = ['機内', '帰宅'];
 //
 // 日程概要はFAMILY_DAYSから組む。手で書くと、日程を1回直した時点で概要だけが
 // 古くなる。概要は全体を見る場所なので、ズレたときの実害が最も大きい。
-// flightはmoveより上。moveを上にすると9/14が「入国審査…各自帰宅」を拾い、その日の
-// 主役である19:35のセントレア着が概要から消えた（2026-08-16に生成物で確認）。
-// 到着地は宿泊列が持つので、移動日はフライトを出すほうが日ごとの粒度がそろう。
+// フライトのある日は、この並びからflightを外して選ぶ（overviewDayRows）。便名と
+// 時刻は区間の行が持つので、同じ便を主な内容にも出すと1行に同じ事実が2回並ぶ。
+// 2026-08-16はflightをmoveより上に置いていた。当時の概要に区間の行が無く、moveを
+// 上にすると9/14が「入国審査…各自帰宅」を拾って、その日の主役である19:35の
+// 中部国際空港着が概要から消えたため。区間の行を出す以上、その理由はもう無い。
+// flightを残してあるのは、区間データの無いフライト行（9/14の帰着）を持つ日でも
+// 主な内容が空にならないようにするため。
 const OVERVIEW_MAIN_KIND_ORDER = ['work', 'review', 'flight', 'move', 'procedure', 'transfer', 'stay'];
-// 「。」以降は補足なので落とす。「（）」は残す。'中部国際空港（セントレア）着' の
-// ように、括弧の後ろに述語が続く行があり、括弧で切ると意味が変わる。
+// 「。」以降は補足なので落とす。「（）」は残す。'Maritim Stuttgartに荷物を預ける
+// （正式チェックインは15:00〜）' のように括弧が条件を持つ行があり、括弧で切ると
+// 意味が変わる。
 const overviewHeadline = text => text.replace(/<[^>]+>/g, '').split('。')[0].trim();
 // 未確定の日だけ、「。」の後ろに残した理由を小さく添える（9/12・9/13の過ごし方案）。
 // 状態の札は付けない。CLAUDE.mdの「状態を持つ単位は予定1件」に従い、札の所有者は
@@ -1807,38 +1821,85 @@ const OVERVIEW_UNDECIDED_DATES = ['9/12', '9/13'];
 // 日ごとの区分。1行の内容だけだと便名や会議名が並ぶばかりで、その日が何の日なのかが
 // 読み取れない（2026-08-16にユーザーが指摘）。ここもFAMILY_DAYSから導出する。
 // 手で並べると、日程を1日ずらしたときに区分だけ古くなる。
+// 軸は1本だけにする。2026-08-23まで9/8が「移動」（その日の行為）、9/13が「帰国日」
+// （旅程上の位置）で、2つの軸が混ざっていた（ユーザーが指摘）。行為で名付けると
+// 往路の到着日と復路の出発日がどちらも「移動」になり、区分から向きが消える。
+// 旅程上の位置で名付ける。境目の4日は越える境界で呼び、間の日は中身で呼ぶ。
 // 順序が判定順。上から最初に当たったものを採る。
-//   初日      … 出国。機内泊でも「帰国日」ではない
-//   最終日    … 帰国
-//   機内泊    … 帰国日（初日でない機内泊は復路の夜）
-//   仕事あり  … イベント
-//   移動あり  … 移動。到着日・国内移動日
-//   それ以外  … 休日
+//   初日            … 出国（日本を出る。機内泊でも帰りではない）
+//   最終日          … 帰国（日本に着く）
+//   機内泊          … 帰路（現地を出て、その夜は空の上）
+//   前夜が機内泊    … 到着（現地に着く）
+//   仕事あり        … イベント
+//   移動あり        … 移動（境界をまたがない移動だけの日。HRSには無い）
+//   それ以外        … 休日
 const overviewDayKind = (day, i, all) => {
   if (i === 0) return '出国';
   if (i === all.length - 1) return '帰国';
-  if (day.stays.some(s => s[1] === '機内')) return '帰国日';
+  if (day.stays.some(s => s[1] === '機内')) return '帰路';
+  if (all[i - 1].stays.some(s => s[1] === '機内')) return '到着';
   if (day.events.some(e => e[1] === 'work')) return 'イベント';
   if (day.events.some(e => ['flight', 'move', 'transfer'].includes(e[1]))) return '移動';
   return '休日';
 };
 // 導出結果が変わったら気付けるように、期待値を並べて突き合わせる。
-const OVERVIEW_DAY_KINDS = ['出国', '移動', 'イベント', 'イベント', 'イベント', '休日', '帰国日', '帰国'];
+// 2026-08-23に9/8を「移動」から「到着」、9/13を「帰国日」から「帰路」へ変えた。
+// 日数も並びも変わっていない。軸を1本にそろえただけで、8日のうち2日の呼び名が動いた。
+const OVERVIEW_DAY_KINDS = ['出国', '到着', 'イベント', 'イベント', 'イベント', '休日', '帰路', '帰国'];
+
+// 概要に出すフライトは、利用フライトのFLIGHT_JOURNEYSから引く。概要のために便名や
+// 時刻を書き直さない（書き直せば旅程と概要が別々の値を持つ）。
+// 並べる日は出発日にする。復路のAY79は家族向けでは9/13の夜の続きとして書いてあるが、
+// ヘルシンキ発は日付をまたいだ9/14 0:45で、中部国際空港着19:35も9/14。9/14の行に
+// 置かないと、帰国便が概要から消える（2026-08-23までそうなっていた）。
+const overviewDayKey = label => label.split('（')[0];
+const OVERVIEW_LEGS_BY_DATE = FLIGHT_JOURNEYS.reduce((acc, journey) => {
+  journey.legs.forEach(leg => {
+    const date = overviewDayKey(leg.from[1]);
+    (acc[date] = acc[date] || []).push(leg);
+  });
+  return acc;
+}, {});
+const OVERVIEW_LEG_COUNT = Object.values(OVERVIEW_LEGS_BY_DATE).reduce((n, legs) => n + legs.length, 0);
+
+// 1区間1行。出発時刻・空港・発、到着時刻・空港・着、便名、所要をこの順で出す。
+// 向きは矢印ではなく「発」「着」で示す（EUROBLECH方式）。日付をまたぐ側だけ日付を
+// 添える。22:50発の便が5:55に着くのを同じ日と読ませない。
+// 393pxでは折り返して2行になる。3行に伸びる書き方（機材・ラウンジ・注記）は足さない。
+const overviewLegMarkup = (dayDate, leg) => {
+  const point = (label, [code, dateLabel, time]) => {
+    const date = overviewDayKey(dateLabel);
+    // 時刻帯を書かないと、0:45発の便が19:35着で「12時間50分」と、数字だけが合わない
+    // 行になる。空港と同じくAIRPORTSから引く（利用フライトのカードと同じ値）。
+    const tz = AIRPORTS[code][1];
+    return '<span class="ov-leg-pt">'
+      + (date === dayDate ? '' : `<span class="ov-leg-day">${date}</span>`)
+      + `<b>${time}</b><span class="ov-leg-tz">${tz}</span>`
+      + `<span class="ov-leg-code">${code}</span><em>${label}</em></span>`;
+  };
+  return `<div class="ov-leg">${lineIconHtml('flight')}<span class="ov-leg-no">${leg.no}</span>`
+    + point('発', leg.from) + point('着', leg.to)
+    + `<span class="ov-leg-dur">${leg.duration}</span></div>`;
+};
 
 function overviewDayRows() {
   return FAMILY_DAYS.map((day, i, all) => {
-    const pick = OVERVIEW_MAIN_KIND_ORDER
+    const legs = OVERVIEW_LEGS_BY_DATE[day.date] || [];
+    const order = legs.length ? OVERVIEW_MAIN_KIND_ORDER.filter(k => k !== 'flight') : OVERVIEW_MAIN_KIND_ORDER;
+    const pick = order
       .map(kind => day.events.find(ev => ev[1] === kind))
       .find(Boolean);
-    if (!pick) throw new Error(`Overview: no representative event for ${day.date}`);
-    const main = overviewHeadline(pick[3]);
-    if (!main) throw new Error(`Overview: empty headline for ${day.date}`);
+    // 出発日はフライトしか予定が無い。区間の行だけの日があってよい。
+    if (!pick && !legs.length) throw new Error(`Overview: no representative event for ${day.date}`);
+    const main = pick ? overviewHeadline(pick[3]) : '';
+    if (pick && !main) throw new Error(`Overview: empty headline for ${day.date}`);
     const undecided = OVERVIEW_UNDECIDED_DATES.includes(day.date);
     return {
       date: `${day.date}（${day.dow}）`,
       kind: overviewDayKind(day, i, all),
       main,
-      note: undecided ? overviewTail(pick[3]) : '',
+      note: undecided && pick ? overviewTail(pick[3]) : '',
+      legs: legs.map(leg => overviewLegMarkup(day.date, leg)),
       stay: day.stays.map(s => s[1]).join('／'),
     };
   });
@@ -1882,15 +1943,35 @@ function buildOverviewSection(source, undecidedBanner) {
   const [d1, d2, d3] = ['d1', 'd2', 'd3'].map(sessionCount);
   if (!d1 || !d2 || !d3) throw new Error(`Overview: session rows not found (d1=${d1} d2=${d2} d3=${d3})`);
 
+  // 概要のフライトと利用フライトが同じ便を指していること。片側だけを見ると、
+  // 概要に増やしたまま家族向けの本文が古い便名を持つ状態が通る。
+  const familyFlightNos = [...new Set(FAMILY_DAYS
+    .flatMap(day => day.events)
+    .filter(ev => ev[1] === 'flight')
+    .flatMap(ev => ev[3].match(/AY\d+/g) || []))].sort();
+  const legNos = Object.values(OVERVIEW_LEGS_BY_DATE).flat().map(leg => leg.no).sort();
+  if (familyFlightNos.join('／') !== legNos.join('／')) {
+    throw new Error(`Overview: flight numbers differ. legs ${legNos.join('／')} vs itinerary ${familyFlightNos.join('／')}`);
+  }
+  Object.keys(OVERVIEW_LEGS_BY_DATE).forEach(date => {
+    if (!FAMILY_DAYS.some(day => day.date === date)) {
+      throw new Error(`Overview: flight leg on ${date}, which is not a day of the trip`);
+    }
+  });
+
   const rows = overviewDayRows();
   if (rows.length !== 8) throw new Error(`Overview: expected 8 day rows, got ${rows.length}`);
+  const shownLegs = rows.reduce((n, r) => n + r.legs.length, 0);
+  if (shownLegs !== OVERVIEW_LEG_COUNT) {
+    throw new Error(`Overview: ${OVERVIEW_LEG_COUNT} legs to show, but ${shownLegs} reached the table`);
+  }
   const kinds = rows.map(r => r.kind);
   if (kinds.join('／') !== OVERVIEW_DAY_KINDS.join('／')) {
     throw new Error(`Overview: day kinds changed. got ${kinds.join('／')}, expected ${OVERVIEW_DAY_KINDS.join('／')}`);
   }
   const dayRowsHtml = rows.map(r =>
     `<tr><td class="ov-date">${r.date}</td><td class="ov-kind"><span>${r.kind}</span></td>`
-    + `<td>${r.main}${r.note ? `<span class="ov-note">${r.note}</span>` : ''}</td>`
+    + `<td>${r.main}${r.note ? `<span class="ov-note">${r.note}</span>` : ''}${r.legs.join('')}</td>`
     + `<td class="ov-stay">${r.stay}</td></tr>`
   ).join('\n          ');
 
@@ -1904,7 +1985,7 @@ function buildOverviewSection(source, undecidedBanner) {
       <div class="sum-facts">
         <div><b>会期</b><span>9/9〜9/11</span><span>3日間</span></div>
         <div><b>全日程</b><span>8日間</span><span>2名</span></div>
-        <div><b>帰着</b><span>9/14（月）</span><span>セントレア 19:35</span></div>
+        <div><b>帰着</b><span>9/14（月）</span><span>中部国際空港 19:35</span></div>
       </div>
     </div>
   </div>
@@ -1920,7 +2001,7 @@ function buildOverviewSection(source, undecidedBanner) {
       </table>
       <div class="ov-more no-print"><button class="btn" data-goto="plan">${lineIconHtml('calendar')}日ごとの旅程へ</button></div>
     </div>
-    <div class="foot">${lineIconHtml('bulb')}時刻・便名・候補の中身は旅程タブが持ちます。ここは1日1行の俯瞰だけです</div>
+    <div class="foot">${lineIconHtml('bulb')}フライトは全${OVERVIEW_LEG_COUNT}区間を1行ずつ出します。候補の中身と地図リンクは旅程タブが持ちます</div>
   </div>
 
   <div class="card">
@@ -2047,18 +2128,18 @@ function buildFamily() {
   const summaryFacts = [
     '9/7（月）〜9/14（月）｜2名｜シュトゥットガルト・フランクフルト',
     'ロボットの国際会議',
-    '9月14日（月）', '中部国際空港（セントレア）着',
-    '入国審査・荷物受取に約40分', '20:35頃 セントレア発（ミュースカイ）',
+    '9月14日（月）', '中部国際空港着',
+    '入国審査・荷物受取に約40分', '20:35頃 中部国際空港発（ミュースカイ）',
     '21:50頃 京都駅', '21:40頃 犬山駅',
-    '9/13（日）19:20 フランクフルト発', '9/14（月）19:35 セントレア着', 'Finnair',
-    '9/7（月）22:50 セントレア発', '9/8（火）9:20 フランクフルト着',
+    '9/13（日）19:20 フランクフルト発', '9/14（月）19:35 中部国際空港着', 'Finnair',
+    '9/7（月）22:50 中部国際空港発', '9/8（火）9:20 フランクフルト着',
   ];
   summaryFacts.forEach(fact => {
     if (!source.includes(fact)) throw new Error(`Family summary fact missing from source: ${fact}`);
   });
 
   // ---------- ① 出張サマリー ----------
-  // 帰りの「19:20 フランクフルト発」は現地時刻、「19:35 セントレア着」は
+  // 帰りの「19:20 フランクフルト発」は現地時刻、「19:35 中部国際空港着」は
   // 日本時刻。元のカードはどちらか書いていなかったので、ここで明示する。
   // 連絡が取れない時間帯は、ページ自身の時差（7時間）から出しただけの
   // 機内区間の時刻で、新しい事実ではない。
@@ -2067,14 +2148,14 @@ function buildFamily() {
     <div class="sum-place sum-a"><strong>シュトゥットガルト</strong><span>9/8（火）〜9/12（土）</span><span>HRS Europe 2026。会場はホテルの隣（徒歩約3分）</span></div>
     <div class="sum-place sum-b"><strong>フランクフルト</strong><span>9/12（土）〜9/13（日）</span><span>帰国前泊。空港近郊</span></div>
     <div class="sum-facts">
-      <div><b>出発</b><span>9/7（月）</span><span>セントレア発</span></div>
+      <div><b>出発</b><span>9/7（月）</span><span>中部国際空港発</span></div>
       <div><b>期間</b><span>8日間</span><span>2名</span></div>
-      <div><b>帰着</b><span>9/14（月）</span><span>セントレア 19:35</span></div>
+      <div><b>帰着</b><span>9/14（月）</span><span>中部国際空港 19:35</span></div>
     </div>
-    <div class="small"><strong>行きの便</strong>：9/7（月）22:50 セントレア発（日本時刻） → 9/8（火）9:20 フランクフルト着（現地時刻）</div>
-    <div class="small"><strong>帰りの便</strong>：9/13（日）19:20 フランクフルト発（現地時刻） → ヘルシンキ乗継 → 9/14（月）19:35 セントレア着（日本時刻・Finnair）</div>
+    <div class="small"><strong>行きの便</strong>：9/7（月）22:50 中部国際空港発（日本時刻） → 9/8（火）9:20 フランクフルト着（現地時刻）</div>
+    <div class="small"><strong>帰りの便</strong>：9/13（日）19:20 フランクフルト発（現地時刻） → ヘルシンキ乗継 → 9/14（月）19:35 中部国際空港着（日本時刻・Finnair）</div>
     <div class="small" style="font-weight:700">連絡が取れない時間帯（日本時間）：往路の機内 ${FAMILY_BLACKOUT_OUTBOUND}／復路の機内 ${FAMILY_BLACKOUT_RETURN}</div>
-    <div class="small">帰宅の見込み：19:35 セントレア着 → 入国審査・荷物受取に約40分 → 20:35頃セントレア発（ミュースカイ） → 21:50頃京都駅／21:40頃犬山駅</div>
+    <div class="small">帰宅の見込み：19:35 中部国際空港着 → 入国審査・荷物受取に約40分 → 20:35頃中部国際空港発（ミュースカイ） → 21:50頃京都駅／21:40頃犬山駅</div>
   </div></section>`;
 
   // ---------- ② 時差・気候 ----------

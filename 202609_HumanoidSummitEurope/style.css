@@ -667,6 +667,15 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
    進み具合の札（.plan-state）ではないので、そちらと見た目を分ける。 */
 .ov-days td.ov-kind{width:74px}
 .ov-kind>span{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:0 6px;background:var(--hov);color:var(--tx2);font-size:11px;font-weight:700;white-space:nowrap}
+/* フライトは1区間1行。日程概要は1日1行が原則だが、便だけは例外にする。復路が
+   「過ごし方は未定」に隠れて、帰国便が概要のどこにも出ていなかった（2026-08-23）。
+   横に並べ、入りきらなければ折り返す。393pxで2行、PC幅で1行に収まる分量に留める。 */
+.ov-leg{display:flex;flex-wrap:wrap;align-items:baseline;gap:1px 7px;margin-top:4px;font-size:12px;line-height:1.5;color:var(--tx2)}
+.ov-leg:first-child{margin-top:0}
+.ov-leg .line-icon{color:var(--mu)}
+.ov-leg-no,.ov-leg-code,.ov-leg-pt b{color:var(--tx);font-weight:700}
+.ov-leg-pt{display:inline-flex;align-items:baseline;gap:3px;white-space:nowrap}
+.ov-leg-day,.ov-leg-tz,.ov-leg-pt em,.ov-leg-dur{color:var(--mu);font-size:11px;font-style:normal}
 .ov-facility{display:grid;gap:7px}
 .ov-facility>div{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:start;font-size:13px;line-height:1.55}
 .ov-facility b{color:var(--mu);font-size:12px;font-weight:700}
