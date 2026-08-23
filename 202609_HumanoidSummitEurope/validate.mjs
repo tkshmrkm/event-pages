@@ -69,12 +69,14 @@ const overviewEnd = online.indexOf('<section class="tab on" id="tab-plan"');
 assert(overviewStart !== -1 && overviewEnd > overviewStart, `${onlineName}: overview section not found`);
 const overviewHtml = online.slice(overviewStart, overviewEnd);
 const overviewLegs = overviewHtml.match(/<div class="ov-leg">[\s\S]*?<\/div>/g) || [];
-assert(overviewLegs.length === 4, `${onlineName}: the overview must show all four flight legs, found ${overviewLegs.length}`);
+// フライト4区間と、都市間の陸路1区間（9/8のICE）。空港アクセスは概要に出さない。
+assert(overviewLegs.length === 5, `${onlineName}: the overview must show four flight legs and the inter-city train, found ${overviewLegs.length}`);
 [
   ['AY80',   '22:50', 'JST',  'NGO', '5:55',  'EEST', 'HEL', '13時間5分'],
   ['AY1411', '7:40',  'EEST', 'HEL', '9:20',  'CEST', 'FRA', '2時間40分'],
   ['AY1416', '19:20', 'CEST', 'FRA', '22:45', 'EEST', 'HEL', '2時間25分'],
   ['AY79',   '0:45',  'EEST', 'HEL', '19:35', 'JST',  'NGO', '12時間50分'],
+  ['ICE 515', '10:51', 'FRA', '12:11', 'Stuttgart Hbf', '1時間20分'],
 ].forEach(([no, ...facts]) => {
   const leg = overviewLegs.filter(html => html.includes(`>${no}<`));
   assert(leg.length === 1, `${onlineName}: overview flight leg ${no} must appear exactly once`);
@@ -114,6 +116,27 @@ assert(overviewRow('9/13').includes('class="ov-off">休日<') && overviewRow('9/
   `${onlineName}: 9/13 is a day off and the homebound day at once; both labels must show`);
 assert(!overviewRow('9/9').includes('ov-off'), `${onlineName}: weekdays must not carry the day-off label`);
 assert(sharedCss.includes('.ov-kind>span.ov-off{'), 'style.css: day-off label style missing');
+// ---------- 区間行と主な内容は時系列 ----------
+// 主な内容を先頭に固定していたころ、9/8が「Stuttgart Hbf着（12:11）→ 7:40のフライト」と
+// 逆順に出ていた（2026-08-23にユーザーが指摘）。行の中の並びを位置で見る。
+const overviewOrder = (date, first, second) => {
+  const row = overviewRow(date);
+  assert(row.indexOf(first) !== -1 && row.indexOf(second) !== -1,
+    `${onlineName}: ${date} must carry both ${first} and ${second}`);
+  assert(row.indexOf(first) < row.indexOf(second),
+    `${onlineName}: ${date} must read in time order: ${first} before ${second}`);
+};
+overviewOrder('9/8', 'AY1411', 'ICE 515');
+overviewOrder('9/14', 'AY79', '名鉄名古屋で分岐して各自帰宅');
+overviewOrder('9/13', '検討中', 'AY1416');
+// 陸路が入るのは都市間だけ。9/8の到着は区間行が持つので、地の文で繰り返さない。
+assert(!overviewHtml.includes('ミュースカイ'), `${onlineName}: airport access belongs to the itinerary, not the overview`);
+assert((overviewRow('9/8').match(/Stuttgart Hbf/g) || []).length === 1,
+  `${onlineName}: 9/8 must say Stuttgart Hbf once, in its train leg`);
+// 時刻帯は、出発と到着で違うときだけ出す。同じ時刻帯の中を走るICEには付けない。
+const iceLeg = overviewLegs.find(html => html.includes('ICE 515'));
+assert(!iceLeg.includes('CEST'), `${onlineName}: the train stays in one time zone, so it needs no zone labels`);
+assert(sharedCss.includes('.ov-leg+.ov-main{'), 'style.css: spacing between a leg line and the headline missing');
 // 手続きの列挙は概要に要らない（在り処と無い場所を対で見る。旅程と家族向けには残す）。
 ['荷物を預ける', '入国審査'].forEach(detail => {
   assert(!overviewHtml.includes(detail), `${onlineName}: the overview must not carry the step-by-step ${detail}`);

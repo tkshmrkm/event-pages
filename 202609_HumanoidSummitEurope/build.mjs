@@ -384,6 +384,7 @@ const overviewCss = String.raw`
    横に並べ、入りきらなければ折り返す。393pxで2行、PC幅で1行に収まる分量に留める。 */
 .ov-leg{display:flex;flex-wrap:wrap;align-items:baseline;gap:1px 7px;margin-top:4px;font-size:12px;line-height:1.5;color:var(--tx2)}
 .ov-leg:first-child{margin-top:0}
+.ov-leg+.ov-main{margin-top:4px}
 .ov-leg .line-icon{color:var(--mu)}
 .ov-leg-no,.ov-leg-code,.ov-leg-pt b{color:var(--tx);font-weight:700}
 .ov-leg-pt{display:inline-flex;align-items:baseline;gap:3px;white-space:nowrap}
@@ -1762,7 +1763,7 @@ const FAMILY_DAYS = [
     ['5:55〜7:40','transfer','乗り継ぎ','ヘルシンキで1時間45分'],
     ['7:40','flight','フライト','HEL発 → FRA（AY1411／A321・2時間40分）9:20着'],
     ['9:20','procedure','到着','Frankfurt FRA着。荷物受取・税関'],
-    ['12:11〜12:30頃','move','移動','Stuttgart Hbf着 → Maritim Stuttgartに荷物を預ける（正式チェックインは15:00〜）','Stuttgart Hbf着'],
+    ['12:11〜12:30頃','move','移動','Stuttgart Hbf着 → Maritim Stuttgartに荷物を預ける（正式チェックインは15:00〜）'],
     ['夕方〜夜','stay','チェックイン','Maritim Stuttgartにチェックイン'],
   ], stays:[['全員','Maritim Stuttgart']] },
   { date:'9/9', dow:'水', events:[
@@ -1884,31 +1885,59 @@ const OVERVIEW_DAY_OFFS = ['', '', '', '', '', '休日', '休日', ''];
 // ヘルシンキ発は日付をまたいだ9/14 0:45で、中部国際空港着19:35も9/14。9/14の行に
 // 置かないと、帰国便が概要から消える（2026-08-23までそうなっていた）。
 const overviewDayKey = label => label.split('（')[0];
-const OVERVIEW_LEGS_BY_DATE = FLIGHT_JOURNEYS.reduce((acc, journey) => {
-  journey.legs.forEach(leg => {
-    const date = overviewDayKey(leg.from[1]);
-    (acc[date] = acc[date] || []).push(leg);
-  });
-  return acc;
-}, {});
+// 並べ替え用。「日中」のように時刻を持たない行は0にして、その日の先頭へ置く。
+const overviewMinutes = label => {
+  const hit = String(label).match(/(\d{1,2}):(\d{2})/);
+  return hit ? Number(hit[1]) * 60 + Number(hit[2]) : 0;
+};
+
+// 陸路も区間行に出す。9/8はフランクフルトに着いたあとICEでシュトゥットガルトへ入るので、
+// フライトだけではその日の移動が半分しか出ない（2026-08-23にユーザーが指摘）。
+// 出すのは都市間の移動だけ。空港アクセス（名鉄名古屋⇔中部国際空港の28分）は当日の
+// 行動計画の粒度なので旅程が持つ。9/12のシュトゥットガルト→フランクフルトは案ごとに
+// 便も時刻も違う（8:30頃／10:26／13:00頃／15:00）ので、案が決まるまで出さない。
+// 決まったらここへ1件足す。値はsource.htmlの旅程にある文字列で、buildOverviewSectionが
+// 組み立て前に一致を確認する。
+// 地点は、空港はコード、駅は駅名。フライトの区間行と同じ場所が同じ字で出るようにする
+// （旅程が持つ「長距離駅（Fernbf）」まで概要には出さない）。
+const GROUND_LEGS = [
+  { icon: 'train', no: 'ICE 515', duration: '1時間20分',
+    from: ['FRA', 'CEST', '9/8', '10:51'], to: ['Stuttgart Hbf', 'CEST', '9/8', '12:11'] },
+];
+// フライトの区間データを、陸路と同じ形（地点・時刻帯・日付・時刻）へそろえる。
+const overviewFlightLeg = leg => ({
+  icon: 'flight', no: leg.no, duration: leg.duration,
+  from: [leg.from[0], AIRPORTS[leg.from[0]][1], overviewDayKey(leg.from[1]), leg.from[2]],
+  to: [leg.to[0], AIRPORTS[leg.to[0]][1], overviewDayKey(leg.to[1]), leg.to[2]],
+});
+const OVERVIEW_LEGS_BY_DATE = {};
+FLIGHT_JOURNEYS.forEach(journey => journey.legs.forEach(leg => {
+  const shaped = overviewFlightLeg(leg);
+  const date = shaped.from[2];
+  (OVERVIEW_LEGS_BY_DATE[date] = OVERVIEW_LEGS_BY_DATE[date] || []).push(shaped);
+}));
+GROUND_LEGS.forEach(leg => {
+  const date = leg.from[2];
+  (OVERVIEW_LEGS_BY_DATE[date] = OVERVIEW_LEGS_BY_DATE[date] || []).push(leg);
+});
+Object.values(OVERVIEW_LEGS_BY_DATE).forEach(legs =>
+  legs.sort((a, b) => overviewMinutes(a.from[3]) - overviewMinutes(b.from[3])));
 const OVERVIEW_LEG_COUNT = Object.values(OVERVIEW_LEGS_BY_DATE).reduce((n, legs) => n + legs.length, 0);
 
-// 1区間1行。出発時刻・空港・発、到着時刻・空港・着、便名、所要をこの順で出す。
+// 1区間1行。出発時刻・地点・発、到着時刻・地点・着、便名、所要をこの順で出す。
 // 向きは矢印ではなく「発」「着」で示す（EUROBLECH方式）。日付をまたぐ側だけ日付を
 // 添える。22:50発の便が5:55に着くのを同じ日と読ませない。
 // 393pxでは折り返して2行になる。3行に伸びる書き方（機材・ラウンジ・注記）は足さない。
 const overviewLegMarkup = (dayDate, leg) => {
-  const point = (label, [code, dateLabel, time]) => {
-    const date = overviewDayKey(dateLabel);
-    // 時刻帯を書かないと、0:45発の便が19:35着で「12時間50分」と、数字だけが合わない
-    // 行になる。空港と同じくAIRPORTSから引く（利用フライトのカードと同じ値）。
-    const tz = AIRPORTS[code][1];
-    return '<span class="ov-leg-pt">'
-      + (date === dayDate ? '' : `<span class="ov-leg-day">${date}</span>`)
-      + `<b>${time}</b><span class="ov-leg-tz">${tz}</span>`
-      + `<span class="ov-leg-code">${code}</span><em>${label}</em></span>`;
-  };
-  return `<div class="ov-leg">${lineIconHtml('flight')}<span class="ov-leg-no">${leg.no}</span>`
+  // 時刻帯は、出発と到着で違うときだけ出す。0:45発・19:35着で所要12時間50分の区間は、
+  // 時刻帯が無いと数字だけが合わない行になる。同じ時刻帯の中を走るICEには要らない。
+  const showTz = leg.from[1] !== leg.to[1];
+  const point = (label, [name, tz, date, time]) =>
+    '<span class="ov-leg-pt">'
+    + (date === dayDate ? '' : `<span class="ov-leg-day">${date}</span>`)
+    + `<b>${time}</b>${showTz ? `<span class="ov-leg-tz">${tz}</span>` : ''}`
+    + `<span class="ov-leg-code">${name}</span><em>${label}</em></span>`;
+  return `<div class="ov-leg">${lineIconHtml(leg.icon)}<span class="ov-leg-no">${leg.no}</span>`
     + point('発', leg.from) + point('着', leg.to)
     + `<span class="ov-leg-dur">${leg.duration}</span></div>`;
 };
@@ -1916,22 +1945,37 @@ const overviewLegMarkup = (dayDate, leg) => {
 function overviewDayRows() {
   return FAMILY_DAYS.map((day, i, all) => {
     const legs = OVERVIEW_LEGS_BY_DATE[day.date] || [];
-    const order = legs.length ? OVERVIEW_MAIN_KIND_ORDER.filter(k => k !== 'flight') : OVERVIEW_MAIN_KIND_ORDER;
+    // 区間行が持っている移動は主な内容に出さない。区間行にしていない移動は残す
+    // （9/14の「名鉄名古屋で分岐して各自帰宅」。空港アクセスは区間行にしないため）。
+    const order = legs.length
+      ? ['work', 'review'].concat(legs.some(leg => leg.icon !== 'flight') ? [] : ['move'])
+      : OVERVIEW_MAIN_KIND_ORDER;
     const pick = order
       .map(kind => day.events.find(ev => ev[1] === kind))
       .find(Boolean);
-    // 出発日はフライトしか予定が無い。区間の行だけの日があってよい。
+    // 移動しかない日は区間行だけになる。主な内容が空の行があってよい。
     if (!pick && !legs.length) throw new Error(`Overview: no representative event for ${day.date}`);
     const main = pick ? overviewHeadline(pick[4] || pick[3]) : '';
     if (pick && !main) throw new Error(`Overview: empty headline for ${day.date}`);
     const undecided = OVERVIEW_UNDECIDED_DATES.includes(day.date);
+    const note = undecided && pick ? overviewTail(pick[3]) : '';
+    // 主な内容も区間行も、その日の時刻で並べる。主な内容を先頭に固定すると、9/8が
+    // 「Stuttgart Hbf着（12:11）→ 7:40のフライト」と逆順になる（2026-08-23に指摘）。
+    const parts = legs.map(leg => ({ at: overviewMinutes(leg.from[3]), html: overviewLegMarkup(day.date, leg) }));
+    if (pick) {
+      parts.push({
+        at: overviewMinutes(pick[0]),
+        html: `<div class="ov-main">${main}${note ? `<span class="ov-note">${note}</span>` : ''}</div>`,
+      });
+    }
+    parts.sort((a, b) => a.at - b.at);
     return {
       date: `${day.date}（${day.dow}）`,
       kind: overviewDayKind(day, i, all),
       off: overviewIsDayOff(day) ? '休日' : '',
       main,
-      note: undecided && pick ? overviewTail(pick[3]) : '',
-      legs: legs.map(leg => overviewLegMarkup(day.date, leg)),
+      legs,
+      content: parts.map(part => part.html).join(''),
       stay: day.stays.map(s => s[1]).join('／'),
     };
   });
@@ -1981,10 +2025,17 @@ function buildOverviewSection(source, undecidedBanner) {
     .flatMap(day => day.events)
     .filter(ev => ev[1] === 'flight')
     .flatMap(ev => ev[3].match(/AY\d+/g) || []))].sort();
-  const legNos = Object.values(OVERVIEW_LEGS_BY_DATE).flat().map(leg => leg.no).sort();
+  const legNos = Object.values(OVERVIEW_LEGS_BY_DATE).flat()
+    .filter(leg => leg.icon === 'flight').map(leg => leg.no).sort();
   if (familyFlightNos.join('／') !== legNos.join('／')) {
     throw new Error(`Overview: flight numbers differ. legs ${legNos.join('／')} vs itinerary ${familyFlightNos.join('／')}`);
   }
+  // 陸路は概要のために書き起こした行なので、値が旅程にあることを確かめてから使う。
+  GROUND_LEGS.forEach(leg => {
+    [leg.no, leg.duration, leg.from[0], leg.from[3], leg.to[0], leg.to[3]].forEach(fact => {
+      if (!source.includes(fact)) throw new Error(`Overview: ground leg fact missing from source: ${fact}`);
+    });
+  });
   Object.keys(OVERVIEW_LEGS_BY_DATE).forEach(date => {
     if (!FAMILY_DAYS.some(day => day.date === date)) {
       throw new Error(`Overview: flight leg on ${date}, which is not a day of the trip`);
@@ -2014,7 +2065,7 @@ function buildOverviewSection(source, undecidedBanner) {
   const dayRowsHtml = rows.map(r =>
     `<tr><td class="ov-date">${r.date}</td>`
     + `<td class="ov-kind">${r.off ? `<span class="ov-off">${r.off}</span>` : ''}${r.kind ? `<span>${r.kind}</span>` : ''}</td>`
-    + `<td>${r.main}${r.note ? `<span class="ov-note">${r.note}</span>` : ''}${r.legs.join('')}</td>`
+    + `<td>${r.content}</td>`
     + `<td class="ov-stay">${r.stay}</td></tr>`
   ).join('\n          ');
 
@@ -2044,7 +2095,7 @@ function buildOverviewSection(source, undecidedBanner) {
       </table>
       <div class="ov-more no-print"><button class="btn" data-goto="plan">${lineIconHtml('calendar')}日ごとの旅程へ</button></div>
     </div>
-    <div class="foot">${lineIconHtml('bulb')}フライトは全${OVERVIEW_LEG_COUNT}区間を1行ずつ出します。候補の中身と地図リンクは旅程タブが持ちます</div>
+    <div class="foot">${lineIconHtml('bulb')}都市間の移動は全${OVERVIEW_LEG_COUNT}区間を1行ずつ出します。候補の中身と地図リンクは旅程タブが持ちます</div>
   </div>
 
   <div class="card">
