@@ -10,10 +10,18 @@ const sourcePath = join(here, 'source.html');
 const outputPath = join(here, 'index.html');
 const familyOutputPath = join(here, 'family_print.html');
 const immigrationOutputPath = join(here, 'immigration_print.html');
+// Windowsの2パス決め打ちだとLinux/macOSでビルドできない。CI・コンテナ・Linux開発機では
+// TRIP_BROWSERで明示的に指定できるようにし（先頭で見る＝指定があれば必ずそれを使う）、
+// 末尾にLinuxでよくあるChrome/Chromiumの場所を足す。existsSyncはundefinedを渡すと
+// 例外になるので、環境変数が未設定のときは候補に入れない。
 const browserPath = [
+  process.env.TRIP_BROWSER,
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-].find(existsSync);
+  '/usr/bin/google-chrome',
+  '/usr/bin/chromium',
+  '/usr/bin/chromium-browser',
+].filter(Boolean).find(existsSync);
 if (!browserPath) throw new Error('Chrome or Edge is required to build index.html');
 
 const DAY_META = {
@@ -1408,7 +1416,7 @@ const transformScript = `
   const lineIconMap = {
     '🛋':'lounge', '🛂':'procedure', '🏨':'hotel', '🍽':'meal', '😴':'rest', '🥂':'drinks',
     '🏭':'factory', '🚶':'walk', '🏠':'home', '🏛':'event', '🕐':'clock', '🕗':'clock', '🚗':'car',
-    '📍':'pin', '🎯':'target', '✅':'checkCircle', '👥':'people', '⚠':'warning', '⭐':'star',
+    '📍':'pin', '🎯':'target', '✅':'checkCircle', '👥':'people', '⚠':'warning', '⭐':'star', '★':'star',
     '👤':'person', '📅':'calendar', '📝':'memo', '📱':'phone', '🗺':'map', '🚆':'train', '🚄':'train',
     '🛒':'cart', '✍':'pen', '🎫':'ticket', '🌐':'globe', '🌍':'globe', '🏢':'building',
     '💰':'money', '📁':'folder', '📄':'document', '💻':'laptop', '🔍':'search', '💳':'card',
@@ -1520,9 +1528,14 @@ writeFileSync(inputPath, source, 'utf8');
 try {
   let output;
   try {
+    // rootで実行するとChromeのユーザー名前空間サンドボックスが起動を拒否する
+    // （コンテナ・CIでよくある）。Windowsやroot以外では挙動を変えたくないので、
+    // 「Windowsでない」かつ「root（uid 0）」のときだけ --no-sandbox を足す。
+    const isRootOnPosix = process.platform !== 'win32' && process.getuid && process.getuid() === 0;
     output = execFileSync(browserPath, [
       '--headless', '--disable-gpu', '--no-first-run', '--no-default-browser-check',
       `--user-data-dir=${profilePath}`, '--virtual-time-budget=1500', '--dump-dom',
+      ...(isRootOnPosix ? ['--no-sandbox'] : []),
       pathToFileURL(inputPath).href,
     ], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, windowsHide: true });
   } catch (headlessError) {
