@@ -496,19 +496,43 @@ function buildOverviewSection(source) {
   });
 
   const esc = value => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const laneHtml = lane =>
-    `<div class="ov-lane ov-lane-${lane.tone}">`
-    + `<span class="ov-who">${esc(lane.who)}</span>`
-    + `<span class="ov-kind"><span>${esc(lane.kind)}</span></span>`
-    + `<span class="ov-main">${esc(lane.main)}${lane.note ? `<span class="ov-note">${esc(lane.note)}</span>` : ''}</span>`
-    + `<span class="ov-city">${esc(lane.stay)}</span>`
+  // ---------- 日程概要は人ごとに1本ずつ（2026-08-23） ----------
+  // 村上と美馬・金築は10/20の夜まで別に動く。1日を2レーンに割った1本の表にすると、
+  // 同じ値（区分・宿）が同じ日に2回並び、どこが同じでどこが違うのかを読む側が
+  // 突き合わせることになる（ユーザーが指摘）。旅程概要そのものを2本にして、
+  // もう一方と同じ行には「共通」を付ける。合流後は全行が共通になるので、
+  // 共通の札が続くことが合流の合図になる（レーンの色が1本になるのと同じ役目）。
+  const OVERVIEW_PEOPLE = [
+    { who: '村上', tone: 'murakami' },
+    { who: '美馬・金築', tone: 'team' },
+  ];
+  const laneFor = (row, tone) => row.lanes.find(l => l.tone === tone) || row.lanes.find(l => l.tone === 'shared');
+  const personRows = OVERVIEW_PEOPLE.map(person => ({
+    ...person,
+    days: rows.map(row => {
+      const mine = laneFor(row, person.tone);
+      const others = OVERVIEW_PEOPLE.filter(other => other.tone !== person.tone).map(other => laneFor(row, other.tone));
+      // 印を付けるのは2つだけ。行がまるごと同じ（その日は同じ行動）か、泊まる街だけ
+      // 同じ（日中は別でも夜は同じ場所）か。区分だけの一致は印にしない。
+      // 「イベント」同士でも、TechExとEuroBLECHなら同じ行動ではない。
+      const sameAll = others.every(o => o && o.kind === mine.kind && o.main === mine.main && o.stay === mine.stay);
+      const sameStay = !sameAll && others.every(o => o && o.stay === mine.stay);
+      return { date: row.date, kind: mine.kind, main: mine.main, note: mine.note, stay: mine.stay, sameAll, sameStay };
+    }),
+  }));
+  const personRowHtml = day =>
+    `<div class="ov-prow${day.sameAll ? ' ov-prow-same' : ''}">`
+    + `<span class="ov-date">${esc(day.date)}${day.sameAll ? '<span class="ov-same">共通</span>' : ''}</span>`
+    + `<span class="ov-kind"><span>${esc(day.kind)}</span></span>`
+    + `<span class="ov-main">${esc(day.main)}${day.note ? `<span class="ov-note">${esc(day.note)}</span>` : ''}</span>`
+    + `<span class="ov-city">${esc(day.stay)}${day.sameStay ? '<span class="ov-same">共通</span>' : ''}</span>`
     + '</div>';
-  const dayHtml = row =>
-    `<article class="ov-day${row.date === mergeDate ? ' ov-day-merge' : ''}">`
-    + `<header>${esc(row.date)}</header>`
-    + row.lanes.map(laneHtml).join('')
-    + (row.date === mergeDate ? `<div class="ov-join">この夜から${esc(mergeCity)}で3名合流</div>` : '')
-    + '</article>';
+  const personHtml = person =>
+    `<section class="ov-person ov-person-${person.tone}">`
+    + `<header><strong>${esc(person.who)}</strong><span>${esc(person.days[0].date)}〜${esc(person.days[person.days.length - 1].date)}</span></header>`
+    + person.days.map(day => personRowHtml(day)
+      + (day.date === mergeDate ? `<div class="ov-join">この夜から${esc(mergeCity)}で3名合流。ここから下は全部共通</div>` : '')).join('')
+    + '</section>';
 
   return `<div class="tab" id="tab-overview" role="tabpanel" aria-label="概要">
   <div class="legacy-stack">
@@ -535,9 +559,9 @@ function buildOverviewSection(source) {
   <div class="ov-card">
     <div class="ov-head">📅 日程概要</div>
     <div class="ov-body">
-      <p class="ov-lead">出発から${mergeIndex + 1}日目まで村上と美馬・金築は別行動。色が2本から1本になる日が合流</p>
-      <div class="ov-flow">
-        ${rows.map(dayHtml).join('\n        ')}
+      <p class="ov-lead">旅程が割れているので2本並べます。もう一方と同じ日には<span class="ov-same">共通</span>が付きます。出発から${mergeIndex + 1}日目の夜に合流し、そこから先は全部共通</p>
+      <div class="ov-two">
+        ${personRows.map(personHtml).join('\n        ')}
       </div>
       <div class="ov-more no-print"><button class="btn" type="button" data-goto="itinerary">📅 日ごとの旅程へ</button></div>
     </div>
