@@ -11,15 +11,62 @@ workflow unless there is a concrete reason not to.
 
 ## Stable interaction contract
 
-Every new trip page should have only three primary field sections:
+A trip page carries five primary field sections. The count is not the contract
+— 準備 folds away once it is filled in, leaving four — but the split is: what is
+opened on the ground (旅程, 視察), what is only wanted before departure (準備),
+and what shows the whole trip (概要) never share a section. Nothing needed on the
+ground may live in the section that folds away.
 
-1. `旅程` — continuous-scroll daily itinerary with a horizontally scrollable date rail.
-2. `会場` — event-specific targets and two-part notes: preparation plus same-day notes.
-3. `記録` — review, Markdown copy/download, JSON backup, and JSON restore.
+Each section below says what every event keeps and what each event settles for
+itself. The vocabulary these rely on — icons, plan states, prose, overview rules
+— is in *Shared versus event-specific* below.
 
-Preparation and documents are secondary content inside the itinerary or a
-separate pre-departure page. The family view is a separate responsive/print
-page. Traveler colors appear only where people actually split; merged travel
+1. `概要` — the whole trip at a glance.
+   - Shared: a change of scale, not a summary. One line of fact per day and a
+     way through to the detailed section; movement listed one leg per line
+     rather than reduced to a representative; rows in time order; one axis per
+     chip; no plan-state chips, whose owner is 旅程 and 視察.
+   - Event-specific: whether a day splits into lanes (EuroBLECH runs two until
+     the travellers meet, HRS one), which fact a day row leads with, palette.
+2. `旅程` — the continuous daily itinerary, every day reachable from the date rail.
+   - Shared: everything used on the ground lives here, including flights, stays
+     and map links; transport icons and `発` / `着` as described below; map links
+     on the place name itself; one control that opens and closes every day card.
+   - Event-specific: traveler lanes, card geometry, which reference cards sit at
+     the end of the section.
+3. `視察` — what the trip is there to see: sessions, exhibitors, factory visits, meetings.
+   - Shared: every record unit carries `事前の狙い・質問` and `当日メモ`; day notes
+     accept named, timestamped appends from more than one device; the section is
+     named for the act, not the place.
+   - Event-specific: the record unit itself and the columns around it.
+4. `準備` — pre-departure to-dos, and nothing else.
+   - Shared: it must stay foldable, and once folded nothing needed on the ground
+     may be lost with it. HRS moved flights, stays and map links out to 旅程 on
+     2026-08-16 for exactly this reason.
+   - Event-specific: the to-do list.
+5. `記録` — review, cloud sync, Markdown and JSON.
+   - Shared: read from the cloud, copy and download Markdown, export and import
+     JSON, and never embed the sync key.
+   - Event-specific: what the Markdown carries beyond the trip-wide sections.
+
+Order and naming: sections opened on the ground come first and foldable ones
+last, and the panels follow the tab order in the DOM, since printing opens every
+tab and stacks them. Labels are at most two characters — with five tabs a
+four-character label overflows 393 px, and the overflow is silent because the
+tab bar scrolls with its scrollbar hidden. The default tab is 旅程, not 概要: the
+overview earns its place before departure and at the desk, while opening on it
+costs a tap every time on the ground.
+
+**Renaming a tab changes the label only.** `data-tab`, the panel `id` and the
+storage keys stay as they are, or saved tab state and saved notes stop
+resolving: HRS renamed `会場` to `視察` and kept `venue` and `ses:`. Ids are per
+event and frozen at birth rather than shared — HRS calls the itinerary `plan`
+where EuroBLECH calls it `itinerary`, and neither may be aligned to the other
+now that both hold stored data.
+
+Documents and the family view are not tabs. `family_print.html` and
+`immigration_print.html` are separate pages reached from the header.
+Traveler colors appear only where people actually split; merged travel
 uses a neutral surface.
 
 ## Shared versus event-specific
