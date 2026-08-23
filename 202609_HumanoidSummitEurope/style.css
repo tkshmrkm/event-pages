@@ -664,9 +664,16 @@ details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding
    2つが同じ列の値に見えた。左罫を付けて、主な内容への注記だと分かるようにする。 */
 .ov-note{display:block;margin-top:3px;padding-left:7px;border-left:2px solid var(--line);color:var(--mu);font-size:12px}
 /* 区分。便名や会議名が並ぶだけでは、その日が何の日かが読み取れない。
-   進み具合の札（.plan-state）ではないので、そちらと見た目を分ける。 */
+   進み具合の札（.plan-state）ではないので、そちらと見た目を分ける。
+   札は2つまで。暦（休日）と中身（会議・企業訪問・移動）は別の軸なので、
+   1つの札にまとめない。74pxでは2つ並ばないのでPC幅では自然に縦へ折り返し、
+   日付と同じ行に出る430px以下では横に並ぶ。 */
 .ov-days td.ov-kind{width:74px}
-.ov-kind>span{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:0 6px;background:var(--hov);color:var(--tx2);font-size:11px;font-weight:700;white-space:nowrap}
+.ov-kind>span{display:inline-block;margin:0 4px 2px 0;border:1px solid var(--line);border-radius:4px;padding:0 6px;background:var(--hov);color:var(--tx2);font-size:11px;font-weight:700;white-space:nowrap}
+/* 休日は面を反転させる。淡い面どうしだと隣の札と見分けが付かず、明記した意味が
+   薄れる（--neuの面で試して読めなかった）。色相は増やさない。黄は警告、
+   ラベンダーは未確定、ローズはHRSと決まっているので、濃い無彩に白抜きにする。 */
+.ov-kind>span.ov-off{border-color:var(--tx2);background:var(--tx2);color:#fff}
 /* フライトは1区間1行。日程概要は1日1行が原則だが、便だけは例外にする。復路が
    「過ごし方は未定」に隠れて、帰国便が概要のどこにも出ていなかった（2026-08-23）。
    横に並べ、入りきらなければ折り返す。393pxで2行、PC幅で1行に収まる分量に留める。 */

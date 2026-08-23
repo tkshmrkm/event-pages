@@ -96,11 +96,29 @@ assert(overviewRow('9/13').includes('AY1416') && overviewRow('9/13').includes('�
 ['NGO発 → HEL', 'HEL発 → FRA', 'FRA発 → HEL', 'HEL発 → NGO'].forEach(prose => {
   assert(!overviewHtml.includes(prose), `${onlineName}: the overview repeats the flight prose ${prose}; the per-leg lines own it`);
 });
-// 区分は1本の軸（旅程上の位置）で付ける。行為の軸の「移動」と混ぜない。9/8が「移動」で
-// 9/13が「帰国日」だと、往路の到着日と復路の出発日が別々の物差しで呼ばれる。
+// 区分は2軸。暦（休日かどうか）と中身（会議・企業訪問・移動）は別の札にする。
+// 1つの札にまとめると、9/13のように「休日で、かつ帰路」の日が表せない。
 assert(overviewRow('9/8').includes('>到着<') && overviewRow('9/13').includes('>帰路<'),
-  `${onlineName}: overview day kinds must come from one axis`);
-assert(!overviewHtml.includes('>帰国日<'), `${onlineName}: 帰国日 is the old axis; the arrival day would have to be 移動`);
+  `${onlineName}: the arrival day and the homebound day must be named for the border they cross`);
+assert(!overviewHtml.includes('>帰国日<'), `${onlineName}: 帰国日 mixed the two axes; the arrival day would have to be 移動`);
+// 中身の札。仕事の日を「イベント」でまとめると、9/11だけ場所も終わる時刻も違うことが消える。
+assert(overviewRow('9/9').includes('>会議<') && overviewRow('9/11').includes('>企業訪問<'),
+  `${onlineName}: the working days must say what they are`);
+assert(!overviewHtml.includes('>イベント<'), `${onlineName}: イベント says nothing about what happens that day`);
+// 休日は土日の2日だけに、中身の札とは別の札で出す。
+const overviewOff = overviewHtml.match(/<span class="ov-off">休日<\/span>/g) || [];
+assert(overviewOff.length === 2, `${onlineName}: 9/12 and 9/13 are the days off, found ${overviewOff.length}`);
+['9/12', '9/13'].forEach(date => assert(overviewRow(date).includes('class="ov-off">休日<'),
+  `${onlineName}: ${date} is a Saturday/Sunday and must say so`));
+assert(overviewRow('9/13').includes('class="ov-off">休日<') && overviewRow('9/13').includes('>帰路<'),
+  `${onlineName}: 9/13 is a day off and the homebound day at once; both labels must show`);
+assert(!overviewRow('9/9').includes('ov-off'), `${onlineName}: weekdays must not carry the day-off label`);
+assert(sharedCss.includes('.ov-kind>span.ov-off{'), 'style.css: day-off label style missing');
+// 手続きの列挙は概要に要らない（在り処と無い場所を対で見る。旅程と家族向けには残す）。
+['荷物を預ける', '入国審査'].forEach(detail => {
+  assert(!overviewHtml.includes(detail), `${onlineName}: the overview must not carry the step-by-step ${detail}`);
+  assert(online.includes(detail), `${onlineName}: ${detail} must stay in the itinerary itself`);
+});
 assert((online.match(/<details class="day" open/g) || []).length === 8, `${onlineName}: all eight days must start open`);
 // 準備は2026-08-16に正式タブへ。それまでは旅程タブのボタンからしか開けず、中の
 // 「利用フライト」へオンライン版から事実上たどり着けなかった。EBは先に4タブ化済み。

@@ -369,9 +369,16 @@ const overviewCss = String.raw`
    2つが同じ列の値に見えた。左罫を付けて、主な内容への注記だと分かるようにする。 */
 .ov-note{display:block;margin-top:3px;padding-left:7px;border-left:2px solid var(--line);color:var(--mu);font-size:12px}
 /* 区分。便名や会議名が並ぶだけでは、その日が何の日かが読み取れない。
-   進み具合の札（.plan-state）ではないので、そちらと見た目を分ける。 */
+   進み具合の札（.plan-state）ではないので、そちらと見た目を分ける。
+   札は2つまで。暦（休日）と中身（会議・企業訪問・移動）は別の軸なので、
+   1つの札にまとめない。74pxでは2つ並ばないのでPC幅では自然に縦へ折り返し、
+   日付と同じ行に出る430px以下では横に並ぶ。 */
 .ov-days td.ov-kind{width:74px}
-.ov-kind>span{display:inline-block;border:1px solid var(--line);border-radius:4px;padding:0 6px;background:var(--hov);color:var(--tx2);font-size:11px;font-weight:700;white-space:nowrap}
+.ov-kind>span{display:inline-block;margin:0 4px 2px 0;border:1px solid var(--line);border-radius:4px;padding:0 6px;background:var(--hov);color:var(--tx2);font-size:11px;font-weight:700;white-space:nowrap}
+/* 休日は面を反転させる。淡い面どうしだと隣の札と見分けが付かず、明記した意味が
+   薄れる（--neuの面で試して読めなかった）。色相は増やさない。黄は警告、
+   ラベンダーは未確定、ローズはHRSと決まっているので、濃い無彩に白抜きにする。 */
+.ov-kind>span.ov-off{border-color:var(--tx2);background:var(--tx2);color:#fff}
 /* フライトは1区間1行。日程概要は1日1行が原則だが、便だけは例外にする。復路が
    「過ごし方は未定」に隠れて、帰国便が概要のどこにも出ていなかった（2026-08-23）。
    横に並べ、入りきらなければ折り返す。393pxで2行、PC幅で1行に収まる分量に留める。 */
@@ -1743,6 +1750,10 @@ const CLIMATE_ROWS = [
 // HRSは全行程が同一行動（人別の別行動がない）ので、EuroBLECHが合流後に使う
 // <section class="family-shared"><h3>全員</h3> の1枠構成を毎日使う
 // （class="family-day-row shared-day"も毎日付ける）。
+// 5つ目の要素は概要タブ用の短い言い方（省略可）。荷物を預ける・入国審査といった
+// 手続きの列挙は、その日の全体像には要らない（2026-08-23にユーザーが指摘）。
+// 家族向けは4つ目の本文をそのまま使い、概要だけが短いほうを取る。
+// 新しい事実を書けないよう、buildOverviewSectionが本文の一部であることを確認する。
 const FAMILY_DAYS = [
   { date:'9/7', dow:'月', events:[
     ['22:50発','flight','機内','NGO発 → HEL（Finnair AY80／A350・13時間5分）。<b>翌朝まで連絡がつきにくい</b>'],
@@ -1751,7 +1762,7 @@ const FAMILY_DAYS = [
     ['5:55〜7:40','transfer','乗り継ぎ','ヘルシンキで1時間45分'],
     ['7:40','flight','フライト','HEL発 → FRA（AY1411／A321・2時間40分）9:20着'],
     ['9:20','procedure','到着','Frankfurt FRA着。荷物受取・税関'],
-    ['12:11〜12:30頃','move','移動','Stuttgart Hbf着 → Maritim Stuttgartに荷物を預ける（正式チェックインは15:00〜）'],
+    ['12:11〜12:30頃','move','移動','Stuttgart Hbf着 → Maritim Stuttgartに荷物を預ける（正式チェックインは15:00〜）','Stuttgart Hbf着'],
     ['夕方〜夜','stay','チェックイン','Maritim Stuttgartにチェックイン'],
   ], stays:[['全員','Maritim Stuttgart']] },
   { date:'9/9', dow:'水', events:[
@@ -1774,7 +1785,7 @@ const FAMILY_DAYS = [
   ], stays:[['全員','機内']] },
   { date:'9/14', dow:'月', events:[
     ['19:35','flight','帰着','中部国際空港着'],
-    ['21:05頃','move','帰宅','入国審査・荷物受取・税関を終え、名鉄名古屋で分岐して各自帰宅'],
+    ['21:05頃','move','帰宅','入国審査・荷物受取・税関を終え、名鉄名古屋で分岐して各自帰宅','名鉄名古屋で分岐して各自帰宅'],
   ], stays:[['全員','帰宅']] },
 ];
 // 地図リンクは場所名そのものに張るのが規約。2件のURLはFAMILY_FIXUPSが使っている
@@ -1833,19 +1844,39 @@ const OVERVIEW_UNDECIDED_DATES = ['9/12', '9/13'];
 //   仕事あり        … イベント
 //   移動あり        … 移動（境界をまたがない移動だけの日。HRSには無い）
 //   それ以外        … 休日
+// 休日かどうかは暦の話で、その日に何をするか（会議・企業訪問・移動）とは別の軸。
+// 1つの札にまとめると、9/13のように「休日で、かつ帰路」の日が表せない
+// （2026-08-23にユーザーが指摘）。札は2つまで出し、休日を先に置く。
+// 祝日はいまの日程に無い。入るときはdowと同じくFAMILY_DAYSに持たせる。
+// ここで日付を決め打ちしない。
+const OVERVIEW_OFF_DOW = ['土', '日'];
+const overviewIsDayOff = day => OVERVIEW_OFF_DOW.includes(day.dow);
+
+// 仕事の日の中身。会場に籠もる日と外へ出る日を同じ「イベント」でまとめると、
+// 9/11だけ場所も終わる時刻も違うことが概要から消える。予定文から読むので、
+// 日程を差し替えれば札も一緒に動く。当たらなければ会議（HRSは国際会議の視察）。
+const OVERVIEW_WORK_KINDS = [['企業訪問', '企業訪問'], ['工場見学', '工場見学'], ['打ち合わせ', '打合せ']];
+const overviewWorkKind = day => {
+  const work = day.events.find(ev => ev[1] === 'work');
+  const hit = OVERVIEW_WORK_KINDS.find(([needle]) => work[3].includes(needle));
+  return hit ? hit[1] : '会議';
+};
+
 const overviewDayKind = (day, i, all) => {
   if (i === 0) return '出国';
   if (i === all.length - 1) return '帰国';
   if (day.stays.some(s => s[1] === '機内')) return '帰路';
   if (all[i - 1].stays.some(s => s[1] === '機内')) return '到着';
-  if (day.events.some(e => e[1] === 'work')) return 'イベント';
+  if (day.events.some(e => e[1] === 'work')) return overviewWorkKind(day);
   if (day.events.some(e => ['flight', 'move', 'transfer'].includes(e[1]))) return '移動';
-  return '休日';
+  return '';
 };
 // 導出結果が変わったら気付けるように、期待値を並べて突き合わせる。
-// 2026-08-23に9/8を「移動」から「到着」、9/13を「帰国日」から「帰路」へ変えた。
-// 日数も並びも変わっていない。軸を1本にそろえただけで、8日のうち2日の呼び名が動いた。
-const OVERVIEW_DAY_KINDS = ['出国', '到着', 'イベント', 'イベント', 'イベント', '休日', '帰路', '帰国'];
+// 2026-08-23に3度動かした。9/8「移動」→「到着」、9/13「帰国日」→「帰路」で
+// 軸を1本（旅程上の位置）にそろえ、そのあと休日を別の札へ出して、
+// 残った軸を「その日の中身」にした。9/12は中身の予定がまだ無いので空になる。
+const OVERVIEW_DAY_KINDS = ['出国', '到着', '会議', '会議', '企業訪問', '', '帰路', '帰国'];
+const OVERVIEW_DAY_OFFS = ['', '', '', '', '', '休日', '休日', ''];
 
 // 概要に出すフライトは、利用フライトのFLIGHT_JOURNEYSから引く。概要のために便名や
 // 時刻を書き直さない（書き直せば旅程と概要が別々の値を持つ）。
@@ -1891,12 +1922,13 @@ function overviewDayRows() {
       .find(Boolean);
     // 出発日はフライトしか予定が無い。区間の行だけの日があってよい。
     if (!pick && !legs.length) throw new Error(`Overview: no representative event for ${day.date}`);
-    const main = pick ? overviewHeadline(pick[3]) : '';
+    const main = pick ? overviewHeadline(pick[4] || pick[3]) : '';
     if (pick && !main) throw new Error(`Overview: empty headline for ${day.date}`);
     const undecided = OVERVIEW_UNDECIDED_DATES.includes(day.date);
     return {
       date: `${day.date}（${day.dow}）`,
       kind: overviewDayKind(day, i, all),
+      off: overviewIsDayOff(day) ? '休日' : '',
       main,
       note: undecided && pick ? overviewTail(pick[3]) : '',
       legs: legs.map(leg => overviewLegMarkup(day.date, leg)),
@@ -1969,8 +2001,19 @@ function buildOverviewSection(source, undecidedBanner) {
   if (kinds.join('／') !== OVERVIEW_DAY_KINDS.join('／')) {
     throw new Error(`Overview: day kinds changed. got ${kinds.join('／')}, expected ${OVERVIEW_DAY_KINDS.join('／')}`);
   }
+  const offs = rows.map(r => r.off);
+  if (offs.join('／') !== OVERVIEW_DAY_OFFS.join('／')) {
+    throw new Error(`Overview: days off changed. got ${offs.join('／')}, expected ${OVERVIEW_DAY_OFFS.join('／')}`);
+  }
+  // 概要用の短い言い方は、旅程の本文の一部であること。ここで言い換えを作らない。
+  FAMILY_DAYS.forEach(day => day.events.forEach(ev => {
+    if (ev[4] && !ev[3].includes(ev[4])) {
+      throw new Error(`Overview: ${day.date} short form "${ev[4]}" is not part of the itinerary text`);
+    }
+  }));
   const dayRowsHtml = rows.map(r =>
-    `<tr><td class="ov-date">${r.date}</td><td class="ov-kind"><span>${r.kind}</span></td>`
+    `<tr><td class="ov-date">${r.date}</td>`
+    + `<td class="ov-kind">${r.off ? `<span class="ov-off">${r.off}</span>` : ''}${r.kind ? `<span>${r.kind}</span>` : ''}</td>`
     + `<td>${r.main}${r.note ? `<span class="ov-note">${r.note}</span>` : ''}${r.legs.join('')}</td>`
     + `<td class="ov-stay">${r.stay}</td></tr>`
   ).join('\n          ');
