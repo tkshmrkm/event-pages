@@ -10,10 +10,18 @@ const sourcePath = join(here, 'source.html');
 const outputPath = join(here, 'index.html');
 const familyOutputPath = join(here, 'family_print.html');
 const immigrationOutputPath = join(here, 'immigration_print.html');
+// Windowsの2パス決め打ちだとLinux/macOSでビルドできない。CI・コンテナ・Linux開発機では
+// TRIP_BROWSERで明示的に指定できるようにし（先頭で見る＝指定があれば必ずそれを使う）、
+// 末尾にLinuxでよくあるChrome/Chromiumの場所を足す。existsSyncはundefinedを渡すと
+// 例外になるので、環境変数が未設定のときは候補に入れない。
 const browserPath = [
+  process.env.TRIP_BROWSER,
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-].find(existsSync);
+  '/usr/bin/google-chrome',
+  '/usr/bin/chromium',
+  '/usr/bin/chromium-browser',
+].filter(Boolean).find(existsSync);
 if (!browserPath) throw new Error('Chrome or Edge is required to build index.html');
 
 const DAY_META = {
@@ -266,31 +274,118 @@ const overviewHeadline = text => {
   return plain.trim();
 };
 
-// レーンごとの区分。1行の内容だけだと便名や会議名が並ぶばかりで、その日が
-// そのレーンにとって何の日なのかが読めない。判定は上から順に最初に当たったものを採る。
-//   出国    … そのレーンが最初に飛ぶ日。村上は10/17、美馬・金築は10/18でずれる
-//   帰国    … 全日程の最終日
-//   帰国便  … 機内泊（そのレーンの初日を除く）
-//   イベント… work がある
-//   移動    … flight / move / transfer / procedure がある
-//   休日    … それ以外
-//   日本    … 行事が無い。まだ発っていない（10/17の美馬・金築）
-const overviewLaneKind = (events, { first, last, stay }) => {
-  if (!events.length) return '日本';
+// ---------- 区分は2軸（2026-08-23。HRSで決めた規則をEBへ） ----------
+// 暦（休日かどうか）と、その日の中身（何をする日か）は別の軸。1つの札にまとめると、
+// 10/24のような「休日で、かつ帰路」の日が表せない。札は2つまでで、休日を先に置く。
+// 祝日はいまの日程に無い。入るときは dow と同じく FAMILY_DAYS に持たせる。
+const OVERVIEW_OFF_DOW = ['土', '日'];
+const overviewIsDayOff = day => OVERVIEW_OFF_DOW.includes(day.dow);
+
+// 中身の軸。ここでは行為（移動）と旅程上の位置（帰国便）を混ぜない。境目の日は
+// 越える境界で呼び、間の日は何をする日かで呼ぶ。**「イベント」でまとめない。**
+// TechExの参加日とAutostadtの見学日と工場見学は別物で、まとめると場所も
+// 終わる時刻も概要から消える。仕事の日の呼び名は OVERVIEW_EVENTS の種類を使い、
+// ここで別の言い回しを作らない（用語の決定に従う）。
+// 「日本」は場所であって中身ではないので廃止した。まだ発っていない日は中身が
+// 空になり、宿の列の「日本」が居場所を言う。
+//   出国 … そのレーンが最初に飛ぶ日。村上は10/17、美馬・金築は10/18でずれる
+//   帰国 … 全日程の最終日
+//   帰路 … 機内泊（そのレーンの初日を除く）
+//   到着 … 前夜が機内泊
+//   種類 … work があれば参加／見学／展示会視察／工場見学
+//   移動 … 境界をまたがない移動だけの日
+const overviewLaneKind = (events, { first, last, stay, arrived }) => {
+  if (!events.length) return '';
   if (first) return '出国';
   if (last) return '帰国';
-  if (stay === '機内') return '帰国便';
-  if (events.some(e => e[1] === 'work')) return 'イベント';
-  if (events.some(e => ['flight', 'move', 'transfer', 'procedure'].includes(e[1]))) return '移動';
-  return '休日';
+  if (stay === '機内') return '帰路';
+  if (arrived) return '到着';
+  const work = events.find(ev => ev[1] === 'work');
+  if (work) return overviewEvent(work[3]).kind;
+  if (events.some(ev => ['flight', 'move', 'transfer', 'procedure'].includes(ev[1]))) return '移動';
+  return '';
 };
 // 代表の1件を選ぶ順。work を先に見るのは、イベント日に「チェックイン」が
-// 主役として出てしまうのを避けるため。flight は move より上（HRSと同じ理由で、
-// 10/25が「入国手続きを終えて各自帰宅」を拾うと14:10のセントレア着が消える）。
+// 主役として出てしまうのを避けるため。区間行を持つ日は、その区間が言っている
+// 種別（flight・procedure・transfer、陸路があれば move も）を外して選ぶ。
+// 同じ便を主な内容にも出すと、1行に同じ事実が2回並ぶ（2026-08-23）。
 const OVERVIEW_MAIN_KIND_ORDER = ['work', 'review', 'flight', 'procedure', 'move', 'transfer', 'stay'];
-const overviewMain = events => {
-  const pick = OVERVIEW_MAIN_KIND_ORDER.map(kind => events.find(ev => ev[1] === kind)).find(Boolean);
-  return pick ? overviewHeadline(pick[3]) : '';
+
+// ---------- 概要に出す区間（2026-08-23） ----------
+// 値は ROUTES から引く。概要のために時刻や便名を書き直さない。出すのは
+// **フライトと、泊まる街が変わる陸路**だけ。会場への往復（ICE888・S4など）と
+// 空港アクセス（S5・メトロ・徒歩）は当日の行動計画の粒度なので旅程が持つ。
+// tone は誰の区間か。合流後は shared で、2本の概要の両方に同じ区間が出る。
+const OVERVIEW_LEG_KEYS = [
+  ['1017', 'CX539',      'murakami', 'flight'],
+  ['1017', 'CX271',      'murakami', 'flight'],
+  ['1018', 'CX539',      'team',     'flight'],
+  ['1018', 'CX289',      'team',     'flight'],
+  ['1019', 'RE2＋ICE774', 'team',     'train'],
+  ['1020', 'KL1791',     'murakami', 'flight'],
+  ['1020', 'ICE77',      'murakami', 'train'],
+  ['1023', 'ICE771',     'shared',   'train'],
+  ['1024', 'CX288',      'shared',   'flight'],
+  ['1025', 'CX536',      'shared',   'flight'],
+];
+// '10/17（土）16:10' から日付と時刻を取り出す。ROUTESの書式はこの1つだけ。
+const overviewRouteDate = at => at.split('（')[0];
+const overviewRouteTime = at => (at.match(/(\d{1,2}):(\d{2})/) || [''])[0];
+const overviewMinutes = at => {
+  const hit = String(at).match(/(\d{1,2}):(\d{2})/);
+  return hit ? Number(hit[1]) * 60 + Number(hit[2]) : 0;
+};
+// 地点は、空港はコード、駅は駅名。'中部国際空港（NGO）' は NGO、'Göttingen Hbf' は
+// そのまま。区間行は幅が狭く、正式名を並べると393pxで3行になる。
+const overviewPlace = name => {
+  const code = name.match(/（([A-Z]{3})）$/);
+  return code ? code[1] : name;
+};
+const OVERVIEW_LEGS = OVERVIEW_LEG_KEYS.map(([dayKey, code, tone, icon]) => {
+  const route = ROUTES.find(row => row[0] === dayKey && row[5] === code);
+  if (!route) throw new Error(`Overview: no route for ${dayKey} ${code}`);
+  const [, , depAt, depTz, depPlace, no, duration, arrAt, arrTz, arrPlace] = route;
+  return {
+    tone, icon, no, duration,
+    date: overviewRouteDate(depAt),
+    from: [overviewPlace(depPlace), depTz, overviewRouteDate(depAt), overviewRouteTime(depAt)],
+    to: [overviewPlace(arrPlace), arrTz, overviewRouteDate(arrAt), overviewRouteTime(arrAt)],
+  };
+});
+// 1区間1行。出発時刻・地点・発、到着時刻・地点・着、便名、所要をこの順で出す。
+// 向きは矢印ではなく「発」「着」で示す。時刻帯は出発と到着で違うときだけ出す
+// （13:40発・翌07:20着で11時間40分の区間は、時刻帯が無いと数字が合わない）。
+// 日付はまたぐ側にだけ添える。
+// 区間行のアイコンは文中に置くので、文字サイズ基準の .line-icon を直接書く。
+// 絵文字の短縮形は使えない。✈・🛫・🛬 はどれも先に走る変換で20px固定の
+// .flight-mark へ置き換えられ、12pxの行の中に文字より大きい箱が並ぶ。
+const OVERVIEW_LEG_ICON = {
+  flight: '<span class="line-icon line-icon-flight" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z"/></svg></span>',
+  train: '<span class="line-icon line-icon-train" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span>',
+};
+const overviewLegMarkup = (dayDate, leg) => {
+  // buildOverviewSection の esc はその中のローカルなので、ここでは同じ処理を持つ。
+  const esc = value => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const showTz = leg.from[1] !== leg.to[1];
+  const point = (label, [place, tz, date, time]) =>
+    '<span class="ov-leg-pt">'
+    + (date === dayDate ? '' : `<span class="ov-leg-day">${esc(date)}</span>`)
+    + `<b>${esc(time)}</b>${showTz ? `<span class="ov-leg-tz">${esc(tz)}</span>` : ''}`
+    + `<span class="ov-leg-code">${esc(place)}</span><em>${label}</em></span>`;
+  return `<span class="ov-leg">${OVERVIEW_LEG_ICON[leg.icon]}<span class="ov-leg-no">${esc(leg.no)}</span>`
+    + point('発', leg.from) + point('着', leg.to)
+    + `<span class="ov-leg-dur">${esc(leg.duration)}</span></span>`;
+};
+// 区間行が言っている種別は主な内容から外す。陸路の区間行があるときは move も外す
+// （区間行にしていない移動は残す。10/24の「ホテル → フランクフルト空港」など）。
+const overviewMainPick = (events, legs) => {
+  const covered = legs.length
+    ? ['flight', 'procedure', 'transfer'].concat(legs.some(leg => leg.icon !== 'flight') ? ['move'] : [])
+    : [];
+  return OVERVIEW_MAIN_KIND_ORDER
+    .filter(kind => !covered.includes(kind))
+    .map(kind => events.find(ev => ev[1] === kind))
+    .find(Boolean);
 };
 
 // レーンの並びは、その日に何本あるかで決まる。合流後は1本。
@@ -317,20 +412,34 @@ function overviewDayRows() {
       ];
     return {
       date: `${day.date}（${day.dow}）`,
-      lanes: lanes.map(lane => ({
-        ...lane,
-        kind: overviewLaneKind(lane.events, {
-          first: firstFlight[lane.tone] === day.date,
-          last,
-          stay: rawStayOf(lane.who),
-        }),
-        // まだ発っていないレーンは行事が無い。区分と居場所の両方が「日本」と
-        // 言っているので、内容の行は出さない（'—' だけの行が1本増えるだけ）。
-        main: overviewMain(lane.events),
-        // 未確定が残る日はその理由を1行添える。札は付けない。状態を持つ単位は
-        // 予定1件で、札の持ち主は旅程タブにある（同じ札を概要にも複製しない）。
-        note: overviewHeadline((lane.events.find(e => e[1] === 'review') || [])[3] || ''),
-      })),
+      dow: day.dow,
+      // 暦の軸。中身の札とは別に出す。
+      off: overviewIsDayOff(day) ? '休日' : '',
+      lanes: lanes.map(lane => {
+        const legs = OVERVIEW_LEGS.filter(leg => leg.date === day.date && leg.tone === lane.tone);
+        const pick = overviewMainPick(lane.events, legs);
+        return {
+          ...lane,
+          legs,
+          kind: overviewLaneKind(lane.events, {
+            first: firstFlight[lane.tone] === day.date,
+            last,
+            stay: rawStayOf(lane.who),
+            // 前夜が機内泊なら、その日は現地に着く日。10/18の村上、10/19の美馬・金築。
+            arrived: i > 0 && (all[i - 1].stays.find(stay => stay[0] === lane.who
+              || stay[0] === '全員') || [])[1] === '機内',
+          }),
+          // まだ発っていないレーンは予定が無い。区分も内容も空にして、宿の列の
+          // 「日本」が居場所を言う。移動しかない日は区間行だけが残る。
+          main: pick ? overviewHeadline(pick[3]) : '',
+          // 主な内容を時系列に混ぜるための時刻。時刻を持たない行（「日中」）は
+          // その日の先頭へ置く。
+          mainAt: pick ? pick[0] : '',
+          // 未確定が残る日はその理由を1行添える。札は付けない。状態を持つ単位は
+          // 予定1件で、札の持ち主は旅程タブにある（同じ札を概要にも複製しない）。
+          note: overviewHeadline((lane.events.find(e => e[1] === 'review') || [])[3] || ''),
+        };
+      }),
     };
   });
 }
@@ -488,19 +597,64 @@ function buildOverviewSection(source) {
   });
 
   const esc = value => String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const laneHtml = lane =>
-    `<div class="ov-lane ov-lane-${lane.tone}">`
-    + `<span class="ov-who">${esc(lane.who)}</span>`
-    + `<span class="ov-kind"><span>${esc(lane.kind)}</span></span>`
-    + `<span class="ov-main">${esc(lane.main)}${lane.note ? `<span class="ov-note">${esc(lane.note)}</span>` : ''}</span>`
-    + `<span class="ov-city">${esc(lane.stay)}</span>`
-    + '</div>';
-  const dayHtml = row =>
-    `<article class="ov-day${row.date === mergeDate ? ' ov-day-merge' : ''}">`
-    + `<header>${esc(row.date)}</header>`
-    + row.lanes.map(laneHtml).join('')
-    + (row.date === mergeDate ? `<div class="ov-join">この夜から${esc(mergeCity)}で3名合流</div>` : '')
-    + '</article>';
+  // ---------- 日程概要は人ごとに1本ずつ（2026-08-23） ----------
+  // 村上と美馬・金築は10/20の夜まで別に動く。1日を2レーンに割った1本の表にすると、
+  // 同じ値（区分・宿）が同じ日に2回並び、どこが同じでどこが違うのかを読む側が
+  // 突き合わせることになる（ユーザーが指摘）。旅程概要そのものを2本にして、
+  // もう一方と同じ行には「共通」を付ける。合流後は全行が共通になるので、
+  // 共通の札が続くことが合流の合図になる（レーンの色が1本になるのと同じ役目）。
+  const OVERVIEW_PEOPLE = [
+    { who: '村上', tone: 'murakami' },
+    { who: '美馬・金築', tone: 'team' },
+  ];
+  const laneFor = (row, tone) => row.lanes.find(l => l.tone === tone) || row.lanes.find(l => l.tone === 'shared');
+  const personRows = OVERVIEW_PEOPLE.map(person => ({
+    ...person,
+    days: rows.map(row => {
+      const mine = laneFor(row, person.tone);
+      const others = OVERVIEW_PEOPLE.filter(other => other.tone !== person.tone).map(other => laneFor(row, other.tone));
+      // 印を付けるのは2つだけ。行がまるごと同じ（その日は同じ行動）か、泊まる街だけ
+      // 同じ（日中は別でも夜は同じ場所）か。区分だけの一致は印にしない。
+      // 「イベント」同士でも、TechExとEuroBLECHなら同じ行動ではない。
+      const legSignature = lane => lane.legs.map(leg => leg.no).join('／');
+      const sameAll = others.every(o => o && o.kind === mine.kind && o.main === mine.main
+        && o.stay === mine.stay && legSignature(o) === legSignature(mine));
+      const sameStay = !sameAll && others.every(o => o && o.stay === mine.stay);
+      return {
+        date: row.date, dow: row.dow, off: row.off,
+        kind: mine.kind, main: mine.main, mainAt: mine.mainAt, note: mine.note,
+        legs: mine.legs, stay: mine.stay, sameAll, sameStay,
+      };
+    }),
+  }));
+  // 主な内容も区間行も、その日の時刻で並べる。主な内容を先頭に固定すると、10/20の
+  // 村上が「TechEx Day 2（09:45）→ 16:50のフライト」ではなく逆順に出る。
+  const personRowHtml = day => {
+    const parts = day.legs.map(leg => ({
+      at: overviewMinutes(leg.from[3]),
+      html: overviewLegMarkup(day.date.split('（')[0], leg),
+    }));
+    if (day.main) {
+      parts.push({
+        at: overviewMinutes(day.mainAt),
+        html: `<span class="ov-main">${esc(day.main)}${day.note ? `<span class="ov-note">${esc(day.note)}</span>` : ''}</span>`,
+      });
+    }
+    parts.sort((a, b) => a.at - b.at);
+    return `<div class="ov-prow${day.sameAll ? ' ov-prow-same' : ''}">`
+      + `<span class="ov-date">${esc(day.date)}${day.sameAll ? '<span class="ov-same">共通</span>' : ''}</span>`
+      + `<span class="ov-kind">${day.off ? `<span class="ov-off">${esc(day.off)}</span>` : ''}</span>`
+      + `<span class="ov-kind">${day.kind ? `<span>${esc(day.kind)}</span>` : ''}</span>`
+      + `<span class="ov-body-cell">${parts.map(part => part.html).join('')}</span>`
+      + `<span class="ov-city">${esc(day.stay)}${day.sameStay ? '<span class="ov-same">共通</span>' : ''}</span>`
+      + '</div>';
+  };
+  const personHtml = person =>
+    `<section class="ov-person ov-person-${person.tone}">`
+    + `<header><strong>${esc(person.who)}</strong><span>${esc(person.days[0].date)}〜${esc(person.days[person.days.length - 1].date)}</span></header>`
+    + person.days.map(day => personRowHtml(day)
+      + (day.date === mergeDate ? `<div class="ov-join">この夜から${esc(mergeCity)}で3名合流。ここから下は全部共通</div>` : '')).join('')
+    + '</section>';
 
   return `<div class="tab" id="tab-overview" role="tabpanel" aria-label="概要">
   <div class="legacy-stack">
@@ -527,13 +681,13 @@ function buildOverviewSection(source) {
   <div class="ov-card">
     <div class="ov-head">📅 日程概要</div>
     <div class="ov-body">
-      <p class="ov-lead">出発から${mergeIndex + 1}日目まで村上と美馬・金築は別行動。色が2本から1本になる日が合流</p>
-      <div class="ov-flow">
-        ${rows.map(dayHtml).join('\n        ')}
+      <p class="ov-lead">旅程が割れているので2本並べます。もう一方と同じ日には<span class="ov-same">共通</span>が付きます。出発から${mergeIndex + 1}日目の夜に合流し、そこから先は全部共通</p>
+      <div class="ov-two">
+        ${personRows.map(personHtml).join('\n        ')}
       </div>
       <div class="ov-more no-print"><button class="btn" type="button" data-goto="itinerary">📅 日ごとの旅程へ</button></div>
     </div>
-    <div class="ov-foot">💡 時刻・便名・乗り継ぎ・宿の住所は旅程タブが持ちます。ここは1日1行の俯瞰だけです</div>
+    <div class="ov-foot">💡 都市間の移動は1区間ずつ出します。会場への往復・空港アクセス・乗り継ぎ・宿の住所は旅程タブが持ちます</div>
   </div>
 
   <div class="ov-card">
@@ -1408,7 +1562,7 @@ const transformScript = `
   const lineIconMap = {
     '🛋':'lounge', '🛂':'procedure', '🏨':'hotel', '🍽':'meal', '😴':'rest', '🥂':'drinks',
     '🏭':'factory', '🚶':'walk', '🏠':'home', '🏛':'event', '🕐':'clock', '🕗':'clock', '🚗':'car',
-    '📍':'pin', '🎯':'target', '✅':'checkCircle', '👥':'people', '⚠':'warning', '⭐':'star',
+    '📍':'pin', '🎯':'target', '✅':'checkCircle', '👥':'people', '⚠':'warning', '⭐':'star', '★':'star',
     '👤':'person', '📅':'calendar', '📝':'memo', '📱':'phone', '🗺':'map', '🚆':'train', '🚄':'train',
     '🛒':'cart', '✍':'pen', '🎫':'ticket', '🌐':'globe', '🌍':'globe', '🏢':'building',
     '💰':'money', '📁':'folder', '📄':'document', '💻':'laptop', '🔍':'search', '💳':'card',
@@ -1520,9 +1674,14 @@ writeFileSync(inputPath, source, 'utf8');
 try {
   let output;
   try {
+    // rootで実行するとChromeのユーザー名前空間サンドボックスが起動を拒否する
+    // （コンテナ・CIでよくある）。Windowsやroot以外では挙動を変えたくないので、
+    // 「Windowsでない」かつ「root（uid 0）」のときだけ --no-sandbox を足す。
+    const isRootOnPosix = process.platform !== 'win32' && process.getuid && process.getuid() === 0;
     output = execFileSync(browserPath, [
       '--headless', '--disable-gpu', '--no-first-run', '--no-default-browser-check',
       `--user-data-dir=${profilePath}`, '--virtual-time-budget=1500', '--dump-dom',
+      ...(isRootOnPosix ? ['--no-sandbox'] : []),
       pathToFileURL(inputPath).href,
     ], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, windowsHide: true });
   } catch (headlessError) {

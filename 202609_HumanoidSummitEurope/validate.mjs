@@ -58,6 +58,90 @@ assert(online.includes("['overview','plan','venue','rec','prep'].includes(store.
   assert(online.includes(link), `${onlineName}: overview cross-link missing: ${link}`);
 });
 assert(sharedCss.includes('.ov-days{') && sharedCss.includes('.ov-facility{'), 'style.css: overview styles missing');
+assert(sharedCss.includes('.ov-leg{'), 'style.css: overview flight-leg styles missing');
+// ---------- 概要のフライトは1区間ずつ ----------
+// 2026-08-23まで、9/13の行が「過ごし方は未定」を拾って、帰国便のAY1416とAY79が
+// 概要のどこにも出ていなかった。在り処と無い場所を対で見る。
+//   在り処 … 4区間ぶんの便名・時刻・時刻帯・空港・所要が、それぞれ1行に揃っていること
+//   無い場所 … 同じ便を「主な内容」の地の文が重ねて持たないこと
+const overviewStart = online.indexOf('<section class="tab" id="tab-overview"');
+const overviewEnd = online.indexOf('<section class="tab on" id="tab-plan"');
+assert(overviewStart !== -1 && overviewEnd > overviewStart, `${onlineName}: overview section not found`);
+const overviewHtml = online.slice(overviewStart, overviewEnd);
+const overviewLegs = overviewHtml.match(/<div class="ov-leg">[\s\S]*?<\/div>/g) || [];
+// フライト4区間と、都市間の陸路1区間（9/8のICE）。空港アクセスは概要に出さない。
+assert(overviewLegs.length === 5, `${onlineName}: the overview must show four flight legs and the inter-city train, found ${overviewLegs.length}`);
+[
+  ['AY80',   '22:50', 'JST',  'NGO', '5:55',  'EEST', 'HEL', '13時間5分'],
+  ['AY1411', '7:40',  'EEST', 'HEL', '9:20',  'CEST', 'FRA', '2時間40分'],
+  ['AY1416', '19:20', 'CEST', 'FRA', '22:45', 'EEST', 'HEL', '2時間25分'],
+  ['AY79',   '0:45',  'EEST', 'HEL', '19:35', 'JST',  'NGO', '12時間50分'],
+  ['ICE 515', '10:51', 'FRA', '12:11', 'Stuttgart Hbf', '1時間20分'],
+].forEach(([no, ...facts]) => {
+  const leg = overviewLegs.filter(html => html.includes(`>${no}<`));
+  assert(leg.length === 1, `${onlineName}: overview flight leg ${no} must appear exactly once`);
+  facts.forEach(fact => assert(leg[0].includes(fact), `${onlineName}: overview flight leg ${no} is missing ${fact}`));
+  assert(leg[0].includes('>発</em>') && leg[0].includes('>着</em>'), `${onlineName}: overview flight leg ${no} must show 発 and 着`);
+});
+const overviewRows = overviewHtml.match(/<tr>[\s\S]*?<\/tr>/g) || [];
+const overviewRow = date => {
+  const row = overviewRows.find(r => r.includes(`>${date}（`));
+  assert(row, `${onlineName}: overview row for ${date} not found`);
+  return row;
+};
+// 帰国便は出発日の9/14の行。家族向けの書き方（9/13の夜の続き）へ寄せると、
+// ヘルシンキ発0:45と中部国際空港着19:35が前日の行に入る。
+assert(overviewRow('9/14').includes('AY79') && !overviewRow('9/13').includes('AY79'),
+  `${onlineName}: the homebound leg belongs to the row of the day it departs`);
+assert(overviewRow('9/13').includes('AY1416') && overviewRow('9/13').includes('検討中'),
+  `${onlineName}: 9/13 must keep both the undecided daytime and its flight`);
+['NGO発 → HEL', 'HEL発 → FRA', 'FRA発 → HEL', 'HEL発 → NGO'].forEach(prose => {
+  assert(!overviewHtml.includes(prose), `${onlineName}: the overview repeats the flight prose ${prose}; the per-leg lines own it`);
+});
+// 区分は2軸。暦（休日かどうか）と中身（会議・企業訪問・移動）は別の札にする。
+// 1つの札にまとめると、9/13のように「休日で、かつ帰路」の日が表せない。
+assert(overviewRow('9/8').includes('>到着<') && overviewRow('9/13').includes('>帰路<'),
+  `${onlineName}: the arrival day and the homebound day must be named for the border they cross`);
+assert(!overviewHtml.includes('>帰国日<'), `${onlineName}: 帰国日 mixed the two axes; the arrival day would have to be 移動`);
+// 中身の札。仕事の日を「イベント」でまとめると、9/11だけ場所も終わる時刻も違うことが消える。
+assert(overviewRow('9/9').includes('>会議<') && overviewRow('9/11').includes('>企業訪問<'),
+  `${onlineName}: the working days must say what they are`);
+assert(!overviewHtml.includes('>イベント<'), `${onlineName}: イベント says nothing about what happens that day`);
+// 休日は土日の2日だけに、中身の札とは別の札で出す。
+const overviewOff = overviewHtml.match(/<span class="ov-off">休日<\/span>/g) || [];
+assert(overviewOff.length === 2, `${onlineName}: 9/12 and 9/13 are the days off, found ${overviewOff.length}`);
+['9/12', '9/13'].forEach(date => assert(overviewRow(date).includes('class="ov-off">休日<'),
+  `${onlineName}: ${date} is a Saturday/Sunday and must say so`));
+assert(overviewRow('9/13').includes('class="ov-off">休日<') && overviewRow('9/13').includes('>帰路<'),
+  `${onlineName}: 9/13 is a day off and the homebound day at once; both labels must show`);
+assert(!overviewRow('9/9').includes('ov-off'), `${onlineName}: weekdays must not carry the day-off label`);
+assert(sharedCss.includes('.ov-kind>span.ov-off{'), 'style.css: day-off label style missing');
+// ---------- 区間行と主な内容は時系列 ----------
+// 主な内容を先頭に固定していたころ、9/8が「Stuttgart Hbf着（12:11）→ 7:40のフライト」と
+// 逆順に出ていた（2026-08-23にユーザーが指摘）。行の中の並びを位置で見る。
+const overviewOrder = (date, first, second) => {
+  const row = overviewRow(date);
+  assert(row.indexOf(first) !== -1 && row.indexOf(second) !== -1,
+    `${onlineName}: ${date} must carry both ${first} and ${second}`);
+  assert(row.indexOf(first) < row.indexOf(second),
+    `${onlineName}: ${date} must read in time order: ${first} before ${second}`);
+};
+overviewOrder('9/8', 'AY1411', 'ICE 515');
+overviewOrder('9/14', 'AY79', '名鉄名古屋で分岐して各自帰宅');
+overviewOrder('9/13', '検討中', 'AY1416');
+// 陸路が入るのは都市間だけ。9/8の到着は区間行が持つので、地の文で繰り返さない。
+assert(!overviewHtml.includes('ミュースカイ'), `${onlineName}: airport access belongs to the itinerary, not the overview`);
+assert((overviewRow('9/8').match(/Stuttgart Hbf/g) || []).length === 1,
+  `${onlineName}: 9/8 must say Stuttgart Hbf once, in its train leg`);
+// 時刻帯は、出発と到着で違うときだけ出す。同じ時刻帯の中を走るICEには付けない。
+const iceLeg = overviewLegs.find(html => html.includes('ICE 515'));
+assert(!iceLeg.includes('CEST'), `${onlineName}: the train stays in one time zone, so it needs no zone labels`);
+assert(sharedCss.includes('.ov-leg+.ov-main{'), 'style.css: spacing between a leg line and the headline missing');
+// 手続きの列挙は概要に要らない（在り処と無い場所を対で見る。旅程と家族向けには残す）。
+['荷物を預ける', '入国審査'].forEach(detail => {
+  assert(!overviewHtml.includes(detail), `${onlineName}: the overview must not carry the step-by-step ${detail}`);
+  assert(online.includes(detail), `${onlineName}: ${detail} must stay in the itinerary itself`);
+});
 assert((online.match(/<details class="day" open/g) || []).length === 8, `${onlineName}: all eight days must start open`);
 // 準備は2026-08-16に正式タブへ。それまでは旅程タブのボタンからしか開けず、中の
 // 「利用フライト」へオンライン版から事実上たどり着けなかった。EBは先に4タブ化済み。
@@ -159,6 +243,17 @@ assert(online.includes("store.del('detail')"), `${onlineName}: stored detail fla
 assert(/\.note,\.dt\{display:block\}/.test(sharedCss), 'style.css: notes must stay visible without the detail toggle');
 
 const offline = fs.readFileSync(path.join(here, 'desk_print.html'), 'utf8');
+// ---------- パネルのDOM順はタブの並びと同じ（2026-08-24） ----------
+// 画面は切り替えて見るので気付かないが、印刷はタブを全部開いて縦に並べる。
+// source.htmlの並びが 旅程 → 準備 → 視察 のままで、机上用印刷版では紙の上に
+// 準備が視察より前に出ていた。build.mjsが視察の後ろへ移すので、生成物で確かめる。
+for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtml]]) {
+  const panels = (text.match(/<section class="tab[^"]*" id="tab-([a-z]+)"/g) || [])
+    .map(hit => hit.match(/id="tab-([a-z]+)"/)[1]);
+  const tabs = [...new Set((text.match(/data-tab="([a-z]+)"/g) || []).map(hit => hit.match(/data-tab="([a-z]+)"/)[1]))];
+  assert(panels.join('／') === tabs.join('／'),
+    `${name}: panel order ${panels.join('／')} must follow the tab order ${tabs.join('／')}`);
+}
 assert(offline.includes('DESK PRINT') && offline.includes('机上用印刷版'), 'desk_print.html: desk-print identity missing');
 assert(offline.includes('<style>') && !offline.includes('href="style.css"'), 'desk_print.html: CSS must remain embedded');
 const offlineMarkup = offline.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
@@ -287,6 +382,16 @@ for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtm
   const flags = [...new Set(text.match(/[\u{1F1E6}-\u{1F1FF}]{2}/gu) || [])];
   assert(flags.length === 0, `${name}: flag emoji must be dropped (Windows renders them as DE/JP letters); found ${flags.join(' ')}`);
 }
+// ---------- 空港の呼び名は1つ ----------
+// 概要タブだけで「中部国際空港（セントレア）」「セントレア」「NGO」の3通りが出ていた
+// （2026-08-23にユーザーが指摘）。名前は「中部国際空港」、コードで並ぶ場所は「NGO」、
+// 空港として指すフル形は「中部国際空港（NGO）」。愛称と「中部」単独は使わない。
+// 地図検索のURL（query=中部国際空港+セントレア）は画面に出ないので対象外。
+for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtml], ['family_print.html', family], ['style.css', sharedCss]]) {
+  const visible = text.replace(/href="[^"]*"/g, '');
+  assert(!visible.includes('セントレア'), `${name}: the airport nickname セントレア must not appear; use 中部国際空港`);
+  assert(!/中部(?!国際空港)/.test(visible), `${name}: 中部 alone is a third spelling of the airport; use 中部国際空港`);
+}
 assert(sharedCss.includes('.line-icon{'), 'style.css: line-icon style missing');
 // .line-iconは.btn（13px）・.plan-head（14px）・.ttl（16px）の文中に置く。
 // 固定19pxの箱は文字より大きく見えたので、寸法は文字サイズ基準（em）で持たせる。
@@ -342,7 +447,7 @@ assert((offlineHtml.match(/class="line-icon line-icon-print"/g) || []).length >=
 // 配られていた。寸法規則を失ったSVGは親の幅いっぱいに広がるので、見出しの
 // アイコン1つでページが崩れる（2026-08-16に画面で発見）。
 // マークアップと規則は対にして検査する。style.css側だけ見ても机上版は守れない。
-for (const rule of ['.line-icon{', '.flight-mark{', '.plan-state{', '.sum-place,', '.ov-days{']) {
+for (const rule of ['.line-icon{', '.flight-mark{', '.plan-state{', '.sum-place,', '.ov-days{', '.ov-leg{']) {
   assert(sharedCss.includes(rule), `style.css: missing the ${rule} rule`);
   assert(offlineHtml.includes(rule), `desk_print.html: the desk-print copy must embed the ${rule} rule that style.css has, or the markup falls back to unstyled HTML`);
 }

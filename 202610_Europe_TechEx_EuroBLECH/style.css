@@ -173,6 +173,25 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .ov-facts span{display:block;color:var(--tx);font-size:var(--f4);font-weight:700;line-height:1.45}
 .ov-facts span+span{color:var(--mu);font-weight:600}
 /* 日ごとの流れ。日付が見出し、その下にレーンが1〜2本ぶら下がる。 */
+/* 日程概要は人ごとに1本（2026-08-23）。1日を2レーンに割った1本の表だと、同じ値が
+   同じ日に2回並ぶ（10/20は区分「イベント」と宿「ゲッティンゲン」が両レーンに出ていた）。
+   2本に分けて、もう一方と同じ行に「共通」を付ける。合流後は全行に付くので、
+   札が続くことが合流の合図になる。色は旅程の人物レーンと同じ変数を使う。 */
+.ov-two{display:grid;gap:10px}
+.ov-person{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff}
+.ov-person>header{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:6px 10px;font-size:var(--f4);font-weight:700}
+.ov-person-murakami>header{background:#EEF5FB;color:var(--lane-murakami-tx)}
+.ov-person-team>header{background:#F0F8F2;color:var(--lane-team-tx)}
+.ov-person>header span{color:var(--tx2);font-size:var(--f5);font-weight:600}
+/* 列は 日付／休日の札／中身の札／内容と区間行／宿。札の列は暦と中身で別に持つ。
+   1つの札に2つの軸を載せないため、空でも列は残す（行ごとに列がずれない）。 */
+.ov-prow{display:grid;grid-template-columns:74px 44px 62px minmax(0,1fr) 96px;gap:6px 8px;align-items:start;padding:7px 10px;border-top:1px solid var(--line2);font-size:var(--f4);line-height:1.5}
+.ov-body-cell{min-width:0;display:block}
+.ov-body-cell .ov-main{display:block}
+.ov-person>header+.ov-prow{border-top:0}
+.ov-prow-same{background:#F7F9FA}
+.ov-date{color:var(--tx);font-weight:700;white-space:nowrap}
+.ov-same{display:inline-block;margin-left:5px;border:1px solid var(--neu-bd);border-radius:3px;background:var(--neu-bg);color:var(--tx2);font-size:var(--f5);font-weight:700;padding:0 4px;white-space:nowrap}
 .ov-flow{display:grid;gap:7px}
 .ov-day{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#fff}
 .ov-day>header{padding:5px 10px;background:var(--line2);color:var(--tx);font-size:var(--f4);font-weight:700}
@@ -190,6 +209,13 @@ details.fold>.fold-body>div+div{margin-top:5px}
 @media(max-width:430px){
   /* 393pxでは4列のうち主な内容が1文字ずつ折り返す。誰・区分・宿を1行目に置き、
      内容を2行目へ落とす。家族向け気候表と概要表で同じ失敗をしている（2026-08-15/16）。 */
+  /* 393pxでは4列に入らない。日付と区分を1行目、宿を右端、内容を全幅にする。 */
+  .ov-prow{grid-template-columns:auto auto auto minmax(0,1fr);gap:3px 6px;padding:7px 9px}
+  .ov-prow>.ov-date{grid-column:1}
+  .ov-prow>.ov-kind:nth-of-type(2){grid-column:2}
+  .ov-prow>.ov-kind:nth-of-type(3){grid-column:3}
+  .ov-prow>.ov-city{grid-column:4;text-align:right}
+  .ov-prow>.ov-body-cell{grid-column:1/5}
   .ov-lane{grid-template-columns:auto auto minmax(0,1fr);gap:4px 7px;padding:7px 9px}
   .ov-who{grid-column:1}
   .ov-kind{grid-column:2}

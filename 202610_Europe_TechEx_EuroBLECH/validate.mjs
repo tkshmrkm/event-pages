@@ -105,21 +105,87 @@ const checks = [
   ['line icon size comes from the shared stylesheet', /\.line-icon\{[^}]*width:1\.15em/.test(hrsCss) && !/(^|[^ ])\.line-icon\{/m.test(css) && css.includes('[class*="bg-gray-700"] .line-icon')],
   ['no oversized itinerary time cells', rowTimes.every(value => value.length <= 32)],
   ['four-column mobile contract retained', /@media\(max-width:640px\)[\s\S]*\.route-four,.lanes \.route-four\{grid-template-columns:72px minmax\(0,1fr\) 74px minmax\(0,1fr\)\}/.test(css)],
-  // ---------- 概要タブは動きが分かることが役目（2026-08-16） ----------
+  // パネルのDOM順はタブの並びと同じ。画面は切り替えて見るので気付かないが、印刷は
+  // タブを全部開いて縦に並べる。HRSは2026-08-24まで紙の上で準備が視察より前に出ていた。
+  ['panels follow the tab order', (() => {
+    // パネルは div と section が混じり、class と id の並びも一定でない。idで拾う。
+    const panels = (html.match(/<[a-z]+[^>]*\bid="tab-([a-z]+)"[^>]*>/g) || [])
+      .map(hit => hit.match(/id="tab-([a-z]+)"/)[1]);
+    const tabs = [...new Set((html.match(/data-tab="([a-z]+)"/g) || []).map(hit => hit.match(/data-tab="([a-z]+)"/)[1]))];
+    return panels.length === 5 && panels.join('／') === tabs.join('／');
+  })()],
+  // ---------- 概要タブは動きが分かることが役目（2026-08-16／2026-08-23に2本立てへ） ----------
   // EBは村上と美馬・金築が別の日に別の空港から出て、10/20の夜に合流する。
-  // 概要はその形をひと目で見せるためにある。レーンが2本から1本になることが
-  // 合流の合図なので、**別行動の4日が2本、合流後の5日が1本**を数える。
-  // 崩れたら、概要が「動きの分かる場所」でなくなったということ。
-  ['the overview shows two lanes until the trip converges',
-    countIn(overview, /class="ov-day\b/g) === 9
-    && countIn(overview, /class="ov-lane ov-lane-murakami"/g) === 4
-    && countIn(overview, /class="ov-lane ov-lane-team"/g) === 4
-    && countIn(overview, /class="ov-lane ov-lane-shared"/g) === 5],
-  // 合流の印は1日だけ。日中の行動がまだ別なので day.shared では拾えず、
-  // 「全レーンの宿の街が同じになった最初の日」で判定している。10/21ではなく10/20。
-  ['the overview marks the day the two lanes converge',
-    countIn(overview, /class="ov-join"/g) === 1
-    && /10\/20（火）[\s\S]*?ov-join[^>]*>この夜からゲッティンゲンで3名合流/.test(overview)],
+  // 2026-08-23まで1日を2レーンに割った1本の表だったが、同じ値が同じ日に2回並んでいた
+  // （10/20は区分「イベント」と宿「ゲッティンゲン」が両レーンに出ていた）。
+  // ユーザーの指示で**旅程概要そのものを人ごとに1本ずつ**にし、もう一方と同じところに
+  // 「共通」を付ける形にした。数えるのは、2本あること・どちらも全9日を持つこと。
+  ['the overview gives each traveller their own schedule',
+    countIn(overview, /class="ov-person ov-person-murakami"/g) === 1
+    && countIn(overview, /class="ov-person ov-person-team"/g) === 1
+    && countIn(overview, /class="ov-prow/g) === 18],
+  // 共通の印は「もう一方と同じ」を意味する。合流後の5日は行ごと共通、合流の日は
+  // 日中が別なので宿だけ共通、合流前は付かない。在り処と無い場所を対で見る。
+  ['the overview marks what the two travellers share', (() => {
+    const sections = overview.match(/<section class="ov-person[\s\S]*?<\/section>/g) || [];
+    if (sections.length !== 2) return false;
+    return sections.every(section => {
+      const rows = section.match(/<div class="ov-prow[\s\S]*?(?=<div class="ov-prow|<div class="ov-join|<\/section>)/g) || [];
+      if (rows.length !== 9) return false;
+      const dateOf = row => (row.match(/>(\d+\/\d+)（/) || [])[1];
+      const wholeDay = rows.filter(row => row.includes('ov-prow-same')).map(dateOf);
+      const stayOnly = rows.filter(row => !row.includes('ov-prow-same') && row.includes('ov-same')).map(dateOf);
+      return wholeDay.join('／') === '10/21／10/22／10/23／10/24／10/25' && stayOnly.join('／') === '10/20';
+    });
+  })()],
+  // ---------- 区分は2軸、移動は1区間ずつ、並びは時刻順（2026-08-23にHRSと同じ規則へ） ----------
+  // 暦（休日）と中身は別の札。1つにまとめると10/24の「休日で、かつ帰路」が表せない。
+  ['the overview separates the calendar from what the day holds', (() => {
+    const off = overview.match(/<span class="ov-off">休日<\/span>/g) || [];
+    // 10/17・10/18・10/24・10/25の土日が、2本の概要それぞれに出る。
+    if (off.length !== 8) return false;
+    const rowOf = (person, date) => {
+      const section = (overview.match(new RegExp(`<section class="ov-person ov-person-${person}[\\s\\S]*?</section>`)) || [''])[0];
+      return (section.match(new RegExp(`<div class="ov-prow[^>]*>(?:(?!<div class="ov-prow)[\\s\\S])*?${date}（[\\s\\S]*?(?=<div class="ov-prow|<div class="ov-join|</section>)`)) || [''])[0];
+    };
+    return rowOf('murakami', '10/24').includes('ov-off">休日')
+      && rowOf('murakami', '10/24').includes('>帰路<')
+      && !overview.includes('>帰国便<')
+      && !overview.includes('>イベント<')
+      && !/class="ov-kind"><span>日本</.test(overview);
+  })()],
+  // 仕事の日は種類で呼ぶ。用語の決定（参加／見学／展示会視察／工場見学）に従う。
+  ['the overview names the working days by what they are',
+    ['参加', '見学', '展示会視察', '工場見学'].every(kind => overview.includes(`<span>${kind}</span>`))],
+  // 移動は1区間ずつ。フライト7区間と、泊まる街が変わる陸路3区間。合流後の4区間は
+  // 2本の概要の両方に出るので、数は延べで数える。
+  ['the overview shows movement one leg at a time', (() => {
+    const legs = overview.match(/<span class="ov-leg">[\s\S]*?<\/span><\/span>/g) || [];
+    const has = code => legs.filter(leg => leg.includes(`>${code}<`)).length;
+    return has('CX539') === 2 && has('CX271') === 1 && has('CX289') === 1
+      && has('KL1791') === 1 && has('ICE77') === 1 && has('RE2＋ICE774') === 1
+      && has('ICE771') === 2 && has('CX288') === 2 && has('CX536') === 2
+      // 会場への往復と空港アクセスは概要に出さない。旅程が持つ。
+      && has('ICE888') === 0 && has('S5') === 0 && has('S4') === 0;
+  })()],
+  // 時刻順。主な内容を先頭に固定していたころ、10/20の村上が
+  // 「TechEx Day 2（09:45）→ 16:50のフライト」ではなく逆順に出ていた。
+  ['the overview reads in time order', (() => {
+    const section = (overview.match(/<section class="ov-person ov-person-murakami[\s\S]*?<\/section>/) || [''])[0];
+    const row = (section.match(/<div class="ov-prow[^>]*>(?:(?!<div class="ov-prow)[\s\S])*?10\/20（[\s\S]*?(?=<div class="ov-prow|<div class="ov-join|<\/section>)/) || [''])[0];
+    return row.indexOf('TechEx Europe Day 2') < row.indexOf('KL1791')
+      && row.indexOf('KL1791') < row.indexOf('ICE77');
+  })()],
+  // 合流の帯は人ごとに1本ずつ、どちらも10/20と10/21のあいだ。日中の行動はまだ別なので
+  // day.shared では拾えず、「全レーンの宿の街が同じになった最初の日」で判定している。
+  ['the overview marks the day the two travellers converge', (() => {
+    const sections = overview.match(/<section class="ov-person[\s\S]*?<\/section>/g) || [];
+    return countIn(overview, /class="ov-join"/g) === 2
+      && countIn(overview, /ov-join[^>]*>この夜からゲッティンゲンで3名合流/g) === 2
+      && sections.length === 2
+      && sections.every(section => section.indexOf('ov-join') > section.indexOf('10/20（火）')
+        && section.indexOf('ov-join') < section.indexOf('10/21（水）'));
+  })()],
   // 街の名前で動きを見せる。宿の名前だと長すぎて、変わったことが読み取れない。
   ['the overview tracks movement by city',
     ['日本', '機内', 'アムステルダム', 'ゲッティンゲン', 'フランクフルト', '帰宅']
