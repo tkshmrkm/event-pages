@@ -129,6 +129,44 @@ const checks = [
       return wholeDay.join('／') === '10/21／10/22／10/23／10/24／10/25' && stayOnly.join('／') === '10/20';
     });
   })()],
+  // ---------- 区分は2軸、移動は1区間ずつ、並びは時刻順（2026-08-23にHRSと同じ規則へ） ----------
+  // 暦（休日）と中身は別の札。1つにまとめると10/24の「休日で、かつ帰路」が表せない。
+  ['the overview separates the calendar from what the day holds', (() => {
+    const off = overview.match(/<span class="ov-off">休日<\/span>/g) || [];
+    // 10/17・10/18・10/24・10/25の土日が、2本の概要それぞれに出る。
+    if (off.length !== 8) return false;
+    const rowOf = (person, date) => {
+      const section = (overview.match(new RegExp(`<section class="ov-person ov-person-${person}[\\s\\S]*?</section>`)) || [''])[0];
+      return (section.match(new RegExp(`<div class="ov-prow[^>]*>(?:(?!<div class="ov-prow)[\\s\\S])*?${date}（[\\s\\S]*?(?=<div class="ov-prow|<div class="ov-join|</section>)`)) || [''])[0];
+    };
+    return rowOf('murakami', '10/24').includes('ov-off">休日')
+      && rowOf('murakami', '10/24').includes('>帰路<')
+      && !overview.includes('>帰国便<')
+      && !overview.includes('>イベント<')
+      && !/class="ov-kind"><span>日本</.test(overview);
+  })()],
+  // 仕事の日は種類で呼ぶ。用語の決定（参加／見学／展示会視察／工場見学）に従う。
+  ['the overview names the working days by what they are',
+    ['参加', '見学', '展示会視察', '工場見学'].every(kind => overview.includes(`<span>${kind}</span>`))],
+  // 移動は1区間ずつ。フライト7区間と、泊まる街が変わる陸路3区間。合流後の4区間は
+  // 2本の概要の両方に出るので、数は延べで数える。
+  ['the overview shows movement one leg at a time', (() => {
+    const legs = overview.match(/<span class="ov-leg">[\s\S]*?<\/span><\/span>/g) || [];
+    const has = code => legs.filter(leg => leg.includes(`>${code}<`)).length;
+    return has('CX539') === 2 && has('CX271') === 1 && has('CX289') === 1
+      && has('KL1791') === 1 && has('ICE77') === 1 && has('RE2＋ICE774') === 1
+      && has('ICE771') === 2 && has('CX288') === 2 && has('CX536') === 2
+      // 会場への往復と空港アクセスは概要に出さない。旅程が持つ。
+      && has('ICE888') === 0 && has('S5') === 0 && has('S4') === 0;
+  })()],
+  // 時刻順。主な内容を先頭に固定していたころ、10/20の村上が
+  // 「TechEx Day 2（09:45）→ 16:50のフライト」ではなく逆順に出ていた。
+  ['the overview reads in time order', (() => {
+    const section = (overview.match(/<section class="ov-person ov-person-murakami[\s\S]*?<\/section>/) || [''])[0];
+    const row = (section.match(/<div class="ov-prow[^>]*>(?:(?!<div class="ov-prow)[\s\S])*?10\/20（[\s\S]*?(?=<div class="ov-prow|<div class="ov-join|<\/section>)/) || [''])[0];
+    return row.indexOf('TechEx Europe Day 2') < row.indexOf('KL1791')
+      && row.indexOf('KL1791') < row.indexOf('ICE77');
+  })()],
   // 合流の帯は人ごとに1本ずつ、どちらも10/20と10/21のあいだ。日中の行動はまだ別なので
   // day.shared では拾えず、「全レーンの宿の街が同じになった最初の日」で判定している。
   ['the overview marks the day the two travellers converge', (() => {
