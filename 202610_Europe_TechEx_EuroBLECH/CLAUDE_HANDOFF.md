@@ -1,6 +1,7 @@
 # Claude 引き継ぎ — TechEx Europe・EuroBLECH 2026 field guide v3
 
-更新日: 2026-08-16（HRSの5タブ化で決まったことをEBへ戻した。概要タブも新設して全件完了）
+更新日: 2026-08-16（HRSの5タブ化で決まったことをEBへ戻した。概要タブも新設して全件完了）。
+2026-08-23に日程概要の人別1本化・HRSの3規則・★（U+2605）のアイコン対応を追加。
 
 ## 目的
 
@@ -219,6 +220,14 @@ v3をフォルダの公開入口にした。HRS（`202609_HumanoidSummitEurope`�
 **区間行のアイコンは文中なので `.line-icon` を直接書く。** 絵文字の短縮形は使えない。
 `✈` `🛫` `🛬` はどれも先に走る変換で20px固定の `.flight-mark` へ置き換えられ、
 12pxの行の中に文字より大きい箱が並ぶ。
+
+**同じ2026-08-23に、`★`（U+2605 BLACK STAR）でビルドが止まった。** `source.html`の
+セッション優先度マーカー（`★`〜`★★★`）18箇所は、絵文字対応表に `⭐`（U+2B50）は
+あっても `★` が無く、ChromeのICUは両方を `Extended_Pictographic` と判定するため
+止まっていた。`EMOJI_ICON_MAP` に `'★':'star'` を足し、既存の `star` SVGへ
+`⭐` と同じ経路でマッピングした（`build.mjs`）。あわせて `browserPath` が
+Windowsの2パスしか見ていなかったのを直し、`TRIP_BROWSER` 環境変数と
+Linuxの一般的なChrome/Chromiumパスを追加した（検証コマンドの節を参照）。
 
 ## 用語の決定
 
@@ -552,7 +561,7 @@ EBの検査（103件）も回すこと。
 **この作業はEBだけのものではない。** 2026年12月のSIGGRAPH Asia、2027年3月のLOGIMATを
 同じ基盤で作る。**EBへ当てるものは、まず `shared/trip-field` に置けないかを考える。**
 EB側のファイルに書いた分は、次の2イベントで同じ作業をもう一度やることになる。
-実例がある。アイコン41種・`.plan-state`・`.line-icon` の `em` 化は、いずれも
+実例がある。アイコン46種・`.plan-state`・`.line-icon` の `em` 化は、いずれも
 一度どちらかのイベント側へ書いてしまい、共通へ引き出す二度手間になった。
 
 判断の目安は `../shared/trip-field/README.md` の Shared versus event-specific。
@@ -570,11 +579,11 @@ EB側のファイルに書いた分は、次の2イベントで同じ作業を�
 | タブ | `旅程 / 会場 / 記録` の3つ | `旅程 / 準備 / 会場 / 記録` の4つ（2026-08-15に家族を分離） |
 | 生成物 | 4件（`index.html` / 机上用印刷版 / 家族向け印刷版 / `style.css`） | 2件（`index.html` / `family_print.html`） |
 | CSS | 自前の `style.css`（`core.css` を連結） | HRSの `style.css` を読み込み ＋ 自前の `style.css` |
-| 補足の折り畳み | `.note` → `details.fold` 20件 | `details.fold` 21件（やること7・過ごし方6・食事メモ8）。**EBが元祖なので移植不要** |
+| 補足の折り畳み | `.note` → `details.fold` 20件 | `details.fold` 31件（2026-08-15時点はやること7・過ごし方6・食事メモ8の21件。以降に「ラウンジ利用の詳細」「香港（HKG）乗継の共通メモ」などが増え、2026-08-24の実測で31件）。**EBが元祖なので移植不要** |
 | 補足のマークアップ | `.note` | Tailwind風（`text-slate-500 text-xs` など）。`.note` は0件 |
-| 予定の状態 | `.plan-state` 9件 | **札が無い。** 語が地の文に散る（候補12・確定11・未定5・要検討2・要確認5） |
+| 予定の状態 | `.plan-state` 9件 | **札が無い。** 語が地の文に散る（2026-08-15時点は候補12・確定11・未定5・要検討2・要確認5。2026-08-24の実測は候補12・確定13・未定3・要検討1・要確認4） |
 
-**EBはHRSの `style.css` を読むので、`.plan-state`・`.line-icon`（`1.15em`）・アイコン41種は
+**EBはHRSの `style.css` を読むので、`.plan-state`・`.line-icon`（`1.15em`）・アイコン46種は
 すでに届いている。** 必要なのはマークアップの変更と、EB側の上書き削除だけ。
 
 **タブ構成が違うので、丸ごと寄せる作業ではない。** HRSに準備タブが無いため、
@@ -709,7 +718,15 @@ node .\202610_Europe_TechEx_EuroBLECH\validate.mjs
 git diff --check
 ```
 
-ビルドは `index.html`、`family_print.html`、`immigration_print.html` の3件を書き出す。検証は103件。
+**Windows以外（Linux/CIなど）ではChrome/Edgeの自動検出パスが無いので、
+`TRIP_BROWSER` 環境変数でブラウザのパスを渡す必要がある**（2026-08-23、
+`browserPath` にLinux対応と `TRIP_BROWSER` の上書きを追加）。例:
+`TRIP_BROWSER=$(ls -d /opt/pw-browsers/chromium-*/chrome-linux/chrome | head -1) node 202610_Europe_TechEx_EuroBLECH/build.mjs`。
+root権限で非Windows環境のときは `--no-sandbox` を自動で付ける。
+
+ビルドは `index.html`、`family_print.html`、`immigration_print.html` の3件を書き出す。
+検証は2026-08-16時点で103件だったが、2026-08-23に日程概要の人別検査などが増え、
+2026-08-24の実測は112件。
 
 変換スクリプトが途中で例外を出しても `--dump-dom` は黙って通す。変換の後半が
 丸ごと抜けた生成物ができ、`<script id="v3-build-transform">` の本文がページに

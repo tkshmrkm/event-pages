@@ -213,7 +213,8 @@ Workers KVの旅程選択と自由編集欄は、同じ出張スナップショ�
 - `202609_HumanoidSummitEurope/source.html`: 手で書く唯一の入力元
 - `202609_HumanoidSummitEurope/desk_print.html`: 机上用印刷版
 - `202609_HumanoidSummitEurope/family_print.html`: 家族向け予定表
-- `202609_HumanoidSummitEurope/style.css`: オンライン版と家族版のCSS
+- `202609_HumanoidSummitEurope/immigration_print.html`: 入国審査用（英語。氏名とパスポート番号はどこにも保存しない）
+- `202609_HumanoidSummitEurope/style.css`: オンライン版・家族向け・入国審査用のCSS
 - `202609_HumanoidSummitEurope/build.mjs`: 生成処理
 - `202609_HumanoidSummitEurope/validate.mjs`: 受入検証
 
@@ -250,8 +251,8 @@ EUROBLECHの共通基盤への移行は未実装で、次の主要作業とし�
 
 ## 11. 次の作業
 
-1. 予定の5段階状態と「次に決めること」を共通部品化する
-2. 人別フォーカスを共通ランタイムへ追加する
+1. 予定の「次に決めること」の表示（期限・第一候補・確定条件・予約状態・最終確認日）を共通部品化する
+2. `.plan-state` をEUROBLECHの生成物へ適用する（5段階状態自体は2026-08-15に共通部品化済み）
 3. EUROBLECHを同じ操作基盤へ移行する
 4. 配色と内容構造はEUROBLECH固有のものを維持する
 

@@ -20,6 +20,12 @@ Use only three primary sections:
 2. `会場`: sessions, target companies, questions, and direct links into note entry.
 3. `記録`: review, organize, export, and import field notes.
 
+**Superseded.** The published `index.html` now has five tabs
+(`概要 / 旅程 / 視察 / 準備 / 記録`): a preparation tab was added 2026-08-15 and
+an overview tab 2026-08-16, and `会場` was renamed `視察` (display name only)
+2026-08-16. See `CLAUDE_HANDOFF.md` for the current tab set and the reasons
+behind each addition.
+
 Do not include a people filter. Use Kyoto/Inuyama colors only on lane headers where the travelers are actually separated. Use a neutral `全員` lane after merging.
 
 Preparation content should not occupy a primary field-use tab. Keep it in a separate pre-departure page or a secondary collapsed section. The family view only needs to print well and does not need the smartphone field UI.
@@ -43,6 +49,11 @@ Preparation content should not occupy a primary field-use tab. Keep it in a sepa
 - Keep the title scrollable; keep only the three-section navigation and date navigation sticky where needed.
 - Avoid horizontal page overflow at a 390 px viewport.
 - Use the monochrome text symbol `✈︎` for flights. Express direction with `発` and `着`, not OS-dependent colored airplane emoji.
+  **Superseded.** `✈︎` (U+2708 with the text variation selector) is still
+  `Extended_Pictographic` and now fails the zero-emoji build check. Transport
+  icons are the shared monochrome SVGs (`.flight-mark` for flights,
+  `.mode-icon`/`.line-icon` for everything else) — see `CLAUDE_HANDOFF.md`,
+  "アイコンは全部モノクロSVG".
 
 Latest palette:
 

@@ -217,6 +217,15 @@ git diff --check
 `**/*immigration*` で追跡されないので、checkout直後は存在しない。検査だけ先に
 走らせると、EBは必ず落ちる（2026-08-16に踏んだ）。
 
+**EBのビルドはブラウザーを使う。** DOMで変換して `--dump-dom` で受け取るので、
+Chrome/Edgeが要る。Windowsの既定パスは自動で見つかる。それ以外の環境では
+実行ファイルを `TRIP_BROWSER` で渡す（2026-08-23に追加。Windows以外だと
+「ブラウザーが無い」で止まり、EB側だけ検査も走らない状態だった）。
+
+```bash
+TRIP_BROWSER=/usr/bin/chromium node ./202610_Europe_TechEx_EuroBLECH/build.mjs
+```
+
 `shared/trip-field` を触ったらEB側も回す。EBはHRSの `style.css` を読んでいる。
 
 生成後はローカルサーバーで、393px、412px、PC幅をブラウザー確認する。

@@ -73,7 +73,7 @@ uses a neutral surface.
 
 Shared:
 
-- three-section navigation and date rail;
+- primary-section navigation and date rail, per the section list above;
 - 44 px or larger controls and 16 px input text;
 - immediate local browser persistence plus optional Cloudflare synchronization;
 - named, timestamped shared append entries that do not overwrite another device's entry;
@@ -124,9 +124,13 @@ The generic runtime recognizes:
 - `[data-trip-export-json]` — download all values in the namespace.
 - `[data-trip-import-json]` — JSON file input.
 - `[data-trip-download-markdown]` — download a readable final memo on a PC.
+- `[data-trip-export-markdown]` — copy the same Markdown to the clipboard.
 - `[data-trip-status]` — short live status message.
 - `[data-trip-cloud]` — optional Cloudflare synchronization panel.
 - `[data-trip-cloud-key]` — runtime-only synchronization key input.
+- `[data-trip-cloud-author]` — the name attached to a shared append entry.
+- `[data-trip-cloud-remember]` — checkbox to keep the sync key on this device.
+- `[data-trip-cloud-status]` — live status text for the cloud panel.
 - `[data-trip-cloud-pull]` / `[data-trip-cloud-push]` — explicit cloud transfer controls.
 
 The shared JSON schema is `trip-field-records`, version `1`. Event-specific
@@ -184,9 +188,11 @@ appearance remains in the HRS builder so adoption does not change the approved
 design.
 
 `202610_Europe_TechEx_EuroBLECH` loads the HRS stylesheet and therefore already
-receives everything in `core.css`, including the plan-state chip and the icon
-set. What it still carries locally — a fixed 19 px `.line-icon`, emoji, and
-Tailwind-shaped markup — is listed in that event's `CLAUDE_HANDOFF.md`.
+receives everything in `core.css`, including the plan-state chip rules and the
+icon set — though its generated pages do not yet place any `.plan-state` chip
+(the fixed 19 px `.line-icon` override and all emoji have already been
+removed). What it still carries locally — Tailwind-shaped markup — is listed
+in that event's `CLAUDE_HANDOFF.md`.
 
 Before adding a rule to an event builder, check whether it is event-specific
 appearance or a shared contract. Colors, itinerary content, and traveler lanes
