@@ -105,6 +105,15 @@ const checks = [
   ['line icon size comes from the shared stylesheet', /\.line-icon\{[^}]*width:1\.15em/.test(hrsCss) && !/(^|[^ ])\.line-icon\{/m.test(css) && css.includes('[class*="bg-gray-700"] .line-icon')],
   ['no oversized itinerary time cells', rowTimes.every(value => value.length <= 32)],
   ['four-column mobile contract retained', /@media\(max-width:640px\)[\s\S]*\.route-four,.lanes \.route-four\{grid-template-columns:72px minmax\(0,1fr\) 74px minmax\(0,1fr\)\}/.test(css)],
+  // パネルのDOM順はタブの並びと同じ。画面は切り替えて見るので気付かないが、印刷は
+  // タブを全部開いて縦に並べる。HRSは2026-08-24まで紙の上で準備が視察より前に出ていた。
+  ['panels follow the tab order', (() => {
+    // パネルは div と section が混じり、class と id の並びも一定でない。idで拾う。
+    const panels = (html.match(/<[a-z]+[^>]*\bid="tab-([a-z]+)"[^>]*>/g) || [])
+      .map(hit => hit.match(/id="tab-([a-z]+)"/)[1]);
+    const tabs = [...new Set((html.match(/data-tab="([a-z]+)"/g) || []).map(hit => hit.match(/data-tab="([a-z]+)"/)[1]))];
+    return panels.length === 5 && panels.join('／') === tabs.join('／');
+  })()],
   // ---------- 概要タブは動きが分かることが役目（2026-08-16／2026-08-23に2本立てへ） ----------
   // EBは村上と美馬・金築が別の日に別の空港から出て、10/20の夜に合流する。
   // 2026-08-23まで1日を2レーンに割った1本の表だったが、同じ値が同じ日に2回並んでいた

@@ -1574,6 +1574,19 @@ function buildMain({ offline = false } = {}) {
     throw new Error('the flight card is still inside the preparation tab');
   }
 
+  // ---------- パネルのDOM順をタブの並びにそろえる（2026-08-24） ----------
+  // タブバーは 概要 / 旅程 / 視察 / 準備 / 記録 だが、source.htmlの並びは
+  // 旅程 → 準備 → 視察 で、生成物のDOMもその順のままだった。印刷はタブを全部
+  // 開いて縦に並べるので、紙の上で準備が視察より前に出ていた（机上用印刷版で確認）。
+  // 画面では切り替えて見るので気付かない。EB側は最初からタブ順と同じ。
+  const prepBlock = (html.match(/\s*<!--[^>]*タブ：準備[\s\S]*?-->\s*<section class="tab" id="tab-prep"[\s\S]*?\n<\/section>/) || [])[0];
+  if (!prepBlock) throw new Error('prep section (with its comment) not found for the panel reorder');
+  const venueBlock = (html.match(/<section class="tab" id="tab-venue"[\s\S]*?\n<\/section>/) || [])[0];
+  if (!venueBlock) throw new Error('venue section not found for the panel reorder');
+  html = html.replace(prepBlock, '').replace(venueBlock, `${venueBlock}\n${prepBlock.trim()}`);
+  // 並びが合っていることは validate.mjs が生成物で見る。ここではまだ概要が
+  // 差し込まれておらず、家族タブも残っているので、この時点では数えられない。
+
   html = mustReplace(html, '<button class="btn" id="btn-export">📋 Markdownでコピー</button>', '<button class="btn" id="btn-export">📋 Markdownでコピー</button>\n' + transferControls, 'record buttons');
   html = mustReplace(html, '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>', '    <span class="small muted" id="export-msg" style="align-self:center" role="status" aria-live="polite"></span>\n  </div>\n' + cloudPanel, 'cloud sync panel');
   html = mustReplace(html, "  document.getElementById('btn-clear').addEventListener('click', () => {", transferScript + "  document.getElementById('btn-clear').addEventListener('click', () => {", 'JSON script insertion');

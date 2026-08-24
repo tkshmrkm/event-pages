@@ -243,6 +243,17 @@ assert(online.includes("store.del('detail')"), `${onlineName}: stored detail fla
 assert(/\.note,\.dt\{display:block\}/.test(sharedCss), 'style.css: notes must stay visible without the detail toggle');
 
 const offline = fs.readFileSync(path.join(here, 'desk_print.html'), 'utf8');
+// ---------- パネルのDOM順はタブの並びと同じ（2026-08-24） ----------
+// 画面は切り替えて見るので気付かないが、印刷はタブを全部開いて縦に並べる。
+// source.htmlの並びが 旅程 → 準備 → 視察 のままで、机上用印刷版では紙の上に
+// 準備が視察より前に出ていた。build.mjsが視察の後ろへ移すので、生成物で確かめる。
+for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtml]]) {
+  const panels = (text.match(/<section class="tab[^"]*" id="tab-([a-z]+)"/g) || [])
+    .map(hit => hit.match(/id="tab-([a-z]+)"/)[1]);
+  const tabs = [...new Set((text.match(/data-tab="([a-z]+)"/g) || []).map(hit => hit.match(/data-tab="([a-z]+)"/)[1]))];
+  assert(panels.join('／') === tabs.join('／'),
+    `${name}: panel order ${panels.join('／')} must follow the tab order ${tabs.join('／')}`);
+}
 assert(offline.includes('DESK PRINT') && offline.includes('机上用印刷版'), 'desk_print.html: desk-print identity missing');
 assert(offline.includes('<style>') && !offline.includes('href="style.css"'), 'desk_print.html: CSS must remain embedded');
 const offlineMarkup = offline.replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '');
