@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -8,6 +9,30 @@ const voidTags = new Set(['area','base','br','col','embed','hr','img','input','l
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
+}
+
+// ---------- 配るファイルが本当に配れる状態か（2026-08-24） ----------
+// ヘッダーから入国審査用の1枚へリンクしているのに、`.gitignore` の個人書類向け
+// パターン（**/*immigration*）に巻き込まれて追跡されず、GitHub Pagesで404になって
+// いた。手元では見えるので、ブラウザーで開いても気付けない。2つ対で見る。
+//   1. 同じフォルダを指すリンクの先が、ファイルとして在ること
+//   2. 生成物が .gitignore で無視されていないこと（gitに聞く）
+const localTargets = html => [...html.matchAll(/(?:href|src)="([^"#:]+)"/g)]
+  .map(hit => hit[1])
+  .filter(target => !target.startsWith('//') && !target.startsWith('data:'));
+for (const name of files) {
+  const text = fs.readFileSync(path.join(here, name), 'utf8');
+  localTargets(text).forEach(target => {
+    assert(fs.existsSync(path.resolve(here, target)), `${name}: link target does not exist: ${target}`);
+  });
+}
+try {
+  const ignored = execFileSync('git', ['check-ignore', ...files.map(name => path.join(here, name))],
+    { encoding: 'utf8' }).trim();
+  assert(!ignored, `these generated files are ignored by git, so they never reach GitHub Pages:\n${ignored}`);
+} catch (error) {
+  // check-ignore は「1件も無視していない」ときに終了コード1で返る。それが正常。
+  if (error.status !== 1) throw error;
 }
 
 function checkBalanced(html, name) {

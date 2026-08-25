@@ -1,5 +1,6 @@
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { readFileSync, existsSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 
@@ -105,6 +106,26 @@ const checks = [
   ['line icon size comes from the shared stylesheet', /\.line-icon\{[^}]*width:1\.15em/.test(hrsCss) && !/(^|[^ ])\.line-icon\{/m.test(css) && css.includes('[class*="bg-gray-700"] .line-icon')],
   ['no oversized itinerary time cells', rowTimes.every(value => value.length <= 32)],
   ['four-column mobile contract retained', /@media\(max-width:640px\)[\s\S]*\.route-four,.lanes \.route-four\{grid-template-columns:72px minmax\(0,1fr\) 74px minmax\(0,1fr\)\}/.test(css)],
+  // ---------- 配るファイルが本当に配れる状態か（2026-08-24） ----------
+  // ヘッダーから入国審査用の1枚へリンクしているのに、`.gitignore` の個人書類向け
+  // パターン（**/*immigration*）に巻き込まれて追跡されず、GitHub Pagesで404になって
+  // いた。手元では見えるのでブラウザーで開いても気付けない。在り処と経路を対で見る。
+  ['every local link points at a file that exists', (() => {
+    const targets = [...html.matchAll(/(?:href|src)="([^"#:]+)"/g)]
+      .map(hit => hit[1])
+      .filter(target => !target.startsWith('//') && !target.startsWith('data:'));
+    return targets.every(target => existsSync(resolve(here, target)));
+  })()],
+  ['the generated files are not ignored by git', (() => {
+    const generated = ['index.html', 'family_print.html', 'immigration_print.html']
+      .map(name => join(here, name));
+    try {
+      return !execFileSync('git', ['check-ignore', ...generated], { encoding: 'utf8' }).trim();
+    } catch (error) {
+      // 1件も無視していないとき、check-ignore は終了コード1で返る。それが正常。
+      return error.status === 1;
+    }
+  })()],
   // パネルのDOM順はタブの並びと同じ。画面は切り替えて見るので気付かないが、印刷は
   // タブを全部開いて縦に並べる。HRSは2026-08-24まで紙の上で準備が視察より前に出ていた。
   ['panels follow the tab order', (() => {
