@@ -545,9 +545,12 @@ HRSと同じ4ブロック（`出張概要 / 日程概要 / イベント概要 / 
 
 ### 6. 検査を走らせる順番
 
-**必ず `build.mjs` を先に実行する。** `immigration_print.html` は
-`.gitignore` の `**/*immigration*` で追跡されないので、checkout直後は存在せず、
-`validate.mjs` だけ先に走らせると必ず落ちる。2026-08-16に踏んだ。
+**必ず `build.mjs` を先に実行する。** 生成物が古いまま検査を通しても、直したことの
+確認にならない。2026-08-24までは `immigration_print.html` が `.gitignore` の
+`**/*immigration*` に巻き込まれて追跡されず、checkout直後に存在しないので
+`validate.mjs` だけ先に走らせると必ず落ちていた（2026-08-16に踏んだ）。
+いまは `!**/immigration_print.html` で生成物だけ追跡している。追跡していなかった
+あいだ、ヘッダーからのリンクはGitHub Pagesで404だった。
 
 EBは `../202609_HumanoidSummitEurope/style.css` を読む。HRS側やcore.cssを触ったら
 EBの検査（103件）も回すこと。

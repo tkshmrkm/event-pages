@@ -22,6 +22,11 @@
 # Personal travel and expense documents
 **/*immigration*
 **/*Immigration*
+# ただし各イベントの immigration_print.html は生成物で、ヘッダーからリンクしている
+# 配布物。個人書類のパターンに巻き込まれて追跡されず、GitHub Pagesでリンクが404に
+# なっていた（2026-08-24にユーザーが発見）。氏名と旅券番号は入力欄で、どこにも
+# 保存されないので中身は他の生成物と同じ性質のもの。
+!**/immigration_print.html
 **/*passport*
 **/*Passport*
 **/*receipt*

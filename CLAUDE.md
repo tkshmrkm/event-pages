@@ -213,9 +213,16 @@ node .\202610_Europe_TechEx_EuroBLECH\validate.mjs
 git diff --check
 ```
 
-**必ずビルドしてから検査する。** `immigration_print.html` は `.gitignore` の
-`**/*immigration*` で追跡されないので、checkout直後は存在しない。検査だけ先に
-走らせると、EBは必ず落ちる（2026-08-16に踏んだ）。
+**必ずビルドしてから検査する。** 生成物が古いまま検査を通しても、直したことの
+確認にならない。
+
+**`immigration_print.html` は追跡する。** `.gitignore` の個人書類向けパターン
+`**/*immigration*` に巻き込まれて追跡されず、ヘッダーからのリンクがGitHub Pagesで
+404になっていた（2026-08-24にユーザーが発見。手元では見えるので、ブラウザーで
+開いても気付けない）。`!**/immigration_print.html` で生成物だけ戻してある。
+氏名と旅券番号は入力欄で、どこにも保存されない。
+**配るファイルは、リンクの先が在ることと、gitに無視されていないことを対で検査する。**
+どちらの検査も両イベントの `validate.mjs` にある。
 
 **EBのビルドはブラウザーを使う。** DOMで変換して `--dump-dom` で受け取るので、
 Chrome/Edgeが要る。Windowsの既定パスは自動で見つかる。それ以外の環境では
