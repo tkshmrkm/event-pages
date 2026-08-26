@@ -25,10 +25,8 @@ table { width:100%; border-collapse:separate; border-spacing:0; border:1px solid
 th { background:#f1f5f9; color:#334155; text-align:left; padding:10px; border-bottom:1px solid var(--line); white-space:nowrap; }
 td { padding:10px; border-bottom:1px solid var(--line); vertical-align:top; }
 tr:last-child td { border-bottom:none; }
-.group { display:inline-block; color:#fff; border-radius:999px; padding:3px 9px; font-weight:700; font-size:11.5px; white-space:nowrap; }
-.core { background:var(--blue); } .industry { background:var(--green); } .implementation { background:var(--orange); } .human { background:var(--purple); } .foresight { background:var(--rose); }
 .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11.2px; font-weight:700; white-space:nowrap; }
-.plan { background:#dcfce7; color:#166534; } .done { background:#dbeafe; color:#1e40af; } .consider { background:#fef3c7; color:#92400e; } .no { background:#f1f5f9; color:#475569; } .track { background:#e0f2fe; color:#075985; } .neutral { background:#f1f5f9; color:#475569; }
+.done { background:#dbeafe; color:#1e40af; } .consider { background:#fef3c7; color:#92400e; } .track { background:#e0f2fe; color:#075985; }
 .small { color:var(--muted); font-size:11.2px; }
 .grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; margin-top:16px; }
 .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:14px; }
@@ -46,39 +44,11 @@ th.sortable { cursor:pointer; user-select:none; } th.sortable::after { content:"
 pre { background:#0f172a; color:#e2e8f0; border-radius:14px; padding:18px; white-space:pre-wrap; font-size:12.5px; line-height:1.55; }
 @media print { body { background:#fff; } .wrap { max-width:none; padding:10mm; } header,.section { box-shadow:none; } table { font-size:9.2px; } .sort-controls { display:none; } }
 @media (max-width:1050px) { .grid { grid-template-columns:1fr 1fr; } .sort-controls { grid-template-columns:1fr; } table { font-size:11px; } }
-
-.subsection { margin-top:18px; }
-.subsection h3 { margin:0 0 6px; font-size:17px; color:#0f172a; }
-.split-view { border-top:1px solid var(--line); padding-top:16px; }
-.split-table { margin-top:10px; }
-.split-table th, .split-table td { font-size:10.8px; }
-
-/* 3色分類: 学会・展示会・技術イベント */
-tr.row-conference td { background:#eff6ff; }
-tr.row-exhibition td { background:#ecfdf5; }
-tr.row-tech td { background:#fff7ed; }
-tr.row-conference:hover td { background:#dbeafe; }
-tr.row-exhibition:hover td { background:#d1fae5; }
-tr.row-tech:hover td { background:#ffedd5; }
 .legend { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 14px; }
 .legend-item { display:inline-block; border-radius:999px; padding:5px 11px; font-size:12px; font-weight:700; border:1px solid var(--line); }
 .legend-conference { background:#eff6ff; color:#1e40af; }
 .legend-exhibition { background:#ecfdf5; color:#047857; }
 .legend-tech { background:#fff7ed; color:#b45309; }
-
-/* 3色分類は行の背景色。参加状況バッジのグレーは不参加のステータス表示。 */
-tr.row-conference td { background:#eff6ff !important; }
-tr.row-exhibition td { background:#ecfdf5 !important; }
-tr.row-tech td { background:#fff7ed !important; }
-tr.row-conference:hover td { background:#dbeafe !important; }
-tr.row-exhibition:hover td { background:#d1fae5 !important; }
-tr.row-tech:hover td { background:#ffedd5 !important; }
-
-/* 3分類は行全体ではなく種別欄ラベルで表示 */
-tr.row-conference td, tr.row-exhibition td, tr.row-tech td,
-tr.row-conference:hover td, tr.row-exhibition:hover td, tr.row-tech:hover td {
-  background:inherit !important;
-}
 .type-pill {
   display:inline-block;
   border-radius:999px;
