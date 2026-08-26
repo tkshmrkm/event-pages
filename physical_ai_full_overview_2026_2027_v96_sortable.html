@@ -40,9 +40,10 @@ tr:last-child td { border-bottom:none; }
 .status-check input, .year-check input { width:15px; height:15px; margin:0; padding:0; accent-color:var(--blue); }
 .status-check:has(input:checked), .year-check:has(input:checked) { color:#0f172a; font-weight:700; }
 th.sortable { cursor:pointer; user-select:none; } th.sortable::after { content:" ⇅"; color:#94a3b8; font-size:10px; }
+.table-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
 .counter { color:var(--muted); font-size:12.5px; margin:6px 0 10px; }
 pre { background:#0f172a; color:#e2e8f0; border-radius:14px; padding:18px; white-space:pre-wrap; font-size:12.5px; line-height:1.55; }
-@media print { body { background:#fff; } .wrap { max-width:none; padding:10mm; } header,.section { box-shadow:none; } table { font-size:9.2px; } .sort-controls { display:none; } }
+@media print { body { background:#fff; } .table-scroll { overflow:visible; } .wrap { max-width:none; padding:10mm; } header,.section { box-shadow:none; } table { font-size:9.2px; } .sort-controls { display:none; } }
 @media (max-width:1050px) { .grid { grid-template-columns:1fr 1fr; } .sort-controls { grid-template-columns:1fr; } table { font-size:11px; } }
 .legend { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 14px; }
 .legend-item { display:inline-block; border-radius:999px; padding:5px 11px; font-size:12px; font-weight:700; border:1px solid var(--line); }
@@ -143,7 +144,7 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 参加人数は確定派遣人数ではなく、年度計画時点の見込み・上限枠として扱う。
 <br/>5・6章では、部門予算化候補に該当するイベント名の前に 💰 アイコンを表示する。<br/>人数・担当は5章の開催日確定リストで管理し、3章では扱いのみを示す。</div>
 <h3>3-A. 部門基幹予算枠</h3>
-<table>
+<div class="table-scroll"><table>
 <thead>
 <tr>
 <th>対象</th>
@@ -165,9 +166,9 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <tr><td>CES</td><td>戦略探索枠</td><td>AI、ロボット、モビリティ、家電・サービス、将来市場</td><td>CES 2027：1月6–9日、Las Vegas, Nevada, United States</td></tr>
 <tr><td>World Robot Conference and Expo</td><td>戦略探索・予備枠</td><td>中国ロボット産業、ヒューマノイド、政策・標準化・社会実装を確認する戦略探索対象。人数はイベント固有ではなく、年度予算側で管理する。</td><td>World Robot Conference and Expo 2026：8月19–23日、Beijing, China（開催済み）。2027年の日程は未発表</td></tr>
 </tbody>
-</table>
+</table></div>
 <h3>3-B. テーマ連動予算枠</h3>
-<table>
+<div class="table-scroll"><table>
 <thead>
 <tr>
 <th>対象</th>
@@ -180,7 +181,7 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <tr><td>JEC World</td><td>テーマ連動枠</td><td>複合材、材料、軽量化、製造プロセス</td><td>JEC World 2027：3月2–4日、Paris Nord Villepinte, France</td></tr>
 <tr><td>Interclean</td><td>テーマ連動枠</td><td>清掃、衛生、サービスロボット、業界実装</td><td>Interclean Amsterdam 2028：4月4–7日、RAI Amsterdam, Amsterdam, Netherlands（隔年開催のため2027年は無し）</td></tr>
 <tr><td>SEMICON系</td><td>テーマ連動枠</td><td>半導体製造装置、クリーン搬送、精密自動化</td><td>直近はSEMICON Taiwan 2026：9月2–4日、TaiNEX 1&amp;2, Taipei, Taiwan（以降SEMICON West・Europa・Japanが年内に順次開催）。SEMICON Westは2027年から会場をPhoenixへ移し春開催へ変更（2027年は3月30日–4月1日）</td></tr></tbody>
-</table>
+</table></div>
 </div>
 <div class="section" id="tier1-conferences">
 <h2>4. 国際学会</h2>
@@ -188,7 +189,7 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <div class="note">
 分野を代表するトップティア（Tier1）の国際学会を一覧化する。掲載は学会の格付けであり、部門としての参加要否とは別。
 </div>
-<table>
+<div class="table-scroll"><table>
 <thead>
 <tr>
 <th>学会</th>
@@ -214,15 +215,15 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <tr><td>ACC</td><td>Control / Motion / Systems</td><td>毎年</td><td>CDCと並ぶ制御理論分野の二大フラッグシップ会議の一つ</td></tr>
 <tr><td>ASME IDETC/CIE</td><td>Mechanical Design / Structural &amp; Multidisciplinary Optimization</td><td>毎年</td><td>設計工学・Design Automation分野のASME最大のフラッグシップ会議</td></tr>
 </tbody>
-</table>
+</table></div>
 <h3>4-2. 参加ルール</h3>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>項目</th><th>内容</th></tr></thead>
 <tbody>
 <tr><td><strong>判断</strong></td><td>学会は部門予算化・人数配分の対象に含めず、原則「参考情報」として管理する。現地参加は4-1のTier1国際学会リストに掲載されている学会を原則とし、いずれも個別申請に基づき可否を判断する。リスト外の学会に参加する場合は、共同研究先の発表や、今後継続的な参加を検討すべき分野の見極めなど、参加する明確な理由を申請時に示す。理由を確認しない「適当なタイミングでの参加」は行わない。部門派遣としての現地参加は、同一カテゴリ（5章「カテゴリ」列基準）内で代表会議1件を基本とし、重点カテゴリでも代表会議とあわせて最大2件までとする（個人のR&amp;D探索枠としての参加はこの上限の対象外）。確定した参加は部門計画とは分けて実績情報を追記し、参加後は内容を部内で共有する。それ自体は部門予算化を意味しない。5章に掲載済みの学会参加（参加済み・参加予定）は、この基準に基づき取り組み内容を確認のうえリスト化されているものとする。</td></tr>
 <tr><td><strong>人数</strong></td><td>部門派遣における担当者は原則1〜2名とする。</td></tr>
 </tbody>
-</table>
+</table></div>
 </div><div class="section" id="confirmed-date-section">
 <h2>5. 開催日確定リスト</h2>
 <div class="note">
@@ -255,7 +256,7 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 </fieldset>
 </div>
 <div class="counter" id="timelineCounter" aria-live="polite"></div>
-<table id="timelineTable">
+<div class="table-scroll"><table id="timelineTable">
 <thead>
 <tr>
 <th class="sortable">年</th>
@@ -387,7 +388,7 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <tr data-datekey="20280404"><td>2028</td><td>4月4–7日</td><td><span class="budget-icon" title="部門予算化候補">💰</span> Interclean Amsterdam 2028</td><td>★★☆☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>RAI Amsterdam, Amsterdam, Netherlands</td><td><span class="badge tbd">2028計画</span></td><td>TBD</td><td>清掃・衛生・サービスロボット・施設管理の業界実装確認。Interclean Amsterdamの次回開催として管理。</td></tr>
 <tr data-datekey="20281018"><td>2028</td><td>10月18–25日</td><td>K Düsseldorf 2028</td><td>★★☆☆☆</td><td>★★★★☆</td><td>International Exhibition / Market &amp; Implementation</td><td><span class="type-pill type-exhibition">展示会・見本市</span></td><td>Messe Düsseldorf, Düsseldorf, Germany</td><td><span class="badge tbd">2028計画</span></td><td>TBD</td><td>プラスチック・ゴム、材料、成形加工、リサイクル、材料循環の大型展示会</td></tr>
 </tbody>
-</table>
+</table></div>
 </div>
 <div class="section">
 <h2>6. 未確定・候補メモ</h2><div class="budget-legend">
@@ -395,7 +396,7 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <span class="small">（確定派遣ではなく、年度計画で予算枠として管理する対象）</span>
 </div>
 <div class="note">開催日が未確定、または候補段階のイベントを残す。開催日が確定したものは5章の開催日確定リストへ移す。</div>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>イベント</th><th>AI×Robotics重要度</th><th>事業適合度</th><th>カテゴリ</th><th>扱い・時期</th><th>担当・人数</th><th>想定開催地</th><th>目的・扱い</th></tr></thead>
 <tbody>
 <tr>
@@ -463,7 +464,7 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <tr><td><strong>RLC 2027</strong></td><td>★★★☆☆</td><td>★★☆☆☆</td><td>Robot Learning / AI基盤</td><td>2027候補：8月（日次TBD）</td><td>TBD</td><td>Brown University, United States ／ Odense, Denmark</td><td>強化学習専門の会議。2027年は2会場に分かれ、Brownが8月上旬、Odenseが8月下旬でEWRLとの共催。採択論文はどちらで発表するか著者が選ぶ。日次は未発表。</td></tr>
 <tr><td><span class="budget-icon" title="部門予算化候補">💰</span> 年間予算予備枠（部門）</td><td>—</td><td>—</td><td>部門予算枠</td><td>2027年度年間枠</td><td>予備枠10名分</td><td>—</td><td>特定イベントに紐づけない追加派遣・追加調査用の年間予算予備枠。WRC固有の人数ではない。</td></tr>
 </tbody>
-</table>
+</table></div>
 </div>
 </div>
 <script>
