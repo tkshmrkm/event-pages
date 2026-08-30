@@ -446,9 +446,9 @@ for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtm
   assert(text.includes(FRA_ROUTE_IMG), `${name}: the FRA-to-long-distance-station route diagram is missing`);
   assert(text.includes(FRA_MAP_URL), `${name}: the official FRA concourse map link is missing`);
   assert(text.includes('<summary>長距離駅への行き方</summary>'), `${name}: the route diagram must stay inside its fold`);
-  // 図はTerminal 1到着から描いてある。Finnairが着くのはTerminal 3（空港公式のAirlines A-Z、
-  // 2026-08-30閲覧）なので、SkyLineでTerminal 1へ移る一言が抜けると、図だけが残って
-  // 「着いた場所から歩き出せる」と読める。図とその一言を対で見る。
+  // 図はTerminal 3到着から長距離駅までを通しで描いてある（2026-08-30に差し替え。
+  // 前の図はTerminal 1到着から始まっていて、Finnairが着くTerminal 3の分が抜けていた）。
+  // 到着ターミナルとSkyLineが説明から消えると、また片側だけの図に戻る。対で見る。
   const routeFold = text.slice(text.indexOf('<summary>長距離駅への行き方</summary>'));
   const routeBody = routeFold.slice(0, routeFold.indexOf('</details>'));
   assert(routeBody.includes('SkyLine') && routeBody.includes('Terminal 3'),
