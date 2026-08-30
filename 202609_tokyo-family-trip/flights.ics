@@ -1,0 +1,73 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//event-pages//tokyo-family-trip 2026-09//JA
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:2026年9月 東京・千葉 家族旅行 移動
+X-WR-TIMEZONE:Asia/Tokyo
+BEGIN:VTIMEZONE
+TZID:Asia/Tokyo
+BEGIN:STANDARD
+DTSTART:19700101T000000
+TZOFFSETFROM:+0900
+TZOFFSETTO:+0900
+TZNAME:JST
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:nh022-20260922@tokyo-family-trip.event-pages
+DTSTAMP:20260830T000000Z
+DTSTART;TZID=Asia/Tokyo:20260922T110000
+DTEND;TZID=Asia/Tokyo:20260922T121500
+SUMMARY:NH022 伊丹(南) → 羽田(T2)
+LOCATION:大阪国際空港（伊丹）南ターミナル
+DESCRIPTION:往路 · 9月22日（火・休）\n伊丹(南) 11:00発 → 
+ 羽田(T2) 12:15着 / 所要1時間15分\n運航 ANA WINGS / 機材 738 / 
+ スタンダード\n座席 9H / 9J / 9K\n搭乗 たけしさん・沙織
+ さん・璃桜さん 計3名
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+UID:jal131-20260923@tokyo-family-trip.event-pages
+DTSTAMP:20260830T000000Z
+DTSTART;TZID=Asia/Tokyo:20260923T173500
+DTEND;TZID=Asia/Tokyo:20260923T184000
+SUMMARY:JAL131 羽田(T1) → 伊丹(北)
+LOCATION:羽田空港 第1ターミナル
+DESCRIPTION:復路 · 9月23日（水・祝）\n羽田(T1) 17:35発 → 伊
+ 丹(北) 18:40着 / 所要1時間05分\n機材 73H / 普通席\n座席 29C
+  / 29B / 29A\n搭乗 たけしさん・沙織さん・璃桜さん 計3名
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+UID:limousine-hnd-hilton-20260922@tokyo-family-trip.event-pages
+DTSTAMP:20260830T000000Z
+DTSTART;TZID=Asia/Tokyo:20260922T133000
+DTEND;TZID=Asia/Tokyo:20260922T143000
+SUMMARY:リムジンバス 羽田(T2) → ヒルトン東京ベイ
+LOCATION:羽田空港 第2ターミナル 6番のりば
+DESCRIPTION:往路 · 9月22日（火・休）· NH022からの接続\n羽
+ 田(T2) 13:30発 → ヒルトン東京ベイ 14:30着 / 所要1時間\n
+ 便30 東京空港交通 / 東京ディズニーリゾートエリア線\n
+ 大人1\,300円 · まだ購入していない\n遅れたら13:45発・14:
+ 00発も同じ経路
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+UID:limousine-toyosu-hnd-20260923@tokyo-family-trip.event-pages
+DTSTAMP:20260830T000000Z
+DTSTART;TZID=Asia/Tokyo:20260923T151500
+DTEND;TZID=Asia/Tokyo:20260923T154000
+SUMMARY:リムジンバス 豊洲駅 → 羽田(T1)
+LOCATION:豊洲駅 リムジンバスのりば
+DESCRIPTION:復路 · 9月23日（水・祝）· JAL131への接続\n豊洲
+ 駅 15:15発 → 羽田空港 第1ターミナル 15:40着 / 所要25分\n
+ 東京空港交通 リムジンバス 羽田空港線\n合計3名 · 購
+ 入済み
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR

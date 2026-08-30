@@ -57,9 +57,9 @@
       align-items: end;
       padding: 24px;
       background:
-        linear-gradient(180deg, rgba(7, 34, 58, .18), rgba(7, 34, 58, .76)),
-        radial-gradient(circle at 18% 18%, rgba(255, 217, 121, .45), transparent 22rem),
-        linear-gradient(135deg, #5bb6d6 0%, #2a7ab7 42%, #203c5a 100%);
+        linear-gradient(90deg, rgba(7, 34, 58, .88) 0%, rgba(7, 34, 58, .68) 46%, rgba(7, 34, 58, .2) 78%, rgba(7, 34, 58, .08) 100%),
+        linear-gradient(180deg, rgba(7, 34, 58, .08) 20%, rgba(7, 34, 58, .74) 100%),
+        url("assets/hero-tokyo-bay-family-v2.jpg") center center / cover no-repeat;
       color: #fff;
       position: relative;
       overflow: hidden;
@@ -68,13 +68,9 @@
     .hero::after {
       content: "";
       position: absolute;
-      inset: auto -8vw -19vh -8vw;
-      height: 36vh;
-      background:
-        linear-gradient(90deg, transparent 0 7%, rgba(255,255,255,.28) 7% 8%, transparent 8% 16%, rgba(255,255,255,.22) 16% 17%, transparent 17% 100%),
-        linear-gradient(0deg, #f0f6f7 0 28%, #d5edf3 28% 36%, #eef7f8 36% 100%);
-      clip-path: polygon(0 42%, 17% 20%, 32% 31%, 48% 12%, 64% 33%, 80% 19%, 100% 35%, 100% 100%, 0 100%);
-      opacity: .92;
+      inset: 0;
+      background: radial-gradient(circle at 18% 18%, rgba(255, 217, 121, .2), transparent 26rem);
+      pointer-events: none;
     }
 
     .hero-inner {
@@ -939,6 +935,7 @@
       .hero {
         min-height: 60vh;
         padding: 18px;
+        background-position: 62% center;
       }
 
       .summary,
@@ -1149,6 +1146,7 @@
 <a href="#waiting">待機プラン</a>
 <a href="#day2">2日目</a>
 <a href="#checklist">チェック</a>
+<a href="flights.ics">カレンダー</a>
 <button class="print-button" onclick="window.print()" type="button">印刷</button>
 </nav>
 <main>
@@ -1206,8 +1204,8 @@
 </article>
 <article class="conf-card">
 <strong>ピクサーの世界展</strong>
-<span>9月23日 10:30〜12:30 · 市場前駅から徒歩約3分</span>
-<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%94%E3%82%AF%E3%82%B5%E3%83%BC%E3%81%AE%E4%B8%96%E7%95%8C%E5%B1%95%20%E8%B1%8A%E6%B4%B2%20%E5%B8%82%E5%A0%B4%E5%89%8D" target="_blank">ピクサーの世界展</a></div>
+<span>9月23日 10:30〜12:30 · CREVIA BASE Tokyo · 市場前駅から徒歩約3分 · 日時指定券</span>
+<div class="map-btns"><a class="map-btn" href="https://tickets.tbs.co.jp/mundopixar/" target="_blank">公式サイト</a></div>
 </article>
 <article class="conf-card">
 <strong>ららぽーとTOKYO-BAY</strong>
@@ -1224,16 +1222,19 @@
 <section class="page-section" id="day1">
 <h2>1日目：9月22日（火・休）</h2>
 <div aria-label="1日目のタイムライン" class="timeline">
-<article class="event"><div class="time">08:20頃</div><div class="event-body"><strong>中書島のご自宅を出発</strong><span>伊丹空港へは電車移動を本命にする。早めに出られるならバス等も可。9:45〜10:00伊丹着を目安にする。</span></div></article>
-<article class="event"><div class="time">10:00頃</div><div class="event-body"><strong>伊丹空港到着</strong><span>南ターミナルへ。国内線出発の約1時間前に到着する目安。保安検査、トイレ、飲み物購入まで余裕を持たせる。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E4%BC%8A%E4%B8%B9%E7%A9%BA%E6%B8%AF" target="_blank">伊丹空港</a></div></div></article>
+<article class="event"><div class="time">07:35頃</div><div class="event-body"><strong>中書島のご自宅を出発</strong><span>07:47の京阪に乗る。荷物3人分を持つので、駅までの時間を多めに見る。</span></div></article>
+<article class="event"><div class="time">07:47</div><div class="event-body"><strong>中書島 → 京都駅（乗換1回・22分・420円）</strong><span>京阪本線準急で丹波橋。徒歩で近鉄丹波橋へ移り、07:57の近鉄京都線で京都08:09着。</span></div></article>
+<article class="event"><div class="time">08:25頃</div><div class="event-body"><strong>京都駅八条口 K1のりばへ</strong><span>アバンティ専門店街から西へ約100m。予約制ではなく先着順。券売機はのりば後方。交通系ICカードとタッチ決済が使える。</span><div class="map-btns"><a class="map-btn" href="https://www.hankyu-kankobus.co.jp/limousine/timetable/K/" target="_blank">時刻表・運賃</a></div></div></article>
+<article class="event"><div class="time">08:35</div><div class="event-body"><strong>京都駅八条口 → 伊丹空港（リムジンバス）</strong><span>阪急観光バス、約50〜55分。大人1,500円・小児750円。時刻は平日・土日祝共通。公式に「道路事情等により遅延する場合がある」との注意書きあり。</span></div></article>
+<article class="event"><div class="time">09:30</div><div class="event-body"><strong>伊丹空港 南ターミナル着</strong><span>NH022の11:00発まで1時間30分。保安検査、トイレ、飲み物購入まで余裕がある。08:35発に乗れなかった場合は次の09:00発で09:55着、出発1時間5分前になる。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E4%BC%8A%E4%B8%B9%E7%A9%BA%E6%B8%AF" target="_blank">伊丹空港</a></div></div></article>
 <article class="event"><div class="time">11:00</div><div class="event-body"><strong>NH022便 伊丹(南)発</strong><span>ANA WINGS運航。機材738、スタンダード、座席9H/9J/9K。</span></div></article>
 <article class="event"><div class="time">12:15</div><div class="event-body"><strong>羽田空港(T2)着</strong><span>所要1時間15分。到着後、T2内でランチ（下のランチ候補を参照）。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF%20%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank">羽田空港 第2ターミナル</a></div></div></article>
-<article class="event"><div class="time">12:15〜13:20</div><div class="event-body"><strong>羽田空港(T2)でランチ</strong><span>約1時間。食事中にリムジンバスを予約しておくとスムーズ。13:25にはバス乗り場（6番のりば）へ。</span><div class="map-btns"><a class="map-btn" href="https://www.limousinebus.co.jp/ja/line/detail/Haneda-TDR/" target="_blank">リムジンバス時刻・予約</a></div></div></article>
-<article class="event"><div class="time">13:30</div><div class="event-body"><strong>羽田空港からリムジンバスでホテルへ</strong><span>6番のりば発、ディズニーリゾート方面ヒルトン東京ベイ行。乗り換えなしで移動。所要約1時間。大人1,300円。</span></div></article>
-<article class="event rest"><div class="time">14:30頃</div><div class="event-body"><strong>ヒルトン東京ベイ到着</strong><span>確認番号3466061172。15:00チェックイン前なので、まず荷物預けと事前手続き。部屋が準備済みなら入室、未準備なら夜にチェックイン。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%92%E3%83%AB%E3%83%88%E3%83%B3%E6%9D%B1%E4%BA%AC%E3%83%99%E3%82%A4" target="_blank">ヒルトン東京ベイ</a></div></div></article>
-<article class="event"><div class="time">15:00</div><div class="event-body"><strong>ホテル → 舞浜駅（無料シャトルバス）</strong><span>10〜15分間隔。部屋に入れなかった場合も荷物はホテルに預けたままでOK、ライブ後にチェックイン。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/dir/%E3%83%92%E3%83%AB%E3%83%88%E3%83%B3%E6%9D%B1%E4%BA%AC%E3%83%99%E3%82%A4/%E8%88%9E%E6%B5%9C%E9%A7%85" target="_blank">ホテル→舞浜駅</a></div></div></article>
-<article class="event"><div class="time">15:15</div><div class="event-body"><strong>舞浜駅 → 南船橋駅（JR京葉線）</strong><span>乗車時間は約15分。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/dir/%E8%88%9E%E6%B5%9C%E9%A7%85/%E5%8D%97%E8%88%B9%E6%A9%8B%E9%A7%85" target="_blank">舞浜駅→南船橋駅</a></div></div></article>
-<article class="event live"><div class="time">15:30</div><div class="event-body"><strong>LaLa arena周辺到着</strong><span>璃桜さんの入場準備。入場列や合流場所を確認。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=LaLa%20arena%20TOKYO-BAY" target="_blank">LaLa arena</a></div></div></article>
+<article class="event"><div class="time">12:40〜13:20</div><div class="event-body"><strong>羽田空港(T2)でランチ</strong><span>荷物受取を挟むので正味40分ほど。食事中にリムジンバスを予約しておくとスムーズ。13:25には6番のりば（1階・到着ロビー）へ。</span><div class="map-btns"><a class="map-btn" href="https://www.limousinebus.co.jp/ja/line/detail/Haneda-TDR/" target="_blank">リムジンバス時刻・予約</a></div></div></article>
+<article class="event"><div class="time">13:30</div><div class="event-body"><strong>羽田空港からリムジンバスでホテルへ</strong><span>6番のりば発、便30（東京空港交通）。ヒルトン東京ベイ14:30着、所要1時間。大人1,300円。遅れたら13:45発・14:00発も同じ経路。</span></div></article>
+<article class="event rest"><div class="time">14:30</div><div class="event-body"><strong>ヒルトン東京ベイ到着</strong><span>確認番号3466061172。15:00チェックイン前なので、まず荷物預けと事前手続き。部屋が準備済みなら入室、未準備なら夜にチェックイン。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%92%E3%83%AB%E3%83%88%E3%83%B3%E6%9D%B1%E4%BA%AC%E3%83%99%E3%82%A4" target="_blank">ヒルトン東京ベイ</a></div></div></article>
+<article class="event"><div class="time">15:05</div><div class="event-body"><strong>ホテル → 舞浜駅</strong><span>向かいのベイサイド・ステーションからディズニーリゾートラインで16分・300円・6分間隔。部屋に入れなかった場合も荷物はホテルに預けたままでよく、ライブ後にチェックインする。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/dir/%E3%83%92%E3%83%AB%E3%83%88%E3%83%B3%E6%9D%B1%E4%BA%AC%E3%83%99%E3%82%A4/%E8%88%9E%E6%B5%9C%E9%A7%85" target="_blank">ホテル→舞浜駅</a></div></div></article>
+<article class="event"><div class="time">15:32</div><div class="event-body"><strong>舞浜駅 → 南船橋駅（乗換なし・11分・253円）</strong><span>JR京葉線快速 蘇我行。1番線発、1番線着。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/dir/%E8%88%9E%E6%B5%9C%E9%A7%85/%E5%8D%97%E8%88%B9%E6%A9%8B%E9%A7%85" target="_blank">舞浜駅→南船橋駅</a></div></div></article>
+<article class="event live"><div class="time">15:45頃</div><div class="event-body"><strong>LaLa arena周辺到着</strong><span>璃桜さんの入場準備。入場列や合流場所を確認。開演17:00まで1時間15分。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=LaLa%20arena%20TOKYO-BAY" target="_blank">LaLa arena</a></div></div></article>
 <article class="event live"><div class="time">17:00</div><div class="event-body"><strong>いれいすライブ開演</strong><span>会場：LaLa arena TOKYO-BAY。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=LaLa%20arena%20TOKYO-BAY" target="_blank">LaLa arena TOKYO-BAY</a></div></div></article>
 <article class="event rest"><div class="time">17:00〜20:00</div><div class="event-body"><strong>たけしさん夫婦はららぽーと待機</strong><span>下の待機プランを参照。</span></div></article>
 <article class="event"><div class="time">20:00頃</div><div class="event-body"><strong>ライブ終了、璃桜さんと合流</strong><span>合流場所は事前に決めておくとスムーズ。</span></div></article>
@@ -1242,29 +1243,40 @@
 
 <div class="info-box print-cluster">
 <h3>羽田空港(T2)ランチ候補</h3>
-<p>到着後、T2内のレストラン街で1時間程度。13:25には6番のりばへ向かう。</p>
+<p>到着ロビーもリムジンバス6番のりばも1階。階を動かないなら1階、店数で選ぶなら3階に上がる。どちらもセキュリティチェック前。13:25には6番のりばへ戻る。</p>
 <div class="plan-grid">
 <article class="plan-card">
-<h3>杵屋</h3>
-<p>うどん・そばを中心とした定食屋。空港内に複数出店しており使い勝手がいい。天ぷらとのセットも充実。</p>
-<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E6%9D%B5%E5%B1%8B+%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF+%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank">杵屋</a></div>
+<h3>蕎麦酒処 つきじ庵</h3>
+<p><b>1F</b>・セキュリティチェック前。到着ロビーと同じ階。そば。</p>
+<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%95%8E%E9%BA%A6%E9%85%92%E5%87%A6%20%E3%81%A4%E3%81%8D%E3%81%98%E5%BA%B5%20%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank">蕎麦酒処 つきじ庵</a></div>
 </article>
 <article class="plan-card">
-<h3>丸亀製麺</h3>
-<p>讃岐うどんのセルフ式チェーン。打ちたて・揚げたての天ぷらと合わせて手早く食べられる。行列でも回転が速い。</p>
-<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E4%B8%B8%E4%BA%80%E8%A3%BD%E9%BA%BA+%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF+%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank">丸亀製麺</a></div>
+<h3>餃子とタンメン　天</h3>
+<p><b>1F</b>・セキュリティチェック前。到着ロビーと同じ階。餃子とタンメン。</p>
+<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E9%A4%83%E5%AD%90%E3%81%A8%E3%82%BF%E3%83%B3%E3%83%A1%E3%83%B3%20%E5%A4%A9%20%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank">餃子とタンメン 天</a></div>
 </article>
 <article class="plan-card">
-<h3>博多 一風堂</h3>
-<p>白丸・赤丸の定番博多ラーメン。T2内に出店。ラーメンで腹ごしらえしたい気分のときに。</p>
-<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E4%B8%80%E9%A2%A8%E5%A0%82+%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF+%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank">博多 一風堂</a></div>
+<h3>讃岐うどん般若林</h3>
+<p><b>3F</b>・セキュリティチェック前。うどん。</p>
+<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%AE%83%E5%B2%90%E3%81%86%E3%81%A9%E3%82%93%E8%88%AC%E8%8B%A5%E6%9E%97%20%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank">讃岐うどん般若林</a></div>
 </article>
 <article class="plan-card">
-<h3>箱根そば</h3>
-<p>東日本定番の立ち食いそばチェーン。かき揚げそば・月見そばなどシンプルで軽め。さっと済ませたいときに向く。</p>
-<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E7%AE%B1%E6%A0%B9%E3%81%9D%E3%81%B0+%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF" target="_blank">箱根そば</a></div>
+<h3>元祖寿司　羽田空港第2ターミナル店</h3>
+<p><b>3F</b>・セキュリティチェック前。寿司。</p>
+<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%85%83%E7%A5%96%E5%AF%BF%E5%8F%B8%20%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB%E5%BA%97" target="_blank">元祖寿司 羽田空港第2ターミナル店</a></div>
+</article>
+<article class="plan-card">
+<h3>こめらく　贅沢な、お茶漬け日和。</h3>
+<p><b>3F</b>・セキュリティチェック前。お茶漬けとごはんもの。軽めに済ませたいときに。</p>
+<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%81%93%E3%82%81%E3%82%89%E3%81%8F%20%E8%B4%85%E6%B2%A2%E3%81%AA%E3%80%81%E3%81%8A%E8%8C%B6%E6%BC%AC%E3%81%91%E6%97%A5%E5%92%8C%E3%80%82%20%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank">こめらく 贅沢な、お茶漬け日和。</a></div>
+</article>
+<article class="plan-card">
+<h3>自由が丘バーガー</h3>
+<p><b>3F</b>・セキュリティチェック前。ハンバーガー。</p>
+<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%87%AA%E7%94%B1%E3%81%8C%E4%B8%98%E3%83%90%E3%83%BC%E3%82%AC%E3%83%BC%20%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank">自由が丘バーガー</a></div>
 </article>
 </div>
+<p>丸亀製麺はB1F、とんかつ和幸は4F。どちらも階の移動が増えるぶん、荷物があると戻りに時間がかかる。</p>
 </div>
 
 
@@ -1282,6 +1294,8 @@
 <section class="page-section" id="waiting">
 <h2>ららぽーとTOKYO-BAY 待機プラン</h2>
 <p>璃桜さんのライブ中は「近くにいる安心感」と「親側の体力温存」を優先。終演後は駅・通路が混む前提で、19:45には会計と移動準備を始める設計にします。</p>
+<p>夕食はその日の気分で決められるよう、公式の一覧から探す。フードコートは北館3Fに30件ある。</p>
+<div class="map-btns"><a class="map-btn" href="https://mitsui-shopping-park.com/gourmet/lalaport/tokyo-bay/" target="_blank">グルメガイド（全店）</a><a class="map-btn" href="https://mitsui-shopping-park.com/gourmet/lalaport/tokyo-bay/?language=ja-JP&amp;genre%5B%5D=%E3%83%95%E3%83%BC%E3%83%89%E3%82%B3%E3%83%BC%E3%83%88" target="_blank">フードコート（北館3F）</a></div>
 <h3>当日の体力で選ぶ3案</h3>
 <div class="plan-grid print-cluster">
 <article class="plan-card">
@@ -1289,7 +1303,7 @@
 <h3>A案：休憩多めの安定プラン</h3>
 <p>移動疲れが残っている前提の本命案。カフェと早め夕食を軸にします。</p>
 <ul>
-<li>16:35 上島珈琲店<a aria-label="地図を開く" class="map-icon" href="https://www.google.com/maps/search/?api=1&amp;query=%E4%B8%8A%E5%B3%B6%E7%8F%88%E7%90%B2%E5%BA%97%20%E3%82%89%E3%82%89%E3%81%BD%E3%83%BC%E3%81%A8TOKYO-BAY" target="_blank">↗</a>などで休憩</li>
+<li>16:35 上島珈琲店<a aria-label="地図を開く" class="map-icon" href="https://www.google.com/maps/search/?api=1&amp;query=%E4%B8%8A%E5%B3%B6%E7%8F%88%E7%90%B2%E5%BA%97%20%E3%82%89%E3%82%89%E3%81%BD%E3%83%BC%E3%81%A8TOKYO-BAY%E5%8C%97%E9%A4%A8" target="_blank">↗</a>などで休憩</li>
 <li>17:15 雑貨を軽く見る</li>
 <li>18:10 夕食（洋麺屋 五右衛門<a aria-label="地図を開く" class="map-icon" href="https://www.google.com/maps/search/?api=1&amp;query=%E6%B4%8B%E9%BA%BA%E5%B1%8B%20%E4%BA%94%E5%8F%B3%E8%A1%9B%E9%96%80%20%E3%82%89%E3%82%89%E3%81%BD%E3%83%BC%E3%81%A8TOKYO-BAY" target="_blank">↗</a>など）</li>
 <li>19:15 カフェかベンチで待機</li>
@@ -1356,14 +1370,16 @@
 <h2>2日目：9月23日（水・祝）</h2>
 <div aria-label="2日目のタイムライン" class="timeline">
 <article class="event"><div class="time">08:00</div><div class="event-body"><strong>ホテルにて朝食</strong><span>ヒルトン・ゴールド特典の無料朝食を堪能。</span></div></article>
-<article class="event"><div class="time">09:30</div><div class="event-body"><strong>チェックアウト → 舞浜駅（無料シャトルバス）</strong><span>荷物を持ってチェックアウト後、ホテル発の無料シャトルバスで舞浜駅へ（10〜15分間隔）。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/dir/%E3%83%92%E3%83%AB%E3%83%88%E3%83%B3%E6%9D%B1%E4%BA%AC%E3%83%99%E3%82%A4/%E8%88%9E%E6%B5%9C%E9%A7%85" target="_blank">ホテル→舞浜駅</a></div></div></article>
-<article class="event"><div class="time">09:45</div><div class="event-body"><strong>舞浜駅 → 市場前駅（乗り換え複数・約50分）</strong><span>京葉線で新木場駅→りんかい線で国際展示場駅→徒歩6分→有明駅→ゆりかもめで市場前駅。9月はまだ暑いため、タクシー（約25分・¥3,000〜5,000）も検討。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/dir/%E8%88%9E%E6%B5%9C%E9%A7%85/%E5%B8%82%E5%A0%B4%E5%89%8D%E9%A7%85" target="_blank">舞浜駅→市場前駅</a></div></div></article>
-<article class="event"><div class="time">10:15</div><div class="event-body"><strong>市場前駅到着</strong><span>会場へ徒歩約3分。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%B8%82%E5%A0%B4%E5%89%8D%E9%A7%85" target="_blank">市場前駅</a></div></div></article>
-<article class="event live"><div class="time">10:30〜12:30</div><div class="event-body"><strong>ピクサーの世界展を鑑賞</strong><span>体験型フォトスポットとグッズ購入の目安は約2時間。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%94%E3%82%AF%E3%82%B5%E3%83%BC%E3%81%AE%E4%B8%96%E7%95%8C%E5%B1%95%20%E8%B1%8A%E6%B4%B2%20%E5%B8%82%E5%A0%B4%E5%89%8D" target="_blank">ピクサーの世界展</a></div></div></article>
+<article class="event"><div class="time">09:00</div><div class="event-body"><strong>チェックアウト</strong><span>荷物を持って手続きを済ませ、09:05にはホテルを出る。</span></div></article>
+<article class="event"><div class="time">09:05</div><div class="event-body"><strong>ホテル → 舞浜駅</strong><span>向かいのベイサイド・ステーションからディズニーリゾートラインで16分・300円・6分間隔。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/dir/%E3%83%92%E3%83%AB%E3%83%88%E3%83%B3%E6%9D%B1%E4%BA%AC%E3%83%99%E3%82%A4/%E8%88%9E%E6%B5%9C%E9%A7%85" target="_blank">ホテル→舞浜駅</a></div></div></article>
+<article class="event"><div class="time">09:31</div><div class="event-body"><strong>舞浜駅 → 市場前駅（乗換2回・30分・566円）</strong><span>京葉線で新木場駅→有楽町線で豊洲駅→ゆりかもめで市場前駅。新木場もゆりかもめ豊洲も当駅始発で、荷物があっても座りやすい。</span></div></article>
+<article class="event"><div class="time">10:01</div><div class="event-body"><strong>市場前駅到着</strong><span>会場へ徒歩約3分。10:30の回まで25分の余裕。タクシーならホテルから20分・12.5km、概算5,000〜6,000円（首都高込み・運賃表は未確認）。09:35に出れば09:55着。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%B8%82%E5%A0%B4%E5%89%8D%E9%A7%85" target="_blank">市場前駅</a></div></div></article>
+<article class="event live"><div class="time">10:30〜12:30</div><div class="event-body"><strong>ピクサーの世界展を鑑賞</strong><span>会場はCREVIA BASE Tokyo。日時指定券なので、記載の時刻に入場する。早く着いても前倒しでは入れない。体験型フォトスポットとグッズ購入の目安は約2時間。</span><div class="map-btns"><a class="map-btn" href="https://tickets.tbs.co.jp/mundopixar/" target="_blank">公式サイト</a></div></div></article>
 <article class="event"><div class="time">12:30</div><div class="event-body"><strong>豊洲千客万来を見学</strong><span>市場前駅からすぐ。江戸の食と文化をテーマにした場外施設を散策。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%B1%8A%E6%B4%B2%E5%8D%83%E5%AE%A2%E4%B8%87%E6%9D%A5" target="_blank">豊洲千客万来</a></div></div></article>
-<article class="event"><div class="time">13:30</div><div class="event-body"><strong>ゆりかもめで豊洲駅へ、ららぽーと豊洲でランチ</strong><span>市場前駅から豊洲駅まで約5分。ランチ後そのままリムジンバス乗り場へ。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%82%89%E3%82%89%E3%81%BD%E3%83%BC%E3%81%A8%E8%B1%8A%E6%B4%B2" target="_blank">ららぽーと豊洲</a></div></div></article>
-<article class="event"><div class="time">15:00</div><div class="event-body"><strong>豊洲エリア出発、羽田空港へ</strong><span>豊洲駅発リムジンバスで羽田各ターミナルへ直行。所要約25〜45分・約1,000円。乗り換えなしで荷物があっても楽。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%B1%8A%E6%B4%B2%E9%A7%85+%E3%83%AA%E3%83%A0%E3%82%B8%E3%83%B3%E3%83%90%E3%82%B9+%E4%B9%97%E3%82%8A%E5%A0%B4" target="_blank">豊洲駅 バス乗り場</a><a class="map-btn" href="https://www.limousinebus.co.jp/ja/line/detail/Haneda-Toyosu/" target="_blank">リムジンバス時刻・予約</a></div></div></article>
-<article class="event"><div class="time">15:45</div><div class="event-body"><strong>羽田空港(T1)到着</strong><span>JAL便なので第1ターミナル。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF%20%E7%AC%AC1%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank">羽田空港 第1ターミナル</a></div></div></article>
+<article class="event"><div class="time">13:00</div><div class="event-body"><strong>千客万来で寿司の昼食</strong><span>館内でそのまま昼にする。下の候補を参照。予約するなら時間を指定しておく。</span></div></article>
+<article class="event"><div class="time">14:40</div><div class="event-body"><strong>ゆりかもめで豊洲駅へ</strong><span>市場前駅から約5分。ららぽーと豊洲は時間が余ったときに寄る。そのままリムジンバス乗り場へ。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%82%89%E3%82%89%E3%81%BD%E3%83%BC%E3%81%A8%E8%B1%8A%E6%B4%B2" target="_blank">ららぽーと豊洲</a></div></div></article>
+<article class="event"><div class="time">15:15</div><div class="event-body"><strong>豊洲駅発リムジンバスで羽田空港へ</strong><span>羽田空港線、第1ターミナル直行。所要25分。3名分購入済み。乗り換えなしで荷物があっても楽。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%B1%8A%E6%B4%B2%E9%A7%85+%E3%83%AA%E3%83%A0%E3%82%B8%E3%83%B3%E3%83%90%E3%82%B9+%E4%B9%97%E3%82%8A%E5%A0%B4" target="_blank">豊洲駅 バス乗り場</a><a class="map-btn" href="https://www.limousinebus.co.jp/ja/line/detail/Haneda-Toyosu/" target="_blank">リムジンバス時刻・予約</a></div></div></article>
+<article class="event"><div class="time">15:40</div><div class="event-body"><strong>羽田空港(T1)到着</strong><span>JAL便なので第1ターミナル。JAL131の17:35発まで約1時間55分。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF%E5%9B%BD%E5%86%85%E7%B7%9A%20%E7%AC%AC1%E6%97%85%E5%AE%A2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB" target="_blank">羽田空港 第1ターミナル</a></div></div></article>
 <article class="event rest"><div class="time">16:00</div><div class="event-body"><strong>サクララウンジにて休憩</strong><span>JMBサファイア特典。3人目はマイルまたはクーポンで対応。</span></div></article>
 <article class="event"><div class="time">17:35</div><div class="event-body"><strong>JAL131便 羽田(T1)発</strong><span>羽田第1ターミナル発、機材73H、普通席、座席29C/29B/29A。</span></div></article>
 <article class="event"><div class="time">18:40</div><div class="event-body"><strong>伊丹空港(北)着</strong><span>所要1時間05分。荷物を受け取り、京都駅八条口行きリムジンバスへ。</span><div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E4%BC%8A%E4%B8%B9%E7%A9%BA%E6%B8%AF" target="_blank">伊丹空港</a></div></div></article>
@@ -1372,34 +1388,33 @@
 </div>
 
 <div class="info-box print-cluster">
-<h3>豊洲ランチ候補</h3>
-<p>千客万来で見学後、ゆりかもめでららぽーと豊洲へ移動してランチ。その後リムジンバスで羽田へ。</p>
+<h3>豊洲ランチ候補（寿司）</h3>
+<p>千客万来で見学したあと、そのまま館内で昼にする。市場前駅から豊洲駅までゆりかもめ約5分で、15:15のバスに戻る。営業時間・価格・電話は各店の公式サイトの記載（当日変わることがある）。</p>
 <div class="plan-grid">
 <article class="plan-card">
-<span class="tag">千客万来</span>
-<h3>豊洲 まるり鮨</h3>
-<p>豊洲市場直送の天然本まぐろが看板。フードコート形式なので混雑時も待ち時間少なめ。</p>
-<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%81%BE%E3%82%8B%E3%82%8A%E9%AE%A8+%E8%B1%8A%E6%B4%B2%E5%8D%83%E5%AE%A2%E4%B8%87%E6%9D%A5" target="_blank">まるり鮨</a></div>
+<span class="tag">千客万来 2F</span>
+<h3>つきぢ神楽寿司</h3>
+<p>10:00〜22:00（L.O. 21:30）。カウンターとテーブル。<b>ネット予約フォームと電話（03-5859-5023）の両方あり。</b>鮪づくし5,500円、厳選にぎり4,400円と万来セット3,300円は16時まで、海鮮丼5,500円。</p>
 </article>
 <article class="plan-card">
-<span class="tag">千客万来</span>
-<h3>江戸辻屋</h3>
-<p>NEO江戸前がコンセプトの寿司・海鮮丼。ミニ海鮮丼は1,000円台から。営業10:00〜22:00。</p>
-<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E6%B1%9F%E6%88%B8%E8%BE%BB%E5%B1%8B+%E8%B1%8A%E6%B4%B2%E5%8D%83%E5%AE%A2%E4%B8%87%E6%9D%A5" target="_blank">江戸辻屋</a></div>
+<span class="tag">千客万来 2F</span>
+<h3>鮨 Yasuke by 銚子丸</h3>
+<p>10:00〜21:00（L.O. 20:30）。130席あり、祝日でも回転が読める。OpenTableでのネット予約と電話（03-3520-8682）。価格は公式に記載なし。</p>
 </article>
 <article class="plan-card">
-<span class="tag">ららぽーと豊洲</span>
-<h3>つきじ鈴富 すし富</h3>
-<p>豊洲市場まぐろ専門仲卸が手掛ける本格江戸前寿司。天然まぐろにこだわったランチセットあり。</p>
-<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%81%99%E3%81%97%E5%AF%8C+%E3%82%89%E3%82%89%E3%81%BD%E3%83%BC%E3%81%A8%E8%B1%8A%E6%B4%B2" target="_blank">すし富</a></div>
+<span class="tag">千客万来 1F</span>
+<h3>鮨政</h3>
+<p>10:00〜22:00（LAST IN 20:00）。おまかせを目の前で一貫ずつ握る。15席のみなので電話（03-6204-9950）で押さえる。価格は公式に記載なし。</p>
 </article>
 <article class="plan-card">
 <span class="tag">ららぽーと豊洲</span>
-<h3>銀蔵 豊洲店</h3>
-<p>日替わりランチが充実。炙りサーモン・まぐろなどリーズナブルに楽しめる。</p>
-<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E9%8A%80%E8%94%B5+%E8%B1%8A%E6%B4%B2" target="_blank">銀蔵 豊洲</a></div>
+<h3>札幌魚河岸57番 いきいき寿司</h3>
+<p>豊洲１ SOUTH PORT 3F。11:00〜22:00（L.O. 21:30）。オーダー制の回転寿司で96席。豊洲駅側なのでバスに戻る余裕は一番大きい。予約手段と価格は公式に記載なし。</p>
 </article>
 </div>
+<p>荷物は千客万来2F（ペデストリアンデッキ付近）のコインロッカーへ。ららぽーと豊洲側は6か所あり、豊洲１ 1Fセンターポートは24時間・S400/M500/L700円。ららぽーとのクロークは館内で買った商品の当日預かりのみで、旅行荷物は預けられない。</p>
+<p>以前の候補は外した。つきじ鈴富 すし富はららぽーと豊洲の現行ショップ一覧（213件）に無く、豊洲まるり鮨と江戸辻屋は公式に座席数の記載がない。</p>
+<div class="map-btns"><a class="map-btn" href="https://www.google.com/maps/search/?api=1&amp;query=%E8%B1%8A%E6%B4%B2%E5%8D%83%E5%AE%A2%E4%B8%87%E6%9D%A5" target="_blank">豊洲千客万来</a><a class="map-btn" href="https://www.toyosu-senkyakubanrai.jp/facilities" target="_blank">千客万来 公式</a></div>
 </div>
 
 </section>
@@ -1409,7 +1424,7 @@
 <div class="checklist">
 <label class="check-item"><input data-check="live-ticket" type="checkbox"/><span><b>いれいすライブチケット（璃桜さん）</b><small>アプリまたはスクリーンショットを事前確認。入場QRが表示できる状態にしておく。</small></span></label>
 <label class="check-item"><input data-check="pixar-ticket" type="checkbox"/><span><b>ピクサーの世界展チケット</b><small>3人分。スクリーンショットまたはApple Walletに保存。</small></span></label>
-<label class="check-item"><input data-check="bus-reservation" type="checkbox"/><span><b>リムジンバス予約（羽田→ヒルトン）</b><small>連休のため事前予約必須。京阪バス公式サイトで時刻を確認のうえクレジットカードで決済。</small></span></label>
+<label class="check-item"><input data-check="bus-reservation" type="checkbox"/><span><b>リムジンバス予約（羽田→ヒルトン）</b><small>連休なので「リムジンバス予約Web」で事前購入。大人1,300円。羽田空港発は当日の自動券売機でも買える。</small></span></label>
 </div>
 <h3>アプリ・デジタル</h3>
 <div class="checklist">
