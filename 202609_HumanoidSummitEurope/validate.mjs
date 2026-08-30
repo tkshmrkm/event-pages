@@ -368,6 +368,21 @@ assert(familyEmergencySection, 'family_print.html: emergency section missing');
 assert(familyEmergencySection[0].includes('href="tel:+4930210940"'), 'family_print.html: embassy phone must be a tel: link (+49 30 210940)');
 assert(familyEmergencySection[0].includes('href="tel:+49692385730"'), 'family_print.html: consulate phone must be a tel: link (+49 69 2385730)');
 assert(!familyEmergencySection[0].includes('>地図</a>') && !familyEmergencySection[0].includes('>（地図）</a>') && !familyEmergencySection[0].includes('📍'), 'family_print.html: emergency section must not carry a separate 📍 地図 link');
+// ---------- 紙で途中に切れ目を作らない（2026-08-30） ----------
+// Chromeで実際に印刷して見つけた3か所。時差・気候は「現地の気候」の見出しだけが
+// 前ページに残り、9/11の日カードは日付と宿泊だけが前ページで中身が次ページ、
+// 緊急連絡先は4行が次ページへこぼれていた。畳める単位にavoidが要る。
+assert(/.family-section[^{]*{[^}]*break-inside:avoid/.test(sharedCss),
+  'style.css: family sections must not split across printed pages');
+assert(/.family-day-row[^{]*{[^}]*break-inside:avoid/.test(sharedCss),
+  'style.css: family day rows must not split across printed pages');
+// 日程詳細そのものには付けない。8日分は1ページに収まらないので、満たせないavoidは
+// 無視され、代わりに日カードの途中で切れる。**入れてはいけない側も検査する。**
+assert(!/.family-schedule[^{,]*{[^}]*break-inside:avoid/.test(sharedCss),
+  'style.css: .family-schedule must stay breakable between day rows (an unsatisfiable avoid is ignored, and the split lands inside a day card instead)');
+// 見出しだけが前ページの末尾に取り残されないこと。
+assert(/.family-section-head[^{]*{[^}]*break-after:avoid/.test(sharedCss),
+  'style.css: a section head must stay with the block it introduces');
 assert(!/管轄/.test(familyEmergencySection[0]), 'family_print.html: emergency section must not claim consular jurisdiction (not confirmed in the source list)');
 assert(/外務省 在外公館リスト/.test(familyEmergencySection[0]) && /令和5年5月22日付/.test(familyEmergencySection[0]) && /2026-08-15確認/.test(familyEmergencySection[0]), 'family_print.html: emergency section must cite its source and confirmation date');
 

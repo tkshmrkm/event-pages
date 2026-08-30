@@ -350,6 +350,17 @@ const familyCss = String.raw`
 @media print{
   .family-head{padding-top:0}
   .family-page .tab{padding-top:8px}
+  /* 紙で途中に切れ目を作らない（2026-08-30）。Chromeで印刷した実物を見ると、
+     3か所で割れていた。時差・気候は「現地の気候」の見出しだけが前ページに残り、
+     9/11の日カードは日付と宿泊だけが前ページ、中身が次ページ、緊急連絡先は
+     4行が次ページへこぼれていた。**畳める単位ごとにavoidを付ける。**
+     .family-scheduleには付けない。8日分で1ページに収まらないので、
+     満たせないavoidは無視され、代わりに日カードの途中で切れる。 */
+  .family-section,.family-day-row{break-inside:avoid}
+  .schedule-legend,.timezone-cards,.climate-row,.sum-place,.sum-facts,.agenda-line{break-inside:avoid}
+  /* 見出しだけが前ページの末尾に取り残されないように、次の要素と離さない。 */
+  .family-section-head,.schedule-legend{break-after:avoid}
+  .family-section-body>*,.climate-list>*{orphans:2;widows:2}
 }
 `;
 
