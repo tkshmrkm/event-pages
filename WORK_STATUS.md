@@ -1,6 +1,6 @@
 # WORK STATUS — overseas trip layout
 
-更新日: 2026-08-23
+更新日: 2026-08-30
 
 ## 文書の役割
 
@@ -47,8 +47,12 @@ PC保存までを一続きで支える。
 - mainに入っていたローカルブランチ3本は2026-08-16に削除済み。残るのは
   `main` / `claude/eb-backport-0816` / `claude/hrs-update-check-6671f7` の3本で、
   最後の1本は未マージのまま**意図的に残している**（`59f912e` はマージしない）
-- worktreeは `S:/work/github/event-pages`（main）と
-  `.claude/worktrees/hrs-5-tab-structure-16744e`（`claude/eb-backport-0816`）の2つ
+- worktreeは2つ。`S:/work/github/event-pages`（いまは `claude/hrs-schedule-discrepancy-8jaxm8`）と
+  `.claude/worktrees/hrs-5-tab-structure-16744e`（いまは `claude/hrs-fra-db-map-add-f4cc89`）。
+  **フォルダ名とブランチ名は一致しない。** 作業前に `git worktree list` で確かめる
+- **2026-08-30の作業は `claude/hrs-fra-db-map-add-f4cc89`**（`861485f` から分岐）。
+  HRSの9/8にFRA到着から空港長距離駅までの経路図（`fra_fernbahnhof_route.png`）と
+  空港公式の構内マップへのリンクを足した。未マージ、未push
 
 作業再開時は、上記を現状と思い込まず、必ず次を実行すること。
 

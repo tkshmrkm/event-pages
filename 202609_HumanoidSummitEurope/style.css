@@ -558,6 +558,10 @@ details.fold>summary::-webkit-details-marker{display:none}
 details.fold>summary::before{content:'▸';color:var(--mu);font-size:var(--f5)}
 details.fold[open]>summary::before{content:'▾'}
 details.fold>.fold-body{margin-top:4px;border-left:2px solid var(--line);padding-left:9px;color:var(--tx2);font-size:var(--f4);line-height:1.6}
+/* 折り畳みの中に置く経路図。393px幅に収めるため寸法は固定pxで持たず親幅に従わせる。
+   PCで原寸まで伸びると紙にも画面にも大きすぎるのでmax-widthで止める。 */
+.fold-body .route-map{display:block;width:100%;max-width:520px;height:auto;margin:6px 0;border:1px solid var(--line);border-radius:6px;background:#fff}
+.fold-body .route-map-link{display:block;text-decoration:none}
 .btn{min-height:44px;padding:9px 13px;font-size:13px;border-color:var(--line);color:var(--tx2)}
 .banner{font-size:14px;border-width:2px}
 /* .line-iconの定義はshared/trip-field/core.cssにある（全イベント共通）。

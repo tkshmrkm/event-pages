@@ -20,16 +20,21 @@ function assert(condition, message) {
 const localTargets = html => [...html.matchAll(/(?:href|src)="([^"#:]+)"/g)]
   .map(hit => hit[1])
   .filter(target => !target.startsWith('//') && !target.startsWith('data:'));
+// 見るのは生成物だけではない。生成物が指す同フォルダのファイル（style.css、
+// 旅程の経路図PNG）も一緒に配られる。ファイルが在る検査は手元を見ているので、
+// 追跡されていなくても通ってしまう。リンクの先を集めてから、そろえてgitに聞く。
+const shipped = new Set(files);
 for (const name of files) {
   const text = fs.readFileSync(path.join(here, name), 'utf8');
   localTargets(text).forEach(target => {
     assert(fs.existsSync(path.resolve(here, target)), `${name}: link target does not exist: ${target}`);
+    shipped.add(target);
   });
 }
 try {
-  const ignored = execFileSync('git', ['check-ignore', ...files.map(name => path.join(here, name))],
+  const ignored = execFileSync('git', ['check-ignore', ...[...shipped].map(name => path.join(here, name))],
     { encoding: 'utf8' }).trim();
-  assert(!ignored, `these generated files are ignored by git, so they never reach GitHub Pages:\n${ignored}`);
+  assert(!ignored, `these shipped files are ignored by git, so they never reach GitHub Pages:\n${ignored}`);
 } catch (error) {
   // check-ignore は「1件も無視していない」ときに終了コード1で返る。それが正常。
   if (error.status !== 1) throw error;
@@ -430,6 +435,27 @@ assert(/width:[\d.]+em/.test(lineIconRule) && /height:[\d.]+em/.test(lineIconRul
 assert((online.match(/class="line-icon line-icon-print"/g) || []).length === 3, `${onlineName}: expected the print line-icon SVG in the header button, the family-print link and the immigration link`);
 assert(online.includes('href="immigration_print.html"'), `${onlineName}: immigration print link missing`);
 assert(!online.includes('id="tab-fam"'), `${onlineName}: the unreachable family section must not come back (family_print.html is the family copy)`);
+// ---------- FRA到着から長距離駅への経路図（2026-08-30） ----------
+// 図と空港公式の構内マップは、旅程9/8のICE行の折り畳みに置く。折り畳みの外へ出ると
+// 常時表示の行が画像で埋まるので、在り処（旅程）と様式（.route-map）を対で見る。
+// PNG自体はファイルが在ることとgitに無視されていないことを、上のshippedでまとめて受ける。
+// 規則を失った画像は親の幅いっぱいへ広がるので、マークアップと寸法規則も対にする。
+const FRA_ROUTE_IMG = 'src="fra_fernbahnhof_route.png"';
+const FRA_MAP_URL = 'https://map.frankfurt-airport.com/?poi=fernbahnhof';
+for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtml]]) {
+  assert(text.includes(FRA_ROUTE_IMG), `${name}: the FRA-to-long-distance-station route diagram is missing`);
+  assert(text.includes(FRA_MAP_URL), `${name}: the official FRA concourse map link is missing`);
+  assert(text.includes('<summary>長距離駅への行き方</summary>'), `${name}: the route diagram must stay inside its fold`);
+}
+// 寸法規則の在り処は2つに分かれる。オンライン版はstyle.cssを読み、机上用印刷版は
+// 同じ中身を<style>へ埋め込む。埋め込みが抜けると画像だけ親の幅いっぱいへ広がる。
+const routeMapRule = /.fold-body .route-map{[^}]*max-width/;
+assert(routeMapRule.test(sharedCss), 'style.css: .route-map sizing rule missing');
+assert(routeMapRule.test(offlineHtml), 'desk_print.html: .route-map sizing rule missing from the embedded CSS');
+// 家族向けと入国審査用は旅程を持たない。入国審査用は英語だけなので図の説明文も入らない。
+for (const [name, text] of [['family_print.html', family], ['immigration_print.html', immiHtml]]) {
+  assert(!text.includes('fra_fernbahnhof_route.png'), `${name}: the itinerary route diagram does not belong here`);
+}
 
 // ---------- 予定の状態は5つだけ ----------
 // 未検討／候補あり／仮決め／確定／当日判断。これ以外の語を状態の札に使わない。
@@ -499,7 +525,9 @@ for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtm
 
 // 2026-08-19に21→22。9/11午後のエスリンゲン観光を足し、その見どころと
 // 未確認事項を折り畳み（見どころと未確認事項）へ入れたぶん。
-const FOLD_COUNT = 22;
+// 2026-08-30に22→23。9/8のFRA到着から長距離駅までの経路図と空港公式の構内マップを
+// 折り畳み（長距離駅への行き方）へ入れたぶん。図は常時表示にすると行が画像で埋まる。
+const FOLD_COUNT = 23;
 for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtml]]) {
   // 机上用印刷版は全<details>を強制的にopenへ書き換えるため、class="fold"の前に
   // open属性が挿入される（<details open class="fold">）。属性順に依存しない数え方にする。
