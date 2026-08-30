@@ -3,7 +3,7 @@ VERSION:2.0
 PRODID:-//event-pages//tokyo-family-trip 2026-09//JA
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-X-WR-CALNAME:2026年9月 東京・千葉 家族旅行 移動
+X-WR-CALNAME:2026年9月 東京・千葉 家族旅行
 X-WR-TIMEZONE:Asia/Tokyo
 BEGIN:VTIMEZONE
 TZID:Asia/Tokyo
@@ -14,6 +14,22 @@ TZOFFSETTO:+0900
 TZNAME:JST
 END:STANDARD
 END:VTIMEZONE
+BEGIN:VEVENT
+UID:limousine-kyoto-itm-20260922@tokyo-family-trip.event-pages
+DTSTAMP:20260830T000000Z
+DTSTART;TZID=Asia/Tokyo:20260922T083500
+DTEND;TZID=Asia/Tokyo:20260922T093000
+SUMMARY:リムジンバス 京都駅八条口 → 伊丹空港
+LOCATION:京都駅八条口 K1のりば
+DESCRIPTION:往路 · 9月22日（火・休）· NH022への接続\n八条
+ 口 08:35発 → 伊丹空港 南ターミナル 09:30着 / 所要50〜55
+ 分\n阪急観光バス / 大人1\,500円・小児750円\n予約制では
+ なく先着順。のりばへは08:25頃\n中書島07:47の京阪 → 丹
+ 波橋 → 近鉄で京都08:09着\n乗り逃したら次は09:00発（09:
+ 55着・出発1時間5分前）
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
 BEGIN:VEVENT
 UID:nh022-20260922@tokyo-family-trip.event-pages
 DTSTAMP:20260830T000000Z
@@ -29,30 +45,45 @@ STATUS:CONFIRMED
 TRANSP:OPAQUE
 END:VEVENT
 BEGIN:VEVENT
-UID:jal131-20260923@tokyo-family-trip.event-pages
-DTSTAMP:20260830T000000Z
-DTSTART;TZID=Asia/Tokyo:20260923T173500
-DTEND;TZID=Asia/Tokyo:20260923T184000
-SUMMARY:JAL131 羽田(T1) → 伊丹(北)
-LOCATION:羽田空港 第1ターミナル
-DESCRIPTION:復路 · 9月23日（水・祝）\n羽田(T1) 17:35発 → 伊
- 丹(北) 18:40着 / 所要1時間05分\n機材 73H / 普通席\n座席 29C
-  / 29B / 29A\n搭乗 たけしさん・沙織さん・璃桜さん 計3名
-STATUS:CONFIRMED
-TRANSP:OPAQUE
-END:VEVENT
-BEGIN:VEVENT
 UID:limousine-hnd-hilton-20260922@tokyo-family-trip.event-pages
 DTSTAMP:20260830T000000Z
 DTSTART;TZID=Asia/Tokyo:20260922T133000
 DTEND;TZID=Asia/Tokyo:20260922T143000
 SUMMARY:リムジンバス 羽田(T2) → ヒルトン東京ベイ
-LOCATION:羽田空港 第2ターミナル 6番のりば
+LOCATION:羽田空港 第2ターミナル 1階 6番のりば
 DESCRIPTION:往路 · 9月22日（火・休）· NH022からの接続\n羽
  田(T2) 13:30発 → ヒルトン東京ベイ 14:30着 / 所要1時間\n
  便30 東京空港交通 / 東京ディズニーリゾートエリア線\n
  大人1\,300円 · まだ購入していない\n遅れたら13:45発・14:
  00発も同じ経路
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+UID:ireisu-live-20260922@tokyo-family-trip.event-pages
+DTSTAMP:20260830T000000Z
+DTSTART;TZID=Asia/Tokyo:20260922T170000
+DTEND;TZID=Asia/Tokyo:20260922T200000
+SUMMARY:いれいすライブ（璃桜さん）
+LOCATION:LaLa arena TOKYO-BAY（南船橋）
+DESCRIPTION:9月22日（火・休）17:00開演\n会場入りは15:45頃。
+ 入場列と合流場所を先に決めておく\nたけしさん・沙織
+ さんはららぽーとTOKYO-BAYで待機\n終演後20:00に合流 → 
+ 南船橋20:30 → ホテル21:00頃
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+UID:pixar-20260923@tokyo-family-trip.event-pages
+DTSTAMP:20260830T000000Z
+DTSTART;TZID=Asia/Tokyo:20260923T103000
+DTEND;TZID=Asia/Tokyo:20260923T123000
+SUMMARY:ピクサーの世界展
+LOCATION:CREVIA BASE Tokyo（豊洲・市場前駅から徒歩3分）
+DESCRIPTION:9月23日（水・祝）\n日時指定券。記載の時刻に
+ 入場する\n早く着いても前倒しでは入れない\n市場前駅1
+ 0:01着から徒歩3分\nチケットは3人分。スクリーンショッ
+ トかApple Walletに保存
 STATUS:CONFIRMED
 TRANSP:OPAQUE
 END:VEVENT
@@ -67,6 +98,19 @@ DESCRIPTION:復路 · 9月23日（水・祝）· JAL131への接続\n豊洲
  駅 15:15発 → 羽田空港 第1ターミナル 15:40着 / 所要25分\n
  東京空港交通 リムジンバス 羽田空港線\n合計3名 · 購
  入済み
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+END:VEVENT
+BEGIN:VEVENT
+UID:jal131-20260923@tokyo-family-trip.event-pages
+DTSTAMP:20260830T000000Z
+DTSTART;TZID=Asia/Tokyo:20260923T173500
+DTEND;TZID=Asia/Tokyo:20260923T184000
+SUMMARY:JAL131 羽田(T1) → 伊丹(北)
+LOCATION:羽田空港 第1ターミナル
+DESCRIPTION:復路 · 9月23日（水・祝）\n羽田(T1) 17:35発 → 伊
+ 丹(北) 18:40着 / 所要1時間05分\n機材 73H / 普通席\n座席 29C
+  / 29B / 29A\n搭乗 たけしさん・沙織さん・璃桜さん 計3名
 STATUS:CONFIRMED
 TRANSP:OPAQUE
 END:VEVENT

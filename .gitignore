@@ -16,9 +16,9 @@
 **/*.BAK
 **/*.ics
 # ただし 202609_tokyo-family-trip/flights.ics は index.html からリンクしている
-# 配布物。中身は index.html が既に持っている便名・座席・氏名だけで、新しく
-# 出す情報はない。無視されたままだと本体へ移らず、リンクが404になる。
-!**/flights.ics
+# 配布物。無視されたままだと本体へ移らず、リンクが404になる。
+# 他フォルダの .ics まで巻き込まないよう、このファイルだけを指す。
+!202609_tokyo-family-trip/flights.ics
 **/*.csv
 **/*.gs
 **/ticket_text*.txt
