@@ -52,9 +52,15 @@ PC保存までを一続きで支える。
   そちらを `main` へ戻す
 - `claude/hrs-update-check-6671f7` はもう無い（以前ここに「意図的に残している」と
   書いてあったが、ローカルには存在しない）
-- worktreeは2つ。`S:/work/github/event-pages`（`claude/hrs-schedule-discrepancy-8jaxm8`）と
-  `.claude/worktrees/hrs-5-tab-structure-16744e`（`main`）。
+- worktreeは3つ。`S:/work/github/event-pages`（`claude/hrs-schedule-discrepancy-8jaxm8`）、
+  `.claude/worktrees/hrs-5-tab-structure-16744e`（`main`）、
+  `202609_tokyo-family-trip/.claude/worktrees/flight-info-to-ics-122ccd`
+  （`claude/flight-info-to-ics-122ccd`、`861485f` から分岐）。
   **フォルダ名とブランチ名は一致しない。** 作業前に `git worktree list` で確かめる
+- **「main 1本」はこのセッションの作業線の話。** 他のセッションが動いている間は、
+  そちらは自分のブランチを持つ。mainを持つworktreeは1つだけにする（gitが同じブランチを
+  2つのworktreeで開けない）
+- リモートには `origin/claude/physical-ai-overview-update-0jzd34` もある（ローカルには無い）
 
 作業再開時は、上記を現状と思い込まず、必ず次を実行すること。
 
