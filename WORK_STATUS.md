@@ -36,23 +36,25 @@ PC保存までを一続きで支える。
 
 ## 現在のGit状態
 
-- **2026-08-23〜24の作業は `claude/hrs-schedule-discrepancy-8jaxm8`**（mainから分岐、
-  PR #2、draft）。HRSの概要の直しから始めて、規約の書き直し、EBのビルド修復、
-  EBの概要（人ごとに1本＋共通の印、区分の2軸、区間行、時刻順）まで含む。
-  触ったのは両イベントのフォルダ、`shared/trip-field/README.md`、規定文書3件
-- HRSの5タブ化は `main` へマージしてpush済み
-- **EBへの戻しは `claude/eb-backport-0816` にコミット8件、push済み。mainへは未マージ。**
-  分岐元はmain。生成物はコミット済みのものが最新ビルドとバイト一致することを確認済み
-- `claude/hrs-5-tab-structure-16744e`（worktree）でHRSの5タブ化を実施
-- mainに入っていたローカルブランチ3本は2026-08-16に削除済み。残るのは
-  `main` / `claude/eb-backport-0816` / `claude/hrs-update-check-6671f7` の3本で、
-  最後の1本は未マージのまま**意図的に残している**（`59f912e` はマージしない）
-- worktreeは2つ。`S:/work/github/event-pages`（いまは `claude/hrs-schedule-discrepancy-8jaxm8`）と
-  `.claude/worktrees/hrs-5-tab-structure-16744e`（いまは `claude/hrs-fra-db-map-add-f4cc89`）。
+**2026-08-30から `main` 1本で進める**（ユーザーの判断）。作業ごとのブランチは作らない。
+これまで分けていたのは、Claude CodeとCodexが同じcheckoutを共有しないためだったが、
+`861485f` から分けた `claude/hrs-fra-db-map-add-f4cc89` は分岐点がmainの先端のままで、
+分けたことで得た隔離が無かった。**並行作業を再開するときだけ分ける。**
+
+- `main` は `1cbe9fd`。9/8のFRA到着から空港長距離駅までの経路図
+  （`fra_fernbahnhof_route.png`）と空港公式の構内マップ・SkyLineのリンクまで入っている。push済み
+- `claude/hrs-fra-db-map-add-f4cc89` はmainへfast-forwardで畳んで、ローカルとリモートの
+  両方から削除した
+- **`claude/eb-backport-0816` は未マージのまま残る（mainとの差は2コミット）。消さない。**
+  以前ここに「コミット8件」と書いてあったのは、mainへ入る前の数え方
+- `claude/hrs-schedule-discrepancy-8jaxm8` はmainへマージ済み（`861485f`）。ただし
+  `S:/work/github/event-pages` のcheckoutがこのブランチを開いたままなので、消す前に
+  そちらを `main` へ戻す
+- `claude/hrs-update-check-6671f7` はもう無い（以前ここに「意図的に残している」と
+  書いてあったが、ローカルには存在しない）
+- worktreeは2つ。`S:/work/github/event-pages`（`claude/hrs-schedule-discrepancy-8jaxm8`）と
+  `.claude/worktrees/hrs-5-tab-structure-16744e`（`main`）。
   **フォルダ名とブランチ名は一致しない。** 作業前に `git worktree list` で確かめる
-- **2026-08-30の作業は `claude/hrs-fra-db-map-add-f4cc89`**（`861485f` から分岐）。
-  HRSの9/8にFRA到着から空港長距離駅までの経路図（`fra_fernbahnhof_route.png`）と
-  空港公式の構内マップへのリンクを足した。未マージ、未push
 
 作業再開時は、上記を現状と思い込まず、必ず次を実行すること。
 
