@@ -446,6 +446,13 @@ for (const [name, text] of [[onlineName, online], ['desk_print.html', offlineHtm
   assert(text.includes(FRA_ROUTE_IMG), `${name}: the FRA-to-long-distance-station route diagram is missing`);
   assert(text.includes(FRA_MAP_URL), `${name}: the official FRA concourse map link is missing`);
   assert(text.includes('<summary>長距離駅への行き方</summary>'), `${name}: the route diagram must stay inside its fold`);
+  // 図はTerminal 1到着から描いてある。Finnairが着くのはTerminal 3（空港公式のAirlines A-Z、
+  // 2026-08-30閲覧）なので、SkyLineでTerminal 1へ移る一言が抜けると、図だけが残って
+  // 「着いた場所から歩き出せる」と読める。図とその一言を対で見る。
+  const routeFold = text.slice(text.indexOf('<summary>長距離駅への行き方</summary>'));
+  const routeBody = routeFold.slice(0, routeFold.indexOf('</details>'));
+  assert(routeBody.includes('SkyLine') && routeBody.includes('Terminal 3'),
+    `${name}: the route diagram starts at Terminal 1, so the fold must say Finnair lands at Terminal 3 and the SkyLine bridges the two`);
 }
 // 寸法規則の在り処は2つに分かれる。オンライン版はstyle.cssを読み、机上用印刷版は
 // 同じ中身を<style>へ埋め込む。埋め込みが抜けると画像だけ親の幅いっぱいへ広がる。
