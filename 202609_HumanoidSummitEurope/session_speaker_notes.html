@@ -61,6 +61,12 @@
   .facility dd{margin:0; overflow-wrap:anywhere}
   .facility ul{margin:8px 0 0; padding-left:18px; font-size:13.5px}
   .facility h4{font-size:12.5px; color:var(--mu); margin:12px 0 4px; font-weight:700}
+  .person{border-top:1px solid var(--line); padding:10px 0}
+  .person:first-of-type{border-top:0; padding-top:2px}
+  .p-name{font-weight:700; font-size:14px}
+  .p-when{font-size:11px; font-weight:700; color:var(--accent); background:var(--accent-bg); border:1px solid var(--accent-line); border-radius:999px; padding:1px 6px; margin-left:6px; vertical-align:1px}
+  .p-co{color:var(--mu); font-size:12.5px; margin-top:1px}
+  .p-bio{margin:5px 0 0; font-size:13px; line-height:1.65}
   .src{font-size:12px; color:var(--mu2); margin-top:10px; padding-top:8px; border-top:1px dashed var(--line)}
   .src a{color:var(--mu)}
   footer{margin-top:32px; padding-top:12px; border-top:1px solid var(--line); font-size:12px; color:var(--mu2)}
@@ -92,6 +98,7 @@
   <nav class="daynav" id="top" aria-label="日付ジャンプ">
     <a href="#day1">Day 1（9/9）</a>
     <a href="#day2">Day 2（9/10）</a>
+    <a href="#people">登壇者の紹介</a>
     <a href="#exhibit">展示・出展社</a>
     <a href="#day3">Day 3（9/11）</a>
   </nav>
@@ -400,6 +407,53 @@
     </tbody>
   </table>
   <p class="src">講演8:45〜17:10。休憩10:25・15:25、昼休み12:10〜13:30。</p>
+  <p class="back-to-nav"><a href="#top">▲ ナビへ</a></p>
+
+  <h2 id="people">登壇者の紹介（公式サイト掲載の8名）</h2>
+  <div class="facility">
+    <div class="meta">出典：<a href="https://acgrobot.com/" target="_blank" rel="noopener">acgrobot.com</a> トップページの Speaker Lineup（2026-09-05 閲覧）。原文は英語で、下は要約。紹介文が載っているのはこの8名だけで、他の登壇者は氏名・肩書・所属のみ。</div>
+    <div class="person">
+      <div class="p-name">Jürgen Müller<span class="p-when">08:45 Day 1</span></div>
+      <div class="p-co">CEO, Robert Bosch Robotics</div>
+      <p class="p-bio">自動運転・運転支援の経験を持ち、Robert Bosch Robotics GmbHのCEOとBoschのヒューマノイド事業オーナーを兼ねる。子会社のP&amp;Lを持ち、Physical AI・知覚・制御を含む次世代ヒューマノイドの製品と技術ロードマップを引く。初期の顧客案件から量産導入までの事業化が担当。</p>
+    </div>
+    <div class="person">
+      <div class="p-name">Christian Souche<span class="p-when">09:10 Day 1</span></div>
+      <div class="p-co">MD, Head of Robotics Innovation, Accenture</div>
+      <p class="p-bio">Accenture Innovationでロボティクスを統括。産業用途に限らず小売・消費財・銀行・公益・スマートシティ向けの次世代ロボットを構想し投入する。新規サービスや製品を立ち上げてスケールさせるR&amp;Dマネジメントの経験が長い。</p>
+    </div>
+    <div class="person">
+      <div class="p-name">Werner Kraus<span class="p-when">11:40 Day 1</span></div>
+      <div class="p-co">Head of Research Division Automation and Robotics, Fraunhofer IPA</div>
+      <p class="p-bio">ロボティクスと自動化で15年以上。知的自動化、ロボットシステムのインテグレーション、応用開発が専門。Fraunhofer IPAのロボティクス部門長として、製造・物流・サービス分野でAI活用ロボットの研究と産業実装を橋渡しする。<strong>9/11の訪問先の1つ</strong>。</p>
+    </div>
+    <div class="person">
+      <div class="p-name">Ercan Gündüz<span class="p-when">14:20 Day 1</span></div>
+      <div class="p-co">Head of Production Engineering &amp; Automation Department, Arçelik-LG</div>
+      <p class="p-bio">Koç GroupとBekoで24年。製造・産業自動化・デジタル変革の戦略プログラムを主導してきた。現在はトルコで先行するヒューマノイドの実製造ライン投入を率いる。パイロットを量産解へ移すことが焦点で、AI・デジタル製造・工場運用との統合が主題。</p>
+    </div>
+    <div class="person">
+      <div class="p-name">André Scholz<span class="p-when">14:55 Day 1 ／ 11:45 Day 2（パネル）</span></div>
+      <div class="p-co">Head of Innovation Department Autonomous Factory, Siemens</div>
+      <p class="p-bio">Siemens AGのFactory Automation内で「Autonomous Factory」部門を率いる。デジタル化と柔軟性の向上で自律工場を実現するモジュール型ソフトウェア部品が担当領域。ロボティクスにおけるAIと生産システムの変革が専門。Helmut Schmidt大学（ハンブルク）で自動化工学の博士。</p>
+    </div>
+    <div class="person">
+      <div class="p-name">Michael Gienger<span class="p-when">16:50 Day 1</span></div>
+      <div class="p-co">Chief Scientist, Honda Research Institute Europe</div>
+      <p class="p-bio">ロボティクス、メカトロニクス、ヒューマノイド制御の研究が長い。二足歩行、人とロボットの相互作用、認知ロボティクスが専門。Honda Research Institute Europe GmbHのChief Scientistとして知的ロボティクスの研究開発を率いる。</p>
+    </div>
+    <div class="person">
+      <div class="p-name">Christian Gräff<span class="p-when">09:35 Day 2</span></div>
+      <div class="p-co">Managing Director, Smart Living &amp; Health Center e.V.</div>
+      <p class="p-bio">高齢者ケアへのヒューマノイド導入が主題。ドイツ赤十字やKorianを含む代表団を上海のヒューマノイド・インキュベーターへ率いて商用適用を調査した。論文「Humanoid Robots, A Future Health Care Service?」に寄与し、EVEなどのロボットをリハビリや在宅支援で検討している。</p>
+    </div>
+    <div class="person">
+      <div class="p-name">Francesco Ferro<span class="p-when">11:20 Day 1</span></div>
+      <div class="p-co">CEO, PAL Robotics</div>
+      <p class="p-bio">サービスロボットで20年以上。ヒューマノイドとサービスロボットの製品化、実導入が焦点。PAL RoboticsのCEOとして研究・小売・医療向けの展開を率いる。2024年に European CEO のRobotics部門で CEO of the Year に選ばれた。</p>
+    </div>
+    <p class="src"><strong>Fabio Puglia（President and CTO, Oversonic Robotics）の欄に出ている紹介文は、Michael Gienger のものと一字一句同じ。</strong>サイト側の貼り違えとみられるので、Puglia の紹介はここに載せていない。</p>
+  </div>
   <p class="back-to-nav"><a href="#top">▲ ナビへ</a></p>
 
   <h2 id="exhibit">展示・出展社</h2>
