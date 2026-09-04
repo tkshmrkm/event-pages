@@ -2140,9 +2140,10 @@ function buildOverviewSection(source, undecidedBanner) {
         <div><b>規模</b><span>参加1,000名超・500社超・出展40社超の見込み（主催者発表）</span></div>
         <div><b>前回</b><span>HRS Europe 2025（ベルリン）参加500名超。今回がシュトゥットガルトへの移転初回</span></div>
       </div>
-      <!-- 「主要出展社」から「主要登壇企業」へ改称。出展社の名前は主催者が出しておらず
-           （40+社という数だけ）、この7社は公式アジェンダの登壇企業なので、出展社と
-           呼ぶ根拠がなかった。並びは旅程タブの lane-note と同じにする。 -->
+      <!-- ここに並ぶ7社は公式アジェンダPDFの登壇企業で、出展社ではない。出展社の一覧は
+           acgrobot.com のスポンサーページにあり、そちらには Google DeepMind のように
+           登壇しない企業も入る。両者を混ぜないため呼び名を分けている。7社の選定は知名度で、
+           ユーザーが確定した。並びは旅程タブの lane-note と同じにし、2箇所は対で直す。 -->
       <div>${lineIconHtml('star')}主要登壇企業：Boston Dynamics・Bosch Robotics・Siemens・Porsche Engineering・Honda Research Institute Europe・Unitree Robotics・Fraunhofer IPA</div>
       <details class="fold"><summary>数字の出どころ</summary><div class="fold-body">規模の3つと前回の参加者数は主催者の公表値で、第三者による検証はされていない。参加1,000名超・500社超は開催前の見込み、前回500名超は主催者が実績として書いているもの。登壇者数は公式サイトの同一ページに「30+」と「40」の2つが載っていて判断できないため、ここには出していない。出典は<a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">humanoidrobotssummit.com</a>と<a href="https://acgrobot.com/" target="_blank" rel="noopener">acgrobot.com</a>（2026-08-16 閲覧）。</div></details>
       <div class="ov-more no-print"><button class="btn" data-goto="venue">${lineIconHtml('book')}セッション表と当日メモへ</button></div>
