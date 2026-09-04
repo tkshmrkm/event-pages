@@ -859,7 +859,7 @@ const FOLD_NOTES = [
   { lead: '入国審査はHELで完了', summary: '朝食の調達' },
   { lead: '9:20着から約90分あり', summary: '乗る便の判断' },
   { lead: '・Markthalle Stuttgart', summary: 'ランチ候補' },
-  { lead: 'セッション一覧（全11項目', summary: '会期の内訳' },
+  { lead: 'セッション一覧（全19項目', summary: '会期の内訳' },
   { lead: 'Liederhalle前からチャーターバスで出発', summary: '訪問の詳細' },
   { lead: 'Universität駅からS1直通で乗り換えなし', visible: 'Universität駅からS1直通で乗り換えなし', summary: '見どころと未確認事項' },
   { lead: 'ワンワールド便。JAL/ワンワールドサファイア', summary: 'ラウンジの利用資格' },
@@ -879,7 +879,7 @@ const FOLD_NOTES = [
   { tag: 'div', lead: '大聖堂は駅の目の前なので', summary: 'ケルンでの回り方' },
   { tag: 'div', lead: 'Xは往復ICEの遅延が', summary: '余裕の取り方' },
   { lead: 'ラウンジや買物は予定に入れず', summary: '空港での過ごし方' },
-  { lead: 'セッション一覧（全13項目）', summary: '会期の内訳' },
+  { lead: 'セッション一覧（全17項目）', summary: '会期の内訳' },
 ];
 
 // ---------- 予定の状態を5つにそろえる ----------
@@ -1795,10 +1795,10 @@ const FAMILY_DAYS = [
     ['夕方〜夜','stay','チェックイン','Maritim Stuttgartにチェックイン'],
   ], stays:[['全員','Maritim Stuttgart']] },
   { date:'9/9', dow:'水', events:[
-    ['9:00〜17:00','work','仕事','HRS Europe 2026 Day 1（Liederhalle）'],
+    ['8:45〜18:00','work','仕事','HRS Europe 2026 Day 1（Liederhalle）'],
   ], stays:[['全員','Maritim Stuttgart']] },
   { date:'9/10', dow:'木', events:[
-    ['9:00〜17:00','work','仕事','HRS Europe 2026 Day 2（Liederhalle）'],
+    ['8:45〜17:10','work','仕事','HRS Europe 2026 Day 2（Liederhalle）'],
   ], stays:[['全員','Maritim Stuttgart']] },
   { date:'9/11', dow:'金', events:[
     ['8:30〜12:00','work','仕事','HRS Europe 2026 Day 3：企業訪問（Fraunhofer IPA・ARENA2036）。Liederhalle前からチャーターバスで出発、午後は自由行動'],
@@ -2024,11 +2024,11 @@ function buildOverviewSection(source, undecidedBanner) {
     '9/7（月）〜9/14（月）｜2名｜シュトゥットガルト・フランクフルト',
     'Liederhalle', 'Berliner Platz 1-3', 'ホテルから徒歩約3分',
     '9/9・9/10 は講演＋展示（40+社）／9/11 は近郊企業訪問',
-    'Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA',
+    'Boston Dynamics・Bosch Robotics・Siemens・Porsche Engineering・Honda Research Institute Europe・Unitree Robotics・Fraunhofer IPA',
     'Maritim Stuttgart', 'Best Western Hotel Airport Frankfurt',
     // 各日のテーマ。会場タブの日別プレースホルダーが持っている文字列をそのまま使う。
-    '政策・市場・量産・Embodied AI・モーター技術',
-    '医療応用・センサー・GDPR・フレキシブル生産ライン',
+    '産業導入・自動車製造・量産化・データ収集・ロボデモ',
+    'サイバー安全・機能安全・センシング・Physical AI・量産エコシステム',
     '企業訪問（Fraunhofer IPA・ARENA2036、8:30〜12:00）',
   ];
   overviewFacts.forEach(fact => {
@@ -2131,8 +2131,8 @@ function buildOverviewSection(source, undecidedBanner) {
     <div class="bd small" style="display:grid;gap:7px">
       <div>ヒューマノイドの国際会議。9/9〜9/11の3日間で、Day 1・Day 2に全${d1 + d2}項目と展示40+社、最終日は企業訪問</div>
       <div class="ov-facility">
-        <div><b>Day 1</b><span>9/9（水）全${d1}項目 — 政策・市場・量産・Embodied AI・モーター技術</span></div>
-        <div><b>Day 2</b><span>9/10（木）全${d2}セッション — 医療応用・センサー・GDPR・フレキシブル生産ライン</span></div>
+        <div><b>Day 1</b><span>9/9（水）全${d1}項目 — 産業導入・自動車製造・量産化・データ収集・ロボデモ</span></div>
+        <div><b>Day 2</b><span>9/10（木）全${d2}項目 — サイバー安全・機能安全・センシング・Physical AI・量産エコシステム</span></div>
         <div><b>Day 3</b><span>9/11（金）企業訪問（Fraunhofer IPA・ARENA2036、8:30〜12:00）</span></div>
       </div>
       <div class="ov-facility">
@@ -2140,7 +2140,7 @@ function buildOverviewSection(source, undecidedBanner) {
         <div><b>規模</b><span>参加1,000名超・500社超・出展40社超の見込み（主催者発表）</span></div>
         <div><b>前回</b><span>HRS Europe 2025（ベルリン）参加500名超。今回がシュトゥットガルトへの移転初回</span></div>
       </div>
-      <div>${lineIconHtml('star')}主要出展社：Google DeepMind・NVIDIA・BMW Group・Boston Dynamics・Unitree Robotics・Siemens・Fraunhofer IPA</div>
+      <div>${lineIconHtml('star')}主要登壇企業：Boston Dynamics・Bosch Robotics・Siemens・Porsche Engineering・Honda Research Institute Europe・Unitree Robotics・Fraunhofer IPA</div>
       <details class="fold"><summary>数字の出どころ</summary><div class="fold-body">規模の3つと前回の参加者数は主催者の公表値で、第三者による検証はされていない。参加1,000名超・500社超は開催前の見込み、前回500名超は主催者が実績として書いているもの。登壇者数は公式サイトの同一ページに「30+」と「40」の2つが載っていて判断できないため、ここには出していない。出典は<a href="https://humanoidrobotssummit.com/" target="_blank" rel="noopener">humanoidrobotssummit.com</a>と<a href="https://acgrobot.com/" target="_blank" rel="noopener">acgrobot.com</a>（2026-08-16 閲覧）。</div></details>
       <div class="ov-more no-print"><button class="btn" data-goto="venue">${lineIconHtml('book')}セッション表と当日メモへ</button></div>
     </div>
