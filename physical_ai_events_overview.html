@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Physical AI関連 国際会議・展示会 俯瞰資料 2026–2028</title>
+<style>
+:root {
+  --bg:#f6f8fb; --panel:#fff; --ink:#172033; --muted:#64748b; --line:#d8e0ec;
+  --blue:#1d4ed8; --green:#047857; --orange:#b45309; --purple:#6d28d9; --rose:#be123c;
+}
+* { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP","Yu Gothic",Meiryo,sans-serif; line-height:1.62; }
+.wrap { max-width:1680px; margin:0 auto; padding:30px 22px 56px; }
+header { background:linear-gradient(135deg,#0f172a,#1e3a8a); color:#fff; padding:32px 34px; border-radius:22px; margin-bottom:22px; box-shadow:0 12px 28px rgba(15,23,42,.18); }
+h1 { margin:0 0 8px; font-size:30px; letter-spacing:.02em; }
+.subtitle { margin:0; color:#dbeafe; font-size:15px; }
+.meta { margin-top:14px; color:#bfdbfe; font-size:13px; }
+.section { background:var(--panel); border:1px solid var(--line); border-radius:18px; box-shadow:0 6px 18px rgba(15,23,42,.05); padding:22px; margin-top:18px; }
+h2 { margin:0 0 14px; font-size:21px; }
+.message { border-left:5px solid var(--blue); background:#eff6ff; padding:14px 16px; border-radius:12px; margin:12px 0; }
+.note { border-left:5px solid var(--orange); background:#fffbeb; padding:14px 16px; border-radius:12px; margin:12px 0; }
+table { width:100%; border-collapse:separate; border-spacing:0; border:1px solid var(--line); border-radius:14px; overflow:hidden; background:#fff; font-size:11.6px; }
+th { background:#f1f5f9; color:#334155; text-align:left; padding:10px; border-bottom:1px solid var(--line); white-space:nowrap; }
+td { padding:10px; border-bottom:1px solid var(--line); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+.group { display:inline-block; color:#fff; border-radius:999px; padding:3px 9px; font-weight:700; font-size:11.5px; white-space:nowrap; }
+.core { background:var(--blue); } .industry { background:var(--green); } .implementation { background:var(--orange); } .human { background:var(--purple); } .foresight { background:var(--rose); }
+.badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11.2px; font-weight:700; white-space:nowrap; }
+.plan { background:#dcfce7; color:#166534; } .done { background:#dbeafe; color:#1e40af; } .consider { background:#fef3c7; color:#92400e; } .no { background:#f1f5f9; color:#475569; } .track { background:#e0f2fe; color:#075985; } .neutral { background:#f1f5f9; color:#475569; }
+.small { color:var(--muted); font-size:11.2px; }
+.grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; margin-top:16px; }
+.card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:14px; }
+.card h3 { margin:0 0 6px; font-size:15px; } .card p { margin:0; color:var(--muted); font-size:12.5px; }
+.sort-controls { display:grid; grid-template-columns: 1.2fr .9fr .9fr 1fr 1fr 1fr; gap:10px; margin:14px 0 12px; }
+.sort-controls input, .sort-controls select { width:100%; border:1px solid var(--line); border-radius:10px; padding:9px 10px; font-size:13px; background:#fff; }
+.status-filter, .year-filter { grid-column:1 / -1; display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:0; padding:9px 12px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+.status-filter legend, .year-filter legend { padding:0 5px; color:#475569; font-size:12px; font-weight:700; }
+.status-options, .year-options { display:flex; flex-wrap:wrap; gap:7px 12px; }
+.status-check, .year-check { display:inline-flex; align-items:center; gap:5px; cursor:pointer; color:#334155; font-size:12px; white-space:nowrap; }
+.status-check input, .year-check input { width:15px; height:15px; margin:0; padding:0; accent-color:var(--blue); }
+.status-check:has(input:checked), .year-check:has(input:checked) { color:#0f172a; font-weight:700; }
+th.sortable { cursor:pointer; user-select:none; } th.sortable::after { content:" ⇅"; color:#94a3b8; font-size:10px; }
+.counter { color:var(--muted); font-size:12.5px; margin:6px 0 10px; }
+pre { background:#0f172a; color:#e2e8f0; border-radius:14px; padding:18px; white-space:pre-wrap; font-size:12.5px; line-height:1.55; }
+@media print { body { background:#fff; } .wrap { max-width:none; padding:10mm; } header,.section { box-shadow:none; } table { font-size:9.2px; } .sort-controls { display:none; } }
+@media (max-width:1050px) { .grid { grid-template-columns:1fr 1fr; } .sort-controls { grid-template-columns:1fr; } table { font-size:11px; } }
+
+.subsection { margin-top:18px; }
+.subsection h3 { margin:0 0 6px; font-size:17px; color:#0f172a; }
+.split-view { border-top:1px solid var(--line); padding-top:16px; }
+.split-table { margin-top:10px; }
+.split-table th, .split-table td { font-size:10.8px; }
+
+/* 3色分類: 学会・展示会・技術イベント */
+tr.row-conference td { background:#eff6ff; }
+tr.row-exhibition td { background:#ecfdf5; }
+tr.row-tech td { background:#fff7ed; }
+tr.row-conference:hover td { background:#dbeafe; }
+tr.row-exhibition:hover td { background:#d1fae5; }
+tr.row-tech:hover td { background:#ffedd5; }
+.legend { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 14px; }
+.legend-item { display:inline-block; border-radius:999px; padding:5px 11px; font-size:12px; font-weight:700; border:1px solid var(--line); }
+.legend-conference { background:#eff6ff; color:#1e40af; }
+.legend-exhibition { background:#ecfdf5; color:#047857; }
+.legend-tech { background:#fff7ed; color:#b45309; }
+
+/* 3色分類は行の背景色。参加状況バッジのグレーは不参加のステータス表示。 */
+tr.row-conference td { background:#eff6ff !important; }
+tr.row-exhibition td { background:#ecfdf5 !important; }
+tr.row-tech td { background:#fff7ed !important; }
+tr.row-conference:hover td { background:#dbeafe !important; }
+tr.row-exhibition:hover td { background:#d1fae5 !important; }
+tr.row-tech:hover td { background:#ffedd5 !important; }
+
+/* 3分類は行全体ではなく種別欄ラベルで表示 */
+tr.row-conference td, tr.row-exhibition td, tr.row-tech td,
+tr.row-conference:hover td, tr.row-exhibition:hover td, tr.row-tech:hover td {
+  background:inherit !important;
+}
+.type-pill {
+  display:inline-block;
+  border-radius:999px;
+  padding:3px 8px;
+  font-size:11px;
+  font-weight:700;
+  white-space:nowrap;
+  border:1px solid var(--line);
+}
+.type-conference { background:#eff6ff; color:#1e40af; border-color:#bfdbfe; }
+.type-exhibition { background:#ecfdf5; color:#047857; border-color:#bbf7d0; }
+.type-tech { background:#fff7ed; color:#b45309; border-color:#fed7aa; }
+
+/* 部門予算化候補アイコン */
+.budget-icon {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:18px;
+  height:18px;
+  margin-right:5px;
+  border-radius:999px;
+  background:#fef3c7;
+  color:#92400e;
+  font-size:12px;
+  font-weight:700;
+  vertical-align:middle;
+  border:1px solid #fcd34d;
+}
+.budget-legend {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+  margin:10px 0 12px;
+  padding:8px 10px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:#fffbeb;
+  color:#78350f;
+  font-size:12px;
+}
+
+/* 参加状況バッジ色の統一 */
+.badge.done { background:#dcfce7 !important; color:#166534 !important; border:1px solid #86efac !important; }
+.badge.planned { background:#dbeafe !important; color:#1d4ed8 !important; border:1px solid #93c5fd !important; }
+.badge.consider { background:#fef3c7 !important; color:#92400e !important; border:1px solid #fcd34d !important; }
+.badge.candidate { background:#f5f3ff !important; color:#6d28d9 !important; border:1px solid #c4b5fd !important; }
+.badge.none { background:#f1f5f9 !important; color:#475569 !important; border:1px solid #cbd5e1 !important; }
+.badge.track { background:#e0f2fe !important; color:#0369a1 !important; border:1px solid #7dd3fc !important; }
+.badge.tbd { background:#f8fafc !important; color:#64748b !important; border:1px solid #cbd5e1 !important; }
+
+#confirmed-date-section table th, #confirmed-date-section table td { font-size:11px; }
+#confirmed-date-section .type-pill { white-space:nowrap; }
+
+.badge.info { background:#f3f4f6 !important; color:#374151 !important; border:1px solid #d1d5db !important; }
+
+/* 開催日が本日より前のイベントはグレーアウトして視認性を下げる */
+#timelineTable tbody tr.row-past { opacity:.45; filter:grayscale(60%); }
+#timelineTable tbody tr.row-past:hover { opacity:.85; filter:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>Physical AI関連 国際会議・展示会 俯瞰資料</h1>
+<p class="subtitle">カテゴリ、参加状況、担当、開催日、開催地を正規化した2026–2028年統合管理表</p>
+<div class="meta">更新日：2026年9月16日</div>
+</header>
+<div class="section">
+<h2>1. 全体方針</h2>
+<div class="message">
+Physical AIは、ロボティクス単体ではなく、認識、学習、制御、組込み・エッジ実装、設計最適化、シミュレーション、産業自動化、OR、HRI、国際展示会・見本市、技術探索・事業探索イベントまでを含む複合領域である。
+本資料は、参加可否を自動的に決めるものではなく、村上が判断するために、カテゴリ、開催日、開催地、参加状況、担当、重複を見える化するものである。
+</div>
+<div class="note">更新日：2026年9月16日。終了済みイベントは参加実績に基づき「参加済み」または「不参加」へ更新し、開催中・今後のイベントは「参加予定」「検討中」「候補」「参考情報」等で管理する。</div>
+</div>
+<div class="section">
+<h2>2. 注目カテゴリー</h2>
+<div class="grid">
+<div class="card"><h3>Physical AI中核</h3><p>ロボットが認識し、学習し、物理世界で動作するための中核技術。</p></div>
+<div class="card"><h3>産業適用</h3><p>製造・物流・市場・実機導入・最適運用へ接続する領域。</p></div>
+<div class="card"><h3>設計・実装基盤</h3><p>制御、組込み・エッジ実装、メカ設計、構造最適化、シミュレーションなど。</p></div>
+<div class="card"><h3>人・身体性</h3><p>人との協働、柔軟機構、触覚、接触作業など。</p></div>
+<div class="card"><h3>技術探索・事業探索</h3><p>事業機会、スタートアップ、外部連携、広域トレンド。</p></div>
+</div>
+</div>
+<div class="section" id="department-budget">
+<h2>3. 部門予算化候補</h2>
+<div class="note">
+部門として継続的に予算化する対象を、基幹枠・テーマ連動枠・戦略探索枠に分けて管理する。
+参加人数は確定派遣人数ではなく、年度計画時点の見込み・上限枠として扱う。
+<br/>5・6章では、部門予算化候補に該当するイベント名の前に 💰 アイコンを表示する。<br/>人数・担当は6章の2027年以降候補メモで管理し、3章では扱いのみを示す。</div>
+<h3>3-A. 部門基幹予算枠</h3>
+<table>
+<thead>
+<tr>
+<th>対象</th>
+<th>扱い</th>
+<th>主な目的</th>
+<th>次回開催（日程・場所）</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Hannover Messe</td><td>基幹枠</td><td>欧州製造業、FA、デジタル製造、産業DX</td><td>Hannover Messe 2027：4月5–8日、Hannover Exhibition Grounds, Hannover, Germany</td></tr>
+<tr><td>Automate</td><td>基幹枠</td><td>北米ロボット、自動化、実装動向</td><td>Automate 2027：5月10–13日、Las Vegas Convention Center, Las Vegas, NV, United States</td></tr>
+<tr><td>automatica</td><td>基幹枠</td><td>欧州ロボット、自動化、FA、実機動向</td><td>automatica 2027：6月22–25日、Messe München, Munich, Germany</td></tr>
+<tr><td>SPS</td><td>基幹枠</td><td>制御、PLC、FA、ドライブ、産業ネットワーク</td><td>SPS 2026：11月24–26日、Nuremberg, Germany</td></tr>
+<tr><td>LogiMAT</td><td>基幹枠</td><td>物流、自動倉庫、AGV/AMR、マテハン</td><td>LogiMAT 2027：3月16–18日、Messe Stuttgart, Stuttgart, Germany</td></tr>
+<tr><td>MODEX / ProMAT</td><td>基幹枠</td><td>北米物流自動化、倉庫自動化、サプライチェーン</td><td>ProMat 2027：4月19–21日、McCormick Place, Chicago, IL, United States</td></tr>
+<tr><td>IMTS / EMO</td><td>基幹枠</td><td>工作機械、加工、生産技術、スマートマニュファクチャリング</td><td>IMTS 2026：9月14–19日、McCormick Place, Chicago, IL, United States</td></tr>
+<tr><td>ITMA / ITMA Asia</td><td>基幹枠</td><td>繊維機械、産業機械、材料・工程技術</td><td>ITMA ASIA + CITME 2026：11月20–24日、National Exhibition and Convention Center, Shanghai, China</td></tr>
+<tr><td>GTC</td><td>基幹枠</td><td>Physical AI、AI基盤、Simulation、Omniverse、ロボティクス基盤</td><td>GTC 2027：3月14–18日（本会議15–18日）、San Jose McEnery Convention Center, San Jose, CA, United States</td></tr>
+<tr><td>CES</td><td>戦略探索枠</td><td>AI、ロボット、モビリティ、家電・サービス、将来市場</td><td>CES 2027：1月6–9日、Las Vegas, Nevada, United States</td></tr>
+<tr><td>World Robot Conference and Expo</td><td>戦略探索・予備枠</td><td>中国ロボット産業、ヒューマノイド、政策・標準化・社会実装を確認する戦略探索対象。人数はイベント固有ではなく、年度予算側で管理する。</td><td>World Robot Conference and Expo 2026：8月19–23日、Beijing, China</td></tr>
+</tbody>
+</table>
+<h3>3-B. テーマ連動予算枠</h3>
+<table>
+<thead>
+<tr>
+<th>対象</th>
+<th>扱い</th>
+<th>主な目的</th>
+<th>次回開催（日程・場所）</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>JEC World</td><td>テーマ連動枠</td><td>複合材、材料、軽量化、製造プロセス</td><td>JEC World 2027：3月2–4日、Paris Nord Villepinte, France</td></tr>
+<tr><td>Interclean</td><td>テーマ連動枠</td><td>清掃、衛生、サービスロボット、業界実装</td><td>Interclean Amsterdam 2028：4月4–7日、RAI Amsterdam, Amsterdam, Netherlands（隔年開催のため2027年は無し）</td></tr>
+<tr><td>SEMICON系</td><td>テーマ連動枠</td><td>半導体製造装置、クリーン搬送、精密自動化</td><td>直近はSEMICON Taiwan 2026：9月2–4日、TaiNEX 1&amp;2, Taipei, Taiwan（以降SEMICON West・Europa・Japanが年内に順次開催）</td></tr></tbody>
+</table>
+</div>
+<div class="section" id="tier1-conferences">
+<h2>4. 国際学会</h2>
+<h3>4-1. リスト</h3>
+<div class="note">
+分野を代表するトップティア（Tier1）の国際学会を一覧化する。4-2「判断」（ICRA / CoRL / CVPRのように分野トップティアかつ現地価値が高い会議は個別許可の判断材料として優先的に扱える）を判断する際の参照リストとして用いる。掲載は学会の格付けであり、部門としての参加要否とは別。
+</div>
+<table>
+<thead>
+<tr>
+<th>学会</th>
+<th>分野</th>
+<th>開催サイクル</th>
+<th>Tier1とする根拠</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>ICRA</td><td>Robotics / Physical AI本体</td><td>毎年</td><td>ロボティクス分野最大規模・最高峰の会議の一つ</td></tr>
+<tr><td>IROS</td><td>Robotics / Physical AI本体</td><td>毎年</td><td>ICRAと並ぶロボティクス分野最大級・最高峰の年次会議</td></tr>
+<tr><td>RSS</td><td>Robotics / Physical AI本体</td><td>毎年</td><td>厳選されたシングルトラック開催で、採択率・選考の厳しさで知られる会議</td></tr>
+<tr><td>CoRL</td><td>Robot Learning / AI基盤</td><td>毎年</td><td>4-2「判断」で例示される分野トップティア（Robot Learning）</td></tr>
+<tr><td>CVPR</td><td>Vision / 3D認識</td><td>毎年</td><td>4-2「判断」で例示される分野トップティア（Vision）</td></tr>
+<tr><td>ICCV</td><td>Vision / 3D認識</td><td>隔年・奇数年</td><td>CVPR・ECCVと並ぶComputer Visionの三大会議の一角</td></tr>
+<tr><td>ECCV</td><td>Vision / 3D認識</td><td>隔年・偶数年</td><td>CVPR・ICCVと並ぶComputer Visionの三大会議の一角</td></tr>
+<tr><td>NeurIPS</td><td>Robot Learning / AI基盤</td><td>毎年</td><td>ICML・ICLRと並ぶ機械学習三大会議の一つで、AI基盤分野で最大規模・最高峰</td></tr>
+<tr><td>ICML</td><td>Robot Learning / AI基盤</td><td>毎年</td><td>NeurIPS・ICLRと並ぶ機械学習三大会議の一つ</td></tr>
+<tr><td>ICLR</td><td>Robot Learning / AI基盤</td><td>毎年</td><td>NeurIPS・ICMLと並ぶ機械学習三大会議の一つ、深層学習領域の中核</td></tr>
+<tr><td>SIGGRAPH</td><td>Simulation / Digital Twin / CG</td><td>毎年</td><td>Computer Graphics分野の最高峰会議</td></tr>
+<tr><td>IFAC World Congress</td><td>Control / Motion / Systems</td><td>3年に1度</td><td>制御コミュニティの世界大会。規模・権威ともに最上位</td></tr>
+<tr><td>CDC</td><td>Control / Motion / Systems</td><td>毎年</td><td>ACCと並ぶ制御理論分野の二大フラッグシップ会議の一つ</td></tr>
+<tr><td>ACC</td><td>Control / Motion / Systems</td><td>毎年</td><td>CDCと並ぶ制御理論分野の二大フラッグシップ会議の一つ</td></tr>
+<tr><td>ASME IDETC/CIE</td><td>Mechanical Design / Structural &amp; Multidisciplinary Optimization</td><td>毎年</td><td>設計工学・Design Automation分野のASME最大のフラッグシップ会議</td></tr>
+</tbody>
+</table>
+<h3>4-2. 参加ルール</h3>
+<table>
+<thead><tr><th>項目</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td><strong>判断</strong></td><td>学会は部門予算化・人数配分の対象に含めず、原則「参考情報」として管理する。現地参加は4-1のTier1国際学会リストに掲載されている学会を原則とし、いずれも個別申請に基づき可否を判断する。リスト外の学会に参加する場合は、共同研究先の発表や、今後継続的な参加を検討すべき分野の見極めなど、参加する明確な理由を申請時に示す。理由を確認しない「適当なタイミングでの参加」は行わない。部門派遣としての現地参加は、同一カテゴリ（5章「カテゴリ」列基準）内で代表会議1件を基本とし、重点カテゴリでも代表会議とあわせて最大2件までとする（個人のR&amp;D探索枠としての参加はこの上限の対象外）。確定した参加は部門計画とは分けて実績情報を追記し、参加後は内容を部内で共有する。それ自体は部門予算化を意味しない。5章に掲載済みの学会参加（参加済み・参加予定）は、この基準に基づき取り組み内容を確認のうえリスト化されているものとする。</td></tr>
+<tr><td><strong>人数</strong></td><td>部門派遣における担当者は原則1〜2名とする。</td></tr>
+</tbody>
+</table>
+</div><div class="section" id="confirmed-date-section">
+<h2>5. 開催日確定リスト</h2>
+<div class="note">
+開催日が具体化しているイベントを、2026年と2027年以降をまとめて管理する。学会・展示会・技術カンファレンスの区分、部門予算化候補、参加状況、担当・人数をこの表で確認する。
+</div><div class="small">管理の正本は5章の開催日確定リストと6章の未確定・候補メモに一本化する。ツリー表示は更新漏れ防止のため削除。</div>
+<div class="budget-legend">
+<span class="budget-icon">💰</span> 部門予算化候補
+<span class="small">（確定派遣ではなく、年度計画で予算枠として管理する対象）</span>
+</div>
+<div class="legend">
+<span class="legend-item legend-conference">学会・専門会議</span>
+<span class="legend-item legend-exhibition">展示会・見本市</span>
+<span class="legend-item legend-tech">技術カンファレンス・サミット</span>
+</div><div class="small">参考情報は、派遣候補ではなく技術・市場動向の確認対象として残す。</div>
+<div class="sort-controls" aria-label="開催日確定リストの検索・絞り込み">
+<input id="timelineSearch" type="search" placeholder="イベント・担当・目的などを検索" aria-label="一覧をキーワード検索"/>
+<select id="importanceFilter" aria-label="AI×Robotics重要度で絞り込み"><option value="">重要度：すべて</option></select>
+<select id="businessFitFilter" aria-label="事業適合度で絞り込み"><option value="">事業適合度：すべて</option></select>
+<select id="categoryFilter" aria-label="カテゴリで絞り込み"><option value="">カテゴリ：すべて</option></select>
+<select id="typeFilter" aria-label="種別で絞り込み"><option value="">種別：すべて</option></select>
+<select id="locationFilter" aria-label="開催地で絞り込み"><option value="">開催地：すべて</option></select>
+<label class="status-check" style="grid-column:1 / -1;"><input id="upcomingOnly" type="checkbox"/><span>今後開催のみ表示（開催済みイベントを除く）</span></label>
+<fieldset id="yearFilter" class="year-filter">
+<legend>年（未選択＝すべて）</legend>
+<div id="yearOptions" class="year-options"></div>
+</fieldset>
+<fieldset id="statusFilter" class="status-filter">
+<legend>参加状況（未選択＝すべて）</legend>
+<div id="statusOptions" class="status-options"></div>
+</fieldset>
+</div>
+<div class="counter" id="timelineCounter" aria-live="polite"></div>
+<table id="timelineTable">
+<thead>
+<tr>
+<th class="sortable">年</th>
+<th class="sortable" data-type="date">開催日</th>
+<th class="sortable">イベント</th>
+<th class="sortable">AI×Robotics重要度</th>
+<th class="sortable">事業適合度</th>
+<th class="sortable">カテゴリ</th>
+<th class="sortable">種別</th>
+<th class="sortable">開催地</th>
+<th class="sortable">参加状況</th>
+<th class="sortable">担当・人数</th>
+<th class="sortable">目的・扱い</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div>
+<div class="section">
+<h2>6. 未確定・候補メモ</h2><div class="budget-legend">
+<span class="budget-icon">💰</span> 部門予算化候補
+<span class="small">（確定派遣ではなく、年度計画で予算枠として管理する対象）</span>
+</div><div class="legend">
+<span class="legend-item legend-conference">学会・専門会議</span>
+<span class="legend-item legend-exhibition">展示会・見本市</span>
+<span class="legend-item legend-tech">技術カンファレンス・サミット</span>
+</div><div class="small color-note">3分類は行全体ではなく、種別欄の色付きラベルで示します。グレーの小さなバッジは「不参加」の参加状況です。</div>
+<div class="note">開催日が未確定、または候補段階のイベントを残す。開催日が確定したものは5章の開催日確定リストへ移す。</div>
+<table>
+<thead><tr><th>イベント</th><th>AI×Robotics重要度</th><th>事業適合度</th><th>カテゴリ</th><th>扱い・時期</th><th>担当・人数</th><th>想定開催地</th><th>目的・扱い</th></tr></thead>
+<tbody id="pendingTableBody">
+</tbody>
+</table>
+</div>
+</div>
+<script src="physical_ai_events.js"></script>
+<script>
+(function renderPhysicalAiEvents() {
+  const events = window.PHYSICAL_AI_EVENTS;
+  const timelineBody = document.querySelector('#timelineTable tbody');
+  const pendingBody = document.getElementById('pendingTableBody');
+  if (!Array.isArray(events) || !timelineBody || !pendingBody) {
+    const counter = document.getElementById('timelineCounter');
+    if (counter) counter.textContent = 'イベントデータを読み込めませんでした';
+    return;
+  }
+
+  const typeClass = {
+    '学会・専門会議': 'type-conference',
+    '展示会・見本市': 'type-exhibition',
+    '技術カンファレンス・サミット': 'type-tech'
+  };
+
+  function addTextCell(row, value) {
+    const cell = row.insertCell();
+    cell.textContent = value ?? '';
+    return cell;
+  }
+
+  function addEventCell(row, event, strong = false) {
+    const cell = row.insertCell();
+    if (event.budgetCandidate) {
+      const icon = document.createElement('span');
+      icon.className = 'budget-icon';
+      icon.title = '部門予算化候補';
+      icon.textContent = '💰';
+      cell.append(icon, document.createTextNode(' '));
+    }
+    if (strong) {
+      const label = document.createElement('strong');
+      label.textContent = event.name;
+      cell.appendChild(label);
+    } else {
+      cell.appendChild(document.createTextNode(event.name));
+    }
+    return cell;
+  }
+
+  events
+    .filter(event => event.dateStatus === 'confirmed')
+    .sort((a, b) => a.sortDate.localeCompare(b.sortDate) || a.name.localeCompare(b.name, 'ja'))
+    .forEach(event => {
+      const row = timelineBody.insertRow();
+      row.dataset.datekey = event.sortDate.replaceAll('-', '');
+      addTextCell(row, String(event.year));
+      const dateCell = addTextCell(row, event.dateLabel);
+      if (event.dateNote) {
+        dateCell.appendChild(document.createElement('br'));
+        const note = document.createElement('span');
+        note.className = 'small';
+        note.textContent = event.dateNote;
+        dateCell.appendChild(note);
+      }
+      addEventCell(row, event);
+      addTextCell(row, event.importance);
+      addTextCell(row, event.businessFit);
+      addTextCell(row, event.category);
+      const typeCell = row.insertCell();
+      const type = document.createElement('span');
+      type.className = `type-pill ${typeClass[event.type] || ''}`.trim();
+      type.textContent = event.type;
+      typeCell.appendChild(type);
+      addTextCell(row, event.location);
+      const statusCell = row.insertCell();
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = event.status;
+      statusCell.appendChild(badge);
+      addTextCell(row, event.assignment);
+      addTextCell(row, event.purpose);
+    });
+
+  events
+    .filter(event => event.dateStatus === 'pending')
+    .sort((a, b) => a.order - b.order)
+    .forEach(event => {
+      const row = pendingBody.insertRow();
+      addEventCell(row, event, !event.name.includes('年間予算予備枠'));
+      addTextCell(row, event.importance);
+      addTextCell(row, event.businessFit);
+      addTextCell(row, event.category);
+      addTextCell(row, event.handling);
+      addTextCell(row, event.assignment);
+      addTextCell(row, event.location);
+      addTextCell(row, event.purpose);
+    });
+})();
+</script>
+<script>
+(function() {
+  const table = document.getElementById('timelineTable');
+  if (!table) return;
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+
+  // 同じステータス表示には常に同じバッジ色を適用する。
+  const badgeClassByStatus = {
+    '参加済み': 'done', '参加予定': 'planned', '検討中': 'consider',
+    '候補': 'candidate', '不参加': 'none', '論文・発表追跡': 'track',
+    '参考情報': 'info',
+    '2027計画': 'tbd', '2028計画': 'tbd'
+  };
+  rows.forEach(row => {
+    const badge = row.cells[8].querySelector('.badge');
+    const status = cleanText(row.cells[8]);
+    if (badge && badgeClassByStatus[status]) badge.className = `badge ${badgeClassByStatus[status]}`;
+  });
+
+  // 開催日（data-datekey）が本日より前の行をグレーアウトする
+  const todayKey = Number(
+    new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' }).replace(/-/g, '')
+  );
+  rows.forEach(row => {
+    const raw = row.getAttribute('data-datekey');
+    if (raw && parseInt(raw, 10) < todayKey) row.classList.add('row-past');
+  });
+
+  const search = document.getElementById('timelineSearch');
+  const importanceFilter = document.getElementById('importanceFilter');
+  const businessFitFilter = document.getElementById('businessFitFilter');
+  const categoryFilter = document.getElementById('categoryFilter');
+  const yearFilter = document.getElementById('yearFilter');
+  const yearOptions = document.getElementById('yearOptions');
+  const statusFilter = document.getElementById('statusFilter');
+  const statusOptions = document.getElementById('statusOptions');
+  const typeFilter = document.getElementById('typeFilter');
+  const locationFilter = document.getElementById('locationFilter');
+  const upcomingOnly = document.getElementById('upcomingOnly');
+  const counter = document.getElementById('timelineCounter');
+
+  function cleanText(el) { return (el.textContent || '').replace(/\s+/g, ' ').trim(); }
+  function uniqueValues(colIndex) {
+    return Array.from(new Set(rows.map(r => cleanText(r.cells[colIndex])).filter(Boolean))).sort((a,b) => b.length - a.length || a.localeCompare(b, 'ja'));
+  }
+  function fillSelect(select, values) {
+    values.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v; opt.textContent = v; select.appendChild(opt);
+    });
+  }
+  function fillStatusChecks(values) {
+    values.forEach((value, index) => {
+      const label = document.createElement('label');
+      label.className = 'status-check';
+      const input = document.createElement('input');
+      input.type = 'checkbox'; input.value = value; input.id = `statusCheck${index}`;
+      const text = document.createElement('span');
+      text.textContent = value;
+      label.append(input, text);
+      statusOptions.appendChild(label);
+    });
+  }
+  function fillYearChecks(values) {
+    values.forEach((value, index) => {
+      const label = document.createElement('label');
+      label.className = 'year-check';
+      const input = document.createElement('input');
+      input.type = 'checkbox'; input.value = value; input.id = `yearCheck${index}`;
+      const text = document.createElement('span');
+      text.textContent = value;
+      label.append(input, text);
+      yearOptions.appendChild(label);
+    });
+  }
+
+  fillSelect(importanceFilter, uniqueValues(3));
+  fillSelect(businessFitFilter, uniqueValues(4));
+  fillSelect(categoryFilter, uniqueValues(5));
+  fillSelect(typeFilter, uniqueValues(6));
+  fillSelect(locationFilter, uniqueValues(7));
+  fillYearChecks(uniqueValues(0).sort((a, b) => Number(a) - Number(b)));
+  const availableStatuses = new Set(uniqueValues(8));
+  const statusOrder = ['参加済み', '参加予定', '検討中', '候補', '不参加', '論文・発表追跡', '参考情報', '2027計画', '2028計画'];
+  fillStatusChecks(statusOrder.filter(status => availableStatuses.has(status)));
+
+  let sortState = { index: 1, dir: 1, type: 'date' };
+
+  function dateKey(row) {
+    const raw = row.getAttribute('data-datekey');
+    return raw ? parseInt(raw, 10) : 9999;
+  }
+
+  function apply() {
+    const q = (search.value || '').toLowerCase();
+    const imp = importanceFilter.value;
+    const biz = businessFitFilter.value;
+    const cat = categoryFilter.value;
+    const type = typeFilter.value;
+    const loc = locationFilter.value;
+    const selectedYears = new Set(Array.from(yearFilter.querySelectorAll('input:checked')).map(input => input.value));
+    const selectedStatuses = new Set(Array.from(statusFilter.querySelectorAll('input:checked')).map(input => input.value));
+
+    let visible = rows.filter(r => {
+      const all = cleanText(r).toLowerCase();
+      return (!q || all.includes(q)) &&
+             (!selectedYears.size || selectedYears.has(cleanText(r.cells[0]))) &&
+             (!imp || cleanText(r.cells[3]) === imp) &&
+             (!biz || cleanText(r.cells[4]) === biz) &&
+             (!cat || cleanText(r.cells[5]) === cat) &&
+             (!type || cleanText(r.cells[6]) === type) &&
+             (!loc || cleanText(r.cells[7]) === loc) &&
+             (!selectedStatuses.size || selectedStatuses.has(cleanText(r.cells[8]))) &&
+             (!upcomingOnly.checked || dateKey(r) >= todayKey);
+    });
+
+    visible.sort((a,b) => {
+      if (sortState.type === 'date') return (dateKey(a) - dateKey(b)) * sortState.dir;
+      const av = cleanText(a.cells[sortState.index]);
+      const bv = cleanText(b.cells[sortState.index]);
+      return av.localeCompare(bv, 'ja', { numeric:true }) * sortState.dir;
+    });
+
+    tbody.innerHTML = '';
+    visible.forEach(r => tbody.appendChild(r));
+    counter.textContent = `表示 ${visible.length} / 全 ${rows.length} 件`;
+  }
+
+  table.querySelectorAll('th.sortable').forEach((th, i) => {
+    th.addEventListener('click', () => {
+      if (sortState.index === i) sortState.dir *= -1;
+      else { sortState.index = i; sortState.dir = 1; sortState.type = th.dataset.type || 'text'; }
+      apply();
+    });
+  });
+
+  [search, importanceFilter, businessFitFilter, categoryFilter, typeFilter, locationFilter].forEach(el => el.addEventListener('input', apply));
+  yearFilter.addEventListener('change', apply);
+  statusFilter.addEventListener('change', apply);
+  upcomingOnly.addEventListener('change', apply);
+  apply();
+})();
+</script>
+</body>
+</html>
