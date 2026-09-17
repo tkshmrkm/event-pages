@@ -1033,8 +1033,8 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "International Exhibition / Market & Implementation",
     "type": "展示会・見本市",
     "location": "Shanghai New International Expo Centre, Shanghai, China",
-    "status": "候補",
-    "assignment": "TBD",
+    "status": "不参加",
+    "assignment": "—",
     "purpose": "中国・アジアの物流・倉庫自動化市場"
   },
   {
@@ -1067,9 +1067,9 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "International Exhibition / Market & Implementation",
     "type": "展示会・見本市",
     "location": "Trade Fair Center Messe München, Munich, Germany",
-    "status": "候補",
-    "assignment": "TBD",
-    "purpose": "欧州半導体製造装置・材料・プロセス。electronica併催"
+    "status": "参加予定",
+    "assignment": "寺田・三枝",
+    "purpose": "欧州半導体製造装置・材料・プロセス。electronica 2026と同日程・同会場で併催。electronicaに参加する寺田・三枝が合わせて参加予定。"
   },
   {
     "id": "20261110-electronica-2026",
@@ -1118,8 +1118,8 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "International Exhibition / Market & Implementation",
     "type": "展示会・見本市",
     "location": "National Exhibition and Convention Center, Shanghai, China",
-    "status": "候補",
-    "assignment": "TBD",
+    "status": "不参加",
+    "assignment": "—",
     "purpose": "繊維機械・繊維製造技術"
   },
   {
@@ -1152,8 +1152,8 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "Simulation / Digital Twin / CG",
     "type": "学会・専門会議",
     "location": "KLCC, Kuala Lumpur, Malaysia",
-    "status": "参加予定",
-    "assignment": "村上",
+    "status": "候補",
+    "assignment": "TBD",
     "purpose": "Digital Twin、Simulation、3D表現、生成表現"
   },
   {
@@ -1272,7 +1272,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "技術カンファレンス・サミット",
     "location": "Las Vegas, Nevada, United States",
     "status": "2027計画",
-    "assignment": "TBD",
+    "assignment": "田原・公募2名",
     "purpose": "広域技術・事業探索"
   },
   {
