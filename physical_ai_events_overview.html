@@ -45,7 +45,8 @@ th.sortable { cursor:pointer; user-select:none; } th.sortable::after { content:"
 .counter { color:var(--muted); font-size:12.5px; margin:0; }
 .counter-row { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:6px 0 10px; }
 .past-toggle { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; background:#fff; color:#334155; font:inherit; font-size:12px; padding:5px 12px; cursor:pointer; }
-.past-toggle:hover { border-color:var(--blue); color:#0f172a; }
+.past-toggle:hover:not(:disabled) { border-color:var(--blue); color:#0f172a; }
+.past-toggle:disabled { cursor:default; background:#f8fafc; color:var(--muted); }
 .past-toggle[hidden] { display:none; }
 .past-toggle .caret { font-size:10px; color:#94a3b8; }
 pre { background:#0f172a; color:#e2e8f0; border-radius:14px; padding:18px; white-space:pre-wrap; font-size:12.5px; line-height:1.55; }
@@ -556,19 +557,26 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
     visible.forEach(r => tbody.appendChild(r));
 
     const past = visible.filter(r => r.classList.contains('row-past'));
+    // 絞り込んだ結果が開催済みしか残らないときは、空の表を見せずに自動で開く。
+    const autoExpanded = pastCollapsed && past.length > 0 && past.length === visible.length;
+    const collapsed = pastCollapsed && !autoExpanded;
+
     visible.forEach(r => r.classList.toggle(
-      'row-collapsed', pastCollapsed && r.classList.contains('row-past')
+      'row-collapsed', collapsed && r.classList.contains('row-past')
     ));
 
     pastToggle.hidden = past.length === 0;
-    pastToggle.setAttribute('aria-expanded', String(!pastCollapsed));
-    pastToggle.querySelector('.caret').textContent = pastCollapsed ? '▶' : '▼';
-    pastToggleLabel.textContent = pastCollapsed
-      ? `開催済み ${past.length} 件を表示`
-      : `開催済み ${past.length} 件を隠す`;
+    pastToggle.disabled = autoExpanded;
+    pastToggle.setAttribute('aria-expanded', String(!collapsed));
+    pastToggle.querySelector('.caret').textContent = collapsed ? '▶' : '▼';
+    pastToggleLabel.textContent = autoExpanded
+      ? `開催済み ${past.length} 件のみ該当（自動で展開中）`
+      : collapsed
+        ? `開催済み ${past.length} 件を表示`
+        : `開催済み ${past.length} 件を隠す`;
 
-    const shown = pastCollapsed ? visible.length - past.length : visible.length;
-    counter.textContent = pastCollapsed && past.length
+    const shown = collapsed ? visible.length - past.length : visible.length;
+    counter.textContent = collapsed && past.length
       ? `表示 ${shown} / 全 ${rows.length} 件（開催済み ${past.length} 件を折りたたみ中）`
       : `表示 ${shown} / 全 ${rows.length} 件`;
   }
