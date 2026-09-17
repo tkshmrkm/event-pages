@@ -66,9 +66,9 @@ const ROUTES = [
   ['1018','CX289 HKG発','10/18（日）23:55','HKT','香港国際空港（HKG）','CX289','13時間20分','10/19（月）07:15','CEST','Frankfurt Airport（FRA）'],
   ['1019','ホテル → RAI','10/19（月）08:30','CEST','Holiday Inn Express Amsterdam - Sloterdijk Station','メトロ50系統＋徒歩','約25〜28分','10/19（月）08:55頃','CEST','RAI Amsterdam'],
   ['1019','RAI → ホテルへ戻る','10/19（月）21:00頃','CEST','RAI Amsterdam','メトロ50系統＋徒歩','約25〜28分','10/19（月）21:25頃','CEST','Holiday Inn Express Amsterdam - Sloterdijk Station'],
-  ['1019','RE2 + ICE774 FRA空港駅発','10/19（月）08:22','CEST','Frankfurt空港駅','RE2＋ICE774','2時間9分','10/19（月）10:31','CEST','Göttingen Hbf'],
-  ['1019','ICE ゲッティンゲン発 → Wolfsburg','10/19（月）11:00頃','CEST','Göttingen Hbf','ICE（Hannover経由）','約1時間15〜20分','10/19（月）12:20頃','CEST','Wolfsburg Hbf'],
-  ['1019','Wolfsburg Hbf 着 → Autostadtへ','10/19（月）12:20頃','CEST','Wolfsburg Hbf','徒歩','約10分','10/19（月）12:30頃','CEST','Autostadt'],
+  ['1019','ICE11 + ECE8 FRA空港駅発','10/19（月）09:15','CEST','Frankfurt空港 長距離駅（Fernbf）','ICE11＋ECE8','2時間16分','10/19（月）11:31','CEST','Göttingen Hbf'],
+  ['1019','ICE682 + RE30 ゲッティンゲン発 → Wolfsburg','10/19（月）12:59','CEST','Göttingen Hbf','ICE682＋RE30','1時間53分','10/19（月）14:52','CEST','Wolfsburg Hbf'],
+  ['1019','Wolfsburg Hbf 着 → Autostadtへ','10/19（月）14:52','CEST','Wolfsburg Hbf','徒歩','約10分','10/19（月）15:05頃','CEST','Autostadt'],
   ['1019','ICE Wolfsburg Hbf発 → ゲッティンゲン','10/19（月）17:30頃','CEST','Wolfsburg Hbf','ICE直通','約1時間15〜20分','10/19（月）18:45頃','CEST','Göttingen Hbf'],
   ['1020','チェックアウト（荷物持参）→ RAIへ','10/20（火）08:30頃','CEST','Holiday Inn Express Amsterdam - Sloterdijk Station','メトロ50系統＋徒歩','約25〜28分','10/20（火）08:55頃','CEST','RAI Amsterdam'],
   ['1020','RAI →','10/20（火）14:55','CEST','RAI Amsterdam','鉄道','約10分','10/20（火）15:20頃','CEST','Amsterdam Airport Schiphol（AMS）'],
@@ -321,7 +321,7 @@ const OVERVIEW_LEG_KEYS = [
   ['1017', 'CX271',      'murakami', 'flight'],
   ['1018', 'CX539',      'team',     'flight'],
   ['1018', 'CX289',      'team',     'flight'],
-  ['1019', 'RE2＋ICE774', 'team',     'train'],
+  ['1019', 'ICE11＋ECE8', 'team',     'train'],
   ['1020', 'KL1791',     'murakami', 'flight'],
   ['1020', 'ICE77',      'murakami', 'train'],
   ['1023', 'ICE771',     'shared',   'train'],
@@ -997,8 +997,8 @@ const transformScript = `
       cx539?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">17:10頃</div><div class="action-body"><div class="font-semibold">🍽 機内食（主菜＋デザート）</div><div class="text-slate-600 text-xs">離陸1時間後が目安。これが実質の夕食になる</div></div></div>');
     }
     if (id === '1019') {
-      // 07:15着〜08:22発の1時間しかない行動なので、日トップではなく時系列に置く。
-      rowFor(day, 'Frankfurt Airport（FRA）着')?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">07:45頃</div><div class="action-body"><div class="font-semibold">🍽 空港で買い出し</div><div class="text-slate-600 text-xs">08:22発の列車まで待ち時間。パンと飲み物を買っておく</div></div></div>');
+      // 07:15着〜09:15発の待ち時間の行動なので、日トップではなく時系列に置く。
+      rowFor(day, 'Frankfurt Airport（FRA）着')?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">07:45頃</div><div class="action-body"><div class="font-semibold">🍽 朝食・空港で買い出し</div><div class="text-slate-600 text-xs">09:15発の列車まで約2時間ある。座って朝食を取り、車内用のパンと飲み物も買っておく</div></div></div>');
       const techEx = rowFor(day, 'TechEx Day 1 — Gold Track');
       techEx?.insertAdjacentHTML('afterbegin', '<div class="text-slate-500">09:45–16:50</div>');
       Array.from(techEx?.querySelectorAll('div') || []).find(el => el.textContent.trim() === '18:00–21:00 VIP Networking Drinks（Gold Pass特典）')?.remove();
@@ -1006,7 +1006,7 @@ const transformScript = `
       const drinksTime = Array.from(drinks?.children || []).find(el => el.textContent.trim() === '夕方');
       if (drinksTime) drinksTime.textContent = '18:00–21:00';
       const baggage = rowFor(day, 'ゲッティンゲン着 → Hotel FREIgeistへ荷物を預ける');
-      if (baggage) baggage.innerHTML = '<div class="text-slate-500">10:35頃</div><div class="font-semibold">🏨 ホテルに荷物を預ける</div><div class="text-slate-600 text-xs">チェックイン前のため、日中預かりを依頼（要事前確認）</div>';
+      if (baggage) baggage.innerHTML = '<div class="text-slate-500">11:40頃</div><div class="font-semibold">🏨 ホテルに荷物を預ける</div><div class="text-slate-600 text-xs">チェックイン前のため、日中預かりを依頼（要事前確認）。12:59発までに駅へ戻る</div>';
       const checkin = rowFor(day, 'ゲッティンゲン着 → 荷物ピックアップ・正式チェックイン');
       if (checkin) checkin.innerHTML = '<div class="text-slate-500">18:50頃</div><div class="font-semibold">🏨 荷物受取・チェックイン</div>';
     }

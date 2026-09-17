@@ -79,7 +79,7 @@ const checks = [
   // 人物レーンの見出しは絵文字からSVGアイコンへ変わったので、語だけを見る。
   ['10/19 granularity aligned', itinerary.includes('<div class="row-time">09:45〜16:50</div>') && itinerary.includes('美馬・金築（FRA着・ヴォルフスブルク日帰り）') && itinerary.includes('荷物受取・チェックイン') && !itinerary.includes('なぜ先にゲッティンゲンへ寄るのか')],
   ['10/19 networking time retained', /<div class="row-time">18:00〜21:00<\/div>[\s\S]{0,700}VIP Networking Drinks/.test(itinerary) && !/<div class="row-time">夕方<\/div>[\s\S]{0,700}VIP Networking Drinks/.test(itinerary)],
-  ['10/19 movements use four-column rows', /class="route-four"[^>]*><div class="row-time">12:20頃[\s\S]*?<strong>徒歩<\/strong>[\s\S]*?<time>12:30頃<\/time>/.test(itinerary) && /class="route-four"[^>]*><div class="row-time">17:30頃[\s\S]*?<strong>ICE直通<\/strong>[\s\S]*?<time>18:45頃<\/time>/.test(itinerary)],
+  ['10/19 movements use four-column rows', /class="route-four"[^>]*><div class="row-time">14:52[\s\S]*?<strong>徒歩<\/strong>[\s\S]*?<time>15:05頃<\/time>/.test(itinerary) && /class="route-four"[^>]*><div class="row-time">17:30頃[\s\S]*?<strong>ICE直通<\/strong>[\s\S]*?<time>18:45頃<\/time>/.test(itinerary)],
   // 復路は文章の2案から、交通行2本＋案の見出しへ変えた。未決であることは
   // 「列車候補を確認」という文字が示す。交通行に色や点線は使わない（2026-08-15）。
   ['10/22 decisions present', day1022.includes('class="choice-head"') && (day1022.match(/class="choice-label"/g) || []).length === 2 && day1022.includes('早帰り案 — ホテル18:05頃着') && day1022.includes('市内滞在案 — ホテル20:05頃着') && (day1022.match(/列車候補を確認/g) || []).length === 2 && day1022.includes('タクシー（Uber）') && day1022.includes('ブレーメンでランチ')],
@@ -184,7 +184,7 @@ const checks = [
     const legs = overview.match(/<span class="ov-leg">[\s\S]*?<\/span><\/span>/g) || [];
     const has = code => legs.filter(leg => leg.includes(`>${code}<`)).length;
     return has('CX539') === 2 && has('CX271') === 1 && has('CX289') === 1
-      && has('KL1791') === 1 && has('ICE77') === 1 && has('RE2＋ICE774') === 1
+      && has('KL1791') === 1 && has('ICE77') === 1 && has('ICE11＋ECE8') === 1
       && has('ICE771') === 2 && has('CX288') === 2 && has('CX536') === 2
       // 会場への往復と空港アクセスは概要に出さない。旅程が持つ。
       && has('ICE888') === 0 && has('S5') === 0 && has('S4') === 0;
