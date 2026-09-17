@@ -608,9 +608,9 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "Simulation / Digital Twin / CG",
     "type": "学会・専門会議",
     "location": "Los Angeles Convention Center, Los Angeles, CA, United States",
-    "status": "参加予定",
+    "status": "参加済み",
     "assignment": "深川",
-    "purpose": "CG、Simulation、3D表現。SIGGRAPH Asiaとの差分確認 参加予定。"
+    "purpose": "CG、Simulation、3D表現。SIGGRAPH Asiaとの差分確認 参加済み。"
   },
   {
     "id": "20260815-ijcai-ecai-2026",
@@ -642,7 +642,7 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "Industrial Automation / Smart Factory",
     "type": "学会・専門会議",
     "location": "Shenyang, China",
-    "status": "参加予定",
+    "status": "参加済み",
     "assignment": "北村",
     "purpose": "産業自動化、Smart Factory、製造・物流システム"
   },
@@ -659,9 +659,9 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "International Exhibition / Market & Implementation",
     "type": "展示会・見本市",
     "location": "Beijing, China",
-    "status": "参加予定",
+    "status": "参加済み",
     "assignment": "保木・渡邊・古谷",
-    "purpose": "中国ロボット産業、ヒューマノイド、政策・標準化・社会実装。2026年は保木・渡邊・古谷の3名参加予定。"
+    "purpose": "中国ロボット産業、ヒューマノイド、政策・標準化・社会実装。2026年は保木・渡邊・古谷の3名が参加。"
   },
   {
     "id": "20260823-ifac-world-congress-2026",

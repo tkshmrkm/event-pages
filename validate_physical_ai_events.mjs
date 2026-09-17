@@ -72,7 +72,7 @@ events.forEach((event, index) => {
     if (!allowedStatuses.has(event.status)) fail(index, event, `status が不正です: ${event.status}`);
     if (!allowedTypes.has(event.type)) fail(index, event, `type が不正です: ${event.type}`);
 
-    if (event.sortDate < '2026-09-16' && event.status === '参加予定') {
+    if (event.sortDate < '2026-09-18' && event.status === '参加予定') {
       warnings.push(`${event.name}: 開催日が基準日より前ですが参加予定のままです`);
     }
   }
