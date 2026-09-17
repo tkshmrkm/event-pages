@@ -42,9 +42,14 @@ tr:last-child td { border-bottom:none; }
 .status-check input, .year-check input { width:15px; height:15px; margin:0; padding:0; accent-color:var(--blue); }
 .status-check:has(input:checked), .year-check:has(input:checked) { color:#0f172a; font-weight:700; }
 th.sortable { cursor:pointer; user-select:none; } th.sortable::after { content:" ⇅"; color:#94a3b8; font-size:10px; }
-.counter { color:var(--muted); font-size:12.5px; margin:6px 0 10px; }
+.counter { color:var(--muted); font-size:12.5px; margin:0; }
+.counter-row { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:6px 0 10px; }
+.past-toggle { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; background:#fff; color:#334155; font:inherit; font-size:12px; padding:5px 12px; cursor:pointer; }
+.past-toggle:hover { border-color:var(--blue); color:#0f172a; }
+.past-toggle[hidden] { display:none; }
+.past-toggle .caret { font-size:10px; color:#94a3b8; }
 pre { background:#0f172a; color:#e2e8f0; border-radius:14px; padding:18px; white-space:pre-wrap; font-size:12.5px; line-height:1.55; }
-@media print { body { background:#fff; } .wrap { max-width:none; padding:10mm; } header,.section { box-shadow:none; } table { font-size:9.2px; } .sort-controls { display:none; } }
+@media print { body { background:#fff; } .wrap { max-width:none; padding:10mm; } header,.section { box-shadow:none; } table { font-size:9.2px; } .sort-controls { display:none; } .past-toggle { display:none; } #timelineTable tbody tr.row-collapsed { display:table-row; } }
 @media (max-width:1050px) { .grid { grid-template-columns:1fr 1fr; } .sort-controls { grid-template-columns:1fr; } table { font-size:11px; } }
 
 .subsection { margin-top:18px; }
@@ -139,6 +144,7 @@ tr.row-conference:hover td, tr.row-exhibition:hover td, tr.row-tech:hover td {
 /* 開催日が本日より前のイベントはグレーアウトして視認性を下げる */
 #timelineTable tbody tr.row-past { opacity:.45; filter:grayscale(60%); }
 #timelineTable tbody tr.row-past:hover { opacity:.85; filter:none; }
+#timelineTable tbody tr.row-collapsed { display:none; }
 </style>
 </head>
 <body>
@@ -284,7 +290,10 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <div id="statusOptions" class="status-options"></div>
 </fieldset>
 </div>
+<div class="counter-row">
+<button id="pastToggle" class="past-toggle" type="button" aria-expanded="false" aria-controls="timelineTable" hidden><span class="caret" aria-hidden="true">▶</span><span id="pastToggleLabel">開催済みを表示</span></button>
 <div class="counter" id="timelineCounter" aria-live="polite"></div>
+</div>
 <table id="timelineTable">
 <thead>
 <tr>
@@ -456,6 +465,10 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
   const locationFilter = document.getElementById('locationFilter');
   const upcomingOnly = document.getElementById('upcomingOnly');
   const counter = document.getElementById('timelineCounter');
+  const pastToggle = document.getElementById('pastToggle');
+  const pastToggleLabel = document.getElementById('pastToggleLabel');
+  // 開催済みは既定で折りたたむ。件数は数えたままにして、表示だけを畳む。
+  let pastCollapsed = true;
 
   function cleanText(el) { return (el.textContent || '').replace(/\s+/g, ' ').trim(); }
   function uniqueValues(colIndex) {
@@ -541,7 +554,23 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 
     tbody.innerHTML = '';
     visible.forEach(r => tbody.appendChild(r));
-    counter.textContent = `表示 ${visible.length} / 全 ${rows.length} 件`;
+
+    const past = visible.filter(r => r.classList.contains('row-past'));
+    visible.forEach(r => r.classList.toggle(
+      'row-collapsed', pastCollapsed && r.classList.contains('row-past')
+    ));
+
+    pastToggle.hidden = past.length === 0;
+    pastToggle.setAttribute('aria-expanded', String(!pastCollapsed));
+    pastToggle.querySelector('.caret').textContent = pastCollapsed ? '▶' : '▼';
+    pastToggleLabel.textContent = pastCollapsed
+      ? `開催済み ${past.length} 件を表示`
+      : `開催済み ${past.length} 件を隠す`;
+
+    const shown = pastCollapsed ? visible.length - past.length : visible.length;
+    counter.textContent = pastCollapsed && past.length
+      ? `表示 ${shown} / 全 ${rows.length} 件（開催済み ${past.length} 件を折りたたみ中）`
+      : `表示 ${shown} / 全 ${rows.length} 件`;
   }
 
   table.querySelectorAll('th.sortable').forEach((th, i) => {
@@ -556,6 +585,7 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
   yearFilter.addEventListener('change', apply);
   statusFilter.addEventListener('change', apply);
   upcomingOnly.addEventListener('change', apply);
+  pastToggle.addEventListener('click', () => { pastCollapsed = !pastCollapsed; apply(); });
   apply();
 })();
 </script>
