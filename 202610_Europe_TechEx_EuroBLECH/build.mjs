@@ -1156,42 +1156,6 @@ const transformScript = `
     day.replaceWith(details);
   });
 
-  // 別行動の日は左右のレーンが別々に流れるので、行数の少ない側だけ時間が詰まって
-  // 見える。時刻を持つ行に「次の時刻までの分数」を --tspan として持たせ、CSSで
-  // 同じ尺（分→px）の下限の高さに変える。レーンの先頭には、その日いちばん早い
-  // 時刻との差を --tlead として空ける。これで左右の時間軸がそろう。
-  //
-  // 同じ日でも人によって時刻の基準が違う日（10/17・10/18は村上が欧州時間、
-  // 美馬・金築が日本・香港時間）は、1本の軸に載せると同時刻に見えてしまうので
-  // そろえない。レーンの中に複数のタイムゾーンが出てきたら何もしない。
-  const rowStartMinutes = row => {
-    const cell = row.querySelector('.row-time');
-    const match = cell && /(\\d{1,2}):(\\d{2})/.exec(cell.textContent);
-    return match ? Number(match[1]) * 60 + Number(match[2]) : null;
-  };
-  itinerary.querySelectorAll('.lanes').forEach(lanes => {
-    const laneList = Array.from(lanes.querySelectorAll(':scope > .lane'));
-    if (laneList.length < 2) return;
-    const zones = new Set(Array.from(lanes.querySelectorAll('.endpoint .tz'))
-      .map(el => el.textContent.replace(/[^A-Z]/g, '')).filter(Boolean));
-    if (zones.size > 1) return;
-    const perLane = laneList.map(lane => Array.from(lane.querySelectorAll(':scope > .route-four, :scope > .action'))
-      .map(row => ({ row, at: rowStartMinutes(row) }))
-      .filter(entry => entry.at !== null));
-    if (perLane.filter(rows => rows.length).length < 2) return;
-    const dayStart = Math.min(...perLane.filter(rows => rows.length).map(rows => rows[0].at));
-    perLane.forEach(rows => {
-      if (!rows.length) return;
-      const lead = rows[0].at - dayStart;
-      if (lead > 0) rows[0].row.style.setProperty('--tlead', String(lead));
-      rows.forEach((entry, index) => {
-        const next = rows[index + 1];
-        if (!next) return;
-        const span = next.at - entry.at;
-        if (span > 0) entry.row.style.setProperty('--tspan', String(span));
-      });
-    });
-  });
 
   const stack = itinerary.querySelector(':scope > .max-w-2xl');
   if (stack) {
