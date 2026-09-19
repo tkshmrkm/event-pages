@@ -925,7 +925,7 @@ const transformScript = `
       const arrival = rowFor(day, '空港到着目安');
       if (arrival) {
         arrival.innerHTML = '<div class="row-time">13:10〜16:10</div><div class="action-body"><div class="font-semibold">🕐 セントレアで出発待ち（約3時間）</div><div class="text-slate-600 text-xs">機内食は離陸1時間後が目安（17:10頃）。昼は軽く</div>' + todoFold([
-          'キャセイは<strong>第1ターミナル3階 Iカウンター</strong>。チェックイン開始は<strong>出発3時間前の13:10</strong>（セントレア公式・2026-09-19確認）',
+          'キャセイは<strong>第1ターミナル3階 Iカウンター</strong>。チェックイン開始は<strong>出発3時間前の13:10</strong>',
           '<strong>自動手荷物預け機（セルフバッグドロップ）の対象航空会社</strong>。オンラインチェックイン済みでも、まず<strong>自動チェックイン機にパスポートをかざして搭乗券と手荷物タグを発行</strong>し、自分でタグを付けてから預ける。設置位置はセントレア公式に記載が無いので当日の案内で確認',
           '保安検査と出国審査を済ませてから制限エリアへ',
           '事前の機内食予約は不要。「食事の選択」はファースト／ビジネス限定で、エコノミーで要るのは特別食（アレルギー・ベジタリアン等）の申請だけ',
@@ -966,7 +966,7 @@ const transformScript = `
       // 10/17と同じく、13:10の「空港到着目安」と重複していたので1行に寄せる。
       rowFor(day, '空港到着目安')?.remove();
       if (lounge) lounge.innerHTML = '<div class="text-slate-500">13:10〜16:10</div><div class="font-semibold">🕐 セントレアで出発待ち（約3時間）</div><div class="text-slate-600 text-xs">機内食は離陸1時間後が目安（17:10頃）。昼は軽く</div>' + todoFold([
-        'キャセイは<strong>第1ターミナル3階 Iカウンター</strong>。チェックイン開始は<strong>出発3時間前の13:10</strong>（セントレア公式・2026-09-19確認）',
+        'キャセイは<strong>第1ターミナル3階 Iカウンター</strong>。チェックイン開始は<strong>出発3時間前の13:10</strong>',
         '<strong>自動手荷物預け機（セルフバッグドロップ）の対象航空会社</strong>。オンラインチェックイン済みでも、まず<strong>自動チェックイン機にパスポートをかざして搭乗券と手荷物タグを発行</strong>し、自分でタグを付けてから預ける。設置位置はセントレア公式に記載が無いので当日の案内で確認',
         '保安検査と出国審査を済ませてから制限エリアへ',
       ]) + spendFold([
@@ -1012,7 +1012,8 @@ const transformScript = `
     }
     if (id === '1020') {
       rowFor(day, 'Hannover Messe/Laatzen駅着')?.remove();
-      const techEx = rowFor(day, 'TechEx Day 2');
+      // 検索キーは見出し全文。短い 'TechEx Day 2' だと本文でその語に触れた行にも当たる。
+      const techEx = rowFor(day, 'TechEx Day 2 — Physical AI');
       techEx?.insertAdjacentHTML('afterbegin', '<div class="text-slate-500">09:45–14:55</div>');
       const ice77 = routeRowFor(day, 'ICE77');
       ice77?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">20:30頃</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">Göttingen Hbfから徒歩約5分・約400m</div></div></div>');
