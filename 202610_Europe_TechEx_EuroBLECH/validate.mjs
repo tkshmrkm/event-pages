@@ -64,7 +64,7 @@ const checks = [
   ['pre-departure windows are single blocks', (itinerary.match(/セントレアで出発待ち（約3時間）/g) || []).length === 2 && (itinerary.match(/13:10〜16:10/g) || []).length === 2 && (itinerary.match(/空港到着目安/g) || []).length === 1 && !itinerary.includes('セントレアで昼食') && !itinerary.includes('JALサクララウンジ（国際線・出国審査後）')],
   // 行の時刻は build.mjs が rowFor で行を引き当てて入れる。検索キーが短いと本文で同じ語に
   // 触れた別の行に当たり、時刻が隣へずれる。10/20の先頭4行で並びを固定しておく。
-  ['10/20 row times stay with their own rows', JSON.stringify([...day1020.matchAll(/<div class="row-time">([\s\S]*?)<\/div>/g)].map(match => match[1].replace(/<[^>]+>/g, '').trim()).slice(0, 4)) === JSON.stringify(['朝', '08:30頃', '09:45〜14:55', '14:55'])],
+  ['10/20 row times stay with their own rows', JSON.stringify([...day1020.matchAll(/<div class="row-time">([\s\S]*?)<\/div>/g)].map(match => match[1].replace(/<[^>]+>/g, '').trim()).slice(0, 4)) === JSON.stringify(['08:15', '08:30頃', '09:45〜14:55', '14:55'])],
   // 待ち・乗り継ぎの見出しは「地点＋所要」だけ。理由や手順は折り畳みの中に置く。
   // 所要は交通手段と同じ規則で、推定には約を付け、時刻表どおりの区間には付けない。
   ['wait headings carry only place and duration', ['セントレアで出発待ち（約3時間）', '香港で乗り継ぎ（3時間45分）', '香港で乗り継ぎ（4時間25分）', '香港で乗り継ぎ（2時間15分）'].every(t => itinerary.includes(t)) && !itinerary.includes('— 過ごし方')],
