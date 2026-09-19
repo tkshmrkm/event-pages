@@ -54,7 +54,7 @@ const checks = [
   ['10/19 context moved to topics', itinerary.includes('美馬・金築はEuroBLECH開幕前の自由日') && !itinerary.includes('class="text-xs text-slate-500 px-1">EuroBLECHは10/20開幕')],
   ['lounge candidates are conditional without defensive prose', itinerary.includes('JALサクララウンジ') && itinerary.includes('Plaza Premium Lounge／The Coral Finest Business Class Lounge') && !itinerary.includes('利用不可とは断定せず') && !itinerary.includes('ステータス無し・プライオリティパス無し')],
   ['unnecessary one-day wording removed', !html.includes('参加できるのは実質この日だけ')],
-  ['booking status belongs to preparation', !/選定済み（未購入|運賃は手配中/.test(itinerary) && prep.includes('航空券状況') && prep.includes('選定済み（未購入')],
+  ['booking status belongs to preparation', !/選定済み|運賃は手配中/.test(itinerary) && prep.includes('航空券状況') && prep.includes('購入済み')],
   ['baggage-drop wording matches approved sample', (itinerary.match(/ホテルに荷物を預ける/g) || []).length === 2 && !itinerary.includes('ホテルフロントへ荷物預け') && !itinerary.includes('荷物預け（予約済み）')],
   // ホテル名は場所名と同じく、文字そのものが地図リンクである（2026-08-14からの標準）。
   ['hotel names are kept in lodging outcomes', (itinerary.match(/<strong>宿泊：<\/strong><a class="place"[^>]*>Holiday Inn Express Amsterdam - Sloterdijk Station<\/a>/g) || []).length === 2 && (itinerary.match(/<strong>宿泊：<\/strong><a class="place"[^>]*>Hotel FREIgeist Göttingen Innenstadt<\/a>/g) || []).length >= 4 && !/ホテルに荷物を預ける[\s\S]{0,250}(?:Holiday Inn Express|Hotel FREIgeist)/.test(itinerary)],
@@ -151,8 +151,8 @@ const checks = [
     countIn(overview, /class="ov-person ov-person-murakami"/g) === 1
     && countIn(overview, /class="ov-person ov-person-team"/g) === 1
     && countIn(overview, /class="ov-prow/g) === 18],
-  // 共通の印は「もう一方と同じ」を意味する。合流後の5日は行ごと共通、合流の日は
-  // 日中が別なので宿だけ共通、合流前は付かない。在り処と無い場所を対で見る。
+  // 共通の印は「その日まるごともう一方と同じ」を意味する。合流後の5日だけに付く。
+  // 宿だけ一致する日（10/20）には付けない。合流はその下の帯が言う。
   ['the overview marks what the two travellers share', (() => {
     const sections = overview.match(/<section class="ov-person[\s\S]*?<\/section>/g) || [];
     if (sections.length !== 2) return false;
@@ -162,21 +162,18 @@ const checks = [
       const dateOf = row => (row.match(/>(\d+\/\d+)（/) || [])[1];
       const wholeDay = rows.filter(row => row.includes('ov-prow-same')).map(dateOf);
       const stayOnly = rows.filter(row => !row.includes('ov-prow-same') && row.includes('ov-same')).map(dateOf);
-      return wholeDay.join('／') === '10/21／10/22／10/23／10/24／10/25' && stayOnly.join('／') === '10/20';
+      return wholeDay.join('／') === '10/21／10/22／10/23／10/24／10/25' && stayOnly.length === 0;
     });
   })()],
-  // ---------- 区分は2軸、移動は1区間ずつ、並びは時刻順（2026-08-23にHRSと同じ規則へ） ----------
-  // 暦（休日）と中身は別の札。1つにまとめると10/24の「休日で、かつ帰路」が表せない。
-  ['the overview separates the calendar from what the day holds', (() => {
-    const off = overview.match(/<span class="ov-off">休日<\/span>/g) || [];
-    // 10/17・10/18・10/24・10/25の土日が、2本の概要それぞれに出る。
-    if (off.length !== 8) return false;
+  // ---------- 札は中身だけ、移動は1区間ずつ、並びは時刻順 ----------
+  // 休日の札は廃止した。日付が（土）（日）を持っているので二重になる。
+  ['the overview names the day by what it holds', (() => {
+    if (overview.includes('ov-off')) return false;
     const rowOf = (person, date) => {
       const section = (overview.match(new RegExp(`<section class="ov-person ov-person-${person}[\\s\\S]*?</section>`)) || [''])[0];
       return (section.match(new RegExp(`<div class="ov-prow[^>]*>(?:(?!<div class="ov-prow)[\\s\\S])*?${date}（[\\s\\S]*?(?=<div class="ov-prow|<div class="ov-join|</section>)`)) || [''])[0];
     };
-    return rowOf('murakami', '10/24').includes('ov-off">休日')
-      && rowOf('murakami', '10/24').includes('>帰路<')
+    return rowOf('murakami', '10/24').includes('>帰路<')
       && !overview.includes('>帰国便<')
       && !overview.includes('>イベント<')
       && !/class="ov-kind"><span>日本</.test(overview);

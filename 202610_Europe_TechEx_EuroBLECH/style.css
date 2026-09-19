@@ -183,9 +183,8 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .ov-person-murakami>header{background:#EEF5FB;color:var(--lane-murakami-tx)}
 .ov-person-team>header{background:#F0F8F2;color:var(--lane-team-tx)}
 .ov-person>header span{color:var(--tx2);font-size:var(--f5);font-weight:600}
-/* 列は 日付／休日の札／中身の札／内容と区間行／宿。札の列は暦と中身で別に持つ。
-   1つの札に2つの軸を載せないため、空でも列は残す（行ごとに列がずれない）。 */
-.ov-prow{display:grid;grid-template-columns:74px 44px 62px minmax(0,1fr) 96px;gap:6px 8px;align-items:start;padding:7px 10px;border-top:1px solid var(--line2);font-size:var(--f4);line-height:1.5}
+/* 列は 日付／中身の札／内容と区間行／宿。札が無い日も列は残す（行ごとに列がずれない）。 */
+.ov-prow{display:grid;grid-template-columns:74px 62px minmax(0,1fr) 96px;gap:6px 8px;align-items:start;padding:7px 10px;border-top:1px solid var(--line2);font-size:var(--f4);line-height:1.5}
 .ov-body-cell{min-width:0;display:block}
 .ov-body-cell .ov-main{display:block}
 .ov-person>header+.ov-prow{border-top:0}

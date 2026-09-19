@@ -274,13 +274,6 @@ const overviewHeadline = text => {
   return plain.trim();
 };
 
-// ---------- 区分は2軸（2026-08-23。HRSで決めた規則をEBへ） ----------
-// 暦（休日かどうか）と、その日の中身（何をする日か）は別の軸。1つの札にまとめると、
-// 10/24のような「休日で、かつ帰路」の日が表せない。札は2つまでで、休日を先に置く。
-// 祝日はいまの日程に無い。入るときは dow と同じく FAMILY_DAYS に持たせる。
-const OVERVIEW_OFF_DOW = ['土', '日'];
-const overviewIsDayOff = day => OVERVIEW_OFF_DOW.includes(day.dow);
-
 // 中身の軸。ここでは行為（移動）と旅程上の位置（帰国便）を混ぜない。境目の日は
 // 越える境界で呼び、間の日は何をする日かで呼ぶ。**「イベント」でまとめない。**
 // TechExの参加日とAutostadtの見学日と工場見学は別物で、まとめると場所も
@@ -413,8 +406,6 @@ function overviewDayRows() {
     return {
       date: `${day.date}（${day.dow}）`,
       dow: day.dow,
-      // 暦の軸。中身の札とは別に出す。
-      off: overviewIsDayOff(day) ? '休日' : '',
       lanes: lanes.map(lane => {
         const legs = OVERVIEW_LEGS.filter(leg => leg.date === day.date && leg.tone === lane.tone);
         const pick = overviewMainPick(lane.events, legs);
@@ -613,17 +604,15 @@ function buildOverviewSection(source) {
     days: rows.map(row => {
       const mine = laneFor(row, person.tone);
       const others = OVERVIEW_PEOPLE.filter(other => other.tone !== person.tone).map(other => laneFor(row, other.tone));
-      // 印を付けるのは2つだけ。行がまるごと同じ（その日は同じ行動）か、泊まる街だけ
-      // 同じ（日中は別でも夜は同じ場所）か。区分だけの一致は印にしない。
+      // 印を付けるのは行がまるごと同じ日だけ。区分だけの一致や、宿だけの一致は印にしない。
       // 「イベント」同士でも、TechExとEuroBLECHなら同じ行動ではない。
       const legSignature = lane => lane.legs.map(leg => leg.no).join('／');
       const sameAll = others.every(o => o && o.kind === mine.kind && o.main === mine.main
         && o.stay === mine.stay && legSignature(o) === legSignature(mine));
-      const sameStay = !sameAll && others.every(o => o && o.stay === mine.stay);
       return {
-        date: row.date, dow: row.dow, off: row.off,
+        date: row.date, dow: row.dow,
         kind: mine.kind, main: mine.main, mainAt: mine.mainAt, note: mine.note,
-        legs: mine.legs, stay: mine.stay, sameAll, sameStay,
+        legs: mine.legs, stay: mine.stay, sameAll,
       };
     }),
   }));
@@ -643,10 +632,9 @@ function buildOverviewSection(source) {
     parts.sort((a, b) => a.at - b.at);
     return `<div class="ov-prow${day.sameAll ? ' ov-prow-same' : ''}">`
       + `<span class="ov-date">${esc(day.date)}${day.sameAll ? '<span class="ov-same">共通</span>' : ''}</span>`
-      + `<span class="ov-kind">${day.off ? `<span class="ov-off">${esc(day.off)}</span>` : ''}</span>`
       + `<span class="ov-kind">${day.kind ? `<span>${esc(day.kind)}</span>` : ''}</span>`
       + `<span class="ov-body-cell">${parts.map(part => part.html).join('')}</span>`
-      + `<span class="ov-city">${esc(day.stay)}${day.sameStay ? '<span class="ov-same">共通</span>' : ''}</span>`
+      + `<span class="ov-city">${esc(day.stay)}</span>`
       + '</div>';
   };
   const personHtml = person =>
@@ -1122,7 +1110,6 @@ const transformScript = `
       row.remove();
       return '<details class="topic"><summary>' + esc(title) + '</summary><div class="topic-body">' + html + '</div></details>';
     }).join('');
-    rows(day).filter(row => /選定済み（未購入|運賃は手配中/.test(row.textContent)).forEach(row => row.remove());
     rows(day).filter(row => /(?:に宿泊|泊（|機内泊)/.test(row.textContent) && !row.classList.contains('route-four')).forEach(row => row.remove());
 
     const oldHead = day.firstElementChild;
