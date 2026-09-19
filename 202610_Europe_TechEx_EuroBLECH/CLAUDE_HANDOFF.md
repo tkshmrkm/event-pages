@@ -184,6 +184,23 @@ v3をフォルダの公開入口にした。HRS（`202609_HumanoidSummitEurope`�
   差し替え、交通行は `ROUTES` の4列が差し替える。**source.htmlだけ直しても出力は変わらない。**
   `.replace(/^7:45〜$/, '07:45〜')` の正規化は、この変更で対象が消えたため削除した。
 
+## Holiday Inn Express Sloterdijk のチェックイン／チェックアウト（2026-09-19確認）
+
+[IHG公式のAmenitiesページ](https://www.ihg.com/holidayinnexpress/hotels/us/en/amsterdam/amsop/hoteldetail/amenities)
+を開いて確認。画面表示が `Check-in: 3:00 PM` / `Check-out: 12:00 PM`、同ページの構造化データも
+`"checkinTime": "15:00"` / `"checkoutTime": "12:00"` で一致。**ホテルコードは `amsop`**（`amssl` は誤り）。
+
+- 10/18の荷物預け行を「チェックイン開始の15:00まで」、10/20の行を「チェックアウトは12:00まで」に確定。
+  宿泊情報カードにも「チェックイン15:00／チェックアウト12:00」を入れた。
+- **10/20のチェックアウトは独立した行にした。** `ROUTES` の4列markupは出発地・交通手段・所要・到着地しか
+  出さないため、`['1020','チェックアウト（荷物持参）→ RAIへ',…]` のキーに入っていた「チェックアウト」の語が
+  出力から消えていた。10/23のゲッティンゲンと同じく、交通行の前に `🏨 ホテルをチェックアウト（荷物持参）` を置いた。
+- **フロントでの荷物預かりはIHG公式に記載が無い。** 「Other services」の `Storage space available`
+  （蘭語版 `Opslagruimte beschikbaar`）は収納スペースの汎用表記で、手荷物預かりとは断定できない。
+  10/18は06:55着→15:00チェックインで6時間以上これに依存するため、行に「当日確認」と書いてある。
+  `Late check out available` の記載はあるが時刻・料金は未記載。要ればホテル直通
+  （+31-20-7979191 / info.amsop@hiex.nl）。
+
 ## EuroBLECHの日ラベル（今後の共通ルール）
 
 **EuroBLECHの日には番号を振らない。** 元資料にあるのは `10/20開幕` だけで、

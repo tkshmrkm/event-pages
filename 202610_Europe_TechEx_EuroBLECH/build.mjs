@@ -961,7 +961,7 @@ const transformScript = `
     }
     if (id === '1018') {
       const rest = rowFor(day, '時差調整・休息');
-      rest?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">15:00頃</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">Holiday Inn Express Amsterdam - Sloterdijk Station</div></div></div>');
+      rest?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">15:00</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">Holiday Inn Express Amsterdam - Sloterdijk Station</div></div></div>');
       const lounge = rowFor(day, 'ラウンジ候補');
       // 10/17と同じく、13:10の「空港到着目安」と重複していたので1行に寄せる。
       rowFor(day, '空港到着目安')?.remove();
