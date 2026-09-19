@@ -59,7 +59,7 @@ const ROUTES = [
   ['1017','名古屋駅発 → 中部国際空港','10/17（土）12:35','JST','名鉄名古屋駅','名鉄ミュースカイ','約28分','10/17（土）13:03','JST','中部国際空港駅'],
   ['1017','CX539 NGO発','10/17（土）16:10','JST','中部国際空港（NGO）','CX539','4時間20分','10/17（土）19:30','HKT','香港国際空港（HKG）'],
   ['1017','CX271 HKG発','10/17（土）23:15','HKT','香港国際空港（HKG）','CX271','13時間40分','10/18（日）06:55','CEST','Amsterdam Airport Schiphol（AMS）'],
-  ['1018','Schiphol → Amsterdam Sloterdijk','10/18（日）07:30頃','CEST','Schiphol Airport Station','NS直通','約8〜10分','10/18（日）07:40頃','CEST','Amsterdam Sloterdijk'],
+  ['1018','Schiphol → Amsterdam Sloterdijk','10/18（日）08:15頃','CEST','Schiphol Airport Station','NS直通スプリンター','約10分','10/18（日）08:25頃','CEST','Amsterdam Sloterdijk'],
   ['1018','京都駅発 → 名古屋','10/18（日）11:30頃','JST','京都駅','新幹線 のぞみ','約36分','10/18（日）12:06頃','JST','名古屋駅'],
   ['1018','名古屋駅発 → 中部国際空港','10/18（日）12:35','JST','名鉄名古屋駅','名鉄ミュースカイ','約28分','10/18（日）13:03','JST','中部国際空港駅'],
   ['1018','CX539 NGO発','10/18（日）16:10','JST','中部国際空港（NGO）','CX539','4時間20分','10/18（日）19:30','HKT','香港国際空港（HKG）'],
@@ -167,8 +167,6 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['美馬・金築が20日朝ハノーファーへ移動して参加', '美馬・金築が20日朝ハノーファーへ移動して視察'],
   ['<div class="font-semibold">10/21（水）— 全員フル参加</div>', '<div class="font-semibold">10/21（水）— 全員で終日視察</div>'],
   ['10/22（木）12:45–14:00 · 全員参加・予約確定済み', '10/22（木）12:45–14:00 ・ 全員で工場見学・予約確定済み'],
-  // 自動手荷物預けの対象便かは未確認。有人カウンター前提にそろえる（村上10/17・美馬金築10/18の両方）。
-  ['<div class="text-slate-600 text-xs">国際線のため3時間前にチェックイン</div>', '<div class="text-slate-600 text-xs">国際線のため3時間前にチェックイン。自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く</div>', 'all'],
 ];
 
 // 家族向けの日別。駅から駅への細かい移動は載せない。
@@ -903,7 +901,7 @@ const transformScript = `
     });
     // 日跨ぎ便は前日の4列交通に到着を残すが、到着日の人物レーンだけを見ても
     // どこに何時に着いたか分かるように、空港名を主表示、手続きを従表示にする。
-    [['AMS 着','06:55','🛂 Amsterdam Airport Schiphol（AMS）着','入国審査・荷物受取'],['FRA 着','07:15','🛂 Frankfurt Airport（FRA）着','入国審査・荷物受取'],['HKG 着','07:20', flightIcon() + ' 香港国際空港（HKG）着','']].forEach(([match,time,label,sub]) => {
+    [['AMS 着','06:55','🛂 Amsterdam Airport Schiphol（AMS）着','入国審査・荷物受取で<strong>1時間〜1時間半</strong>みる。Sloterdijk行きのスプリンターは日曜朝も<strong>10〜20分間隔</strong>なので、手続きが済み次第すぐ乗れる'],['FRA 着','07:15','🛂 Frankfurt Airport（FRA）着','入国審査・荷物受取'],['HKG 着','07:20', flightIcon() + ' 香港国際空港（HKG）着','']].forEach(([match,time,label,sub]) => {
       const row = rowFor(day, match);
       if (row && !row.classList.contains('route-four')) row.innerHTML = '<div class="text-slate-500">' + time + '</div><div class="font-semibold">' + label + '</div>' + (sub ? '<div class="text-slate-600 text-xs">' + sub + '</div>' : '');
     });
@@ -927,8 +925,8 @@ const transformScript = `
       const arrival = rowFor(day, '空港到着目安');
       if (arrival) {
         arrival.innerHTML = '<div class="row-time">13:10〜16:10</div><div class="action-body"><div class="font-semibold">🕐 セントレアで出発待ち（約3時間）</div><div class="text-slate-600 text-xs">機内食は離陸1時間後が目安（17:10頃）。昼は軽く</div>' + todoFold([
-          '国際線のため出発3時間前にチェックイン',
-          '自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く',
+          'キャセイは<strong>第1ターミナル3階 Iカウンター</strong>。チェックイン開始は<strong>出発3時間前の13:10</strong>（セントレア公式・2026-09-19確認）',
+          '<strong>自動手荷物預け機（セルフバッグドロップ）の対象航空会社</strong>。オンラインチェックイン済みでも、まず<strong>自動チェックイン機にパスポートをかざして搭乗券と手荷物タグを発行</strong>し、自分でタグを付けてから預ける。設置位置はセントレア公式に記載が無いので当日の案内で確認',
           '保安検査と出国審査を済ませてから制限エリアへ',
           '事前の機内食予約は不要。「食事の選択」はファースト／ビジネス限定で、エコノミーで要るのは特別食（アレルギー・ベジタリアン等）の申請だけ',
         ]) + spendFold([
@@ -968,8 +966,8 @@ const transformScript = `
       // 10/17と同じく、13:10の「空港到着目安」と重複していたので1行に寄せる。
       rowFor(day, '空港到着目安')?.remove();
       if (lounge) lounge.innerHTML = '<div class="text-slate-500">13:10〜16:10</div><div class="font-semibold">🕐 セントレアで出発待ち（約3時間）</div><div class="text-slate-600 text-xs">機内食は離陸1時間後が目安（17:10頃）。昼は軽く</div>' + todoFold([
-        '国際線のため出発3時間前にチェックイン',
-        '自動手荷物預けの対応可否は未確認のため、有人カウンターで預ける前提で動く',
+        'キャセイは<strong>第1ターミナル3階 Iカウンター</strong>。チェックイン開始は<strong>出発3時間前の13:10</strong>（セントレア公式・2026-09-19確認）',
+        '<strong>自動手荷物預け機（セルフバッグドロップ）の対象航空会社</strong>。オンラインチェックイン済みでも、まず<strong>自動チェックイン機にパスポートをかざして搭乗券と手荷物タグを発行</strong>し、自分でタグを付けてから預ける。設置位置はセントレア公式に記載が無いので当日の案内で確認',
         '保安検査と出国審査を済ませてから制限エリアへ',
       ]) + spendFold([
         loungeOption([
@@ -1656,7 +1654,6 @@ const transformScript = `
       .replace(/(\\d{1,2}\\/\\d{1,2}) \\(([月火水木金土日])\\)/g, '$1（$2）')
       .replace(/(\\d{1,2}\\/\\d{1,2})–(\\d{1,2}\\/\\d{1,2})/g, '$1〜$2')
       .replace(/(\\d{1,2}\\/\\d{1,2})–(\\d{1,2})(?!:)/g, '$1〜$2')
-      .replace(/^7:45〜$/, '07:45〜')
       .replace(/^9:00(頃)?–/, '09:00$1–')
       .replace(/^9:45–/, '09:45–')
       .replace(/^乗り換え$/, '乗り継ぎ');
