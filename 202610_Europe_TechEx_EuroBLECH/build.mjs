@@ -1068,7 +1068,7 @@ const transformScript = `
         'Terminal 3発。ターミナル間の移動時間を見ておく',
       ]) + spendFold([
         loungeOption([
-          ['エアライン', 'oneworldアプリが <strong>Priority Lounge</strong>（T3・5階・06:15〜21:15）を利用可と表示。同伴の可否は未確認'],
+          ['エアライン', 'oneworld公式にキャセイ対象として <strong>Priority Lounge</strong>（T3）が載っている。Sapphireでエコノミーでも可・シャワーあり。<strong>同伴1名まで＝3名のうち1名が入れない</strong>'],
           ['Priority Pass', '同じ Priority Lounge が対象施設。9月に入れたAir Franceはシェンゲン側なのでCX288では使えない。詳細は旅程末尾の「ラウンジ利用可否」'],
           ['一般有料', '対象施設は未確認'],
           ['カード付帯', '対象施設は未確認'],
@@ -1259,8 +1259,8 @@ const transformScript = `
       ['カード付帯', 'tbd', '香港での対象は未確認。保有カードの特典ページで当日確認する。'],
     ]],
     ['10/24 FRA出発', '全員・3時間', [
-      ['エアライン', 'ok', '<strong>oneworldアプリが Priority Lounge を利用可と表示</strong>（村上が2026-09-19に確認）。キャセイはFRAに自社ラウンジを持たないが、ワンワールド側の資格でここに入れる見込み。<strong>Terminal 3</strong>発（キャセイは2026/4移転済み、旧T2は2026/6/9閉鎖）。<strong>同伴の可否は未確認</strong>。美馬・金築はステータスもプライオリティパスも無いので、入れるとすれば同伴枠だけ。搭乗券を受け取るときにカウンターで確認する。'],
-      ['Priority Pass', 'ok', '<strong>Priority Lounge</strong>（T3・5階・06:15〜21:15）が対象施設で、oneworld側と<strong>二重の経路になる</strong>。以下は経緯。<strong>村上が2026年9月のHRS出張時に、T3のAir Franceラウンジへプライオリティパスで入れることを現地で確認した。</strong>ただしその時はヘルシンキ行き＝シェンゲン内線。<strong>10/24のCX288は香港行きで非シェンゲン</strong>なので、同じラウンジに届くとは限らない。T3の対象3軒は次のとおり（<a href="https://www.prioritypass.com/en-GB/lounges/germany/frankfurt" target="_blank">Priority Pass公式</a>・2026-09-19閲覧）。<strong>Air France Lounge</strong>（5階・05:00〜20:00）は<strong>シェンゲンゾーン</strong>と明記。<strong>SkyTeam Lounge</strong>（4階・06:30〜22:00）は<strong>非シェンゲン</strong>だがSkyTeam便・同コードシェア限定で、ワンワールドのキャセイは対象外。<strong>Priority Lounge</strong>（5階・06:15〜21:15）は航空会社の制限記載がなく、<strong>ここが10/24の行き先</strong>。Priority Pass公式にはシェンゲン／非シェンゲンの別が書かれていないが、oneworldアプリがCX288に対して出している以上、非シェンゲン側から入れると見てよい。いずれも滞在上限3時間で、10:40着・13:40発なら時間は足りる。<strong>美馬・金築はプライオリティパスを持たない</strong>ため対象外。同伴で入れるかは会員種別しだいで未確認。'],
+      ['エアライン', 'ok', '<a href="https://www.oneworld.com/airport-lounge-results?location=FRA" target="_blank">oneworld公式のFRAラウンジ一覧</a>（2026-09-19閲覧）に載っている。キャセイ対象は <strong>Priority Lounge（Terminal 3）</strong>で、対象航空会社は American Airlines・British Airways・<strong>Cathay Pacific</strong>・Japan Airlines。利用資格は Business Class／First Class／<strong>Sapphire</strong>／Emerald なので、<strong>村上はエコノミーでも入れる</strong>。シャワーあり。<strong>同伴は1名まで</strong>（oneworldの規定。同伴者も oneworld 運航・販売の便に搭乗していることが条件で、CX288は満たす）。<strong>3名のうち1名は入れない</strong>ので、香港乗継と同じく分かれるかどうかを決めておく。⚠️ oneworldの一覧にはT3の Priority Lounge が<strong>2つ</strong>あり、もう一方は Qatar Airways 専用。当日どちらかを確認する。'],
+      ['Priority Pass', 'ok', '<strong>Priority Lounge</strong>（T3・5階・06:15〜21:15）が対象施設で、oneworld側と<strong>二重の経路になる</strong>。以下は経緯。<strong>村上が2026年9月のHRS出張時に、T3のAir Franceラウンジへプライオリティパスで入れることを現地で確認した。</strong>ただし<strong>そのラウンジはoneworld側ではFinnair搭乗者専用</strong>と明記されていて、9月に通れたのはFinnairに乗っていたから。キャセイでは対象外になる。加えてPriority Pass側の掲載ではシェンゲンゾーンにあり、香港行きのCX288は非シェンゲンなので、そちらの経路でも届かない。T3の対象3軒は次のとおり（<a href="https://www.prioritypass.com/en-GB/lounges/germany/frankfurt" target="_blank">Priority Pass公式</a>・2026-09-19閲覧）。<strong>Air France Lounge</strong>（5階・05:00〜20:00）は<strong>シェンゲンゾーン</strong>と明記。<strong>SkyTeam Lounge</strong>（4階・06:30〜22:00）は<strong>非シェンゲン</strong>だがSkyTeam便・同コードシェア限定で、ワンワールドのキャセイは対象外。<strong>Priority Lounge</strong>（5階・06:15〜21:15）は航空会社の制限記載がなく、<strong>ここが10/24の行き先</strong>。Priority Pass公式にはシェンゲン／非シェンゲンの別が書かれていないが、oneworld公式がCX288の対象として載せている以上、非シェンゲン側から入れると見てよい。⚠️ ただしPriority Pass側の掲載は Priority Lounge が<strong>1つ</strong>、oneworld側は<strong>2つ</strong>（Qatar専用と、AA・BA・CX・JAL用）。営業時間の06:15〜21:15がどちらのものかは<strong>未確認</strong>。いずれも滞在上限3時間で、10:40着・13:40発なら時間は足りる。<strong>美馬・金築はプライオリティパスを持たない</strong>ため、この経路では対象外。プライオリティパス側の同伴条件は会員種別しだいで未確認だが、<strong>oneworld側の同伴1名が使える</strong>のでそちらで足りる。'],
       ['一般有料', 'tbd', '対象施設は未確認。'],
       ['カード付帯', 'tbd', '対象施設は未確認。'],
     ]],
