@@ -948,8 +948,8 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "Technology Foresight / Innovation",
     "type": "技術カンファレンス・サミット",
     "location": "RAI Amsterdam, Amsterdam, Netherlands",
-    "status": "候補",
-    "assignment": "TBD",
+    "status": "参加予定",
+    "assignment": "村上",
     "purpose": "IoT、AI、Edge、デジタル基盤",
     "sourceUrl": "https://techexevent.com/europe/",
     "verifiedAt": "2026-09-19"

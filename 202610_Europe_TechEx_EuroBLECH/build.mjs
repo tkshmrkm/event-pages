@@ -78,12 +78,12 @@ const ROUTES = [
   ['1020','ICE888','10/20（火）07:55','CEST','Göttingen Hbf','ICE888（直通）','28分','10/20（火）08:23','CEST','Hannover Messe/Laatzen'],
   ['1020','EuroBLECHからゲッティンゲンへ戻る','10/20（火）17:30頃','CEST','Hannover Messe/Laatzen','列車候補を確認','約30分の目安','10/20（火）18:00頃','CEST','Göttingen Hbf'],
   ['1021','ICE888','10/21（水）07:55','CEST','Göttingen Hbf','ICE888','28分','10/21（水）08:23','CEST','Hannover Messe/Laatzen'],
-  ['1021','EuroBLECHからゲッティンゲンへ戻る','10/21（水）17:30頃','CEST','Hannover Messe/Laatzen','列車候補を確認','約30分の目安','10/21（水）18:00頃','CEST','Göttingen Hbf'],
+  ['1021','EuroBLECHからゲッティンゲンへ戻る','10/21（水）16:35','CEST','Hannover Messe/Laatzen','ICE681','28分','10/21（水）17:03','CEST','Göttingen Hbf'],
   ['1022','ICE1674','10/22（木）09:00','CEST','Göttingen Hbf','ICE1674（直通）','1時間45分','10/22（木）10:45','CEST','Bremen Hbf'],
   ['1022','ブレーメンHbf → ゲッティンゲン','10/22（木）18:00頃','CEST','Bremen Hbf','列車候補を確認','約2時間の目安','10/22（木）20:00頃','CEST','Göttingen Hbf'],
-  ['1023','ICE888','10/23（金）07:55','CEST','Göttingen Hbf','ICE888','28分','10/23（金）08:23','CEST','Hannover Messe/Laatzen'],
-  ['1023','S4','10/23（金）14:30','CEST','Hannover Messe/Laatzen','S4','8分','10/23（金）14:38','CEST','Hannover Hbf'],
-  ['1023','ICE771','10/23（金）14:53','CEST','Hannover Hbf','ICE771','2時間21分','10/23（金）17:14','CEST','Frankfurt(Main) Hbf'],
+  ['1023','ICE888','10/23（金）07:55','CEST','Göttingen Hbf','ICE888','28分・9→16番線','10/23（金）08:23','CEST','Hannover Messe/Laatzen'],
+  ['1023','S4','10/23（金）14:30','CEST','Hannover Messe/Laatzen','S4','8分・16→2番線','10/23（金）14:38','CEST','Hannover Hbf'],
+  ['1023','ICE771','10/23（金）14:53','CEST','Hannover Hbf','ICE771','2時間21分・3→7番線','10/23（金）17:14','CEST','Frankfurt(Main) Hbf'],
   ['1024','FRA中央駅','10/24（土）10:15','CEST','Toyoko Inn Frankfurt am Main Hauptbahnhof','徒歩＋空港列車','約25分','10/24（土）10:40','CEST','Frankfurt Airport Terminal 3'],
   ['1024','フランクフルト → 香港','10/24（土）13:40','CEST','Frankfurt Airport（FRA）','CX288','11時間40分','10/25（日）07:20','HKT','香港国際空港（HKG）'],
   ['1025','CX536 HKG発','10/25（日）09:35','HKT','香港国際空港（HKG）','CX536','3時間35分','10/25（日）14:10','JST','中部国際空港（NGO）'],
@@ -1026,9 +1026,9 @@ const transformScript = `
     }
     if (id === '1021') {
       const expo = rowFor(day, 'EuroBLECH（Hannover Messe）');
-      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00–17:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">全員で終日視察。会場は' + mapLink('ハノーファーメッセ') + '</div>';
+      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00–16:20頃</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">全員で終日視察。会場は' + mapLink('ハノーファーメッセ') + '。16:35発に合わせて16:20頃に退場する</div>';
       const back = Array.from(day.querySelectorAll('.route-four')).at(-1);
-      back?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">19:00頃</div><div class="action-body"><div class="font-semibold">🍽 全員で夕食</div><div class="text-slate-600 text-xs">ゲッティンゲン旧市街</div></div></div>');
+      back?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">18:30頃</div><div class="action-body"><div class="font-semibold">🍽 全員で夕食</div><div class="text-slate-600 text-xs">ゲッティンゲン旧市街。17:03着なので前日までより早く動ける</div></div></div>');
     }
     if (id === '1022') {
       // 復路は列車が2本あるので、案を文章で並べずに交通行を2本出す。
@@ -1152,6 +1152,43 @@ const transformScript = `
       details.appendChild(laneFrom(source, tone, title, stays[0]));
     }
     day.replaceWith(details);
+  });
+
+  // 別行動の日は左右のレーンが別々に流れるので、行数の少ない側だけ時間が詰まって
+  // 見える。時刻を持つ行に「次の時刻までの分数」を --tspan として持たせ、CSSで
+  // 同じ尺（分→px）の下限の高さに変える。レーンの先頭には、その日いちばん早い
+  // 時刻との差を --tlead として空ける。これで左右の時間軸がそろう。
+  //
+  // 同じ日でも人によって時刻の基準が違う日（10/17・10/18は村上が欧州時間、
+  // 美馬・金築が日本・香港時間）は、1本の軸に載せると同時刻に見えてしまうので
+  // そろえない。レーンの中に複数のタイムゾーンが出てきたら何もしない。
+  const rowStartMinutes = row => {
+    const cell = row.querySelector('.row-time');
+    const match = cell && /(\\d{1,2}):(\\d{2})/.exec(cell.textContent);
+    return match ? Number(match[1]) * 60 + Number(match[2]) : null;
+  };
+  itinerary.querySelectorAll('.lanes').forEach(lanes => {
+    const laneList = Array.from(lanes.querySelectorAll(':scope > .lane'));
+    if (laneList.length < 2) return;
+    const zones = new Set(Array.from(lanes.querySelectorAll('.endpoint .tz'))
+      .map(el => el.textContent.replace(/[^A-Z]/g, '')).filter(Boolean));
+    if (zones.size > 1) return;
+    const perLane = laneList.map(lane => Array.from(lane.querySelectorAll(':scope > .route-four, :scope > .action'))
+      .map(row => ({ row, at: rowStartMinutes(row) }))
+      .filter(entry => entry.at !== null));
+    if (perLane.filter(rows => rows.length).length < 2) return;
+    const dayStart = Math.min(...perLane.filter(rows => rows.length).map(rows => rows[0].at));
+    perLane.forEach(rows => {
+      if (!rows.length) return;
+      const lead = rows[0].at - dayStart;
+      if (lead > 0) rows[0].row.style.setProperty('--tlead', String(lead));
+      rows.forEach((entry, index) => {
+        const next = rows[index + 1];
+        if (!next) return;
+        const span = next.at - entry.at;
+        if (span > 0) entry.row.style.setProperty('--tspan', String(span));
+      });
+    });
   });
 
   const stack = itinerary.querySelector(':scope > .max-w-2xl');
