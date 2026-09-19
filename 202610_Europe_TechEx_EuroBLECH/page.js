@@ -126,10 +126,10 @@ const CHECKLIST = [
   '<span class="line-icon line-icon-ticket" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z"/><path d="M14 7v2m0 3v2m0 3v0"/></svg></span> EuroBLECH 入場券（美馬・自身で購入済み／領収書を精算用に保管）',
   '<span class="line-icon line-icon-ticket" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z"/><path d="M14 7v2m0 3v2m0 3v0"/></svg></span> EuroBLECH 入場券（金築・ベッコフ経由を連絡済み → 発券を待って受領）',
   '<span class="line-icon line-icon-laptop" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="11" rx="1"/><path d="M2 19h20"/></svg></span> TechEx Europe Gold Pass（村上・無償付与で取得済み／当日提示物を確認）',
-  '<span class="flight-mark inline-flight-mark" role="img" aria-label="フライト"></span> CX 航空券 村上往路（NGO→HKG→AMS CX539/CX271・10/17 16:10発）購入手配',
-  '<span class="flight-mark inline-flight-mark" role="img" aria-label="フライト"></span> CX 航空券 美馬・金築往路（NGO→HKG→FRA CX539/CX289・10/18 16:10発）手配',
-  '<span class="flight-mark inline-flight-mark" role="img" aria-label="フライト"></span> 航空券 復路（FRA→HKG→NGO CX288/CX536・10/24発・NGO着 10/25 14:10）購入手配',
-  '<span class="flight-mark inline-flight-mark" role="img" aria-label="フライト"></span> KL1791 AMS→HAJ 航空券購入（村上・10/20 16:50発）',
+  '<span class="flight-mark inline-flight-mark" role="img" aria-label="フライト"></span> CX 航空券 村上往路（NGO→HKG→AMS CX539/CX271・10/17 16:10発）購入済み',
+  '<span class="flight-mark inline-flight-mark" role="img" aria-label="フライト"></span> CX 航空券 美馬・金築往路（NGO→HKG→FRA CX539/CX289・10/18 16:10発）購入済み',
+  '<span class="flight-mark inline-flight-mark" role="img" aria-label="フライト"></span> 航空券 復路（FRA→HKG→NGO CX288/CX536・10/24発・NGO着 10/25 14:10）購入済み',
+  '<span class="flight-mark inline-flight-mark" role="img" aria-label="フライト"></span> KL1791 AMS→HAJ 航空券（村上・10/20 16:50発）購入済み',
   '<span class="line-icon line-icon-hotel" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6h16v15M8 10h2m4 0h2m-8 4h2m4 0h2M9 21v-3h6v3"/></svg></span> Holiday Inn Express Amsterdam - Sloterdijk Station（村上・10/18〜20 2泊）予約済み',
   '<span class="line-icon line-icon-hotel" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6h16v15M8 10h2m4 0h2m-8 4h2m4 0h2M9 21v-3h6v3"/></svg></span> Hotel FREIgeist Göttingen Innenstadt（10/19〜23泊）予約済み・村上レイトチェックイン確認',
   '<span class="line-icon line-icon-hotel" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6h16v15M8 10h2m4 0h2m-8 4h2m4 0h2M9 21v-3h6v3"/></svg></span> Toyoko Inn Frankfurt am Main Hauptbahnhof（全員・10/23泊）予約済み',
@@ -153,7 +153,7 @@ const CHECKLIST = [
 ];
 // チェック状態は配列の添字をそのままlocalStorageのキーにしている。
 // 途中に項目を挿すと既に付いているチェックが1つずつずれるので、新しい項目は末尾に足す。
-const DEFAULT_CHECKED = new Set([1, 2, 4, 9, 10, 11, 12]);
+const DEFAULT_CHECKED = new Set([1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 
 function checklistDone(index) {
   const saved = localStorage.getItem(`${FIELD_KEY}:check:${index}`);
