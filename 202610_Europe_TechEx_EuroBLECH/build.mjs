@@ -1062,13 +1062,14 @@ const transformScript = `
       const lounge = rowFor(day, 'FRAラウンジ');
       lounge?.remove();
       if (airport) airport.innerHTML = '<div class="text-slate-500">10:40〜13:40</div><div class="font-semibold">🕐 フランクフルト空港で出発待ち（3時間）</div>' + todoFold([
+        '<strong>前夜にオンラインチェックインを済ませておく。</strong>FRAにはバッグドロップがあり、オンラインチェックイン後はそのまま預けられる（2026年9月に村上が現地で確認）',
         'CX288のチェックインカウンターと搭乗ゲートは当日の案内で確認',
-        '10:40〜12:55を目安にチェックイン・保安検査・出国審査を済ませる',
+        '10:40〜12:55を目安にバッグドロップ・保安検査・出国審査を済ませる',
         'Terminal 3発。ターミナル間の移動時間を見ておく',
       ]) + spendFold([
         loungeOption([
           ['エアライン', 'キャセイはFRAに自社ラウンジが無く契約ラウンジを使う。どこかは未確定'],
-          ['Priority Pass', 'フランクフルトの対象施設は未確認'],
+          ['Priority Pass', 'T3に対象3軒。9月にAir Franceラウンジへ入れたが<strong>シェンゲン側</strong>で、CX288は非シェンゲン。本命は Priority Lounge（5階・06:15〜21:15）。詳細は旅程末尾の「ラウンジ利用可否」'],
           ['一般有料', '対象施設は未確認'],
           ['カード付帯', '対象施設は未確認'],
         ]),
@@ -1258,8 +1259,8 @@ const transformScript = `
       ['カード付帯', 'tbd', '香港での対象は未確認。保有カードの特典ページで当日確認する。'],
     ]],
     ['10/24 FRA出発', '全員・3時間', [
-      ['エアライン', 'tbd', 'キャセイはFRAに自社ラウンジが無く契約ラウンジを使う。どこかは未確定。<strong>Terminal 3</strong>発（キャセイは2026/4移転済み、旧T2は2026/6/9閉鎖）。'],
-      ['Priority Pass', 'tbd', 'フランクフルトの対象施設は未確認。'],
+      ['エアライン', 'tbd', 'キャセイはFRAに自社ラウンジが無く契約ラウンジを使う。どこかは<strong>いまも未確定</strong>。9月の現地確認でも分かったのはプライオリティパス側だけだった。<strong>Terminal 3</strong>発（キャセイは2026/4移転済み、旧T2は2026/6/9閉鎖）。搭乗券を受け取るときにカウンターで聞くのが確実。'],
+      ['Priority Pass', 'tbd', '<strong>村上が2026年9月のHRS出張時に、T3のAir Franceラウンジへプライオリティパスで入れることを現地で確認した。</strong>ただしその時はヘルシンキ行き＝シェンゲン内線。<strong>10/24のCX288は香港行きで非シェンゲン</strong>なので、同じラウンジに届くとは限らない。T3の対象3軒は次のとおり（<a href="https://www.prioritypass.com/en-GB/lounges/germany/frankfurt" target="_blank">Priority Pass公式</a>・2026-09-19閲覧）。<strong>Air France Lounge</strong>（5階・05:00〜20:00）は<strong>シェンゲンゾーン</strong>と明記。<strong>SkyTeam Lounge</strong>（4階・06:30〜22:00）は<strong>非シェンゲン</strong>だがSkyTeam便・同コードシェア限定で、ワンワールドのキャセイは対象外。<strong>Priority Lounge</strong>（5階・06:15〜21:15）は航空会社の制限記載がなく<strong>10/24の本命</strong>だが、シェンゲン／非シェンゲンの別が公式に書かれておらず未確認。いずれも滞在上限3時間で、10:40着・13:40発なら時間は足りる。<strong>美馬・金築はプライオリティパスを持たない</strong>ため対象外。同伴で入れるかは会員種別しだいで未確認。'],
       ['一般有料', 'tbd', '対象施設は未確認。'],
       ['カード付帯', 'tbd', '対象施設は未確認。'],
     ]],

@@ -148,7 +148,11 @@ const CHECKLIST = [
   '<span class="line-icon line-icon-phone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 19h2"/></svg></span> Visit Japan Web（入国・税関情報を事前登録し、QRコードを端末に保存）',
   '<span class="line-icon line-icon-clipboard" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="1"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M8 10h8M8 14h8M8 18h5"/></svg></span> 名刺（多めに用意）',
   '<span class="line-icon line-icon-plug" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v5M15 3v5"/><path d="M6 8h12v3a6 6 0 0 1-12 0z"/><path d="M12 17v4"/></svg></span> 変換プラグ（Cタイプ・EU規格）',
+  '<span class="line-icon line-icon-train" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span> Hannover Messe/Laatzen→Göttingen 鉄道予約（10/21・ICE681 16:35発）',
+  '<span class="line-icon line-icon-ticket" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z"/><path d="M14 7v2m0 3v2m0 3v0"/></svg></span> 10/24 FRA T3 非シェンゲン側で使えるPPラウンジを確認（Priority Loungeのゾーン）',
 ];
+// チェック状態は配列の添字をそのままlocalStorageのキーにしている。
+// 途中に項目を挿すと既に付いているチェックが1つずつずれるので、新しい項目は末尾に足す。
 const DEFAULT_CHECKED = new Set([1, 2, 4, 9, 10, 11, 12]);
 
 function checklistDone(index) {
