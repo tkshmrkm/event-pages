@@ -384,20 +384,7 @@ details.fold>.fold-body>div+div{margin-top:5px}
   .family-day-row{grid-template-columns:64px minmax(0,1fr)}.family-day-row>header{grid-row:1/4}.family-day-row>section,.family-day-row>aside{grid-column:2;border-left:1px solid var(--line);border-top:1px solid var(--line)}.family-day-row>section:first-of-type{border-top:0}.shared-day .family-shared{grid-column:2}.agenda-line{grid-template-columns:82px minmax(0,1fr);gap:3px 7px}.agenda-line time{grid-row:1/3;font-size:14px}.agenda-line .schedule-tag{grid-column:2}.agenda-line p{grid-column:2}
 }
 
-/* 別行動の日の時間軸そろえ。build.mjs が時刻のある行に --tspan（次の時刻までの
-   分数）と --tlead（その日の最初の時刻からの差）を入れる。ここでは分をpxに
-   変えるだけ。1列に折り返す幅ではレーンが縦に並ぶのでそろえる意味がなく、
-   紙でも余白がページを食うので、2列の画面のときだけ効かせる。 */
-@media (min-width:641px){
-  .lanes [style*="--tspan"]{min-height:calc(var(--tspan) * var(--t-scale,3px))}
-  .lanes [style*="--tlead"]{margin-top:calc(var(--tlead) * var(--t-scale,3px))}
-}
-
 @media print{
-  /* 紙では時間軸の余白がページを食うので元の高さに戻す */
-  .lanes [style*="--tspan"]{min-height:0}
-  .lanes [style*="--tlead"]{margin-top:0}
-
   .header-actions,.field-nav,.record-actions,.field-footer{display:none!important}
   .tab{display:block!important}
   .table-scroll{overflow:visible}
