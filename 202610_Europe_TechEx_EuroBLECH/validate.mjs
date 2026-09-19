@@ -96,7 +96,9 @@ const checks = [
   ['Japanese prose uses Japanese city names', !/(?:Amsterdam行き|Amsterdam到着後|Wolfsburgへ日帰り|Hannoverへ|Bremenへ日帰り|午後にFrankfurtへ|Frankfurt空港から)/.test(itinerary)],
   ['duplicate station-arrival action removed', !itinerary.includes('Hannover Messe/Laatzen駅着')],
   ['Bremen return stays a decision rather than a confirmed booking', day1022.includes('列車候補を確認') && day1022.includes('約2時間の目安') && !day1022.includes('予約確定済み')],
-  ['Bremen topic has no Hannover carryover', !day1022.includes('会場（メッセ）到着後') && day1022.includes('ゲッティンゲン駅・車内・ブレーメン到着後')],
+  // 10/22の「翌朝」は10/23で07:55発。ここに10/21の文面（翌朝09:00発でブレーメンへ）を
+  // 入れていたため、1日ずれた案内が出ていた。メッセを持ち込まない方針はそのまま残す。
+  ['Bremen topic has no Hannover carryover', !day1022.includes('会場（メッセ）到着後') && day1022.includes('翌朝は07:55発と早い')],
   ['legacy icon placeholders removed', !html.includes('class="fas fa-') && !js.includes('✈︎')],
   ['event naming aligned', html.includes('<title>TechEx Europe・EuroBLECH 2026') && html.includes('TechEx Europe・EuroBLECH 2026 ・ field guide') && js.includes('# TechEx Europe・EuroBLECH 2026 記録') && !html.includes('VIP networking drinks')],
   ['Japanese punctuation normalized', !html.includes('·') && !/(?:村上|美馬・金築):/.test(html) && !/\d{1,2}\/\d{1,2} \([月火水木金土日]\)/.test(html)],

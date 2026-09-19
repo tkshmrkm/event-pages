@@ -106,7 +106,9 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['🥂 Expo floor networking drinks（Gold Pass対象）', '🥂 Expo Floor Networking Drinks（Gold Pass対象）'],
   ['<strong>②Expo floor networking drinks 参加可</strong>', '<strong>②Expo Floor Networking Drinks 参加可</strong>'],
   ['<div class="text-slate-600 text-xs mt-0.5"><strong>昼はブレーメン</strong>（マルクト広場周辺）でランチ。<strong>夜</strong>は、ブレーメンに良い店があればそのまま夕食、なければ18時前にゲッティンゲンへ戻って旧市街で。</div>', '<div class="text-slate-600 text-xs mt-0.5"><strong>昼はブレーメン</strong>（マルクト広場周辺）でランチ。<strong>夜</strong>は、ブレーメンに良い店があればそのまま夕食、なければゲッティンゲンへ戻って旧市街で。</div>'],
-  ['<strong>ホテルは朝食が付かない</strong>うえ翌朝は07:55発と早い。前夜に買っておくと確実だが、この日も会場（メッセ）到着後に朝の時間帯でパン等はとれる。', '<strong>ホテルは朝食が付かない</strong>うえ翌朝は09:00発。前夜に購入するか、ゲッティンゲン駅・車内・ブレーメン到着後に軽くとる。'],
+  // 10/22の翌朝は10/23で07:55発（ハノーファーメッセ行き）。ここに10/21用の
+  // 「翌朝は09:00発」を入れていたため、日カードが1日ずれた案内を出していた。
+  ['<strong>ホテルは朝食が付かない</strong>うえ翌朝は07:55発と早い。前夜に買っておくと確実だが、この日も会場（メッセ）到着後に朝の時間帯でパン等はとれる。', '<strong>ホテルは朝食が付かない</strong>うえ翌朝は07:55発と早い。<strong>REWE Prinzenstraße 13 が月〜土 6:00–0:00</strong>なので、ゲッティンゲン着が20時を回っても当夜に買えるし、翌朝6時以降でも間に合う。'],
   // 10/20 村上のHAJ待ちも、FRAの買い出しと同じ「短い主表示＋折り畳み」にそろえる。
   ['<div class="text-slate-600 text-xs">S5発（19:06）まで約1時間20分。<strong>夕食はここが本命</strong>。ゲッティンゲン着は20:25と遅く店が閉まりがちなので、空港で食べるか列車用に買っておく。</div>', '<div class="text-slate-600 text-xs">S5発（19:06）まで約1時間20分。ここで夕食か買い出しを済ませる</div><details class="fold mt-1"><summary>なぜここで済ませるか</summary><div class="fold-body"><div>ゲッティンゲン着は20:25と遅く、旧市街の店が閉まりがち</div><div>空港で食べるか、列車で食べる分を買っておく</div></div></details>'],
   ['17時過ぎにFRA着。', '17:14頃にフランクフルト中央駅着。'],
