@@ -69,7 +69,7 @@ const ROUTES = [
   ['1019','ICE11 + ECE8 FRA空港駅発','10/19（月）09:15','CEST','Frankfurt空港 長距離駅（Fernbf）','ICE11＋ECE8','2時間16分','10/19（月）11:31','CEST','Göttingen Hbf'],
   ['1019','ICE682 + RE30 ゲッティンゲン発 → Wolfsburg','10/19（月）12:59','CEST','Göttingen Hbf','ICE682＋RE30','1時間53分','10/19（月）14:52','CEST','Wolfsburg Hbf'],
   ['1019','Wolfsburg Hbf 着 → Autostadtへ','10/19（月）14:52','CEST','Wolfsburg Hbf','徒歩','約10分','10/19（月）15:05頃','CEST','Autostadt'],
-  ['1019','ICE Wolfsburg Hbf発 → ゲッティンゲン','10/19（月）17:30頃','CEST','Wolfsburg Hbf','ICE直通','約1時間15〜20分','10/19（月）18:45頃','CEST','Göttingen Hbf'],
+  ['1019','ICE Wolfsburg Hbf発 → ゲッティンゲン','10/19（月）17:10','CEST','Wolfsburg Hbf','RE30＋ICE683','1時間49分・8→10番線','10/19（月）18:59','CEST','Göttingen Hbf'],
   ['1020','チェックアウト（荷物持参）→ RAIへ','10/20（火）08:30頃','CEST','Holiday Inn Express Amsterdam - Sloterdijk Station','メトロ50系統＋徒歩','約25〜28分','10/20（火）08:55頃','CEST','RAI Amsterdam'],
   ['1020','RAI →','10/20（火）14:55','CEST','RAI Amsterdam','鉄道','約10分','10/20（火）15:20頃','CEST','Amsterdam Airport Schiphol（AMS）'],
   ['1020','✈️ KL1791（KLM Cityhopper）AMS発','10/20（火）16:50','CEST','Amsterdam Airport Schiphol（AMS）','KL1791','55分','10/20（火）17:45','CEST','Hannover Airport（HAJ）'],
@@ -102,7 +102,7 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['フランクフルト → セントレア 出発（全員同便）', 'フランクフルト出発 → 香港（全員）'],
   ['セントレア 帰着 🎉', '香港乗継 → セントレア帰着・各自帰宅'],
   ['🏨 荷物預け（予約済み）', '🏨 ホテルに荷物を預ける'],
-  ['Wolfsburgから<strong>18:45頃</strong>にゲッティンゲン着 → 荷物ピックアップ・チェックイン後', 'ヴォルフスブルクから<strong>18:45頃</strong>にゲッティンゲン着 → 荷物受取・チェックイン後'],
+  ['Wolfsburgから<strong>18:59</strong>にゲッティンゲン着 → 荷物ピックアップ・チェックイン後', 'ヴォルフスブルクから<strong>18:59</strong>にゲッティンゲン着 → 荷物受取・チェックイン後'],
   ['🥂 Expo floor networking drinks（Gold Pass対象）', '🥂 Expo Floor Networking Drinks（Gold Pass対象）'],
   ['<strong>②Expo floor networking drinks 参加可</strong>', '<strong>②Expo Floor Networking Drinks 参加可</strong>'],
   ['<div class="text-slate-600 text-xs mt-0.5"><strong>昼はブレーメン</strong>（マルクト広場周辺）でランチ。<strong>夜</strong>は、ブレーメンに良い店があればそのまま夕食、なければ18時前にゲッティンゲンへ戻って旧市街で。</div>', '<div class="text-slate-600 text-xs mt-0.5"><strong>昼はブレーメン</strong>（マルクト広場周辺）でランチ。<strong>夜</strong>は、ブレーメンに良い店があればそのまま夕食、なければゲッティンゲンへ戻って旧市街で。</div>'],
@@ -195,7 +195,7 @@ const FAMILY_DAYS = [
   ], team:[
     ['07:15','procedure','到着','Frankfurt FRA着。入国審査・荷物受取'],
     ['15:05頃〜17:15頃','work','見学','Autostadt（ヴォルフスブルク）'],
-    ['18:50頃','stay','チェックイン','Hotel FREIgeist Göttingen Innenstadt'],
+    ['19:05頃','stay','チェックイン','Hotel FREIgeist Göttingen Innenstadt'],
   ], stays:[['村上','Holiday Inn Express Amsterdam - Sloterdijk Station'],['美馬・金築','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/20', dow:'火', murakami:[
     ['09:45〜14:55','work','仕事','TechEx Europe Day 2（RAI Amsterdam）'],
@@ -1010,19 +1010,19 @@ const transformScript = `
       const baggage = rowFor(day, 'ゲッティンゲン着 → Hotel FREIgeistへ荷物を預ける');
       if (baggage) baggage.innerHTML = '<div class="text-slate-500">11:40頃</div><div class="font-semibold">🏨 ホテルに荷物を預ける</div><div class="text-slate-600 text-xs">チェックイン前のため、日中預かりを依頼（要事前確認）。12:59発までに駅へ戻る</div>';
       const checkin = rowFor(day, 'ゲッティンゲン着 → 荷物ピックアップ・正式チェックイン');
-      if (checkin) checkin.innerHTML = '<div class="text-slate-500">18:50頃</div><div class="font-semibold">🏨 荷物受取・チェックイン</div>';
+      if (checkin) checkin.innerHTML = '<div class="text-slate-500">19:05頃</div><div class="font-semibold">🏨 荷物受取・チェックイン</div>';
     }
     if (id === '1020') {
       rowFor(day, 'Hannover Messe/Laatzen駅着')?.remove();
       const techEx = rowFor(day, 'TechEx Day 2');
       techEx?.insertAdjacentHTML('afterbegin', '<div class="text-slate-500">09:45–14:55</div>');
       const ice77 = routeRowFor(day, 'ICE77');
-      ice77?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">20:30頃</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">Göttingen Hbfから徒歩約3〜5分</div></div></div>');
+      ice77?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">20:30頃</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">Göttingen Hbfから徒歩約5分・約400m</div></div></div>');
       // 会場そのものへの地図リンクは場所名に張る。元資料の「📍 ハノーファーメッセ」は
       // 別リンクの旧形式なので、10/21・10/23と同じ「会場は<場所名>」にそろえる。
       // 検索キーは元資料の文字列。表示側は3日とも「EuroBLECH ＋ 誰が視察するか ＋ 会場」でそろえる。
       const expo = rowFor(day, 'EuroBLECH Day 1');
-      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00頃〜17:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">美馬・金築が終日視察。会場は' + mapLink('ハノーファーメッセ') + '</div>';
+      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00〜18:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">美馬・金築が終日視察。会場は' + mapLink('ハノーファーメッセ') + '。公式の会期時間は10/20〜22が09:00〜18:00、10/23のみ09:00〜17:00</div>';
       const back = ROUTES.find(route => route[0] === '1020' && route[1].includes('戻る'));
       expo?.insertAdjacentHTML('afterend', '<div class="route-four">' + routeMarkup(back) + '</div>');
     }
