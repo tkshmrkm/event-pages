@@ -120,16 +120,16 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['対象ラウンジ名・有料の選択肢', 'エアライン／Priority Passの候補'],
   ['<div>ステータス無し・プライオリティパス無しのため<strong>サクララウンジは利用不可</strong>。村上は前日出発のため同伴枠も使えない。</div>', '<div><strong>エアライン側：</strong>JALサクララウンジ（第1ターミナル・国際線制限エリア）。CX539での利用可否は、搭乗クラス・oneworld/Cathay等のステータス・航空会社の招待条件をチェックイン時に確認。</div>'],
   ['<div><strong>出国審査前のカードラウンジ</strong>（ゴールドカード以上が対象）: プレミアムラウンジ セントレア / 第2プレミアムラウンジ セントレア / QUALIA LOUNGE。</div>', '<div><strong>Priority Pass側：</strong>Plaza Premium Lounge（第1ターミナル・保安検査／出国審査後・Gate 18付近）または The Coral Finest Business Class Lounge。会員本人のアプリで当日の対象施設と同伴条件を確認。</div>'],
-  ['                <div>制限エリア内で確実に休むなら プラザ・プレミアム・ラウンジ名古屋（有料 約5,930円/人〜・<strong>営業時間は要確認</strong>）。</div>\n', ''],
+  ['                <div>制限エリア内で確実に休むなら プラザ・プレミアム・ラウンジ名古屋（有料・<strong>営業時間は要確認</strong>）。</div>\n', ''],
   ['ラウンジは対象外。<strong>香港らしいものを食べるなら着いてすぐ Level 7 へ</strong>', 'ラウンジ資格は未確認。<strong>香港らしいものを食べるなら着いてすぐ Level 7 へ</strong>'],
-  ['<div><strong>ラウンジを使うなら</strong>: 有料の Plaza Premium。Gate 60 が24時間・HKD 250〜で最安、Gate 1 が24時間・HKD 650〜。</div>', '<div><strong>エアライン側：</strong>キャセイのビジネスクラスラウンジ。搭乗クラスまたはoneworld/Cathay等のステータスが対象かを確認。The Deck と The Pier, Business は05:30〜00:30、The Bridge は05:00〜最終キャセイ便。</div><div><strong>一般有料：</strong>Plaza Premium Lounge は Gate 1・Gate 60 が24時間、Gate 35 が06:00〜01:00。Priority Passの対象施設かは未確認のため、会員本人のアプリで当日の対象と同伴条件を確認。</div>'],
+  ['<div><strong>ラウンジを使うなら</strong>: 有料の Plaza Premium。Gate 60 が24時間で最安、Gate 1 が24時間。</div>', '<div><strong>エアライン側：</strong>キャセイのビジネスクラスラウンジ。搭乗クラスまたはoneworld/Cathay等のステータスが対象かを確認。The Deck と The Pier, Business は05:30〜00:30、The Bridge は05:00〜最終キャセイ便。</div><div><strong>一般有料：</strong>Plaza Premium Lounge は Gate 1・Gate 60 が24時間、Gate 35 が06:00〜01:00。Priority Passの対象施設かは未確認のため、会員本人のアプリで当日の対象と同伴条件を確認。</div>'],
   ['ラウンジは対象外なので<strong>制限エリア内で夕食を取る</strong>', 'ラウンジを利用しない場合は<strong>制限エリア内で夕食を取る</strong>'],
   ['会場はExhibition FloorのNetworking Garden。<strong>開催はこの日だけ</strong>（Day 2に交流会はない）。同じ夜19:00–22:00にBoat After Party（運河クルーズ）もあるが、<strong>こちらは招待制でGold Passの特典ではない</strong>。', '会場はExhibition FloorのNetworking Garden。Day 2に交流会はない。'],
   ['          <div class="text-xs text-slate-500 px-1">EuroBLECHは10/20開幕のため19日は自由日。Wolfsburgへの日帰りはゲッティンゲンが経路上にあるため、先にホテルへ荷物を預けて身軽に移動</div>\n', ''],
   // 準備タブの「ラウンジ利用可否」表は transformScript 側で区間×4系統に組み直す。
   // 個々のセルをここで置換すると二重管理になるため、表への置換は持たせない。
   ['美馬・金築は<strong>ゴールドカード以上ならセントレアの出国審査前カードラウンジが無料</strong>。', '美馬・金築は、航空会社ラウンジとPriority Passラウンジの利用条件を確認。'],
-  ['<strong>有料ラウンジ</strong>: Plaza Premium は <strong>Gate 60 が24時間・HKD 250〜（最安）</strong>、Gate 1 が24時間・HKD 650〜。Plaza Premium First は West Hall 06:00〜／East Hall 06:30〜。', '<strong>一般有料ラウンジ</strong>: Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。Plaza Premium First は East Hall（Gate 1）06:30〜01:00／West Hall（Gate 35）06:00〜01:00・HKD 980〜。Priority Passの対象施設かは未確認のため、会員本人のアプリで当日確認する。'],
+  ['<strong>有料ラウンジ</strong>: Plaza Premium は <strong>Gate 60 が24時間（最安）</strong>、Gate 1 が24時間。Plaza Premium First は West Hall 06:00〜／East Hall 06:30〜。', '<strong>一般有料ラウンジ</strong>: Plaza Premium Lounge は Gate 60 が24時間（最安）、Gate 1 が24時間、Gate 35 が06:00〜01:00。Plaza Premium First は East Hall（Gate 1）06:30〜01:00／West Hall（Gate 35）06:00〜01:00。Priority Passの対象施設かは未確認のため、会員本人のアプリで当日確認する。'],
   // 香港のラウンジ。営業時間はキャセイ公式のラウンジ個別ページで確認済み（2026-08-14時点）。
   // The Deck: L7・Gate 6付近・05:30-00:30 / The Pier, Business: L6・Gate 65付近・05:30-00:30・シャワー14室
   // The Bridge: L6・Gate 35付近・05:00〜最終キャセイ便（00:30-03:20の範囲）
@@ -140,7 +140,7 @@ const SOURCE_TEXT_REPLACEMENTS = [
   // 行時刻も乗り継ぎ全体（着から発まで）にそろえる。20:00〜22:30はラウンジ前提だった頃の名残。
   ['<div class="text-slate-500">20:00〜22:30</div>', '<div class="text-slate-500">19:30〜23:15</div>'],
   // 10/17 村上の香港乗継 3時間45分。
-  ['          <div class="font-semibold">🛋 ビジネスクラスラウンジで夕食＋シャワー</div>\n          <div class="text-slate-600 text-xs">Sapphireでビジネスクラスラウンジ可（The Pier ビジネス側はシャワー14室）。⚠️ <strong>営業時間が未確認</strong>のため、到着後にトランスファーデスクで開いているラウンジを聞く。</div>\n          <details class="fold mt-1">\n            <summary>閉まっていた場合の代替・無料シャワーの場所</summary>\n            <div class="fold-body">\n              <div>⭐ <strong>無料シャワー（L5・24時間）</strong>: Gate 12付近 / Gate 43付近。シャンプー等あり、タオルは近くの自販機で購入。<strong>ラウンジの可否と無関係に使える</strong>ので、総移動21時間45分の後半が楽になる。</div>\n              <div><strong>有料ラウンジ</strong>: Plaza Premium が Gate 60（24時間・HKD 250〜／最安）、Gate 1（24時間・HKD 650〜）。</div>\n              <div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng（香港式の茶餐廳）・McDonald\'s が<strong>24時間</strong>。Level 7 フードコート（Tasty Congee のお粥・雲呑麺など）は22〜23時台に閉まる可能性があるので、行くなら早めに。</div>\n              <div>ファースト側の「ザ・カバナ」「ザ・ヘイヴン」は Sapphire では対象外。</div>\n            </div>\n          </details>\n',
+  ['          <div class="font-semibold">🛋 ビジネスクラスラウンジで夕食＋シャワー</div>\n          <div class="text-slate-600 text-xs">Sapphireでビジネスクラスラウンジ可（The Pier ビジネス側はシャワー14室）。⚠️ <strong>営業時間が未確認</strong>のため、到着後にトランスファーデスクで開いているラウンジを聞く。</div>\n          <details class="fold mt-1">\n            <summary>閉まっていた場合の代替・無料シャワーの場所</summary>\n            <div class="fold-body">\n              <div>⭐ <strong>無料シャワー（L5・24時間）</strong>: Gate 12付近 / Gate 43付近。シャンプー等あり、タオルは近くの自販機で購入。<strong>ラウンジの可否と無関係に使える</strong>ので、総移動21時間45分の後半が楽になる。</div>\n              <div><strong>有料ラウンジ</strong>: Plaza Premium が Gate 60（24時間・最安）、Gate 1（24時間）。</div>\n              <div><strong>飲食</strong>: Gate 10〜11付近 Level 6 の Men Wah Bing Teng（香港式の茶餐廳）・McDonald\'s が<strong>24時間</strong>。Level 7 フードコート（Tasty Congee のお粥・雲呑麺など）は22〜23時台に閉まる可能性があるので、行くなら早めに。</div>\n              <div>ファースト側の「ザ・カバナ」「ザ・ヘイヴン」は Sapphire では対象外。</div>\n            </div>\n          </details>\n',
     '          <div class="font-semibold">🕐 香港で乗り継ぎ（3時間45分）</div>\n'],
   ['<div>⚠️ <strong>キャセイ自社ラウンジ（The Wing / The Pier / The Deck / The Bridge）の営業時間は未確認</strong>（公式サイトにアクセスできず特定できなかった）。<strong>夜23時台・早朝7時台は閉まっている可能性がある</strong>ため、出発前にキャセイに確認するか、到着後にトランスファーデスクで開いているラウンジを聞く。</div>', '<div>⭐ <strong>キャセイのビジネスクラスラウンジ営業時間</strong>: The Deck（L7・Gate 6付近）と The Pier, Business（L6・Gate 65付近）が<strong>05:30〜00:30</strong>、The Bridge（L6・Gate 35付近）が<strong>05:00〜最終キャセイ便（00:30〜03:20の範囲）</strong>。<strong>夜23時台も早朝7時台も営業時間内</strong>。The Wing は現行のラウンジ一覧では First のみで、Business側の掲載が無い。</div>'],
   // 10/25 全員の香港乗継 2時間15分。ここもラウンジを選択肢の一つとして並べる。
@@ -938,7 +938,7 @@ const transformScript = `
         loungeOption([
           ['エアライン', 'キャセイのビジネスクラスラウンジ。The Deck（Gate 6付近・L7）と The Pier, Business（Gate 65付近・L6）が05:30〜00:30、The Bridge（Gate 35付近・L6）が05:00〜最終キャセイ便。20:00〜22:30はいずれも営業時間内。The Pier, Business はシャワー14室'],
           ['Priority Pass', '香港の対象施設は未確認'],
-          ['一般有料', 'Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜'],
+          ['一般有料', 'Plaza Premium Lounge は Gate 60 が24時間（最安）、Gate 1 が24時間、Gate 35 が06:00〜01:00'],
           ['カード付帯', '香港での対象は未確認'],
         ]),
         '<div>⭐ <strong>無料シャワー</strong>: L5の Gate 12付近 / Gate 43付近が24時間。シャンプー等あり、タオルは近くの自販機で購入。<strong>ラウンジの可否と無関係に使える</strong>ので、総移動21時間45分の後半が楽になる</div>',
@@ -974,7 +974,7 @@ const transformScript = `
         loungeOption([
           ['エアライン', 'キャセイのビジネスクラスラウンジ。The Deck（Gate 6付近・L7）と The Pier, Business（Gate 65付近・L6）が05:30〜00:30、The Bridge（Gate 35付近・L6）が05:00〜最終キャセイ便'],
           ['Priority Pass', '香港の対象施設は未確認'],
-          ['一般有料', 'Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜'],
+          ['一般有料', 'Plaza Premium Lounge は Gate 60 が24時間（最安）、Gate 1 が24時間、Gate 35 が06:00〜01:00'],
           ['カード付帯', '香港での対象は未確認'],
         ]),
         '<div>⭐ <strong>無料シャワー</strong>: L5の Gate 12付近 / Gate 43付近が24時間。シャンプー等あり、タオルは自販機で購入。ラウンジの可否と無関係に使える</div>',
@@ -1195,7 +1195,7 @@ const transformScript = `
     ['10/17 HKG乗継', '村上・3時間45分', [
       ['エアライン', 'ok', 'oneworld Sapphireでキャセイのビジネスクラスラウンジに<strong>本人＋同伴1名</strong>（キャセイ運航ラウンジのみ）。The Deck と The Pier, Business は05:30〜00:30、The Bridge は05:00〜最終キャセイ便。ファーストクラスラウンジ（The Wing, First / The Pier, First）と、その中の「ザ・カバナ」「ザ・ヘイヴン」は対象外。'],
       ['Priority Pass', 'tbd', '香港の対象施設は未確認。会員本人のアプリで当日の対象と同伴条件を確認する。'],
-      ['一般有料', 'ok', 'Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。Plaza Premium First は East Hall（Gate 1）06:30〜01:00／West Hall（Gate 35）06:00〜01:00・HKD 980〜。'],
+      ['一般有料', 'ok', 'Plaza Premium Lounge は Gate 60 が24時間（最安）、Gate 1 が24時間、Gate 35 が06:00〜01:00。Plaza Premium First は East Hall（Gate 1）06:30〜01:00／West Hall（Gate 35）06:00〜01:00。'],
       ['カード付帯', 'tbd', '香港での対象は未確認。保有カードの特典ページで当日確認する。'],
     ]],
     ['10/18 セントレア出発', '美馬・金築・約3時間', [
@@ -1207,7 +1207,7 @@ const transformScript = `
     ['10/18 HKG乗継', '美馬・金築・4時間25分', [
       ['エアライン', 'tbd', 'キャセイのビジネスクラスラウンジ。搭乗クラスまたはoneworld/Cathay等のステータスが対象かを確認する。営業時間は The Deck と The Pier, Business が05:30〜00:30、The Bridge が05:00〜最終キャセイ便。'],
       ['Priority Pass', 'tbd', '香港の対象施設は未確認。会員本人のアプリで当日の対象と同伴条件を確認する。'],
-      ['一般有料', 'ok', 'Plaza Premium Lounge は Gate 60 が24時間・HKD 250〜（最安）、Gate 1 が24時間・HKD 650〜、Gate 35 が06:00〜01:00・HKD 650〜。'],
+      ['一般有料', 'ok', 'Plaza Premium Lounge は Gate 60 が24時間（最安）、Gate 1 が24時間、Gate 35 が06:00〜01:00。'],
       ['カード付帯', 'tbd', '香港での対象は未確認。保有カードの特典ページで当日確認する。'],
     ]],
     ['10/24 FRA出発', '全員・3時間', [
@@ -1242,8 +1242,7 @@ const transformScript = `
 
   // ---------- 現地で使うものを準備から旅程へ移す（2026-08-16） ----------
   // 準備は出発前に埋め切ったら畳む前提のタブである。ところが中身の性質が2つに
-  // 割れていた。畳んで困らないのは、出発前チェックリスト・航空券状況（未購入か
-  // どうかの管理）・予算概算・書類の取得状況の4枚。困るのは次の3つで、いずれも
+  // 割れていた。畳んで困らないのは、出発前チェックリスト・航空券状況・書類の取得状況の3枚。困るのは次の3つで、いずれも
   // 出発したあとに開くものしかない。
   //   ホテル予約状況 … 住所・駅からの行き方・朝食時間・チェックアウト時刻。
   //                    ホテル名は日カードにあるが、住所はここにしか無い

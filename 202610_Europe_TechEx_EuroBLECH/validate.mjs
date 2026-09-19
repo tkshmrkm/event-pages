@@ -265,9 +265,9 @@ const checks = [
     ['ホテル予約状況', 'ラウンジ利用可否', '便利リンク', 'ラウンジ利用の詳細', '香港（HKG）乗継の共通メモ']
       .every(title => onSite.includes(title) && !prep.includes(title))],
   // 逆向き。出発前に埋め切るものを旅程へ流さない。旅程は現地で毎日開くので、
-  // 未購入かどうかの管理表や費用の見積もりが混ざると日付を探す邪魔になる。
+  // 予約や書類の管理表が混ざると日付を探す邪魔になる。
   ['preparation keeps what is finished before departure',
-    ['出発前チェックリスト', '航空券状況', '予算概算', '重要書類の取得状況']
+    ['出発前チェックリスト', '航空券状況', '重要書類の取得状況']
       .every(title => prep.includes(title) && !onSite.includes(title))],
   // 移した先で様式が生きていること。このカード群の見た目は .legacy-tab と
   // .legacy-stack に紐づいていて、クラス名からは読めない。箱を落とすと静かに素へ落ちる。
