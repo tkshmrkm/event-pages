@@ -65,7 +65,7 @@ const ROUTES = [
   ['1018','CX539 NGO発','10/18（日）16:10','JST','中部国際空港（NGO）','CX539','4時間20分','10/18（日）19:30','HKT','香港国際空港（HKG）'],
   ['1018','CX289 HKG発','10/18（日）23:55','HKT','香港国際空港（HKG）','CX289','13時間20分','10/19（月）07:15','CEST','Frankfurt Airport（FRA）'],
   ['1019','ホテル → RAI','10/19（月）08:30','CEST','Holiday Inn Express Amsterdam - Sloterdijk Station','メトロ50系統＋徒歩','約25〜28分','10/19（月）08:55頃','CEST','RAI Amsterdam'],
-  ['1019','RAI → ホテルへ戻る','10/19（月）21:00頃','CEST','RAI Amsterdam','メトロ50系統＋徒歩','約25〜28分','10/19（月）21:25頃','CEST','Holiday Inn Express Amsterdam - Sloterdijk Station'],
+  ['1019','RAI → ホテルへ戻る','10/19（月）18:15頃','CEST','RAI Amsterdam','メトロ50系統＋徒歩','約25〜28分','10/19（月）18:40頃','CEST','Holiday Inn Express Amsterdam - Sloterdijk Station'],
   ['1019','ICE11 + ECE8 FRA空港駅発','10/19（月）09:15','CEST','Frankfurt空港 長距離駅（Fernbf）','ICE11＋ECE8','2時間16分','10/19（月）11:31','CEST','Göttingen Hbf'],
   ['1019','ICE682 + RE30 ゲッティンゲン発 → Wolfsburg','10/19（月）12:59','CEST','Göttingen Hbf','ICE682＋RE30','1時間53分','10/19（月）14:52','CEST','Wolfsburg Hbf'],
   ['1019','Wolfsburg Hbf 着 → Autostadtへ','10/19（月）14:52','CEST','Wolfsburg Hbf','徒歩','約10分','10/19（月）15:05頃','CEST','Autostadt'],
@@ -103,8 +103,8 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['セントレア 帰着 🎉', '香港乗継 → セントレア帰着・各自帰宅'],
   ['🏨 荷物預け（予約済み）', '🏨 ホテルに荷物を預ける'],
   ['Wolfsburgから<strong>18:45頃</strong>にゲッティンゲン着 → 荷物ピックアップ・チェックイン後', 'ヴォルフスブルクから<strong>18:45頃</strong>にゲッティンゲン着 → 荷物受取・チェックイン後'],
-  ['🥂 VIP networking drinks（Gold Pass特典）', '🥂 VIP Networking Drinks（Gold Pass特典）'],
-  ['<strong>②VIP networking drinks 参加可</strong>', '<strong>②VIP Networking Drinks 参加可</strong>'],
+  ['🥂 Expo floor networking drinks（Gold Pass対象）', '🥂 Expo Floor Networking Drinks（Gold Pass対象）'],
+  ['<strong>②Expo floor networking drinks 参加可</strong>', '<strong>②Expo Floor Networking Drinks 参加可</strong>'],
   ['<div class="text-slate-600 text-xs mt-0.5"><strong>昼はブレーメン</strong>（マルクト広場周辺）でランチ。<strong>夜</strong>は、ブレーメンに良い店があればそのまま夕食、なければ18時前にゲッティンゲンへ戻って旧市街で。</div>', '<div class="text-slate-600 text-xs mt-0.5"><strong>昼はブレーメン</strong>（マルクト広場周辺）でランチ。<strong>夜</strong>は、ブレーメンに良い店があればそのまま夕食、なければゲッティンゲンへ戻って旧市街で。</div>'],
   ['<strong>ホテルは朝食が付かない</strong>うえ翌朝は07:55発と早い。前夜に買っておくと確実だが、この日も会場（メッセ）到着後に朝の時間帯でパン等はとれる。', '<strong>ホテルは朝食が付かない</strong>うえ翌朝は09:00発。前夜に購入するか、ゲッティンゲン駅・車内・ブレーメン到着後に軽くとる。'],
   // 10/20 村上のHAJ待ちも、FRAの買い出しと同じ「短い主表示＋折り畳み」にそろえる。
@@ -122,7 +122,7 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['ラウンジは対象外。<strong>香港らしいものを食べるなら着いてすぐ Level 7 へ</strong>', 'ラウンジ資格は未確認。<strong>香港らしいものを食べるなら着いてすぐ Level 7 へ</strong>'],
   ['<div><strong>ラウンジを使うなら</strong>: 有料の Plaza Premium。Gate 60 が24時間・HKD 250〜で最安、Gate 1 が24時間・HKD 650〜。</div>', '<div><strong>エアライン側：</strong>キャセイのビジネスクラスラウンジ。搭乗クラスまたはoneworld/Cathay等のステータスが対象かを確認。The Deck と The Pier, Business は05:30〜00:30、The Bridge は05:00〜最終キャセイ便。</div><div><strong>一般有料：</strong>Plaza Premium Lounge は Gate 1・Gate 60 が24時間、Gate 35 が06:00〜01:00。Priority Passの対象施設かは未確認のため、会員本人のアプリで当日の対象と同伴条件を確認。</div>'],
   ['ラウンジは対象外なので<strong>制限エリア内で夕食を取る</strong>', 'ラウンジを利用しない場合は<strong>制限エリア内で夕食を取る</strong>'],
-  ['Gold Passに含まれる特典。<strong>翌20日は14:55に会場を出るため、参加できるのは実質この日だけ</strong>。開催時刻・場所は当日のアジェンダで確認。', '開催時刻・場所は当日のアジェンダで確認。'],
+  ['会場はExhibition FloorのNetworking Garden。<strong>開催はこの日だけ</strong>（Day 2に交流会はない）。同じ夜19:00–22:00にBoat After Party（運河クルーズ）もあるが、<strong>こちらは招待制でGold Passの特典ではない</strong>。', '会場はExhibition FloorのNetworking Garden。Day 2に交流会はない。'],
   ['          <div class="text-xs text-slate-500 px-1">EuroBLECHは10/20開幕のため19日は自由日。Wolfsburgへの日帰りはゲッティンゲンが経路上にあるため、先にホテルへ荷物を預けて身軽に移動</div>\n', ''],
   // 準備タブの「ラウンジ利用可否」表は transformScript 側で区間×4系統に組み直す。
   // 個々のセルをここで置換すると二重管理になるため、表への置換は持たせない。
@@ -188,11 +188,11 @@ const FAMILY_DAYS = [
     ['23:55〜','flight','機内','CX289 香港発。**翌朝まで連絡がつきにくい**'],
   ], stays:[['村上','Holiday Inn Express Amsterdam - Sloterdijk Station'],['美馬・金築','機内']] },
   { date:'10/19', dow:'月', murakami:[
-    ['09:45〜16:50','work','仕事','TechEx Europe Day 1（RAI Amsterdam）'],
-    ['18:00〜21:00','work','交流会','VIP Networking Drinks'],
+    ['09:45〜17:00','work','仕事','TechEx Europe Day 1（RAI Amsterdam）'],
+    ['17:00〜18:00','work','交流会','Expo Floor Networking Drinks'],
   ], team:[
     ['07:15','procedure','到着','Frankfurt FRA着。入国審査・荷物受取'],
-    ['12:30〜17:20頃','work','見学','Autostadt（ヴォルフスブルク）'],
+    ['15:05頃〜17:15頃','work','見学','Autostadt（ヴォルフスブルク）'],
     ['18:50頃','stay','チェックイン','Hotel FREIgeist Göttingen Innenstadt'],
   ], stays:[['村上','Holiday Inn Express Amsterdam - Sloterdijk Station'],['美馬・金築','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/20', dow:'火', murakami:[
@@ -450,7 +450,7 @@ function overviewDayRows() {
 // この違いは日カードを開かないと分からないので、概要が持つ。
 //
 // イベント名は work の行から起こす。手で並べると、日程からイベントを1つ
-// 落としたときに概要だけが古くなる。VIP Networking Drinks は TechEx の
+// 落としたときに概要だけが古くなる。Expo Floor Networking Drinks は TechEx の
 // 一部なので TechEx へ寄せる（別のイベントとして数えない）。
 // 4つは種類が違う。名前だけ並べても、何をしに行くのかが読めない。
 // 語は「用語の決定」（CLAUDE.md）のとおりに使う。ここで別の言い回しを作らない。
@@ -459,7 +459,7 @@ function overviewDayRows() {
 //   EuroBLECH                 … 展示会視察（本命。3名）
 //   Mercedes-Benz Werk Bremen … 工場見学（予約確定。3名）
 const OVERVIEW_EVENTS = [
-  ['TechEx Europe', '参加', ['TechEx Europe', 'VIP Networking Drinks']],
+  ['TechEx Europe', '参加', ['TechEx Europe', 'Expo Floor Networking Drinks']],
   ['Autostadt', '見学', ['Autostadt']],
   ['EuroBLECH', '展示会視察', ['EuroBLECH']],
   ['Mercedes-Benz Werk Bremen', '工場見学', ['Mercedes-Benz Werk Bremen']],
@@ -1000,11 +1000,11 @@ const transformScript = `
       // 07:15着〜09:15発の待ち時間の行動なので、日トップではなく時系列に置く。
       rowFor(day, 'Frankfurt Airport（FRA）着')?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">07:45頃</div><div class="action-body"><div class="font-semibold">🍽 朝食・空港で買い出し</div><div class="text-slate-600 text-xs">09:15発の列車まで約2時間ある。座って朝食を取り、車内用のパンと飲み物も買っておく</div></div></div>');
       const techEx = rowFor(day, 'TechEx Day 1 — Gold Track');
-      techEx?.insertAdjacentHTML('afterbegin', '<div class="text-slate-500">09:45–16:50</div>');
-      Array.from(techEx?.querySelectorAll('div') || []).find(el => el.textContent.trim() === '18:00–21:00 VIP Networking Drinks（Gold Pass特典）')?.remove();
-      const drinks = rowFor(day, 'VIP Networking Drinks');
+      techEx?.insertAdjacentHTML('afterbegin', '<div class="text-slate-500">09:45–17:00</div>');
+      Array.from(techEx?.querySelectorAll('div') || []).find(el => el.textContent.trim() === '17:00–18:00 Expo floor networking drinks（Gold Pass対象）')?.remove();
+      const drinks = rowFor(day, 'Expo Floor Networking Drinks');
       const drinksTime = Array.from(drinks?.children || []).find(el => el.textContent.trim() === '夕方');
-      if (drinksTime) drinksTime.textContent = '18:00–21:00';
+      if (drinksTime) drinksTime.textContent = '17:00–18:00';
       const baggage = rowFor(day, 'ゲッティンゲン着 → Hotel FREIgeistへ荷物を預ける');
       if (baggage) baggage.innerHTML = '<div class="text-slate-500">11:40頃</div><div class="font-semibold">🏨 ホテルに荷物を預ける</div><div class="text-slate-600 text-xs">チェックイン前のため、日中預かりを依頼（要事前確認）。12:59発までに駅へ戻る</div>';
       const checkin = rowFor(day, 'ゲッティンゲン着 → 荷物ピックアップ・正式チェックイン');

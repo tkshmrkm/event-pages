@@ -936,11 +936,11 @@ window.PHYSICAL_AI_EVENTS = [
     "purpose": "Industrial Electronics全般。2026年は不参加。"
   },
   {
-    "id": "20261020-techex-europe-2026",
+    "id": "20261019-techex-europe-2026",
     "dateStatus": "confirmed",
-    "sortDate": "2026-10-20",
+    "sortDate": "2026-10-19",
     "year": 2026,
-    "dateLabel": "10月20–21日",
+    "dateLabel": "10月19–20日",
     "name": "TechEx Europe 2026",
     "budgetCandidate": false,
     "importance": "★★☆☆☆",
@@ -950,7 +950,9 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "RAI Amsterdam, Amsterdam, Netherlands",
     "status": "候補",
     "assignment": "TBD",
-    "purpose": "IoT、AI、Edge、デジタル基盤"
+    "purpose": "IoT、AI、Edge、デジタル基盤",
+    "sourceUrl": "https://techexevent.com/europe/",
+    "verifiedAt": "2026-09-19"
   },
   {
     "id": "20261020-euroblech-2026",
