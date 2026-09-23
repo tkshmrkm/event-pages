@@ -758,6 +758,31 @@ CSSはNode側で読んで `cssKnownClasses` / `cssKnownSubstrings` として渡�
 翌10/23は07:55発なので朝は早い。
 **2案を残したまま当日決める形でよい。** 選んだ場合は片方の行を消す。
 
+## TechExのアジェンダ再確認とEuroBLECHの別ページ（2026-09-23）
+
+**TechEx**（公式アジェンダを2026-09-23に読んだ）
+- Day 1（Industrial AI and Autonomous Operations、Gold Track）は9/19から変更なし。
+  16:15の登壇者（Jalal Bouhdada, Indurex）と司会（Lucy Barnard, IoT Insider）だけ書き足した
+- Day 2（Physical AI、Free Track）は **開会が09:45→09:30** に早まった。旅程の行、概要の日程、
+  視察タブの3か所と、`validate.mjs` の10/20の行時刻の期待値を動かした。RAI着は08:55頃なので旅程は変わらない
+- Day 2の14:50–15:30のパネルは、Bavarian Univ.の教授が外れ、DHLのMohamed Fouda（Day 1 15:50の登壇者）が入った。
+  退出が14:55なのは変わらない
+- 旧URL `iottechexpo.com/europe/agenda/physical-al/` は古い版のまま残っている。**正は
+  `physicalaiconference.com/europe/agenda/physical-ai/`**。Day 1は `iottechexpo.com/europe/agenda/industrial-ai-and-autonomous-operations/`
+- Opening Drinks Reception（10/18夜）の場所はまだTBC
+
+**EuroBLECHの別ページ `euroblech.html`**（ユーザーの判断。タブは増やさず、視察タブのカードからリンク）
+- `build.mjs` の入国用ページの直後で生成する。様式は `style.css` 末尾の `.eb-*`
+- 載せるのは公式サイトで確かめた事実だけ（会期・開場時間、Skywalk→西1入口、バッジと写真付き身分証、
+  撮影・録音の禁止、Colleqt QR、会議テーマ、未確認2件）
+- **視察テーマはユーザーの指示待ち。** 旧資料（`references/superseded/euroblech_3day_schedule.md`）は
+  土台にしないとユーザーが決めた。空の枠は置いていない
+- 出展社一覧とShow Agendaは公式側が動的ページで、curlでは中身が取れない。取り込むならブラウザー経由
+- **会期が4日間（10/20–23）と公式で確認できた。** 「EuroBLECHの日ラベル」の節にある
+  「会期日数を確認できたら番号を入れるか決める」の条件が満たされた。番号を入れるかはユーザー未判断
+- 検査は116件→121件（リンク、4日分の開場時間、身分証と撮影の規定、静的・絵文字なし、クラスがCSSに受けられているか）
+- 入国審査用の1枚を人ごとに分けるかは、ユーザーと相談中（2026-09-23）
+
 ## 検証
 
 変更後は次を実行する。

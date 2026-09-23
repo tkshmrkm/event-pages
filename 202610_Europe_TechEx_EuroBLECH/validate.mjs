@@ -12,6 +12,7 @@ const js = readFileSync(join(here, 'page.js'), 'utf8');
 const hrsCss = readFileSync(join(here, '..', '202609_HumanoidSummitEurope', 'style.css'), 'utf8');
 const familyPrint = readFileSync(join(here, 'family_print.html'), 'utf8');
 const immigration = readFileSync(join(here, 'immigration_print.html'), 'utf8');
+const euroblech = readFileSync(join(here, 'euroblech.html'), 'utf8');
 // パネルの並びは 旅程 / 視察 / 準備 / 記録。切り出しの終端は隣のタブで決まるので、
 // 並べ替えたらここも一緒に直す（2026-08-16に 準備 と 視察 を入れ替えた）。
 const itinerary = html.slice(html.indexOf('id="tab-itinerary"'), html.indexOf('id="tab-venue"'));
@@ -64,7 +65,7 @@ const checks = [
   ['pre-departure windows are single blocks', (itinerary.match(/セントレアで出発待ち（約3時間）/g) || []).length === 2 && (itinerary.match(/13:10〜16:10/g) || []).length === 2 && (itinerary.match(/空港到着目安/g) || []).length === 1 && !itinerary.includes('セントレアで昼食') && !itinerary.includes('JALサクララウンジ（国際線・出国審査後）')],
   // 行の時刻は build.mjs が rowFor で行を引き当てて入れる。検索キーが短いと本文で同じ語に
   // 触れた別の行に当たり、時刻が隣へずれる。10/20の先頭4行で並びを固定しておく。
-  ['10/20 row times stay with their own rows', JSON.stringify([...day1020.matchAll(/<div class="row-time">([\s\S]*?)<\/div>/g)].map(match => match[1].replace(/<[^>]+>/g, '').trim()).slice(0, 4)) === JSON.stringify(['08:15', '08:30頃', '09:45〜14:55', '14:55'])],
+  ['10/20 row times stay with their own rows', JSON.stringify([...day1020.matchAll(/<div class="row-time">([\s\S]*?)<\/div>/g)].map(match => match[1].replace(/<[^>]+>/g, '').trim()).slice(0, 4)) === JSON.stringify(['08:15', '08:30頃', '09:30〜14:55', '14:55'])],
   // 待ち・乗り継ぎの見出しは「地点＋所要」だけ。理由や手順は折り畳みの中に置く。
   // 所要は交通手段と同じ規則で、推定には約を付け、時刻表どおりの区間には付けない。
   ['wait headings carry only place and duration', ['セントレアで出発待ち（約3時間）', '香港で乗り継ぎ（3時間45分）', '香港で乗り継ぎ（4時間25分）', '香港で乗り継ぎ（2時間15分）'].every(t => itinerary.includes(t)) && !itinerary.includes('— 過ごし方')],
@@ -123,7 +124,7 @@ const checks = [
     return targets.every(target => existsSync(resolve(here, target)));
   })()],
   ['the generated files are not ignored by git', (() => {
-    const generated = ['index.html', 'family_print.html', 'immigration_print.html']
+    const generated = ['index.html', 'family_print.html', 'immigration_print.html', 'euroblech.html']
       .map(name => join(here, name));
     try {
       return !execFileSync('git', ['check-ignore', ...generated], { encoding: 'utf8' }).trim();
@@ -193,7 +194,7 @@ const checks = [
       && has('ICE888') === 0 && has('S5') === 0 && has('S4') === 0;
   })()],
   // 時刻順。主な内容を先頭に固定していたころ、10/20の村上が
-  // 「TechEx Day 2（09:45）→ 16:50のフライト」ではなく逆順に出ていた。
+  // 「TechEx Day 2（09:30）→ 16:50のフライト」ではなく逆順に出ていた。
   ['the overview reads in time order', (() => {
     const section = (overview.match(/<section class="ov-person ov-person-murakami[\s\S]*?<\/section>/) || [''])[0];
     const row = (section.match(/<div class="ov-prow[^>]*>(?:(?!<div class="ov-prow)[\s\S])*?10\/20（[\s\S]*?(?=<div class="ov-prow|<div class="ov-join|<\/section>)/) || [''])[0];
@@ -363,6 +364,18 @@ const checks = [
   ['immigration page lists all three hotels', ['Holiday Inn Express Amsterdam', 'Hotel FREIgeist Göttingen Innenstadt', 'Toyoko Inn Frankfurt am Main Hauptbahnhof']
     .every(hotel => immigration.includes(hotel))],
   ['online version links the immigration page', html.includes('href="immigration_print.html"')],
+  // ---------- EuroBLECHの基本情報（2026-09-23） ----------
+  // 視察タブのカードから開く別ページ。公式で確かめた4日分の開場時間と、現地で効く
+  // 2つの規定（写真付き身分証・撮影禁止）が落ちていないかを見る。
+  ['venue card links the EuroBLECH page', html.includes('href="euroblech.html"') && euroblech.includes('href="index.html"')],
+  ['EuroBLECH page lists the four official opening days', countIn(euroblech, /<tr><th>10\/2[0-3]（.）<\/th><td class="eb-time">09:00–1[78]:00<\/td>/g) === 4
+    && euroblech.includes('10/23（金）</th><td class="eb-time">09:00–17:00')],
+  ['EuroBLECH page keeps the ID and photography rules', euroblech.includes('写真付きの身分証') && euroblech.includes('撮影・録音')],
+  ['EuroBLECH page is static and emoji-free', !/<script/i.test(euroblech) && !/\p{Extended_Pictographic}/u.test(euroblech)],
+  ['EuroBLECH page classes are received by css', (() => {
+    const used = new Set([...euroblech.matchAll(/class="([^"]+)"/g)].flatMap(hit => hit[1].split(/\s+/)));
+    return [...used].every(name => css.includes('.' + name) || hrsCss.includes('.' + name));
+  })()],
   // ---------- 効いていないクラスは残さない ----------
   // Tailwind CDNは読み込んでいないので、受けの無いクラス名は何もしていない。
   // クラス名を見ても効くかどうか読めない状態が、実害2件（日付バッジの黒文字、

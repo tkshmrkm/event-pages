@@ -10,6 +10,7 @@ const sourcePath = join(here, 'source.html');
 const outputPath = join(here, 'index.html');
 const familyOutputPath = join(here, 'family_print.html');
 const immigrationOutputPath = join(here, 'immigration_print.html');
+const euroblechOutputPath = join(here, 'euroblech.html');
 // Windowsの2パス決め打ちだとLinux/macOSでビルドできない。CI・コンテナ・Linux開発機では
 // TRIP_BROWSERで明示的に指定できるようにし（先頭で見る＝指定があれば必ずそれを使う）、
 // 末尾にLinuxでよくあるChrome/Chromiumの場所を足す。existsSyncはundefinedを渡すと
@@ -196,7 +197,7 @@ const FAMILY_DAYS = [
     ['19:05頃','stay','チェックイン','Hotel FREIgeist Göttingen Innenstadt'],
   ], stays:[['村上','Holiday Inn Express Amsterdam - Sloterdijk Station'],['美馬・金築','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/20', dow:'火', murakami:[
-    ['09:45〜14:55','work','仕事','TechEx Europe Day 2（RAI Amsterdam）'],
+    ['09:30〜14:55','work','仕事','TechEx Europe Day 2（RAI Amsterdam）'],
     ['16:50','flight','フライト','KL1791 Amsterdam AMS発 → Hannover HAJ 17:45着'],
     ['20:30頃','stay','チェックイン','Hotel FREIgeist Göttingen Innenstadt'],
   ], team:[
@@ -617,7 +618,7 @@ function buildOverviewSection(source) {
     }),
   }));
   // 主な内容も区間行も、その日の時刻で並べる。主な内容を先頭に固定すると、10/20の
-  // 村上が「TechEx Day 2（09:45）→ 16:50のフライト」ではなく逆順に出る。
+  // 村上が「TechEx Day 2（09:30）→ 16:50のフライト」ではなく逆順に出る。
   const personRowHtml = day => {
     const parts = day.legs.map(leg => ({
       at: overviewMinutes(leg.from[3]),
@@ -1002,7 +1003,7 @@ const transformScript = `
       rowFor(day, 'Hannover Messe/Laatzen駅着')?.remove();
       // 検索キーは見出し全文。短い 'TechEx Day 2' だと本文でその語に触れた行にも当たる。
       const techEx = rowFor(day, 'TechEx Day 2 — Physical AI');
-      techEx?.insertAdjacentHTML('afterbegin', '<div class="text-slate-500">09:45–14:55</div>');
+      techEx?.insertAdjacentHTML('afterbegin', '<div class="text-slate-500">09:30–14:55</div>');
       const ice77 = routeRowFor(day, 'ICE77');
       ice77?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">20:30頃</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">Göttingen Hbfから徒歩約5分・約400m</div></div></div>');
       // 会場そのものへの地図リンクは場所名に張る。元資料の「📍 ハノーファーメッセ」は
@@ -1781,6 +1782,80 @@ try {
 `;
   writeFileSync(immigrationOutputPath, immigrationPrint.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n'), 'utf8');
   console.log(`Generated ${immigrationOutputPath}`);
+
+  // ---------- EuroBLECHの基本情報（別ページ） ----------
+  // 視察タブのカードに全部載せると、EuroBLECHだけで他の3件を合わせたより長くなる
+  // （2026-09-23にユーザーが判断）。タブは増やさず、カードからこのページへ渡す。
+  // 載せるのは公式サイトで確かめた事実だけ。視察テーマはユーザーの指示待ちで、
+  // 空の枠は置かない（34c40dfで空のブース欄を消したのと同じ理由）。
+  const ebOfficial = 'https://www.euroblech.com/en-gb';
+  const ebLink = (path, label) => `<a href="${ebOfficial}/${path}" target="_blank" rel="noopener">${label}</a>`;
+  const ebSection = (title, body) => `<section class="eb-section"><h2>${title}</h2><div class="eb-body">${body}</div></section>`;
+  const ebList = items => `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+  const ebDays = [
+    ['10/20（火）', '09:00–18:00', '美馬・金築が終日視察'],
+    ['10/21（水）', '09:00–18:00', '3名で視察。16:20頃に退場'],
+    ['10/22（木）', '09:00–18:00', '行かない（ブレーメン工場見学）'],
+    ['10/23（金）', '09:00–17:00', '3名で視察。14:15頃に退場'],
+  ].map(([day, hours, us]) => `<tr><th>${day}</th><td class="eb-time">${hours}</td><td>${us}</td></tr>`).join('');
+  const euroblechPage = `<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>EuroBLECH 2026 基本情報</title>
+<link rel="stylesheet" href="../202609_HumanoidSummitEurope/style.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="eb-page" data-trip-layout="eb-detail-v1"><main class="wrap">
+  <header class="eb-head">
+    <div class="eyebrow">EUROBLECH 2026 · HANNOVER</div>
+    <h1>EuroBLECH 2026 基本情報</h1>
+    <p class="eb-sub">第28回 国際板金加工技術見本市｜10/20（火）〜10/23（金）｜ハノーファーメッセ</p>
+    <div class="no-print"><a class="btn" href="index.html">出張ガイドへ戻る</a></div>
+  </header>
+  ${ebSection('会期と開場時間', `<table class="eb-table"><thead><tr><th>日</th><th>開場</th><th>私たち</th></tr></thead><tbody>${ebDays}</tbody></table><p class="eb-note">会期は4日間。最終日だけ17:00に閉まる。</p>`)}
+  ${ebSection('会場への入り方', ebList([
+    '最寄りは会場専用の <strong>Hannover Messe/Laatzen</strong> 駅。屋根付きの通路（Skywalk）で <strong>西1入口（West 1）</strong> へつながる。ゲッティンゲンからのICEはこの駅に直接着く',
+    'ハノーファー中央駅から市内交通で来ると <strong>北1入口（Nord 1）</strong> に着く。約20分。今回の旅程では使わない',
+    '市内交通（ÜSTRA／GVH、A–C区間）が会期中乗り放題になる「EuroBLECH Travel Card」がある。料金は公式ページに書かれていない',
+    'ドイツ鉄道の割引「DB Event Ticket」がある。片道・列車指定で2等€55.90から、全区間自由で2等€77.90から。<strong>入場券は含まない</strong>',
+  ]))}
+  ${ebSection('入場とバッジ', ebList([
+    '入場には事前登録のバッジが要る。<strong>本人しか使えず</strong>、4日間同じものを使う。忘れると入場を断られることがある',
+    '<strong>パスポートなど写真付きの身分証を持ち歩く。</strong> 求められて提示できない、またはバッジと一致しないと退場させられることがある',
+    '入場時に手荷物検査がある',
+    '服装はビジネスウェア',
+  ]))}
+  ${ebSection('会場でのルール', ebList([
+    '<strong>撮影・録音は、主催者の事前の書面許可が無い限り禁止。</strong> 許可は取っていないので、ブースの記録はメモとColleqt（下）で残す',
+    'セッションに入るとバッジを読み取られ、氏名と連絡先が主催者から登壇者・出展者に渡る。出展者にバッジを読ませた場合も同じ',
+    '荷物を置いたまま離れない。放置された荷物は主催者が処分する',
+  ]))}
+  ${ebSection('Colleqt QR（名刺とパンフレットの代わり）', ebList([
+    '出発前にメールで届く自分のQRコードを<strong>印刷して持っていく</strong>',
+    'ブースに掲げてあるColleqt QRをスマホのカメラで読み、開いたリンクで自分のバッジのQRを読む。バッジを読むのは初回だけ',
+    '読んだブースは一覧に残り、<strong>毎日まとめのメールが届く</strong>。3名それぞれに届くので、夜に突き合わせられる',
+    'QRを読むと、その出展者から後日連絡が来ることに同意したことになる',
+  ]))}
+  ${ebSection('会議プログラムのテーマ（公式）', `<table class="eb-table"><tbody>
+    <tr><th>Smart Manufacturing</th><td>AIの適用／デジタルツインとシミュレーション／機械データ・監視・MESによる簡素な連携生産／データによる効率と実績の把握</td></tr>
+    <tr><th>Sustainable Production</th><td>省エネの機械と工程／材料最適化とスクラップ削減／循環型生産とリサイクル／持続可能な材料と軽量化／CO₂排出の測定と削減</td></tr>
+    <tr><th>Workforce Performance</th><td>生産工程での実用的な自動化とロボット／人と機械の協働／作業者に使いやすいシステムとUX／技能・教育・人材育成／品質・検査・精密加工</td></tr>
+  </tbody></table><p class="eb-note">個別のセッションとガイドツアーの時刻は、公式の${ebLink('show-programme.html', 'Show Agenda')}で日付を絞って見る。このページには取り込んでいない。</p>`)}
+  ${ebSection('未確認', ebList([
+    '<strong>2026年のホール配置。</strong> 公式の会場ページから開けるエリアマップは2024年版だけ',
+    '<strong>クローク。</strong> 公式サイトに記載が見つからない。10/23は荷物を預ける前提なので、入口で確かめる',
+  ]))}
+  ${ebSection('公式リンク', ebList([
+    ebLink('visit/venue-and-travel.html', '会場と交通（Venue and Travel）'),
+    ebLink('exhibitor-directory.html', '出展社一覧（Exhibitor directory）'),
+    ebLink('show-programme.html', 'プログラム（Show Agenda）'),
+    ebLink('visit/visitor-smart-event.html', 'Colleqt QRの使い方'),
+    ebLink('admission-policy.html', '入場規定（Admissions Policy）'),
+  ]))}
+  <p class="eb-src">出典：EuroBLECH公式サイト（Venue and Travel、Admissions Policy、Colleqt QR、Conference Themes）、2026-09-23確認。「私たち」の列はこの出張の旅程。</p>
+</main></body></html>
+`;
+  writeFileSync(euroblechOutputPath, euroblechPage.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n'), 'utf8');
+  console.log(`Generated ${euroblechOutputPath}`);
 
   // オンライン版から家族セクションを落とす。正本はfamily_print.htmlで、
   // タブからも外したので、残しても画面から開く方法が無い。
