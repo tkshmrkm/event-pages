@@ -892,7 +892,9 @@ const transformScript = `
     // どこに何時に着いたか分かるように、空港名を主表示、手続きを従表示にする。
     [['AMS 着','06:55','🛂 Amsterdam Airport Schiphol（AMS）着','入国審査・荷物受取で<strong>1時間〜1時間半</strong>みる。Sloterdijk行きのスプリンターは日曜朝も<strong>10〜20分間隔</strong>なので、手続きが済み次第すぐ乗れる'],['FRA 着','07:15','🛂 Frankfurt Airport（FRA）着','入国審査・荷物受取'],['HKG 着','07:20', flightIcon() + ' 香港国際空港（HKG）着','']].forEach(([match,time,label,sub]) => {
       const row = rowFor(day, match);
-      if (row && !row.classList.contains('route-four')) row.innerHTML = '<div class="text-slate-500">' + time + '</div><div class="font-semibold">' + label + '</div>' + (sub ? '<div class="text-slate-600 text-xs">' + sub + '</div>' : '');
+      if (row && !row.classList.contains('route-four')) row.innerHTML = '<div class="text-slate-500">' + time + '</div><div class="font-semibold">' + label + '</div>' + (sub ? '<div class="text-slate-600 text-xs">' + sub + '</div>' : '')
+        // シェンゲンの入国審査は紙で出す。ブースではスマホを使わない前提（2026-09-23、ユーザーの判断）。
+        + (match === 'HKG 着' ? '' : todoFold(['入国審査では<strong>印刷した入国用の紙</strong>をパスポートと一緒に出す。審査ブースではスマホを使わない前提']));
     });
     if (id === '1021') {
       const expo1021 = rowFor(day, 'EuroBLECH（Hannover Messe）');

@@ -80,7 +80,9 @@ const checks = [
   ['CX536 meal is placed after departure', /<strong>CX536<\/strong>[\s\S]{0,900}<div class="row-time">10:35頃<\/div>[\s\S]{0,700}機内食（昼食）/.test(day1025) && day1025.includes('<strong>CX536で機内食が出る</strong>')],
   // やることの折り畳みは7件: 空港の待ち・乗り継ぎ6回と、10/25の入国手続き1回。
   // 手続き・確認・館内移動・Visit Japan Webは主表示に出さず、すべてここへ入れる。
-  ['todo lists live inside folds', count(/<summary>やること<\/summary>/g) === 7 && !/text-slate-600 text-xs">[^<]*セキュリティ再検査/.test(itinerary) && !/text-slate-600 text-xs">Visit Japan Web/.test(itinerary)],
+  // 8件目・9件目は2026-09-23に足した、AMS着とFRA着の「入国審査は紙で出す」。
+  ['paper sheet is the plan at Schengen entry', countIn(itinerary, /印刷した入国用の紙/g) === 2],
+  ['todo lists live inside folds', count(/<summary>やること<\/summary>/g) === 9 && !/text-slate-600 text-xs">[^<]*セキュリティ再検査/.test(itinerary) && !/text-slate-600 text-xs">Visit Japan Web/.test(itinerary)],
   // 人物レーンの見出しは絵文字からSVGアイコンへ変わったので、語だけを見る。
   ['10/19 granularity aligned', itinerary.includes('<div class="row-time">09:45〜17:00</div>') && itinerary.includes('美馬・金築（FRA着・ヴォルフスブルク日帰り）') && itinerary.includes('荷物受取・チェックイン') && !itinerary.includes('なぜ先にゲッティンゲンへ寄るのか')],
   ['10/19 networking time retained', /<div class="row-time">17:00〜18:00<\/div>[\s\S]{0,700}Expo Floor Networking Drinks/.test(itinerary) && !/<div class="row-time">夕方<\/div>[\s\S]{0,700}Expo Floor Networking Drinks/.test(itinerary)],
