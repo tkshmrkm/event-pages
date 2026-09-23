@@ -354,15 +354,27 @@ const checks = [
   // 審査官は英語（かオランダ語・ドイツ語）しか読まないので英語で書く。
   // 氏名とパスポート番号はどこにも保存しない。localStorageにも同期にも乗せない。
   ['immigration page is fully static', !/<script/i.test(immigration) && countIn(immigration, /onclick="/g) === 1 && immigration.includes('onclick="window.print()"')],
-  ['immigration page never persists passport details', !/localStorage|sessionStorage|TripField|cloudEndpoint/.test(immigration) && countIn(immigration, /<input/g) === 2],
+  ['immigration page never persists passport details', !/localStorage|sessionStorage|TripField|cloudEndpoint/.test(immigration) && countIn(immigration, /<input/g) === 4],
   ['immigration page is English only', !/[぀-ヿ一-鿿]/.test(immigration) && !/\p{Extended_Pictographic}/u.test(immigration)],
   // シェンゲンへの入国地点が人によって割れる。村上はAMS、美馬・金築はFRA。
   // どちらの審査官が見ても自分の分が読めるよう、両方を載せる。
-  ['immigration page states both Schengen entry points', immigration.includes('MURAKAMI') && immigration.includes('MIMA and KANECHIKU')
-    && immigration.includes('Amsterdam (AMS)') && immigration.includes('Frankfurt (FRA)')],
-  ['immigration page states the return ticket', immigration.includes('return ticket held') && immigration.includes('CX288') && immigration.includes('CX536')],
-  ['immigration page lists all three hotels', ['Holiday Inn Express Amsterdam', 'Hotel FREIgeist Göttingen Innenstadt', 'Toyoko Inn Frankfurt am Main Hauptbahnhof']
-    .every(hotel => immigration.includes(hotel))],
+  // 2026-09-23から人ごとのシート。自分のシートに他人の入国地点・ホテルが混ざらないことを見る。
+  ...(() => {
+    const sheet = id => { const from = immigration.indexOf('id="' + id + '"'); const to = immigration.indexOf('</section>', from); return from < 0 ? '' : immigration.slice(from, to); };
+    const murakami = sheet('murakami'), team = sheet('team');
+    return [
+      ['immigration has one sheet per traveller group', countIn(immigration, /class="immi-sheet"/g) === 2 && murakami.includes('MURAKAMI') && team.includes('MIMA / KANETSUKI')],
+      ['each sheet states only its own entry', murakami.includes('18 Oct 2026, 06:55</strong> at Amsterdam (AMS)') && !murakami.includes('CX289')
+        && team.includes('19 Oct 2026, 07:15</strong> at Frankfurt (FRA)') && !team.includes('CX271')],
+      ['each sheet lists only its own hotels', ['Holiday Inn Express Amsterdam', 'Hotel FREIgeist Göttingen Innenstadt', 'Toyoko Inn Frankfurt am Main Hauptbahnhof'].every(hotel => murakami.includes(hotel))
+        && !team.includes('Holiday Inn Express') && ['Hotel FREIgeist Göttingen Innenstadt', 'Toyoko Inn Frankfurt am Main Hauptbahnhof'].every(hotel => team.includes(hotel))],
+      ['each sheet states the return ticket', [murakami, team].every(part => part.includes('return ticket held') && part.includes('CX288') && part.includes('CX536'))],
+      // 金築はカネツキ（2026-09-23にユーザーが訂正）。KANECHIKUと書いていた。
+      ['Kanetsuki is romanised as read', immigration.includes('KANETSUKI') && !/KANECHIKU/i.test(immigration)],
+      ['each sheet has its own name and passport fields', countIn(murakami, /<input/g) === 2 && countIn(team, /<input/g) === 2],
+      ['sheets print on separate pages', css.includes('.immi-sheet{break-after:page}') && css.includes('.immi-page:has(.immi-sheet:target) .immi-sheet:not(:target){display:none}')],
+    ];
+  })(),
   ['online version links the immigration page', html.includes('href="immigration_print.html"')],
   // ---------- EuroBLECHの基本情報（2026-09-23） ----------
   // 視察タブのカードから開く別ページ。公式で確かめた4日分の開場時間と、現地で効く

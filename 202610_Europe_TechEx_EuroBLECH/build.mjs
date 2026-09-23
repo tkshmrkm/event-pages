@@ -1744,40 +1744,74 @@ try {
   // 氏名とパスポート番号は入力欄にして、どこにも保存しない。localStorageにも
   // Cloudflare同期にも乗せない。閉じれば消える。共用端末で開いても残らないため。
   // HRSと違い、シェンゲンへの入国地点が人によって割れる。村上はアムステルダム、
-  // 美馬・金築はフランクフルト。どちらの審査官が見ても自分の分が読めるよう両方載せる。
-  const immiRows = [
-    ['Purpose of stay', 'Attending two industry trade fairs in the Netherlands and Germany: <strong>TechEx Europe 2026</strong> and <strong>EuroBLECH 2026</strong>, plus arranged company visits. Business trip, 3 travellers from Japan. No paid work in the Schengen area.'],
-    ['Events', '<strong>TechEx Europe 2026</strong> — RAI Amsterdam, Netherlands, 19–20 Oct 2026<br><strong>EuroBLECH 2026</strong> — Hannover Messe (Laatzen), Germany, 20–23 Oct 2026<br><strong>Mercedes-Benz Werk Bremen</strong> — guided factory visit, 22 Oct 2026, 12:45–14:00 (booked)<br><strong>Autostadt Wolfsburg</strong> — 19 Oct 2026'],
-    ['Entry into Schengen', '<strong>MURAKAMI</strong>: arrive <strong>18 Oct 2026, 06:55</strong> at Amsterdam (AMS), Cathay Pacific CX539 / CX271 via Hong Kong<br><strong>MIMA and KANECHIKU</strong>: arrive <strong>19 Oct 2026, 07:15</strong> at Frankfurt (FRA), Cathay Pacific CX539 / CX289 via Hong Kong'],
-    ['Exit from Schengen', 'All three depart <strong>24 Oct 2026, 13:40</strong> from Frankfurt (FRA), Cathay Pacific CX288 / CX536 via Hong Kong<br>Arrive Nagoya (NGO) 25 Oct 2026, 14:10 — <strong>return ticket held</strong>'],
-    ['Length of stay', 'MURAKAMI: <strong>6 nights</strong> (18–24 Oct 2026). MIMA and KANECHIKU: <strong>5 nights</strong> (19–24 Oct 2026).<br>Well within the 90-day visa-free limit for Japanese nationals.'],
-    ['Accommodation', '18–20 Oct (MURAKAMI): <strong>Holiday Inn Express Amsterdam — Sloterdijk Station</strong><br>Zaventemweg 3, 1043 EH Amsterdam, Netherlands<br><br>19–23 Oct: <strong>Hotel FREIgeist Göttingen Innenstadt</strong><br>Berliner Strasse 30, 37073 Göttingen, Germany<br><br>23–24 Oct (all three): <strong>Toyoko Inn Frankfurt am Main Hauptbahnhof</strong><br>Stuttgarter Straße 35, 60329 Frankfurt am Main, Germany'],
-    ['In case of enquiry', 'Embassy of Japan in the Netherlands<br>Tobias Asserlaan 5, 2517KC Den Haag — Tel +31 70 346-9544<br><br>Consulate-General of Japan in Frankfurt<br>MesseTurm 34, Friedrich-Ebert-Anlage 49, 60327 Frankfurt am Main — Tel +49 69 238573-0'],
-  ].map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('\n      ');
+  // 美馬・金築はフランクフルト。1枚に両方を載せると、審査官が他人の行を読み分けることに
+  // なるので、人ごとのシートに分けた（2026-09-23、ユーザーの判断）。美馬・金築は日程が
+  // 同じなので1枚を共用する。審査ブースではスマホを出せない前提で、紙が正本。
+  // ヘッダーのボタンは1つのまま、開くと両方が出て、印刷すると1シート1枚になる。
+  // ページ先頭の切替（#murakami / #team）は :target で自分のシートだけを確かめる用。
+  // スクリプトは使わない（静的のまま）。
+  const immiSheets = [
+    {
+      id: 'murakami',
+      who: 'MURAKAMI',
+      events: 'TechEx Europe / EuroBLECH 2026',
+      border: 'NETHERLANDS',
+      rows: [
+        ['Purpose of stay', 'Attending two industry trade fairs: <strong>TechEx Europe 2026</strong> in Amsterdam and <strong>EuroBLECH 2026</strong> in Hannover, plus a booked factory visit. Business trip from Japan. Two colleagues join from 20 Oct. No paid work in the Schengen area.'],
+        ['Events', '<strong>TechEx Europe 2026</strong> — RAI Amsterdam, Netherlands, 19–20 Oct 2026<br><strong>EuroBLECH 2026</strong> — Hannover Messe (Laatzen), Germany, 20–23 Oct 2026<br><strong>Mercedes-Benz Werk Bremen</strong> — guided factory visit, 22 Oct 2026, 12:45–14:00 (booked)'],
+        ['Entry into Schengen', 'Arrive <strong>18 Oct 2026, 06:55</strong> at Amsterdam (AMS), Cathay Pacific CX539 / CX271 via Hong Kong'],
+        ['Exit from Schengen', 'Depart <strong>24 Oct 2026, 13:40</strong> from Frankfurt (FRA), Cathay Pacific CX288 / CX536 via Hong Kong<br>Arrive Nagoya (NGO) 25 Oct 2026, 14:10 — <strong>return ticket held</strong>'],
+        ['Length of stay', '<strong>6 nights</strong> (18–24 Oct 2026). Well within the 90-day visa-free limit for Japanese nationals.'],
+        ['Accommodation', '18–20 Oct: <strong>Holiday Inn Express Amsterdam — Sloterdijk Station</strong><br>Zaventemweg 3, 1043 EH Amsterdam, Netherlands<br><br>20–23 Oct: <strong>Hotel FREIgeist Göttingen Innenstadt</strong><br>Berliner Strasse 30, 37073 Göttingen, Germany<br><br>23–24 Oct: <strong>Toyoko Inn Frankfurt am Main Hauptbahnhof</strong><br>Stuttgarter Straße 35, 60329 Frankfurt am Main, Germany'],
+        ['In case of enquiry', 'Embassy of Japan in the Netherlands<br>Tobias Asserlaan 5, 2517KC Den Haag — Tel +31 70 346-9544'],
+      ],
+    },
+    {
+      id: 'team',
+      who: 'MIMA / KANETSUKI',
+      events: 'EuroBLECH 2026',
+      border: 'GERMANY',
+      rows: [
+        ['Purpose of stay', 'Attending the industry trade fair <strong>EuroBLECH 2026</strong> in Hannover, plus a booked factory visit. Business trip from Japan, two colleagues travelling together; a third colleague joins from 20 Oct. No paid work in the Schengen area.'],
+        ['Events', '<strong>EuroBLECH 2026</strong> — Hannover Messe (Laatzen), Germany, 20–23 Oct 2026<br><strong>Mercedes-Benz Werk Bremen</strong> — guided factory visit, 22 Oct 2026, 12:45–14:00 (booked)<br><strong>Autostadt Wolfsburg</strong> — 19 Oct 2026'],
+        ['Entry into Schengen', 'Arrive <strong>19 Oct 2026, 07:15</strong> at Frankfurt (FRA), Cathay Pacific CX539 / CX289 via Hong Kong'],
+        ['Exit from Schengen', 'Depart <strong>24 Oct 2026, 13:40</strong> from Frankfurt (FRA), Cathay Pacific CX288 / CX536 via Hong Kong<br>Arrive Nagoya (NGO) 25 Oct 2026, 14:10 — <strong>return ticket held</strong>'],
+        ['Length of stay', '<strong>5 nights</strong> (19–24 Oct 2026). Well within the 90-day visa-free limit for Japanese nationals.'],
+        ['Accommodation', '19–23 Oct: <strong>Hotel FREIgeist Göttingen Innenstadt</strong><br>Berliner Strasse 30, 37073 Göttingen, Germany<br><br>23–24 Oct: <strong>Toyoko Inn Frankfurt am Main Hauptbahnhof</strong><br>Stuttgarter Straße 35, 60329 Frankfurt am Main, Germany'],
+        ['In case of enquiry', 'Consulate-General of Japan in Frankfurt<br>MesseTurm 34, Friedrich-Ebert-Anlage 49, 60327 Frankfurt am Main — Tel +49 69 238573-0'],
+      ],
+    },
+  ];
+  const immiSheet = sheet => `<section class="immi-sheet" id="${sheet.id}">
+  <header class="immi-head">
+    <div class="eyebrow">FOR BORDER CONTROL · ${sheet.border}</div>
+    <h1>Traveller Information</h1>
+    <p class="immi-sub">${sheet.who} · ${sheet.events}</p>
+  </header>
+  <div class="immi-id">
+    <label><span>Full name (as in passport)</span><input type="text" autocomplete="off" spellcheck="false"></label>
+    <label><span>Passport number</span><input type="text" autocomplete="off" spellcheck="false"></label>
+  </div>
+  <table class="immi-table">
+    <tbody>
+      ${sheet.rows.map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('\n      ')}
+    </tbody>
+  </table>
+  <p class="immi-foot">Prepared by the traveller. Details match the itinerary and the bookings held.</p>
+</section>`;
   const immigrationPrint = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>TechEx Europe / EuroBLECH 2026 — Traveller Information</title>
 <link rel="stylesheet" href="../202609_HumanoidSummitEurope/style.css">
 <link rel="stylesheet" href="style.css">
 </head>
-<body class="immi-page" data-trip-layout="immigration-v1"><main class="wrap">
-  <header class="immi-head">
-    <div class="eyebrow">FOR BORDER CONTROL · NETHERLANDS / GERMANY</div>
-    <h1>Traveller Information</h1>
-    <p class="immi-sub">TechEx Europe 2026 · EuroBLECH 2026 · 18–24 October 2026</p>
-    <div class="no-print"><button class="btn" type="button" onclick="window.print()">Print this page</button></div>
-  </header>
-  <section class="immi-id">
-    <label><span>Full name (as in passport)</span><input type="text" autocomplete="off" spellcheck="false"></label>
-    <label><span>Passport number</span><input type="text" autocomplete="off" spellcheck="false"></label>
-    <p class="immi-note no-print">Type these just before printing. Nothing on this page is saved — close the page and the fields are empty again.</p>
-  </section>
-  <table class="immi-table">
-    <tbody>
-      ${immiRows}
-    </tbody>
-  </table>
-  <p class="immi-foot">Prepared by the traveller. Details match the itinerary and the bookings held.</p>
+<body class="immi-page" data-trip-layout="immigration-v2"><main class="wrap">
+  <div class="immi-bar no-print">
+    <nav class="immi-pick" aria-label="Choose the traveller"><a href="#murakami">MURAKAMI</a><a href="#team">MIMA / KANETSUKI</a><a href="#">Both</a></nav>
+    <button class="btn" type="button" onclick="window.print()">Print this page</button>
+    <p class="immi-note">Type the name and passport number just before printing. Nothing on this page is saved — close the page and the fields are empty again.</p>
+  </div>
+  ${immiSheets.map(immiSheet).join('\n  ')}
 </main></body></html>
 `;
   writeFileSync(immigrationOutputPath, immigrationPrint.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n'), 'utf8');

@@ -409,3 +409,19 @@ details.fold>.fold-body>div+div{margin-top:5px}
 .eb-table tbody th,.eb-time{white-space:nowrap}
 .eb-note{margin:8px 0 0;color:var(--mu);font-size:13px}
 .eb-src{color:var(--mu);font-size:12px;line-height:1.6}
+
+/* 入国審査用を人ごとのシートに分けた（2026-09-23）。#murakami / #team で開くと
+   :target のシートだけを出す。ハッシュ無しなら両方出し、印刷は1シート1枚。 */
+.immi-bar{display:grid;gap:8px;margin-bottom:16px}
+.immi-bar .immi-note{margin:0}
+.immi-pick{display:flex;flex-wrap:wrap;gap:8px}
+.immi-pick a{display:inline-flex;align-items:center;min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-radius:8px;background:#fff;color:var(--tx2);font-size:14px;font-weight:700;text-decoration:none}
+.immi-page:has(#murakami:target) .immi-pick a[href="#murakami"],
+.immi-page:has(#team:target) .immi-pick a[href="#team"]{border-color:#0B5C60;background:#EEF4F4;color:#0B5C60}
+.immi-page:has(.immi-sheet:target) .immi-sheet:not(:target){display:none}
+.immi-sheet+.immi-sheet{margin-top:28px;padding-top:18px;border-top:2px dashed var(--line)}
+@media print{
+  .immi-sheet{break-after:page}
+  .immi-sheet:last-child{break-after:auto}
+  .immi-sheet+.immi-sheet{margin-top:0;padding-top:0;border-top:0}
+}
