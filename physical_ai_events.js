@@ -1387,7 +1387,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Midnightbazar Munich, Munich, Germany",
     "status": "参考情報",
     "assignment": "—",
-    "purpose": "欧州のヒューマノイド、Physical AI、Digital Twin、産業実装・事業化動向を部門で把握する参考情報。2027年が初開催のため、参加はプログラム・登壇企業・展示内容の具体化後に判断する。 主催はULMO-Consulting（Ulrich Möller）。旧名Humanoid Evolution Summitの公式ドメインはこのサイトへ転送される。定員500名で、産業導入・実機検証（Physical AI validation）を前面に出す。",
+    "purpose": "欧州のヒューマノイド、Physical AI、Digital Twin、産業実装・事業化動向を部門で把握する参考情報。2027年が初開催のため、参加はプログラム・登壇企業・展示内容の具体化後に判断する。 主催はULMO-Consulting（Ulrich Möller）。旧名Humanoid Evolution Summitの公式ドメインはこのサイトへ転送される。定員500名で、産業導入・実機検証（Physical AI validation）を前面に出す。 つながり：前後10日以内に他の予定がなく、単独の出張になる。",
     "sourceUrl": "https://www.advancedhumanoidforum.com/",
     "verifiedAt": "2026-09-23"
   },
@@ -1406,7 +1406,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Olympia London, London, United Kingdom",
     "status": "候補",
     "assignment": "TBD",
-    "purpose": "TechEx Events Ltd主催。TechEx Globalの8つの併催イベントの1つで、Physical AI単独の開催ではない。企業導入・周辺IT寄り。North America版（6月）と同じシリーズなので、両方を別々の派遣候補として積み上げず、地域・時期で選ぶ。11VC主催の「THE Physical AI Expo」とは別イベント。",
+    "purpose": "TechEx Events Ltd主催。TechEx Globalの8つの併催イベントの1つで、Physical AI単独の開催ではない。企業導入・周辺IT寄り。North America版（6月）と同じシリーズなので、両方を別々の派遣候補として積み上げず、地域・時期で選ぶ。11VC主催の「THE Physical AI Expo」とは別イベント。 つながり：欧州内で続く予定がない。次はMD&M West（2/9–11、Anaheim）で大西洋を越える。",
     "sourceUrl": "https://physicalaiconference.com/global/",
     "verifiedAt": "2026-09-23"
   },
@@ -1442,7 +1442,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "VISTEC, Rayong, Thailand",
     "status": "参考情報",
     "assignment": "—",
-    "purpose": "第3回International Symposium on Physical Artificial Intelligence and Robotics。VISTEC・東北大学・国立情報学研究所の共同主催。生物知能から身体知能への学際テーマ。Tier1外の小規模会議のため、共同研究や特定テーマがある場合に限って現地参加を考える。",
+    "purpose": "第3回International Symposium on Physical Artificial Intelligence and Robotics。VISTEC・東北大学・国立情報学研究所の共同主催。生物知能から身体知能への学際テーマ。Tier1外の小規模会議のため、共同研究や特定テーマがある場合に限って現地参加を考える。 つながり：SEMICON Korea（2/17–19、Seoul）へ5日空けて続けられる。",
     "sourceUrl": "https://is-pair.vistec.ac.th/2027/",
     "verifiedAt": "2026-09-23"
   },
@@ -1514,7 +1514,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Birmingham, United Kingdom",
     "status": "候補",
     "assignment": "TBD",
-    "purpose": "euRoboticsの年次フォーラム（1,000名超）。欧州の研究・産業・政策の接点を見る場で、学会ほど研究発表寄りでも、展示会ほど展示寄りでもない。会期にはサイドイベントを含む。",
+    "purpose": "euRoboticsの年次フォーラム（1,000名超）。欧州の研究・産業・政策の接点を見る場で、学会ほど研究発表寄りでも、展示会ほど展示寄りでもない。会期にはサイドイベントを含む。 つながり：JEC World（3/2–4、Paris）・MWC（3/1–4、Barcelona）と会期が重なる。行くなら人を分ける。",
     "sourceUrl": "https://erf2027.eu/",
     "verifiedAt": "2026-09-23"
   },
@@ -1621,7 +1621,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Shanghai, China（都市未確認）",
     "status": "候補",
     "assignment": "TBD",
-    "purpose": "Global Embodied Intelligence and Humanoid Innovation Asia。Embodied IntelligenceとHumanoidに絞った中国勢中心の会議で、会期後にSite Visitがある。日程は公式アジェンダで確認したが、都市と主催法人は公式ページで確認できていない。GEIA Europeと同じシリーズなので、どちらか一方を選ぶ。",
+    "purpose": "Global Embodied Intelligence and Humanoid Innovation Asia。Embodied IntelligenceとHumanoidに絞った中国勢中心の会議で、会期後にSite Visitがある。日程は公式アジェンダで確認したが、都市と主催法人は公式ページで確認できていない。GEIA Europeと同じシリーズなので、どちらか一方を選ぶ。 つながり：帰国してフィジカルAI EXPO（4/21–23、東京）へ続けられる。Hannover Messe（4/5–8）の帰りに寄る形も可能（間5日）。",
     "sourceUrl": "http://www.geiaasia.com/2027_GEIA_Asia_Agenda.html",
     "verifiedAt": "2026-09-23"
   },
@@ -1657,7 +1657,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Tokyo Big Sight, Tokyo, Japan",
     "status": "候補",
     "assignment": "TBD",
-    "purpose": "RX Japan主催、NexTech Week春の6構成展の1つ。国内企業のPhysical AI導入動向を低コストで確認でき、海外イベントを選ぶ前の比較基準になる。渡航を伴わない。",
+    "purpose": "RX Japan主催、NexTech Week春の6構成展の1つ。国内企業のPhysical AI導入動向を低コストで確認でき、海外イベントを選ぶ前の比較基準になる。渡航を伴わない。 つながり：GEIA Asia（4/13–16）の帰国後に続けられる。",
     "sourceUrl": "https://www.nextech-week.jp/spring/ja-jp.html",
     "verifiedAt": "2026-09-23"
   },
@@ -1784,7 +1784,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Davos, Switzerland",
     "status": "候補",
     "assignment": "TBD",
-    "purpose": "Davos Congress主催。Robotics・Physical AI・実環境導入のカンファレンスに、展示とRobot City（実環境デモ）を組み合わせる。最終日の土曜は一般向けFamily Day。Robotics Summit & Expo（6/2–3、Boston）と会期が重なる。",
+    "purpose": "Davos Congress主催。Robotics・Physical AI・実環境導入のカンファレンスに、展示とRobot City（実環境デモ）を組み合わせる。最終日の土曜は一般向けFamily Day。Robotics Summit & Expo（6/2–3、Boston）と会期が重なる。 つながり：London Tech Week（6/7–11、London）へ2日空けて続けられる。6月の欧州はL4DC（6/16–18）・AI for Good（6/21–24）・automatica（6/22–25）まで並ぶが、1回の滞在では3週間を超える。RSE（6/2–3、Boston）とは会期が重なる。",
     "sourceUrl": "https://davostechsummit.com/",
     "verifiedAt": "2026-09-23"
   },
@@ -1839,7 +1839,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "San Jose McEnery Convention Center, San Jose, CA, United States",
     "status": "候補",
     "assignment": "TBD",
-    "purpose": "TechEx Events Ltd主催。TechEx North Americaの併催イベントの1つ（全体で8,000名超・出展250超と公表）。Global版（2月、London）と同じシリーズなので、どちらか一方を選ぶ。",
+    "purpose": "TechEx Events Ltd主催。TechEx North Americaの併催イベントの1つ（全体で8,000名超・出展250超と公表）。Global版（2月、London）と同じシリーズなので、どちらか一方を選ぶ。 つながり：CVPR（6/20–25、Seattle）へ3日空けて続けられる。automatica（6/22–25、Munich）へは大西洋を越える。",
     "sourceUrl": "https://physicalaiconference.com/northamerica/",
     "verifiedAt": "2026-09-23"
   },
@@ -1877,7 +1877,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Palexpo, Geneva, Switzerland",
     "status": "参考情報",
     "assignment": "—",
-    "purpose": "ITU主催、50超の国連機関と連携し、スイス政府と共催。Physical AI専業ではなく、標準・政策・社会実装の情報源として追う。公式ページは見出しが6月21–24日、FAQが「21–25日の週」で揺れている。automatica（6/22–25）と会期が重なる。",
+    "purpose": "ITU主催、50超の国連機関と連携し、スイス政府と共催。Physical AI専業ではなく、標準・政策・社会実装の情報源として追う。公式ページは見出しが6月21–24日、FAQが「21–25日の週」で揺れている。automatica（6/22–25）と会期が重なる。 つながり：L4DC（6/16–18、Stockholm）の後に続けられる。automatica（6/22–25、Munich）とは会期が重なるため、1日ずつ行き来するか一方を選ぶ。",
     "sourceUrl": "https://aiforgood.itu.int/summit27/",
     "verifiedAt": "2026-09-23"
   },
@@ -2004,7 +2004,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "China（都市未確認）",
     "status": "参考情報",
     "assignment": "—",
-    "purpose": "Intelligent Robot・Embodied AIがテーマ。公式サイトには事務局の連絡先しかなく、主催する大学・学会・法人も都市も確認できない。3日目はExcursion。主催者が明らかになるまで現地参加の候補にしない。",
+    "purpose": "Intelligent Robot・Embodied AIがテーマ。公式サイトには事務局の連絡先しかなく、主催する大学・学会・法人も都市も確認できない。3日目はExcursion。主催者が明らかになるまで現地参加の候補にしない。 つながり：ITMA（9/16–22、Hannover）の前に付けられる日程だが、主催者が確認できないため使いにくい。",
     "sourceUrl": "https://www.ireai.org/",
     "verifiedAt": "2026-09-23"
   },
@@ -2396,7 +2396,7 @@ window.PHYSICAL_AI_EVENTS = [
     "handling": "2027候補：7月（日次TBD）",
     "assignment": "TBD",
     "location": "Palais des Congrès, Paris, France",
-    "purpose": "RAISE Summit系のPhysical AI・Humanoid・産業ロボットの会議。RAISE・MACHINAはHyve傘下になった。公式は「Palais des Congrès • Paris • July 2027」まで（9/16時点の検討リストにあったStation Fから会場が変わった）。日次の発表後に5章へ移す。RSS 2027（7/6–11、Athens）と時期が近い。",
+    "purpose": "RAISE Summit系のPhysical AI・Humanoid・産業ロボットの会議。RAISE・MACHINAはHyve傘下になった。公式は「Palais des Congrès • Paris • July 2027」まで（9/16時点の検討リストにあったStation Fから会場が変わった）。日次の発表後に5章へ移す。RSS 2027（7/6–11、Athens）と時期が近い。 つながり：日次の発表後、RSS 2027（7/6–11、Athens）の前後に付けられるかを判断する。",
     "sourceUrl": "https://www.machinasummit.com/",
     "verifiedAt": "2026-09-23"
   },
@@ -2412,7 +2412,7 @@ window.PHYSICAL_AI_EVENTS = [
     "handling": "2027候補：Q3（日程TBD）",
     "assignment": "TBD",
     "location": "ExCeL London, London, United Kingdom",
-    "purpose": "11VC主催の初回開催。TechEx Events主催のPhysical AI Expo Globalとは別イベント。投資家・Enterprise Buyer・実機デモを前面に出す。6,000名・40超のライブデモは主催者の計画値で、実績ではない。",
+    "purpose": "11VC主催の初回開催。TechEx Events主催のPhysical AI Expo Globalとは別イベント。投資家・Enterprise Buyer・実機デモを前面に出す。6,000名・40超のライブデモは主催者の計画値で、実績ではない。 つながり：日程しだいでITMA（9/16–22、Hannover）・IROS（9/26〜、Florence）とつながる可能性がある。",
     "sourceUrl": "https://www.thephysicalaiexpo.com/",
     "verifiedAt": "2026-09-23"
   },
@@ -2428,7 +2428,7 @@ window.PHYSICAL_AI_EVENTS = [
     "handling": "2027候補：日程TBD",
     "assignment": "TBD",
     "location": "Munich, Germany（想定）",
-    "purpose": "GEIA Asiaと同じシリーズの欧州版（登壇40超・出展20超・300名超の見込み）。9/16時点の検討リストでは11月4–6日・Munichとしていたが、9/23の公式ページでは日程・都市を確認できなかった。Asiaとどちらか一方を選ぶ。HRS Europe・Advanced Humanoid Forumとテーマの重なりが大きい。",
+    "purpose": "GEIA Asiaと同じシリーズの欧州版（登壇40超・出展20超・300名超の見込み）。9/16時点の検討リストでは11月4–6日・Munichとしていたが、9/23の公式ページでは日程・都市を確認できなかった。Asiaとどちらか一方を選ぶ。HRS Europe・Advanced Humanoid Forumとテーマの重なりが大きい。 つながり：11月上旬開催ならSEMICON Europa（11/16–19、Munich）→SPS（11/23–25、Nuremberg）の前に付けられる（間10日ほど）。",
     "sourceUrl": "https://www.geiaeurope.com/index.html",
     "verifiedAt": "2026-09-23"
   },
