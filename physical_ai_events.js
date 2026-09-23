@@ -966,7 +966,7 @@ window.PHYSICAL_AI_EVENTS = [
     "businessFit": "★★★★★",
     "category": "International Exhibition / Market & Implementation",
     "type": "展示会・見本市",
-    "location": "Hanover Fairground, Hannover, Germany",
+    "location": "Hannover Exhibition Grounds, Hannover, Germany",
     "status": "参加予定",
     "assignment": "村上・金築・美馬",
     "purpose": "板金加工、レーザ、成形、加工自動化。参加予定。"
@@ -1638,7 +1638,7 @@ window.PHYSICAL_AI_EVENTS = [
     "businessFit": "★★★★☆",
     "category": "International Exhibition / Market & Implementation",
     "type": "展示会・見本市",
-    "location": "Hannover Exhibition Center, Hannover, Germany",
+    "location": "Hannover Exhibition Grounds, Hannover, Germany",
     "status": "2027計画",
     "assignment": "前半：～2名／後半：～2名",
     "purpose": "繊維機械・繊維製造。会期前半・後半で担当を分けて派遣する。"
@@ -1830,7 +1830,7 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "International Exhibition / Market & Implementation",
     "handling": "2028候補：TBD",
     "assignment": "TBD",
-    "location": "Hanover Fairground, Hannover, Germany（想定）",
+    "location": "Hannover Exhibition Grounds, Hannover, Germany（想定）",
     "purpose": "板金加工、レーザ、成形、加工自動化。隔年開催のためEuroBLECHの次回開催として管理。"
   },
   {
