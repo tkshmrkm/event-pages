@@ -1235,6 +1235,25 @@ window.PHYSICAL_AI_EVENTS = [
     "purpose": "Digital Twin、Simulation、3D表現、生成表現"
   },
   {
+    "id": "20261202-robonext-2026",
+    "dateStatus": "confirmed",
+    "sortDate": "2026-12-02",
+    "year": 2026,
+    "dateLabel": "12月2–4日",
+    "name": "RoboNext 2026",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★★★☆",
+    "category": "International Exhibition / Market & Implementation",
+    "type": "展示会・見本市",
+    "location": "INTEX Osaka, Osaka, Japan",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "日本ロボット工業会・日刊工業新聞社主催。iREXの中間年に2026年から新設された展示会。ロボット導入が進んでいない分野への適用提案が主題。渡航を伴わない。",
+    "sourceUrl": "https://robonext.nikkan.co.jp/",
+    "verifiedAt": "2026-09-23"
+  },
+  {
     "id": "20261203-ros-industrial-conference-2026",
     "dateStatus": "confirmed",
     "sortDate": "2026-12-03",
