@@ -10,6 +10,7 @@ const sourcePath = join(here, 'source.html');
 const outputPath = join(here, 'index.html');
 const familyOutputPath = join(here, 'family_print.html');
 const immigrationOutputPath = join(here, 'immigration_print.html');
+const euroblechOutputPath = join(here, 'euroblech.html');
 // Windowsの2パス決め打ちだとLinux/macOSでビルドできない。CI・コンテナ・Linux開発機では
 // TRIP_BROWSERで明示的に指定できるようにし（先頭で見る＝指定があれば必ずそれを使う）、
 // 末尾にLinuxでよくあるChrome/Chromiumの場所を足す。existsSyncはundefinedを渡すと
@@ -196,7 +197,7 @@ const FAMILY_DAYS = [
     ['19:05頃','stay','チェックイン','Hotel FREIgeist Göttingen Innenstadt'],
   ], stays:[['村上','Holiday Inn Express Amsterdam - Sloterdijk Station'],['美馬・金築','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/20', dow:'火', murakami:[
-    ['09:45〜14:55','work','仕事','TechEx Europe Day 2（RAI Amsterdam）'],
+    ['09:30〜14:55','work','仕事','TechEx Europe Day 2（RAI Amsterdam）'],
     ['16:50','flight','フライト','KL1791 Amsterdam AMS発 → Hannover HAJ 17:45着'],
     ['20:30頃','stay','チェックイン','Hotel FREIgeist Göttingen Innenstadt'],
   ], team:[
@@ -617,7 +618,7 @@ function buildOverviewSection(source) {
     }),
   }));
   // 主な内容も区間行も、その日の時刻で並べる。主な内容を先頭に固定すると、10/20の
-  // 村上が「TechEx Day 2（09:45）→ 16:50のフライト」ではなく逆順に出る。
+  // 村上が「TechEx Day 2（09:30）→ 16:50のフライト」ではなく逆順に出る。
   const personRowHtml = day => {
     const parts = day.legs.map(leg => ({
       at: overviewMinutes(leg.from[3]),
@@ -891,7 +892,9 @@ const transformScript = `
     // どこに何時に着いたか分かるように、空港名を主表示、手続きを従表示にする。
     [['AMS 着','06:55','🛂 Amsterdam Airport Schiphol（AMS）着','入国審査・荷物受取で<strong>1時間〜1時間半</strong>みる。Sloterdijk行きのスプリンターは日曜朝も<strong>10〜20分間隔</strong>なので、手続きが済み次第すぐ乗れる'],['FRA 着','07:15','🛂 Frankfurt Airport（FRA）着','入国審査・荷物受取'],['HKG 着','07:20', flightIcon() + ' 香港国際空港（HKG）着','']].forEach(([match,time,label,sub]) => {
       const row = rowFor(day, match);
-      if (row && !row.classList.contains('route-four')) row.innerHTML = '<div class="text-slate-500">' + time + '</div><div class="font-semibold">' + label + '</div>' + (sub ? '<div class="text-slate-600 text-xs">' + sub + '</div>' : '');
+      if (row && !row.classList.contains('route-four')) row.innerHTML = '<div class="text-slate-500">' + time + '</div><div class="font-semibold">' + label + '</div>' + (sub ? '<div class="text-slate-600 text-xs">' + sub + '</div>' : '')
+        // シェンゲンの入国審査は紙で出す。ブースではスマホを使わない前提（2026-09-23、ユーザーの判断）。
+        + (match === 'HKG 着' ? '' : todoFold(['入国審査では<strong>印刷した入国用の紙</strong>をパスポートと一緒に出す。審査ブースではスマホを使わない前提']));
     });
     if (id === '1021') {
       const expo1021 = rowFor(day, 'EuroBLECH（Hannover Messe）');
@@ -1002,7 +1005,7 @@ const transformScript = `
       rowFor(day, 'Hannover Messe/Laatzen駅着')?.remove();
       // 検索キーは見出し全文。短い 'TechEx Day 2' だと本文でその語に触れた行にも当たる。
       const techEx = rowFor(day, 'TechEx Day 2 — Physical AI');
-      techEx?.insertAdjacentHTML('afterbegin', '<div class="text-slate-500">09:45–14:55</div>');
+      techEx?.insertAdjacentHTML('afterbegin', '<div class="text-slate-500">09:30–14:55</div>');
       const ice77 = routeRowFor(day, 'ICE77');
       ice77?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">20:30頃</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">Göttingen Hbfから徒歩約5分・約400m</div></div></div>');
       // 会場そのものへの地図リンクは場所名に張る。元資料の「📍 ハノーファーメッセ」は
@@ -1743,44 +1746,152 @@ try {
   // 氏名とパスポート番号は入力欄にして、どこにも保存しない。localStorageにも
   // Cloudflare同期にも乗せない。閉じれば消える。共用端末で開いても残らないため。
   // HRSと違い、シェンゲンへの入国地点が人によって割れる。村上はアムステルダム、
-  // 美馬・金築はフランクフルト。どちらの審査官が見ても自分の分が読めるよう両方載せる。
-  const immiRows = [
-    ['Purpose of stay', 'Attending two industry trade fairs in the Netherlands and Germany: <strong>TechEx Europe 2026</strong> and <strong>EuroBLECH 2026</strong>, plus arranged company visits. Business trip, 3 travellers from Japan. No paid work in the Schengen area.'],
-    ['Events', '<strong>TechEx Europe 2026</strong> — RAI Amsterdam, Netherlands, 19–20 Oct 2026<br><strong>EuroBLECH 2026</strong> — Hannover Messe (Laatzen), Germany, 20–23 Oct 2026<br><strong>Mercedes-Benz Werk Bremen</strong> — guided factory visit, 22 Oct 2026, 12:45–14:00 (booked)<br><strong>Autostadt Wolfsburg</strong> — 19 Oct 2026'],
-    ['Entry into Schengen', '<strong>MURAKAMI</strong>: arrive <strong>18 Oct 2026, 06:55</strong> at Amsterdam (AMS), Cathay Pacific CX539 / CX271 via Hong Kong<br><strong>MIMA and KANECHIKU</strong>: arrive <strong>19 Oct 2026, 07:15</strong> at Frankfurt (FRA), Cathay Pacific CX539 / CX289 via Hong Kong'],
-    ['Exit from Schengen', 'All three depart <strong>24 Oct 2026, 13:40</strong> from Frankfurt (FRA), Cathay Pacific CX288 / CX536 via Hong Kong<br>Arrive Nagoya (NGO) 25 Oct 2026, 14:10 — <strong>return ticket held</strong>'],
-    ['Length of stay', 'MURAKAMI: <strong>6 nights</strong> (18–24 Oct 2026). MIMA and KANECHIKU: <strong>5 nights</strong> (19–24 Oct 2026).<br>Well within the 90-day visa-free limit for Japanese nationals.'],
-    ['Accommodation', '18–20 Oct (MURAKAMI): <strong>Holiday Inn Express Amsterdam — Sloterdijk Station</strong><br>Zaventemweg 3, 1043 EH Amsterdam, Netherlands<br><br>19–23 Oct: <strong>Hotel FREIgeist Göttingen Innenstadt</strong><br>Berliner Strasse 30, 37073 Göttingen, Germany<br><br>23–24 Oct (all three): <strong>Toyoko Inn Frankfurt am Main Hauptbahnhof</strong><br>Stuttgarter Straße 35, 60329 Frankfurt am Main, Germany'],
-    ['In case of enquiry', 'Embassy of Japan in the Netherlands<br>Tobias Asserlaan 5, 2517KC Den Haag — Tel +31 70 346-9544<br><br>Consulate-General of Japan in Frankfurt<br>MesseTurm 34, Friedrich-Ebert-Anlage 49, 60327 Frankfurt am Main — Tel +49 69 238573-0'],
-  ].map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('\n      ');
+  // 美馬・金築はフランクフルト。1枚に両方を載せると、審査官が他人の行を読み分けることに
+  // なるので、人ごとのシートに分けた（2026-09-23、ユーザーの判断）。美馬・金築は日程が
+  // 同じなので1枚を共用する。審査ブースではスマホを出せない前提で、紙が正本。
+  // ヘッダーのボタンは1つのまま、開くと両方が出て、印刷すると1シート1枚になる。
+  // ページ先頭の切替（#murakami / #team）は :target で自分のシートだけを確かめる用。
+  // スクリプトは使わない（静的のまま）。
+  const immiSheets = [
+    {
+      id: 'murakami',
+      who: 'MURAKAMI',
+      events: 'TechEx Europe / EuroBLECH 2026',
+      border: 'NETHERLANDS',
+      rows: [
+        ['Purpose of stay', 'Attending two industry trade fairs: <strong>TechEx Europe 2026</strong> in Amsterdam and <strong>EuroBLECH 2026</strong> in Hannover, plus a booked factory visit. Business trip from Japan. Two colleagues join from 20 Oct. No paid work in the Schengen area.'],
+        ['Events', '<strong>TechEx Europe 2026</strong> — RAI Amsterdam, Netherlands, 19–20 Oct 2026<br><strong>EuroBLECH 2026</strong> — Hannover Messe (Laatzen), Germany, 20–23 Oct 2026<br><strong>Mercedes-Benz Werk Bremen</strong> — guided factory visit, 22 Oct 2026, 12:45–14:00 (booked)'],
+        ['Entry into Schengen', 'Arrive <strong>18 Oct 2026, 06:55</strong> at Amsterdam (AMS), Cathay Pacific CX539 / CX271 via Hong Kong'],
+        ['Exit from Schengen', 'Depart <strong>24 Oct 2026, 13:40</strong> from Frankfurt (FRA), Cathay Pacific CX288 / CX536 via Hong Kong<br>Arrive Nagoya (NGO) 25 Oct 2026, 14:10 — <strong>return ticket held</strong>'],
+        ['Length of stay', '<strong>6 nights</strong> (18–24 Oct 2026). Well within the 90-day visa-free limit for Japanese nationals.'],
+        ['Accommodation', '18–20 Oct: <strong>Holiday Inn Express Amsterdam — Sloterdijk Station</strong><br>Zaventemweg 3, 1043 EH Amsterdam, Netherlands<br><br>20–23 Oct: <strong>Hotel FREIgeist Göttingen Innenstadt</strong><br>Berliner Strasse 30, 37073 Göttingen, Germany<br><br>23–24 Oct: <strong>Toyoko Inn Frankfurt am Main Hauptbahnhof</strong><br>Stuttgarter Straße 35, 60329 Frankfurt am Main, Germany'],
+        ['In case of enquiry', 'Embassy of Japan in the Netherlands<br>Tobias Asserlaan 5, 2517KC Den Haag — Tel +31 70 346-9544'],
+      ],
+    },
+    {
+      id: 'team',
+      who: 'MIMA / KANETSUKI',
+      events: 'EuroBLECH 2026',
+      border: 'GERMANY',
+      rows: [
+        ['Purpose of stay', 'Attending the industry trade fair <strong>EuroBLECH 2026</strong> in Hannover, plus a booked factory visit. Business trip from Japan, two colleagues travelling together; a third colleague joins from 20 Oct. No paid work in the Schengen area.'],
+        ['Events', '<strong>EuroBLECH 2026</strong> — Hannover Messe (Laatzen), Germany, 20–23 Oct 2026<br><strong>Mercedes-Benz Werk Bremen</strong> — guided factory visit, 22 Oct 2026, 12:45–14:00 (booked)<br><strong>Autostadt Wolfsburg</strong> — 19 Oct 2026'],
+        ['Entry into Schengen', 'Arrive <strong>19 Oct 2026, 07:15</strong> at Frankfurt (FRA), Cathay Pacific CX539 / CX289 via Hong Kong'],
+        ['Exit from Schengen', 'Depart <strong>24 Oct 2026, 13:40</strong> from Frankfurt (FRA), Cathay Pacific CX288 / CX536 via Hong Kong<br>Arrive Nagoya (NGO) 25 Oct 2026, 14:10 — <strong>return ticket held</strong>'],
+        ['Length of stay', '<strong>5 nights</strong> (19–24 Oct 2026). Well within the 90-day visa-free limit for Japanese nationals.'],
+        ['Accommodation', '19–23 Oct: <strong>Hotel FREIgeist Göttingen Innenstadt</strong><br>Berliner Strasse 30, 37073 Göttingen, Germany<br><br>23–24 Oct: <strong>Toyoko Inn Frankfurt am Main Hauptbahnhof</strong><br>Stuttgarter Straße 35, 60329 Frankfurt am Main, Germany'],
+        ['In case of enquiry', 'Consulate-General of Japan in Frankfurt<br>MesseTurm 34, Friedrich-Ebert-Anlage 49, 60327 Frankfurt am Main — Tel +49 69 238573-0'],
+      ],
+    },
+  ];
+  const immiSheet = sheet => `<section class="immi-sheet" id="${sheet.id}">
+  <header class="immi-head">
+    <div class="eyebrow">FOR BORDER CONTROL · ${sheet.border}</div>
+    <h1>Traveller Information</h1>
+    <p class="immi-sub"><span class="no-print">${sheet.who} · </span>${sheet.events}</p>
+  </header>
+  <div class="immi-id">
+    <label><span>Full name (as in passport)</span><input type="text" autocomplete="off" spellcheck="false"></label>
+    <label><span>Passport number</span><input type="text" autocomplete="off" spellcheck="false"></label>
+  </div>
+  <table class="immi-table">
+    <tbody>
+      ${sheet.rows.map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join('\n      ')}
+    </tbody>
+  </table>
+  <p class="immi-foot">Prepared by the traveller. Details match the itinerary and the bookings held.</p>
+</section>`;
   const immigrationPrint = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>TechEx Europe / EuroBLECH 2026 — Traveller Information</title>
 <link rel="stylesheet" href="../202609_HumanoidSummitEurope/style.css">
 <link rel="stylesheet" href="style.css">
 </head>
-<body class="immi-page" data-trip-layout="immigration-v1"><main class="wrap">
-  <header class="immi-head">
-    <div class="eyebrow">FOR BORDER CONTROL · NETHERLANDS / GERMANY</div>
-    <h1>Traveller Information</h1>
-    <p class="immi-sub">TechEx Europe 2026 · EuroBLECH 2026 · 18–24 October 2026</p>
-    <div class="no-print"><button class="btn" type="button" onclick="window.print()">Print this page</button></div>
-  </header>
-  <section class="immi-id">
-    <label><span>Full name (as in passport)</span><input type="text" autocomplete="off" spellcheck="false"></label>
-    <label><span>Passport number</span><input type="text" autocomplete="off" spellcheck="false"></label>
-    <p class="immi-note no-print">Type these just before printing. Nothing on this page is saved — close the page and the fields are empty again.</p>
-  </section>
-  <table class="immi-table">
-    <tbody>
-      ${immiRows}
-    </tbody>
-  </table>
-  <p class="immi-foot">Prepared by the traveller. Details match the itinerary and the bookings held.</p>
+<body class="immi-page" data-trip-layout="immigration-v2"><main class="wrap">
+  <div class="immi-bar no-print">
+    <nav class="immi-pick" aria-label="Choose the traveller"><a href="#murakami">MURAKAMI</a><a href="#team">MIMA / KANETSUKI</a><a href="#">Both</a></nav>
+    <button class="btn" type="button" onclick="window.print()">Print this page</button>
+    <p class="immi-note">Type the name and passport number just before printing. Nothing on this page is saved — close the page and the fields are empty again.</p>
+  </div>
+  ${immiSheets.map(immiSheet).join('\n  ')}
 </main></body></html>
 `;
   writeFileSync(immigrationOutputPath, immigrationPrint.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n'), 'utf8');
   console.log(`Generated ${immigrationOutputPath}`);
+
+  // ---------- EuroBLECHの基本情報（別ページ） ----------
+  // 視察タブのカードに全部載せると、EuroBLECHだけで他の3件を合わせたより長くなる
+  // （2026-09-23にユーザーが判断）。タブは増やさず、カードからこのページへ渡す。
+  // 載せるのは公式サイトで確かめた事実だけ。視察テーマはユーザーの指示待ちで、
+  // 空の枠は置かない（34c40dfで空のブース欄を消したのと同じ理由）。
+  const ebOfficial = 'https://www.euroblech.com/en-gb';
+  const ebLink = (path, label) => `<a href="${ebOfficial}/${path}" target="_blank" rel="noopener">${label}</a>`;
+  const ebSection = (title, body) => `<section class="eb-section"><h2>${title}</h2><div class="eb-body">${body}</div></section>`;
+  const ebList = items => `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+  const ebDays = [
+    ['10/20（火）', '09:00–18:00', '美馬・金築が終日視察'],
+    ['10/21（水）', '09:00–18:00', '3名で視察。16:20頃に退場'],
+    ['10/22（木）', '09:00–18:00', '行かない（ブレーメン工場見学）'],
+    ['10/23（金）', '09:00–17:00', '3名で視察。14:15頃に退場'],
+  ].map(([day, hours, us]) => `<tr><th>${day}</th><td class="eb-time">${hours}</td><td>${us}</td></tr>`).join('');
+  const euroblechPage = `<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>EuroBLECH 2026 基本情報</title>
+<link rel="stylesheet" href="../202609_HumanoidSummitEurope/style.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="eb-page" data-trip-layout="eb-detail-v1"><main class="wrap">
+  <header class="eb-head">
+    <div class="eyebrow">EUROBLECH 2026 · HANNOVER</div>
+    <h1>EuroBLECH 2026 基本情報</h1>
+    <p class="eb-sub">第28回 国際板金加工技術見本市｜10/20（火）〜10/23（金）｜ハノーファーメッセ</p>
+    <div class="no-print"><a class="btn" href="index.html">出張ガイドへ戻る</a></div>
+  </header>
+  ${ebSection('会期と開場時間', `<table class="eb-table"><thead><tr><th>日</th><th>開場</th><th>私たち</th></tr></thead><tbody>${ebDays}</tbody></table><p class="eb-note">会期は4日間。最終日だけ17:00に閉まる。</p>`)}
+  ${ebSection('会場への入り方', ebList([
+    '最寄りは会場専用の <strong>Hannover Messe/Laatzen</strong> 駅。屋根付きの通路（Skywalk）で <strong>西1入口（West 1）</strong> へつながる。ゲッティンゲンからのICEはこの駅に直接着く',
+    'ハノーファー中央駅から市内交通で来ると <strong>北1入口（Nord 1）</strong> に着く。約20分。今回の旅程では使わない',
+    '市内交通（ÜSTRA／GVH、A–C区間）が会期中乗り放題になる「EuroBLECH Travel Card」がある。料金は公式ページに書かれていない',
+    'ドイツ鉄道の割引「DB Event Ticket」がある。片道・列車指定で2等€55.90から、全区間自由で2等€77.90から。<strong>入場券は含まない</strong>',
+  ]))}
+  ${ebSection('入場とバッジ', ebList([
+    '入場には事前登録のバッジが要る。<strong>本人しか使えず</strong>、4日間同じものを使う。忘れると入場を断られることがある',
+    '<strong>パスポートなど写真付きの身分証を持ち歩く。</strong> 求められて提示できない、またはバッジと一致しないと退場させられることがある',
+    '入場時に手荷物検査がある',
+    '服装はビジネスウェア',
+  ]))}
+  ${ebSection('会場でのルール', ebList([
+    '<strong>撮影・録音は、主催者の事前の書面許可が無い限り禁止。</strong> 許可は取っていないので、ブースの記録はメモとColleqt（下）で残す',
+    'セッションに入るとバッジを読み取られ、氏名と連絡先が主催者から登壇者・出展者に渡る。出展者にバッジを読ませた場合も同じ',
+    '荷物を置いたまま離れない。放置された荷物は主催者が処分する',
+  ]))}
+  ${ebSection('Colleqt QR（名刺とパンフレットの代わり）', ebList([
+    '出発前にメールで届く自分のQRコードを<strong>印刷して持っていく</strong>',
+    'ブースに掲げてあるColleqt QRをスマホのカメラで読み、開いたリンクで自分のバッジのQRを読む。バッジを読むのは初回だけ',
+    '読んだブースは一覧に残り、<strong>毎日まとめのメールが届く</strong>。3名それぞれに届くので、夜に突き合わせられる',
+    'QRを読むと、その出展者から後日連絡が来ることに同意したことになる',
+  ]))}
+  ${ebSection('会議プログラムのテーマ（公式）', `<table class="eb-table"><tbody>
+    <tr><th>Smart Manufacturing</th><td>AIの適用／デジタルツインとシミュレーション／機械データ・監視・MESによる簡素な連携生産／データによる効率と実績の把握</td></tr>
+    <tr><th>Sustainable Production</th><td>省エネの機械と工程／材料最適化とスクラップ削減／循環型生産とリサイクル／持続可能な材料と軽量化／CO₂排出の測定と削減</td></tr>
+    <tr><th>Workforce Performance</th><td>生産工程での実用的な自動化とロボット／人と機械の協働／作業者に使いやすいシステムとUX／技能・教育・人材育成／品質・検査・精密加工</td></tr>
+  </tbody></table><p class="eb-note">個別のセッションとガイドツアーの時刻は、公式の${ebLink('show-programme.html', 'Show Agenda')}で日付を絞って見る。このページには取り込んでいない。</p>`)}
+  ${ebSection('未確認', ebList([
+    '<strong>2026年のホール配置。</strong> 公式の会場ページから開けるエリアマップは2024年版だけ',
+    '<strong>クローク。</strong> 公式サイトに記載が見つからない。10/23は荷物を預ける前提なので、入口で確かめる',
+  ]))}
+  ${ebSection('公式リンク', ebList([
+    ebLink('visit/venue-and-travel.html', '会場と交通（Venue and Travel）'),
+    ebLink('exhibitor-directory.html', '出展社一覧（Exhibitor directory）'),
+    ebLink('show-programme.html', 'プログラム（Show Agenda）'),
+    ebLink('visit/visitor-smart-event.html', 'Colleqt QRの使い方'),
+    ebLink('admission-policy.html', '入場規定（Admissions Policy）'),
+  ]))}
+  <p class="eb-src">出典：EuroBLECH公式サイト（Venue and Travel、Admissions Policy、Colleqt QR、Conference Themes）、2026-09-23確認。「私たち」の列はこの出張の旅程。</p>
+</main></body></html>
+`;
+  writeFileSync(euroblechOutputPath, euroblechPage.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n'), 'utf8');
+  console.log(`Generated ${euroblechOutputPath}`);
 
   // オンライン版から家族セクションを落とす。正本はfamily_print.htmlで、
   // タブからも外したので、残しても画面から開く方法が無い。

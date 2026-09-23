@@ -12,6 +12,7 @@ const js = readFileSync(join(here, 'page.js'), 'utf8');
 const hrsCss = readFileSync(join(here, '..', '202609_HumanoidSummitEurope', 'style.css'), 'utf8');
 const familyPrint = readFileSync(join(here, 'family_print.html'), 'utf8');
 const immigration = readFileSync(join(here, 'immigration_print.html'), 'utf8');
+const euroblech = readFileSync(join(here, 'euroblech.html'), 'utf8');
 // パネルの並びは 旅程 / 視察 / 準備 / 記録。切り出しの終端は隣のタブで決まるので、
 // 並べ替えたらここも一緒に直す（2026-08-16に 準備 と 視察 を入れ替えた）。
 const itinerary = html.slice(html.indexOf('id="tab-itinerary"'), html.indexOf('id="tab-venue"'));
@@ -64,7 +65,7 @@ const checks = [
   ['pre-departure windows are single blocks', (itinerary.match(/セントレアで出発待ち（約3時間）/g) || []).length === 2 && (itinerary.match(/13:10〜16:10/g) || []).length === 2 && (itinerary.match(/空港到着目安/g) || []).length === 1 && !itinerary.includes('セントレアで昼食') && !itinerary.includes('JALサクララウンジ（国際線・出国審査後）')],
   // 行の時刻は build.mjs が rowFor で行を引き当てて入れる。検索キーが短いと本文で同じ語に
   // 触れた別の行に当たり、時刻が隣へずれる。10/20の先頭4行で並びを固定しておく。
-  ['10/20 row times stay with their own rows', JSON.stringify([...day1020.matchAll(/<div class="row-time">([\s\S]*?)<\/div>/g)].map(match => match[1].replace(/<[^>]+>/g, '').trim()).slice(0, 4)) === JSON.stringify(['08:15', '08:30頃', '09:45〜14:55', '14:55'])],
+  ['10/20 row times stay with their own rows', JSON.stringify([...day1020.matchAll(/<div class="row-time">([\s\S]*?)<\/div>/g)].map(match => match[1].replace(/<[^>]+>/g, '').trim()).slice(0, 4)) === JSON.stringify(['08:15', '08:30頃', '09:30〜14:55', '14:55'])],
   // 待ち・乗り継ぎの見出しは「地点＋所要」だけ。理由や手順は折り畳みの中に置く。
   // 所要は交通手段と同じ規則で、推定には約を付け、時刻表どおりの区間には付けない。
   ['wait headings carry only place and duration', ['セントレアで出発待ち（約3時間）', '香港で乗り継ぎ（3時間45分）', '香港で乗り継ぎ（4時間25分）', '香港で乗り継ぎ（2時間15分）'].every(t => itinerary.includes(t)) && !itinerary.includes('— 過ごし方')],
@@ -79,7 +80,9 @@ const checks = [
   ['CX536 meal is placed after departure', /<strong>CX536<\/strong>[\s\S]{0,900}<div class="row-time">10:35頃<\/div>[\s\S]{0,700}機内食（昼食）/.test(day1025) && day1025.includes('<strong>CX536で機内食が出る</strong>')],
   // やることの折り畳みは7件: 空港の待ち・乗り継ぎ6回と、10/25の入国手続き1回。
   // 手続き・確認・館内移動・Visit Japan Webは主表示に出さず、すべてここへ入れる。
-  ['todo lists live inside folds', count(/<summary>やること<\/summary>/g) === 7 && !/text-slate-600 text-xs">[^<]*セキュリティ再検査/.test(itinerary) && !/text-slate-600 text-xs">Visit Japan Web/.test(itinerary)],
+  // 8件目・9件目は2026-09-23に足した、AMS着とFRA着の「入国審査は紙で出す」。
+  ['paper sheet is the plan at Schengen entry', countIn(itinerary, /印刷した入国用の紙/g) === 2],
+  ['todo lists live inside folds', count(/<summary>やること<\/summary>/g) === 9 && !/text-slate-600 text-xs">[^<]*セキュリティ再検査/.test(itinerary) && !/text-slate-600 text-xs">Visit Japan Web/.test(itinerary)],
   // 人物レーンの見出しは絵文字からSVGアイコンへ変わったので、語だけを見る。
   ['10/19 granularity aligned', itinerary.includes('<div class="row-time">09:45〜17:00</div>') && itinerary.includes('美馬・金築（FRA着・ヴォルフスブルク日帰り）') && itinerary.includes('荷物受取・チェックイン') && !itinerary.includes('なぜ先にゲッティンゲンへ寄るのか')],
   ['10/19 networking time retained', /<div class="row-time">17:00〜18:00<\/div>[\s\S]{0,700}Expo Floor Networking Drinks/.test(itinerary) && !/<div class="row-time">夕方<\/div>[\s\S]{0,700}Expo Floor Networking Drinks/.test(itinerary)],
@@ -123,7 +126,7 @@ const checks = [
     return targets.every(target => existsSync(resolve(here, target)));
   })()],
   ['the generated files are not ignored by git', (() => {
-    const generated = ['index.html', 'family_print.html', 'immigration_print.html']
+    const generated = ['index.html', 'family_print.html', 'immigration_print.html', 'euroblech.html']
       .map(name => join(here, name));
     try {
       return !execFileSync('git', ['check-ignore', ...generated], { encoding: 'utf8' }).trim();
@@ -193,7 +196,7 @@ const checks = [
       && has('ICE888') === 0 && has('S5') === 0 && has('S4') === 0;
   })()],
   // 時刻順。主な内容を先頭に固定していたころ、10/20の村上が
-  // 「TechEx Day 2（09:45）→ 16:50のフライト」ではなく逆順に出ていた。
+  // 「TechEx Day 2（09:30）→ 16:50のフライト」ではなく逆順に出ていた。
   ['the overview reads in time order', (() => {
     const section = (overview.match(/<section class="ov-person ov-person-murakami[\s\S]*?<\/section>/) || [''])[0];
     const row = (section.match(/<div class="ov-prow[^>]*>(?:(?!<div class="ov-prow)[\s\S])*?10\/20（[\s\S]*?(?=<div class="ov-prow|<div class="ov-join|<\/section>)/) || [''])[0];
@@ -353,16 +356,42 @@ const checks = [
   // 審査官は英語（かオランダ語・ドイツ語）しか読まないので英語で書く。
   // 氏名とパスポート番号はどこにも保存しない。localStorageにも同期にも乗せない。
   ['immigration page is fully static', !/<script/i.test(immigration) && countIn(immigration, /onclick="/g) === 1 && immigration.includes('onclick="window.print()"')],
-  ['immigration page never persists passport details', !/localStorage|sessionStorage|TripField|cloudEndpoint/.test(immigration) && countIn(immigration, /<input/g) === 2],
+  ['immigration page never persists passport details', !/localStorage|sessionStorage|TripField|cloudEndpoint/.test(immigration) && countIn(immigration, /<input/g) === 4],
   ['immigration page is English only', !/[぀-ヿ一-鿿]/.test(immigration) && !/\p{Extended_Pictographic}/u.test(immigration)],
   // シェンゲンへの入国地点が人によって割れる。村上はAMS、美馬・金築はFRA。
   // どちらの審査官が見ても自分の分が読めるよう、両方を載せる。
-  ['immigration page states both Schengen entry points', immigration.includes('MURAKAMI') && immigration.includes('MIMA and KANECHIKU')
-    && immigration.includes('Amsterdam (AMS)') && immigration.includes('Frankfurt (FRA)')],
-  ['immigration page states the return ticket', immigration.includes('return ticket held') && immigration.includes('CX288') && immigration.includes('CX536')],
-  ['immigration page lists all three hotels', ['Holiday Inn Express Amsterdam', 'Hotel FREIgeist Göttingen Innenstadt', 'Toyoko Inn Frankfurt am Main Hauptbahnhof']
-    .every(hotel => immigration.includes(hotel))],
+  // 2026-09-23から人ごとのシート。自分のシートに他人の入国地点・ホテルが混ざらないことを見る。
+  ...(() => {
+    const sheet = id => { const from = immigration.indexOf('id="' + id + '"'); const to = immigration.indexOf('</section>', from); return from < 0 ? '' : immigration.slice(from, to); };
+    const murakami = sheet('murakami'), team = sheet('team');
+    return [
+      ['immigration has one sheet per traveller group', countIn(immigration, /class="immi-sheet"/g) === 2 && murakami.includes('MURAKAMI') && team.includes('MIMA / KANETSUKI')],
+      ['each sheet states only its own entry', murakami.includes('18 Oct 2026, 06:55</strong> at Amsterdam (AMS)') && !murakami.includes('CX289')
+        && team.includes('19 Oct 2026, 07:15</strong> at Frankfurt (FRA)') && !team.includes('CX271')],
+      ['each sheet lists only its own hotels', ['Holiday Inn Express Amsterdam', 'Hotel FREIgeist Göttingen Innenstadt', 'Toyoko Inn Frankfurt am Main Hauptbahnhof'].every(hotel => murakami.includes(hotel))
+        && !team.includes('Holiday Inn Express') && ['Hotel FREIgeist Göttingen Innenstadt', 'Toyoko Inn Frankfurt am Main Hauptbahnhof'].every(hotel => team.includes(hotel))],
+      ['each sheet states the return ticket', [murakami, team].every(part => part.includes('return ticket held') && part.includes('CX288') && part.includes('CX536'))],
+      // 金築はカネツキ（2026-09-23にユーザーが訂正）。KANECHIKUと書いていた。
+      // 印刷した紙には本人が氏名を書くので、シート名（誰のシートか）は画面だけに出す。
+      ['sheet names are screen-only', ['MURAKAMI', 'MIMA / KANETSUKI'].every(who => immigration.includes('<span class="no-print">' + who + ' · </span>'))],
+      ['Kanetsuki is romanised as read', immigration.includes('KANETSUKI') && !/KANECHIKU/i.test(immigration)],
+      ['each sheet has its own name and passport fields', countIn(murakami, /<input/g) === 2 && countIn(team, /<input/g) === 2],
+      ['sheets print on separate pages', css.includes('.immi-sheet{break-after:page}') && css.includes('.immi-page:has(.immi-sheet:target) .immi-sheet:not(:target){display:none}')],
+    ];
+  })(),
   ['online version links the immigration page', html.includes('href="immigration_print.html"')],
+  // ---------- EuroBLECHの基本情報（2026-09-23） ----------
+  // 視察タブのカードから開く別ページ。公式で確かめた4日分の開場時間と、現地で効く
+  // 2つの規定（写真付き身分証・撮影禁止）が落ちていないかを見る。
+  ['venue card links the EuroBLECH page', html.includes('href="euroblech.html"') && euroblech.includes('href="index.html"')],
+  ['EuroBLECH page lists the four official opening days', countIn(euroblech, /<tr><th>10\/2[0-3]（.）<\/th><td class="eb-time">09:00–1[78]:00<\/td>/g) === 4
+    && euroblech.includes('10/23（金）</th><td class="eb-time">09:00–17:00')],
+  ['EuroBLECH page keeps the ID and photography rules', euroblech.includes('写真付きの身分証') && euroblech.includes('撮影・録音')],
+  ['EuroBLECH page is static and emoji-free', !/<script/i.test(euroblech) && !/\p{Extended_Pictographic}/u.test(euroblech)],
+  ['EuroBLECH page classes are received by css', (() => {
+    const used = new Set([...euroblech.matchAll(/class="([^"]+)"/g)].flatMap(hit => hit[1].split(/\s+/)));
+    return [...used].every(name => css.includes('.' + name) || hrsCss.includes('.' + name));
+  })()],
   // ---------- 効いていないクラスは残さない ----------
   // Tailwind CDNは読み込んでいないので、受けの無いクラス名は何もしていない。
   // クラス名を見ても効くかどうか読めない状態が、実害2件（日付バッジの黒文字、
