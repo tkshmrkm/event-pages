@@ -115,6 +115,18 @@ git status --branch --short
   - ASME IDETC/CIE 2027：日程・会場とも未発表
   - CoRL・ICML・NeurIPS・ROSCon・HRS Europe の2027年分
   - NeurIPS 2026 の開催地別の日程はユーザーの判断で対象外
+  - MACHINA Summit 2027（7月・Paris）、THE Physical AI Expo London 2027（Q3）、
+    GEIA Europe 2027（公式で日程・都市を確認できず）、Physical AI Summit Munich 2027
+- **2027年のPhysical AI系候補（2026-09-23）** … ローカルの未追跡ファイル
+  `physical_ai_2027_candidate_events_v2.html`（9/16時点・14件）を、9/23に公式ページで
+  確かめ直して取り込んだ。狙いは、既存の予定と続けて回れるイベントがあるかどうかを見ること
+  - Humanoid Evolution Summit 2027 は Advanced Humanoid Forum 2027 と同じイベント
+    （旧ドメインが新サイトへ302転送）。新しい行は作らず、既存の行の名前・会場・出典を直した
+  - 5章へ9件、6章へ4件を追加した。学会（IS-PAIR・IREAI）とAI for Goodは「参考情報」、
+    残りは「候補」
+  - GEIA Asia の都市（Shanghai）と主催法人は、公式ページでは確認できていない
+  - これらは既存の予定とのつながりを見るための候補なので、掲載範囲の方針
+    （TechExは1回だけ触れる扱い、など）は当てはめない（2026-09-23 ユーザー）
 - **クラウドセッションからは主催者サイトを直接開けない**（送信先はgithub.comのみ許可）。
   日程は検索経由で公式ページの記載を拾ったもの。予算枠に関わるものは公式で確かめてから確定する
 
