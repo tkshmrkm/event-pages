@@ -25,10 +25,8 @@ table { width:100%; border-collapse:separate; border-spacing:0; border:1px solid
 th { background:#f1f5f9; color:#334155; text-align:left; padding:10px; border-bottom:1px solid var(--line); white-space:nowrap; }
 td { padding:10px; border-bottom:1px solid var(--line); vertical-align:top; }
 tr:last-child td { border-bottom:none; }
-.group { display:inline-block; color:#fff; border-radius:999px; padding:3px 9px; font-weight:700; font-size:11.5px; white-space:nowrap; }
-.core { background:var(--blue); } .industry { background:var(--green); } .implementation { background:var(--orange); } .human { background:var(--purple); } .foresight { background:var(--rose); }
 .badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11.2px; font-weight:700; white-space:nowrap; }
-.plan { background:#dcfce7; color:#166534; } .done { background:#dbeafe; color:#1e40af; } .consider { background:#fef3c7; color:#92400e; } .no { background:#f1f5f9; color:#475569; } .track { background:#e0f2fe; color:#075985; } .neutral { background:#f1f5f9; color:#475569; }
+.done { background:#dbeafe; color:#1e40af; } .consider { background:#fef3c7; color:#92400e; } .track { background:#e0f2fe; color:#075985; }
 .small { color:var(--muted); font-size:11.2px; }
 .grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:14px; margin-top:16px; }
 .card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:14px; }
@@ -42,6 +40,7 @@ tr:last-child td { border-bottom:none; }
 .status-check input, .year-check input { width:15px; height:15px; margin:0; padding:0; accent-color:var(--blue); }
 .status-check:has(input:checked), .year-check:has(input:checked) { color:#0f172a; font-weight:700; }
 th.sortable { cursor:pointer; user-select:none; } th.sortable::after { content:" ⇅"; color:#94a3b8; font-size:10px; }
+.table-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
 .counter { color:var(--muted); font-size:12.5px; margin:0; }
 .counter-row { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:6px 0 10px; }
 .past-toggle { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; background:#fff; color:#334155; font:inherit; font-size:12px; padding:5px 12px; cursor:pointer; }
@@ -50,41 +49,13 @@ th.sortable { cursor:pointer; user-select:none; } th.sortable::after { content:"
 .past-toggle[hidden] { display:none; }
 .past-toggle .caret { font-size:10px; color:#94a3b8; }
 pre { background:#0f172a; color:#e2e8f0; border-radius:14px; padding:18px; white-space:pre-wrap; font-size:12.5px; line-height:1.55; }
-@media print { body { background:#fff; } .wrap { max-width:none; padding:10mm; } header,.section { box-shadow:none; } table { font-size:9.2px; } .sort-controls { display:none; } .past-toggle { display:none; } #timelineTable tbody tr.row-collapsed { display:table-row; } }
+@media print { body { background:#fff; } .table-scroll { overflow:visible; } .wrap { max-width:none; padding:10mm; } header,.section { box-shadow:none; } table { font-size:9.2px; } .sort-controls { display:none; } .past-toggle { display:none; } #timelineTable tbody tr.row-collapsed { display:table-row; } }
 @media (max-width:1050px) { .grid { grid-template-columns:1fr 1fr; } .sort-controls { grid-template-columns:1fr; } table { font-size:11px; } }
-
-.subsection { margin-top:18px; }
-.subsection h3 { margin:0 0 6px; font-size:17px; color:#0f172a; }
-.split-view { border-top:1px solid var(--line); padding-top:16px; }
-.split-table { margin-top:10px; }
-.split-table th, .split-table td { font-size:10.8px; }
-
-/* 3色分類: 学会・展示会・技術イベント */
-tr.row-conference td { background:#eff6ff; }
-tr.row-exhibition td { background:#ecfdf5; }
-tr.row-tech td { background:#fff7ed; }
-tr.row-conference:hover td { background:#dbeafe; }
-tr.row-exhibition:hover td { background:#d1fae5; }
-tr.row-tech:hover td { background:#ffedd5; }
 .legend { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 14px; }
 .legend-item { display:inline-block; border-radius:999px; padding:5px 11px; font-size:12px; font-weight:700; border:1px solid var(--line); }
 .legend-conference { background:#eff6ff; color:#1e40af; }
 .legend-exhibition { background:#ecfdf5; color:#047857; }
 .legend-tech { background:#fff7ed; color:#b45309; }
-
-/* 3色分類は行の背景色。参加状況バッジのグレーは不参加のステータス表示。 */
-tr.row-conference td { background:#eff6ff !important; }
-tr.row-exhibition td { background:#ecfdf5 !important; }
-tr.row-tech td { background:#fff7ed !important; }
-tr.row-conference:hover td { background:#dbeafe !important; }
-tr.row-exhibition:hover td { background:#d1fae5 !important; }
-tr.row-tech:hover td { background:#ffedd5 !important; }
-
-/* 3分類は行全体ではなく種別欄ラベルで表示 */
-tr.row-conference td, tr.row-exhibition td, tr.row-tech td,
-tr.row-conference:hover td, tr.row-exhibition:hover td, tr.row-tech:hover td {
-  background:inherit !important;
-}
 .type-pill {
   display:inline-block;
   border-radius:999px;
@@ -153,7 +124,7 @@ tr.row-conference:hover td, tr.row-exhibition:hover td, tr.row-tech:hover td {
 <header>
 <h1>Physical AI関連 国際会議・展示会 俯瞰資料</h1>
 <p class="subtitle">カテゴリ、参加状況、担当、開催日、開催地を正規化した2026–2028年統合管理表</p>
-<div class="meta">更新日：2026年9月18日</div>
+<div class="meta">更新日：2026年9月23日</div>
 </header>
 <div class="section">
 <h2>1. 全体方針</h2>
@@ -161,7 +132,7 @@ tr.row-conference:hover td, tr.row-exhibition:hover td, tr.row-tech:hover td {
 Physical AIは、ロボティクス単体ではなく、認識、学習、制御、組込み・エッジ実装、設計最適化、シミュレーション、産業自動化、OR、HRI、国際展示会・見本市、技術探索・事業探索イベントまでを含む複合領域である。
 本資料は、参加可否を自動的に決めるものではなく、村上が判断するために、カテゴリ、開催日、開催地、参加状況、担当、重複を見える化するものである。
 </div>
-<div class="note">更新日：2026年9月18日。終了済みイベントは参加実績に基づき「参加済み」または「不参加」へ更新し、開催中・今後のイベントは「参加予定」「検討中」「候補」「参考情報」等で管理する。</div>
+<div class="note">更新日：2026年9月23日。終了済みイベントは参加実績に基づき「参加済み」または「不参加」へ更新し、開催中・今後のイベントは「参加予定」「検討中」「候補」「参考情報」等で管理する。</div>
 </div>
 <div class="section">
 <h2>2. 注目カテゴリー</h2>
@@ -178,9 +149,9 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <div class="note">
 部門として継続的に予算化する対象を、基幹枠・テーマ連動枠・戦略探索枠に分けて管理する。
 参加人数は確定派遣人数ではなく、年度計画時点の見込み・上限枠として扱う。
-<br/>5・6章では、部門予算化候補に該当するイベント名の前に 💰 アイコンを表示する。<br/>人数・担当は6章の2027年以降候補メモで管理し、3章では扱いのみを示す。</div>
+<br/>5・6章では、部門予算化候補に該当するイベント名の前に 💰 アイコンを表示する。<br/>人数・担当は5章の開催日確定リストで管理し、3章では扱いのみを示す。</div>
 <h3>3-A. 部門基幹予算枠</h3>
-<table>
+<div class="table-scroll"><table>
 <thead>
 <tr>
 <th>対象</th>
@@ -196,15 +167,15 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <tr><td>SPS</td><td>基幹枠</td><td>制御、PLC、FA、ドライブ、産業ネットワーク</td><td>SPS 2026：11月24–26日、Nuremberg, Germany</td></tr>
 <tr><td>LogiMAT</td><td>基幹枠</td><td>物流、自動倉庫、AGV/AMR、マテハン</td><td>LogiMAT 2027：3月16–18日、Messe Stuttgart, Stuttgart, Germany</td></tr>
 <tr><td>MODEX / ProMAT</td><td>基幹枠</td><td>北米物流自動化、倉庫自動化、サプライチェーン</td><td>ProMat 2027：4月19–21日、McCormick Place, Chicago, IL, United States</td></tr>
-<tr><td>IMTS / EMO</td><td>基幹枠</td><td>工作機械、加工、生産技術、スマートマニュファクチャリング</td><td>IMTS 2026：9月14–19日、McCormick Place, Chicago, IL, United States</td></tr>
+<tr><td>IMTS / EMO</td><td>基幹枠</td><td>工作機械、加工、生産技術、スマートマニュファクチャリング</td><td>EMO Milano 2027：10月4–9日、Fieramilano, Milan, Italy（IMTS 2026は9月14–19日に開催済み）</td></tr>
 <tr><td>ITMA / ITMA Asia</td><td>基幹枠</td><td>繊維機械、産業機械、材料・工程技術</td><td>ITMA ASIA + CITME 2026：11月20–24日、National Exhibition and Convention Center, Shanghai, China</td></tr>
 <tr><td>GTC</td><td>基幹枠</td><td>Physical AI、AI基盤、Simulation、Omniverse、ロボティクス基盤</td><td>GTC 2027：3月14–18日（本会議15–18日）、San Jose McEnery Convention Center, San Jose, CA, United States</td></tr>
 <tr><td>CES</td><td>戦略探索枠</td><td>AI、ロボット、モビリティ、家電・サービス、将来市場</td><td>CES 2027：1月6–9日、Las Vegas, Nevada, United States</td></tr>
-<tr><td>World Robot Conference and Expo</td><td>戦略探索・予備枠</td><td>中国ロボット産業、ヒューマノイド、政策・標準化・社会実装を確認する戦略探索対象。人数はイベント固有ではなく、年度予算側で管理する。</td><td>World Robot Conference and Expo 2026：8月19–23日、Beijing, China</td></tr>
+<tr><td>World Robot Conference and Expo</td><td>戦略探索・予備枠</td><td>中国ロボット産業、ヒューマノイド、政策・標準化・社会実装を確認する戦略探索対象。人数はイベント固有ではなく、年度予算側で管理する。</td><td>World Robot Conference and Expo 2027：8月18日開幕、終了日・会場は未発表（2026は8月19–23日に開催済み）</td></tr>
 </tbody>
-</table>
+</table></div>
 <h3>3-B. テーマ連動予算枠</h3>
-<table>
+<div class="table-scroll"><table>
 <thead>
 <tr>
 <th>対象</th>
@@ -216,16 +187,16 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <tbody>
 <tr><td>JEC World</td><td>テーマ連動枠</td><td>複合材、材料、軽量化、製造プロセス</td><td>JEC World 2027：3月2–4日、Paris Nord Villepinte, France</td></tr>
 <tr><td>Interclean</td><td>テーマ連動枠</td><td>清掃、衛生、サービスロボット、業界実装</td><td>Interclean Amsterdam 2028：4月4–7日、RAI Amsterdam, Amsterdam, Netherlands（隔年開催のため2027年は無し）</td></tr>
-<tr><td>SEMICON系</td><td>テーマ連動枠</td><td>半導体製造装置、クリーン搬送、精密自動化</td><td>直近はSEMICON Taiwan 2026：9月2–4日、TaiNEX 1&amp;2, Taipei, Taiwan（以降SEMICON West・Europa・Japanが年内に順次開催）</td></tr></tbody>
-</table>
+<tr><td>SEMICON系</td><td>テーマ連動枠</td><td>半導体製造装置、クリーン搬送、精密自動化</td><td>直近はSEMICON West 2026：10月13–15日、Moscone Center, San Francisco, CA, United States（以降SEMICON Europa・Japanが年内に順次開催）。SEMICON Westは2027年から会場をPhoenixへ移し春開催へ変更（2027年は3月30日–4月1日）</td></tr></tbody>
+</table></div>
 </div>
 <div class="section" id="tier1-conferences">
 <h2>4. 国際学会</h2>
 <h3>4-1. リスト</h3>
 <div class="note">
-分野を代表するトップティア（Tier1）の国際学会を一覧化する。4-2「判断」（ICRA / CoRL / CVPRのように分野トップティアかつ現地価値が高い会議は個別許可の判断材料として優先的に扱える）を判断する際の参照リストとして用いる。掲載は学会の格付けであり、部門としての参加要否とは別。
+分野を代表するトップティア（Tier1）の国際学会を一覧化する。掲載は学会の格付けであり、部門としての参加要否とは別。
 </div>
-<table>
+<div class="table-scroll"><table>
 <thead>
 <tr>
 <th>学会</th>
@@ -238,8 +209,8 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <tr><td>ICRA</td><td>Robotics / Physical AI本体</td><td>毎年</td><td>ロボティクス分野最大規模・最高峰の会議の一つ</td></tr>
 <tr><td>IROS</td><td>Robotics / Physical AI本体</td><td>毎年</td><td>ICRAと並ぶロボティクス分野最大級・最高峰の年次会議</td></tr>
 <tr><td>RSS</td><td>Robotics / Physical AI本体</td><td>毎年</td><td>厳選されたシングルトラック開催で、採択率・選考の厳しさで知られる会議</td></tr>
-<tr><td>CoRL</td><td>Robot Learning / AI基盤</td><td>毎年</td><td>4-2「判断」で例示される分野トップティア（Robot Learning）</td></tr>
-<tr><td>CVPR</td><td>Vision / 3D認識</td><td>毎年</td><td>4-2「判断」で例示される分野トップティア（Vision）</td></tr>
+<tr><td>CoRL</td><td>Robot Learning / AI基盤</td><td>毎年</td><td>Robot Learning分野の中核会議で、実機・Sim2Real・基盤モデルの成果が集まる</td></tr>
+<tr><td>CVPR</td><td>Vision / 3D認識</td><td>毎年</td><td>ICCV・ECCVと並ぶComputer Visionの三大会議の一角</td></tr>
 <tr><td>ICCV</td><td>Vision / 3D認識</td><td>隔年・奇数年</td><td>CVPR・ECCVと並ぶComputer Visionの三大会議の一角</td></tr>
 <tr><td>ECCV</td><td>Vision / 3D認識</td><td>隔年・偶数年</td><td>CVPR・ICCVと並ぶComputer Visionの三大会議の一角</td></tr>
 <tr><td>NeurIPS</td><td>Robot Learning / AI基盤</td><td>毎年</td><td>ICML・ICLRと並ぶ機械学習三大会議の一つで、AI基盤分野で最大規模・最高峰</td></tr>
@@ -251,15 +222,15 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <tr><td>ACC</td><td>Control / Motion / Systems</td><td>毎年</td><td>CDCと並ぶ制御理論分野の二大フラッグシップ会議の一つ</td></tr>
 <tr><td>ASME IDETC/CIE</td><td>Mechanical Design / Structural &amp; Multidisciplinary Optimization</td><td>毎年</td><td>設計工学・Design Automation分野のASME最大のフラッグシップ会議</td></tr>
 </tbody>
-</table>
+</table></div>
 <h3>4-2. 参加ルール</h3>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>項目</th><th>内容</th></tr></thead>
 <tbody>
 <tr><td><strong>判断</strong></td><td>学会は部門予算化・人数配分の対象に含めず、原則「参考情報」として管理する。現地参加は4-1のTier1国際学会リストに掲載されている学会を原則とし、いずれも個別申請に基づき可否を判断する。リスト外の学会に参加する場合は、共同研究先の発表や、今後継続的な参加を検討すべき分野の見極めなど、参加する明確な理由を申請時に示す。理由を確認しない「適当なタイミングでの参加」は行わない。部門派遣としての現地参加は、同一カテゴリ（5章「カテゴリ」列基準）内で代表会議1件を基本とし、重点カテゴリでも代表会議とあわせて最大2件までとする（個人のR&amp;D探索枠としての参加はこの上限の対象外）。確定した参加は部門計画とは分けて実績情報を追記し、参加後は内容を部内で共有する。それ自体は部門予算化を意味しない。5章に掲載済みの学会参加（参加済み・参加予定）は、この基準に基づき取り組み内容を確認のうえリスト化されているものとする。</td></tr>
 <tr><td><strong>人数</strong></td><td>部門派遣における担当者は原則1〜2名とする。</td></tr>
 </tbody>
-</table>
+</table></div>
 </div><div class="section" id="confirmed-date-section">
 <h2>5. 開催日確定リスト</h2>
 <div class="note">
@@ -295,7 +266,7 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 <button id="pastToggle" class="past-toggle" type="button" aria-expanded="false" aria-controls="timelineTable" hidden><span class="caret" aria-hidden="true">▶</span><span id="pastToggleLabel">開催済みを表示</span></button>
 <div class="counter" id="timelineCounter" aria-live="polite"></div>
 </div>
-<table id="timelineTable">
+<div class="table-scroll"><table id="timelineTable">
 <thead>
 <tr>
 <th class="sortable">年</th>
@@ -313,23 +284,19 @@ Physical AIは、ロボティクス単体ではなく、認識、学習、制御
 </thead>
 <tbody>
 </tbody>
-</table>
+</table></div>
 </div>
 <div class="section">
 <h2>6. 未確定・候補メモ</h2><div class="budget-legend">
 <span class="budget-icon">💰</span> 部門予算化候補
 <span class="small">（確定派遣ではなく、年度計画で予算枠として管理する対象）</span>
-</div><div class="legend">
-<span class="legend-item legend-conference">学会・専門会議</span>
-<span class="legend-item legend-exhibition">展示会・見本市</span>
-<span class="legend-item legend-tech">技術カンファレンス・サミット</span>
-</div><div class="small color-note">3分類は行全体ではなく、種別欄の色付きラベルで示します。グレーの小さなバッジは「不参加」の参加状況です。</div>
+</div>
 <div class="note">開催日が未確定、または候補段階のイベントを残す。開催日が確定したものは5章の開催日確定リストへ移す。</div>
-<table>
+<div class="table-scroll"><table>
 <thead><tr><th>イベント</th><th>AI×Robotics重要度</th><th>事業適合度</th><th>カテゴリ</th><th>扱い・時期</th><th>担当・人数</th><th>想定開催地</th><th>目的・扱い</th></tr></thead>
 <tbody id="pendingTableBody">
 </tbody>
-</table>
+</table></div>
 </div>
 </div>
 <script src="physical_ai_events.js"></script>

@@ -49,7 +49,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "COEX, Seoul, Republic of Korea",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "半導体製造装置・材料・プロセス・先端パッケージング。基準日以前に開催済みのため不参加。"
+    "purpose": "半導体製造装置・材料・プロセス・先端パッケージング。不参加。"
   },
   {
     "id": "20260309-amc-2026",
@@ -168,7 +168,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Vancouver Convention Centre, Vancouver, BC, Canada",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "3D Vision。3D認識・空間理解の補完候補だが、基準日以前に開催済みのため不参加。"
+    "purpose": "3D Vision。3D認識・空間理解の補完候補。不参加。"
   },
   {
     "id": "20260324-logimat-2026",
@@ -202,7 +202,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Shanghai New International Expo Centre, Shanghai, China",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "中国半導体製造装置・材料・プロセス。基準日以前に開催済みのため不参加。"
+    "purpose": "中国半導体製造装置・材料・プロセス。不参加。"
   },
   {
     "id": "20260407-robosoft-2026",
@@ -216,7 +216,7 @@ window.PHYSICAL_AI_EVENTS = [
     "businessFit": "★★★☆☆",
     "category": "Soft Robotics / Haptics",
     "type": "学会・専門会議",
-    "location": "金沢, Japan",
+    "location": "Kanazawa, Japan",
     "status": "参加済み",
     "assignment": "中島・高野",
     "purpose": "ソフトロボティクス、触覚、柔軟機構、接触作業。Soft Roboticsカテゴリの代表実績だが、AI×Robotics全体では補完領域。"
@@ -367,8 +367,8 @@ window.PHYSICAL_AI_EVENTS = [
     "budgetCandidate": false,
     "importance": "★★★★☆",
     "businessFit": "★★★★☆",
-    "category": "International Exhibition / Market & Implementation",
-    "type": "展示会・見本市",
+    "category": "Robotics / Physical AI本体",
+    "type": "技術カンファレンス・サミット",
     "location": "Boston Convention and Exhibition Center, Boston, MA, United States",
     "status": "参加済み",
     "assignment": "村上・佐藤・三浦",
@@ -389,7 +389,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Takanawa Gateway Convention Center, Tokyo, Japan",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "国内開催。ヒューマノイド、Embodied AI、商用化、量産、投資・事業化動向を確認する候補。6月末時点で開催済みのため不参加扱い。"
+    "purpose": "国内開催。ヒューマノイド、Embodied AI、商用化、量産、投資・事業化動向を確認する候補。不参加。"
   },
   {
     "id": "20260601-icra-2026",
@@ -457,7 +457,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Long Beach Convention Center, Long Beach, CA, United States",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "XR、Spatial AI、AR/VR、ヒューマンインターフェース、空間コンピューティングの探索候補。6月末時点で開催済みのため不参加扱い。"
+    "purpose": "XR、Spatial AI、AR/VR、ヒューマンインターフェース、空間コンピューティングの探索候補。不参加。"
   },
   {
     "id": "20260617-vivatech-2026",
@@ -508,7 +508,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "福岡国際会議場, Fukuoka, Japan",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "国内ロボティクス・メカトロニクス研究、若手発表・育成候補。6月末時点で開催済みのため不参加扱い。"
+    "purpose": "国内ロボティクス・メカトロニクス研究、若手発表・育成候補。不参加。"
   },
   {
     "id": "20260706-icml-2026",
@@ -732,6 +732,25 @@ window.PHYSICAL_AI_EVENTS = [
     "purpose": "機械力学、計測制御、振動・ダイナミクス、モーション基盤の国内参考情報"
   },
   {
+    "id": "20260901-rsj-2026",
+    "dateStatus": "confirmed",
+    "sortDate": "2026-09-01",
+    "year": 2026,
+    "dateLabel": "9月1–4日",
+    "name": "RSJ 2026（日本ロボット学会学術講演会）",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★★☆☆",
+    "category": "Robotics / Physical AI本体",
+    "type": "学会・専門会議",
+    "location": "Kanazawa University, Kanazawa, Japan",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "国内ロボティクス最大の学術講演会（第44回）。国内大学・企業の研究動向をまとめて確認できる。渡航を伴わない。",
+    "sourceUrl": "https://ac.rsj-web.org/2026/",
+    "verifiedAt": "2026-09-23"
+  },
+  {
     "id": "20260902-semicon-taiwan-2026",
     "dateStatus": "confirmed",
     "sortDate": "2026-09-02",
@@ -764,6 +783,25 @@ window.PHYSICAL_AI_EVENTS = [
     "status": "論文・発表追跡",
     "assignment": "—",
     "purpose": "欧州Computer Vision本流。CVPR参加を前提に、ロボットビジョン・3D・空間理解を追跡"
+  },
+  {
+    "id": "20260908-etfa-2026",
+    "dateStatus": "confirmed",
+    "sortDate": "2026-09-08",
+    "year": 2026,
+    "dateLabel": "9月8–11日",
+    "name": "ETFA 2026",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★★★☆",
+    "category": "Industrial Automation / Smart Factory",
+    "type": "学会・専門会議",
+    "location": "Västerås Kongress, Västerås, Sweden",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "IEEE-IES主催（第31回）。工場自動化、産業通信、リアルタイム制御。Humanoid Robotics Summit Europe 2026と日程が重なる。",
+    "sourceUrl": "https://etfa2026.ieee-ies.org/",
+    "verifiedAt": "2026-09-23"
   },
   {
     "id": "20260909-humanoid-robotics-summit-europe-2026",
@@ -902,6 +940,25 @@ window.PHYSICAL_AI_EVENTS = [
     "purpose": "マシンビジョン、画像処理、産業用カメラ・検査の展示会参加予定。部門予算化候補には含めない。"
   },
   {
+    "id": "20261012-ciif-2026",
+    "dateStatus": "confirmed",
+    "sortDate": "2026-10-12",
+    "year": 2026,
+    "dateLabel": "10月12–16日",
+    "name": "CIIF 2026（中国国際工業博覧会）",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★★★☆",
+    "category": "International Exhibition / Market & Implementation",
+    "type": "展示会・見本市",
+    "location": "National Exhibition and Convention Center, Shanghai, China",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "中国最大級の総合工業展（第26回）。ロボット専門館を併設。中国の産業自動化・ロボット実装動向。",
+    "sourceUrl": "https://www.ciif-expo.com/",
+    "verifiedAt": "2026-09-23"
+  },
+  {
     "id": "20261013-semicon-west-2026",
     "dateStatus": "confirmed",
     "sortDate": "2026-10-13",
@@ -966,7 +1023,7 @@ window.PHYSICAL_AI_EVENTS = [
     "businessFit": "★★★★★",
     "category": "International Exhibition / Market & Implementation",
     "type": "展示会・見本市",
-    "location": "Hanover Fairground, Hannover, Germany",
+    "location": "Hannover Exhibition Grounds, Hannover, Germany",
     "status": "参加予定",
     "assignment": "村上・金築・美馬",
     "purpose": "板金加工、レーザ、成形、加工自動化。参加予定。"
@@ -1091,6 +1148,25 @@ window.PHYSICAL_AI_EVENTS = [
     "purpose": "半導体、パッシブ部品、組込みシステム、パワーエレクトロニクス等、電子部品・技術全般を扱う世界最大級の電子部品展示会。SEMICON Europa 2026と同日程・同会場で併催。寺田・三枝が参加予定。"
   },
   {
+    "id": "20261116-isrr-2026",
+    "dateStatus": "confirmed",
+    "sortDate": "2026-11-16",
+    "year": 2026,
+    "dateLabel": "11月16–20日",
+    "name": "ISRR 2026",
+    "budgetCandidate": false,
+    "importance": "★★★★☆",
+    "businessFit": "★★★☆☆",
+    "category": "Robotics / Physical AI本体",
+    "type": "学会・専門会議",
+    "location": "Casa del Rio Melaka Hotel, Malacca, Malaysia",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "IFRR主催の招待制シンポジウム。ロボティクス研究の方向性を少人数で議論する場。ITMA ASIA + CITME 2026の直前。",
+    "sourceUrl": "https://isrr2026.su.domains/",
+    "verifiedAt": "2026-09-23"
+  },
+  {
     "id": "20261117-formnext-2026",
     "dateStatus": "confirmed",
     "sortDate": "2026-11-17",
@@ -1138,7 +1214,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "展示会・見本市",
     "location": "Nuremberg, Germany",
     "status": "参加予定",
-    "assignment": "東・1名",
+    "assignment": "東",
     "purpose": "Smart Production Solutions。FA、産業制御、産業通信、ドライブ、センサ等を確認する。東が1名で参加予定。"
   },
   {
@@ -1157,6 +1233,25 @@ window.PHYSICAL_AI_EVENTS = [
     "status": "候補",
     "assignment": "TBD",
     "purpose": "Digital Twin、Simulation、3D表現、生成表現"
+  },
+  {
+    "id": "20261202-robonext-2026",
+    "dateStatus": "confirmed",
+    "sortDate": "2026-12-02",
+    "year": 2026,
+    "dateLabel": "12月2–4日",
+    "name": "RoboNext 2026",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★★★☆",
+    "category": "International Exhibition / Market & Implementation",
+    "type": "展示会・見本市",
+    "location": "INTEX Osaka, Osaka, Japan",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "日本ロボット工業会・日刊工業新聞社主催。iREXの中間年に2026年から新設された展示会。ロボット導入が進んでいない分野への適用提案が主題。渡航を伴わない。",
+    "sourceUrl": "https://robonext.nikkan.co.jp/",
+    "verifiedAt": "2026-09-23"
   },
   {
     "id": "20261203-ros-industrial-conference-2026",
@@ -1470,6 +1565,44 @@ window.PHYSICAL_AI_EVENTS = [
     "purpose": "物流・マテハン・サプライチェーン"
   },
   {
+    "id": "20270426-iclr-2027",
+    "dateStatus": "confirmed",
+    "sortDate": "2027-04-26",
+    "year": 2027,
+    "dateLabel": "4月26–30日",
+    "name": "ICLR 2027",
+    "budgetCandidate": false,
+    "importance": "★★★★☆",
+    "businessFit": "★★☆☆☆",
+    "category": "Robot Learning / AI基盤",
+    "type": "学会・専門会議",
+    "location": "San Francisco, CA, United States",
+    "status": "論文・発表追跡",
+    "assignment": "—",
+    "purpose": "AI基盤・表現学習。都市は公式のワークショップ募集ページ（4月29–30日、San Francisco）による。本会議の会場は未発表。",
+    "sourceUrl": "https://iclr.cc/Conferences/2027",
+    "verifiedAt": "2026-09-23"
+  },
+  {
+    "id": "20270503-aamas-2027",
+    "dateStatus": "confirmed",
+    "sortDate": "2027-05-03",
+    "year": 2027,
+    "dateLabel": "5月3–7日",
+    "name": "AAMAS 2027",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★☆☆☆",
+    "category": "Robot Learning / AI基盤",
+    "type": "学会・専門会議",
+    "location": "JW Marriott Hanoi, Hanoi, Vietnam",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "自律エージェント・マルチエージェント系（第26回）。協調制御、分散意思決定。",
+    "sourceUrl": "https://warwick.ac.uk/fac/sci/dcs/aamas2027/",
+    "verifiedAt": "2026-09-23"
+  },
+  {
     "id": "20270510-automate-2027",
     "dateStatus": "confirmed",
     "sortDate": "2027-05-10",
@@ -1557,6 +1690,25 @@ window.PHYSICAL_AI_EVENTS = [
     "purpose": "欧州最大級の総合テックフェスティバル。エンタープライズAI・DX・スタートアップ動向の探索候補として参考情報で管理。"
   },
   {
+    "id": "20270616-l4dc-2027",
+    "dateStatus": "confirmed",
+    "sortDate": "2027-06-16",
+    "year": 2027,
+    "dateLabel": "6月16–18日",
+    "name": "L4DC 2027",
+    "budgetCandidate": false,
+    "importance": "★★★★☆",
+    "businessFit": "★★★☆☆",
+    "category": "Control / Motion / Systems",
+    "type": "学会・専門会議",
+    "location": "Stockholm, Sweden",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "学習と動力学・制御の接点を扱う会議（第9回）。KTH主催。会場名は未発表。",
+    "sourceUrl": "https://l4dc2027.control.ee.ethz.ch/",
+    "verifiedAt": "2026-09-23"
+  },
+  {
     "id": "20270620-cvpr-2027",
     "dateStatus": "confirmed",
     "sortDate": "2027-06-20",
@@ -1593,6 +1745,25 @@ window.PHYSICAL_AI_EVENTS = [
     "purpose": "スマートオートメーション・ロボティクス"
   },
   {
+    "id": "20270627-icaps-2027",
+    "dateStatus": "confirmed",
+    "sortDate": "2027-06-27",
+    "year": 2027,
+    "dateLabel": "6月27日–7月2日",
+    "name": "ICAPS 2027",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★★☆☆",
+    "category": "Robot Learning / AI基盤",
+    "type": "学会・専門会議",
+    "location": "Columbia, SC, United States",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "プランニング・スケジューリング（第37回）。ロボットの行動計画とタスク割当。",
+    "sourceUrl": "https://icaps27.icaps-conference.org/",
+    "verifiedAt": "2026-09-23"
+  },
+  {
     "id": "20270706-rss-2027",
     "dateStatus": "confirmed",
     "sortDate": "2027-07-06",
@@ -1608,6 +1779,44 @@ window.PHYSICAL_AI_EVENTS = [
     "status": "参考情報",
     "assignment": "—",
     "purpose": "ロボティクス分野トップ会議。2027年7月6–11日、Athens開催。部門の参加・予算計画には含めず、論文・発表と個別参加判断の参考情報として管理する。"
+  },
+  {
+    "id": "20270707-acc-2027",
+    "dateStatus": "confirmed",
+    "sortDate": "2027-07-07",
+    "year": 2027,
+    "dateLabel": "7月7–9日",
+    "name": "ACC 2027",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★★☆☆",
+    "category": "Control / Motion / Systems",
+    "type": "学会・専門会議",
+    "location": "Philadelphia Marriott Downtown, Philadelphia, PA, United States",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "American Control Conference。制御理論の二大会議の一つ。前日7月6日にプレカンファレンス・ワークショップ。",
+    "sourceUrl": "https://acc2027.a2c2.org/",
+    "verifiedAt": "2026-09-23"
+  },
+  {
+    "id": "20270712-world-haptics-2027",
+    "dateStatus": "confirmed",
+    "sortDate": "2027-07-12",
+    "year": 2027,
+    "dateLabel": "7月12–15日",
+    "name": "World Haptics 2027",
+    "budgetCandidate": false,
+    "importance": "★★★★☆",
+    "businessFit": "★★★☆☆",
+    "category": "Soft Robotics / Haptics",
+    "type": "学会・専門会議",
+    "location": "Hilton Boston Park Plaza, Boston, MA, United States",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "触覚・力覚提示の最上位会議。IEEE Haptics Symposium（偶数年）と交互開催。接触作業と力制御の基盤。",
+    "sourceUrl": "https://2027.worldhaptics.org/",
+    "verifiedAt": "2026-09-23"
   },
   {
     "id": "20270808-siggraph-2027",
@@ -1638,7 +1847,7 @@ window.PHYSICAL_AI_EVENTS = [
     "businessFit": "★★★★☆",
     "category": "International Exhibition / Market & Implementation",
     "type": "展示会・見本市",
-    "location": "Hannover Exhibition Center, Hannover, Germany",
+    "location": "Hannover Exhibition Grounds, Hannover, Germany",
     "status": "2027計画",
     "assignment": "前半：～2名／後半：～2名",
     "purpose": "繊維機械・繊維製造。会期前半・後半で担当を分けて派遣する。"
@@ -1767,6 +1976,25 @@ window.PHYSICAL_AI_EVENTS = [
     "verifiedAt": "2026-09-16"
   },
   {
+    "id": "20271214-cdc-2027",
+    "dateStatus": "confirmed",
+    "sortDate": "2027-12-14",
+    "year": 2027,
+    "dateLabel": "12月14–17日",
+    "name": "CDC 2027",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★★☆☆",
+    "category": "Control / Motion / Systems",
+    "type": "学会・専門会議",
+    "location": "Lisbon, Portugal",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "IEEE Conference on Decision and Control。制御理論・意思決定・最適制御。会場名は主催学会から未公表。",
+    "sourceUrl": "https://ieeecss.org/conferences",
+    "verifiedAt": "2026-09-23"
+  },
+  {
     "id": "20280403-modex-2028",
     "dateStatus": "confirmed",
     "sortDate": "2028-04-03",
@@ -1830,7 +2058,7 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "International Exhibition / Market & Implementation",
     "handling": "2028候補：TBD",
     "assignment": "TBD",
-    "location": "Hanover Fairground, Hannover, Germany（想定）",
+    "location": "Hannover Exhibition Grounds, Hannover, Germany（想定）",
     "purpose": "板金加工、レーザ、成形、加工自動化。隔年開催のためEuroBLECHの次回開催として管理。"
   },
   {
@@ -1936,9 +2164,57 @@ window.PHYSICAL_AI_EVENTS = [
     "purpose": "AI基盤のトップ会議。Embodied AI、World Model、Robotics関連Workshopと論文を追跡する。公式発表は欧州開催まで。"
   },
   {
-    "id": "pending-item",
+    "id": "pending-asme-idetc-cie-2027",
     "dateStatus": "pending",
     "order": 8,
+    "name": "ASME IDETC/CIE 2027",
+    "budgetCandidate": false,
+    "importance": "★★☆☆☆",
+    "businessFit": "★★☆☆☆",
+    "category": "Mechanical Design / Structural & Multidisciplinary Optimization",
+    "handling": "2027候補：日程TBD",
+    "assignment": "TBD",
+    "location": "TBD",
+    "purpose": "設計工学、Design Automation、CIE、メカ設計・最適化。ASME公式の案内は2027年版へ切り替わったが、日程・開催地は未発表。",
+    "sourceUrl": "https://event.asme.org/IDETC-CIE",
+    "verifiedAt": "2026-09-23"
+  },
+  {
+    "id": "pending-irex-2027",
+    "dateStatus": "pending",
+    "order": 9,
+    "name": "iREX 2027（国際ロボット展）",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★★★☆",
+    "category": "International Exhibition / Market & Implementation",
+    "handling": "2027候補：12月上旬／日次TBD",
+    "assignment": "TBD",
+    "location": "Tokyo Big Sight, Tokyo, Japan",
+    "purpose": "日本ロボット工業会主催の国内最大のロボット展。隔年・奇数年開催。日次の発表後に5章へ移す。渡航を伴わない。",
+    "sourceUrl": "https://irex.nikkan.co.jp/",
+    "verifiedAt": "2026-09-23"
+  },
+  {
+    "id": "pending-rlc-2027",
+    "dateStatus": "pending",
+    "order": 10,
+    "name": "RLC 2027",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★☆☆☆",
+    "category": "Robot Learning / AI基盤",
+    "handling": "2027候補：8月（日次TBD）",
+    "assignment": "TBD",
+    "location": "Brown University, United States ／ Odense, Denmark（想定）",
+    "purpose": "強化学習専門の会議。2027年はEWRLとの共同開催で2会場に分かれる予定。日程・開催地の公式発表後に5章へ移す。",
+    "sourceUrl": "https://rl-conference.cc/",
+    "verifiedAt": "2026-09-23"
+  },
+  {
+    "id": "pending-item",
+    "dateStatus": "pending",
+    "order": 11,
     "name": "年間予算予備枠（部門）",
     "budgetCandidate": true,
     "importance": "—",
