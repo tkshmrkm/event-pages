@@ -370,6 +370,8 @@ const checks = [
         && !team.includes('Holiday Inn Express') && ['Hotel FREIgeist Göttingen Innenstadt', 'Toyoko Inn Frankfurt am Main Hauptbahnhof'].every(hotel => team.includes(hotel))],
       ['each sheet states the return ticket', [murakami, team].every(part => part.includes('return ticket held') && part.includes('CX288') && part.includes('CX536'))],
       // 金築はカネツキ（2026-09-23にユーザーが訂正）。KANECHIKUと書いていた。
+      // 印刷した紙には本人が氏名を書くので、シート名（誰のシートか）は画面だけに出す。
+      ['sheet names are screen-only', ['MURAKAMI', 'MIMA / KANETSUKI'].every(who => immigration.includes('<span class="no-print">' + who + ' · </span>'))],
       ['Kanetsuki is romanised as read', immigration.includes('KANETSUKI') && !/KANECHIKU/i.test(immigration)],
       ['each sheet has its own name and passport fields', countIn(murakami, /<input/g) === 2 && countIn(team, /<input/g) === 2],
       ['sheets print on separate pages', css.includes('.immi-sheet{break-after:page}') && css.includes('.immi-page:has(.immi-sheet:target) .immi-sheet:not(:target){display:none}')],

@@ -1786,7 +1786,7 @@ try {
   <header class="immi-head">
     <div class="eyebrow">FOR BORDER CONTROL · ${sheet.border}</div>
     <h1>Traveller Information</h1>
-    <p class="immi-sub">${sheet.who} · ${sheet.events}</p>
+    <p class="immi-sub"><span class="no-print">${sheet.who} · </span>${sheet.events}</p>
   </header>
   <div class="immi-id">
     <label><span>Full name (as in passport)</span><input type="text" autocomplete="off" spellcheck="false"></label>
