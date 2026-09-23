@@ -1138,7 +1138,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "展示会・見本市",
     "location": "Nuremberg, Germany",
     "status": "参加予定",
-    "assignment": "東・1名",
+    "assignment": "東",
     "purpose": "Smart Production Solutions。FA、産業制御、産業通信、ドライブ、センサ等を確認する。東が1名で参加予定。"
   },
   {
