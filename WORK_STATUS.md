@@ -1,6 +1,6 @@
 # WORK STATUS — overseas trip layout
 
-更新日: 2026-08-30
+更新日: 2026-09-23
 
 ## 文書の役割
 
@@ -41,8 +41,9 @@ PC保存までを一続きで支える。
 `861485f` から分けた `claude/hrs-fra-db-map-add-f4cc89` は分岐点がmainの先端のままで、
 分けたことで得た隔離が無かった。**並行作業を再開するときだけ分ける。**
 
-- `main` は `1cbe9fd`。9/8のFRA到着から空港長距離駅までの経路図
-  （`fra_fernbahnhof_route.png`）と空港公式の構内マップ・SkyLineのリンクまで入っている。push済み
+- `main` は `4f8cb7c`（2026-09-23）。Physical AI俯瞰資料の更新（PR #4）まで入っている。
+  8/30時点の `1cbe9fd`（FRAの経路図）以降に、俯瞰資料のデータ分離（`b143ef6`）と
+  金額表記の削除（`34c40df`）なども入った
 - `claude/hrs-fra-db-map-add-f4cc89` はmainへfast-forwardで畳んで、ローカルとリモートの
   両方から削除した
 - **`claude/eb-backport-0816` は未マージのまま残る（mainとの差は2コミット）。消さない。**
@@ -60,7 +61,13 @@ PC保存までを一続きで支える。
 - **「main 1本」はこのセッションの作業線の話。** 他のセッションが動いている間は、
   そちらは自分のブランチを持つ。mainを持つworktreeは1つだけにする（gitが同じブランチを
   2つのworktreeで開けない）
-- リモートには `origin/claude/physical-ai-overview-update-0jzd34` もある（ローカルには無い）
+- リモートの作業ブランチは、`claude/eb-backport-0816` 以外すべてmainへマージ済み
+  （2026-09-23にリモートで確認）。`drop-lane-time-axis`、`fix-1020-row-times`、
+  `flight-info-to-ics-122ccd`、`hrs-schedule-discrepancy-8jaxm8`、`program-email-pdf-0f6204`、
+  `physical-ai-overview-update-0jzd34`。消すかどうかは未判断
+- **クラウドのClaude Codeセッションは、指定された `claude/` ブランチでしか作業できない。**
+  「main 1本」の例外で、PRを経由してmainへ入れる。`claude/physical-ai-overview-update-0jzd34`
+  はPR #4のマージ後、mainから作り直して続きを載せている
 
 作業再開時は、上記を現状と思い込まず、必ず次を実行すること。
 
@@ -69,6 +76,47 @@ git status --short
 git log -5 --oneline
 git status --branch --short
 ```
+
+## Physical AI俯瞰資料（2026-09-23）
+
+海外出張ページとは別物。部門が追う国際会議・展示会の管理表で、`index.html` の
+「俯瞰資料」から開く。
+
+- **ファイルは3つ。** 正本データ `physical_ai_events.js`、表示 `physical_ai_events_overview.html`、
+  検査 `validate_physical_ai_events.mjs`。9/16の `b143ef6` で、旧
+  `physical_ai_full_overview_2026_2027_v96_sortable.html`（データと表示が1枚）から分けた。
+  **行の追加・修正はJSだけで行う。** HTMLに行を書くと検査が落ちる
+- 9/23のPR #4（`4f8cb7c`）で入れたもの
+  - 調査候補：5章に9件、6章に2件。Soft Robotics / Haptics がRoboSoftの1件しか無く、
+    Robot Learningと制御の間の会議も、国内・産業自動化も手薄だったため
+  - Tier1の2027年分：ICLR・ACC・CDCを5章へ、ASME IDETC/CIEを6章へ
+  - 4-1が、4-2に存在しない文章を引用していたのを直した
+  - 6章の凡例：6章には無い列を説明していたので外した
+  - 3章「次回開催」の過去日を更新した
+  - 未使用CSSを削除した
+  - 393pxでの横あふれ（759px）を直した
+- **状態の語彙は9つだけ**（参加済み / 参加予定 / 検討中 / 候補 / 不参加 / 論文・発表追跡 /
+  参考情報 / 2027計画 / 2028計画）。検査が弾く。「調整中」のような語は作らず、
+  いちばん近い状態を選んで事情は目的欄に書く
+- 担当欄は人名か `TBD`／`—` だけにする。人数を書くのは2027年以降の計画枠だけ
+  （SPS 2026の「東・1名」は「東」に直した）
+- **開催地は英字で、1会場1表記。** 絞り込みの選択肢は完全一致で作られるので、
+  表記がゆれると同じ会場が別の選択肢として並ぶ
+  （ハノーバーは `Hannover Exhibition Grounds` に統一した）
+- 追加する行には `sourceUrl` と `verifiedAt` を対で付ける
+- 6章の `年間予算予備枠` は常に最後の行にする
+- **3章「次回開催」はデータから作られていない。** イベントが終わるたびに手で直す。
+  9/23時点で次に過去日になるのは SEMICON West 2026（10/13–15）
+- 更新日（ヘッダーと1章）と、検査の「参加予定のまま過去日」判定に使う基準日は、同時に動かす
+- 日程が未確定のもの（6章）
+  - iREX 2027：日次が未発表
+  - RLC 2027：会場（Brown / Odense）は「想定」
+  - ICLR 2027：都市はワークショップ募集ページに基づく。本会議の会場は未発表
+  - ASME IDETC/CIE 2027：日程・会場とも未発表
+  - CoRL・ICML・NeurIPS・ROSCon・HRS Europe の2027年分
+  - NeurIPS 2026 の開催地別の日程はユーザーの判断で対象外
+- **クラウドセッションからは主催者サイトを直接開けない**（送信先はgithub.comのみ許可）。
+  日程は検索経由で公式ページの記載を拾ったもの。予算枠に関わるものは公式で確かめてから確定する
 
 ## 次にやること（この作業から出たもの）
 
@@ -526,6 +574,9 @@ Porscheplatzへの経路36字、費用に含む区間54字）。
 - `202610_Europe_TechEx_EuroBLECH/source.html`: EUROBLECHの入力元（手で書く唯一の原本）
 - `202610_Europe_TechEx_EuroBLECH/build.mjs`: EUROBLECH v3の編集元
 - `202610_Europe_TechEx_EuroBLECH/CLAUDE_HANDOFF.md`: EUROBLECHの引き継ぎ本体
+- `physical_ai_events.js`: Physical AI俯瞰資料の正本データ
+- `physical_ai_events_overview.html`: 俯瞰資料の表示（データを読んで描画する）
+- `validate_physical_ai_events.mjs`: 俯瞰資料の検査
 
 ## 検証
 
@@ -536,6 +587,7 @@ node .\cloudflare\trip-notes-worker\validate-worker.mjs
 node .\shared\trip-field\validate-template.mjs
 node .\202609_HumanoidSummitEurope\build.mjs
 node .\202609_HumanoidSummitEurope\validate.mjs
+node .\validate_physical_ai_events.mjs
 git diff --check
 ```
 
