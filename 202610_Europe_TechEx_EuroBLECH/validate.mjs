@@ -80,6 +80,11 @@ const checks = [
   ['CX536 meal is placed after departure', /<strong>CX536<\/strong>[\s\S]{0,900}<div class="row-time">10:35頃<\/div>[\s\S]{0,700}機内食（昼食）/.test(day1025) && day1025.includes('<strong>CX536で機内食が出る</strong>')],
   // やることの折り畳みは7件: 空港の待ち・乗り継ぎ6回と、10/25の入国手続き1回。
   // 手続き・確認・館内移動・Visit Japan Webは主表示に出さず、すべてここへ入れる。
+  // EuroBLECHの日は会期の番号で呼ぶ（2026-09-23から。公式で会期4日間を確認）。
+  // 10/22はDay 3だがブレーメンなので行かない。10/23は会期の最終日。
+  ['EuroBLECH days carry the show-day number', !familyPrint.includes('EuroBLECH Day') && ['EuroBLECH Day 1</div>', 'EuroBLECH Day 2</div>', 'EuroBLECH Day 4（最終日）</div>'].every(label => itinerary.includes(label))
+    && countIn(overview, /EuroBLECH Day [124]/g) === 5 && !/EuroBLECH Day 3/.test(html)
+    && ['Day 1。', 'Day 2。', 'Day 3。行かない', 'Day 4（最終日）。'].every(label => euroblech.includes(label))],
   // 8件目・9件目は2026-09-23に足した、AMS着とFRA着の「入国審査は紙で出す」。
   ['paper sheet is the plan at Schengen entry', countIn(itinerary, /印刷した入国用の紙/g) === 2],
   ['todo lists live inside folds', count(/<summary>やること<\/summary>/g) === 9 && !/text-slate-600 text-xs">[^<]*セキュリティ再検査/.test(itinerary) && !/text-slate-600 text-xs">Visit Japan Web/.test(itinerary)],

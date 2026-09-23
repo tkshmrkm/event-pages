@@ -94,10 +94,11 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['出発日 — 村上のみ セントレア発（美馬・金築は翌18日発）', '出発日 — 村上のみセントレア発（美馬・金築は翌18日発）'],
   ['AMS着・時差調整日（村上）/ 出発日（美馬・金築）', 'AMS着・時差調整日（村上）／出発日（美馬・金築）'],
   ['TechEx Day 1 フル参加（村上）/ 美馬・金築 FRA着→ゲッティンゲン（荷物預け）→Wolfsburg（Autostadt）', 'TechEx Day 1（村上）／FRA着・ヴォルフスブルク日帰り（美馬・金築）'],
-  // EuroBLECHの日には番号を振らない。会期が10/20開幕であることは元資料にあるが、
-  // 何日開催かは未確認で、`Day 1` も `最終` も裏が取れていない。参加日は日付カードで分かる。
-  ['TechEx Day 2 → ゲッティンゲン移動（村上）/ EuroBLECH Day 1（美馬・金築）', 'TechEx Day 2・ゲッティンゲン移動（村上）／EuroBLECH 視察（美馬・金築）'],
-  ['EuroBLECH 最終 → フランクフルト移動（全員）', 'EuroBLECH 視察 → フランクフルト移動（全員）'],
+  // EuroBLECHの日には会期の番号を振る（2026-09-23、ユーザーの判断）。公式で会期が4日間
+  // （10/20–23）と確認できたため。10/22（Day 3）はブレーメンなので行かない。
+  // 10/23は「Day 4（最終日）」。会期の最終日であって、自分たちの最終日という意味ではない。
+  ['TechEx Day 2 → ゲッティンゲン移動（村上）/ EuroBLECH Day 1（美馬・金築）', 'TechEx Day 2・ゲッティンゲン移動（村上）／EuroBLECH Day 1 視察（美馬・金築）'],
+  ['EuroBLECH 最終 → フランクフルト移動（全員）', 'EuroBLECH Day 4（最終日）視察 → フランクフルト移動（全員）'],
   ['Bremen 日帰り — 全員（工場見学）', 'ブレーメン日帰り — 全員（工場見学）'],
   ['👥 美馬・金築（FRA着 → ゲッティンゲンで荷物預け → Wolfsburg → ゲッティンゲン）', '👥 美馬・金築（FRA着・ヴォルフスブルク日帰り）'],
   ['フランクフルト → セントレア 出発（全員同便）', 'フランクフルト出発 → 香港（全員）'],
@@ -157,7 +158,7 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['🏭 EuroBLECH（最終）', '🏛 EuroBLECH（最終）'],
   ['🏭 EuroBLECH 2026', '🏛 EuroBLECH 2026'],
   ['<i class="fas fa-industry"></i> EuroBLECH 公式サイト', '<i class="fas fa-landmark"></i> EuroBLECH 公式サイト'],
-  ['EuroBLECH フル参加 — 全員合流', 'EuroBLECH 展示会視察 — 全員合流'],
+  ['EuroBLECH フル参加 — 全員合流', 'EuroBLECH Day 2 展示会視察 — 全員合流'],
   ['<!-- Day 5: 10/21 EuroBLECH フル参加（全員合流） -->', '<!-- Day 5: 10/21 EuroBLECH 展示会視察（全員合流） -->'],
   // 「EuroBLECH フル参加（全員合流・ハノーファーメッセ）」への置換はここから外した。
   // その文はindex_v1.html側の旧家族向け表にしか無く、直後に家族向けブロックごと
@@ -166,7 +167,7 @@ const SOURCE_TEXT_REPLACEMENTS = [
   ['<div class="text-sm text-slate-600 mt-1">村上・美馬・金築 全員参加</div>', '<div class="text-sm text-slate-600 mt-1">村上・美馬・金築 全員で終日視察</div>'],
   ['Hannover Messe · 10/20（火）– 10/23（金）· 全員参加', 'Hannover Messe ・ 10/20（火）– 10/23（金）・ 全員で展示会視察'],
   ['美馬・金築が20日朝ハノーファーへ移動して参加', '美馬・金築が20日朝ハノーファーへ移動して視察'],
-  ['<div class="font-semibold">10/21（水）— 全員フル参加</div>', '<div class="font-semibold">10/21（水）— 全員で終日視察</div>'],
+  ['<div class="font-semibold">10/21（水）— 全員フル参加</div>', '<div class="font-semibold">10/21（水）Day 2 — 全員で終日視察</div>'],
   ['10/22（木）12:45–14:00 · 全員参加・予約確定済み', '10/22（木）12:45–14:00 ・ 全員で工場見学・予約確定済み'],
 ];
 
@@ -201,11 +202,11 @@ const FAMILY_DAYS = [
     ['16:50','flight','フライト','KL1791 Amsterdam AMS発 → Hannover HAJ 17:45着'],
     ['20:30頃','stay','チェックイン','Hotel FREIgeist Göttingen Innenstadt'],
   ], team:[
-    ['09:00〜17:00','work','仕事','EuroBLECH 展示会視察（ハノーファー）'],
+    ['09:00〜17:00','work','仕事','EuroBLECH Day 1 展示会視察（ハノーファー）'],
     ['18:00頃','stay','戻り目安','ゲッティンゲンのホテルへ'],
   ], stays:[['全員','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/21', dow:'水', shared:[
-    ['09:00〜17:00','work','仕事','EuroBLECH 展示会視察（3名合流。ハノーファー）'],
+    ['09:00〜17:00','work','仕事','EuroBLECH Day 2 展示会視察（3名合流。ハノーファー）'],
     ['19:00頃','stay','夕食','ゲッティンゲン旧市街'],
   ], stays:[['全員','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/22', dow:'木', shared:[
@@ -213,7 +214,7 @@ const FAMILY_DAYS = [
     ['18:05頃／20:05頃','review','戻り時刻は未定','早帰り案と市内滞在案のどちらかで決まる'],
   ], stays:[['全員','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/23', dow:'金', shared:[
-    ['09:00〜14:15頃','work','仕事','EuroBLECH 展示会視察（ハノーファー）'],
+    ['09:00〜14:15頃','work','仕事','EuroBLECH Day 4（最終日）展示会視察（ハノーファー）'],
     ['17:14','move','移動','フランクフルト中央駅着'],
     ['17:30頃','stay','チェックイン','Toyoko Inn Frankfurt am Main Hauptbahnhof'],
   ], stays:[['全員','Toyoko Inn Frankfurt am Main Hauptbahnhof']] },
@@ -1012,13 +1013,13 @@ const transformScript = `
       // 別リンクの旧形式なので、10/21・10/23と同じ「会場は<場所名>」にそろえる。
       // 検索キーは元資料の文字列。表示側は3日とも「EuroBLECH ＋ 誰が視察するか ＋ 会場」でそろえる。
       const expo = rowFor(day, 'EuroBLECH Day 1');
-      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00〜18:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">美馬・金築が終日視察。会場は' + mapLink('ハノーファーメッセ') + '。公式の会期時間は10/20〜22が09:00〜18:00、10/23のみ09:00〜17:00</div>';
+      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00〜18:00</div><div class="font-semibold text-teal-800">🏛 EuroBLECH Day 1</div><div class="text-slate-600 text-xs">美馬・金築が終日視察。会場は' + mapLink('ハノーファーメッセ') + '。公式の会期時間は10/20〜22が09:00〜18:00、10/23のみ09:00〜17:00</div>';
       const back = ROUTES.find(route => route[0] === '1020' && route[1].includes('戻る'));
       expo?.insertAdjacentHTML('afterend', '<div class="route-four">' + routeMarkup(back) + '</div>');
     }
     if (id === '1021') {
       const expo = rowFor(day, 'EuroBLECH（Hannover Messe）');
-      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00–16:20頃</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">全員で終日視察。会場は' + mapLink('ハノーファーメッセ') + '。16:35発に合わせて16:20頃に退場する</div>';
+      if (expo) expo.innerHTML = '<div class="text-slate-500">09:00–16:20頃</div><div class="font-semibold text-teal-800">🏛 EuroBLECH Day 2</div><div class="text-slate-600 text-xs">全員で終日視察。会場は' + mapLink('ハノーファーメッセ') + '。16:35発に合わせて16:20頃に退場する</div>';
       const back = Array.from(day.querySelectorAll('.route-four')).at(-1);
       back?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">18:30頃</div><div class="action-body"><div class="font-semibold">🍽 全員で夕食</div><div class="text-slate-600 text-xs">ゲッティンゲン旧市街。17:03着なので前日までより早く動ける</div></div></div>');
     }
@@ -1041,7 +1042,7 @@ const transformScript = `
     }
     if (id === '1023') {
       const expo1023 = rowFor(day, 'EuroBLECH（最終）');
-      if (expo1023) expo1023.innerHTML = '<div class="text-slate-500">09:00〜14:15頃</div><div class="font-semibold text-teal-800">🏛 EuroBLECH</div><div class="text-slate-600 text-xs">全員で視察。会場は' + mapLink('ハノーファーメッセ') + '</div><div class="text-slate-600 text-xs">入場後は荷物をクロークへ。14:30発の列車に合わせて14:15頃退場</div>';
+      if (expo1023) expo1023.innerHTML = '<div class="text-slate-500">09:00〜14:15頃</div><div class="font-semibold text-teal-800">🏛 EuroBLECH Day 4（最終日）</div><div class="text-slate-600 text-xs">全員で視察。会場は' + mapLink('ハノーファーメッセ') + '</div><div class="text-slate-600 text-xs">入場後は荷物をクロークへ。14:30発の列車に合わせて14:15頃退場</div>';
       const lastTrain = routeRowFor(day, 'ICE771');
       lastTrain?.insertAdjacentHTML('afterend', '<div class="action"><div class="row-time">17:30頃</div><div class="action-body"><div class="font-semibold">🏨 ホテルにチェックイン</div><div class="text-slate-600 text-xs">フランクフルト中央駅南口から徒歩約2分</div></div></div><div class="action"><div class="row-time">18:30頃</div><div class="action-body"><div class="font-semibold">🍽 夕食</div><div class="text-slate-600 text-xs">フランクフルト中央駅周辺。夜は荷物・貴重品に注意。</div></div></div>');
     }
@@ -1737,6 +1738,8 @@ try {
 </head>
 <body class="family-page" data-trip-layout="family-v1"><header class="family-head"><div class="wrap"><div class="eyebrow">EUROPE BUSINESS TRIP 2026</div><h1>家族向け予定表</h1><div class="subtitle">TechEx Europe・EuroBLECH 2026｜10/17（土）〜10/25（日）｜村上・美馬・金築</div><div class="no-print"><button class="btn" type="button" onclick="window.print()">印刷</button></div></div></header><main class="wrap"><div class="legacy-tab family-tab">${familyInner}</div></main></body></html>
 `;
+  // 概要と行を共有しているが、家族向けにはEuroBLECHの会期番号を持ち込まない。
+  familyPrint = familyPrint.replace(/EuroBLECH Day \d(?:（最終日）)? ?/g, 'EuroBLECH ');
   familyPrint = familyPrint.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n');
   writeFileSync(familyOutputPath, familyPrint, 'utf8');
   console.log(`Generated ${familyOutputPath}`);
@@ -1829,10 +1832,10 @@ try {
   const ebSection = (title, body) => `<section class="eb-section"><h2>${title}</h2><div class="eb-body">${body}</div></section>`;
   const ebList = items => `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
   const ebDays = [
-    ['10/20（火）', '09:00–18:00', '美馬・金築が終日視察'],
-    ['10/21（水）', '09:00–18:00', '3名で視察。16:20頃に退場'],
-    ['10/22（木）', '09:00–18:00', '行かない（ブレーメン工場見学）'],
-    ['10/23（金）', '09:00–17:00', '3名で視察。14:15頃に退場'],
+    ['10/20（火）', '09:00–18:00', 'Day 1。美馬・金築が終日視察'],
+    ['10/21（水）', '09:00–18:00', 'Day 2。3名で視察。16:20頃に退場'],
+    ['10/22（木）', '09:00–18:00', 'Day 3。行かない（ブレーメン工場見学）'],
+    ['10/23（金）', '09:00–17:00', 'Day 4（最終日）。3名で視察。14:15頃に退場'],
   ].map(([day, hours, us]) => `<tr><th>${day}</th><td class="eb-time">${hours}</td><td>${us}</td></tr>`).join('');
   const euroblechPage = `<!DOCTYPE html>
 <html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
