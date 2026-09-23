@@ -49,7 +49,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "COEX, Seoul, Republic of Korea",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "半導体製造装置・材料・プロセス・先端パッケージング。基準日以前に開催済みのため不参加。"
+    "purpose": "半導体製造装置・材料・プロセス・先端パッケージング。不参加。"
   },
   {
     "id": "20260309-amc-2026",
@@ -168,7 +168,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Vancouver Convention Centre, Vancouver, BC, Canada",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "3D Vision。3D認識・空間理解の補完候補だが、基準日以前に開催済みのため不参加。"
+    "purpose": "3D Vision。3D認識・空間理解の補完候補。不参加。"
   },
   {
     "id": "20260324-logimat-2026",
@@ -202,7 +202,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Shanghai New International Expo Centre, Shanghai, China",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "中国半導体製造装置・材料・プロセス。基準日以前に開催済みのため不参加。"
+    "purpose": "中国半導体製造装置・材料・プロセス。不参加。"
   },
   {
     "id": "20260407-robosoft-2026",
@@ -389,7 +389,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Takanawa Gateway Convention Center, Tokyo, Japan",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "国内開催。ヒューマノイド、Embodied AI、商用化、量産、投資・事業化動向を確認する候補。6月末時点で開催済みのため不参加扱い。"
+    "purpose": "国内開催。ヒューマノイド、Embodied AI、商用化、量産、投資・事業化動向を確認する候補。不参加。"
   },
   {
     "id": "20260601-icra-2026",
@@ -457,7 +457,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Long Beach Convention Center, Long Beach, CA, United States",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "XR、Spatial AI、AR/VR、ヒューマンインターフェース、空間コンピューティングの探索候補。6月末時点で開催済みのため不参加扱い。"
+    "purpose": "XR、Spatial AI、AR/VR、ヒューマンインターフェース、空間コンピューティングの探索候補。不参加。"
   },
   {
     "id": "20260617-vivatech-2026",
@@ -508,7 +508,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "福岡国際会議場, Fukuoka, Japan",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "国内ロボティクス・メカトロニクス研究、若手発表・育成候補。6月末時点で開催済みのため不参加扱い。"
+    "purpose": "国内ロボティクス・メカトロニクス研究、若手発表・育成候補。不参加。"
   },
   {
     "id": "20260706-icml-2026",
