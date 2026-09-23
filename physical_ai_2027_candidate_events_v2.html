@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2027 Physical AI 関連イベント 検討リスト v2</title>
+<style>
+:root{--bg:#f6f8fb;--panel:#fff;--ink:#172033;--muted:#64748b;--line:#d8e0ec;--blue:#1d4ed8;--orange:#b45309}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP","Yu Gothic",Meiryo,sans-serif;line-height:1.58}
+.wrap{max-width:1900px;margin:auto;padding:30px 22px 56px}
+header{background:linear-gradient(135deg,#0f172a,#1e3a8a);color:#fff;padding:30px 34px;border-radius:22px;box-shadow:0 12px 28px rgba(15,23,42,.18)}
+h1{margin:0 0 8px;font-size:30px} .subtitle{color:#dbeafe;margin:0} .meta{color:#bfdbfe;font-size:13px;margin-top:12px}
+.section{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:18px;box-shadow:0 6px 18px rgba(15,23,42,.05)}
+h2{margin:0 0 12px;font-size:21px} .message{border-left:5px solid var(--blue);background:#eff6ff;padding:14px 16px;border-radius:12px}
+.note{border-left:5px solid var(--orange);background:#fffbeb;padding:14px 16px;border-radius:12px;margin-top:12px}
+.controls{display:grid;grid-template-columns:2fr 1fr 1fr 1.3fr;gap:10px;margin:14px 0}
+.controls input,.controls select{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:#fff}
+.table-scroll{overflow:auto;border:1px solid var(--line);border-radius:14px}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:2100px;font-size:11.3px}
+th{position:sticky;top:0;background:#f1f5f9;color:#334155;text-align:left;padding:10px;border-bottom:1px solid var(--line);white-space:nowrap;z-index:1}
+td{padding:10px;border-bottom:1px solid #e8edf4;vertical-align:top} tr:hover td{background:#f8fafc}
+.small{font-size:11px;color:var(--muted)} .counter{color:var(--muted);font-size:12px;margin:8px 0}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:700;border:1px solid;white-space:nowrap}
+.vh{background:#ede9fe;color:#6d28d9;border-color:#c4b5fd} .hi{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd} .mid{background:#f1f5f9;color:#475569;border-color:#cbd5e1}
+.confirmed,.good{background:#dcfce7;color:#166534;border-color:#86efac} .partial,.compare{background:#fef3c7;color:#92400e;border-color:#fcd34d}
+.watch{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd} .watch2{background:#f5f3ff;color:#6d28d9;border-color:#c4b5fd}
+.ref{background:#f1f5f9;color:#475569;border-color:#cbd5e1} .caution{background:#fff1f2;color:#be123c;border-color:#fda4af}
+a{color:#1d4ed8;text-decoration:none} a:hover{text-decoration:underline}
+@media(max-width:1000px){.controls{grid-template-columns:1fr}}
+@media print{body{background:#fff} header,.section{box-shadow:none} .controls{display:none}}
+</style>
+</head>
+<body><div class="wrap">
+<header>
+<h1>2027 Physical AI 関連イベント 検討リスト v2</h1>
+<p class="subtitle">重複を避け、主催者・運営母体を明示した候補管理版</p>
+<div class="meta">更新基準日：2026年9月16日 ／ 掲載：14件</div>
+</header>
+
+<section class="section">
+<h2>1. 重複排除ルール</h2>
+<div class="message">
+<strong>同一イベントは公式名称＋主催者＋開催地で正規化</strong>し、表記揺れを別イベントとして数えない。
+同一シリーズの地域版（TechEx Physical AI Expo Global / North America、GEIA Asia / Europe）は別開催として残すが、
+海外派遣候補数を単純加算せず「同一シリーズから選択」として扱う。
+</div>
+<div class="note">
+<strong>Robotics Summit &amp; Expo 2027 は除外。</strong>
+会話中に提示された正本行で既に掲載済みであることが確認できたため、検討リストとの二重管理をやめた。
+なお、アップロードされた正本HTMLはイベント本体を外部JS（physical_ai_events.js）から読む構造で、そのJS自体は今回添付されていないため、
+正本全件との完全な機械照合はできない。新たに正本掲載が判明したものは同様にこの表から外す。
+</div>
+</section>
+
+<section class="section">
+<h2>2. 同名イベントの識別</h2>
+<div class="message">
+<strong>Physical AI Expo Global / North America</strong>＝TechEx Events Ltd のシリーズ。<br>
+<strong>THE Physical AI Expo London</strong>＝11VC Ltd 主催の別イベント。<br>
+名前は似ているが、主催者・会場・イベント設計が異なるため重複ではない。
+</div>
+</section>
+
+<section class="section">
+<h2>3. 検討候補一覧</h2>
+<div class="controls">
+<input id="q" type="search" placeholder="イベント名・主催者・テーマ・都市を検索">
+<select id="status"><option value="">検討状況：すべて</option></select>
+<select id="distance"><option value="">Physical AI距離：すべて</option></select>
+<select id="org"><option value="">主催者：すべて</option></select>
+</div>
+<div id="counter" class="counter"></div>
+<div class="table-scroll"><table id="events">
+<thead><tr>
+<th>開催日</th><th>イベント</th><th>主催者・運営母体</th><th>開催地</th><th>種別</th><th>主テーマ</th>
+<th>Physical AI距離</th><th>成熟度・実績</th><th>現地参加価値</th><th>情報確度</th>
+<th>既存イベントとの重複・補完</th><th>検討状況</th><th>コメント・公式情報</th>
+</tr></thead>
+<tbody>
+    <tr data-status="重点監視" data-distance="非常に高い" data-organizer="ULMO-Consulting / Ulrich Möller">
+      <td>2027/1/20–21</td>
+      <td><strong>Advanced Humanoid Forum 2027</strong></td>
+      <td><strong>ULMO-Consulting / Ulrich Möller</strong><br><span class="small">公式サイトに “Organized by: Ulrich Möller · ULMO-Consulting” と明記。</span></td>
+      <td>Munich, Germany</td>
+      <td>技術カンファレンス・サミット</td>
+      <td>Humanoid / Physical AI / Embodied AI / Industrial Validation</td>
+      <td><span class="badge vh">非常に高い</span></td>
+      <td>新規（初回）</td>
+      <td>高い</td>
+      <td><span class="badge confirmed">開催日・会場確定</span></td>
+      <td>HRS Europeと近いが、産業導入・安全・Cybersecurity・RobotOps・Real-to-Simをより前面に出す。</td>
+      <td><span class="badge watch">重点監視</span></td>
+      <td>初回開催。HRS Europeとの内容重複を見ながら、登壇企業・実機検証ゾーンの充実度で判断。<br><a href="https://www.advancedhumanoidforum.com/" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="比較候補" data-distance="高い" data-organizer="TechEx Events Ltd">
+      <td>2027/2/3–4</td>
+      <td><strong>Physical AI Expo Global 2027（TechEx）</strong></td>
+      <td><strong>TechEx Events Ltd</strong><br><span class="small">TechEx Globalの構成イベント。公式サイトの運営・問い合わせはTechEx Events。</span></td>
+      <td>Olympia London, UK</td>
+      <td>展示会・技術カンファレンス</td>
+      <td>Physical AI / Enterprise AI / Autonomous Systems / Edge / IoT</td>
+      <td><span class="badge hi">高い</span></td>
+      <td>Physical AI枠は新興／TechEx母体は既存</td>
+      <td>中〜高</td>
+      <td><span class="badge confirmed">開催日・会場確定</span></td>
+      <td>GTCより企業導入・周辺IT寄り。Physical AI単独開催ではなく、TechEx Globalの複数イベント併催。</td>
+      <td><span class="badge compare">比較候補</span></td>
+      <td>11VC主催の『THE Physical AI Expo』とは別イベント。名称だけで同一視しない。<br><a href="https://physicalaiconference.com/global/" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="参考・論文追跡" data-distance="非常に高い" data-organizer="VISTEC / Tohoku University / NII（共同主催）">
+      <td>2027/2/11–12</td>
+      <td><strong>IS-PAIR 2027</strong></td>
+      <td><strong>VISTEC / Tohoku University / NII（共同主催）</strong><br><span class="small">Vidyasirimedhi Institute of Science and Technology、東北大学、国立情報学研究所の共同主催。</span></td>
+      <td>Rayong, Thailand</td>
+      <td>学会・専門会議</td>
+      <td>Physical AI / Biorobotics / Embodied Intelligence</td>
+      <td><span class="badge vh">非常に高い</span></td>
+      <td>第3回</td>
+      <td>中</td>
+      <td><span class="badge confirmed">開催日・会場確定</span></td>
+      <td>RSS/ICRAより小規模で、生物知能→身体知能の学際性が強い。</td>
+      <td><span class="badge ref">参考・論文追跡</span></td>
+      <td>産業探索より研究テーマ適合性で判断。共同研究や特定テーマがある場合の候補。<br><a href="https://is-pair.vistec.ac.th/2027/" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="有力候補" data-distance="高い" data-organizer="euRobotics aisbl">
+      <td>2027/3/2–4</td>
+      <td><strong>European Robotics Forum 2027 (ERF)</strong></td>
+      <td><strong>euRobotics aisbl</strong><br><span class="small">euRoboticsが主催。2027ローカル運営はMTCおよびUniversity of Birminghamを中心とする体制。</span></td>
+      <td>Birmingham, UK</td>
+      <td>専門フォーラム</td>
+      <td>Robotics / AI / Industry-Academia-Policy / EU ecosystem</td>
+      <td><span class="badge hi">高い</span></td>
+      <td>定着した年次イベント</td>
+      <td>高い</td>
+      <td><span class="badge confirmed">開催日・開催都市確定</span></td>
+      <td>ICRA/RSSより研究発表偏重でなく、automaticaより展示偏重でない。欧州産学官エコシステムを見る場。</td>
+      <td><span class="badge good">有力候補</span></td>
+      <td>欧州の研究・産業・政策の接点を見る用途が明確。既存イベントとの役割重複が比較的少ない。<br><a href="https://erf2027.eu/" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="重点監視" data-distance="非常に高い" data-organizer="GEIA（Global Embodied Intelligence and Humanoid Accelerator）">
+      <td>2027/4/13–16</td>
+      <td><strong>GEIA Asia 2027</strong></td>
+      <td><strong>GEIA（Global Embodied Intelligence and Humanoid Accelerator）</strong><br><span class="small">公式サイト上の運営母体はGEIA。法的な主催法人名は公式ページでは明確に確認できず。</span></td>
+      <td>Shanghai, China</td>
+      <td>技術カンファレンス・サミット</td>
+      <td>Embodied Intelligence / Humanoid / Industry Applications / Site Visit</td>
+      <td><span class="badge vh">非常に高い</span></td>
+      <td>新興シリーズ（2026実績あり）</td>
+      <td>高い</td>
+      <td><span class="badge confirmed">開催日確定</span></td>
+      <td>WRCよりEmbodied IntelligenceとHumanoidに集中。GEIA Europeとは同一シリーズの地域別開催。</td>
+      <td><span class="badge watch">重点監視</span></td>
+      <td>中国勢の技術・商用化、Site Visitが価値。主催法人の明確さは引き続き確認。<br><a href="https://www.geiaasia.com/" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="有力候補" data-distance="高い" data-organizer="RX Japan合同会社">
+      <td>2027/4/21–23</td>
+      <td><strong>フィジカルAI EXPO（NexTech Week 2027 春）</strong></td>
+      <td><strong>RX Japan合同会社</strong><br><span class="small">NexTech Week 2027春の公式開催概要に主催として明記。</span></td>
+      <td>Tokyo Big Sight, Japan</td>
+      <td>展示会・見本市</td>
+      <td>Physical AI / Humanoid / AI implementation / Industrial deployment</td>
+      <td><span class="badge hi">高い</span></td>
+      <td>2027春から構成展として明示</td>
+      <td>中〜高</td>
+      <td><span class="badge confirmed">開催日・会場確定</span></td>
+      <td>海外Physical AIイベントとは別系統。国内企業・導入動向を低コストで確認できる。</td>
+      <td><span class="badge good">有力候補</span></td>
+      <td>国内のため海外出張候補とは競合しにくい。海外イベント選別前のベンチマークとして使える。<br><a href="https://www.nextech-week.jp/spring/ja-jp.html" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="有力候補" data-distance="非常に高い" data-organizer="Davos Congress / Davos Destinations-Organisation">
+      <td>2027/6/2–5</td>
+      <td><strong>Davos Tech Summit 2027</strong></td>
+      <td><strong>Davos Congress / Davos Destinations-Organisation</strong><br><span class="small">Davos Congress公式ページでCongress organisationとしてDavos Congress（Davos Destinations-Organisation）を明記。複数研究・産業機関がInitiatorsとして参画。</span></td>
+      <td>Davos, Switzerland</td>
+      <td>技術カンファレンス・サミット</td>
+      <td>Physical AI / Robotics / Real-world Deployment / Robot City</td>
+      <td><span class="badge vh">非常に高い</span></td>
+      <td>2026開催実績あり</td>
+      <td>非常に高い</td>
+      <td><span class="badge confirmed">開催日・開催地確定</span></td>
+      <td>GTCの基盤技術、HRSのHumanoid、automaticaの産業自動化の中間。Robot Cityによる実環境デモが特徴。</td>
+      <td><span class="badge good">有力候補</span></td>
+      <td>Robotics Summit &amp; Expoは正本掲載済みのため本検討表から除外。6/2–3のRSEと日程が重なる点だけ比較材料として残す。<br><a href="https://davostechsummit.com/" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="比較候補" data-distance="非常に高い" data-organizer="TechEx Events Ltd">
+      <td>2027/6/16–17</td>
+      <td><strong>Physical AI Expo North America 2027（TechEx）</strong></td>
+      <td><strong>TechEx Events Ltd</strong><br><span class="small">TechExの7つの併催イベントの一つ。公式サイトの著作権・問い合わせ先はTechEx Events Ltd。</span></td>
+      <td>San Jose, CA, USA</td>
+      <td>展示会・技術カンファレンス</td>
+      <td>Physical AI / Autonomous Systems / Edge AI / Foundation Models for Robotics</td>
+      <td><span class="badge vh">非常に高い</span></td>
+      <td>Physical AI枠は新興／TechEx母体は既存</td>
+      <td>中〜高</td>
+      <td><span class="badge confirmed">開催日・会場確定</span></td>
+      <td>Physical AI Expo Globalと同一TechExシリーズの北米版。GTCと同じSan Joseだが企業導入・複合展示会色が強い。</td>
+      <td><span class="badge compare">比較候補</span></td>
+      <td>Global版と同じシリーズなので、両方を別々の海外派遣候補として積み上げず、地域・時期で選択する。<br><a href="https://physicalaiconference.com/northamerica/" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="参考情報" data-distance="中" data-organizer="International Telecommunication Union (ITU)">
+      <td>2027/6/21–25週</td>
+      <td><strong>AI for Good Global Summit 2027</strong></td>
+      <td><strong>International Telecommunication Union (ITU)</strong><br><span class="small">ITU主催、50超のUN姉妹機関と連携、Swiss Governmentとの共同開催。</span></td>
+      <td>Geneva, Switzerland</td>
+      <td>国際サミット</td>
+      <td>AI / Advanced Robotics / Mobility / Policy / Social Impact</td>
+      <td><span class="badge mid">中</span></td>
+      <td>既存・定着</td>
+      <td>中</td>
+      <td><span class="badge confirmed">開催週・都市確定</span></td>
+      <td>Physical AI専業ではない。automatica（6/22–25）と会期がほぼ重複。</td>
+      <td><span class="badge ref">参考情報</span></td>
+      <td>産業R&amp;Dなら優先度は高くない。標準・政策・社会実装の情報源として追跡。<br><a href="https://aiforgood.itu.int/summit27/" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="重点監視" data-distance="非常に高い" data-organizer="Chain of Events / RAISE Summit（Hyve Group傘下）">
+      <td>2027/7月</td>
+      <td><strong>MACHINA Summit 2027</strong></td>
+      <td><strong>Chain of Events / RAISE Summit（Hyve Group傘下）</strong><br><span class="small">公式サイトは “MACHINA BY RAISE SUMMIT”。Chain of EventsがMACHINA/RAISEを運営し、2026年にHyve Groupへ売却。</span></td>
+      <td>Station F, Paris, France</td>
+      <td>技術カンファレンス・サミット</td>
+      <td>Physical AI / Humanoid / Industrial Robotics / Simulation / VLA</td>
+      <td><span class="badge vh">非常に高い</span></td>
+      <td>新興（2026開始）</td>
+      <td>高い</td>
+      <td><span class="badge partial">月・都市確定／具体日要確認</span></td>
+      <td>GTCの技術基盤とHRSのHumanoidをつなぎ、企業導入・商用化を強く意識。</td>
+      <td><span class="badge watch">重点監視</span></td>
+      <td>運営母体はイベント会社として明確。2027の具体日・登壇者・展示規模で評価を更新。<br><a href="https://www.machinasummit.com/" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="重点監視" data-distance="非常に高い" data-organizer="11VC Ltd">
+      <td>2027/Q3</td>
+      <td><strong>THE Physical AI Expo London 2027（11VC）</strong></td>
+      <td><strong>11VC Ltd</strong><br><span class="small">公式サイトに “An 11VC Event” および © 11VC Ltd と明記。</span></td>
+      <td>ExCeL London, UK</td>
+      <td>展示会・サミット</td>
+      <td>Physical AI / Humanoid / Autonomous Systems / Investors / Enterprise Buyers</td>
+      <td><span class="badge vh">非常に高い</span></td>
+      <td>2027初回予定</td>
+      <td>高い（計画値）</td>
+      <td><span class="badge partial">Q3・会場のみ公表</span></td>
+      <td>TechEx Events主催のPhysical AI Expo Globalとは完全に別イベント。投資家・Enterprise Buyer・実機デモを前面に出す。</td>
+      <td><span class="badge watch">重点監視</span></td>
+      <td>初回。6,000人・40+ live demosは主催者計画値として扱い、実績とは区別する。<br><a href="https://www.thephysicalaiexpo.com/" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="参考・慎重" data-distance="非常に高い" data-organizer="主催法人を公式サイトで確認できず">
+      <td>2027/9/10–12</td>
+      <td><strong>IREAI 2027</strong></td>
+      <td><strong>主催法人を公式サイトで確認できず</strong><br><span class="small">公式サイトには会議事務局・連絡先はあるが、主催する大学・学会・法人の明確な記載を確認できず。要追加確認。</span></td>
+      <td>China（都市要確認）</td>
+      <td>学会・専門会議</td>
+      <td>Intelligent Robot / Embodied AI / VLA / Foundation Models / Sim-to-Real</td>
+      <td><span class="badge vh">非常に高い</span></td>
+      <td>新規・実績要確認</td>
+      <td>低〜中</td>
+      <td><span class="badge partial">開催日・国公表／都市・主催者要確認</span></td>
+      <td>CoRL/ICRA/RSSとテーマは重なるが、学会としての格・運営母体が未評価。</td>
+      <td><span class="badge caution">参考・慎重</span></td>
+      <td>テーマ名だけでは評価しない。主催者が明確になるまで現地参加候補には上げない。<br><a href="https://www.ireai.org/" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="監視" data-distance="非常に高い" data-organizer="GEIA（Global Embodied Intelligence and Humanoid Accelerator）">
+      <td>2027/11/4–6</td>
+      <td><strong>GEIA Europe 2027</strong></td>
+      <td><strong>GEIA（Global Embodied Intelligence and Humanoid Accelerator）</strong><br><span class="small">GEIA Asia公式サイト上でGEIA Global Eventsの欧州版として掲載。法的な主催法人名は要確認。</span></td>
+      <td>Munich, Germany</td>
+      <td>技術カンファレンス・サミット</td>
+      <td>Embodied Intelligence / Humanoid / China-Europe ecosystem</td>
+      <td><span class="badge vh">非常に高い</span></td>
+      <td>新興シリーズ</td>
+      <td>中〜高</td>
+      <td><span class="badge partial">開催日・都市公表</span></td>
+      <td>GEIA Asiaと同一シリーズ。HRS Europe・Advanced Humanoid Forumともテーマ重複が大きい。</td>
+      <td><span class="badge watch2">監視</span></td>
+      <td>GEIAシリーズを複数派遣候補として重複計上せず、Asia/Europeのどちらが目的に合うかで選択。<br><a href="https://www.geiaasia.com/" target="_blank" rel="noopener">公式情報</a></td>
+    </tr>
+    <tr data-status="監視" data-distance="高い" data-organizer="Dockland Media Group / Edelweiss Innovation &amp; Intelligence Institute">
+      <td>2027（日程未定）</td>
+      <td><strong>Physical AI Summit Munich 2027</strong></td>
+      <td><strong>Dockland Media Group / Edelweiss Innovation &amp; Intelligence Institute</strong><br><span class="small">Dockland Media GroupがConvenor、EIIIがCo-organizer。Bergsonne Labs、Nomad Futurist Foundation、TUM Think TankがFounding Partners。</span></td>
+      <td>Munich, Germany</td>
+      <td>小規模サミット</td>
+      <td>Physical AI / Ambient Intelligence / HRI / Applied Robotics</td>
+      <td><span class="badge hi">高い</span></td>
+      <td>2026 San Joseが創設回</td>
+      <td>中</td>
+      <td><span class="badge partial">Munich 2027のみ公表／日程未定</span></td>
+      <td>大規模展示会よりワークショップ・コミュニティ形成型。Advanced Humanoid Forumとは規模・議論形式が異なる。</td>
+      <td><span class="badge watch2">監視</span></td>
+      <td>主催母体は比較的明確。Munich 2027の日程とプログラム確定後に評価。<br><a href="https://www.physicalaiseries.com/events" target="_blank" rel="noopener">公式情報</a></td>
+    </tr></tbody>
+</table></div>
+</section>
+
+<section class="section">
+<h2>4. 主催者確認上の注意</h2>
+<div class="note">
+IREAIは、公式サイト上で開催テーマ・日程・事務局連絡先は確認できるものの、
+主催する大学・学会・法人を明確に確認できていないため「主催法人を公式サイトで確認できず」とした。
+GEIAは運営ブランド/組織名は確認できるが、法的な主催法人名は明示性が低いため、その点を注記している。
+</div>
+</section>
+</div>
+<script>
+const rows=[...document.querySelectorAll('#events tbody tr')];
+const q=document.getElementById('q'),status=document.getElementById('status'),distance=document.getElementById('distance'),org=document.getElementById('org'),counter=document.getElementById('counter');
+function fill(sel,key){[...new Set(rows.map(r=>r.dataset[key]).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'ja')).forEach(v=>{let o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o)})}
+fill(status,'status');fill(distance,'distance');fill(org,'organizer');
+function apply(){let s=(q.value||'').toLowerCase(),n=0;rows.forEach(r=>{let ok=(!s||r.textContent.toLowerCase().includes(s))&&(!status.value||r.dataset.status===status.value)&&(!distance.value||r.dataset.distance===distance.value)&&(!org.value||r.dataset.organizer===org.value);r.style.display=ok?'':'none';if(ok)n++});counter.textContent=`表示 ${n} / 全 ${rows.length} 件`;}
+[q,status,distance,org].forEach(x=>x.addEventListener('input',apply));apply();
+</script>
+</body></html>
