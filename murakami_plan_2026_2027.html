@@ -24,6 +24,7 @@ a{color:var(--tent)}
 .sw.cand{border-color:var(--none);border-style:dashed;background:color-mix(in srgb,var(--none) 12%,transparent)}
 .sw.ref{border-color:var(--none);border-style:dotted}
 .sw.skip{border-color:var(--none);border-style:solid;background:repeating-linear-gradient(45deg,transparent 0 3px,var(--line) 3px 5px)}
+.sw.go{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 45%,transparent)}
 .sw.hit{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 30%,transparent)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
 .chips button{font:inherit;font-size:13px;padding:3px 12px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
@@ -45,7 +46,10 @@ a{color:var(--tent)}
 .cal-bar.cand{border-color:var(--none);border-style:dashed;background:color-mix(in srgb,var(--none) 12%,transparent)}
 .cal-bar.ref{border-color:var(--none);border-style:dotted}
 .cal-bar.skip{border-color:var(--none);opacity:.55;background:repeating-linear-gradient(45deg,transparent 0 3px,var(--line) 3px 5px)}
-.cal-bar.hit{border-color:var(--warn);box-shadow:0 0 0 1px var(--warn)}
+.cal-bar.go{border-color:var(--ok);border-width:2.5px;background:color-mix(in srgb,var(--ok) 45%,transparent)}
+.cal-bar.tog{cursor:pointer}
+.cal-bar.tog:focus-visible{outline:2px solid var(--tent);outline-offset:1px}
+.cal-bar.hit{border-style:dotted;border-color:var(--warn);box-shadow:0 0 0 1px var(--warn)}
 .cal-bar b{position:absolute;top:0;line-height:15px;font-size:11px;font-weight:600;white-space:nowrap;padding:0 3px;text-shadow:0 0 3px var(--card),0 0 3px var(--card)}
 .cal-bar b.l{left:0}.cal-bar b.r{right:0}
 .cal-none{color:var(--mute);font-size:12px}
@@ -72,6 +76,13 @@ tr.isskip td:nth-child(2){opacity:.6}
 tr.ismain td{background:color-mix(in srgb,var(--tent) 8%,var(--card))}
 .cal-bar.main{border-width:2.5px;height:20px}
 .cal-bar.main b{font-weight:800;line-height:16px}
+.sum{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:0 0 8px;font-size:13px}
+@media (min-width:700px){.sum{position:sticky;top:0;z-index:5}}
+.sum ul{margin:4px 0 0;padding-left:18px}
+.rs{font:inherit;font-size:12px;padding:2px 10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+button.go{font:inherit;font-size:12px;font-weight:700;padding:1px 10px;border-radius:12px;border:1.5px dashed var(--think);background:transparent;color:var(--think);cursor:pointer}
+button.go[aria-pressed=true]{border-style:solid;border-color:var(--ok);background:var(--ok);color:#fff}
+.stl{font-size:10px;color:var(--mute);margin-top:2px}
 .hitnote{color:var(--warn)}
 .sm{color:var(--mute);font-size:12px;margin-top:2px}
 td:nth-child(3){white-space:nowrap}
@@ -92,7 +103,8 @@ li{margin:3px 0}
 <span><i class="sw cand"></i>候補</span>
 <span><i class="sw ref"></i>資料（現地には行かず追う）</span>
 <span><i class="sw skip"></i>見送り</span>
-<span><i class="sw hit"></i>海外の確定・想定と国内が重なる</span>
+<span><i class="sw go"></i>「行く」にした</span>
+<span><i class="sw hit"></i>行く予定どうしが重なる</span>
 <span><b class="pa" style="margin:0">H/P</b> Humanoid / Physical AI</span>
 </div>
 <div class="chips" id="chips" role="group" aria-label="絞り込み">
@@ -102,8 +114,10 @@ li{margin:3px 0}
 <button data-f="pa" aria-pressed="false">Humanoid / Physical AI</button>
 </div>
 
-<h2>月別カレンダー</h2>
-<p class="meta">海外と国内を同じ日付の軸に並べた。オレンジの帯が、海外の確定・想定と国内が同じ日にある期間。</p>
+<h2>月別カレンダー（判断用）</h2>
+<p class="meta">「検討中」「候補」のバー（または一覧の「未定」ボタン）を押すと「行く」になり、重なりと出張の間隔がその場で更新される。選んだ内容はこのブラウザに保存される。</p>
+<div class="sum" id="sum"></div>
+<p class="meta"><button id="reset" type="button" class="rs">「行く」をすべて外す</button></p>
 <div id="cal"></div>
 
 <h2>一覧</h2>
@@ -156,7 +170,7 @@ li{margin:3px 0}
 
 <script>
 (function(){
-/* lane: o=海外 d=国内 / st: ok確定 tent想定 cand候補 ref資料 / pa: Humanoid・Physical AI / w: 検索結果のみ */
+/* l: o=海外 d=国内 / st: ok確定 tent想定 think検討中 cand候補 ref資料 skip見送り / pa: Humanoid・Physical AI / w: 検索結果のみ */
 var E=[
 {l:"o",st:"ok",  a:"2026-10-19",b:"2026-10-20",n:"TechEx Europe",p:"Amsterdam"},
 {l:"o",st:"ok",  a:"2026-10-20",b:"2026-10-23",n:"EuroBLECH",p:"Hannover",m:"村上・金築・美馬",u:"202610_Europe_TechEx_EuroBLECH/euroblech.html"},
@@ -193,19 +207,46 @@ var E=[
 {l:"o",st:"think",a:"2027-10-04",b:"2027-10-09",n:"EMO Milano 2027",p:"Milan",m:"魅力的。IROSからつながる。EMO 2025に参加"},
 {l:"d",st:"cand",a:"2027-11-30",b:"2027-12-03",n:"SIGGRAPH Asia 2027",p:"Tokyo International Forum",m:"CG・AI"}
 ];
-var ST={ok:"確定",tent:"想定",cand:"候補",ref:"資料",think:"検討中",skip:"見送り"};
-var DAY=864e5;
+var ST={ok:"確定",tent:"想定",think:"検討中",cand:"候補",ref:"資料",skip:"見送り"};
+var DAY=864e5,KEY="murakami-plan-sel-v1";
 function U(s){var a=s.split("-");return Date.UTC(+a[0],+a[1]-1,+a[2])}
-E.forEach(function(e){e.A=U(e.a);e.B=U(e.b)});
-function firm(e){return e.l=="o"&&(e.st=="ok"||e.st=="tent")}
+E.forEach(function(e,i){e.i=i;e.A=U(e.a);e.B=U(e.b);e.tog=(e.st=="think"||e.st=="cand")});
+var sel={};
+try{sel=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(x){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(sel))}catch(x){}}
+function go(e){return e.st=="ok"||e.st=="tent"||(e.tog&&!!sel[e.n])}
 function ov(e,f){return e.A<=f.B&&f.A<=e.B}
-E.forEach(function(e){
-  e.hits=E.filter(function(f){return f.l!=e.l&&f.st!="skip"&&e.st!="skip"&&ov(e,f)&&(firm(e)||firm(f))});
-});
 var filter="all";
 function show(e){return filter=="all"||(filter=="pa"?e.pa:e.l==filter)}
 function md(s){var a=s.split("-");return (+a[1])+"/"+(+a[2])}
 function range(e){if(e.a==e.b)return md(e.a);var same=e.a.slice(0,7)==e.b.slice(0,7);return md(e.a)+"–"+(same?(+e.b.slice(8)):md(e.b))}
+function short(e){return e.c||e.n.replace(/（.*$/,"")}
+function days(e){return Math.round((e.B-e.A)/DAY)+1}
+
+var conflicts,warn;
+function compute(){
+  var plan=E.filter(go);
+  conflicts=[];
+  for(var x=0;x<plan.length;x++)for(var y=x+1;y<plan.length;y++)if(ov(plan[x],plan[y])&&!(plan[x].st=="ok"&&plan[y].st=="ok"))conflicts.push([plan[x],plan[y]]);
+  E.forEach(function(e){
+    e.hits=[];
+    if(e.st=="skip"||e.st=="ref")return;
+    plan.forEach(function(f){if(f!==e&&ov(e,f))e.hits.push(f)});
+  });
+}
+
+function drawSummary(){
+  var box=document.getElementById("sum"),plan=E.filter(go).filter(function(e){return e.l=="o"}).sort(function(a,b){return a.A-b.A});
+  var u=0,end=-1;plan.forEach(function(e){var s=Math.max(e.A,end+DAY);if(e.B>=s)u+=Math.round((e.B-s)/DAY)+1;end=Math.max(end,e.B)});
+  var h='<div class="sum-main"><b>海外 '+plan.length+'件・延べ'+u+'日</b>（確定・想定＋「行く」にしたもの）</div>';
+  var cf=conflicts.map(function(c){return '<li class="hitnote">日程が重なる：'+short(c[0])+' × '+short(c[1])+'</li>'}).join("");
+  var gaps=[];
+  for(var k=1;k<plan.length;k++){var g=Math.round((plan[k].A-plan[k-1].B)/DAY)-1;if(g>=0&&g<=14)gaps.push('<li>'+short(plan[k-1])+' → '+short(plan[k])+'：'+(g<=3?'つながる（間'+g+'日）':'間隔'+g+'日')+'</li>')}
+  h+='<ul>'+(cf||'<li>重なりなし</li>')+gaps.join("")+'</ul>';
+  box.innerHTML=h;
+}
+
+function toggle(e){if(!e.tog)return;if(sel[e.n])delete sel[e.n];else sel[e.n]=1;save();draw()}
 
 function drawCal(){
   var root=document.getElementById("cal");root.innerHTML="";
@@ -223,7 +264,7 @@ function drawCal(){
       var run=null;
       for(var d=1;d<=n;d++){
         var t=m0+(d-1)*DAY;
-        var hot=ev.some(function(e){return e.A<=t&&e.B>=t&&e.hits.some(function(f){return f.A<=t&&f.B>=t&&(show(f))})});
+        var hot=conflicts.some(function(c){return c[0].A<=t&&c[0].B>=t&&c[1].A<=t&&c[1].B>=t});
         if(hot){
           if(run&&run.e==d-1){run.e=d;run.el.style.width=(d-run.s+1)/n*100+"%"}
           else{var bd=document.createElement("div");bd.className="cal-band";bd.style.left=(d-1)/n*100+"%";bd.style.width=100/n+"%";body.appendChild(bd);run={s:d,e:d,el:bd}}
@@ -236,9 +277,11 @@ function drawCal(){
         rows.forEach(function(e){
           var s=Math.max(1,Math.round((e.A-m0)/DAY)+1),en=Math.min(n,Math.round((e.B-m0)/DAY)+1);
           var row=document.createElement("div");row.className="cal-row";row.style.gridTemplateColumns="repeat("+n+",1fr)";
-          var bar=document.createElement("div");bar.className="cal-bar "+e.st+(e.hits.length?" hit":"")+(e.main?" main":"");
+          var picked=e.tog&&sel[e.n];
+          var bar=document.createElement("div");bar.className="cal-bar "+(picked?"go":e.st)+(e.hits.length&&!go(e)?" hit":"")+(e.main?" main":"")+(e.tog?" tog":"");
           bar.style.gridColumn=s+" / "+(en+1);
-          var lb=document.createElement("b");lb.textContent=e.c||e.n.replace(/（.*$/,"");lb.className=s>n/2?"r":"l";
+          if(e.tog){bar.setAttribute("role","button");bar.tabIndex=0;bar.setAttribute("aria-pressed",!!picked);bar.addEventListener("click",function(){toggle(e)});bar.addEventListener("keydown",function(ev){if(ev.key=="Enter"||ev.key==" "){ev.preventDefault();toggle(e)}})}
+          var lb=document.createElement("b");lb.textContent=short(e);lb.className=s>n/2?"r":"l";
           bar.appendChild(lb);row.appendChild(bar);body.appendChild(row);
         });
       });
@@ -258,23 +301,31 @@ function drawList(){
     var name=e.u?'<a href="'+e.u+'">'+e.n+'</a>':e.n;
     var memo=[];
     if(e.m)memo.push(e.m);
-    if(e.hits.length)memo.push('<span class="hitnote">重なり：'+e.hits.map(function(f){return f.n.replace(/（.*$/,"")}).join("、")+'</span>');
+    if(e.hits.length&&!go(e))memo.push('<span class="hitnote">行くと重なる：'+e.hits.map(short).join("、")+'</span>');
     tr.innerHTML='<td class="d">'+range(e)+'</td>'+
       '<td>'+name+(e.w?"※":"")+(e.pa?'<span class="pa">H/P</span>':"")+(e.main?'<span class="mainb">メイン</span>':"")+
-      '<div class="ln">'+(e.l=="o"?"海外":"国内")+' ・ '+e.p+'</div>'+
-      (memo.length?'<div class="sm">'+memo.join("<br>")+'</div>':"")+'</td>'+
-      '<td><span class="st '+e.st+'">'+ST[e.st]+'</span></td>';
+      '<div class="ln">'+(e.l=="o"?"海外":"国内")+' ・ '+e.p+' ・ '+days(e)+'日</div>'+
+      (memo.length?'<div class="sm">'+memo.join("<br>")+'</div>':"")+'</td><td class="sc"></td>';
+    var sc=tr.lastChild;
+    if(e.tog){
+      var bt=document.createElement("button");bt.className="go";bt.type="button";
+      var on=!!sel[e.n];bt.setAttribute("aria-pressed",on);bt.textContent=on?"行く":"未定";
+      var tag=document.createElement("div");tag.className="stl";tag.textContent=ST[e.st];
+      bt.addEventListener("click",function(){toggle(e)});
+      sc.appendChild(bt);sc.appendChild(tag);
+    }else sc.innerHTML='<span class="st '+e.st+'">'+ST[e.st]+'</span>';
     tb.appendChild(tr);
   });
 }
 
-function draw(){drawCal();drawList()}
+function draw(){compute();drawSummary();drawCal();drawList()}
 document.getElementById("chips").addEventListener("click",function(ev){
   var b=ev.target.closest("button");if(!b)return;
   filter=b.dataset.f;
   [].forEach.call(this.children,function(c){c.setAttribute("aria-pressed",c===b)});
   draw();
 });
+document.getElementById("reset").addEventListener("click",function(){sel={};save();draw()});
 draw();
 })();
 </script>
