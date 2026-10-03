@@ -20,7 +20,7 @@ h2{font-size:16px;margin:28px 0 10px}
 .name{font-size:16px;font-weight:700;margin:2px 0}
 .meta{color:var(--mute);font-size:13px}
 .tag{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:10px;border:1px solid currentColor;margin-left:6px;vertical-align:1px}
-.ok .tag{color:var(--ok)}.card .tag{color:var(--tent)}.none .tag{color:var(--none)}
+.card.cand{border-left-color:var(--mute);border-left-style:dashed}.cand .tag{color:var(--mute)}.ok .tag{color:var(--ok)}.card .tag{color:var(--tent)}.none .tag{color:var(--none)}
 ul{margin:6px 0 0;padding-left:20px}
 li{margin:4px 0}
 .warn{color:var(--warn)}
@@ -79,6 +79,43 @@ a{color:var(--tent)}
 <div class="meta">Messe München, Munich, Germany ／ 部門枠 1名</div>
 <ul><li>RoboCupの翌日から。Nuremberg → Munich で続けて回れる（約11日間）</li></ul>
 </div>
+<h2>国内の制御系・AI系（候補）</h2>
+<p class="meta">検索で拾った日程。いずれも「候補」で、行くとは決めていない。出典の公式ページは未確認（クラウドから主催者サイトを直接開けないため）。</p>
+<div class="card cand">
+<div class="when">2026年12月8–10日<span class="tag">候補</span></div>
+<div class="name">SI2026（第27回 計測自動制御学会 システムインテグレーション部門講演会）</div>
+<div class="meta">グランキューブ大阪 ／ <a href="https://si2026.sice-si.org/">公式</a></div>
+<ul><li>12月は「たぶん行かない」想定。SIGGRAPH Asia 2026(12/1–4)とHumanoids(12/6–9)の翌日から</li></ul>
+</div>
+<div class="card cand">
+<div class="when">2027年3月2日<span class="tag">候補</span></div>
+<div class="name">SICE ISCS 2027（制御部門 International Symposium on Control Systems）</div>
+<div class="meta">Tokyo ／ 論文投稿締切 2026-10-10 ／ <a href="https://www.sice-ctrl.jp/announcements/eventcat/sice-international-symposium-on-control-systems">制御部門</a></div>
+<ul><li>JEC World・ERF(3/2–4)と同日だが、行く予定の海外イベントとは重ならない</li></ul>
+</div>
+<div class="card cand">
+<div class="when">2027年3月15–16日<span class="tag">候補</span></div>
+<div class="name">ROBOMECH 2027（日本機械学会 ロボティクス・メカトロニクス講演会）</div>
+<div class="meta">鳥羽温泉郷 戸田家（三重） ／ <a href="https://www.jsme.or.jp/rmd/">部門</a></div>
+<ul><li class="warn">GTC(3/14–18)・LogiMAT(3/16–18)と重なる</li></ul>
+</div>
+<div class="card cand">
+<div class="when">2027年4月21–23日<span class="tag">候補</span></div>
+<div class="name">NexTech Week 春 2027（AI・人工知能EXPO、フィジカルAI EXPO）</div>
+<div class="meta">Tokyo Big Sight ／ RX Japan ／ <a href="https://www.nextech-week.jp/hub/ja-jp/visit/ai.html">公式</a></div>
+<ul><li>俯瞰資料に「候補」で載っている行。国内で日帰り可</li></ul>
+</div>
+<div class="card cand">
+<div class="when">日程未発表<span class="tag">未定</span></div>
+<div class="name">iREX 2027 ／ RSJ 2027（第45回 日本ロボット学会）／ JSAI 2027（人工知能学会全国大会）</div>
+<div class="meta">iREXは12月の東京ビッグサイトとされるが日次は未確認。RSJは例年9月、JSAIは例年6月で、2026年分(RSJ 9/1–4 金沢、JSAI 6/8–12 群馬)は終了。2027年分は検索で見つからず</div>
+</div>
+<div class="card cand">
+<div class="when">日程未確認<span class="tag">未定</span></div>
+<div class="name">自動制御連合講演会（第69回、2026年）</div>
+<div class="meta">検索で見つかったのは名古屋大学での委員会議事の記載だけで、講演会本体の日程は確認できていない</div>
+</div>
+
 <div class="card none">
 <div class="when">7月〜12月<span class="tag">予定なし</span></div>
 <div class="name">未定</div>
@@ -88,6 +125,7 @@ a{color:var(--tent)}
 <h2>未確認</h2>
 <ul>
 <li>RoboCup 2027の公式日程</li>
+<li>国内候補の公式日程(SI2026以外は検索結果の記載のみ)</li>
 <li>休暇・他業務との調整</li>
 <li>予算枠への紐づけ（村上個人の割当は未確認）</li>
 </ul>
