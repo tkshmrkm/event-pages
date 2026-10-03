@@ -29,12 +29,121 @@ table{width:100%;border-collapse:collapse;background:var(--card);border:1px soli
 th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
 th{color:var(--mute);font-weight:600}
 .tw{overflow-x:auto}
+
+.cal-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--mute);margin:6px 0 14px}
+.cal-legend i{display:inline-block;width:22px;height:10px;border-radius:3px;border:1.5px solid;vertical-align:-1px;margin-right:5px}
+.lg-ok i{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 30%,transparent)}
+.lg-tent i{border-color:var(--tent);background:color-mix(in srgb,var(--tent) 30%,transparent)}
+.lg-cand i{border-color:var(--none);border-style:dashed}
+.lg-ov i{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 30%,transparent)}
+.cal-month{margin:0 0 12px}
+.cal-mh{font-weight:700;font-size:14px;margin:0 0 3px}
+.cal-body{position:relative;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:0 0 4px;overflow:hidden}
+.cal-ruler{display:grid;font-size:10px;color:var(--mute);border-bottom:1px solid var(--line);height:16px;position:relative}
+.cal-ruler span{text-align:left;padding-left:1px}
+.cal-band{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--warn) 22%,transparent);border-left:1px solid var(--warn);border-right:1px solid var(--warn);pointer-events:none}
+.cal-grp{font-size:10px;color:var(--mute);padding:3px 4px 0;font-weight:700;letter-spacing:.04em}
+.cal-row{display:grid;position:relative;height:20px;margin-top:3px}
+.cal-bar{height:18px;border:1.5px solid;border-radius:4px;position:relative;min-width:6px}
+.cal-bar.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 30%,transparent)}
+.cal-bar.tent{border-color:var(--tent);background:color-mix(in srgb,var(--tent) 30%,transparent)}
+.cal-bar.cand{border-color:var(--none);border-style:dashed;background:color-mix(in srgb,var(--none) 12%,transparent)}
+.cal-bar.hit{border-color:var(--warn);box-shadow:0 0 0 1px var(--warn)}
+.cal-bar b{position:absolute;top:0;line-height:15px;font-size:11px;font-weight:600;white-space:nowrap;color:var(--fg);padding:0 3px;text-shadow:0 0 3px var(--card),0 0 3px var(--card)}
+.cal-bar b.l{left:0}.cal-bar b.r{right:0}
+.cal-none{color:var(--mute);font-size:12px;margin:0 0 6px}
 </style>
 </head>
 <body>
 <main>
 <h1>村上 視察予定 2026-10 〜 2027-12</h1>
 <p class="sub">個人用。更新日 2026-10-03。日程は <a href="physical_ai_events_overview.html">Physical AI俯瞰資料</a> のデータ（2026-09-23時点）に基づく。俯瞰資料そのものは変えていない。</p>
+
+<h2>国内外の重なり</h2>
+<p class="meta">月ごとに日付の軸を引き、海外(確定・想定・要判断)と国内(候補)を同じ軸に並べた。海外の確定・想定と国内が同じ日にある期間をオレンジの帯で示す。</p>
+<div class="cal-legend"><span class="lg-ok"><i></i>確定</span><span class="lg-tent"><i></i>想定</span><span class="lg-cand"><i></i>候補・要判断・資料</span><span class="lg-ov"><i></i>海外(確定・想定)と国内が重なる</span></div>
+<div id="cal"></div>
+<script>
+(function(){
+var E=[
+["o","ok","2026-10-19","2026-10-20","TechEx Europe"],
+["o","ok","2026-10-20","2026-10-23","EuroBLECH"],
+["o","cand","2026-12-06","2026-12-09","Humanoids 2026"],
+["o","cand","2027-01-20","2027-01-21","Advanced Humanoid Forum"],
+["o","cand","2027-02-03","2027-02-04","Physical AI Expo Global"],
+["o","tent","2027-03-14","2027-03-18","GTC"],
+["o","tent","2027-03-16","2027-03-18","LogiMAT"],
+["o","tent","2027-05-24","2027-05-28","ICRA"],
+["o","cand","2027-06-02","2027-06-03","RSE"],
+["o","tent","2027-06-15","2027-06-21","RoboCup"],
+["o","cand","2027-06-16","2027-06-17","Physical AI Expo NA"],
+["o","tent","2027-06-22","2027-06-25","automatica"],
+["o","cand","2027-07-06","2027-07-11","RSS"],
+["o","cand","2027-09-26","2027-10-01","IROS"],
+["d","cand","2026-10-26","2026-10-31","JIMTOF"],
+["d","cand","2026-11-07","2026-11-08","自動制御連合講演会"],
+["d","cand","2026-12-02","2026-12-04","RoboNext"],
+["d","cand","2026-12-08","2026-12-10","SI2026"],
+["d","cand","2026-12-09","2026-12-11","SEMICON Japan"],
+["d","cand","2027-02-17","2027-02-19","ロボデックス東京"],
+["d","cand","2027-02-18","2027-02-19","フィジカルAI・ロボット展"],
+["d","cand","2027-03-02","2027-03-02","ISCS"],
+["d","cand","2027-03-15","2027-03-16","ROBOMECH"],
+["d","cand","2027-03-17","2027-03-19","SMART LOGISTICS"],
+["d","cand","2027-04-21","2027-04-23","NexTech Week"],
+["d","cand","2027-04-22","2027-04-23","中部物流展"],
+["d","cand","2027-05-12","2027-05-14","ロボデックス大阪"],
+["d","cand","2027-09-08","2027-09-10","ロボデックス秋"],
+["d","cand","2027-11-30","2027-12-03","SIGGRAPH Asia"]
+];
+function D(x){var a=x.split("-");return Date.UTC(+a[0],+a[1]-1,+a[2])}
+var day=864e5;
+E=E.map(function(e){return {lane:e[0],st:e[1],a:D(e[2]),b:D(e[3]),n:e[4]}});
+function firm(e){return e.lane=="o"&&(e.st=="ok"||e.st=="tent")}
+E.forEach(function(e){e.hit=E.some(function(f){return f.lane!=e.lane&&(firm(e)||firm(f))&&firm(e.lane=="o"?e:f)&&e.a<=f.b&&f.a<=e.b})});
+var root=document.getElementById("cal");
+for(var y=2026,m=9;!(y==2028);){
+  var n=new Date(Date.UTC(y,m+1,0)).getUTCDate(),m0=Date.UTC(y,m,1),m1=Date.UTC(y,m,n);
+  var ev=E.filter(function(e){return e.a<=m1&&e.b>=m0});
+  var wrap=document.createElement("div");wrap.className="cal-month";
+  var h=document.createElement("div");h.className="cal-mh";h.textContent=y+"年"+(m+1)+"月";wrap.appendChild(h);
+  if(!ev.length){var p=document.createElement("div");p.className="cal-none";p.textContent="予定なし";wrap.appendChild(p)}
+  else{
+    var body=document.createElement("div");body.className="cal-body";
+    var ru=document.createElement("div");ru.className="cal-ruler";ru.style.gridTemplateColumns="repeat("+n+",1fr)";
+    for(var d=1;d<=n;d++){var sp=document.createElement("span");if(d==1||d%5==0)sp.textContent=d;ru.appendChild(sp)}
+    body.appendChild(ru);
+    for(var d=1;d<=n;d++){
+      var t=m0+(d-1)*day;
+      var o=ev.some(function(e){return firm(e)&&e.a<=t&&e.b>=t}),k=ev.some(function(e){return e.lane=="d"&&e.a<=t&&e.b>=t});
+      if(o&&k){
+        var last=body.lastChild;
+        if(last&&last.className=="cal-band"&&last.dataset.end==d-1){last.dataset.end=d;last.style.width=(d-last.dataset.s+1)/n*100+"%"}
+        else{var bd=document.createElement("div");bd.className="cal-band";bd.dataset.s=d;bd.dataset.end=d;bd.style.left=(d-1)/n*100+"%";bd.style.width=100/n+"%";body.appendChild(bd)}
+      }
+    }
+    [["o","海外"],["d","国内"]].forEach(function(g){
+      var list=ev.filter(function(e){return e.lane==g[0]});
+      if(!list.length)return;
+      var gl=document.createElement("div");gl.className="cal-grp";gl.textContent=g[1];body.appendChild(gl);
+      list.forEach(function(e){
+        var s=Math.max(1,Math.round((e.a-m0)/day)+1),en=Math.min(n,Math.round((e.b-m0)/day)+1);
+        var row=document.createElement("div");row.className="cal-row";row.style.gridTemplateColumns="repeat("+n+",1fr)";
+        var bar=document.createElement("div");bar.className="cal-bar "+e.st+(e.hit?" hit":"");
+        bar.style.gridColumn=s+" / "+(en+1);
+        var lb=document.createElement("b");lb.textContent=e.n;lb.className=(s>n/2)?"r":"l";
+        if(s>n/2){lb.style.right="0"}
+        bar.appendChild(lb);row.appendChild(bar);body.appendChild(row);
+      });
+    });
+    wrap.appendChild(body);
+  }
+  root.appendChild(wrap);
+  m++;if(m==12){m=0;y++}
+  if(y==2027&&m==12){break}
+}
+})();
+</script>
 
 <h2>2026年</h2>
 <div class="card ok">
@@ -162,7 +271,7 @@ th{color:var(--mute);font-weight:600}
 <tr><td>2027-03-17〜19</td><td>SMART LOGISTICS Expo 2027</td><td>Tokyo Big Sight</td><td>物流</td><td>GTC・LogiMATと重なる</td></tr>
 <tr><td>2027-04-21〜23</td><td>NexTech Week 春(AI・人工知能EXPO、フィジカルAI EXPO、ヒューマノイドロボットEXPO)</td><td>Tokyo Big Sight</td><td>AI・ヒューマノイド</td><td>中部 国際物流総合展と重なる</td></tr>
 <tr><td>2027-04-22〜23</td><td>中部 国際物流総合展 INNOVATION EXPO 2027</td><td>ポートメッセなごや</td><td>物流</td><td></td></tr>
-<tr><td>2027-05-12〜14</td><td>ロボデックス 大阪</td><td>インテックス大阪</td><td>ロボット・フィジカルAI</td><td>Automate(5/10–13)の直後</td></tr>
+<tr><td>2027-05-12〜14</td><td>ロボデックス 大阪</td><td>インテックス大阪</td><td>ロボット・フィジカルAI</td><td></td></tr>
 <tr><td>2027-09-08〜10</td><td>ロボデックス 秋</td><td>幕張メッセ</td><td>ロボット・フィジカルAI</td><td></td></tr>
 <tr><td>2027-11-30〜12-03</td><td>SIGGRAPH Asia 2027</td><td>Tokyo International Forum</td><td>CG・AI</td><td>俯瞰資料では参考情報</td></tr>
 <tr><td>未発表</td><td>国際物流総合展 2027(東京)／JIMTOF 2028／iREX 2027／RSJ 2027／JSAI 2027</td><td>—</td><td>—</td><td>日程が見つかっていない</td></tr>
