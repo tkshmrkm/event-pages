@@ -22,6 +22,7 @@ a{color:var(--tent)}
 .sw.tent{border-color:var(--tent);background:color-mix(in srgb,var(--tent) 30%,transparent)}
 .sw.cand{border-color:var(--none);border-style:dashed;background:color-mix(in srgb,var(--none) 12%,transparent)}
 .sw.ref{border-color:var(--none);border-style:dotted}
+.sw.skip{border-color:var(--none);border-style:solid;background:repeating-linear-gradient(45deg,transparent 0 3px,var(--line) 3px 5px)}
 .sw.hit{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 30%,transparent)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
 .chips button{font:inherit;font-size:13px;padding:3px 12px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
@@ -41,6 +42,7 @@ a{color:var(--tent)}
 .cal-bar.tent{border-color:var(--tent);background:color-mix(in srgb,var(--tent) 30%,transparent)}
 .cal-bar.cand{border-color:var(--none);border-style:dashed;background:color-mix(in srgb,var(--none) 12%,transparent)}
 .cal-bar.ref{border-color:var(--none);border-style:dotted}
+.cal-bar.skip{border-color:var(--none);opacity:.55;background:repeating-linear-gradient(45deg,transparent 0 3px,var(--line) 3px 5px)}
 .cal-bar.hit{border-color:var(--warn);box-shadow:0 0 0 1px var(--warn)}
 .cal-bar b{position:absolute;top:0;line-height:15px;font-size:11px;font-weight:600;white-space:nowrap;padding:0 3px;text-shadow:0 0 3px var(--card),0 0 3px var(--card)}
 .cal-bar b.l{left:0}.cal-bar b.r{right:0}
@@ -58,6 +60,8 @@ tr.mo td{background:var(--bg);font-weight:700;font-size:12px;color:var(--mute);p
 .st.tent{color:var(--tent);border-color:var(--tent)}
 .st.cand{color:var(--mute);border-color:var(--none);border-style:dashed}
 .st.ref{color:var(--mute);border-color:var(--none);border-style:dotted}
+.st.skip{color:var(--mute);border-color:var(--line);text-decoration:line-through}
+tr.isskip td:nth-child(2){opacity:.6}
 .ln{font-size:11px;color:var(--mute)}
 .pa{font-size:10px;font-weight:700;color:var(--tent);border:1px solid var(--tent);border-radius:3px;padding:0 3px;margin-left:4px;vertical-align:1px}
 .mainb{font-size:10px;font-weight:700;color:#fff;background:var(--ok);border-radius:3px;padding:0 4px;margin-left:4px;vertical-align:1px}
@@ -83,6 +87,7 @@ li{margin:3px 0}
 <span><i class="sw tent"></i>想定</span>
 <span><i class="sw cand"></i>候補</span>
 <span><i class="sw ref"></i>資料（現地には行かず追う）</span>
+<span><i class="sw skip"></i>見送り</span>
 <span><i class="sw hit"></i>海外の確定・想定と国内が重なる</span>
 <span><b class="pa" style="margin:0">H/P</b> Humanoid / Physical AI</span>
 </div>
@@ -112,7 +117,7 @@ li{margin:3px 0}
 
 <h2>悩み中・決めること</h2>
 <ul>
-<li>2027年3月：LogiMAT（Stuttgart、出張 3/15–20）か GTC（San Jose、3/14–18）か。LogiMATを優先。国内の ROBOMECH と SMART LOGISTICS Expo も同じ週</li>
+<li>2027年3月：LogiMAT（Stuttgart、出張 3/15–20）か GTC（San Jose、3/14–18）か。LogiMATを優先。3月の国内（ISCS、ROBOMECH、SMART LOGISTICS Expo）は優先せず見送り</li>
 <li>RSS 2027（Athens、7/4–13）：悩み中。2026は参加</li>
 <li>IROS（9/26–10/1）→ EMO Milano（10/4–9）：つながる。ITMA（9/16–22）の4日後に IROS が始まるので、9月中旬から10月上旬まで約3週間のうち、どこまで行くか</li>
 <li>Automate 2027（Las Vegas、5/10–13）：魅力的。ICRA（5/24–28）と2週間差で、北米→韓国の連続になる</li>
@@ -161,12 +166,12 @@ var E=[
 {l:"o",st:"cand",a:"2027-02-03",b:"2027-02-04",n:"Physical AI Expo Global 2027（TechEx）",p:"London",pa:1},
 {l:"d",st:"cand",a:"2027-02-17",b:"2027-02-19",n:"ロボデックス 東京",p:"Tokyo Big Sight",pa:1,m:"人型ロボット・フィジカルAIを含む",w:1},
 {l:"d",st:"cand",a:"2027-02-18",b:"2027-02-19",n:"フィジカルAI・ロボット展",p:"東京国際フォーラム",pa:1,w:1},
-{l:"d",st:"cand",a:"2027-03-02",b:"2027-03-02",n:"SICE ISCS 2027（制御部門）",p:"Tokyo",m:"論文投稿締切 2026-10-10",w:1},
+{l:"d",st:"skip",a:"2027-03-02",b:"2027-03-02",n:"SICE ISCS 2027（制御部門）",p:"Tokyo",m:"論文投稿締切 2026-10-10",w:1},
 {l:"o",st:"cand",a:"2027-03-02",b:"2027-03-04",n:"JEC World 2027",p:"Paris",m:"複合材料。2024に参加"},
 {l:"o",st:"cand",a:"2027-03-14",b:"2027-03-18",n:"GTC 2027",p:"San Jose",pa:1,m:"LogiMATと択一。LogiMATを優先"},
-{l:"d",st:"cand",a:"2027-03-15",b:"2027-03-16",n:"ROBOMECH 2027",p:"鳥羽（三重）",m:"ロボット・メカトロ",w:1},
+{l:"d",st:"skip",a:"2027-03-15",b:"2027-03-16",n:"ROBOMECH 2027",p:"鳥羽（三重）",m:"ロボット・メカトロ",w:1},
 {l:"o",st:"tent",a:"2027-03-15",b:"2027-03-20",n:"LogiMAT 2027",p:"Stuttgart",m:"出張 3/15–20（会期 3/16–18）。2024に参加。GTCと択一"},
-{l:"d",st:"cand",a:"2027-03-17",b:"2027-03-19",n:"SMART LOGISTICS Expo 2027",p:"Tokyo Big Sight",m:"物流",w:1},
+{l:"d",st:"skip",a:"2027-03-17",b:"2027-03-19",n:"SMART LOGISTICS Expo 2027",p:"Tokyo Big Sight",m:"物流",w:1},
 {l:"o",st:"cand",a:"2027-04-19",b:"2027-04-21",n:"ProMat 2027",p:"Chicago",m:"事業部がAlphaBotを出展"},
 {l:"d",st:"cand",a:"2027-04-21",b:"2027-04-23",n:"NexTech Week 春（AI・人工知能EXPO／フィジカルAI EXPO／ヒューマノイドロボットEXPO）",p:"Tokyo Big Sight",pa:1},
 {l:"d",st:"cand",a:"2027-04-22",b:"2027-04-23",n:"中部 国際物流総合展 INNOVATION EXPO 2027",p:"ポートメッセなごや",m:"物流",w:1},
@@ -183,14 +188,14 @@ var E=[
 {l:"o",st:"cand",a:"2027-10-04",b:"2027-10-09",n:"EMO Milano 2027",p:"Milan",m:"魅力的。IROSからつながる。EMO 2025に参加"},
 {l:"d",st:"cand",a:"2027-11-30",b:"2027-12-03",n:"SIGGRAPH Asia 2027",p:"Tokyo International Forum",m:"CG・AI"}
 ];
-var ST={ok:"確定",tent:"想定",cand:"候補",ref:"資料"};
+var ST={ok:"確定",tent:"想定",cand:"候補",ref:"資料",skip:"見送り"};
 var DAY=864e5;
 function U(s){var a=s.split("-");return Date.UTC(+a[0],+a[1]-1,+a[2])}
 E.forEach(function(e){e.A=U(e.a);e.B=U(e.b)});
 function firm(e){return e.l=="o"&&(e.st=="ok"||e.st=="tent")}
 function ov(e,f){return e.A<=f.B&&f.A<=e.B}
 E.forEach(function(e){
-  e.hits=E.filter(function(f){return f.l!=e.l&&ov(e,f)&&(firm(e)||firm(f))});
+  e.hits=E.filter(function(f){return f.l!=e.l&&f.st!="skip"&&e.st!="skip"&&ov(e,f)&&(firm(e)||firm(f))});
 });
 var filter="all";
 function show(e){return filter=="all"||(filter=="pa"?e.pa:e.l==filter)}
@@ -244,7 +249,7 @@ function drawList(){
   E.filter(show).sort(function(a,b){return a.A-b.A||a.B-b.B}).forEach(function(e){
     var ym=e.a.slice(0,4)+"年"+(+e.a.slice(5,7))+"月";
     if(ym!=last){last=ym;var r=document.createElement("tr");r.className="mo";r.innerHTML='<td colspan="3">'+ym+'</td>';tb.appendChild(r)}
-    var tr=document.createElement("tr");if(e.main)tr.className="ismain";
+    var tr=document.createElement("tr");if(e.main)tr.className="ismain";if(e.st=="skip")tr.className="isskip";
     var name=e.u?'<a href="'+e.u+'">'+e.n+'</a>':e.n;
     var memo=[];
     if(e.m)memo.push(e.m);
