@@ -43,9 +43,21 @@
 # Source notes (keep the repository README)
 **/*.md
 !/README.md
+# Folder organization guides and the relocated shared design document only.
+# Other local notes and private documents remain excluded.
+!/docs/README.md
+!/docs/trip-field/OVERSEAS_TRIP_LAYOUT_SUMMARY.md
+!/travel_top_samples/README.md
+!/202609_HumanoidSummitEurope/references/superseded/README.md
 
 # Old versions and copies
 **/old/
 **/archive/
 **/* - コピー.*
 **/* - old.*
+
+# Git matches the archive-directory pattern on Windows as well. Open only
+# the top-level directory, then keep its contents excluded except the guide.
+!/Archive/
+/Archive/**
+!/Archive/README.md

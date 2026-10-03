@@ -1,6 +1,22 @@
 # WORK STATUS — overseas trip layout
 
-更新日: 2026-09-23
+更新日: 2026-10-03
+
+## フォルダ整理（2026-10-03）
+
+- 承認範囲：公開URLを維持し、資料・試作・旧版を整理。削除・pushは行わない
+- 共通設計本文を `docs/trip-field/OVERSEAS_TRIP_LAYOUT_SUMMARY.md` へ移動。ルートの同名文書は従来の参照を維持する入口
+- `WORK_STATUS.md` / `AGENTS.md` / `CLAUDE.md` は作業開始用の入口としてルートに維持
+- ルートのローカル旧案 `hrs2026_overview_family_tab_spec.md` を `202609_HumanoidSummitEurope/references/superseded/` へ移動。本文とGit対象外の扱いを維持
+- `docs` / `Archive` / `travel_top_samples` / HRSの `references/superseded` に分類案内を追加。イベントごとの既存分類を尊重
+- 公開HTML・CSS・JavaScript・生成／検査スクリプト・配布ICSは配置・内容を維持。候補イベントの2版も保持
+- `.gitignore` は追加した案内と共通設計本文だけを例外にし、個人書類や他のローカル文書を追加しない
+- 下記の過去のGit・worktree情報は記録当時のもの。今回の開始時は `main`、HEAD `cc95423`、未コミット変更なし。worktreeやブランチの削除は対象外
+- 検証済み：公開関連101ファイルの移動前後SHA-256集約一致、共通設計本文・旧案本文のSHA-256一致、案内文書の相対リンク27件の存在、新規案内5件の追跡可否と旧案・個人書類の除外、`git diff --check`。HTML・実行コードは変更していないため、再ビルド・表示検査は実施していない
+- Git：この整理は `main` の単独コミットとして記録し、pushしない。ローカル旧案の移動はGit対象外なので、他のcheckoutへは反映されない
+- 次の一手：必要があれば旧版ごとに現行との差と未取り込み情報を確認する。名前だけで削除しない
+
+以下は従来の作業記録です。今回の整理ではその内容を削除・更新していません。
 
 ## 文書の役割
 
