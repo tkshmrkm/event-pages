@@ -88,6 +88,7 @@ button.go[aria-pressed=true]{border-style:solid;border-color:var(--ok);backgroun
 .tk .t{font-weight:700}
 .tk .w{font-size:13px;color:var(--mute)}
 .tk .m{font-size:13px;margin-top:2px}
+.wb{font-size:10px;font-weight:700;color:var(--think);border:1px solid var(--think);border-radius:3px;padding:0 4px;margin-left:4px;vertical-align:1px}
 .hitnote{color:var(--warn)}
 .sm{color:var(--mute);font-size:12px;margin-top:2px}
 td:nth-child(3){white-space:nowrap}
@@ -134,10 +135,16 @@ li{margin:3px 0}
 <tbody id="list"></tbody>
 </table></div>
 
+<h2>定点観測（講演）</h2>
+<ul>
+<li>ICRA 2027 の基調講演（5/24–28、Seoul）：講演者は未発表。公式サイト <a href="https://2027.ieee-icra.org/">2027.ieee-icra.org</a> の発表待ち。2026年に参加した分と並べて見る</li>
+</ul>
+
 <h2>日程が決まっていないもの</h2>
 <p class="meta">決まるまで未定のままにしておく。</p>
 <ul>
 <li>海外：Humanoid Robotics Summit Europe 2027（2026は参加）、World Robot Conference and Expo 2027、MACHINA Summit 2027、THE Physical AI Expo London 2027、GEIA Europe 2027、Physical AI Summit Munich 2027</li>
+<li>工作機械：IMTS は偶数年開催で、2026（9/14–19、Chicago）は終了済み（廣瀬さんが参加）。次は IMTS 2028（9/11–16）なので、2027年は EMO Milano（10/4–9）が対象</li>
 <li>国内：iREX 2027、RSJ 2027、JSAI 2027、国際物流総合展 2027（東京）、JIMTOF 2028</li>
 </ul>
 
@@ -203,7 +210,7 @@ var E=[
 {l:"d",st:"cand",a:"2027-04-22",b:"2027-04-23",n:"中部 国際物流総合展 INNOVATION EXPO 2027",p:"ポートメッセなごや",m:"物流",w:1},
 {l:"o",st:"think",a:"2027-05-10",b:"2027-05-13",n:"Automate 2027",p:"Las Vegas",pa:1,m:"魅力的。ICRAの2週間前。部門枠2名"},
 {l:"d",st:"cand",a:"2027-05-12",b:"2027-05-14",n:"ロボデックス 大阪",p:"インテックス大阪",pa:1,w:1},
-{l:"o",st:"tent",a:"2027-05-24",b:"2027-05-28",n:"ICRA 2027",p:"Seoul",pa:1,m:"2026も参加"},
+{l:"o",st:"tent",a:"2027-05-24",b:"2027-05-28",n:"ICRA 2027",p:"Seoul",pa:1,watch:1,m:"基調講演を定点観測（講演者は未発表）。2026も参加"},
 {l:"o",st:"cand",a:"2027-06-02",b:"2027-06-03",n:"Robotics Summit & Expo 2027",p:"Boston",pa:1,m:"2026は参加"},
 {l:"o",st:"tent",a:"2027-06-15",b:"2027-06-21",n:"RoboCup 2027（30周年）",p:"Nuremberg",m:"automaticaの前に続けて。ドイツ開催",w:1},
 {l:"o",st:"tent",a:"2027-06-22",b:"2027-06-25",n:"automatica 2027",c:"automatica（メイン）",p:"Munich",main:1,m:"メイン。RoboCupの翌日から。部門枠1名"},
@@ -311,7 +318,7 @@ function drawList(){
     if(e.m)memo.push(e.m);
     if(e.hits.length&&!go(e))memo.push('<span class="hitnote">行くと重なる：'+e.hits.map(short).join("、")+'</span>');
     tr.innerHTML='<td class="d">'+range(e)+'</td>'+
-      '<td>'+name+(e.w?"※":"")+(e.pa?'<span class="pa">H/P</span>':"")+(e.main?'<span class="mainb">メイン</span>':"")+
+      '<td>'+name+(e.w?"※":"")+(e.pa?'<span class="pa">H/P</span>':"")+(e.main?'<span class="mainb">メイン</span>':"")+(e.watch?'<span class="wb">定点</span>':"")+
       '<div class="ln">'+(e.l=="o"?"海外":"国内")+' ・ '+e.p+' ・ '+days(e)+'日</div>'+
       (memo.length?'<div class="sm">'+memo.join("<br>")+'</div>':"")+'</td><td class="sc"></td>';
     var sc=tr.lastChild;
