@@ -20,12 +20,15 @@
 | ファイル | 役割 |
 |---|---|
 | [physical_ai_events_overview.html](physical_ai_events_overview.html) | 現行の俯瞰表示 |
+| [personal_inspection_plan.html](personal_inspection_plan.html) | 村上の2026年残り〜2027年の個人視察予定。本人の視察日・狙い・準備をブラウザーに保存 |
 | [physical_ai_events.js](physical_ai_events.js) | 現行表示の正本データ |
 | [validate_physical_ai_events.mjs](validate_physical_ai_events.mjs) | データ・表示の検査 |
 | [physical_ai_2027_candidate_events.html](physical_ai_2027_candidate_events.html) | 2027年候補の検討資料 |
 | [physical_ai_2027_candidate_events_v2.html](physical_ai_2027_candidate_events_v2.html) | 上記の別版の検討資料 |
 
 候補の2版は内容・構成が異なるため、両方を保持します。現在の予定は現行の俯瞰資料から確認し、検討資料の古い日程をそのまま採用しません。
+
+個人予定は `physical_ai_events.js` の開催情報を参照し、本人の編集は元データへ書き戻しません。初期予定は「村上・参加予定」の2件。2027年の部門計画は候補から自分で追加します。保存はブラウザーごとで、端末間の移動はJSON、読みやすい控えはMarkdown・印刷を使います。`file://` とHTTP、別ブラウザーでは保存領域が異なるため、同じ開き方を継続してください。
 
 ## Shared overseas-trip layout
 

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>村上の視察予定｜2026年残り–2027年</title>
+<link rel="stylesheet" href="personal_inspection_plan.css">
+<script src="physical_ai_events.js" defer></script>
+<script src="personal_inspection_plan.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">本文へ移動</a>
+<div class="wrap">
+<header>
+  <div class="eyebrow">PERSONAL INSPECTION PLAN</div>
+  <h1>村上の視察予定</h1>
+  <p>2026年残り–2027年 · 次に行く場所と、見る目的を決める</p>
+  <nav aria-label="関連ページ"><a href="physical_ai_events_overview.html">全体俯瞰</a><a href="index.html">旅程ページ一覧</a></nav>
+</header>
+<main id="main">
+  <section class="notice" aria-label="予定の基準">
+    <strong>全体計画と個人予定を分けて管理</strong>
+    <p>初期表示は既存データの「担当：村上・参加予定」から作成。2027年の部門計画は自動追加しません。開催期間は元資料の記載、本人の視察日は入力欄で管理します。</p>
+    <p class="muted">元資料の基準日：2026-09-23 · このページ作成時に公式日程の再確認はしていません。最終確認日がある場合は各予定に表示します。</p>
+  </section>
+  <section class="stats" aria-label="個人予定の件数">
+    <div><span>参加予定</span><strong id="plannedCount">0</strong><small>本人の予定として管理</small></div>
+    <div><span>検討中</span><strong id="candidateCount">0</strong><small>自分で選んだ候補</small></div>
+    <div><span>視察日未入力</span><strong id="undatedCount">0</strong><small>参加予定のうち</small></div>
+  </section>
+  <section class="panel" aria-labelledby="scheduleHeading">
+    <div class="section-head"><div><h2 id="scheduleHeading">これからの視察</h2><p class="muted">日付のある予定を先に、日程未定を後に表示</p></div><label>表示年<select id="yearFilter"><option value="all">すべて</option><option value="2026">2026年</option><option value="2027">2027年</option></select></label></div>
+    <div id="schedule"></div>
+    <noscript>予定の表示・保存にはJavaScriptが必要です。</noscript>
+  </section>
+  <section class="panel" aria-labelledby="candidateHeading">
+    <h2 id="candidateHeading">候補を個人予定に追加</h2>
+    <p class="muted">選んだものだけを「検討中」で追加。全体版の担当・参加状況は変更しません</p>
+    <div class="candidate-controls"><label>イベント・開催地を検索<input id="candidateSearch" type="search" placeholder="例：LogiMAT、Automate"></label><label>イベント<select id="eventPicker"></select></label><button id="addEvent" type="button">検討中で追加</button></div>
+    <p id="candidatePreview" class="muted"></p>
+  </section>
+  <section class="panel" aria-labelledby="saveHeading">
+    <h2 id="saveHeading">予定を保存・持ち出す</h2>
+    <p>編集内容はこのブラウザーに保存します。端末間の自動同期はありません。別の端末へ移すときはJSONで保存・読込してください。</p>
+    <div class="actions"><button id="exportJson" type="button">JSONで保存</button><label class="file-button">JSONを読込<input id="importJson" type="file" accept="application/json,.json"></label><button id="exportMarkdown" type="button">Markdownで保存</button><button id="printPlan" type="button">印刷</button></div>
+    <p id="downloadLink"></p>
+    <details id="exportFallback" hidden><summary>書き出し内容を確認・コピー</summary><label>書き出し内容<textarea id="exportText" readonly rows="10"></textarea></label></details>
+    <p id="storageStatus" class="muted" role="status" aria-live="polite"></p>
+    <p class="muted">氏名・視察目的・メモを含む書き出しファイルの共有先は、自分で選んでください。</p>
+  </section>
+</main>
+<footer>個人の予定はこのページで管理 · 開催情報は <a href="physical_ai_events_overview.html">全体俯瞰</a> を参照</footer>
+</div>
+</body>
+</html>
