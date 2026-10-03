@@ -144,7 +144,7 @@ li{margin:3px 0}
 </ul>
 <p class="meta"><b>Humanoid</b>：Physical AI の形態の1つで、話題性がある。Industrial AI の現実性と並べて見る（一覧の「H/P」が Humanoid / Physical AI のイベント）。</p>
 <ul>
-<li>Humanoid Robotics Summit Europe 2027（日程未発表）、Advanced Humanoid Forum（1/20–21、資料）、Humanoids 2026（12/6–9、資料）、ヒューマノイドロボットEXPO（4/21–23、国内）、ICRA 2027（5/24–28）</li>
+<li>Humanoid Robotics Summit Europe 2027（日程未発表）、Advanced Humanoid Forum（1/20–21、資料）、Humanoids 2026（12/6–9、資料）、ヒューマノイドロボットEXPO（4/21–23、国内）、ICRA 2027（5/24–28）、WRC 2027（8/18開幕、Beijing）、World Humanoid Robot Games（ロボット運動会、2027は日程未発表）</li>
 </ul>
 <p class="meta"><b>講演</b></p>
 <ul>
@@ -154,7 +154,7 @@ li{margin:3px 0}
 <h2>日程が決まっていないもの</h2>
 <p class="meta">決まるまで未定のままにしておく。</p>
 <ul>
-<li>海外：Humanoid Robotics Summit Europe 2027（2026は参加）、World Robot Conference and Expo 2027、MACHINA Summit 2027、THE Physical AI Expo London 2027、GEIA Europe 2027、Physical AI Summit Munich 2027</li>
+<li>海外：Humanoid Robotics Summit Europe 2027（2026は参加）、World Humanoid Robot Games 2027（2026は8/22–26、Beijing。ロボット運動会）、MACHINA Summit 2027、THE Physical AI Expo London 2027、GEIA Europe 2027、Physical AI Summit Munich 2027</li>
 <li>工作機械：IMTS は偶数年開催で、2026（9/14–19、Chicago）は終了済み（廣瀬さんが参加）。次は IMTS 2028（9/11–16）なので、2027年は EMO Milano（10/4–9）が対象</li>
 <li>国内：iREX 2027、RSJ 2027、JSAI 2027、国際物流総合展 2027（東京）、JIMTOF 2028</li>
 </ul>
@@ -230,6 +230,7 @@ var E=[
 {l:"o",st:"think",a:"2027-07-04",b:"2027-07-13",n:"RSS 2027",p:"Athens",pa:1,m:"悩み中。出張 7/4–13（会期 7/6–11）。2026に参加"},
 {l:"o",st:"tent",a:"2027-09-16",b:"2027-09-22",n:"ITMA 2027",p:"Hannover",m:"繊維機械。ITMA ASIAに2024参加"},
 {l:"d",st:"cand",a:"2027-09-08",b:"2027-09-10",n:"ロボデックス 秋",p:"幕張メッセ",pa:1,w:1},
+{l:"o",st:"think",a:"2027-08-18",b:"2027-08-18",r:"8/18〜",nd:1,n:"World Robot Conference 2027",c:"WRC 2027",p:"Beijing",pa:1,m:"開幕のみ公式発表で確認。終了日・会場は未発表（2026は8/19–23）。ヒューマノイド・産業・標準化。2026は保木・渡邊・古谷が参加"},
 {l:"o",st:"think",a:"2027-09-26",b:"2027-10-01",n:"IROS 2027",p:"Florence",pa:1,m:"EMOとつながる"},
 {l:"o",st:"think",a:"2027-10-04",b:"2027-10-09",n:"EMO Milano 2027",p:"Milan",m:"魅力的。IROSからつながる。EMO 2025に参加"},
 {l:"o",st:"cand",a:"2027-11-23",b:"2027-11-25",n:"SPS 2027",p:"Nuremberg",m:"FA・産業制御・Industrial AI。2026は東が参加予定。部門枠～2名"},
@@ -247,9 +248,10 @@ function ov(e,f){return e.A<=f.B&&f.A<=e.B}
 var filter="all";
 function show(e){return filter=="all"||(filter=="pa"?e.pa:e.l==filter)}
 function md(s){var a=s.split("-");return (+a[1])+"/"+(+a[2])}
-function range(e){if(e.a==e.b)return md(e.a);var same=e.a.slice(0,7)==e.b.slice(0,7);return md(e.a)+"–"+(same?(+e.b.slice(8)):md(e.b))}
+function range(e){if(e.r)return e.r;if(e.a==e.b)return md(e.a);var same=e.a.slice(0,7)==e.b.slice(0,7);return md(e.a)+"–"+(same?(+e.b.slice(8)):md(e.b))}
 function short(e){return e.c||e.n.replace(/（.*$/,"")}
 function days(e){return Math.round((e.B-e.A)/DAY)+1}
+function dd(e){return e.nd?"":" ・ "+days(e)+"日"}
 
 var conflicts,warn;
 function compute(){
@@ -332,7 +334,7 @@ function drawList(){
     if(e.hits.length&&!go(e))memo.push('<span class="hitnote">行くと重なる：'+e.hits.map(short).join("、")+'</span>');
     tr.innerHTML='<td class="d">'+range(e)+'</td>'+
       '<td>'+name+(e.w?"※":"")+(e.pa?'<span class="pa">H/P</span>':"")+(e.main?'<span class="mainb">メイン</span>':"")+(e.watch?'<span class="wb">定点</span>':"")+
-      '<div class="ln">'+(e.l=="o"?"海外":"国内")+' ・ '+e.p+' ・ '+days(e)+'日</div>'+
+      '<div class="ln">'+(e.l=="o"?"海外":"国内")+' ・ '+e.p+dd(e)+'</div>'+
       (memo.length?'<div class="sm">'+memo.join("<br>")+'</div>':"")+'</td><td class="sc"></td>';
     var sc=tr.lastChild;
     if(e.tog){
@@ -352,7 +354,7 @@ function drawThink(){
     var d=document.createElement("div");d.className="tk";
     var on=!!sel[e.n];
     var info=document.createElement("div");
-    info.innerHTML='<div class="t">'+e.n+(e.pa?'<span class="pa">H/P</span>':"")+'</div><div class="w">'+range(e)+'（'+days(e)+'日） ・ '+e.p+'</div>'+
+    info.innerHTML='<div class="t">'+e.n+(e.pa?'<span class="pa">H/P</span>':"")+'</div><div class="w">'+range(e)+(e.nd?'':'（'+days(e)+'日）')+' ・ '+e.p+'</div>'+
       (e.m?'<div class="m">'+e.m+'</div>':"")+
       (e.hits.length&&!on?'<div class="m hitnote">行くと重なる：'+e.hits.map(short).join("、")+'</div>':"");
     var bt=document.createElement("button");bt.className="go";bt.type="button";bt.setAttribute("aria-pressed",on);bt.textContent=on?"行く":"未定";
