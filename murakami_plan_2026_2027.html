@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>村上 視察予定 2026-2027</title>
 <style>
-:root{--bg:#f6f7f9;--fg:#1d2430;--mute:#5d6878;--card:#fff;--line:#d9dee6;--ok:#1f7a4d;--tent:#2a5fa0;--none:#8a93a1;--warn:#a65a00}
-@media (prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e8ebf0;--mute:#9aa5b5;--card:#1d232d;--line:#2f3846;--ok:#5cc08d;--tent:#7fb0ea;--none:#7d8796;--warn:#e0a050}}
+:root{--bg:#f6f7f9;--fg:#1d2430;--mute:#5d6878;--card:#fff;--line:#d9dee6;--ok:#1f7a4d;--tent:#2a5fa0;--none:#8a93a1;--warn:#a65a00;--think:#7a4fb0}
+@media (prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e8ebf0;--mute:#9aa5b5;--card:#1d232d;--line:#2f3846;--ok:#5cc08d;--tent:#7fb0ea;--none:#7d8796;--warn:#e0a050;--think:#b79af0}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.6 system-ui,"Hiragino Sans","Noto Sans JP",sans-serif}
 main{max-width:820px;margin:0 auto;padding:20px 16px 48px}
@@ -20,6 +20,7 @@ a{color:var(--tent)}
 .sw{display:inline-block;width:22px;height:10px;border-radius:3px;border:1.5px solid;vertical-align:-1px;margin-right:5px}
 .sw.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 30%,transparent)}
 .sw.tent{border-color:var(--tent);background:color-mix(in srgb,var(--tent) 30%,transparent)}
+.sw.think{border-color:var(--think);background:color-mix(in srgb,var(--think) 22%,transparent)}
 .sw.cand{border-color:var(--none);border-style:dashed;background:color-mix(in srgb,var(--none) 12%,transparent)}
 .sw.ref{border-color:var(--none);border-style:dotted}
 .sw.skip{border-color:var(--none);border-style:solid;background:repeating-linear-gradient(45deg,transparent 0 3px,var(--line) 3px 5px)}
@@ -40,6 +41,7 @@ a{color:var(--tent)}
 .cal-bar{height:18px;border:1.5px solid;border-radius:4px;position:relative;min-width:6px}
 .cal-bar.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 30%,transparent)}
 .cal-bar.tent{border-color:var(--tent);background:color-mix(in srgb,var(--tent) 30%,transparent)}
+.cal-bar.think{border-color:var(--think);border-style:dashed;background:color-mix(in srgb,var(--think) 22%,transparent)}
 .cal-bar.cand{border-color:var(--none);border-style:dashed;background:color-mix(in srgb,var(--none) 12%,transparent)}
 .cal-bar.ref{border-color:var(--none);border-style:dotted}
 .cal-bar.skip{border-color:var(--none);opacity:.55;background:repeating-linear-gradient(45deg,transparent 0 3px,var(--line) 3px 5px)}
@@ -58,6 +60,7 @@ tr.mo td{background:var(--bg);font-weight:700;font-size:12px;color:var(--mute);p
 .st{display:inline-block;font-size:11px;font-weight:700;padding:0 7px;border-radius:9px;border:1.5px solid;white-space:nowrap}
 .st.ok{color:var(--ok);border-color:var(--ok)}
 .st.tent{color:var(--tent);border-color:var(--tent)}
+.st.think{color:var(--think);border-color:var(--think)}
 .st.cand{color:var(--mute);border-color:var(--none);border-style:dashed}
 .st.ref{color:var(--mute);border-color:var(--none);border-style:dotted}
 .st.skip{color:var(--mute);border-color:var(--line);text-decoration:line-through}
@@ -85,6 +88,7 @@ li{margin:3px 0}
 <div class="bar">
 <span><i class="sw ok"></i>確定</span>
 <span><i class="sw tent"></i>想定</span>
+<span><i class="sw think"></i>検討中（悩み中）</span>
 <span><i class="sw cand"></i>候補</span>
 <span><i class="sw ref"></i>資料（現地には行かず追う）</span>
 <span><i class="sw skip"></i>見送り</span>
@@ -168,28 +172,28 @@ var E=[
 {l:"d",st:"cand",a:"2027-02-18",b:"2027-02-19",n:"フィジカルAI・ロボット展",p:"東京国際フォーラム",pa:1,w:1},
 {l:"d",st:"cand",a:"2027-03-02",b:"2027-03-02",n:"SICE ISCS 2027（制御部門）",p:"Tokyo",m:"論文投稿締切 2026-10-10",w:1},
 {l:"o",st:"cand",a:"2027-03-02",b:"2027-03-04",n:"JEC World 2027",p:"Paris",m:"複合材料。2024に参加"},
-{l:"o",st:"cand",a:"2027-03-14",b:"2027-03-18",n:"GTC 2027",p:"San Jose",pa:1,m:"LogiMATと択一。LogiMATを優先"},
+{l:"o",st:"think",a:"2027-03-14",b:"2027-03-18",n:"GTC 2027",p:"San Jose",pa:1,m:"LogiMATと択一。LogiMATを優先"},
 {l:"d",st:"skip",a:"2027-03-15",b:"2027-03-16",n:"ROBOMECH 2027",p:"鳥羽（三重）",m:"ロボット・メカトロ",w:1},
 {l:"o",st:"tent",a:"2027-03-15",b:"2027-03-20",n:"LogiMAT 2027",p:"Stuttgart",m:"出張 3/15–20（会期 3/16–18）。2024に参加。GTCと択一"},
 {l:"d",st:"skip",a:"2027-03-17",b:"2027-03-19",n:"SMART LOGISTICS Expo 2027",p:"Tokyo Big Sight",m:"物流",w:1},
-{l:"o",st:"cand",a:"2027-04-19",b:"2027-04-21",n:"ProMat 2027",p:"Chicago",m:"事業部がAlphaBotを出展"},
+{l:"o",st:"think",a:"2027-04-19",b:"2027-04-21",n:"ProMat 2027",p:"Chicago",m:"事業部がAlphaBotを出展"},
 {l:"d",st:"cand",a:"2027-04-21",b:"2027-04-23",n:"NexTech Week 春（AI・人工知能EXPO／フィジカルAI EXPO／ヒューマノイドロボットEXPO）",p:"Tokyo Big Sight",pa:1},
 {l:"d",st:"cand",a:"2027-04-22",b:"2027-04-23",n:"中部 国際物流総合展 INNOVATION EXPO 2027",p:"ポートメッセなごや",m:"物流",w:1},
-{l:"o",st:"cand",a:"2027-05-10",b:"2027-05-13",n:"Automate 2027",p:"Las Vegas",pa:1,m:"魅力的。ICRAの2週間前。部門枠2名"},
+{l:"o",st:"think",a:"2027-05-10",b:"2027-05-13",n:"Automate 2027",p:"Las Vegas",pa:1,m:"魅力的。ICRAの2週間前。部門枠2名"},
 {l:"d",st:"cand",a:"2027-05-12",b:"2027-05-14",n:"ロボデックス 大阪",p:"インテックス大阪",pa:1,w:1},
 {l:"o",st:"tent",a:"2027-05-24",b:"2027-05-28",n:"ICRA 2027",p:"Seoul",pa:1,m:"2026も参加"},
 {l:"o",st:"cand",a:"2027-06-02",b:"2027-06-03",n:"Robotics Summit & Expo 2027",p:"Boston",pa:1,m:"2026は参加"},
 {l:"o",st:"tent",a:"2027-06-15",b:"2027-06-21",n:"RoboCup 2027（30周年）",p:"Nuremberg",m:"automaticaの前に続けて。ドイツ開催",w:1},
 {l:"o",st:"tent",a:"2027-06-22",b:"2027-06-25",n:"automatica 2027",c:"automatica（メイン）",p:"Munich",main:1,m:"メイン。RoboCupの翌日から。部門枠1名"},
 {l:"o",st:"ref", a:"2027-06-16",b:"2027-06-17",n:"Physical AI Expo North America 2027（TechEx）",c:"PAE North America",p:"San Jose",pa:1,m:"RoboCup〜automaticaと同時期。2025に参加"},
-{l:"o",st:"cand",a:"2027-07-04",b:"2027-07-13",n:"RSS 2027",p:"Athens",pa:1,m:"悩み中。出張 7/4–13（会期 7/6–11）。2026に参加"},
+{l:"o",st:"think",a:"2027-07-04",b:"2027-07-13",n:"RSS 2027",p:"Athens",pa:1,m:"悩み中。出張 7/4–13（会期 7/6–11）。2026に参加"},
 {l:"o",st:"tent",a:"2027-09-16",b:"2027-09-22",n:"ITMA 2027",p:"Hannover",m:"繊維機械。ITMA ASIAに2024参加"},
 {l:"d",st:"cand",a:"2027-09-08",b:"2027-09-10",n:"ロボデックス 秋",p:"幕張メッセ",pa:1,w:1},
-{l:"o",st:"cand",a:"2027-09-26",b:"2027-10-01",n:"IROS 2027",p:"Florence",pa:1,m:"EMOとつながる"},
-{l:"o",st:"cand",a:"2027-10-04",b:"2027-10-09",n:"EMO Milano 2027",p:"Milan",m:"魅力的。IROSからつながる。EMO 2025に参加"},
+{l:"o",st:"think",a:"2027-09-26",b:"2027-10-01",n:"IROS 2027",p:"Florence",pa:1,m:"EMOとつながる"},
+{l:"o",st:"think",a:"2027-10-04",b:"2027-10-09",n:"EMO Milano 2027",p:"Milan",m:"魅力的。IROSからつながる。EMO 2025に参加"},
 {l:"d",st:"cand",a:"2027-11-30",b:"2027-12-03",n:"SIGGRAPH Asia 2027",p:"Tokyo International Forum",m:"CG・AI"}
 ];
-var ST={ok:"確定",tent:"想定",cand:"候補",ref:"資料",skip:"見送り"};
+var ST={ok:"確定",tent:"想定",cand:"候補",ref:"資料",think:"検討中",skip:"見送り"};
 var DAY=864e5;
 function U(s){var a=s.split("-");return Date.UTC(+a[0],+a[1]-1,+a[2])}
 E.forEach(function(e){e.A=U(e.a);e.B=U(e.b)});
