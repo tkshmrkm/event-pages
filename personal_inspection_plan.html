@@ -6,6 +6,7 @@
 <title>村上の視察予定｜2026年残り–2027年</title>
 <link rel="stylesheet" href="personal_inspection_plan.css">
 <script src="physical_ai_events.js" defer></script>
+<script src="personal_inspection_context.js" defer></script>
 <script src="personal_inspection_plan.js" defer></script>
 </head>
 <body>
@@ -20,8 +21,18 @@
 <main id="main">
   <section class="notice" aria-label="予定の基準">
     <strong>全体計画と個人予定を分けて管理</strong>
-    <p>初期表示は既存データの「担当：村上・参加予定」から作成。2027年の部門計画は自動追加しません。開催期間は元資料の記載、本人の視察日は入力欄で管理します。</p>
-    <p class="muted">元資料の基準日：2026-09-23 · このページ作成時に公式日程の再確認はしていません。最終確認日がある場合は各予定に表示します。</p>
+    <p>2027年の本人提示案を追加。未確定の案は「検討中」で扱い、出張・滞在の期間案と現地の視察日を分けます。保存済みの編集内容は優先して保持します。</p>
+    <p class="muted">本人提示・公式確認：2026-10-03 · 全体俯瞰の元資料：2026-09-23。今回の公式確認値は個人ページで併記し、全体データは維持しています。</p>
+  </section>
+  <section class="panel" aria-labelledby="outlineHeading">
+    <h2 id="outlineHeading">2027年の視察案の骨格</h2>
+    <p class="muted">2026-10-03に本人が提示した案。二者択一・任意候補・連続参加案を区別し、元の期間を保持</p>
+    <p class="muted table-hint">表は左右にスクロールできます</p>
+    <div class="table-scroll"><table><thead><tr><th scope="col">視察案</th><th scope="col">本人提示期間</th><th scope="col">街の動き</th><th scope="col">検討事項</th></tr></thead><tbody id="outline"></tbody></table></div>
+  </section>
+  <section class="panel" aria-labelledby="decisionsHeading">
+    <h2 id="decisionsHeading">悩み中の箇所</h2>
+    <div id="decisions" class="decision-grid"></div>
   </section>
   <section class="stats" aria-label="個人予定の件数">
     <div><span>参加予定</span><strong id="plannedCount">0</strong><small>本人の予定として管理</small></div>
@@ -29,9 +40,15 @@
     <div><span>視察日未入力</span><strong id="undatedCount">0</strong><small>参加予定のうち</small></div>
   </section>
   <section class="panel" aria-labelledby="scheduleHeading">
-    <div class="section-head"><div><h2 id="scheduleHeading">これからの視察</h2><p class="muted">日付のある予定を先に、日程未定を後に表示</p></div><label>表示年<select id="yearFilter"><option value="all">すべて</option><option value="2026">2026年</option><option value="2027">2027年</option></select></label></div>
+    <div class="section-head"><div><h2 id="scheduleHeading">予定・候補の詳細</h2><p class="muted">本人提示期間、視察日、開催日の順で並べる。連続案はイベントごとに編集</p></div><label>表示年<select id="yearFilter"><option value="all">すべて</option><option value="2026">2026年</option><option value="2027" selected>2027年</option></select></label></div>
     <div id="schedule"></div>
     <noscript>予定の表示・保存にはJavaScriptが必要です。</noscript>
+  </section>
+  <section class="panel" aria-labelledby="historyHeading">
+    <h2 id="historyHeading">村上の過去参加履歴</h2>
+    <p class="muted">本人提示の月・名称を保持。月は開催月として再確認していません。同月の複数イベントは提示時のまとまりのまま表示</p>
+    <p class="muted table-hint">表は左右にスクロールできます</p>
+    <div class="table-scroll"><table><thead><tr><th scope="col">年月</th><th scope="col">本人提示の履歴</th><th scope="col">扱い</th></tr></thead><tbody id="history"></tbody></table></div>
   </section>
   <section class="panel" aria-labelledby="candidateHeading">
     <h2 id="candidateHeading">候補を個人予定に追加</h2>
