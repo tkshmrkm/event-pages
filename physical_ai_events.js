@@ -1566,8 +1566,8 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "Embedded / Edge / Real-time Systems",
     "type": "展示会・見本市",
     "location": "Exhibition Centre Nuremberg, Nuremberg, Germany",
-    "status": "2027計画",
-    "assignment": "TBD",
+    "status": "参加予定",
+    "assignment": "長澤＋1名",
     "purpose": "組込み、Edge AI、リアルタイム、機能安全、Embedded Vision。部門予算化計画。GTC 2027およびLogiMAT 2027と日程が重なるため別担当を前提に検討する。"
   },
   {
