@@ -1404,8 +1404,8 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "Robotics / Physical AI本体",
     "type": "技術カンファレンス・サミット",
     "location": "Olympia London, London, United Kingdom",
-    "status": "候補",
-    "assignment": "TBD",
+    "status": "参考情報",
+    "assignment": "—",
     "purpose": "TechEx Events Ltd主催。TechEx Globalの8つの併催イベントの1つで、Physical AI単独の開催ではない。企業導入・周辺IT寄り。North America版（6月）と同じシリーズなので、両方を別々の派遣候補として積み上げず、地域・時期で選ぶ。11VC主催の「THE Physical AI Expo」とは別イベント。 つながり：欧州内で続く予定がない。次はMD&M West（2/9–11、Anaheim）で大西洋を越える。",
     "sourceUrl": "https://physicalaiconference.com/global/",
     "verifiedAt": "2026-09-23"
