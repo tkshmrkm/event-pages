@@ -1992,6 +1992,25 @@ window.PHYSICAL_AI_EVENTS = [
     "verifiedAt": "2026-09-23"
   },
   {
+    "id": "20270801-asme-idetc-cie-2027",
+    "dateStatus": "confirmed",
+    "sortDate": "2027-08-01",
+    "year": 2027,
+    "dateLabel": "8月1–4日",
+    "name": "ASME IDETC/CIE 2027",
+    "budgetCandidate": false,
+    "importance": "★★☆☆☆",
+    "businessFit": "★★☆☆☆",
+    "category": "Mechanical Design / Structural & Multidisciplinary Optimization",
+    "type": "学会・専門会議",
+    "location": "Philadelphia Marriott Downtown, Philadelphia, PA, United States",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "設計工学、Design Automation、CIE、メカ設計・最適化。",
+    "sourceUrl": "https://event.asme.org/IDETC-CIE",
+    "verifiedAt": "2026-10-04"
+  },
+  {
     "id": "20270808-siggraph-2027",
     "dateStatus": "confirmed",
     "sortDate": "2027-08-08",
@@ -2356,25 +2375,9 @@ window.PHYSICAL_AI_EVENTS = [
     "purpose": "AI基盤のトップ会議。Embodied AI、World Model、Robotics関連Workshopと論文を追跡する。公式発表は欧州開催まで。"
   },
   {
-    "id": "pending-asme-idetc-cie-2027",
-    "dateStatus": "pending",
-    "order": 8,
-    "name": "ASME IDETC/CIE 2027",
-    "budgetCandidate": false,
-    "importance": "★★☆☆☆",
-    "businessFit": "★★☆☆☆",
-    "category": "Mechanical Design / Structural & Multidisciplinary Optimization",
-    "handling": "2027候補：日程TBD",
-    "assignment": "TBD",
-    "location": "TBD",
-    "purpose": "設計工学、Design Automation、CIE、メカ設計・最適化。ASME公式の案内は2027年版へ切り替わったが、日程・開催地は未発表。",
-    "sourceUrl": "https://event.asme.org/IDETC-CIE",
-    "verifiedAt": "2026-09-23"
-  },
-  {
     "id": "pending-irex-2027",
     "dateStatus": "pending",
-    "order": 9,
+    "order": 8,
     "name": "iREX 2027（国際ロボット展）",
     "budgetCandidate": false,
     "importance": "★★★☆☆",
@@ -2390,7 +2393,7 @@ window.PHYSICAL_AI_EVENTS = [
   {
     "id": "pending-rlc-2027",
     "dateStatus": "pending",
-    "order": 10,
+    "order": 9,
     "name": "RLC 2027",
     "budgetCandidate": false,
     "importance": "★★★☆☆",
@@ -2406,7 +2409,7 @@ window.PHYSICAL_AI_EVENTS = [
   {
     "id": "pending-machina-summit-2027",
     "dateStatus": "pending",
-    "order": 11,
+    "order": 10,
     "name": "MACHINA Summit 2027",
     "budgetCandidate": false,
     "importance": "★★★★☆",
@@ -2422,7 +2425,7 @@ window.PHYSICAL_AI_EVENTS = [
   {
     "id": "pending-the-physical-ai-expo-london-2027",
     "dateStatus": "pending",
-    "order": 12,
+    "order": 11,
     "name": "THE Physical AI Expo London 2027（11VC）",
     "budgetCandidate": false,
     "importance": "★★★☆☆",
@@ -2438,7 +2441,7 @@ window.PHYSICAL_AI_EVENTS = [
   {
     "id": "pending-geia-europe-2027",
     "dateStatus": "pending",
-    "order": 13,
+    "order": 12,
     "name": "GEIA Europe 2027",
     "budgetCandidate": false,
     "importance": "★★★☆☆",
@@ -2454,7 +2457,7 @@ window.PHYSICAL_AI_EVENTS = [
   {
     "id": "pending-physical-ai-summit-munich-2027",
     "dateStatus": "pending",
-    "order": 14,
+    "order": 13,
     "name": "Physical AI Summit Munich 2027",
     "budgetCandidate": false,
     "importance": "★★☆☆☆",
@@ -2470,7 +2473,7 @@ window.PHYSICAL_AI_EVENTS = [
   {
     "id": "pending-item",
     "dateStatus": "pending",
-    "order": 15,
+    "order": 14,
     "name": "年間予算予備枠（部門）",
     "budgetCandidate": true,
     "importance": "—",
