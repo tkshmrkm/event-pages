@@ -793,6 +793,19 @@ CSSはNode側で読んで `cssKnownClasses` / `cssKnownSubstrings` として渡�
 - **金築はカネツキ（KANETSUKI）。** KANECHIKUと書いていたのを直し、検査で再発を止めた
 - 検査は121件→125件
 
+## TechEx Day 2の再変更と金築の入場券（2026-10-04）
+
+- 公式アジェンダ（physicalaiconference.com）を2026-10-04に読み直した。12:45–13:15にCapgemini（Alexandre Embry）が入り、
+  昼休みは13:15–14:05に短縮。Physical AI Stack は14:05–14:35、Swisslog は14:40–15:10、最重要パネルは15:15–15:55へずれた
+- **退出は14:55のまま**（ユーザーの判断）。Stackまでは全部聴け、Swisslogは最初の15分、パネルは聴けない。
+  15:10まで残る案は、Schiphol着15:35〜40頃で荷物預けの締切（16:05頃）まで25分ほどしかないので採らなかった
+- Day 1は変更なし
+- 金築のEuroBLECH入場券はベッコフ経由で発行済み（ユーザー談）。準備タブの札、入場券カード、チェックリスト
+  （`page.js` と `source.html` の `DEFAULT_CHECKED` に3を追加）を直した。**既にブラウザーに保存した状態がある端末では、
+  チェックは自動では付かない**（保存値が優先されるため）
+- 反映しなかったもの（ユーザーが不要と判断）：10/18夜のOpening Drinksの会場（公式に Rosarium Amstelpark と出た）、
+  EuroBLECHのガイドツアー、撮影許可の問い合わせ
+
 ## 検証
 
 変更後は次を実行する。
