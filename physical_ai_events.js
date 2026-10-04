@@ -2181,7 +2181,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "学会・専門会議",
     "location": "Tokyo International Forum, Tokyo, Japan",
     "status": "参加予定",
-    "assignment": "—",
+    "assignment": "村上",
     "purpose": "国内開催。Computer Graphics、Simulation、Digital Twin、3D表現、生成表現。2027年は東京開催。",
     "sourceUrl": "https://asia.siggraph.org/2026/about-the-event/siggraph-asia-2027/",
     "verifiedAt": "2026-09-16"
