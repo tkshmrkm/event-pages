@@ -1369,7 +1369,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "技術カンファレンス・サミット",
     "location": "Las Vegas, Nevada, United States",
     "status": "2027計画",
-    "assignment": "田原・公募2名",
+    "assignment": "田原・尾中・保木",
     "purpose": "広域技術・事業探索"
   },
   {
