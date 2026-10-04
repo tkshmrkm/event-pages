@@ -1230,8 +1230,8 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "Simulation / Digital Twin / CG",
     "type": "学会・専門会議",
     "location": "KLCC, Kuala Lumpur, Malaysia",
-    "status": "候補",
-    "assignment": "TBD",
+    "status": "参考情報",
+    "assignment": "—",
     "purpose": "Digital Twin、Simulation、3D表現、生成表現"
   },
   {
@@ -1317,8 +1317,8 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "Technology Foresight / Innovation",
     "type": "技術カンファレンス・サミット",
     "location": "Dubai Exhibition Centre, Expo City Dubai, UAE",
-    "status": "候補",
-    "assignment": "TBD",
+    "status": "参考情報",
+    "assignment": "—",
     "purpose": "AI、デジタル、スタートアップ、市場探索"
   },
   {
@@ -1336,7 +1336,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Tokyo Big Sight, Tokyo, Japan",
     "status": "候補",
     "assignment": "TBD",
-    "purpose": "国内半導体製造装置・材料・先端パッケージング・検査計測"
+    "purpose": "国内開催（渡航を伴わない）。国内半導体製造装置・材料・先端パッケージング・検査計測"
   },
   {
     "id": "20261215-cdc-2026",
@@ -2284,7 +2284,7 @@ window.PHYSICAL_AI_EVENTS = [
     "handling": "2027候補：TBD",
     "assignment": "TBD",
     "location": "TBD",
-    "purpose": "国内半導体装置・材料・プロセス。日程・場所はTBD"
+    "purpose": "国内開催（渡航を伴わない）。国内半導体装置・材料・プロセス。日程・場所はTBD"
   },
   {
     "id": "pending-corl-2027",
