@@ -1512,8 +1512,8 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "Robotics / Physical AI本体",
     "type": "技術カンファレンス・サミット",
     "location": "Birmingham, United Kingdom",
-    "status": "候補",
-    "assignment": "TBD",
+    "status": "参考情報",
+    "assignment": "—",
     "purpose": "euRoboticsの年次フォーラム（1,000名超）。欧州の研究・産業・政策の接点を見る場で、学会ほど研究発表寄りでも、展示会ほど展示寄りでもない。会期にはサイドイベントを含む。 つながり：JEC World（3/2–4、Paris）・MWC（3/1–4、Barcelona）と会期が重なる。行くなら人を分ける。",
     "sourceUrl": "https://erf2027.eu/",
     "verifiedAt": "2026-09-23"
