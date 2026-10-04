@@ -1657,7 +1657,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Tokyo Big Sight, Tokyo, Japan",
     "status": "候補",
     "assignment": "TBD",
-    "purpose": "RX Japan主催、NexTech Week春の6構成展の1つ。国内企業のPhysical AI導入動向を低コストで確認でき、海外イベントを選ぶ前の比較基準になる。渡航を伴わない。 つながり：GEIA Asia（4/13–16）の帰国後に続けられる。",
+    "purpose": "国内開催（渡航を伴わない）。RX Japan主催、NexTech Week春の6構成展の1つ。国内企業のPhysical AI導入動向を低コストで確認でき、海外イベントを選ぶ前の比較基準になる。 つながり：GEIA Asia（4/13–16）の帰国後に続けられる。",
     "sourceUrl": "https://www.nextech-week.jp/spring/ja-jp.html",
     "verifiedAt": "2026-09-23"
   },
