@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>村上 視察予定 2026-2027</title>
+<style>
+:root{--bg:#f6f7f9;--fg:#1d2430;--mute:#5d6878;--card:#fff;--line:#d9dee6;--ok:#1f7a4d;--tent:#2a5fa0;--none:#8a93a1;--warn:#a65a00;--think:#7a4fb0}
+@media (prefers-color-scheme:dark){:root{--bg:#14181f;--fg:#e8ebf0;--mute:#9aa5b5;--card:#1d232d;--line:#2f3846;--ok:#5cc08d;--tent:#7fb0ea;--none:#7d8796;--warn:#e0a050;--think:#b79af0}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.6 system-ui,"Hiragino Sans","Noto Sans JP",sans-serif}
+main{max-width:820px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:20px;margin:0 0 4px}
+h2{font-size:16px;margin:32px 0 8px}
+.sub,.meta{color:var(--mute);font-size:13px;margin:0 0 12px}
+a{color:var(--tent)}
+
+/* 凡例・絞り込み */
+.bar{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:12px;color:var(--mute);margin:0 0 10px}
+.sw{display:inline-block;width:22px;height:10px;border-radius:3px;border:1.5px solid;vertical-align:-1px;margin-right:5px}
+.sw.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 30%,transparent)}
+.sw.tent{border-color:var(--tent);background:color-mix(in srgb,var(--tent) 30%,transparent)}
+.sw.think{border-color:var(--think);background:color-mix(in srgb,var(--think) 22%,transparent)}
+.sw.cand{border-color:var(--none);border-style:dashed;background:color-mix(in srgb,var(--none) 12%,transparent)}
+.sw.ref{border-color:var(--none);border-style:dotted}
+.sw.skip{border-color:var(--none);border-style:solid;background:repeating-linear-gradient(45deg,transparent 0 3px,var(--line) 3px 5px)}
+.sw.go{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 45%,transparent)}
+.sw.hit{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 30%,transparent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.chips button{font:inherit;font-size:13px;padding:3px 12px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+.chips button[aria-pressed=true]{background:var(--tent);border-color:var(--tent);color:#fff}
+@media (prefers-color-scheme:dark){.chips button[aria-pressed=true]{color:#14181f}}
+
+/* 月別カレンダー */
+.cal-mh{font-weight:700;font-size:14px;margin:10px 0 3px}
+.cal-body{position:relative;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:0 0 4px;overflow:hidden}
+.cal-ruler{display:grid;font-size:10px;color:var(--mute);border-bottom:1px solid var(--line);height:16px}
+.cal-ruler span{padding-left:1px}
+.cal-band{position:absolute;top:0;bottom:0;background:color-mix(in srgb,var(--warn) 22%,transparent);border-left:1px solid var(--warn);border-right:1px solid var(--warn);pointer-events:none}
+.cal-grp{font-size:10px;color:var(--mute);padding:3px 4px 0;font-weight:700}
+.cal-row{display:grid;height:20px;margin-top:3px}
+.cal-bar{height:18px;border:1.5px solid;border-radius:4px;position:relative;min-width:6px}
+.cal-bar.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 30%,transparent)}
+.cal-bar.tent{border-color:var(--tent);background:color-mix(in srgb,var(--tent) 30%,transparent)}
+.cal-bar.think{border-color:var(--think);border-style:dashed;background:color-mix(in srgb,var(--think) 22%,transparent)}
+.cal-bar.cand{border-color:var(--none);border-style:dashed;background:color-mix(in srgb,var(--none) 12%,transparent)}
+.cal-bar.ref{border-color:var(--none);border-style:dotted}
+.cal-bar.skip{border-color:var(--none);opacity:.55;background:repeating-linear-gradient(45deg,transparent 0 3px,var(--line) 3px 5px)}
+.cal-bar.go{border-color:var(--ok);border-width:2.5px;background:color-mix(in srgb,var(--ok) 45%,transparent)}
+.cal-bar.tog{cursor:pointer}
+.cal-bar.tog:focus-visible{outline:2px solid var(--tent);outline-offset:1px}
+.cal-bar.hit{border-style:dotted;border-color:var(--warn);box-shadow:0 0 0 1px var(--warn)}
+.cal-bar b{position:absolute;top:0;line-height:15px;font-size:11px;font-weight:600;white-space:nowrap;padding:0 3px;text-shadow:0 0 3px var(--card),0 0 3px var(--card)}
+.cal-bar b.l{left:0}.cal-bar b.r{right:0}
+.cal-none{color:var(--mute);font-size:12px}
+
+/* 一覧 */
+.tw{overflow-x:auto}
+table.dec td:first-child{font-weight:700;width:5.5em}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);font-size:13px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mute);font-weight:600;white-space:nowrap}
+td.d{white-space:nowrap;font-variant-numeric:tabular-nums}
+tr.mo td{background:var(--bg);font-weight:700;font-size:12px;color:var(--mute);padding:4px 9px}
+.st{display:inline-block;font-size:11px;font-weight:700;padding:0 7px;border-radius:9px;border:1.5px solid;white-space:nowrap}
+.st.ok{color:var(--ok);border-color:var(--ok)}
+.st.tent{color:var(--tent);border-color:var(--tent)}
+.st.think{color:var(--think);border-color:var(--think)}
+.st.cand{color:var(--mute);border-color:var(--none);border-style:dashed}
+.st.ref{color:var(--mute);border-color:var(--none);border-style:dotted}
+.st.skip{color:var(--mute);border-color:var(--line);text-decoration:line-through}
+tr.isskip td:nth-child(2){opacity:.6}
+.ln{font-size:11px;color:var(--mute)}
+.pa{font-size:10px;font-weight:700;color:var(--tent);border:1px solid var(--tent);border-radius:3px;padding:0 3px;margin-left:4px;vertical-align:1px}
+.mainb{font-size:10px;font-weight:700;color:#fff;background:var(--ok);border-radius:3px;padding:0 4px;margin-left:4px;vertical-align:1px}
+@media (prefers-color-scheme:dark){.mainb{color:#14181f}}
+tr.ismain td{background:color-mix(in srgb,var(--tent) 8%,var(--card))}
+.cal-bar.main{border-width:2.5px;height:20px}
+.cal-bar.main b{font-weight:800;line-height:16px}
+.sum{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:0 0 8px;font-size:13px}
+@media (min-width:700px){.sum{position:sticky;top:0;z-index:5}}
+.sum ul{margin:4px 0 0;padding-left:18px}
+.rs{font:inherit;font-size:12px;padding:2px 10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+button.go{white-space:nowrap;flex-shrink:0;font:inherit;font-size:12px;font-weight:700;padding:1px 10px;border-radius:12px;border:1.5px dashed var(--think);background:transparent;color:var(--think);cursor:pointer}
+button.go[aria-pressed=true]{border-style:solid;border-color:var(--ok);background:var(--ok);color:#fff}
+.stl{font-size:10px;color:var(--mute);margin-top:2px}
+.thk{display:grid;gap:8px;margin:0 0 6px}
+.tk{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--think);border-radius:8px;padding:9px 12px}
+.tk .t{font-weight:700}
+.tk .w{font-size:13px;color:var(--mute)}
+.tk .m{font-size:13px;margin-top:2px}
+.wb{font-size:10px;font-weight:700;color:var(--think);border:1px solid var(--think);border-radius:3px;padding:0 4px;margin-left:4px;vertical-align:1px}
+.hitnote{color:var(--warn)}
+.sm{color:var(--mute);font-size:12px;margin-top:2px}
+td:nth-child(3){white-space:nowrap}
+ul{margin:4px 0 0;padding-left:20px}
+li{margin:3px 0}
+</style>
+</head>
+<body>
+<main>
+<h1>村上 視察予定 2026-10 〜 2027-12</h1>
+<p class="sub">個人用。更新日 2026-10-03。海外の日程は <a href="physical_ai_events_overview.html">Physical AI俯瞰資料</a>（2026-09-23時点）のデータ。※を付けたものは検索結果の記載だけで、主催者の公式ページでは確認していない。</p>
+
+<p class="sub"><b>2027年のメインは automatica（6/22–25、Munich）。</b>前の週の RoboCup（6/15–21、Nuremberg）と続けて回る。</p>
+<h2>今の判断（2026-10-04）</h2>
+<table class="dec">
+<thead><tr><th>時期</th><th>出張</th></tr></thead>
+<tbody>
+<tr><td>2026年10月</td><td>TechEx Europe、EuroBLECH<div class="sm">Amsterdam → Hannover、10/19–23（予定どおり）</div></td></tr>
+<tr><td>2027年3月</td><td>LogiMAT<div class="sm">Stuttgart、出張 3/15–20（会期 3/16–18）</div></td></tr>
+<tr><td>5月</td><td>Automate<div class="sm">Las Vegas、5/10–13</div></td></tr>
+<tr><td>5月</td><td>ICRA<div class="sm">Seoul、5/24–28</div></td></tr>
+<tr><td>6月</td><td><b>RoboCup ＋ automatica（メイン）</b><div class="sm">Nuremberg → Munich、6/15–25</div></td></tr>
+<tr><td>9月</td><td>ITMA<div class="sm">Hannover、9/16–22のうち前半（9/16–19）か後半（9/20–22）。どちらかは未定</div></td></tr>
+<tr><td>11月</td><td>SPS<div class="sm">Nuremberg、11/23–25</div></td></tr>
+<tr><td>11/30–12/3</td><td>SIGGRAPH Asia（国内）<div class="sm">Tokyo。行く方向</div></td></tr>
+</tbody></table>
+<p class="meta">検討中は WRC 2027（Beijing、8/18開幕）だけ。見送りは下の「決めること」に一覧。</p>
+
+<h2>検討したいもの</h2>
+<p class="meta">「未定」を押すと「行く」になり、下のカレンダーに反映される。</p>
+<div class="thk" id="think"></div>
+<div class="bar">
+<span><i class="sw ok"></i>確定</span>
+<span><i class="sw tent"></i>想定</span>
+<span><i class="sw think"></i>検討中（悩み中）</span>
+<span><i class="sw cand"></i>候補</span>
+<span><i class="sw ref"></i>資料（現地には行かず追う）</span>
+<span><i class="sw skip"></i>見送り</span>
+<span><i class="sw go"></i>「行く」にした</span>
+<span><i class="sw hit"></i>行く予定どうしが重なる</span>
+<span><b class="pa" style="margin:0">H/P</b> Humanoid / Physical AI</span>
+</div>
+<div class="chips" id="chips" role="group" aria-label="絞り込み">
+<button data-f="all" aria-pressed="true">すべて</button>
+<button data-f="o" aria-pressed="false">海外</button>
+<button data-f="d" aria-pressed="false">国内</button>
+<button data-f="pa" aria-pressed="false">Humanoid / Physical AI</button>
+</div>
+
+<h2>月別カレンダー（判断用）</h2>
+<p class="meta">「検討中」「候補」のバー（または一覧の「未定」ボタン）を押すと「行く」になり、重なりと出張の間隔がその場で更新される。選んだ内容はこのブラウザに保存される。</p>
+<div class="sum" id="sum"></div>
+<p class="meta"><button id="reset" type="button" class="rs">「行く」をすべて外す</button></p>
+<div id="cal"></div>
+
+<h2>一覧</h2>
+<div class="tw"><table>
+<thead><tr><th>日程</th><th>イベント</th><th>扱い</th></tr></thead>
+<tbody id="list"></tbody>
+</table></div>
+
+<h2>定点観測</h2>
+<p class="meta"><b>テーマ：Industrial AI の現実性</b>（Physical AI が工場・加工の現場でどこまで実用になっているか）。商品ではなく、現場での使われ方と導入の現実を見る。</p>
+<ul>
+<li>automatica（6/22–25、メイン）、Automate（5/10–13）、SPS 2027（11/23–25、Nuremberg）。EMO Milano（10/4–9）は時期の都合で見送り</li>
+<li>IMTS は2026（9/14–19）が終了済み。廣瀬さんが参加しているので所感を聞く。次は IMTS 2028（9/11–16）</li>
+<li>Hannover Messe 2027 はこのテーマに合うが、会議の都合で見送り</li>
+</ul>
+<p class="meta"><b>Humanoid</b>：Physical AI の形態の1つで、話題性がある。Industrial AI の現実性と並べて見る（一覧の「H/P」が Humanoid / Physical AI のイベント）。</p>
+<ul>
+<li>Humanoid Robotics Summit Europe 2027（日程未発表）、Advanced Humanoid Forum（1/20–21、見送り）、Humanoids 2026（12/6–9、見送り）、ヒューマノイドロボットEXPO（4/21–23、国内）、ICRA 2027（5/24–28）、WRC 2027（8/18開幕、Beijing）、World Humanoid Robot Games（ロボット運動会、2027は日程未発表）</li>
+</ul>
+<p class="meta"><b>講演</b></p>
+<ul>
+<li>ICRA 2027 の基調講演（5/24–28、Seoul）：講演者は未発表。公式サイト <a href="https://2027.ieee-icra.org/">2027.ieee-icra.org</a> の発表待ち。2026年に参加した分と並べて見る</li>
+</ul>
+
+<h2>日程が決まっていないもの</h2>
+<p class="meta">決まるまで未定のままにしておく。</p>
+<ul>
+<li>海外：TechEx Europe 2027（Amsterdam、10月中旬の見込みで公式の発表なし。ITMA・SPS・World Summit AI などとつながるか見る）、Humanoid Robotics Summit Europe 2027（2026は参加）、World Summit AI 2027（Amsterdam、10月予定。10/6–7とする情報サイトもあるが公式の発表なし。AI全般の広い会議で、Physical AIは約10トラックの1つ。適合は低〜中）、World Humanoid Robot Games 2027（2026は8/22–26、Beijing。ロボット運動会）、MACHINA Summit 2027、THE Physical AI Expo London 2027、GEIA Europe 2027、Physical AI Summit Munich 2027</li>
+<li>工作機械：IMTS は偶数年開催で、2026（9/14–19、Chicago）は終了済み（廣瀬さんが参加）。次は IMTS 2028（9/11–16）。2027年の EMO Milano（10/4–9）は、時期の都合で見送り</li>
+<li>国内：iREX 2027、RSJ 2027、JSAI 2027、国際物流総合展 2027（東京）、JIMTOF 2028</li>
+</ul>
+
+<h2>決めること</h2>
+<p class="meta">想定：LogiMAT（3月）、Automate（5月）、ICRA（5月）、RoboCup → automatica（6月）、SPS（11月）、SIGGRAPH Asia（国内、11/30–12/3）。ITMA（9月）は前半か後半かが未定。</p>
+<ul>
+<li>ITMA（9/16–22）：前半（9/16–19）か後半（9/20–22）か。Fraunhofer 見学を前後に足すか</li>
+<li>Automate（5/10–13）と ICRA（5/24–28）は間隔10日。続けて北米 → 韓国になる</li>
+<li>SPS（11/23–25）：行く予定。2026に東さんが参加するので、所感は11月末に聞く</li>
+<li>国の偏り：ドイツが4回（LogiMAT、RoboCup/automatica、ITMA、SPS）。北米1回、韓国1回。中国は2025年11月に企業視察を実施済みだが、2026〜27の計画はなし。WRC 2027（8/18開幕、Beijing）を足すか</li>
+<li>TechEx（Physical AI Expo、TechEx Europe）：ゴールドパスが無料なので、基本は無料で入れる。他の出張とつながるときだけ行く。今は London（2/3–4）も San Jose（6/16–17）もつながらない</li>
+<li>見送り：EMO Milano（時期）、RSS、ProMat（事業部の所感を聞く）、GTC（LogiMATと同じ週で、オンラインでも追えない）、Robotics Summit & Expo、IROS、XPONENTIAL、JEC World、Humanoids 2026、Advanced Humanoid Forum、3月の国内</li>
+<li>俯瞰資料側の状態は変えていない（ICRA は「参考情報」のまま、RoboCup は行が無い）</li>
+</ul>
+
+<h2>年別のまとめ（2024〜2027）</h2>
+<p class="meta">履歴は村上さんの記載とリポジトリの出張ページ。開催地のうち Humanoid Summit（2025）は推定。ICNAP は夏が Naples、12月が Aachen、Fraunhofer IEM は Paderborn（村上さんの記載）。2027年は想定とITMA（検討中）の数。</p>
+<div class="tw"><table>
+<thead><tr><th>年</th><th>出張</th><th>主な行き先</th><th>傾向</th></tr></thead>
+<tbody>
+<tr><td class="d">2024</td><td>6回</td><td>Paris（JEC World）、Stuttgart（LogiMAT）、Naples（ICNAP サマー）、Aachen（ICNAP 12月）、Paderborn（Fraunhofer IME）、Shanghai（ITMA ASIA）</td><td class="sm">製造・材料・物流の展示会が中心。欧州5回、中国1回</td></tr>
+<tr><td class="d">2025</td><td>7回</td><td>Las Vegas（CES）、Singapore（GITEX ASIA）、TechEx North America と Humanoid Summit、ドイツ（Magdeburg・Dortmund・Stuttgart の Fraunhofer、Berlin、Hannover の EMO、Aachen の ICNAP）、<b>中国（11/16–21、蘇州・上海・深セン、ヒューマノイド6社を視察）</b></td><td class="sm">展示会にヒューマノイドが入り、中国の企業視察を実施</td></tr>
+<tr><td class="d">2026</td><td>6回</td><td>Taiwan・KL（SEMICON SEA）、Boston（RSE）、Vienna（ICRA）、Sydney（RSS）、Stuttgart（HRS Europe）、Amsterdam・Hannover（TechEx、EuroBLECH）</td><td class="sm">ロボット学会と Physical AI が中心。欧州・北米・アジア・豪州に分かれる</td></tr>
+<tr><td class="d">2027<br><span class="sm">計画</span></td><td>6回</td><td>Stuttgart（LogiMAT）、Las Vegas（Automate）、Seoul（ICRA）、ドイツ（RoboCup → automatica、ITMA、SPS）。国内は SIGGRAPH Asia</td><td class="sm">ロボット（Automate、ICRA、automatica）と製造展（LogiMAT、ITMA、SPS）が半々。ドイツが4回</td></tr>
+</tbody></table></div>
+<ul>
+<li>回数は毎年6〜7回で安定。2027年の計画は過去と同じ負担の範囲</li>
+<li>ドイツは毎年3〜4回。2027年だけの偏りではない</li>
+<li>中国は2024（Shanghai）と2025（企業視察）に入っていたが、2026〜27の計画にはない。WRC 2027（8/18開幕）が入口になる</li>
+<li>再訪になるのは LogiMAT、ITMA、ICRA。新しく見るのは Automate、automatica、SPS</li>
+<li>ICNAP（2024年に2回、2025年12月）は、2026年12月と2027年の計画に入っていない</li>
+</ul>
+
+<h2>過去の参加履歴</h2>
+<p class="meta">村上さん本人の記載。同じイベントの再訪が分かるように載せる。</p>
+<div class="tw"><table>
+<thead><tr><th>年月</th><th>イベント</th><th>2027の対応</th></tr></thead>
+<tbody>
+<tr><td class="d">2024-02</td><td>JEC World</td><td>JEC World 2027（3/2–4、Paris、見送り）</td></tr>
+<tr><td class="d">2024-03</td><td>LogiMAT</td><td>LogiMAT 2027</td></tr>
+<tr><td class="d">2024-06</td><td>ICNAP サマー（Naples）</td><td></td></tr>
+<tr><td class="d">2024-10</td><td>ITMA ASIA</td><td>ITMA 2027（9/16–22、Hannover）</td></tr>
+<tr><td class="d">2024-11</td><td>Fraunhofer IEM（Paderborn）</td><td></td></tr>
+<tr><td class="d">2024-12</td><td>ICNAP（Aachen）</td><td></td></tr>
+<tr><td class="d">2025-01</td><td>CES</td><td>CES 2027（1/6–9、田原・公募2名）</td></tr>
+<tr><td class="d">2025-04</td><td>GITEX ASIA</td><td></td></tr>
+<tr><td class="d">2025-05</td><td>TechEx North America、Humanoid Summit</td><td>Physical AI Expo North America 2027（6/16–17）</td></tr>
+<tr><td class="d">2025-08</td><td>Fraunhofer IFA、IPA、IML</td><td></td></tr>
+<tr><td class="d">2025-09</td><td>EMO</td><td>EMO Milano 2027（10/4–9、見送り）</td></tr>
+<tr><td class="d">2025-11</td><td>中国ヒューマノイド視察（蘇州・上海・深セン、6社）</td><td>WRC 2027（8/18開幕、検討中）</td></tr>
+<tr><td class="d">2025-12</td><td>ICNAP（Aachen）</td><td></td></tr>
+<tr><td class="d">2026-05</td><td>SEMICON SEA、Robotics Summit &amp; Expo、ICRA</td><td>ICRA 2027、RSE 2027（6/2–3）</td></tr>
+<tr><td class="d">2026-07</td><td>RSS</td><td>RSS 2027（見送り）</td></tr>
+<tr><td class="d">2026-09</td><td>Humanoid Robots Summit</td><td>2027は日程未発表</td></tr>
+<tr><td class="d">2026-10</td><td>EuroBLECH、TechEx Europe</td><td>（予定）</td></tr>
+</tbody></table></div>
+</main>
+
+<script>
+(function(){
+/* l: o=海外 d=国内 / st: ok確定 tent想定 think検討中 cand候補 ref資料 skip見送り / pa: Humanoid・Physical AI / w: 検索結果のみ */
+var E=[
+{l:"o",st:"ok",  a:"2026-10-19",b:"2026-10-20",n:"TechEx Europe",p:"Amsterdam"},
+{l:"o",st:"ok",  a:"2026-10-20",b:"2026-10-23",n:"EuroBLECH",p:"Hannover",m:"村上・金築・美馬",u:"202610_Europe_TechEx_EuroBLECH/euroblech.html"},
+{l:"d",st:"cand",a:"2026-10-26",b:"2026-10-31",n:"JIMTOF 2026",p:"Tokyo Big Sight",m:"工作機械。EuroBLECHの3日後"},
+{l:"d",st:"cand",a:"2026-11-07",b:"2026-11-08",n:"第69回 自動制御連合講演会",p:"東京都市大学 世田谷",m:"制御。土日",w:1},
+{l:"d",st:"cand",a:"2026-12-02",b:"2026-12-04",n:"RoboNext 2026",p:"INTEX Osaka",m:"ロボット"},
+{l:"o",st:"skip", a:"2026-12-06",b:"2026-12-09",n:"Humanoids 2026",p:"Santa Clara",pa:1,m:"行かない（12月は行かない想定）"},
+{l:"d",st:"cand",a:"2026-12-08",b:"2026-12-10",n:"SI2026（SICE システムインテグレーション部門講演会）",p:"グランキューブ大阪",m:"制御・ロボット",w:1},
+{l:"d",st:"cand",a:"2026-12-09",b:"2026-12-11",n:"SEMICON Japan 2026",p:"Tokyo Big Sight",m:"半導体"},
+{l:"o",st:"skip", a:"2027-01-20",b:"2027-01-21",n:"Advanced Humanoid Forum 2027",p:"Munich",pa:1,m:"行かない。初開催で産業導入が主題（登壇51人）"},
+{l:"o",st:"skip",a:"2027-02-03",b:"2027-02-04",n:"Physical AI Expo Global 2027（TechEx）",p:"London",pa:1,m:"TechExはゴールドパスが無料なので、他とつながるときだけ行く。今はつながる予定なし"},
+{l:"d",st:"cand",a:"2027-02-17",b:"2027-02-19",n:"ロボデックス 東京",p:"Tokyo Big Sight",pa:1,m:"人型ロボット・フィジカルAIを含む",w:1},
+{l:"d",st:"cand",a:"2027-02-18",b:"2027-02-19",n:"フィジカルAI・ロボット展",p:"東京国際フォーラム",pa:1,w:1},
+{l:"d",st:"cand",a:"2027-03-02",b:"2027-03-05",n:"第14回 制御部門マルチシンポジウム（MSCS 2027）",c:"MSCS 2027",p:"明治大学 駿河台（東京）",m:"制御。火〜金。発表の予定なし（参加のみ）。SICE ISCS 2027（3/2）は同じ週の催しとみられる（未確認）",u:"https://mscs2027.sice-ctrl.jp/",w:1},
+{l:"o",st:"skip",a:"2027-03-02",b:"2027-03-04",n:"JEC World 2027",p:"Paris",m:"複合材料。2024に参加。行かない"},
+{l:"o",st:"skip",a:"2027-03-14",b:"2027-03-18",n:"GTC 2027",p:"San Jose",pa:1,m:"見送り。LogiMATと同じ週で、オンラインでも追えない。Physical AI＆Roboticsを主題に含む",w:1},
+{l:"d",st:"skip",a:"2027-03-15",b:"2027-03-16",n:"ROBOMECH 2027",p:"鳥羽（三重）",m:"ロボット・メカトロ",w:1},
+{l:"o",st:"tent",a:"2027-03-15",b:"2027-03-20",n:"LogiMAT 2027",p:"Stuttgart",m:"出張 3/15–20（会期 3/16–18）。2024に参加。GTCと同じ週なのでGTCは見送り"},
+{l:"d",st:"skip",a:"2027-03-17",b:"2027-03-19",n:"SMART LOGISTICS Expo 2027",p:"Tokyo Big Sight",m:"物流",w:1},
+{l:"o",st:"skip",a:"2027-04-05",b:"2027-04-08",n:"Hannover Messe 2027",p:"Hannover",pa:1,m:"Physical AIの文脈では優位だが、会議の都合で難しい。部門枠は～2名"},
+{l:"o",st:"skip",a:"2027-04-19",b:"2027-04-21",n:"ProMat 2027",p:"Chicago",m:"見送り。事業部がAlphaBotを出展するので所感は事業部から。主催MHI：出展約1,100社、基調4本・セミナー約200（予定）。2025は人型（Agility Digit）やAIピッキングが出ていた",w:1},
+{l:"d",st:"cand",a:"2027-04-21",b:"2027-04-23",n:"NexTech Week 春（AI・人工知能EXPO／フィジカルAI EXPO／ヒューマノイドロボットEXPO）",p:"Tokyo Big Sight",pa:1},
+{l:"d",st:"cand",a:"2027-04-22",b:"2027-04-23",n:"中部 国際物流総合展 INNOVATION EXPO 2027",p:"ポートメッセなごや",m:"物流",w:1},
+{l:"o",st:"tent",a:"2027-05-10",b:"2027-05-13",n:"Automate 2027",p:"Las Vegas",pa:1,m:"初参加。Humanoid Robot Forum（5/11–12・午後、有料）とNVIDIA協賛のヒューマノイド展示。2026実績：登録5万人超、Industrial AI等のセッション140件超。ICRAの2週間前。部門枠2名",w:1},
+{l:"o",st:"skip",a:"2027-05-17",b:"2027-05-20",n:"XPONENTIAL 2027（AUVSI）",c:"XPONENTIAL",p:"Miami Beach",m:"無人機・自律システム・ロボットの展示会。2026はDetroitで約1万人・出展600社超、実装と規模化が主題。防衛・UAV中心。俯瞰資料に行なし。行かない",w:1},
+{l:"d",st:"cand",a:"2027-05-12",b:"2027-05-14",n:"ロボデックス 大阪",p:"インテックス大阪",pa:1,w:1},
+{l:"o",st:"tent",a:"2027-05-24",b:"2027-05-28",n:"ICRA 2027",p:"Seoul",pa:1,watch:1,m:"基調講演を定点観測（講演者は未発表）。2026も参加"},
+{l:"o",st:"skip",a:"2027-06-02",b:"2027-06-03",n:"Robotics Summit & Expo 2027",p:"Boston",pa:1,m:"見送り。2026に参加し、実践的な話題が多かった。2027はAutomate（初参加）を優先"},
+{l:"o",st:"tent",a:"2027-06-15",b:"2027-06-21",n:"RoboCup 2027（30周年）",p:"Nuremberg",m:"automaticaの前に続けて。ドイツ開催",w:1},
+{l:"o",st:"tent",a:"2027-06-22",b:"2027-06-25",n:"automatica 2027",c:"automatica（メイン）",p:"Munich",main:1,m:"メイン。主題にPhysical AIとヒューマノイド（公式）。出展800社超・ロボット1,100台超（予定）。RoboCupの翌日から。部門枠1名",w:1},
+{l:"o",st:"ref", a:"2027-06-16",b:"2027-06-17",n:"Physical AI Expo North America 2027（TechEx）",c:"PAE North America",p:"San Jose",pa:1,m:"TechExは他とつながるときだけ。RoboCup〜automaticaと同時期で、つながらない。2025に参加"},
+{l:"o",st:"skip",a:"2027-07-04",b:"2027-07-13",n:"RSS 2027",p:"Athens",pa:1,m:"見送り。出張 7/4–13（会期 7/6–11）。2026に参加"},
+{l:"o",st:"think",a:"2027-09-16",b:"2027-09-19",n:"ITMA 2027 前半",c:"ITMA 前半",p:"Hannover",m:"前半か後半のどちらか1回。繊維機械。会期は9/16–22で、前半を9/16–19と仮置き。ITMA ASIAに2024参加"},
+{l:"o",st:"think",a:"2027-09-20",b:"2027-09-22",n:"ITMA 2027 後半",c:"ITMA 後半",p:"Hannover",m:"前半か後半のどちらか1回。後半を9/20–22と仮置き。"},
+{l:"d",st:"cand",a:"2027-09-08",b:"2027-09-10",n:"ロボデックス 秋",p:"幕張メッセ",pa:1,w:1},
+{l:"o",st:"think",a:"2027-08-18",b:"2027-08-18",r:"8/18〜",nd:1,n:"World Robot Conference 2027",c:"WRC 2027",p:"Beijing",pa:1,m:"開幕のみ公式発表で確認。終了日・会場は未発表（2026は8/19–23）。ヒューマノイド・産業・標準化。2026は保木・渡邊・古谷が参加"},
+{l:"o",st:"skip",a:"2027-09-26",b:"2027-10-01",n:"IROS 2027",p:"Florence",pa:1,m:"行かない。研究側はICRAで押さえる。必要なら論文・基調講演を後から見る"},
+{l:"o",st:"skip",a:"2027-10-04",b:"2027-10-09",n:"EMO Milano 2027",p:"Milan",m:"時期が悪いため見送り。EMO 2025に参加"},
+{l:"o",st:"tent",a:"2027-11-23",b:"2027-11-25",n:"SPS 2027",p:"Nuremberg",m:"FA・産業制御・Industrial AI。2026（11/24–26）は東が参加予定なので、所感を聞いてから決める。部門枠～2名"},
+{l:"d",st:"tent",a:"2027-11-30",b:"2027-12-03",n:"SIGGRAPH Asia 2027",p:"Tokyo International Forum",m:"CG・AI。国内なので行く方向。プログラム発表後にPhysical AI／Industrial AI関連を確認"}
+];
+var ST={ok:"確定",tent:"想定",think:"検討中",cand:"候補",ref:"資料",skip:"見送り"};
+var DAY=864e5,KEY="murakami-plan-sel-v1";
+function U(s){var a=s.split("-");return Date.UTC(+a[0],+a[1]-1,+a[2])}
+E.forEach(function(e,i){e.i=i;e.A=U(e.a);e.B=U(e.b);e.tog=(e.st=="think"||e.st=="cand")});
+var sel={};
+try{sel=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(x){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(sel))}catch(x){}}
+function go(e){return e.st=="ok"||e.st=="tent"||(e.tog&&!!sel[e.n])}
+function ov(e,f){return e.A<=f.B&&f.A<=e.B}
+var filter="all";
+function show(e){return filter=="all"||(filter=="pa"?e.pa:e.l==filter)}
+function md(s){var a=s.split("-");return (+a[1])+"/"+(+a[2])}
+function range(e){if(e.r)return e.r;if(e.a==e.b)return md(e.a);var same=e.a.slice(0,7)==e.b.slice(0,7);return md(e.a)+"–"+(same?(+e.b.slice(8)):md(e.b))}
+function short(e){return e.c||e.n.replace(/（.*$/,"")}
+function days(e){return Math.round((e.B-e.A)/DAY)+1}
+function dd(e){return e.nd?"":" ・ "+days(e)+"日"}
+
+var conflicts,warn;
+function compute(){
+  var plan=E.filter(go);
+  conflicts=[];
+  for(var x=0;x<plan.length;x++)for(var y=x+1;y<plan.length;y++)if(ov(plan[x],plan[y])&&!(plan[x].st=="ok"&&plan[y].st=="ok"))conflicts.push([plan[x],plan[y]]);
+  E.forEach(function(e){
+    e.hits=[];
+    if(e.st=="skip"||e.st=="ref")return;
+    plan.forEach(function(f){if(f!==e&&ov(e,f))e.hits.push(f)});
+  });
+}
+
+function drawSummary(){
+  var box=document.getElementById("sum"),plan=E.filter(go).filter(function(e){return e.l=="o"}).sort(function(a,b){return a.A-b.A});
+  var u=0,end=-1;plan.forEach(function(e){var s=Math.max(e.A,end+DAY);if(e.B>=s)u+=Math.round((e.B-s)/DAY)+1;end=Math.max(end,e.B)});
+  var h='<div class="sum-main"><b>海外 '+plan.length+'件・延べ'+u+'日</b>（確定・想定＋「行く」にしたもの）</div>';
+  var cf=conflicts.map(function(c){return '<li class="hitnote">日程が重なる：'+short(c[0])+' × '+short(c[1])+'</li>'}).join("");
+  var gaps=[];
+  for(var k=1;k<plan.length;k++){var g=Math.round((plan[k].A-plan[k-1].B)/DAY)-1;if(g>=0&&g<=14)gaps.push('<li>'+short(plan[k-1])+' → '+short(plan[k])+'：'+(g<=3?'つながる（間'+g+'日）':'間隔'+g+'日')+'</li>')}
+  h+='<ul>'+(cf||'<li>重なりなし</li>')+gaps.join("")+'</ul>';
+  box.innerHTML=h;
+}
+
+function toggle(e){if(!e.tog)return;if(sel[e.n])delete sel[e.n];else sel[e.n]=1;save();draw()}
+
+function drawCal(){
+  var root=document.getElementById("cal");root.innerHTML="";
+  var list=E.filter(show),y=2026,m=9;
+  for(var k=0;k<15;k++){
+    var n=new Date(Date.UTC(y,m+1,0)).getUTCDate(),m0=Date.UTC(y,m,1),m1=Date.UTC(y,m,n);
+    var ev=list.filter(function(e){return e.A<=m1&&e.B>=m0});
+    var h=document.createElement("div");h.className="cal-mh";h.textContent=y+"年"+(m+1)+"月";root.appendChild(h);
+    if(!ev.length){var p=document.createElement("div");p.className="cal-none";p.textContent="予定なし";root.appendChild(p)}
+    else{
+      var body=document.createElement("div");body.className="cal-body";
+      var ru=document.createElement("div");ru.className="cal-ruler";ru.style.gridTemplateColumns="repeat("+n+",1fr)";
+      for(var d=1;d<=n;d++){var sp=document.createElement("span");if(d==1||d%5==0)sp.textContent=d;ru.appendChild(sp)}
+      body.appendChild(ru);
+      var run=null;
+      for(var d=1;d<=n;d++){
+        var t=m0+(d-1)*DAY;
+        var hot=conflicts.some(function(c){return c[0].A<=t&&c[0].B>=t&&c[1].A<=t&&c[1].B>=t});
+        if(hot){
+          if(run&&run.e==d-1){run.e=d;run.el.style.width=(d-run.s+1)/n*100+"%"}
+          else{var bd=document.createElement("div");bd.className="cal-band";bd.style.left=(d-1)/n*100+"%";bd.style.width=100/n+"%";body.appendChild(bd);run={s:d,e:d,el:bd}}
+        }
+      }
+      [["o","海外"],["d","国内"]].forEach(function(g){
+        var rows=ev.filter(function(e){return e.l==g[0]});
+        if(!rows.length)return;
+        var gl=document.createElement("div");gl.className="cal-grp";gl.textContent=g[1];body.appendChild(gl);
+        rows.forEach(function(e){
+          var s=Math.max(1,Math.round((e.A-m0)/DAY)+1),en=Math.min(n,Math.round((e.B-m0)/DAY)+1);
+          var row=document.createElement("div");row.className="cal-row";row.style.gridTemplateColumns="repeat("+n+",1fr)";
+          var picked=e.tog&&sel[e.n];
+          var bar=document.createElement("div");bar.className="cal-bar "+(picked?"go":e.st)+(e.hits.length&&!go(e)?" hit":"")+(e.main?" main":"")+(e.tog?" tog":"");
+          bar.style.gridColumn=s+" / "+(en+1);
+          if(e.tog){bar.setAttribute("role","button");bar.tabIndex=0;bar.setAttribute("aria-pressed",!!picked);bar.addEventListener("click",function(){toggle(e)});bar.addEventListener("keydown",function(ev){if(ev.key=="Enter"||ev.key==" "){ev.preventDefault();toggle(e)}})}
+          var lb=document.createElement("b");lb.textContent=short(e)+(e.st=="think"&&!picked?"？":"");lb.className=s>n/2?"r":"l";
+          bar.appendChild(lb);row.appendChild(bar);body.appendChild(row);
+        });
+      });
+      root.appendChild(body);
+    }
+    m++;if(m==12){m=0;y++}
+  }
+}
+
+function drawList(){
+  var tb=document.getElementById("list");tb.innerHTML="";
+  var last="";
+  E.filter(show).sort(function(a,b){return a.A-b.A||a.B-b.B}).forEach(function(e){
+    var ym=e.a.slice(0,4)+"年"+(+e.a.slice(5,7))+"月";
+    if(ym!=last){last=ym;var r=document.createElement("tr");r.className="mo";r.innerHTML='<td colspan="3">'+ym+'</td>';tb.appendChild(r)}
+    var tr=document.createElement("tr");if(e.main)tr.className="ismain";if(e.st=="skip")tr.className="isskip";
+    var name=e.u?'<a href="'+e.u+'">'+e.n+'</a>':e.n;
+    var memo=[];
+    if(e.m)memo.push(e.m);
+    if(e.hits.length&&!go(e))memo.push('<span class="hitnote">行くと重なる：'+e.hits.map(short).join("、")+'</span>');
+    tr.innerHTML='<td class="d">'+range(e)+'</td>'+
+      '<td>'+name+(e.w?"※":"")+(e.pa?'<span class="pa">H/P</span>':"")+(e.main?'<span class="mainb">メイン</span>':"")+(e.watch?'<span class="wb">定点</span>':"")+
+      '<div class="ln">'+(e.l=="o"?"海外":"国内")+' ・ '+e.p+dd(e)+'</div>'+
+      (memo.length?'<div class="sm">'+memo.join("<br>")+'</div>':"")+'</td><td class="sc"></td>';
+    var sc=tr.lastChild;
+    if(e.tog){
+      var bt=document.createElement("button");bt.className="go";bt.type="button";
+      var on=!!sel[e.n];bt.setAttribute("aria-pressed",on);bt.textContent=on?"行く":"未定";
+      var tag=document.createElement("div");tag.className="stl";tag.textContent=ST[e.st];
+      bt.addEventListener("click",function(){toggle(e)});
+      sc.appendChild(bt);sc.appendChild(tag);
+    }else sc.innerHTML='<span class="st '+e.st+'">'+ST[e.st]+'</span>';
+    tb.appendChild(tr);
+  });
+}
+
+function drawThink(){
+  var box=document.getElementById("think");box.innerHTML="";
+  E.filter(function(e){return e.st=="think"}).sort(function(a,b){return a.A-b.A}).forEach(function(e){
+    var d=document.createElement("div");d.className="tk";
+    var on=!!sel[e.n];
+    var info=document.createElement("div");
+    info.innerHTML='<div class="t">'+e.n+(e.pa?'<span class="pa">H/P</span>':"")+'</div><div class="w">'+range(e)+(e.nd?'':'（'+days(e)+'日）')+' ・ '+e.p+'</div>'+
+      (e.m?'<div class="m">'+e.m+'</div>':"")+
+      (e.hits.length&&!on?'<div class="m hitnote">行くと重なる：'+e.hits.map(short).join("、")+'</div>':"");
+    var bt=document.createElement("button");bt.className="go";bt.type="button";bt.setAttribute("aria-pressed",on);bt.textContent=on?"行く":"未定";
+    bt.addEventListener("click",function(){toggle(e)});
+    d.appendChild(info);d.appendChild(bt);box.appendChild(d);
+  });
+}
+function draw(){compute();drawSummary();drawThink();drawCal();drawList()}
+document.getElementById("chips").addEventListener("click",function(ev){
+  var b=ev.target.closest("button");if(!b)return;
+  filter=b.dataset.f;
+  [].forEach.call(this.children,function(c){c.setAttribute("aria-pressed",c===b)});
+  draw();
+});
+document.getElementById("reset").addEventListener("click",function(){sel={};save();draw()});
+draw();
+})();
+</script>
+</body>
+</html>
