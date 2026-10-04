@@ -219,7 +219,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Kanazawa, Japan",
     "status": "参加済み",
     "assignment": "中島・高野",
-    "purpose": "ソフトロボティクス、触覚、柔軟機構、接触作業。Soft Roboticsカテゴリの代表実績だが、AI×Robotics全体では補完領域。"
+    "purpose": "国内開催。ソフトロボティクス、触覚、柔軟機構、接触作業。Soft Roboticsカテゴリの代表実績だが、AI×Robotics全体では補完領域。"
   },
   {
     "id": "20260413-modex-2026",
@@ -508,7 +508,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "福岡国際会議場, Fukuoka, Japan",
     "status": "不参加",
     "assignment": "—",
-    "purpose": "国内ロボティクス・メカトロニクス研究、若手発表・育成候補。不参加。"
+    "purpose": "国内開催。国内ロボティクス・メカトロニクス研究、若手発表・育成候補。不参加。"
   },
   {
     "id": "20260706-icml-2026",
@@ -593,7 +593,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Okayama Convention Center, Okayama, Japan",
     "status": "参考情報",
     "assignment": "—",
-    "purpose": "Flexible Automation、製造システム、メカトロ、AI/IoT活用 参加判断対象ではなく、技術・市場動向の参考情報として扱う。"
+    "purpose": "国内開催。Flexible Automation、製造システム、メカトロ、AI/IoT活用 参加判断対象ではなく、技術・市場動向の参考情報として扱う。"
   },
   {
     "id": "20260719-siggraph-2026",
@@ -729,7 +729,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "長良川国際会議場, Gifu, Japan",
     "status": "参考情報",
     "assignment": "—",
-    "purpose": "機械力学、計測制御、振動・ダイナミクス、モーション基盤の国内参考情報"
+    "purpose": "国内開催。機械力学、計測制御、振動・ダイナミクス、モーション基盤の国内参考情報"
   },
   {
     "id": "20260901-rsj-2026",
@@ -746,7 +746,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Kanazawa University, Kanazawa, Japan",
     "status": "参考情報",
     "assignment": "—",
-    "purpose": "国内ロボティクス最大の学術講演会（第44回）。国内大学・企業の研究動向をまとめて確認できる。渡航を伴わない。",
+    "purpose": "国内開催。国内ロボティクス最大の学術講演会（第44回）。国内大学・企業の研究動向をまとめて確認できる。",
     "sourceUrl": "https://ac.rsj-web.org/2026/",
     "verifiedAt": "2026-09-23"
   },
@@ -1060,7 +1060,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Tokyo Big Sight, Tokyo, Japan",
     "status": "参考情報",
     "assignment": "—",
-    "purpose": "工作機械、加工、計測、製造技術の国内大型展示会参考情報"
+    "purpose": "国内開催。工作機械、加工、計測、製造技術の国内大型展示会参考情報"
   },
   {
     "id": "20261101-informs-annual-meeting-2026",
@@ -1249,7 +1249,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "INTEX Osaka, Osaka, Japan",
     "status": "参考情報",
     "assignment": "—",
-    "purpose": "日本ロボット工業会・日刊工業新聞社主催。iREXの中間年に2026年から新設された展示会。ロボット導入が進んでいない分野への適用提案が主題。渡航を伴わない。",
+    "purpose": "国内開催。日本ロボット工業会・日刊工業新聞社主催。iREXの中間年に2026年から新設された展示会。ロボット導入が進んでいない分野への適用提案が主題。",
     "sourceUrl": "https://robonext.nikkan.co.jp/",
     "verifiedAt": "2026-09-23"
   },
@@ -1335,8 +1335,8 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "展示会・見本市",
     "location": "Tokyo Big Sight, Tokyo, Japan",
     "status": "候補",
-    "assignment": "TBD",
-    "purpose": "国内開催（渡航を伴わない）。国内半導体製造装置・材料・先端パッケージング・検査計測"
+    "assignment": "—",
+    "purpose": "国内開催。国内半導体製造装置・材料・先端パッケージング・検査計測"
   },
   {
     "id": "20261215-cdc-2026",
@@ -1656,8 +1656,8 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "展示会・見本市",
     "location": "Tokyo Big Sight, Tokyo, Japan",
     "status": "候補",
-    "assignment": "TBD",
-    "purpose": "国内開催（渡航を伴わない）。RX Japan主催、NexTech Week春の6構成展の1つ。国内企業のPhysical AI導入動向を低コストで確認でき、海外イベントを選ぶ前の比較基準になる。 つながり：GEIA Asia（4/13–16）の帰国後に続けられる。",
+    "assignment": "—",
+    "purpose": "国内開催。RX Japan主催、NexTech Week春の6構成展の1つ。国内企業のPhysical AI導入動向を低コストで確認でき、海外イベントを選ぶ前の比較基準になる。 つながり：GEIA Asia（4/13–16）の帰国後に続けられる。",
     "sourceUrl": "https://www.nextech-week.jp/spring/ja-jp.html",
     "verifiedAt": "2026-09-23"
   },
@@ -2182,7 +2182,7 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Tokyo International Forum, Tokyo, Japan",
     "status": "参加予定",
     "assignment": "村上",
-    "purpose": "Computer Graphics、Simulation、Digital Twin、3D表現、生成表現。2027年は東京開催。",
+    "purpose": "国内開催。Computer Graphics、Simulation、Digital Twin、3D表現、生成表現。2027年は東京開催。",
     "sourceUrl": "https://asia.siggraph.org/2026/about-the-event/siggraph-asia-2027/",
     "verifiedAt": "2026-09-16"
   },
@@ -2282,9 +2282,9 @@ window.PHYSICAL_AI_EVENTS = [
     "businessFit": "★★★★★",
     "category": "International Exhibition / Market & Implementation",
     "handling": "2027候補：TBD",
-    "assignment": "TBD",
+    "assignment": "—",
     "location": "TBD",
-    "purpose": "国内開催（渡航を伴わない）。国内半導体装置・材料・プロセス。日程・場所はTBD"
+    "purpose": "国内開催。国内半導体装置・材料・プロセス。日程・場所はTBD"
   },
   {
     "id": "pending-corl-2027",
@@ -2384,9 +2384,9 @@ window.PHYSICAL_AI_EVENTS = [
     "businessFit": "★★★★☆",
     "category": "International Exhibition / Market & Implementation",
     "handling": "2027候補：12月上旬／日次TBD",
-    "assignment": "TBD",
+    "assignment": "—",
     "location": "Tokyo Big Sight, Tokyo, Japan",
-    "purpose": "日本ロボット工業会主催の国内最大のロボット展。隔年・奇数年開催。日次の発表後に5章へ移す。渡航を伴わない。",
+    "purpose": "国内開催。日本ロボット工業会主催の国内最大のロボット展。隔年・奇数年開催。日次の発表後に5章へ移す。",
     "sourceUrl": "https://irex.nikkan.co.jp/",
     "verifiedAt": "2026-09-23"
   },
