@@ -884,7 +884,7 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "Robotics / Physical AI本体",
     "type": "学会・専門会議",
     "location": "Pittsburgh, Pennsylvania, United States",
-    "status": "参加予定",
+    "status": "参加済み",
     "assignment": "酒井・羽山",
     "purpose": "知能ロボット・ロボットシステムの分野トップ会議。酒井・羽山が参加し、内容をR&D内で共有する予定。"
   },
