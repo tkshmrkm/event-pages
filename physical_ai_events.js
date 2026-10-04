@@ -1550,7 +1550,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "展示会・見本市",
     "location": "Messe Stuttgart, Stuttgart, Germany",
     "status": "2027計画",
-    "assignment": "～2名",
+    "assignment": "～2名＋村上（担当外）",
     "purpose": "物流・倉庫自動化"
   },
   {
@@ -1713,7 +1713,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "展示会・見本市",
     "location": "Las Vegas Convention Center, Las Vegas, NV, United States",
     "status": "2027計画",
-    "assignment": "2名",
+    "assignment": "2名＋村上（担当外）",
     "purpose": "北米最大級のロボット・自動化展示会。2027年はLas Vegas開催。部門予算化候補。"
   },
   {
@@ -1730,7 +1730,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "学会・専門会議",
     "location": "COEX, Seoul, Republic of Korea",
     "status": "参考情報",
-    "assignment": "—",
+    "assignment": "村上（担当外）",
     "purpose": "Robotics代表会議。部門の参加・予算計画には含めず、論文・発表と個別参加判断の参考情報として管理する。"
   },
   {
@@ -1844,6 +1844,25 @@ window.PHYSICAL_AI_EVENTS = [
     "verifiedAt": "2026-09-23"
   },
   {
+    "id": "20270617-robocup-2027",
+    "dateStatus": "confirmed",
+    "sortDate": "2027-06-17",
+    "year": 2027,
+    "dateLabel": "6月17–21日",
+    "name": "RoboCup 2027",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★☆☆☆",
+    "category": "Robotics / Physical AI本体",
+    "type": "技術カンファレンス・サミット",
+    "location": "Exhibition Centre Nuremberg, Nuremberg, Germany",
+    "status": "参考情報",
+    "assignment": "村上（担当外）",
+    "purpose": "ロボット競技会の世界大会。一般見学は6/17–20（日曜は決勝とFamily Day）、6/21は別チケットのRoboCup Symposium。翌日開幕のautomatica（6/22–25、Munich）へ続けて回れる。",
+    "sourceUrl": "https://wm.robocup.de/wm27/visit/visitors",
+    "verifiedAt": "2026-10-04"
+  },
+  {
     "id": "20270620-cvpr-2027",
     "dateStatus": "confirmed",
     "sortDate": "2027-06-20",
@@ -1895,7 +1914,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "展示会・見本市",
     "location": "Messe München, Munich, Germany",
     "status": "2027計画",
-    "assignment": "1名",
+    "assignment": "1名＋村上（担当外）",
     "purpose": "スマートオートメーション・ロボティクス"
   },
   {
@@ -2022,7 +2041,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "展示会・見本市",
     "location": "Hannover Exhibition Grounds, Hannover, Germany",
     "status": "2027計画",
-    "assignment": "前半：～2名／後半：～2名",
+    "assignment": "前半：～2名／後半：～2名。ほかに村上（担当外）が前半か後半のどちらかに参加",
     "purpose": "繊維機械・繊維製造。会期前半・後半で担当を分けて派遣する。"
   },
   {
@@ -2126,7 +2145,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "展示会・見本市",
     "location": "Exhibition Centre Nuremberg, Nuremberg, Germany",
     "status": "2027計画",
-    "assignment": "～2名",
+    "assignment": "～2名＋村上（担当外）",
     "purpose": "Smart Production Solutions。FA、PLC、産業制御、産業通信、ドライブ、センサ、Industrial AIを確認する基幹候補。"
   },
   {
@@ -2143,7 +2162,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "学会・専門会議",
     "location": "Tokyo International Forum, Tokyo, Japan",
     "status": "参考情報",
-    "assignment": "—",
+    "assignment": "村上（担当外）",
     "purpose": "Computer Graphics、Simulation、Digital Twin、3D表現、生成表現。2027年は東京開催。",
     "sourceUrl": "https://asia.siggraph.org/2026/about-the-event/siggraph-asia-2027/",
     "verifiedAt": "2026-09-16"
