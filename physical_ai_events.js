@@ -1782,8 +1782,8 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "Robotics / Physical AI本体",
     "type": "技術カンファレンス・サミット",
     "location": "Davos, Switzerland",
-    "status": "候補",
-    "assignment": "TBD",
+    "status": "参考情報",
+    "assignment": "—",
     "purpose": "Davos Congress主催。Robotics・Physical AI・実環境導入のカンファレンスに、展示とRobot City（実環境デモ）を組み合わせる。最終日の土曜は一般向けFamily Day。Robotics Summit & Expo（6/2–3、Boston）と会期が重なる。 つながり：London Tech Week（6/7–11、London）へ2日空けて続けられる。6月の欧州はL4DC（6/16–18）・AI for Good（6/21–24）・automatica（6/22–25）まで並ぶが、1回の滞在では3週間を超える。RSE（6/2–3、Boston）とは会期が重なる。",
     "sourceUrl": "https://davostechsummit.com/",
     "verifiedAt": "2026-09-23"
@@ -2181,7 +2181,7 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "学会・専門会議",
     "location": "Tokyo International Forum, Tokyo, Japan",
     "status": "参加予定",
-    "assignment": "村上",
+    "assignment": "—",
     "purpose": "国内開催。Computer Graphics、Simulation、Digital Twin、3D表現、生成表現。2027年は東京開催。",
     "sourceUrl": "https://asia.siggraph.org/2026/about-the-event/siggraph-asia-2027/",
     "verifiedAt": "2026-09-16"
