@@ -1511,12 +1511,12 @@ window.PHYSICAL_AI_EVENTS = [
     "businessFit": "★★★☆☆",
     "category": "Robotics / Physical AI本体",
     "type": "技術カンファレンス・サミット",
-    "location": "Birmingham, United Kingdom",
+    "location": "ICC Birmingham, Birmingham, United Kingdom",
     "status": "参考情報",
     "assignment": "—",
-    "purpose": "euRoboticsの年次フォーラム（1,000名超）。欧州の研究・産業・政策の接点を見る場で、学会ほど研究発表寄りでも、展示会ほど展示寄りでもない。会期にはサイドイベントを含む。 つながり：JEC World（3/2–4、Paris）・MWC（3/1–4、Barcelona）と会期が重なる。行くなら人を分ける。",
-    "sourceUrl": "https://erf2027.eu/",
-    "verifiedAt": "2026-09-23"
+    "purpose": "euRoboticsの年次フォーラム（1,000名超）。欧州の研究・産業・政策の接点を見る場で、学会ほど研究発表寄りでも、展示会ほど展示寄りでもない。本体は3/2–4で、3/1と3/5にラボツアー。参加登録は9/24に開始。早期料金と、手数料（15%）を引いた取消返金は12/1まで、以降は返金なし。 つながり：JEC World（3/2–4、Paris）・MWC（3/1–4、Barcelona）と会期が重なる。行くなら人を分ける。",
+    "sourceUrl": "https://erf2027.eu/register/",
+    "verifiedAt": "2026-10-05"
   },
   {
     "id": "20270314-gtc-2027",
@@ -1714,7 +1714,9 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Las Vegas Convention Center, Las Vegas, NV, United States",
     "status": "参加予定",
     "assignment": "2名＋村上",
-    "purpose": "北米最大級のロボット・自動化展示会。2027年はLas Vegas開催。部門予算化候補。"
+    "purpose": "北米最大級のロボット・自動化展示会。2027年はLas Vegas開催。部門予算化候補。無料の来場登録を受付中。",
+    "sourceUrl": "https://www.automateshow.com/",
+    "verifiedAt": "2026-10-05"
   },
   {
     "id": "20270524-icra-2027",
@@ -1731,7 +1733,9 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "COEX, Seoul, Republic of Korea",
     "status": "参加予定",
     "assignment": "村上",
-    "purpose": "Robotics代表会議。部門の参加・予算計画には含めず、論文・発表と個別参加判断の参考情報として管理する。"
+    "purpose": "Robotics代表会議。部門の参加・予算計画には含めず、論文・発表と個別参加判断の参考情報として管理する。本会議は5/25–27、ワークショップ・チュートリアルは5/24と5/28で、両方に出るには両方の登録が要る。参加登録は2027年2月初旬に開始予定。取消は4/9まで（手数料あり）。",
+    "sourceUrl": "https://2027.ieee-icra.org/attend/registration-information/",
+    "verifiedAt": "2026-10-05"
   },
   {
     "id": "20270525-semicon-southeast-asia-2027",
@@ -1784,9 +1788,9 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Davos, Switzerland",
     "status": "参考情報",
     "assignment": "—",
-    "purpose": "Davos Congress主催。Robotics・Physical AI・実環境導入のカンファレンスに、展示とRobot City（実環境デモ）を組み合わせる。最終日の土曜は一般向けFamily Day。Robotics Summit & Expo（6/2–3、Boston）と会期が重なる。 つながり：London Tech Week（6/7–11、London）へ2日空けて続けられる。6月の欧州はL4DC（6/16–18）・AI for Good（6/21–24）・automatica（6/22–25）まで並ぶが、1回の滞在では3週間を超える。RSE（6/2–3、Boston）とは会期が重なる。",
-    "sourceUrl": "https://davostechsummit.com/",
-    "verifiedAt": "2026-09-23"
+    "purpose": "Davos Congress主催。Robotics・Physical AI・実環境導入のカンファレンスに、展示とRobot City（実環境デモ）を組み合わせる。6/2夜（18–21時）は招待制のOpening Night、会議・Expoは6/3–4、6/5（土）は一般向けFamily Day。Robotics Summit & Expo（6/2–3、Boston）と会期が重なる。 つながり：London Tech Week（6/7–11、London）へ2日空けて続けられる。6月の欧州はL4DC（6/16–18）・AI for Good（6/21–24）・automatica（6/22–25）まで並ぶが、1回の滞在では3週間を超える。RSE（6/2–3、Boston）とは会期が重なる。",
+    "sourceUrl": "https://www.davostechsummit.com/",
+    "verifiedAt": "2026-10-05"
   },
   {
     "id": "20270607-london-tech-week-2027",
@@ -1803,7 +1807,9 @@ window.PHYSICAL_AI_EVENTS = [
     "location": "Olympia London, London, United Kingdom",
     "status": "参考情報",
     "assignment": "—",
-    "purpose": "欧州最大級の総合テックフェスティバル。エンタープライズAI・DX・スタートアップ動向の探索候補として参考情報で管理。"
+    "purpose": "欧州最大級の総合テックフェスティバル。エンタープライズAI・DX・スタートアップ動向の探索候補として参考情報で管理。本体（Expo・講演）は6/7–9、Olympia London。6/10–11は市内の周辺イベントのみ。",
+    "sourceUrl": "https://londontechweek.com/",
+    "verifiedAt": "2026-10-05"
   },
   {
     "id": "20270616-l4dc-2027",
