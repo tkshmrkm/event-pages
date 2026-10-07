@@ -2123,6 +2123,25 @@ window.PHYSICAL_AI_EVENTS = [
     "purpose": "工作機械・金属加工"
   },
   {
+    "id": "20271006-world-summit-ai-2027",
+    "dateStatus": "confirmed",
+    "sortDate": "2027-10-06",
+    "year": 2027,
+    "dateLabel": "10月6–7日",
+    "name": "World Summit AI 2027",
+    "budgetCandidate": false,
+    "importance": "★★☆☆☆",
+    "businessFit": "★☆☆☆☆",
+    "category": "Technology Foresight / Innovation",
+    "type": "技術カンファレンス・サミット",
+    "location": "Taets Art & Event Park, Amsterdam, Netherlands",
+    "status": "参考情報",
+    "assignment": "—",
+    "purpose": "AI企業・政策・スタートアップ・社会実装トレンドの探索参考情報。AI全般の会議で、Physical AIは多数あるトラックの1つ。",
+    "sourceUrl": "https://worldsummit.ai/",
+    "verifiedAt": "2026-10-07"
+  },
+  {
     "id": "20271026-formnext-2027",
     "dateStatus": "confirmed",
     "sortDate": "2027-10-26",
