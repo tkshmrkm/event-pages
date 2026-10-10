@@ -1005,9 +1005,9 @@ window.PHYSICAL_AI_EVENTS = [
     "category": "Technology Foresight / Innovation",
     "type": "技術カンファレンス・サミット",
     "location": "RAI Amsterdam, Amsterdam, Netherlands",
-    "status": "参加予定",
-    "assignment": "村上",
-    "purpose": "IoT、AI、Edge、デジタル基盤",
+    "status": "不参加",
+    "assignment": "—",
+    "purpose": "IoT、AI、Edge、デジタル基盤。参加予定だった村上の分は2026-10-10にキャンセル。",
     "sourceUrl": "https://techexevent.com/europe/",
     "verifiedAt": "2026-09-19"
   },
@@ -1025,8 +1025,8 @@ window.PHYSICAL_AI_EVENTS = [
     "type": "展示会・見本市",
     "location": "Hannover Exhibition Grounds, Hannover, Germany",
     "status": "参加予定",
-    "assignment": "村上・金築・美馬",
-    "purpose": "板金加工、レーザ、成形、加工自動化。参加予定。"
+    "assignment": "金築・美馬",
+    "purpose": "板金加工、レーザ、成形、加工自動化。参加予定。村上の分は2026-10-10にキャンセル。"
   },
   {
     "id": "20261025-mecc-2026",

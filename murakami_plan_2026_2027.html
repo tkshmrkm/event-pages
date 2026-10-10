@@ -45,7 +45,7 @@ a{color:var(--tent)}
 .cal-bar.think{border-color:var(--think);border-style:dashed;background:color-mix(in srgb,var(--think) 22%,transparent)}
 .cal-bar.cand{border-color:var(--none);border-style:dashed;background:color-mix(in srgb,var(--none) 12%,transparent)}
 .cal-bar.ref{border-color:var(--none);border-style:dotted}
-.cal-bar.skip{border-color:var(--none);opacity:.55;background:repeating-linear-gradient(45deg,transparent 0 3px,var(--line) 3px 5px)}
+.cal-bar.skip,.cal-bar.cancel{border-color:var(--none);opacity:.55;background:repeating-linear-gradient(45deg,transparent 0 3px,var(--line) 3px 5px)}
 .cal-bar.go{border-color:var(--ok);border-width:2.5px;background:color-mix(in srgb,var(--ok) 45%,transparent)}
 .cal-bar.tog{cursor:pointer}
 .cal-bar.tog:focus-visible{outline:2px solid var(--tent);outline-offset:1px}
@@ -68,8 +68,8 @@ tr.mo td{background:var(--bg);font-weight:700;font-size:12px;color:var(--mute);p
 .st.think{color:var(--think);border-color:var(--think)}
 .st.cand{color:var(--mute);border-color:var(--none);border-style:dashed}
 .st.ref{color:var(--mute);border-color:var(--none);border-style:dotted}
-.st.skip{color:var(--mute);border-color:var(--line);text-decoration:line-through}
-tr.isskip td:nth-child(2){opacity:.6}
+.st.skip,.st.cancel{color:var(--mute);border-color:var(--line);text-decoration:line-through}
+tr.isskip td:nth-child(2),tr.iscancel td:nth-child(2){opacity:.6}
 .ln{font-size:11px;color:var(--mute)}
 .pa{font-size:10px;font-weight:700;color:var(--tent);border:1px solid var(--tent);border-radius:3px;padding:0 3px;margin-left:4px;vertical-align:1px}
 .mainb{font-size:10px;font-weight:700;color:#fff;background:var(--ok);border-radius:3px;padding:0 4px;margin-left:4px;vertical-align:1px}
@@ -107,7 +107,7 @@ li{margin:3px 0}
 <table class="dec">
 <thead><tr><th>時期</th><th>出張</th></tr></thead>
 <tbody>
-<tr><td>2026年10月</td><td>TechEx Europe、EuroBLECH<div class="sm">Amsterdam → Hannover、10/19–23（予定どおり）</div></td></tr>
+<tr><td>2026年10月</td><td>TechEx Europe、EuroBLECH：<b>キャンセル</b><div class="sm">Amsterdam → Hannover、10/19–23の予定だった（2026-10-10にキャンセル）</div></td></tr>
 <tr><td>2027年3月</td><td>LogiMAT か GTC（比較中）<div class="sm">LogiMAT：Stuttgart、出張 3/15–20（会期 3/16–18） ／ GTC：San Jose、3/14–18</div></td></tr>
 <tr><td>5月</td><td>Automate<div class="sm">Las Vegas、5/10–13</div></td></tr>
 <tr><td>5月</td><td>ICRA<div class="sm">Seoul、5/24–28</div></td></tr>
@@ -141,7 +141,7 @@ li{margin:3px 0}
 <span><i class="sw think"></i>検討中（悩み中）</span>
 <span><i class="sw cand"></i>候補</span>
 <span><i class="sw ref"></i>資料（現地には行かず追う）</span>
-<span><i class="sw skip"></i>見送り</span>
+<span><i class="sw skip"></i>見送り・キャンセル</span>
 <span><i class="sw go"></i>「行く」にした</span>
 <span><i class="sw hit"></i>行く予定どうしが重なる</span>
 <span><b class="pa" style="margin:0">H/P</b> Humanoid / Physical AI</span>
@@ -209,7 +209,7 @@ li{margin:3px 0}
 <tbody>
 <tr><td class="d">2024</td><td>6回</td><td>Paris（JEC World）、Stuttgart（LogiMAT）、Naples（ICNAP サマー）、Aachen（ICNAP 12月）、Paderborn（Fraunhofer IME）、Shanghai（ITMA ASIA）</td><td class="sm">製造・材料・物流の展示会が中心。欧州5回、中国1回</td></tr>
 <tr><td class="d">2025</td><td>7回</td><td>Las Vegas（CES）、Singapore（GITEX ASIA）、TechEx North America と Humanoid Summit、ドイツ（Magdeburg・Dortmund・Stuttgart の Fraunhofer、Berlin、Hannover の EMO、Aachen の ICNAP）、<b>中国（11/16–21、蘇州・上海・深セン、ヒューマノイド6社を視察）</b></td><td class="sm">展示会にヒューマノイドが入り、中国の企業視察を実施</td></tr>
-<tr><td class="d">2026</td><td>6回</td><td>Taiwan・KL（SEMICON SEA）、Boston（RSE）、Vienna（ICRA）、Sydney（RSS）、Stuttgart（HRS Europe）、Amsterdam・Hannover（TechEx、EuroBLECH）</td><td class="sm">ロボット学会と Physical AI が中心。欧州・北米・アジア・豪州に分かれる</td></tr>
+<tr><td class="d">2026</td><td>5回<br><span class="sm">（10月の TechEx・EuroBLECH はキャンセル）</span></td><td>Taiwan・KL（SEMICON SEA）、Boston（RSE）、Vienna（ICRA）、Sydney（RSS）、Stuttgart（HRS Europe）</td><td class="sm">ロボット学会と Physical AI が中心。欧州・北米・アジア・豪州に分かれる</td></tr>
 <tr><td class="d">2027<br><span class="sm">計画</span></td><td>6回</td><td>Stuttgart（LogiMAT）、Las Vegas（Automate）、Seoul（ICRA）、ドイツ（RoboCup → automatica、ITMA、SPS）。国内は SIGGRAPH Asia</td><td class="sm">ロボット（Automate、ICRA、automatica）と製造展（LogiMAT、ITMA、SPS）が半々。ドイツが4回</td></tr>
 </tbody></table></div>
 <ul>
@@ -241,7 +241,7 @@ li{margin:3px 0}
 <tr><td class="d">2026-05</td><td>SEMICON SEA、Robotics Summit &amp; Expo、ICRA</td><td>ICRA 2027、RSE 2027（6/2–3）</td></tr>
 <tr><td class="d">2026-07</td><td>RSS</td><td>RSS 2027（見送り）</td></tr>
 <tr><td class="d">2026-09</td><td>Humanoid Robots Summit</td><td>2027は日程未発表</td></tr>
-<tr><td class="d">2026-10</td><td>EuroBLECH、TechEx Europe</td><td>（予定）</td></tr>
+<tr><td class="d">2026-10</td><td>EuroBLECH、TechEx Europe（キャンセル）</td><td></td></tr>
 </tbody></table></div>
 </main>
 
@@ -249,9 +249,9 @@ li{margin:3px 0}
 (function(){
 /* l: o=海外 d=国内 / st: ok確定 tent想定 think検討中 cand候補 ref資料 skip見送り / pa: Humanoid・Physical AI / w: 検索結果のみ */
 var E=[
-{l:"o",st:"ok",  a:"2026-10-19",b:"2026-10-20",n:"TechEx Europe",p:"Amsterdam"},
-{l:"o",st:"ok",  a:"2026-10-20",b:"2026-10-23",n:"EuroBLECH",p:"Hannover",m:"村上・金築・美馬",u:"202610_Europe_TechEx_EuroBLECH/euroblech.html"},
-{l:"d",st:"cand",a:"2026-10-26",b:"2026-10-31",n:"JIMTOF 2026",p:"Tokyo Big Sight",m:"工作機械。EuroBLECHの3日後"},
+{l:"o",st:"cancel",a:"2026-10-19",b:"2026-10-20",n:"TechEx Europe",p:"Amsterdam",m:"キャンセル（2026-10-10）"},
+{l:"o",st:"cancel",a:"2026-10-20",b:"2026-10-23",n:"EuroBLECH",p:"Hannover",m:"キャンセル（2026-10-10）。予定は村上・金築・美馬",u:"202610_Europe_TechEx_EuroBLECH/euroblech.html"},
+{l:"d",st:"cand",a:"2026-10-26",b:"2026-10-31",n:"JIMTOF 2026",p:"Tokyo Big Sight",m:"工作機械"},
 {l:"d",st:"cand",a:"2026-11-07",b:"2026-11-08",n:"第69回 自動制御連合講演会",p:"東京都市大学 世田谷",m:"制御。土日",w:1},
 {l:"d",st:"cand",a:"2026-12-02",b:"2026-12-04",n:"RoboNext 2026",p:"INTEX Osaka",m:"ロボット"},
 {l:"o",st:"skip", a:"2026-12-06",b:"2026-12-09",n:"Humanoids 2026",p:"Santa Clara",pa:1,m:"行かない（12月は行かない想定）"},
@@ -292,7 +292,7 @@ var E=[
 {l:"o",st:"tent",a:"2027-11-23",b:"2027-11-25",n:"SPS 2027",p:"Nuremberg",m:"FA・産業制御・Industrial AI。2026（11/24–26）は東が参加予定なので、所感を聞いてから決める。部門枠～2名"},
 {l:"d",st:"tent",a:"2027-11-30",b:"2027-12-03",n:"SIGGRAPH Asia 2027",p:"Tokyo International Forum",m:"CG・AI。国内なので行く方向。プログラム発表後にPhysical AI／Industrial AI関連を確認"}
 ];
-var ST={ok:"確定",tent:"想定",think:"検討中",cand:"候補",ref:"資料",skip:"見送り"};
+var ST={ok:"確定",tent:"想定",think:"検討中",cand:"候補",ref:"資料",skip:"見送り",cancel:"キャンセル"};
 var DAY=864e5,KEY="murakami-plan-sel-v1";
 function U(s){var a=s.split("-");return Date.UTC(+a[0],+a[1]-1,+a[2])}
 E.forEach(function(e,i){e.i=i;e.A=U(e.a);e.B=U(e.b);e.tog=(e.st=="think"||e.st=="cand")});
@@ -316,7 +316,7 @@ function compute(){
   for(var x=0;x<plan.length;x++)for(var y=x+1;y<plan.length;y++)if(ov(plan[x],plan[y])&&!(plan[x].st=="ok"&&plan[y].st=="ok"))conflicts.push([plan[x],plan[y]]);
   E.forEach(function(e){
     e.hits=[];
-    if(e.st=="skip"||e.st=="ref")return;
+    if(e.st=="skip"||e.st=="cancel"||e.st=="ref")return;
     plan.forEach(function(f){if(f!==e&&ov(e,f))e.hits.push(f)});
   });
 }
@@ -383,7 +383,7 @@ function drawList(){
   E.filter(show).sort(function(a,b){return a.A-b.A||a.B-b.B}).forEach(function(e){
     var ym=e.a.slice(0,4)+"年"+(+e.a.slice(5,7))+"月";
     if(ym!=last){last=ym;var r=document.createElement("tr");r.className="mo";r.innerHTML='<td colspan="3">'+ym+'</td>';tb.appendChild(r)}
-    var tr=document.createElement("tr");if(e.main)tr.className="ismain";if(e.st=="skip")tr.className="isskip";
+    var tr=document.createElement("tr");if(e.main)tr.className="ismain";if(e.st=="skip"||e.st=="cancel")tr.className="isskip";
     var name=e.u?'<a href="'+e.u+'">'+e.n+'</a>':e.n;
     var memo=[];
     if(e.m)memo.push(e.m);
