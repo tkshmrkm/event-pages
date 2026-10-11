@@ -1879,8 +1879,16 @@ try {
     <tr><th>Sustainable Production</th><td>省エネの機械と工程／材料最適化とスクラップ削減／循環型生産とリサイクル／持続可能な材料と軽量化／CO₂排出の測定と削減</td></tr>
     <tr><th>Workforce Performance</th><td>生産工程での実用的な自動化とロボット／人と機械の協働／作業者に使いやすいシステムとUX／技能・教育・人材育成／品質・検査・精密加工</td></tr>
   </tbody></table><p class="eb-note">個別のセッションとガイドツアーの時刻は、公式の${ebLink('show-programme.html', 'Show Agenda')}で日付を絞って見る。このページには取り込んでいない。</p>`)}
+  ${ebSection('2026年の新設・見どころ（公式）', ebList([
+    '<strong>来場者アプリ</strong>が復活。会場の案内、出展社のブックマーク、日程の組み立てができる。出発前に入れておく',
+    '<strong>Innovation Zone</strong>（新設）：新技術・応用研究・実装間近のコンセプトを集めた区画',
+    '<strong>Job Shop &amp; Subcontractors Market</strong>（新設）：板金加工の受託先・協力工場が集まる区画',
+    '<strong>NextGen Technology Stage</strong>：自動化・デジタル化・サステナビリティ・AIの講演。<strong>EuroBLECH Awards</strong> の6部門の候補出展社は「Award Trails」で回れる',
+    '2026年のテーマは「For a Stronger Future – Smart &amp; Sustainable Production」',
+    '規模の目安：2024年は出展1,317社、来場38,946人、114か国（主催者発表）',
+  ]) + '<p class="eb-note">出典は公式記事「What to Expect at EuroBLECH 2026」（2025-12-10付）。各区画のホール番号は記事に書かれていない。</p>')}
   ${ebSection('未確認', ebList([
-    '<strong>2026年のホール配置。</strong> 公式の会場ページから開けるエリアマップは2024年版だけ',
+    '<strong>2026年のホール配置。</strong> 公式の会場ページから開けるエリアマップは2024年版だけ（2026-10-11も同じ）。来場者アプリで見られる可能性があるが未確認',
     '<strong>クローク。</strong> 公式サイトに記載が見つからない。10/23は荷物を預ける前提なので、入口で確かめる',
   ]))}
   ${ebSection('公式リンク', ebList([
@@ -1890,7 +1898,7 @@ try {
     ebLink('visit/visitor-smart-event.html', 'Colleqt QRの使い方'),
     ebLink('admission-policy.html', '入場規定（Admissions Policy）'),
   ]))}
-  <p class="eb-src">出典：EuroBLECH公式サイト（Venue and Travel、Admissions Policy、Colleqt QR、Conference Themes）、2026-09-23確認。「私たち」の列はこの出張の旅程。</p>
+  <p class="eb-src">出典：EuroBLECH公式サイト（Venue and Travel、Admissions Policy、Colleqt QR、Conference Themes、What to Expect at EuroBLECH 2026）、2026-10-11確認。「私たち」の列はこの出張の旅程。</p>
 </main></body></html>
 `;
   writeFileSync(euroblechOutputPath, euroblechPage.split(/\r?\n/).map(line => line.trimEnd()).join('\n').replace(/\n*$/, '\n'), 'utf8');

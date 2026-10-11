@@ -806,6 +806,20 @@ CSSはNode側で読んで `cssKnownClasses` / `cssKnownSubstrings` として渡�
 - 反映しなかったもの（ユーザーが不要と判断）：10/18夜のOpening Drinksの会場（公式に Rosarium Amstelpark と出た）、
   EuroBLECHのガイドツアー、撮影許可の問い合わせ
 
+## 2026-10-11の更新チェック
+
+- **TechEx Day 2がまた変わった。** Unitreeの「Physical AI Stack」が無くなり、昼休み13:15–14:15、Swisslog 14:15–14:45、
+  最重要パネル14:50–15:30（Unitreeは外れた）、閉会15:30–15:45。9/23の並びにほぼ戻り、14:55退出のままSwisslogは全部、パネルは冒頭5分
+- **TechEx Day 1は3枠の題が変わった。** 11:35 OPC Foundation「Industrial AI Needs More Than Data – It Needs Semantics」、
+  15:00「Beyond Dashboards: Connecting AI Agents to Live Factory Data」（Rolls-Royceの枠。登壇者未掲載）、16:15 Indurex「Engineering Intelligence for Cyber-Physical Systems」。
+  パネルのSiemens登壇者はCandi Robisonに替わった
+- **EuroBLECH**：会期・開場時間・撮影規定は変わらず、マップは2024年版のまま。`euroblech.html` に
+  「2026年の新設・見どころ（公式）」を足した（来場者アプリ、Innovation Zone、Job Shop & Subcontractors Market、
+  NextGen Technology Stage と Awards、テーマ、2024年実績）。出典は公式記事 What to Expect at EuroBLECH 2026（2025-12-10付）
+- **村上の参加は未確定。** 2026-10-10に別セッションが個人予定ページと俯瞰資料で村上の分を「キャンセル」にしたが、
+  ユーザーは近日中に決めるとしており（2026-10-11）、この出張ガイドは村上が行く前提のまま情報だけ更新した。
+  決まったら旅程・入国用シート・家族向け・トップページの組み直しが要る
+
 ## 検証
 
 変更後は次を実行する。
