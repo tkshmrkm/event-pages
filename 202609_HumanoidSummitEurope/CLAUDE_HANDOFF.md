@@ -285,7 +285,7 @@ EUROBLECHは `🇯🇵 日本` としているが、Windowsでは国旗に合成
 **字数は目安であって基準ではない。** 30字を超えても単一の事実なら常時表示に残し、
 短くても理由の説明なら畳む。分けるのは長さではなく、事実か理屈か。
 
-規則の本体は `../CLAUDE.md`、`../OVERSEAS_TRIP_LAYOUT_SUMMARY.md` の4.5節、
+規則の本体は `../CLAUDE.md`、`../docs/trip-field/OVERSEAS_TRIP_LAYOUT_SUMMARY.md` の4.5節、
 `../shared/trip-field/README.md` にある。
 
 `build.mjs` の `FOLD_NOTES` が対象一覧。`lead`（先頭の一致文字列）で

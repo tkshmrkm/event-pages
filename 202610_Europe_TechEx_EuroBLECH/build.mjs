@@ -194,7 +194,7 @@ const FAMILY_DAYS = [
     ['17:00〜18:00','work','交流会','Expo Floor Networking Drinks'],
   ], team:[
     ['07:15','procedure','到着','Frankfurt FRA着。入国審査・荷物受取'],
-    ['15:05頃〜17:15頃','work','見学','Autostadt（ヴォルフスブルク）'],
+    ['15:05頃〜16:55頃','work','見学','Autostadt（ヴォルフスブルク）'],
     ['19:05頃','stay','チェックイン','Hotel FREIgeist Göttingen Innenstadt'],
   ], stays:[['村上','Holiday Inn Express Amsterdam - Sloterdijk Station'],['美馬・金築','Hotel FREIgeist Göttingen Innenstadt']] },
   { date:'10/20', dow:'火', murakami:[
