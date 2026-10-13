@@ -1719,6 +1719,25 @@ window.PHYSICAL_AI_EVENTS = [
     "verifiedAt": "2026-10-05"
   },
   {
+    "id": "20270512-geia-europe-2027",
+    "dateStatus": "confirmed",
+    "sortDate": "2027-05-12",
+    "year": 2027,
+    "dateLabel": "5月12–14日",
+    "name": "GEIA Europe 2027",
+    "budgetCandidate": false,
+    "importance": "★★★☆☆",
+    "businessFit": "★★★☆☆",
+    "category": "Robotics / Physical AI本体",
+    "type": "技術カンファレンス・サミット",
+    "location": "Munich, Germany",
+    "status": "候補",
+    "assignment": "TBD",
+    "purpose": "GEIA Asiaと同じシリーズの欧州版（登壇40超・出展20超の見込み）。公式は都市まで発表で、会場名は未発表。9/16時点の検討リストにあった11月4–6日ではなく、5月12–14日になった。Asiaとどちらか一方を選ぶ。HRS Europe・Advanced Humanoid Forumとテーマの重なりが大きい。 つながり：Automate（5/10–13、Las Vegas）と会期が重なる。ICRA（5/24–28、Seoul）までは10日空く。",
+    "sourceUrl": "https://www.geiaeurope.com/index.html",
+    "verifiedAt": "2026-10-13"
+  },
+  {
     "id": "20270524-icra-2027",
     "dateStatus": "confirmed",
     "sortDate": "2027-05-24",
@@ -2464,25 +2483,9 @@ window.PHYSICAL_AI_EVENTS = [
     "verifiedAt": "2026-09-23"
   },
   {
-    "id": "pending-geia-europe-2027",
-    "dateStatus": "pending",
-    "order": 12,
-    "name": "GEIA Europe 2027",
-    "budgetCandidate": false,
-    "importance": "★★★☆☆",
-    "businessFit": "★★★☆☆",
-    "category": "Robotics / Physical AI本体",
-    "handling": "2027候補：日程TBD",
-    "assignment": "TBD",
-    "location": "Munich, Germany（想定）",
-    "purpose": "GEIA Asiaと同じシリーズの欧州版（登壇40超・出展20超・300名超の見込み）。9/16時点の検討リストでは11月4–6日・Munichとしていたが、9/23の公式ページでは日程・都市を確認できなかった。Asiaとどちらか一方を選ぶ。HRS Europe・Advanced Humanoid Forumとテーマの重なりが大きい。 つながり：11月上旬開催ならSEMICON Europa（11/16–19、Munich）→SPS（11/23–25、Nuremberg）の前に付けられる（間10日ほど）。",
-    "sourceUrl": "https://www.geiaeurope.com/index.html",
-    "verifiedAt": "2026-09-23"
-  },
-  {
     "id": "pending-physical-ai-summit-munich-2027",
     "dateStatus": "pending",
-    "order": 13,
+    "order": 12,
     "name": "Physical AI Summit Munich 2027",
     "budgetCandidate": false,
     "importance": "★★☆☆☆",
@@ -2498,7 +2501,7 @@ window.PHYSICAL_AI_EVENTS = [
   {
     "id": "pending-item",
     "dateStatus": "pending",
-    "order": 14,
+    "order": 13,
     "name": "年間予算予備枠（部門）",
     "budgetCandidate": true,
     "importance": "—",

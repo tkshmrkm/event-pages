@@ -163,7 +163,7 @@ git status --branch --short
   - CoRL・ICML・NeurIPS・ROSCon・HRS Europe の2027年分
   - NeurIPS 2026 の開催地別の日程はユーザーの判断で対象外
   - MACHINA Summit 2027（7月・Paris）、THE Physical AI Expo London 2027（Q3）、
-    GEIA Europe 2027（公式で日程・都市を確認できず）、Physical AI Summit Munich 2027
+    Physical AI Summit Munich 2027
 - **2027年のPhysical AI系候補（2026-09-23）** … ローカルの未追跡ファイル
   `physical_ai_2027_candidate_events_v2.html`（9/16時点・14件）を、9/23に公式ページで
   確かめ直して取り込んだ。狙いは、既存の予定と続けて回れるイベントがあるかどうかを見ること
