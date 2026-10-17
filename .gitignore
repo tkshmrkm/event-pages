@@ -43,6 +43,8 @@
 # Source notes (keep the repository README)
 **/*.md
 !/README.md
+# エージェント向けの作業指示。CLAUDE.md が @AGENTS.md で読み込むので、無いとcloneした先で指示が欠ける
+!/AGENTS.md
 # Folder organization guides and the relocated shared design document only.
 # Other local notes and private documents remain excluded.
 !/docs/README.md
