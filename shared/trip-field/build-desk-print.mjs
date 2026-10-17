@@ -34,8 +34,12 @@ function inlineStylesheet(tag, href) {
 html = html.replace(/<link\b([^>]*?)rel=["']stylesheet["']([^>]*?)href=["']([^"']+)["']([^>]*)>/gi, (tag, a, b, href) => inlineStylesheet(tag, href));
 html = html.replace(/<link\b([^>]*?)href=["']([^"']+)["']([^>]*?)rel=["']stylesheet["']([^>]*)>/gi, (tag, a, href) => inlineStylesheet(tag, href));
 
+/* Generated output carries no emoji; the banner uses a monochrome .line-icon. */
 /* A desk copy is intentionally static. Saved browser notes remain in the online page. */
 html = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
+
+/* 紙では折り畳みを開けない。閉じたまま印刷すると代替案や条件が紙から消えるので、すべて開いて出す。 */
+html = html.replace(/<details\b(?![^>]*\sopen\b)/gi, '<details open');
 
 const deskCss = `
 <style>
@@ -43,8 +47,9 @@ body.trip-desk-copy .trip-field-nav,
 body.trip-desk-copy [data-trip-panel="records"],
 body.trip-desk-copy .trip-actions,
 body.trip-desk-copy .trip-no-print { display:none!important; }
-body.trip-desk-copy [data-trip-panel="itinerary"],
-body.trip-desk-copy [data-trip-panel="venue"] { display:block!important; }
+/* 記録以外のパネルはすべて紙に載せる（概要・準備・イベント固有のタブも）。
+   DOM順はタブ順と同じなので、紙の上でも現地で使うものが先に並ぶ。 */
+body.trip-desk-copy .trip-panel:not([data-trip-panel="records"]) { display:block!important; }
 body.trip-desk-copy .trip-panel + .trip-panel { margin-top:18px; }
 body.trip-desk-copy .trip-field textarea,
 body.trip-desk-copy .trip-field input,
@@ -66,7 +71,7 @@ html = html.replace(/<body\b([^>]*)>/i, (tag, attrs) => {
     : `${attrs} class="trip-desk-copy"`;
   return `<body${withClass} data-trip-copy="desk-print">`;
 });
-html = html.replace(/(<main\b[^>]*>)/i, '$1\n<div class="trip-banner" data-kind="warning"><span>🖨</span><div><strong>机上用印刷版です。</strong>スマートフォンではオンライン版を使用してください。メモ入力欄はこの紙には含めていません。</div></div>');
+html = html.replace(/(<main\b[^>]*>)/i, '$1\n<div class="trip-banner" data-kind="warning"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M7 14h10v7H7z"/></svg></span><div><strong>机上用印刷版です。</strong>スマートフォンではオンライン版を使用してください。メモ入力欄はこの紙には含めていません。</div></div>');
 
 if (/<script\b/i.test(html) || /<link\b[^>]*rel=["']stylesheet["']/i.test(html)) {
   throw new Error('Interactive or external runtime assets remain in desk-print copy');

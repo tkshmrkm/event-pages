@@ -110,7 +110,7 @@ changing the three primary sections.
 - `runtime.js` — namespaced browser storage, autosave, tab switching, and JSON transfer.
 - `theme-template.css` — copy and change only the design tokens for a new event.
 - `template.html` — minimal working three-section page.
-- `build-desk-print.mjs` — creates one self-contained, non-interactive desk-print HTML file.
+- `build-desk-print.mjs` — creates one self-contained, non-interactive desk-print HTML file. Every panel except 記録 goes on paper, every fold prints open, and the banner carries no emoji.
 
 ## Data attributes
 
@@ -118,6 +118,7 @@ The generic runtime recognizes:
 
 - `body[data-trip-key]` — required local-storage namespace.
 - `[data-trip-tab="name"]` — primary navigation control.
+- `[data-trip-default]` — on one tab: the tab shown on first open (before a tab is saved). Put it on 旅程; without it the first tab opens.
 - `[data-trip-panel="name"]` — corresponding panel.
 - `[data-trip-store="key"]` — autosaved input, textarea, select, or checkbox.
 - `textarea[data-trip-append-timestamp]` — mounts a shared-note composer for that field.
@@ -181,6 +182,10 @@ one another. Devices refresh the shared entry list periodically while the page
 is open.
 
 ## Current adoption
+
+`202611_Chitose` is the first event built directly on this base: `build.mjs`
+writes `index.html` from the shared classes plus a theme `style.css`, then runs
+`build-desk-print.mjs`. It is the reference for starting the next event.
 
 `202609_HumanoidSummitEurope/build.mjs` uses `runtime.js` for its storage
 namespace and includes `core.css` in the generated stylesheet. Its HRS-specific

@@ -530,7 +530,9 @@
       else mountTimestampAppend(field);
     });
 
-    const firstTab = root.querySelector('[data-trip-tab]');
+    /* 既定タブは先頭ではなく data-trip-default で指す。並びは概要が先頭だが、
+       現地で開くのは旅程なので、起動時に概要を出すと毎回1タップ余分になる。 */
+    const firstTab = root.querySelector('[data-trip-tab][data-trip-default]') || root.querySelector('[data-trip-tab]');
     showTab(store.get('ui:tab', firstTab ? firstTab.dataset.tripTab : 'itinerary'));
     return { store, showTab, status, fields, cloud };
   }

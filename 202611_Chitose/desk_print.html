@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>千歳出張 2026年11月6日〜11日（机上用印刷版）</title>
+<style>
+/* inlined from core.css */
+/* Overseas Trip Field Layout — neutral reusable shell */
+:root{
+  --trip-font:'BIZ UDPGothic','Yu Gothic UI','Meiryo',system-ui,sans-serif;
+  --trip-page:#EEF2F3;
+  --trip-card:#FFFFFF;
+  --trip-text:#101820;
+  --trip-subtext:#263640;
+  --trip-muted:#52616A;
+  --trip-border:#AEBCC3;
+  --trip-neutral:#D8E2E6;
+  --trip-primary:#176B75;
+  --trip-primary-soft:#B8DEE2;
+  --trip-event:#94513D;
+  --trip-event-soft:#F0C2B1;
+  --trip-pending:#403574;
+  --trip-pending-soft:#D4CEEA;
+  --trip-warning:#6B4A0C;
+  --trip-warning-soft:#FCE9BE;
+  --trip-radius:12px;
+  --trip-shadow:0 1px 3px rgba(16,24,32,.10);
+  --trip-sticky-height:104px;
+}
+
+.trip-page{
+  margin:0;
+  padding:0 0 24px;
+  background:var(--trip-page);
+  color:var(--trip-text);
+  font-family:var(--trip-font);
+  font-size:16px;
+  line-height:1.62;
+  -webkit-text-size-adjust:100%;
+}
+.trip-page *{box-sizing:border-box}
+.trip-wrap{width:min(940px,100%);margin:0 auto;padding:0 12px}
+.trip-page a{color:#175E92}
+
+.trip-header{position:static;background:#fff;border-bottom:1px solid var(--trip-border)}
+.trip-header-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 0 10px}
+.trip-eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--trip-muted)}
+.trip-title{margin:2px 0;font-size:20px;line-height:1.3}
+.trip-subtitle{margin:0;color:var(--trip-subtext);font-size:13px}
+
+.trip-field-nav{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.98);border-bottom:2px solid var(--trip-border);box-shadow:0 2px 6px rgba(16,24,32,.12)}
+.trip-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-top:4px}
+.trip-tabs::-webkit-scrollbar,.trip-date-rail::-webkit-scrollbar{display:none}
+.trip-tab{flex:1 0 auto;min-width:0;min-height:48px;padding:6px 12px;border:0;border-bottom:4px solid transparent;background:transparent;color:var(--trip-muted);font:700 14px/1.3 var(--trip-font);cursor:pointer}
+.trip-tab[aria-selected=true],.trip-tab.is-active{border-bottom-color:var(--trip-primary);color:var(--trip-text)}
+.trip-date-rail{display:flex;gap:7px;align-items:center;overflow-x:auto;scrollbar-width:none;padding:6px 0 7px;border-top:1px solid #E2E9EC}
+.trip-date-label{flex:0 0 auto;color:var(--trip-subtext);font-size:12px;font-weight:700}
+.trip-date-link{flex:0 0 auto;min-height:44px;padding:10px 14px;border:1px solid var(--trip-border);border-radius:999px;background:#fff;color:var(--trip-subtext);font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap}
+.trip-date-link.is-active{background:var(--trip-text);border-color:var(--trip-text);color:#fff}
+
+.trip-main{padding-top:12px}
+.trip-panel{display:none}
+.trip-panel.is-active{display:block}
+.trip-card,.trip-day,.trip-record{margin:0 0 12px;overflow:hidden;border:2px solid var(--trip-border);border-radius:var(--trip-radius);background:var(--trip-card);box-shadow:var(--trip-shadow)}
+.trip-card-title,.trip-day-title{margin:0;padding:11px 14px;background:var(--trip-neutral);color:var(--trip-subtext);font-size:16px;font-weight:700}
+.trip-card-body{padding:12px 14px}
+.trip-day{scroll-margin-top:calc(var(--trip-sticky-height) + 8px)}
+.trip-day-title{background:var(--trip-primary-soft);color:var(--trip-primary)}
+.trip-day[data-kind=event] .trip-day-title{background:var(--trip-event-soft);color:var(--trip-event)}
+.trip-day[data-kind=pending] .trip-day-title{background:var(--trip-pending-soft);color:var(--trip-pending)}
+.trip-day-date{display:block;font-size:18px}
+.trip-day-summary{display:block;margin-top:2px;font-size:14px;font-weight:400}
+
+.trip-row{display:grid;grid-template-columns:98px minmax(0,1fr);border-top:1px solid #E1E8EB}
+.trip-row:first-child{border-top:0}
+.trip-time{padding:11px 12px;background:#F4F7F8;color:var(--trip-subtext);font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.trip-action{min-width:0;padding:11px 12px}
+.trip-detail{display:block;margin-top:4px;color:var(--trip-muted);font-size:13px}
+/* 交通手段アイコン。色・寸法・stroke幅は202610_Europe_TechEx_EuroBLECH/style.cssと同一にそろえる。
+   フライトはmask画像、鉄道・徒歩・車・手段未定は呼び出し側がSVGを差し込む。
+   `.mode`配下に限定せず単独セレクタにして、`.mode`という構造を持たないイベントでも使えるようにする。 */
+.flight-mark{display:inline-block;flex:0 0 auto;width:20px;height:20px;color:#0B5C60;background:currentColor;vertical-align:-4px;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M22 16v-2l-8.5-5V3.5C13.5 2.67 12.83 2 12 2s-1.5.67-1.5 1.5V9L2 14v2l8.5-2.5V19L8 20.5V22l4-1 4 1v-1.5L13.5 19v-5.5L22 16z' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.inline-flight-mark{margin-right:5px}
+.mode-icon{display:flex;flex:0 0 auto;align-items:center;justify-content:center;width:20px;height:20px;color:#0B5C60}
+.mode-icon svg{display:block;width:100%;height:100%;overflow:visible}
+.mode-icon-unknown{color:#B96B16}
+/* 文中に置くモノクロSVGアイコン（Windowsで黒塗りグリフになる絵文字の置き換え）。
+   .flight-mark／.mode-iconが固定20pxなのは、専用の列に入って行の高さを決める側だから。
+   .line-iconは見出し・ボタン・本文の中に置くので、寸法を固定pxで持つと文字より
+   大きくなる。2026-08-15に実機で確認したときは19px固定で、13〜14pxの文字の中に
+   比1.36〜1.46の箱が並んでいた。寸法は文字サイズ基準で持つ。
+   全イベント共通。イベント側で寸法を上書きしない（色の上書きだけ各イベントに許す）。 */
+.line-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:1.15em;height:1.15em;margin-right:.3em;color:#0B5C60;vertical-align:-.2em}
+.line-icon svg{display:block;width:100%;height:100%;overflow:visible}
+/* 予定の状態。使う語は次の5つだけで、他の言い回しを混ぜない。
+     未検討   まだ案を作っていない
+     候補あり 比較する案がある
+     仮決め   現時点の第一候補
+     確定     予約・発券・公式確認などが終わった
+     当日判断 天候・運休・体調などで現地判断する
+   これは**進み具合の軸**であって、未確定の理由（未発表＝先方が出していない／
+   要確認＝調べれば分かる／要検討＝こちらが決める）とは別の軸。理由のほうは
+   折り畳みや本文に残す。状態の札に理由を書かない。
+   候補を確定しても代替案は消さず、折り畳んで残す。 */
+.plan-state{display:inline-block;flex:0 0 auto;border:1px solid;border-radius:999px;padding:1px 8px;font-size:12px;font-weight:700;line-height:1.5;white-space:nowrap;vertical-align:1px}
+.plan-state-unconsidered{background:#EEF1F3;border-color:#C6D0D6;color:#52616A}
+.plan-state-candidate{background:#EEEAF8;border-color:#A79BCB;color:#302568}
+.plan-state-tentative{background:#FFF3D6;border-color:#DAB864;color:#7A3E08}
+.plan-state-fixed{background:#E3F1F0;border-color:#78A9A9;color:#0B4F5A}
+.plan-state-onsite{background:#E9F2FA;border-color:#8FB4E8;color:#245A85}
+/* 確定に必要な条件を、状態の札の隣に短く添える（「要予約」など）。
+   条件は札の中に書かない。札は状態の語だけを持つ。 */
+.state-note{margin-left:5px;color:#52616A;font-size:12px;font-weight:700}
+
+/* 地図リンクは場所名そのものに張る。「地図」という別リンクは出さない。
+   EUROBLECHでは .endpoint / .stay 配下に限定した指定だが、共通基盤では
+   構造を前提にできないので単独セレクタで持つ。 */
+.place{color:#2A5FA0;font-weight:600;text-decoration:none}
+
+.trip-banner{display:flex;gap:8px;align-items:flex-start;margin:0 0 12px;padding:10px 12px;border:2px solid var(--trip-border);border-radius:10px;background:#fff;color:var(--trip-subtext);font-size:14px}
+.trip-banner[data-kind=warning]{border-color:#DAB864;background:var(--trip-warning-soft);color:var(--trip-warning)}
+.trip-secondary{margin-top:14px}
+
+.trip-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 13px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-subtext);font:700 13px/1.3 var(--trip-font);text-decoration:none;cursor:pointer}
+.trip-button:hover,.trip-button:focus-visible{background:#E7EEF0;color:var(--trip-text)}
+.trip-actions{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+
+.trip-field{padding:10px 12px;border-top:1px solid #E1E8EB}
+.trip-field:first-child{border-top:0}
+.trip-field label{display:block;margin-bottom:5px;color:var(--trip-subtext);font-size:13px;font-weight:700}
+.trip-field textarea,.trip-field input[type=text],.trip-field select{
+  width:100%;min-height:52px;padding:8px 10px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-text);font:16px/1.55 var(--trip-font);resize:vertical
+}
+.trip-field textarea[data-trip-note=day]{min-height:84px}
+.trip-field textarea:focus,.trip-field input:focus,.trip-field select:focus{outline:3px solid rgba(23,107,117,.22);border-color:var(--trip-primary)}
+.trip-timestamp-row{display:flex;justify-content:flex-end;margin-top:7px}
+.trip-timestamp-button{min-height:44px;padding:8px 12px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-primary);font:700 13px/1.3 var(--trip-font);cursor:pointer}
+.trip-timestamp-button:hover{background:var(--trip-soft)}
+.trip-timestamp-button:focus-visible{outline:3px solid rgba(23,107,117,.22);outline-offset:2px}
+.trip-shared-notes{margin-top:8px}
+.trip-shared-log{display:grid;gap:7px;margin-bottom:8px}
+.trip-shared-entry{padding:8px 10px;border-left:3px solid var(--trip-primary);border-radius:4px;background:var(--trip-soft)}
+.trip-shared-meta{margin-bottom:3px;color:var(--trip-muted);font-size:12px;font-weight:700}
+.trip-shared-text{color:var(--trip-text);font-size:14px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.trip-shared-composer{display:grid;gap:7px;margin-top:8px;padding:9px;border:1px solid var(--trip-border);border-radius:9px;background:#fff}
+.trip-shared-composer[hidden]{display:none}
+.trip-shared-draft{width:100%;min-height:70px;padding:8px 10px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-text);font:16px/1.55 var(--trip-font);resize:vertical}
+.trip-shared-actions{display:flex;flex-wrap:wrap;gap:7px}
+.trip-shared-cancel{color:var(--trip-muted)}
+.trip-shared-status{min-height:1.4em;color:var(--trip-muted);font-size:12px}
+.trip-status{min-height:1.5em;color:var(--trip-muted);font-size:13px}
+.trip-cloud-help{margin:0 0 10px;color:var(--trip-muted);font-size:13px}
+.trip-cloud-key{display:grid;gap:5px;margin-bottom:8px;color:var(--trip-subtext);font-size:13px;font-weight:700}
+.trip-cloud-key input{width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--trip-border);border-radius:8px;background:#fff;color:var(--trip-text);font:16px/1.4 var(--trip-font)}
+.trip-cloud-remember{display:flex;gap:7px;align-items:flex-start;margin:8px 0 12px;color:var(--trip-subtext);font-size:13px}
+.trip-cloud-remember input{width:18px;height:18px;margin:1px 0 0}
+.trip-cloud .trip-actions{margin-bottom:8px}
+
+.trip-split{display:grid;grid-template-columns:1fr 1fr}
+.trip-split > * + *{border-left:1px solid var(--trip-border)}
+.trip-lane-title{padding:7px 12px;border-bottom:1px solid var(--trip-border);font-size:13px;font-weight:700}
+.trip-merge{display:flex;gap:8px;align-items:center;padding:10px 14px;border-block:1px solid var(--trip-border);background:var(--trip-neutral);color:var(--trip-subtext);font-size:14px;font-weight:700}
+
+@media(max-width:640px){
+  .trip-wrap{padding-inline:10px}
+  .trip-header-inner{gap:8px}
+  .trip-title{font-size:18px}
+  .trip-tab{padding-inline:8px}
+  .trip-row{grid-template-columns:82px minmax(0,1fr)}
+  .trip-time,.trip-action{padding:10px 9px}
+  .trip-split{grid-template-columns:1fr}
+  .trip-split > * + *{border-left:0;border-top:1px solid var(--trip-border)}
+}
+
+@media print{
+  .trip-page{padding:0;background:#fff;font-size:9pt}
+  .trip-field-nav,.trip-actions,.trip-no-print{display:none!important}
+  .trip-panel{display:block!important}
+  .trip-card,.trip-day,.trip-record{break-inside:avoid;box-shadow:none}
+}
+
+/* フライトカード。1区間を「出発 → 便名 → 到着」の三つ組で見せる。表にすると
+   時刻・空港・便名が同じ大きさの升目に並んで、どれが出発でどれが到着か読み取れない。
+   2026-10 EuroBLECHの家族向けで一度作り、家族には過剰として外した様式を、
+   本人が見る「利用フライト」へ移した（2026-08-16）。EB側のstyle.cssには規則だけが
+   マークアップ無しで残っていたので、ここへ引き取る。
+   中央列は共通の.flight-markを使う。飛行機の文字はWindowsで黒い輪郭グリフになるので、
+   このコメント自身にも書かない（机上用印刷版はcore.cssを<style>へ埋め込む）。 */
+.flight-card{overflow:hidden;margin-top:12px;border:2px solid var(--trip-border);border-radius:11px;background:#fff}
+.flight-card:first-of-type{margin-top:0}
+.flight-card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 13px;background:var(--trip-neutral);color:var(--trip-subtext)}
+.flight-label{display:block;margin-bottom:2px;font-size:11px;font-weight:900;letter-spacing:.07em}
+.flight-card h3{margin:0;font-size:16px;line-height:1.35;font-weight:800;color:var(--trip-text)}
+.flight-total{flex:none;border:1px solid currentColor;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800;white-space:nowrap}
+.flight-leg{display:grid;grid-template-columns:minmax(0,1fr) 96px minmax(0,1fr);align-items:stretch;padding:12px 13px}
+.flight-point{min-width:0}
+.point-label{display:block;color:var(--trip-muted);font-size:11px;font-weight:900;letter-spacing:.08em}
+.flight-point time{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px}
+.flight-date{flex-basis:100%;color:var(--trip-subtext);font-size:13px;font-weight:700}
+.flight-point time strong{color:var(--trip-text);font-size:26px;line-height:1.1;letter-spacing:-.02em}
+.flight-point time em{border-radius:4px;padding:1px 4px;color:#fff;background:var(--trip-subtext);font-size:10px;font-style:normal;font-weight:800}
+.flight-point>a{display:inline-block;margin-top:5px;font-size:13px;font-weight:700;line-height:1.4}
+.flight-route{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;color:var(--trip-muted);text-align:center}
+.flight-route strong{color:var(--trip-text);font-size:13px}
+.flight-rule{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;margin:3px 0}
+.flight-rule::before,.flight-rule::after{content:'';flex:1 1 auto;border-top:2px solid #8DA4AD}
+.flight-route small{color:var(--trip-muted);font-size:10px;line-height:1.4}
+/* 深夜便・機内食など、その区間に付く注記。中央列に入れると潰れるので全幅で持つ。 */
+.flight-note{margin:-4px 13px 8px;color:var(--trip-muted);font-size:12px;line-height:1.5}
+.layover{display:flex;align-items:center;gap:9px;margin:0 13px;border:1px dashed #9B7A2E;border-radius:8px;padding:7px 10px;color:#4D3B0F;background:#FFF4CE;font-size:12px}
+.layover span{flex:none;border-radius:999px;padding:2px 7px;color:#fff;background:#705615;font-weight:800}
+.layover strong{font-size:14px}
+.flight-card>footer{border-top:1px solid #E1E8EB;padding:7px 13px;color:var(--trip-muted);background:#F7F9FA;font-size:12px}
+/* 393pxでは中央96pxを引くと出発・到着が各120px弱になり、空港名が1文字ずつ折り返す。
+   縦積みにして、矢印の列は区切りの横罫に変える。 */
+@media(max-width:520px){
+  .flight-leg{grid-template-columns:minmax(0,1fr);gap:9px}
+  .flight-route{flex-direction:row;flex-wrap:wrap;justify-content:flex-start;gap:5px;text-align:left}
+  .flight-rule{width:auto;flex:0 0 auto;margin:0}
+  .flight-rule::before,.flight-rule::after{display:none}
+  .flight-route small{flex-basis:100%}
+  .flight-point time strong{font-size:23px}
+}
+
+</style>
+<style>
+/* inlined from style.css */
+/* 千歳出張（2026-11）のテーマ。共通部品は ../shared/trip-field/core.css にある。
+   ここに置くのは配色と、この出張だけの表・札の見た目だけ。
+   アイコンの寸法は上書きしない（core.cssの約束）。 */
+:root{
+  --trip-page:#EEF2F7;
+  --trip-card:#FFFFFF;
+  --trip-text:#121A26;
+  --trip-subtext:#24344A;
+  --trip-muted:#506078;
+  --trip-border:#AFBCCD;
+  --trip-neutral:#DCE4EF;
+  --trip-primary:#1F4E9A;
+  --trip-primary-soft:#C9D8F0;
+  --trip-event:#8A4A20;
+  --trip-event-soft:#F3D5BF;
+  --trip-pending:#403574;
+  --trip-pending-soft:#D4CEEA;
+  --trip-warning:#6B4A0C;
+  --trip-warning-soft:#FCE9BE;
+  --trip-soft:#EEF3FA;
+  --trip-radius:12px;
+}
+
+/* 6タブ。2文字のラベルなら393pxに収まる（validate.mjsとブラウザーで数値確認） */
+.trip-tab{padding-inline:8px}
+
+.cf-header-links{display:flex;flex-wrap:wrap;gap:6px;flex:0 0 auto}
+.cf-header-links .trip-button{white-space:nowrap}
+
+/* 表。スマートフォンでは横に溢れる表だけをこの箱の中でスクロールさせ、ページ自体は溢れさせない */
+.cf-scroll{overflow-x:auto;margin:0 0 4px}
+.cf-table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.5}
+.cf-table th,.cf-table td{padding:6px 8px;border:1px solid #D5DEE8;text-align:left;vertical-align:top}
+.cf-table th{background:#F1F5FA;color:var(--trip-subtext);font-weight:700;white-space:nowrap}
+.cf-table .is-chosen td{background:#FFF6D6}
+.cf-table td.num{white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* 折り畳み。summaryは中身を示す語にする */
+details.fold{margin:8px 0 0;border:1px solid #D5DEE8;border-radius:8px;background:#F8FAFD}
+details.fold>summary{min-height:44px;display:flex;align-items:center;padding:8px 12px;color:var(--trip-subtext);font-size:13px;font-weight:700;cursor:pointer}
+details.fold>.fold-body{padding:2px 12px 10px;font-size:13px;color:var(--trip-subtext)}
+details.fold>.fold-body p{margin:6px 0}
+details.fold>.fold-body ul{margin:6px 0;padding-left:1.2em}
+
+.trip-action strong{display:inline}
+/* アイコンは文頭に置いて文と一緒に折り返す（flexにすると長い行でアイコンだけ1行目に残る） */
+.cf-move{display:block}
+.cf-move .mode-icon,.cf-move .flight-mark{display:inline-flex;margin-right:5px;vertical-align:-4px}
+.cf-move strong{font-weight:700}
+.cf-line{display:block;margin-top:4px;font-size:14px}
+
+/* 宿のカード */
+.cf-facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:14px}
+.cf-facts dt{color:var(--trip-muted);font-weight:700;white-space:nowrap}
+.cf-facts dd{margin:0;min-width:0}
+
+/* 概要 */
+.cf-ov-day{display:grid;grid-template-columns:76px minmax(0,1fr);border-top:1px solid #E1E8EF}
+.cf-ov-day:first-child{border-top:0}
+.cf-ov-date{padding:10px;background:#F4F7FB;font-weight:700;font-size:14px}
+.cf-ov-date small{display:block;color:var(--trip-muted);font-size:12px;font-weight:700}
+.cf-ov-body{padding:8px 10px;min-width:0}
+.cf-ov-line{display:flex;align-items:flex-start;gap:6px;padding:2px 0;font-size:14px}
+.cf-ov-time{flex:0 0 46px;color:var(--trip-subtext);font-weight:700;font-variant-numeric:tabular-nums}
+.cf-ov-icon{flex:0 0 20px;display:flex;justify-content:center;padding-top:1px}
+.cf-ov-stay{margin-top:4px;color:var(--trip-muted);font-size:12px;font-weight:700}
+
+/* 視察の記録単位 */
+.cf-session-meta{padding:10px 12px 0;font-size:13px;color:var(--trip-muted);font-weight:700}
+.cf-session-talks{margin:6px 0 0;padding:0 12px 10px 28px;font-size:13px;color:var(--trip-subtext)}
+.cf-session-talks li{margin:2px 0}
+.cf-tag{display:inline-block;margin-left:6px;padding:0 7px;border:1px solid #8FB4E8;border-radius:999px;background:#E9F2FA;color:#245A85;font-size:12px;font-weight:700;vertical-align:1px}
+
+/* 準備のチェックリスト */
+.cf-check{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;padding:10px 12px;border-top:1px solid #E1E8EF}
+.cf-check:first-child{border-top:0}
+.cf-check input{width:22px;height:22px;margin:2px 0 0}
+.cf-check label{font-weight:700;font-size:14px}
+.cf-deadline{display:block;color:#A3122A;font-size:13px;font-weight:700}
+.cf-check .trip-detail{font-weight:400}
+
+/* 食事 */
+.cf-food-list{margin:0;padding:10px 12px 12px 30px;font-size:14px}
+.cf-food-list li{margin:3px 0}
+.cf-food-scene{padding:9px 12px;border-top:1px solid #E1E8EF;font-size:14px}
+.cf-food-scene:first-child{border-top:0}
+.cf-food-scene b{display:block;color:var(--trip-subtext)}
+.cf-food-scene span{display:block;color:var(--trip-muted);font-size:13px}
+.cf-mark-ok{color:#0B4F5A;font-weight:700}
+.cf-mark-mid{color:#7A3E08;font-weight:700}
+.cf-mark-ng{color:#A3122A;font-weight:700}
+
+@media print{
+  details.fold{break-inside:avoid}
+  details.fold>.fold-body{display:block}
+}
+
+</style>
+
+<style>
+body.trip-desk-copy .trip-field-nav,
+body.trip-desk-copy [data-trip-panel="records"],
+body.trip-desk-copy .trip-actions,
+body.trip-desk-copy .trip-no-print { display:none!important; }
+/* 記録以外のパネルはすべて紙に載せる（概要・準備・イベント固有のタブも）。
+   DOM順はタブ順と同じなので、紙の上でも現地で使うものが先に並ぶ。 */
+body.trip-desk-copy .trip-panel:not([data-trip-panel="records"]) { display:block!important; }
+body.trip-desk-copy .trip-panel + .trip-panel { margin-top:18px; }
+body.trip-desk-copy .trip-field textarea,
+body.trip-desk-copy .trip-field input,
+body.trip-desk-copy .trip-field select { display:none!important; }
+body.trip-desk-copy .trip-field:has(textarea),
+body.trip-desk-copy .trip-field:has(input),
+body.trip-desk-copy .trip-field:has(select) { display:none!important; }
+@media print {
+  body.trip-desk-copy .trip-header { border-bottom:1px solid #555; }
+  body.trip-desk-copy .trip-main { padding-top:8px; }
+}
+</style>
+</head>
+<body class="trip-page trip-desk-copy" data-trip-key="chitose-202611" data-trip-layout="field-v1" data-trip-copy="desk-print">
+<!-- 生成物。編集は build.mjs で行い、node 202611_Chitose/build.mjs で再生成する -->
+<header class="trip-header">
+  <div class="trip-wrap trip-header-inner">
+    <div>
+      <div class="trip-eyebrow">BUSINESS TRIP</div>
+      <h1 class="trip-title">千歳出張　11/6（金）〜11/11（水）</h1>
+      <p class="trip-subtitle">自動制御連合講演会（東京）→ 千歳で会議・施設見学 → NexTech Week（幕張）→ 帰宅。JAL優先、出発・帰着は中書島</p>
+    </div>
+    <div class="cf-header-links trip-no-print">
+      <a class="trip-button" href="desk_print.html" aria-label="机上用印刷版"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M7 14h10v7H7z"/></svg></span>印刷版</a>
+    </div>
+  </div>
+</header>
+
+<div class="trip-field-nav">
+  <div class="trip-wrap">
+    <nav class="trip-tabs" role="tablist" aria-label="主要セクション">
+      <button class="trip-tab" type="button" data-trip-tab="overview" role="tab" aria-selected="false">概要</button>
+      <button class="trip-tab is-active" type="button" data-trip-tab="itinerary" data-trip-default role="tab" aria-selected="true">旅程</button>
+      <button class="trip-tab" type="button" data-trip-tab="venue" role="tab" aria-selected="false">視察</button>
+      <button class="trip-tab" type="button" data-trip-tab="food" role="tab" aria-selected="false">食事</button>
+      <button class="trip-tab" type="button" data-trip-tab="prep" role="tab" aria-selected="false">準備</button>
+      <button class="trip-tab" type="button" data-trip-tab="records" role="tab" aria-selected="false">記録</button>
+    </nav>
+    <nav class="trip-date-rail" aria-label="日付">
+      <span class="trip-date-label">日付</span>
+      <a class="trip-date-link" href="#day-1106">11/6</a>
+      <a class="trip-date-link" href="#day-1107">11/7</a>
+      <a class="trip-date-link" href="#day-1108">11/8</a>
+      <a class="trip-date-link" href="#day-1109">11/9</a>
+      <a class="trip-date-link" href="#day-1110">11/10</a>
+      <a class="trip-date-link" href="#day-1111">11/11</a>
+      <a class="trip-date-link" href="#stays">宿</a>
+    </nav>
+  </div>
+</div>
+
+<main class="trip-wrap trip-main">
+<div class="trip-banner" data-kind="warning"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8V3h10v5M7 17H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M7 14h10v7H7z"/></svg></span><div><strong>机上用印刷版です。</strong>スマートフォンではオンライン版を使用してください。メモ入力欄はこの紙には含めていません。</div></div>
+
+  <section class="trip-panel" data-trip-panel="overview" aria-label="概要">
+    <article class="trip-card">
+      <h2 class="trip-card-title">6日間の動き</h2>
+      
+      <div class="cf-ov-day">
+        <div class="cf-ov-date">11/6<small>金</small></div>
+        <div class="cf-ov-body">
+          <div class="cf-ov-line"><span class="cf-ov-time">14:01</span><span class="cf-ov-icon"><span class="mode-icon mode-icon-train" role="img" aria-label="新幹線"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span></span><span>中書島 → 蒲田（17:02発の案もあり）</span></div>
+          <div class="cf-ov-line"><span class="cf-ov-time">夜</span><span class="cf-ov-icon"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v8m-2-8v5a2 2 0 0 0 4 0V3m-2 8v10M16 3v18m0-18c3 2 4 5 4 8h-4"/></svg></span></span><span>会食（場所は未定）</span></div>
+          <div class="cf-ov-stay">泊　東京（蒲田）</div>
+        </div>
+      </div>
+      
+      <div class="cf-ov-day">
+        <div class="cf-ov-date">11/7<small>土</small></div>
+        <div class="cf-ov-body">
+          <div class="cf-ov-line"><span class="cf-ov-time">9:00</span><span class="cf-ov-icon"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span></span><span>自動制御連合講演会 1日目（17:30〜19:30は技術交流会）</span></div>
+          <div class="cf-ov-stay">泊　東京（蒲田）</div>
+        </div>
+      </div>
+      
+      <div class="cf-ov-day">
+        <div class="cf-ov-date">11/8<small>日</small></div>
+        <div class="cf-ov-body">
+          <div class="cf-ov-line"><span class="cf-ov-time">9:00</span><span class="cf-ov-icon"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span></span><span>講演会 2日目（16:30まで）</span></div>
+          <div class="cf-ov-line"><span class="cf-ov-time">19:55</span><span class="cf-ov-icon"><span class="flight-mark" role="img" aria-label="フライト"></span></span><span>JAL529　羽田 → 新千歳 21:30着</span></div>
+          <div class="cf-ov-stay">泊　千歳</div>
+        </div>
+      </div>
+      
+      <div class="cf-ov-day">
+        <div class="cf-ov-date">11/9<small>月</small></div>
+        <div class="cf-ov-body">
+          <div class="cf-ov-line"><span class="cf-ov-time">9:00</span><span class="cf-ov-icon"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2.5 20a5.5 5.5 0 0 1 11 0M10.5 20a5.5 5.5 0 0 1 11 0"/></svg></span></span><span>WEB会議、13:00〜17:00 会議（どちらもホテルの客室で）</span></div>
+          <div class="cf-ov-stay">泊　千歳</div>
+        </div>
+      </div>
+      
+      <div class="cf-ov-day">
+        <div class="cf-ov-date">11/10<small>火</small></div>
+        <div class="cf-ov-body">
+          <div class="cf-ov-line"><span class="cf-ov-time">8:00</span><span class="cf-ov-icon"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V10l5 3V10l5 3V10l5 3V4h3v17z"/><path d="M7 17h2m3 0h2m3 0h2"/></svg></span></span><span>施設見学（終日。千歳駅からバスで往復）</span></div>
+          <div class="cf-ov-stay">泊　千歳</div>
+        </div>
+      </div>
+      
+      <div class="cf-ov-day">
+        <div class="cf-ov-date">11/11<small>水</small></div>
+        <div class="cf-ov-body">
+          <div class="cf-ov-line"><span class="cf-ov-time">7:30</span><span class="cf-ov-icon"><span class="flight-mark" role="img" aria-label="フライト"></span></span><span>JAL590　新千歳 → 羽田 9:10着</span></div>
+          <div class="cf-ov-line"><span class="cf-ov-time">9:38</span><span class="cf-ov-icon"><span class="mode-icon mode-icon-car" role="img" aria-label="リムジンバス"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2m12 0v2h2v-2M6 13h12"/><circle cx="8" cy="15" r=".8"/><circle cx="16" cy="15" r=".8"/></svg></span></span><span>羽田 → 海浜幕張 10:25着</span></div>
+          <div class="cf-ov-line"><span class="cf-ov-time">10:30</span><span class="cf-ov-icon"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span></span><span>NexTech Week（17:00閉場まで）</span></div>
+          <div class="cf-ov-line"><span class="cf-ov-time">18:30</span><span class="cf-ov-icon"><span class="mode-icon mode-icon-train" role="img" aria-label="新幹線"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span></span><span>のぞみ81号　東京 → 中書島 21:21着</span></div>
+          <div class="cf-ov-stay">帰宅</div>
+        </div>
+      </div>
+    </article>
+    <div class="trip-banner"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.1"/></svg></span><div>時刻・乗換・宿の詳細は旅程、聴講するセッションは視察、期限のある手続きは準備</div></div>
+    <details open class="fold"><summary>前提と出典</summary><div class="fold-body"><ul>
+      <li><b>航空便</b>：新千歳空港公式サイトの時刻表データで、各日に運航する便を確認（10/16時点）。予約時にJALのサイトでも確認する。</li>
+      <li><b>鉄道・バス</b>：Yahoo!乗換案内で2026年11月6日〜11日の日付を指定して検索した結果。</li>
+      <li><b>講演会</b>：計測自動制御学会の会告、第69回自動制御連合講演会の公式サイト、プログラムとタイムテーブル（2026/10/05付の暫定版）。</li>
+      <li><b>NexTech Week</b>：幕張メッセ公式イベントカレンダー、NexTech Week公式サイト（10/17時点）。</li>
+      <li><b>現地</b>：施設から空港までの距離・所要時間はOSRM（地図データからの経路計算）による計算値で、表では余裕を見てタクシー10〜15分としている。</li>
+      <li><b>現地のスケジュール</b>：草間さんのモデルケース（千歳駅 8:00発のバス、18:10発のバス）。</li>
+      <li><b>千歳のホテル</b>：じゃらんの検索結果（10/17時点）、ドーミーイン千歳の公式サイト。千歳駅から空港までの車の距離はOSRMによる計算値（約5.5km）で、タクシー料金は推定。</li>
+      <li><b>東京のホテル</b>：じゃらんの検索結果（10/17時点）、各ホテルの公式サイト。</li>
+      <li>保安検査は出発20分前までに通過する前提。</li>
+      <li>検討の経緯と他のケースは別ファイル「千歳出張_旅程_検討ケース_1108-1111.html」にある（このページには取り込んでいない）。</li>
+    </ul></div></details>
+  </section>
+
+  <section class="trip-panel is-active" data-trip-panel="itinerary" aria-label="旅程">
+    <div class="trip-banner" data-kind="warning"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4.5M12 17.5v.1"/></svg></span><div>JAL529・JAL590は予約済み・未購入。購入期限は10/20（火）21:29</div></div>
+
+    <article class="trip-day" id="day-1106" data-kind="travel">
+      <h2 class="trip-day-title"><span class="trip-day-date">11/6（金）</span><span class="trip-day-summary">東京へ移動（ホテルは蒲田）</span></h2>
+      <div class="trip-row"><div class="trip-time"></div><div class="trip-action"><strong>移動の時刻</strong> <span class="plan-state plan-state-candidate">候補あり</span><span class="state-note">会食の時刻しだい</span><span class="trip-detail">新幹線は未予約。どちらも京都から のぞみ、品川からJR京浜東北線</span></div></div>
+      <div class="trip-row"><div class="trip-time">14:01</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-train" role="img" aria-label="新幹線"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>パターン1　<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E4%B8%AD%E6%9B%B8%E5%B3%B6%E9%A7%85" target="_blank" rel="noopener">中書島</a> 発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=JR%E8%92%B2%E7%94%B0%E9%A7%85" target="_blank" rel="noopener">蒲田</a> 17:07着</strong></span><span class="trip-detail">午後に移動、夜は会食。京都 14:36 のぞみ416号 → 品川 16:57。ホテルに荷物を置いてから会食に向かえる</span></div></div>
+      <div class="trip-row"><div class="trip-time">17:02</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-train" role="img" aria-label="新幹線"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>パターン2　<a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E4%B8%AD%E6%9B%B8%E5%B3%B6%E9%A7%85" target="_blank" rel="noopener">中書島</a> 発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=JR%E8%92%B2%E7%94%B0%E9%A7%85" target="_blank" rel="noopener">蒲田</a> 20:10着</strong></span><span class="trip-detail">17時以降に移動。京都 17:36 のぞみ462号 → 品川 19:59</span></div></div>
+      <div class="trip-row"><div class="trip-time">夜</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v8m-2-8v5a2 2 0 0 0 4 0V3m-2 8v10M16 3v18m0-18c3 2 4 5 4 8h-4"/></svg></span>会食</strong> <span class="plan-state plan-state-unconsidered">未検討</span><span class="trip-detail">会食の場所は未定</span></div></div>
+      <div class="trip-row"><div class="trip-time"></div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6h16v15M8 10h2m4 0h2m-8 4h2m4 0h2M9 21v-3h6v3"/></svg></span><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%82%B9%E3%83%BC%E3%83%91%E3%83%BC%E3%83%9B%E3%83%86%E3%83%AB%E6%9D%B1%E4%BA%AC%E3%83%BBJR%E8%92%B2%E7%94%B0%E8%A5%BF%E5%8F%A3" target="_blank" rel="noopener">スーパーホテル東京・JR蒲田西口</a></strong> <span class="plan-state plan-state-fixed">確定</span><span class="trip-detail">蒲田駅 西口から徒歩約3分。2泊（11/6・7）</span></div></div>
+      <div class="trip-card-body">
+        <details open class="fold"><summary>経路と運賃</summary><div class="fold-body"><p>経路は、中書島 →（京阪）丹波橋 →（近鉄）京都 →（新幹線）品川 →（JR京浜東北線）蒲田。約13,740円。</p></div></details>
+        <details open class="fold"><summary>ほかの時刻（検討したもの）</summary><div class="fold-body"><div class="cf-scroll"><table class="cf-table"><thead><tr><th>中書島 発</th><th>新幹線</th><th>大井町 着</th><th>コメント</th></tr></thead><tbody><tr><td>13:01</td><td>のぞみ400号</td><td>16:00</td><td></td></tr><tr><td>15:02</td><td>のぞみ434号</td><td>18:04</td><td>会食が19時以降なら</td></tr><tr><td>18:00</td><td>のぞみ476号</td><td>20:59</td><td></td></tr><tr><td>20:53</td><td>のぞみ204号</td><td>23:50</td><td>当日中に着ける最終</td></tr></tbody></table></div><p>蒲田は大井町からJRで2駅先。</p></div></details>
+      </div>
+      <div class="trip-field"><label for="day-1106-note">当日メモ</label><textarea id="day-1106-note" data-trip-store="day:1106:day" data-trip-note="day" data-trip-append-timestamp placeholder="気づいたこと・変更・後で調べること"></textarea></div>
+    </article>
+
+    <article class="trip-day" id="day-1107" data-kind="event">
+      <h2 class="trip-day-title"><span class="trip-day-date">11/7（土）</span><span class="trip-day-summary">自動制御連合講演会 1日目</span></h2>
+      <div class="trip-row"><div class="trip-time">8:17</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=JR%E8%92%B2%E7%94%B0%E9%A7%85" target="_blank" rel="noopener">蒲田</a> 発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%B0%BE%E5%B1%B1%E5%8F%B0%E9%A7%85" target="_blank" rel="noopener">尾山台</a> 8:46着</strong></span><span class="trip-detail">JR京浜東北線 → 大井町 → 東急大井町線。29分、426円</span></div></div>
+      <div class="trip-row"><div class="trip-time">9:00</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>講演会 1日目</strong> <span class="plan-state plan-state-tentative">仮決め</span><span class="state-note">10/23までに参加登録</span><span class="trip-detail"><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%B8%82%E5%A4%A7%E5%AD%A6%20%E4%B8%96%E7%94%B0%E8%B0%B7%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%91%E3%82%B9" target="_blank" rel="noopener">東京都市大学 世田谷キャンパス</a>（1号館・7号館・9号館）。聴講するセッションは視察タブ</span></div></div>
+      <div class="trip-row"><div class="trip-time">11:45</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v8m-2-8v5a2 2 0 0 0 4 0V3m-2 8v10M16 3v18m0-18c3 2 4 5 4 8h-4"/></svg></span>昼食（12:45まで）</strong><span class="trip-detail">尾山台駅周辺の候補は食事タブ</span></div></div>
+      <div class="trip-row"><div class="trip-time">17:30</div><div class="trip-action"><strong>技術交流会（19:30まで）</strong> <span class="plan-state plan-state-tentative">仮決め</span><span class="state-note">参加登録とあわせて申し込む</span></div></div>
+      <div class="trip-row"><div class="trip-time">19:45</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%B0%BE%E5%B1%B1%E5%8F%B0%E9%A7%85" target="_blank" rel="noopener">尾山台</a> 発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=JR%E8%92%B2%E7%94%B0%E9%A7%85" target="_blank" rel="noopener">蒲田</a> 20:17着</strong></span></div></div>
+      <div class="trip-field"><label for="day-1107-note">当日メモ</label><textarea id="day-1107-note" data-trip-store="day:1107:day" data-trip-note="day" data-trip-append-timestamp placeholder="気づいたこと・変更・後で調べること"></textarea></div>
+    </article>
+
+    <article class="trip-day" id="day-1108" data-kind="travel">
+      <h2 class="trip-day-title"><span class="trip-day-date">11/8（日）</span><span class="trip-day-summary">講演会 2日目のあと千歳へ</span></h2>
+      <div class="trip-row"><div class="trip-time">朝</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6h16v15M8 10h2m4 0h2m-8 4h2m4 0h2M9 21v-3h6v3"/></svg></span>チェックアウトして荷物ごと会場へ</strong><span class="trip-detail">会場にクロークがあるかは未確認</span></div></div>
+      <div class="trip-row"><div class="trip-time">8:17</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=JR%E8%92%B2%E7%94%B0%E9%A7%85" target="_blank" rel="noopener">蒲田</a> 発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%B0%BE%E5%B1%B1%E5%8F%B0%E9%A7%85" target="_blank" rel="noopener">尾山台</a> 8:46着</strong></span><span class="trip-detail">7日と同じ。29分、426円</span></div></div>
+      <div class="trip-row"><div class="trip-time">9:00</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>講演会 2日目（16:30まで）</strong><span class="trip-detail">昼食は11:45〜13:15</span></div></div>
+      <div class="trip-row"><div class="trip-time">16:45</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-train" role="img" aria-label="鉄道"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%B0%BE%E5%B1%B1%E5%8F%B0%E9%A7%85" target="_blank" rel="noopener">尾山台</a> 発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E7%BE%BD%E7%94%B0%E7%A9%BA%E6%B8%AF%E7%AC%AC1%E3%83%BB%E7%AC%AC2%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB%E9%A7%85" target="_blank" rel="noopener">羽田空港第1・第2ターミナル駅</a> 17:46着</strong></span><span class="trip-detail">東急大井町線 → 大井町 →（JR）品川 →（京急）。709円</span></div></div>
+      <div class="trip-row"><div class="trip-time">17:46</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v8m-2-8v5a2 2 0 0 0 4 0V3m-2 8v10M16 3v18m0-18c3 2 4 5 4 8h-4"/></svg></span>羽田で夕食</strong> <span class="plan-state plan-state-onsite">当日判断</span><span class="trip-detail">保安検査の締切 19:35。店の候補は食事タブ</span></div></div>
+      <div class="trip-card-body">
+      
+      <section class="flight-card">
+        <div class="flight-card-head"><div><span class="flight-label">羽田 → 新千歳</span><h3>JAL529 <span class="plan-state plan-state-tentative">仮決め</span><span class="state-note">10/20 21:29までに購入</span></h3></div><span class="flight-total">1時間35分</span></div>
+        <div class="flight-leg">
+          <div class="flight-point"><span class="point-label">発</span><time><span class="flight-date">11/8（日）</span><strong>19:55</strong></time><span>羽田</span></div>
+          <div class="flight-route"><span class="flight-rule"><span class="flight-mark" role="img" aria-label="フライト"></span></span><strong>JAL529</strong><small>JAL</small></div>
+          <div class="flight-point"><span class="point-label">着</span><time><strong>21:30</strong></time><span>新千歳</span></div>
+        </div>
+        <footer>普通席・座席は未指定。往復セイバー（JAL590と合計43,595円）</footer>
+      </section>
+      </div>
+      <div class="trip-row"><div class="trip-time">21:56</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-train" role="img" aria-label="JR快速エアポート"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E6%96%B0%E5%8D%83%E6%AD%B3%E7%A9%BA%E6%B8%AF%E9%A7%85" target="_blank" rel="noopener">新千歳空港駅</a> 発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=JR%E5%8D%83%E6%AD%B3%E9%A7%85" target="_blank" rel="noopener">千歳駅</a> 22:12着</strong></span><span class="trip-detail">290円。次は22:08発（22:23着）</span></div></div>
+      <div class="trip-row"><div class="trip-time">22:12</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-walk" role="img" aria-label="徒歩"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M10 21l2.5-6 3 3v3M9.5 12.5l1.5-4.5 3.5 2 2 3M11 8l-3.5 2.5V14"/></svg></span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%89%E3%83%BC%E3%83%9F%E3%83%BC%E3%82%A4%E3%83%B3%E5%8D%83%E6%AD%B3%20%E5%8C%97%E6%B5%B7%E9%81%93%E5%8D%83%E6%AD%B3%E5%B8%82%E5%B9%B8%E7%94%BA4%E4%B8%81%E7%9B%AE20%E7%95%AA%E5%9C%B01%E5%8F%B7" target="_blank" rel="noopener">ドーミーイン千歳</a>にチェックイン</strong></span><span class="trip-detail">千歳駅 西口から徒歩約7分</span></div></div>
+      <div class="trip-field"><label for="day-1108-note">当日メモ</label><textarea id="day-1108-note" data-trip-store="day:1108:day" data-trip-note="day" data-trip-append-timestamp placeholder="気づいたこと・変更・後で調べること"></textarea></div>
+    </article>
+
+    <article class="trip-day" id="day-1109" data-kind="event">
+      <h2 class="trip-day-title"><span class="trip-day-date">11/9（月）</span><span class="trip-day-summary">千歳で会議</span></h2>
+      <div class="trip-row"><div class="trip-time">9:00</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2.5 20a5.5 5.5 0 0 1 11 0M10.5 20a5.5 5.5 0 0 1 11 0"/></svg></span>WEB会議</strong><span class="trip-detail">ドーミーイン千歳の客室（無料Wi-Fiあり）</span></div></div>
+      <div class="trip-row"><div class="trip-time">13:00</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2.5 20a5.5 5.5 0 0 1 11 0M10.5 20a5.5 5.5 0 0 1 11 0"/></svg></span>会議（17:00まで）</strong><span class="trip-detail">ドーミーイン千歳の客室</span></div></div>
+      <div class="trip-row"><div class="trip-time">夜</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v8m-2-8v5a2 2 0 0 0 4 0V3m-2 8v10M16 3v18m0-18c3 2 4 5 4 8h-4"/></svg></span>駅前の飲み屋街で夕食</strong></div></div>
+      <div class="trip-card-body">
+        <details open class="fold"><summary>客室で会議に出る理由と回線</summary><div class="fold-body"><p>前日から連泊しているので、チェックアウトを気にせず客室で会議に出られる。客室の回線が不安なら、テザリングなど別の回線も用意しておく。</p></div></details>
+      </div>
+      <div class="trip-field"><label for="day-1109-note">当日メモ</label><textarea id="day-1109-note" data-trip-store="day:1109:day" data-trip-note="day" data-trip-append-timestamp placeholder="気づいたこと・変更・後で調べること"></textarea></div>
+    </article>
+
+    <article class="trip-day" id="day-1110" data-kind="event">
+      <h2 class="trip-day-title"><span class="trip-day-date">11/10（火）</span><span class="trip-day-summary">施設見学（終日）</span></h2>
+      <div class="trip-row"><div class="trip-time">7:50</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-walk" role="img" aria-label="徒歩"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M10 21l2.5-6 3 3v3M9.5 12.5l1.5-4.5 3.5 2 2 3M11 8l-3.5 2.5V14"/></svg></span><strong>ホテル → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=JR%E5%8D%83%E6%AD%B3%E9%A7%85" target="_blank" rel="noopener">千歳駅</a></strong></span><span class="trip-detail">7:50ごろ出る。徒歩約7分</span></div></div>
+      <div class="trip-row"><div class="trip-time">8:00</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-car" role="img" aria-label="バス"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2m12 0v2h2v-2M6 13h12"/><circle cx="8" cy="15" r=".8"/><circle cx="16" cy="15" r=".8"/></svg></span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=JR%E5%8D%83%E6%AD%B3%E9%A7%85" target="_blank" rel="noopener">千歳駅</a> 発 → 現地 8:20ごろ着</strong></span> <span class="plan-state plan-state-tentative">仮決め</span><span class="state-note">乗り場を確認</span><span class="trip-detail">現地は新千歳空港の国内線ターミナルから東へ車で約6km</span></div></div>
+      <div class="trip-row"><div class="trip-time">9:00</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V10l5 3V10l5 3V10l5 3V4h3v17z"/><path d="M7 17h2m3 0h2m3 0h2"/></svg></span>朝礼 → そのままクリーンルームへ</strong></div></div>
+      <div class="trip-row"><div class="trip-time">10:00</div><div class="trip-action"><strong>CR作業（11:45まで）</strong></div></div>
+      <div class="trip-row"><div class="trip-time">12:00</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v8m-2-8v5a2 2 0 0 0 4 0V3m-2 8v10M16 3v18m0-18c3 2 4 5 4 8h-4"/></svg></span>昼食・昼休み（13:00まで）</strong><span class="trip-detail">クリーンルームとプレハブ事務所の往復は状況による</span></div></div>
+      <div class="trip-row"><div class="trip-time">13:15</div><div class="trip-action"><strong>CR作業（16:30まで）</strong></div></div>
+      <div class="trip-row"><div class="trip-time">17:00</div><div class="trip-action"><strong>事務作業</strong></div></div>
+      <div class="trip-row"><div class="trip-time">18:10</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-car" role="img" aria-label="バス"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2m12 0v2h2v-2M6 13h12"/><circle cx="8" cy="15" r=".8"/><circle cx="16" cy="15" r=".8"/></svg></span><strong>現地 発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=JR%E5%8D%83%E6%AD%B3%E9%A7%85" target="_blank" rel="noopener">千歳駅</a> 18:30ごろ着</strong></span><span class="trip-detail">ホテルへ徒歩約7分</span></div></div>
+      <div class="trip-row"><div class="trip-time">夜</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v8m-2-8v5a2 2 0 0 0 4 0V3m-2 8v10M16 3v18m0-18c3 2 4 5 4 8h-4"/></svg></span>駅前の飲み屋街で夕食</strong></div></div>
+      <div class="trip-card-body">
+        <details open class="fold"><summary>現地の方に確認すること</summary><div class="fold-body"><ul><li>8:00のバスの乗り場（千歳駅のどの出口か）</li></ul><p>現地のスケジュールは草間さんのモデルケースより。</p></div></details>
+      </div>
+      <div class="trip-field"><label for="day-1110-note">当日メモ</label><textarea id="day-1110-note" data-trip-store="day:1110:day" data-trip-note="day" data-trip-append-timestamp placeholder="気づいたこと・変更・後で調べること"></textarea></div>
+    </article>
+
+    <article class="trip-day" id="day-1111" data-kind="travel">
+      <h2 class="trip-day-title"><span class="trip-day-date">11/11（水）</span><span class="trip-day-summary">新千歳 → 幕張メッセ → 帰宅</span></h2>
+      <div class="trip-row"><div class="trip-time">6:15</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-car" role="img" aria-label="タクシー"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2m12 0v2h2v-2M6 13h12"/><circle cx="8" cy="15" r=".8"/><circle cx="16" cy="15" r=".8"/></svg></span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%89%E3%83%BC%E3%83%9F%E3%83%BC%E3%82%A4%E3%83%B3%E5%8D%83%E6%AD%B3%20%E5%8C%97%E6%B5%B7%E9%81%93%E5%8D%83%E6%AD%B3%E5%B8%82%E5%B9%B8%E7%94%BA4%E4%B8%81%E7%9B%AE20%E7%95%AA%E5%9C%B01%E5%8F%B7" target="_blank" rel="noopener">ドーミーイン千歳</a> → 新千歳 6:30ごろ着</strong></span> <span class="plan-state plan-state-tentative">仮決め</span><span class="state-note">前日までに手配</span><span class="trip-detail">約10分・約5.5km。料金の目安は2,000〜3,000円（推定）。保安検査の締切 7:10</span></div></div>
+      <div class="trip-card-body">
+        <details open class="fold"><summary>別案（JR）</summary><div class="fold-body"><p>6:10ごろホテルから千歳駅へ歩く（約7分）→ 千歳 6:21発（JR快速エアポート）→ 新千歳空港駅 6:37着。290円。</p></div></details>
+      
+      <section class="flight-card">
+        <div class="flight-card-head"><div><span class="flight-label">新千歳 → 羽田</span><h3>JAL590 <span class="plan-state plan-state-tentative">仮決め</span><span class="state-note">10/20 21:29までに購入</span></h3></div><span class="flight-total">1時間40分</span></div>
+        <div class="flight-leg">
+          <div class="flight-point"><span class="point-label">発</span><time><span class="flight-date">11/11（水）</span><strong>7:30</strong></time><span>新千歳</span></div>
+          <div class="flight-route"><span class="flight-rule"><span class="flight-mark" role="img" aria-label="フライト"></span></span><strong>JAL590</strong><small>JAL</small></div>
+          <div class="flight-point"><span class="point-label">着</span><time><strong>9:10</strong></time><span>羽田 第1ターミナル</span></div>
+        </div>
+        <footer>満席ならJAL500（7:45発）、JAL502（8:50発）</footer>
+      </section>
+      </div>
+      <div class="trip-row"><div class="trip-time">9:38</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-car" role="img" aria-label="リムジンバス"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M4 17v-4l2-5h12l2 5v4M4 17v2h2v-2m12 0v2h2v-2M6 13h12"/><circle cx="8" cy="15" r=".8"/><circle cx="16" cy="15" r=".8"/></svg></span><strong>羽田 第1ターミナル 発 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E6%B5%B7%E6%B5%9C%E5%B9%95%E5%BC%B5%E9%A7%85" target="_blank" rel="noopener">海浜幕張</a> 10:25着</strong></span><span class="trip-detail">1,500円</span></div></div>
+      <div class="trip-row"><div class="trip-time">10:30</div><div class="trip-action"><strong><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>NexTech Week（17:00まで）</strong> <span class="plan-state plan-state-fixed">確定</span><span class="trip-detail"><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%B9%95%E5%BC%B5%E3%83%A1%E3%83%83%E3%82%BB%20%E5%B1%95%E7%A4%BA%E3%83%9B%E3%83%BC%E3%83%AB" target="_blank" rel="noopener">幕張メッセ 展示ホール1〜3</a>。開場は10:00、着くのは開場の25分後</span></div></div>
+      <div class="trip-row"><div class="trip-time">17:22</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-train" role="img" aria-label="JR京葉線"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E6%B5%B7%E6%B5%9C%E5%B9%95%E5%BC%B5%E9%A7%85" target="_blank" rel="noopener">海浜幕張</a> 発 → 東京</strong></span></div></div>
+      <div class="trip-row"><div class="trip-time">18:30</div><div class="trip-action"><span class="cf-move"><span class="mode-icon mode-icon-train" role="img" aria-label="新幹線"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r="1"/><circle cx="15" cy="13" r="1"/><path d="M8 16l-2 4m10-4 2 4"/></svg></span><strong>東京 発 のぞみ81号 → <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E4%B8%AD%E6%9B%B8%E5%B3%B6%E9%A7%85" target="_blank" rel="noopener">中書島</a> 21:21着</strong></span> <span class="plan-state plan-state-tentative">仮決め</span><span class="state-note">新幹線を予約</span><span class="trip-detail">京都から近鉄・京阪。約14,140円</span></div></div>
+      <div class="trip-card-body">
+        <details open class="fold"><summary>帰りの別の時刻（検討したもの）</summary><div class="fold-body"><div class="cf-scroll"><table class="cf-table"><thead><tr><th>海浜幕張 発</th><th>東京 発（新幹線）</th><th>中書島 着</th><th>コメント</th></tr></thead><tbody><tr><td>15:02</td><td>16:00 のぞみ267号</td><td>18:50</td><td>早めに切り上げる場合</td></tr><tr><td>16:05</td><td>17:09 のぞみ463号</td><td>19:57</td><td></td></tr><tr class="is-chosen"><td>17:22</td><td>18:30 のぞみ81号</td><td>21:21</td><td>閉場まで見る場合</td></tr><tr><td>19:57</td><td>21:03 のぞみ289号</td><td>23:54</td><td>当日中に中書島に着ける最終</td></tr></tbody></table></div></div></details>
+      </div>
+      <div class="trip-field"><label for="day-1111-note">当日メモ</label><textarea id="day-1111-note" data-trip-store="day:1111:day" data-trip-note="day" data-trip-append-timestamp placeholder="気づいたこと・変更・後で調べること"></textarea></div>
+    </article>
+
+    <article class="trip-card" id="stays">
+      <h2 class="trip-card-title"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6h16v15M8 10h2m4 0h2m-8 4h2m4 0h2M9 21v-3h6v3"/></svg></span>宿泊</h2>
+      <div class="trip-card-body">
+        <h3>11/6・7　東京（2泊） <span class="plan-state plan-state-fixed">確定</span></h3>
+        <dl class="cf-facts">
+          <dt>ホテル</dt><dd>高濃度炭酸泉 梅屋敷の湯 <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%82%B9%E3%83%BC%E3%83%91%E3%83%BC%E3%83%9B%E3%83%86%E3%83%AB%E6%9D%B1%E4%BA%AC%E3%83%BBJR%E8%92%B2%E7%94%B0%E8%A5%BF%E5%8F%A3" target="_blank" rel="noopener">スーパーホテル東京・JR蒲田西口</a></dd>
+          <dt>場所</dt><dd>JR京浜東北線 蒲田駅 西口から徒歩約3分</dd>
+          <dt>特徴</dt><dd>男女別の高濃度人工炭酸泉の大浴場、無料の健康朝食、ウェルカムバー（17:00〜21:00）。評価4.4（1,938件）</dd>
+          <dt>6日の到着</dt><dd>中書島 14:01発 → 蒲田 17:07着、または中書島 17:02発 → 蒲田 20:10着</dd>
+          <dt>会場へ</dt><dd>7日・8日とも蒲田 8:17発 → 尾山台 8:46着（29分、426円）。7日の帰りは尾山台 19:45発 → 蒲田 20:17着</dd>
+          <dt>予約</dt><dd><a href="https://www.jalan.net/" target="_blank" rel="noopener">じゃらん</a>で予約済み</dd>
+        </dl>
+        <details open class="fold"><summary>比較した東京のホテル（検討したもの）</summary><div class="fold-body"><p>じゃらんで11/6〜8の2泊・大人1名を検索した結果（10/17時点）。2泊合計、税込、ブロンズ会員料金を含む。</p><div class="cf-scroll"><table class="cf-table"><thead><tr><th>ホテル</th><th>最寄り駅</th><th>2泊合計</th><th>評価</th><th>会場まで</th></tr></thead><tbody><tr><td>JR東日本ホテルメッツ 大森</td><td>JR大森駅 徒歩1分</td><td>50,670円〜</td><td>4.5</td><td>26分</td></tr><tr><td>アパホテル〈大森駅前〉</td><td>JR大森駅 徒歩1分</td><td>48,150円〜</td><td>4.5</td><td>26分</td></tr><tr><td>アパホテル〈大森駅前東〉</td><td>JR大森駅 徒歩4分</td><td>47,520円〜</td><td>4.4</td><td>26分</td></tr><tr class="is-chosen"><td>スーパーホテル東京・JR蒲田西口（決定）</td><td>JR蒲田駅 徒歩3分</td><td>43,200円〜（朝食付き）</td><td>4.4</td><td>29分</td></tr><tr><td>グランパークホテル パネックス東京</td><td>JR蒲田駅 徒歩2分</td><td>43,300円〜</td><td>4.0</td><td>29分</td></tr><tr><td>ホテルマイステイズ蒲田</td><td>JR蒲田駅 徒歩5分</td><td>44,400円〜</td><td>4.3</td><td>29分</td></tr><tr><td>ホテルメトロポリタン 大井町トラックス</td><td>大井町駅 徒歩1分</td><td>101,800円〜</td><td>4.6</td><td>17分</td></tr><tr><td>新横浜国際ホテル</td><td>JR新横浜駅 徒歩3分</td><td>37,300円〜</td><td>4.1</td><td>27〜32分</td></tr><tr><td>スーパーホテル新横浜</td><td>JR新横浜駅 徒歩3分</td><td>47,600円〜（朝食付き）</td><td>4.4</td><td>27〜32分</td></tr><tr><td>JR東日本ホテルメッツ 横浜鶴見</td><td>JR鶴見駅 徒歩1分</td><td>41,220円〜</td><td>4.4</td><td>38〜43分</td></tr></tbody></table></div><p>溝の口（会場まで8〜11分）、武蔵小杉（14〜16分）も候補に挙げたが、料金は未調査。</p></div></details>
+
+        <h3>11/8〜11/11　千歳（3泊） <span class="plan-state plan-state-fixed">確定</span></h3>
+        <dl class="cf-facts">
+          <dt>ホテル</dt><dd>天然温泉 鶴舞の湯 <a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%83%89%E3%83%BC%E3%83%9F%E3%83%BC%E3%82%A4%E3%83%B3%E5%8D%83%E6%AD%B3%20%E5%8C%97%E6%B5%B7%E9%81%93%E5%8D%83%E6%AD%B3%E5%B8%82%E5%B9%B8%E7%94%BA4%E4%B8%81%E7%9B%AE20%E7%95%AA%E5%9C%B01%E5%8F%B7" target="_blank" rel="noopener">ドーミーイン千歳</a>（2026年6月24日開業）</dd>
+          <dt>場所</dt><dd>北海道千歳市幸町4丁目20番地1号。JR千歳駅 西口から徒歩約7分。新千歳空港から車で約10分</dd>
+          <dt>電話</dt><dd><a href="tel:0123296050">0123-29-6050</a></dd>
+          <dt>チェックイン／アウト</dt><dd>基本は15:00／11:00（プランによって異なる場合あり）</dd>
+          <dt>設備</dt><dd>男女別の天然温泉大浴場（オートロウリュサウナ・水風呂、15:00〜翌10:00）、無料Wi-Fi。朝食は「いくらとサーモンの海鮮手まり」など</dd>
+          <dt>空港への送迎</dt><dd>なし。11/11の朝はタクシー（6:15ごろ、前日までに手配）かJR（千歳 6:21発）</dd>
+          <dt>使い方</dt><dd>8日の夜（22:12）にJRで千歳駅へ → 9日は客室で会議 → 10日は千歳駅 8:00のバスで見学、18:10のバスで戻る → 11日は6:15ごろタクシーで空港へ</dd>
+          <dt>注意</dt><dd>朝食の開始時刻は未確認。6:15より前に食べられなければ、空港で朝食</dd>
+          <dt>予約</dt><dd><a href="https://dormy-hotels.com/dormyinn/hotels/chitose/" target="_blank" rel="noopener">公式サイト</a>で予約済み</dd>
+        </dl>
+        <details open class="fold"><summary>比較した千歳のホテル（検討したもの）</summary><div class="fold-body"><p>じゃらんで11/8〜11の3泊・大人1名を検索した結果（10/17時点）。3泊合計、税込。</p><div class="cf-scroll"><table class="cf-table"><thead><tr><th>ホテル</th><th>駅から</th><th>3泊合計（朝食付き）</th><th>評価</th><th>11/11朝の空港へ</th></tr></thead><tbody><tr><td>千歳ステーションホテル</td><td>駅直結</td><td>25,800円〜</td><td>4.1</td><td>JR（改札まで1分）</td></tr><tr class="is-chosen"><td>ドーミーイン千歳（決定）</td><td>徒歩7分</td><td>32,670円〜</td><td>4.5</td><td>タクシーかJR</td></tr><tr><td>ホテルルートイン千歳駅前</td><td>徒歩3分</td><td>36,300円〜</td><td>4.4</td><td>無料シャトル 6:20発（予約制）</td></tr><tr><td>JRイン千歳</td><td>徒歩30秒</td><td>36,000円〜</td><td>4.3</td><td>JR</td></tr><tr><td>エアターミナルホテル</td><td>空港直結</td><td>47,100円〜</td><td>4.2</td><td>徒歩</td></tr></tbody></table></div></div></details>
+      </div>
+    </article>
+
+    <article class="trip-card" id="links">
+      <h2 class="trip-card-title">現地で使うリンク</h2>
+      <div class="trip-card-body">
+        <ul class="cf-food-list" style="padding-left:18px">
+          <li><a href="https://www.jal.co.jp/jp/ja/dom/" target="_blank" rel="noopener">JAL国内線（予約確認）</a></li>
+          <li><a href="https://expy.jp/" target="_blank" rel="noopener">EX予約</a>　／　<a href="https://smart-ex.jp/" target="_blank" rel="noopener">スマートEX</a></li>
+          <li><a href="https://www.limousinebus.co.jp/" target="_blank" rel="noopener">東京空港交通（リムジンバス）</a>　羽田第1ターミナル 9:38発、1,500円</li>
+          <li><a href="https://rengo69.sice.jp/" target="_blank" rel="noopener">第69回 自動制御連合講演会</a></li>
+          <li><a href="https://www.nextech-week.jp/autumn/ja-jp.html" target="_blank" rel="noopener">NexTech Week【秋】</a></li>
+        </ul>
+      </div>
+    </article>
+  </section>
+
+  <section class="trip-panel" data-trip-panel="venue" aria-label="視察">
+    <article class="trip-card">
+      <h2 class="trip-card-title">第69回 自動制御連合講演会</h2>
+      <div class="trip-card-body">
+        <dl class="cf-facts">
+          <dt>会期</dt><dd>11/7（土）9:00〜19:30（技術交流会 17:30〜19:30）、11/8（日）9:00〜16:30</dd>
+          <dt>会場</dt><dd><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E6%9D%B1%E4%BA%AC%E9%83%BD%E5%B8%82%E5%A4%A7%E5%AD%A6%20%E4%B8%96%E7%94%B0%E8%B0%B7%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%91%E3%82%B9" target="_blank" rel="noopener">東京都市大学 世田谷キャンパス</a> 1号館・7号館・9号館（東急大井町線 尾山台駅から徒歩）</dd>
+          <dt>資料</dt><dd>プログラム（program_20261005.pdf）、タイムテーブル（timetable_20261005.pdf）</dd>
+          <dt>公式</dt><dd><a href="https://rengo69.sice.jp/" target="_blank" rel="noopener">rengo69.sice.jp</a></dd>
+        </dl>
+        <details open class="fold"><summary>資料の保存場所</summary><div class="fold-body"><p>保存場所：00_技術開発センター\カンファレンス。どちらも2026/10/05付の暫定版。下のセッション番号はプログラムの番号と同じ。PDFは公開ページには載せていない。</p></div></details>
+        <details open class="fold"><summary>聴講の選び方</summary><div class="fold-body"><p>物流・搬送に近いもの（クレーン、AGV/AMR、マルチロボットなど）を優先した。「物流・搬送」の札は、物流・搬送機器に特に近いセッション。</p></div></details>
+      </div>
+    </article>
+    
+    <article class="trip-record" id="rec-session-1I1">
+      <h3 class="trip-card-title">1I1　OS15 サイバーフィジカル・フレキシブル・オートメーション I<span class="cf-tag">物流・搬送</span></h3>
+      <div class="cf-session-meta">11/7　9:00〜10:30　I室 <span class="plan-state plan-state-tentative">仮決め</span></div>
+      <ul class="cf-session-talks"><li>1I1-1 自動走行型天井クレーンの最短時間制振搬送（山梨大）</li><li>1I1-2 クレーン地切りの力学モデルと吊り荷重心推定</li><li>1I1-3 製造リードタイム推定（東芝）</li><li>1I1-5 ピッキングタスクの模倣学習にリザバーコンピューティングを適用</li></ul>
+      <div class="trip-field">
+        <label for="session-1I1-prep">事前の狙い・質問</label>
+        <textarea id="session-1I1-prep" data-trip-store="venue:session-1I1:prep" data-trip-note="prep" placeholder="確認したい技術・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="session-1I1-day">当日メモ</label>
+        <textarea id="session-1I1-day" data-trip-store="venue:session-1I1:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+
+    <article class="trip-record" id="rec-session-sp1">
+      <h3 class="trip-card-title">特別講演1　矢野 雄一郎 先生（総務省）「異分野協創が拓くシステム制御の可能性」</h3>
+      <div class="cf-session-meta">11/7　10:45〜11:45</div>
+      
+      <div class="trip-field">
+        <label for="session-sp1-prep">事前の狙い・質問</label>
+        <textarea id="session-sp1-prep" data-trip-store="venue:session-sp1:prep" data-trip-note="prep" placeholder="確認したい技術・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="session-sp1-day">当日メモ</label>
+        <textarea id="session-sp1-day" data-trip-store="venue:session-sp1:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+
+    <article class="trip-record" id="rec-session-1G2">
+      <h3 class="trip-card-title">1G2　OS02 制御のための基盤モデル II</h3>
+      <div class="cf-session-meta">11/7　12:45〜14:15　G室 <span class="plan-state plan-state-tentative">仮決め</span></div>
+      <ul class="cf-session-talks"><li>1G2-1 制御基盤モデルに向けて（理研）</li><li>1G2-3 想定外の事象に対応する複数ロボットの協調アーキテクチャ（阪大）</li><li>1G2-4 Gemini Roboticsによる物体の把持・搬送（東京理科大）</li></ul>
+      <div class="trip-field">
+        <label for="session-1G2-prep">事前の狙い・質問</label>
+        <textarea id="session-1G2-prep" data-trip-store="venue:session-1G2:prep" data-trip-note="prep" placeholder="確認したい技術・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="session-1G2-day">当日メモ</label>
+        <textarea id="session-1G2-day" data-trip-store="venue:session-1G2:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+
+    <article class="trip-record" id="rec-session-1D3">
+      <h3 class="trip-card-title">1D3　マルチエージェントシステムの制御 II<span class="cf-tag">物流・搬送</span></h3>
+      <div class="cf-session-meta">11/7　14:30〜16:00　D室 <span class="plan-state plan-state-tentative">仮決め</span></div>
+      <ul class="cf-session-talks"><li>1D3-1 制御不能なイベントを含むマルチエージェント経路計画</li><li>1D3-2 人を避けるマルチロボット経路計画（大阪公立大）</li><li>1D3-3 協調運搬タスクの分散割り当て（慶大・川崎重工）</li></ul>
+      <div class="trip-field">
+        <label for="session-1D3-prep">事前の狙い・質問</label>
+        <textarea id="session-1D3-prep" data-trip-store="venue:session-1D3:prep" data-trip-note="prep" placeholder="確認したい技術・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="session-1D3-day">当日メモ</label>
+        <textarea id="session-1D3-day" data-trip-store="venue:session-1D3:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+
+    <article class="trip-record" id="rec-session-sp2">
+      <h3 class="trip-card-title">特別講演2　中村 文一 先生（東京理科大）→ 17:30〜19:30 技術交流会</h3>
+      <div class="cf-session-meta">11/7　16:15〜19:30</div>
+      
+      <div class="trip-field">
+        <label for="session-sp2-prep">事前の狙い・質問</label>
+        <textarea id="session-sp2-prep" data-trip-store="venue:session-sp2:prep" data-trip-note="prep" placeholder="確認したい技術・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="session-sp2-day">当日メモ</label>
+        <textarea id="session-sp2-day" data-trip-store="venue:session-sp2:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+
+    <article class="trip-record" id="rec-session-2J1">
+      <h3 class="trip-card-title">2J1　OS04 モーションコントロール I<span class="cf-tag">物流・搬送</span></h3>
+      <div class="cf-session-meta">11/8　9:00〜10:30　J室 <span class="plan-state plan-state-tentative">仮決め</span></div>
+      <ul class="cf-session-talks"><li><b>2J1-1 スタッカクレーンのためのアクティブマスダンパのフィードフォワード制御（東大・豊田自動織機）</b></li><li>2J1-4 四輪操舵型移動ロボットによる協調搬送</li><li>2J1-5 2台のモジュールトレーラを連結した搬送システムの制御</li></ul>
+      <div class="trip-field">
+        <label for="session-2J1-prep">事前の狙い・質問</label>
+        <textarea id="session-2J1-prep" data-trip-store="venue:session-2J1:prep" data-trip-note="prep" placeholder="確認したい技術・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="session-2J1-day">当日メモ</label>
+        <textarea id="session-2J1-day" data-trip-store="venue:session-2J1:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+
+    <article class="trip-record" id="rec-session-sp3">
+      <h3 class="trip-card-title">特別講演3　中井 直正 先生（関西学院大）「太陽系外に惑星が発見された！」</h3>
+      <div class="cf-session-meta">11/8　10:45〜11:45</div>
+      
+      <div class="trip-field">
+        <label for="session-sp3-prep">事前の狙い・質問</label>
+        <textarea id="session-sp3-prep" data-trip-store="venue:session-sp3:prep" data-trip-note="prep" placeholder="確認したい技術・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="session-sp3-day">当日メモ</label>
+        <textarea id="session-sp3-day" data-trip-store="venue:session-sp3:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+
+    <article class="trip-record" id="rec-session-2G2">
+      <h3 class="trip-card-title">2G2　OS11 フィジカルAI時代の制御理論と産業応用 II</h3>
+      <div class="cf-session-meta">11/8　13:15〜14:45　G室 <span class="plan-state plan-state-tentative">仮決め</span></div>
+      <ul class="cf-session-talks"><li>2G2-2 空気圧縮機の軽量モデル予測制御（日立）</li><li>2G2-3 微分可能な粒子フィルタによるEnd-to-Endの動作計画（三菱電機）</li><li>2G2-6 Centroidal Dynamicsの非線形モデル予測制御（トヨタ）</li></ul>
+      <div class="trip-field">
+        <label for="session-2G2-prep">事前の狙い・質問</label>
+        <textarea id="session-2G2-prep" data-trip-store="venue:session-2G2:prep" data-trip-note="prep" placeholder="確認したい技術・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="session-2G2-day">当日メモ</label>
+        <textarea id="session-2G2-day" data-trip-store="venue:session-2G2:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+
+    <article class="trip-record" id="rec-session-2F3">
+      <h3 class="trip-card-title">2F3　移動ロボットのナビゲーション・環境認識<span class="cf-tag">物流・搬送</span></h3>
+      <div class="cf-session-meta">11/8　15:00〜16:30　F室 <span class="plan-state plan-state-tentative">仮決め</span></div>
+      <ul class="cf-session-talks"><li>2F3-2 可搬ランドマークを使う屋外の運搬ビークルの自律走行（山梨大ほか）</li><li>2F3-4 ROS2の屋内自律移動ロボットの自己位置推定の信頼度提示</li><li>2F3-5 LiDARを使う4脚ロボットのナビゲーション</li></ul>
+      <div class="trip-field">
+        <label for="session-2F3-prep">事前の狙い・質問</label>
+        <textarea id="session-2F3-prep" data-trip-store="venue:session-2F3:prep" data-trip-note="prep" placeholder="確認したい技術・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="session-2F3-day">当日メモ</label>
+        <textarea id="session-2F3-day" data-trip-store="venue:session-2F3:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+    <details open class="fold"><summary>別候補のセッション（検討したもの）</summary><div class="fold-body"><div class="cf-scroll"><table class="cf-table"><thead><tr><th>日付・時間</th><th>別候補</th></tr></thead><tbody><tr><td>11/7　9:00〜10:30</td><td>1G1 OS02 制御のための基盤モデル I</td></tr><tr><td>11/7　12:45〜14:15</td><td>1I2 OS15 II（1I2-1 産業用ロボットの負荷側加速度推定（安川電機と共同）、1I2-6 設備レイアウト問題）</td></tr><tr><td>11/7　14:30〜16:00</td><td>1E3 安全性・制約を考慮した制御（1E3-4 AMRの動的障害物回避）／1I3 SICEの「さいす学」（フィジカルAI）</td></tr><tr><td>11/8　9:00〜10:30</td><td>2G1 OS11 フィジカルAI時代の制御理論と産業応用 I</td></tr><tr><td>11/8　13:15〜14:45</td><td>2J2 OS04 モーションコントロール II</td></tr><tr><td>11/8　15:00〜16:30</td><td>2D3 OS06 II（2D3-4 マルチエージェントによる協調物体運搬）</td></tr></tbody></table></div></div></details>
+
+    
+    <article class="trip-record" id="rec-meeting-1109">
+      <h3 class="trip-card-title"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2.5 20a5.5 5.5 0 0 1 11 0M10.5 20a5.5 5.5 0 0 1 11 0"/></svg></span>11/9 会議</h3>
+      <div class="cf-session-meta">9:00 WEB会議、13:00〜17:00 会議（ドーミーイン千歳の客室）</div>
+      
+      <div class="trip-field">
+        <label for="meeting-1109-prep">事前の狙い・質問</label>
+        <textarea id="meeting-1109-prep" data-trip-store="venue:meeting-1109:prep" data-trip-note="prep" placeholder="確認したい技術・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="meeting-1109-day">当日メモ</label>
+        <textarea id="meeting-1109-day" data-trip-store="venue:meeting-1109:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+    
+    <article class="trip-record" id="rec-factory-1110">
+      <h3 class="trip-card-title"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V10l5 3V10l5 3V10l5 3V4h3v17z"/><path d="M7 17h2m3 0h2m3 0h2"/></svg></span>11/10 施設見学</h3>
+      <div class="cf-session-meta">終日。朝礼のあとクリーンルームで作業</div>
+      
+      <div class="trip-field">
+        <label for="factory-1110-prep">事前の狙い・質問</label>
+        <textarea id="factory-1110-prep" data-trip-store="venue:factory-1110:prep" data-trip-note="prep" placeholder="確認したい技術・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="factory-1110-day">当日メモ</label>
+        <textarea id="factory-1110-day" data-trip-store="venue:factory-1110:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+
+    <article class="trip-card">
+      <h2 class="trip-card-title">NexTech Week 2026【秋】</h2>
+      <div class="trip-card-body">
+        <dl class="cf-facts">
+          <dt>会期</dt><dd>11/11（水）〜13（金）10:00〜17:00</dd>
+          <dt>会場</dt><dd><a class="place" href="https://www.google.com/maps/search/?api=1&amp;query=%E5%B9%95%E5%BC%B5%E3%83%A1%E3%83%83%E3%82%BB%20%E5%B1%95%E7%A4%BA%E3%83%9B%E3%83%BC%E3%83%AB" target="_blank" rel="noopener">幕張メッセ 展示ホール1〜3</a></dd>
+          <dt>主催</dt><dd>RX Japan</dd>
+          <dt>構成展</dt><dd>7展：AI・人工知能 EXPO／ブロックチェーン EXPO／量子コンピューティング EXPO／AI時代の人材・組織改革EXPO／<b>ヒューマノイドロボット EXPO（第1回）</b>／<b>フィジカルAI EXPO（第1回、工場や物流現場へのAI実装がテーマ）</b>／XR産業活用展（第1回）</dd>
+          <dt>入場</dt><dd>来場登録済み <span class="plan-state plan-state-fixed">確定</span></dd>
+        </dl>
+        <details open class="fold"><summary>入場の条件</summary><div class="fold-body"><p>事前の来場登録が必要。11/10（火）までは無料、以降は11,000円。部長職以上はVIP登録（無料）もある。</p></div></details>
+      </div>
+    </article>
+    
+    <article class="trip-record" id="rec-nextech">
+      <h3 class="trip-card-title">NexTech Week 見学</h3>
+      <div class="cf-session-meta">11/11　10:30〜17:00</div>
+      
+      <div class="trip-field">
+        <label for="nextech-prep">事前の狙い・質問</label>
+        <textarea id="nextech-prep" data-trip-store="venue:nextech:prep" data-trip-note="prep" placeholder="確認したい技術・質問"></textarea>
+      </div>
+      <div class="trip-field">
+        <label for="nextech-day">当日メモ</label>
+        <textarea id="nextech-day" data-trip-store="venue:nextech:day" data-trip-note="day" data-trip-append-timestamp placeholder="要点・数字・後で調べること"></textarea>
+      </div>
+    </article>
+  </section>
+
+  <section class="trip-panel" data-trip-panel="food" aria-label="食事">
+    <div class="trip-banner"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v8m-2-8v5a2 2 0 0 0 4 0V3m-2 8v10M16 3v18m0-18c3 2 4 5 4 8h-4"/></svg></span><div>間食なし、揚げ物・衣ものなし。主食は1食に1つ。アルコールは千歳の夕食（11/9か11/10）で1杯まで</div></div>
+    <details open class="fold"><summary>方針の詳細</summary><div class="fold-body"><p>脂身の多い肉・加工肉は控えめに。アルコールは基本は飲まない。飲むとしても千歳の夕食（11/9か11/10）で1杯まで（ハイボール1杯、または日本酒をおちょこ1杯）。10/24の検査結果と主治医の判断しだい。</p></div></details>
+
+    <article class="trip-card">
+      <h2 class="trip-card-title">日ごとの注意点</h2>
+      <div class="cf-food-scene"><b>11/6（金）　夜の会食</b><span>飲まない。最初に「アルコールは控えています」と伝える。刺身・焼き魚・鍋・冷奴などを選び、揚げ物と締めの麺・ご飯は避ける</span></div>
+      <div class="cf-food-scene"><b>11/7（土）　スーパーホテル蒲田の朝食ビュッフェ</b><span>パンは控えめに。卵（1個まで）・野菜・ヨーグルト（無糖）中心</span></div>
+      <div class="cf-food-scene"><b>11/7（土）　講演会の昼食（11:45〜12:45）</b><span>下の「昼食の候補」を参照</span></div>
+      <div class="cf-food-scene"><b>11/7（土）　技術交流会（17:30〜19:30）</b><span>飲まない（ソフトドリンクで参加）。立食の揚げ物・ローストビーフの脂身・デザートは避け、野菜・魚・豆腐料理を取る</span></div>
+      <div class="cf-food-scene"><b>11/8（日）　朝食ビュッフェ・講演会の昼食（11:45〜13:15）</b><span>朝食は7日と同じ。昼食は下の「昼食の候補」を参照</span></div>
+      <div class="cf-food-scene"><b>11/8（日）　羽田空港での夕食（第1ターミナル、17:46着〜19:35の保安検査締切まで）</b><span>下の「11/8 羽田の夕食」を参照</span></div>
+      <div class="cf-food-scene"><b>11/9（月）　会議の合間の昼食</b><span>コンビニなら、そばかサラダチキン＋サラダ＋小さめのおにぎり1個など</span></div>
+      <div class="cf-food-scene"><b>11/9・10　千歳駅前の飲み屋街</b><span>飲むならこの日に1杯まで（ハイボールか、日本酒をおちょこ1杯。ビールなら小さいグラス1杯）。和らぎ水を一緒に頼む。つまみは焼き魚（ほっけ、鮭）・刺身・サラダ・冷奴・焼き鳥（塩、皮以外）。ザンギ、いくら丼、締めのラーメンは避ける。ジンギスカンは下の「ジンギスカンの食べ方」を参照。10日に飲む場合、11日は5:45ごろ起きる</span></div>
+      <div class="cf-food-scene"><b>11/9〜11　ドーミーインの朝食</b><span>海鮮手まり（ご飯）やいくらは少量に。おかず中心</span></div>
+      <div class="cf-food-scene"><b>11/10（火）　見学先の昼食</b><span>内容がわからないので、出たものは主食を少なめに</span></div>
+      <div class="cf-food-scene"><b>11/11（水）　朝食（空港）・幕張での昼食・新幹線</b><span>朝は空港でおにぎり1個＋ゆで卵など。昼は会場の揚げ物系の軽食を避ける。新幹線の駅弁は揚げ物が少ないものを選ぶ</span></div>
+    </article>
+
+    <article class="trip-card">
+      <h2 class="trip-card-title">11/7（土）・11/8（日）昼食の候補（尾山台駅周辺）</h2>
+      <div class="trip-card-body">
+        <p class="trip-detail">昼休み：11/7は11:45〜12:45（1時間）、11/8は11:45〜13:15（1時間30分）</p>
+        <div class="cf-scroll"><table class="cf-table"><thead><tr><th>店</th><th>駅からの距離</th><th>ひとこと</th></tr></thead><tbody><tr class="is-chosen"><td><b>有楽庵</b></td><td>約750m</td><td>そば。営業していれば一番の候補</td></tr><tr><td>茶月</td><td>約600m</td><td>持ち帰り寿司。8貫くらいまで</td></tr><tr><td>ロイヤルホスト尾山台店</td><td>約650m</td><td>グリル料理とサラダを選ぶ</td></tr><tr><td>ほっともっと</td><td>約570m</td><td>弁当。焼き魚系を選ぶ</td></tr><tr><td>駅前のコンビニ</td><td>—</td><td>そば、サラダチキン、サラダ、ゆで卵</td></tr><tr><td>ランチセッションの弁当（出る場合）</td><td>会場内</td><td>揚げ物を残す</td></tr><tr><td>避ける</td><td></td><td>串カツ田中、ラーメン店、松屋</td></tr></tbody></table></div>
+        <details open class="fold"><summary>店の情報の出どころと使い分け</summary><div class="fold-body"><p>OpenStreetMapのデータより。土日の営業時間とメニューは未確認。7日は1時間なのでコンビニか持ち帰り、時間に余裕のある8日は有楽庵（そば）まで歩く、という使い分けがおすすめ。</p></div></details>
+      </div>
+    </article>
+
+    <article class="trip-card">
+      <h2 class="trip-card-title">11/8（日）羽田の夕食</h2>
+      <div class="trip-card-body">
+        <p class="trip-detail">第1ターミナル。17:46着〜保安検査の締切 19:35。おすすめは保安検査を通ってから月見そば＋わかめ</p>
+        <div class="cf-scroll"><table class="cf-table"><thead><tr><th>種類</th><th>店</th><th>場所</th><th>ひとこと</th></tr></thead><tbody><tr class="is-chosen"><td><b>そば</b></td><td>そば処そら（北ウイング店・南ウイング店）</td><td>2F（保安検査の後）</td><td>保安検査を先に通ってゲート側で食べられる</td></tr><tr class="is-chosen"><td><b>そば</b></td><td>石臼挽き蕎麦 あずみ野</td><td>2F（保安検査の後）</td><td>同上</td></tr><tr><td>そば</td><td>信州そば あずみ野</td><td>5F（保安検査の前）</td><td></td></tr><tr><td>寿司</td><td>羽田寿司幸</td><td>3F（保安検査の前）</td><td>8貫くらいまで。あら汁があれば一緒に</td></tr><tr><td>寿司</td><td>寿司田</td><td>5F（保安検査の前）</td><td>同上</td></tr><tr><td>海鮮丼</td><td>海鮮丼 銀座おのでら</td><td>B1F（保安検査の前）</td><td>ご飯少なめで</td></tr><tr><td>避ける</td><td>天丼てんや、乱切り蕎麦と天丼 一の井の天丼、町田商店（ラーメン）、銀座ライオン（ビアホール）</td><td></td><td></td></tr></tbody></table></div>
+        <p class="trip-detail">羽田空港公式サイトの店舗一覧より（10/17時点）</p>
+      </div>
+    </article>
+
+    <article class="trip-card">
+      <h2 class="trip-card-title">ジンギスカンの食べ方（千歳の夜）</h2>
+      <div class="trip-card-body">
+        <div class="cf-scroll"><table class="cf-table"><thead><tr><th>選ぶ</th><th>避ける</th></tr></thead><tbody><tr><td>生ラム、ラム肩ロース（赤身が多い）</td><td>マトン（脂が多め）、脂身の多い部位</td></tr><tr><td>生ラムに、つけダレを少しつける</td><td>甘いタレに漬け込んだ「味付けジンギスカン」</td></tr><tr><td>野菜を多めに（もやし、玉ねぎ、ピーマン）</td><td>かぼちゃ・じゃがいもの食べすぎ（糖質）</td></tr><tr><td>肉は150gくらいまで。脂身は外して焼く</td><td>ご飯、締めのうどん</td></tr><tr><td>飲むならハイボール1杯まで</td><td>ビールのおかわり</td></tr></tbody></table></div>
+      </div>
+    </article>
+
+    <article class="trip-card">
+      <h2 class="trip-card-title">外食のジャンル別の選び方</h2>
+      <div class="cf-food-scene"><b>焼き魚</b><span><span class="cf-mark-ok">◎・○ 選んでよい</span>　鯖・鮭・ほっけ・鯵などの塩焼き、鯖の水煮缶、しめ鯖（少量）</span><span><span class="cf-mark-mid">△ 控えめに</span>　鯖の味噌煮（砂糖・塩分がやや多い）</span><span><span class="cf-mark-ng">× 避ける</span>　みりん干し・文化干し（甘い）、鯖の竜田揚げ・フライ</span></div>
+      <div class="cf-food-scene"><b>寿司</b><span><span class="cf-mark-ok">◎・○ 選んでよい</span>　青魚（鯵、鯖、いわし、さんま、こはだ）、サーモン、白身、赤身、イカ、タコ、ホタテ、エビ。中トロ・玉子は少しなら</span><span><span class="cf-mark-mid">△ 控えめに</span>　いくら、うに、数の子、たらこ、白子、煮穴子のタレ</span><span><span class="cf-mark-ng">× 避ける</span>　マヨネーズ系の軍艦・巻物、天ぷら巻き、揚げ物の軍艦</span></div>
+      <div class="cf-food-scene"><b>カレー</b><span><span class="cf-mark-ok">◎・○ 選んでよい</span>　スープカレー（野菜かチキン、皮は外す）、豆・野菜のインドカレー、タンドリーチキン</span><span><span class="cf-mark-mid">△ 控えめに</span>　キーマカレー、グリーンカレー、白いスープカレー（牛乳ベース）、ナン（半分くらいに）</span><span><span class="cf-mark-ng">× 避ける</span>　日本式のルーカレー、カツカレー・唐揚げカレー、バターチキン・クリーム系</span></div>
+      <div class="cf-food-scene"><b>麺</b><span><span class="cf-mark-ok">◎・○ 選んでよい</span>　そば（十割・二八がより良い）、うどん・きしめん（小盛り）。具はわかめ、とろろ昆布、山菜、きのこ、ねぎ、大根おろし、卵、鶏肉（かしわ）、鴨</span><span><span class="cf-mark-mid">△ 控えめに</span>　肉うどん・肉そば（甘辛い牛バラ・豚バラ）、きつね（甘い油揚げ）</span><span><span class="cf-mark-ng">× 避ける</span>　ラーメン全般（塩・醤油も）、天ぷら・かき揚げ・天かす、カレーうどん、鍋焼きうどん（海老天）</span></div>
+      <div class="cf-food-scene"><b>揚げ物</b><span><span class="cf-mark-ok">◎・○ 選んでよい</span>　—</span><span><span class="cf-mark-mid">△ 控えめに</span>　—</span><span><span class="cf-mark-ng">× 避ける</span>　全般（天ぷら、フライ、唐揚げ・ザンギ、カツ、コロッケ）</span></div>
+    </article>
+
+    <article class="trip-card">
+      <h2 class="trip-card-title">迷ったときのおすすめ</h2>
+      <ul class="cf-food-list">
+        <li>鯖の塩焼き定食（ご飯少なめ）</li>
+        <li>月見そば＋わかめ</li>
+        <li>かしわうどん（小盛り）＋卵</li>
+        <li>寿司8貫＋あら汁</li>
+        <li>野菜かチキンのスープカレー（ご飯小盛り）</li>
+      </ul>
+    </article>
+
+    <article class="trip-card">
+      <h2 class="trip-card-title">食べ方のコツ</h2>
+      <ul class="cf-food-list">
+        <li><b>寿司</b>：8貫くらいまで。足りなければ刺身を追加。回転寿司なら「シャリ小」「シャリハーフ」を頼む。シャリは1貫で糖質約7〜8g（10貫で約70〜80g）</li>
+        <li><b>スープカレー</b>：ご飯は小盛り。表面に浮いた油は残し、スープは飲み干さない。チーズや揚げ野菜のトッピングはなし</li>
+        <li><b>麺</b>：つゆは飲み干さない。丼とのセットにしない。大盛り・おかわりはやめる</li>
+        <li><b>焼き魚</b>：1切れ（80〜100g）くらいが適量。週に数回、肉の代わりに選ぶ</li>
+        <li><b>共通</b>：味噌汁・サラダ・野菜を先に食べてから主食へ。締めの麺・ご飯・デザートはやめる</li>
+      </ul>
+    </article>
+
+    <article class="trip-card">
+      <h2 class="trip-card-title">控えたいもの</h2>
+      <div class="cf-food-scene"><b>飲み物</b><span><span class="cf-mark-ng">控える</span>　アルコール全般、ジュース、加糖の缶コーヒー、スポーツドリンク、加糖のカフェラテ</span><span><span class="cf-mark-ok">代わり</span>　無糖のお茶、ブラックコーヒー、水、炭酸水、糖質ゼロのノンアルコール飲料</span></div>
+      <div class="cf-food-scene"><b>甘いもの</b><span><span class="cf-mark-ng">控える</span>　菓子パン、ケーキ、アイス、和菓子、ドライフルーツ、果物の食べすぎ</span><span><span class="cf-mark-ok">代わり</span>　どうしても欲しいときは少量のナッツか無糖ヨーグルト</span></div>
+      <div class="cf-food-scene"><b>主食</b><span><span class="cf-mark-ng">控える</span>　主食の重ね食べ（うどん＋おにぎり、ラーメン＋ライス）、夜遅い麺・締めの雑炊</span><span><span class="cf-mark-ok">代わり</span>　主食は1食に1つ。そば、麦ごはん、玄米も選択肢</span></div>
+      <div class="cf-food-scene"><b>肉</b><span><span class="cf-mark-ng">控える</span>　バラ肉・霜降り・ひき肉料理、鶏の皮、ベーコン・ソーセージなどの加工肉</span><span><span class="cf-mark-ok">代わり</span>　赤身肉、鶏むね・ささみ、魚</span></div>
+      <div class="cf-food-scene"><b>油・乳製品</b><span><span class="cf-mark-ng">控える</span>　揚げ物・衣もの（天ぷら、フライ、唐揚げ、カツ）、バター、生クリーム、チーズ、スナック菓子</span><span><span class="cf-mark-ok">代わり</span>　焼く・蒸す・煮る料理、低脂肪乳</span></div>
+      <div class="cf-food-scene"><b>その他</b><span><span class="cf-mark-ng">控える</span>　卵黄・魚卵・内臓類のとりすぎ（いくら、たらこ、レバー）、豚骨ラーメン、カレーのルー</span><span><span class="cf-mark-ok">代わり</span>　卵は1日1個くらいまで。和風のだしの料理</span></div>
+    </article>
+
+    <article class="trip-card">
+      <h2 class="trip-card-title">積極的にとりたいもの</h2>
+      <ul class="cf-food-list">
+        <li>青魚（サバ、イワシ、サンマ、サケ、ほっけ）</li>
+        <li>大豆製品（豆腐、納豆）</li>
+        <li>野菜、海藻、きのこ（先に食べる）</li>
+      </ul>
+    </article>
+
+    <article class="trip-card">
+      <h2 class="trip-card-title">昼食の例（とろろ昆布うどんの場合）</h2>
+      <div class="trip-card-body">
+        <div class="cf-scroll"><table class="cf-table"><thead><tr><th>組み合わせ</th><th>糖質の目安</th><th>コメント</th></tr></thead><tbody><tr><td>とろろ昆布うどん（1玉）＋鮭おにぎり</td><td>約80〜95g</td><td>主食が重なるので多め</td></tr><tr class="is-chosen"><td>とろろ昆布うどん（小盛り）＋卵・わかめ＋サラダチキンかゆで卵</td><td>約40〜50g</td><td>たんぱく質もとれる</td></tr></tbody></table></div>
+        <details open class="fold"><summary>糖質の値について</summary><div class="fold-body"><p>糖質の値は一般的な目安で、量や店によって変わる。食事の内容や目標量は主治医・管理栄養士の指示を優先する。</p></div></details>
+      </div>
+    </article>
+  </section>
+
+  <section class="trip-panel" data-trip-panel="prep" aria-label="準備">
+    <article class="trip-card">
+      <h2 class="trip-card-title">予約・申し込み</h2>
+      
+      <div class="cf-check">
+        <input type="checkbox" id="prep-jal-buy" data-trip-store="prep:jal-buy">
+        <label for="prep-jal-buy"><span class="cf-deadline">10/20（火）21:29</span>JAL529（11/8）・JAL590（11/11）の購入（支払い）<span class="trip-detail">予約済み・未購入。往復セイバー、合計43,595円。期限を過ぎると自動で取り消される。<a href="https://www.jal.co.jp/jp/ja/dom/" target="_blank" rel="noopener">JAL国内線</a></span></label>
+      </div>
+      
+      <div class="cf-check">
+        <input type="checkbox" id="prep-rengo-reg" data-trip-store="prep:rengo-reg">
+        <label for="prep-rengo-reg"><span class="cf-deadline">10/23（金）</span>自動制御連合講演会 参加登録<span class="trip-detail">早期登録の締切（以降は値上がり）。技術交流会もあわせて申し込む。<a href="https://www.gakkai-web.net/p/rengo/reg/new2.php" target="_blank" rel="noopener">参加申込ウェブサイト</a>（案内：<a href="https://rengo69.sice.jp/registration/" target="_blank" rel="noopener">rengo69.sice.jp/registration/</a>）</span></label>
+      </div>
+      
+      <div class="cf-check">
+        <input type="checkbox" id="prep-shinkansen" data-trip-store="prep:shinkansen">
+        <label for="prep-shinkansen"><span class="cf-deadline">早めに</span>新幹線（11/6 京都→東京、11/11 東京→京都）<span class="trip-detail">11/6：のぞみ416号（14:36発）またはのぞみ462号（17:36発）、11/11：のぞみ81号（18:30発）。<a href="https://expy.jp/" target="_blank" rel="noopener">EX予約</a>／<a href="https://smart-ex.jp/" target="_blank" rel="noopener">スマートEX</a></span></label>
+      </div>
+      
+      <div class="cf-check">
+        <input type="checkbox" id="prep-bus-stop" data-trip-store="prep:bus-stop">
+        <label for="prep-bus-stop"><span class="cf-deadline">事前に</span>現地の方への確認<span class="trip-detail">10日の朝8:00のバスの乗り場（千歳駅のどこか）</span></label>
+      </div>
+      
+      <div class="cf-check">
+        <input type="checkbox" id="prep-taxi" data-trip-store="prep:taxi">
+        <label for="prep-taxi"><span class="cf-deadline">11/10（火）まで</span>11/11早朝（6:15ごろ）のタクシー<span class="trip-detail">ドーミーイン千歳のフロント（TEL 0123-29-6050）に手配を頼むか、タクシー会社に予約</span></label>
+      </div>
+      
+      <div class="cf-check">
+        <input type="checkbox" id="prep-hotel-tokyo" data-trip-store="prep:hotel-tokyo" checked>
+        <label for="prep-hotel-tokyo">スーパーホテル東京・JR蒲田西口 2泊（11/6・7）<span class="trip-detail">予約済み</span></label>
+      </div>
+      
+      <div class="cf-check">
+        <input type="checkbox" id="prep-hotel-chitose" data-trip-store="prep:hotel-chitose" checked>
+        <label for="prep-hotel-chitose">ドーミーイン千歳 3泊（11/8 in〜11/11 out）<span class="trip-detail">予約済み</span></label>
+      </div>
+      
+      <div class="cf-check">
+        <input type="checkbox" id="prep-jal-reserve" data-trip-store="prep:jal-reserve" checked>
+        <label for="prep-jal-reserve">JAL529・JAL590の予約<span class="trip-detail">予約済み（購入は上の行）</span></label>
+      </div>
+      
+      <div class="cf-check">
+        <input type="checkbox" id="prep-nextech-reg" data-trip-store="prep:nextech-reg" checked>
+        <label for="prep-nextech-reg">NexTech Week 来場登録<span class="trip-detail">登録済み。<a href="https://www.nextech-week.jp/autumn/ja-jp.html" target="_blank" rel="noopener">公式サイト</a></span></label>
+      </div>
+    </article>
+    <details open class="fold"><summary>参加費と注意</summary><div class="fold-body"><p>自動制御連合講演会の参加費：SICE会員・協賛学会会員は早期12,000円（10/24以降19,000円）、非会員は早期23,000円（28,000円）。技術交流会は早期5,000円（通常6,000円）。クレジットカード払い。予稿集の公開後はキャンセル不可。</p><p>リンク先は10/17に確認。JALと東京空港交通のサイトは自動アクセスが拒否されたため、ページの中身は確認できていない（ブラウザでは通常どおり開けるはず）。</p></div></details>
+  </section>
+
+  <section class="trip-panel" data-trip-panel="records" aria-label="記録">
+    <div class="trip-banner"><span class="line-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10l4 4v14H5z"/><path d="M15 3v4h4M8 12h8M8 16h6"/></svg></span><div>入力はこの端末に即時保存。PCでクラウドから読み込み、最後にMarkdownとJSONを保存</div></div>
+    <div class="trip-actions trip-no-print">
+      <button class="trip-button" type="button" data-trip-export-markdown data-title="千歳出張 2026-11 記録">Markdownをコピー</button>
+      <button class="trip-button" type="button" data-trip-download-markdown data-title="千歳出張 2026-11 記録">メモをMarkdownでDL</button>
+      <button class="trip-button" type="button" data-trip-export-json>バックアップJSONをDL</button>
+      <label class="trip-button" for="trip-import">JSONを読み込む</label>
+      <input id="trip-import" type="file" accept="application/json,.json" data-trip-import-json hidden>
+    </div>
+    <details open class="trip-card trip-cloud trip-no-print" data-trip-cloud data-endpoint="https://trip-field-sync.mrkn55.workers.dev">
+      <summary class="trip-card-title">Cloudflare同期</summary>
+      <div class="trip-card-body">
+        <p class="trip-cloud-help">共同メモは1件ずつ追加保存され、同時に送っても上書きしない。自由編集欄は最後の保存が優先</p>
+        <label class="trip-cloud-key">記入者名<input type="text" autocomplete="name" data-trip-cloud-author placeholder="例：村上"></label>
+        <label class="trip-cloud-key">同期キー<input type="password" autocomplete="current-password" data-trip-cloud-key></label>
+        <label class="trip-cloud-remember"><input type="checkbox" data-trip-cloud-remember> この端末に同期キーを保存</label>
+        <div class="trip-actions">
+          <button class="trip-button" type="button" data-trip-cloud-pull>クラウドから読込</button>
+          <button class="trip-button" type="button" data-trip-cloud-push>今すぐ保存</button>
+        </div>
+        <div class="trip-status" data-trip-cloud-status role="status" aria-live="polite"></div>
+      </div>
+    </details>
+    <div class="trip-status" data-trip-status role="status" aria-live="polite"></div>
+    <article class="trip-record">
+      <h2 class="trip-card-title">出張全体</h2>
+      <div class="trip-field"><label for="trip-aim">持ち帰ること</label><textarea id="trip-aim" data-trip-store="trip:aim"></textarea></div>
+      <div class="trip-field"><label for="trip-summary">帰着後の総括</label><textarea id="trip-summary" data-trip-store="trip:summary" data-trip-note="day"></textarea></div>
+    </article>
+  </section>
+</main>
+
+
+
+</body>
+</html>

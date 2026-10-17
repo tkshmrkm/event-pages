@@ -1,0 +1,96 @@
+/* 千歳出張（2026-11）のテーマ。共通部品は ../shared/trip-field/core.css にある。
+   ここに置くのは配色と、この出張だけの表・札の見た目だけ。
+   アイコンの寸法は上書きしない（core.cssの約束）。 */
+:root{
+  --trip-page:#EEF2F7;
+  --trip-card:#FFFFFF;
+  --trip-text:#121A26;
+  --trip-subtext:#24344A;
+  --trip-muted:#506078;
+  --trip-border:#AFBCCD;
+  --trip-neutral:#DCE4EF;
+  --trip-primary:#1F4E9A;
+  --trip-primary-soft:#C9D8F0;
+  --trip-event:#8A4A20;
+  --trip-event-soft:#F3D5BF;
+  --trip-pending:#403574;
+  --trip-pending-soft:#D4CEEA;
+  --trip-warning:#6B4A0C;
+  --trip-warning-soft:#FCE9BE;
+  --trip-soft:#EEF3FA;
+  --trip-radius:12px;
+}
+
+/* 6タブ。2文字のラベルなら393pxに収まる（validate.mjsとブラウザーで数値確認） */
+.trip-tab{padding-inline:8px}
+
+.cf-header-links{display:flex;flex-wrap:wrap;gap:6px;flex:0 0 auto}
+.cf-header-links .trip-button{white-space:nowrap}
+
+/* 表。スマートフォンでは横に溢れる表だけをこの箱の中でスクロールさせ、ページ自体は溢れさせない */
+.cf-scroll{overflow-x:auto;margin:0 0 4px}
+.cf-table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.5}
+.cf-table th,.cf-table td{padding:6px 8px;border:1px solid #D5DEE8;text-align:left;vertical-align:top}
+.cf-table th{background:#F1F5FA;color:var(--trip-subtext);font-weight:700;white-space:nowrap}
+.cf-table .is-chosen td{background:#FFF6D6}
+.cf-table td.num{white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* 折り畳み。summaryは中身を示す語にする */
+details.fold{margin:8px 0 0;border:1px solid #D5DEE8;border-radius:8px;background:#F8FAFD}
+details.fold>summary{min-height:44px;display:flex;align-items:center;padding:8px 12px;color:var(--trip-subtext);font-size:13px;font-weight:700;cursor:pointer}
+details.fold>.fold-body{padding:2px 12px 10px;font-size:13px;color:var(--trip-subtext)}
+details.fold>.fold-body p{margin:6px 0}
+details.fold>.fold-body ul{margin:6px 0;padding-left:1.2em}
+
+.trip-action strong{display:inline}
+/* アイコンは文頭に置いて文と一緒に折り返す（flexにすると長い行でアイコンだけ1行目に残る） */
+.cf-move{display:block}
+.cf-move .mode-icon,.cf-move .flight-mark{display:inline-flex;margin-right:5px;vertical-align:-4px}
+.cf-move strong{font-weight:700}
+.cf-line{display:block;margin-top:4px;font-size:14px}
+
+/* 宿のカード */
+.cf-facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:14px}
+.cf-facts dt{color:var(--trip-muted);font-weight:700;white-space:nowrap}
+.cf-facts dd{margin:0;min-width:0}
+
+/* 概要 */
+.cf-ov-day{display:grid;grid-template-columns:76px minmax(0,1fr);border-top:1px solid #E1E8EF}
+.cf-ov-day:first-child{border-top:0}
+.cf-ov-date{padding:10px;background:#F4F7FB;font-weight:700;font-size:14px}
+.cf-ov-date small{display:block;color:var(--trip-muted);font-size:12px;font-weight:700}
+.cf-ov-body{padding:8px 10px;min-width:0}
+.cf-ov-line{display:flex;align-items:flex-start;gap:6px;padding:2px 0;font-size:14px}
+.cf-ov-time{flex:0 0 46px;color:var(--trip-subtext);font-weight:700;font-variant-numeric:tabular-nums}
+.cf-ov-icon{flex:0 0 20px;display:flex;justify-content:center;padding-top:1px}
+.cf-ov-stay{margin-top:4px;color:var(--trip-muted);font-size:12px;font-weight:700}
+
+/* 視察の記録単位 */
+.cf-session-meta{padding:10px 12px 0;font-size:13px;color:var(--trip-muted);font-weight:700}
+.cf-session-talks{margin:6px 0 0;padding:0 12px 10px 28px;font-size:13px;color:var(--trip-subtext)}
+.cf-session-talks li{margin:2px 0}
+.cf-tag{display:inline-block;margin-left:6px;padding:0 7px;border:1px solid #8FB4E8;border-radius:999px;background:#E9F2FA;color:#245A85;font-size:12px;font-weight:700;vertical-align:1px}
+
+/* 準備のチェックリスト */
+.cf-check{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;padding:10px 12px;border-top:1px solid #E1E8EF}
+.cf-check:first-child{border-top:0}
+.cf-check input{width:22px;height:22px;margin:2px 0 0}
+.cf-check label{font-weight:700;font-size:14px}
+.cf-deadline{display:block;color:#A3122A;font-size:13px;font-weight:700}
+.cf-check .trip-detail{font-weight:400}
+
+/* 食事 */
+.cf-food-list{margin:0;padding:10px 12px 12px 30px;font-size:14px}
+.cf-food-list li{margin:3px 0}
+.cf-food-scene{padding:9px 12px;border-top:1px solid #E1E8EF;font-size:14px}
+.cf-food-scene:first-child{border-top:0}
+.cf-food-scene b{display:block;color:var(--trip-subtext)}
+.cf-food-scene span{display:block;color:var(--trip-muted);font-size:13px}
+.cf-mark-ok{color:#0B4F5A;font-weight:700}
+.cf-mark-mid{color:#7A3E08;font-weight:700}
+.cf-mark-ng{color:#A3122A;font-weight:700}
+
+@media print{
+  details.fold{break-inside:avoid}
+  details.fold>.fold-body{display:block}
+}
