@@ -4,6 +4,8 @@
 
 ## 個人予定ページの正本（2026-10-04）
 
+- **2026-10-17：正本の `murakami_plan_2026_2027.html` は、非公開リポジトリ `inspection-private` へ移した。** このリポジトリ（公開）からは外した。更新は非公開側で行う。以下の記述のうち、このリポジトリの `murakami_plan_2026_2027.html` を指す部分は、移動前の記録。旧版 `personal_inspection_plan.*` はまだこのリポジトリに残っている（個人の参加履歴を含む。扱いは未判断）
+
 - 個人予定ページが2つ並行して作られていた。GitHub側の `murakami_plan_2026_2027.html`（2026-10-04 20:39 JST更新）と、
   ローカルだけにあった `personal_inspection_plan.*`（2026-10-04 00:02 JST）。**ユーザーの判断で新しいほうの `murakami_plan_2026_2027.html` を正本にした**
 - `personal_inspection_plan.*` と `personal_inspection_context.js` は旧版として残し、更新しない。削除は未判断
