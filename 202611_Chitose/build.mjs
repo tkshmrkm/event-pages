@@ -2,7 +2,8 @@
 // 入力はこのファイルの中身だけ。index.html と desk_print.html はここから作る生成物なので直接編集しない。
 //   node .\202611_Chitose\build.mjs
 //   node .\202611_Chitose\validate.mjs
-// 元の計画は手書きの「千歳出張_本命プラン_1106-1111.html」（2026-10-17版）。内容は削らずに移した。
+// 元の計画は手書きの references/superseded/千歳出張_本命プラン_1106-1111.html（2026-10-17版）。内容は削らずに移した。
+// references/ には講演会のPDF（program_20261005.pdf・timetable_20261005.pdf）もある。どちらもGit対象外。
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
