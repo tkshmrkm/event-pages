@@ -202,6 +202,7 @@
     .section-lead { margin: 0; color: var(--muted); max-width: 540px; }
 
     .upcoming-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+    .upcoming-empty { margin: 0; padding: 32px; color: var(--muted); border: 1px dashed var(--line); }
     .feature-card {
       position: relative;
       min-height: 410px;
@@ -492,20 +493,7 @@
           <p class="section-lead">開催日が近い順に表示しています。各ページには、日程・移動・会場などの詳細をまとめています。</p>
         </div>
 
-        <div class="upcoming-grid">
-          <article class="feature-card">
-            <span class="card-number" aria-hidden="true">01</span>
-            <span class="status">UPCOMING</span>
-            <div class="feature-content">
-              <div class="feature-date">2026.10.18 — 10.25 · GERMANY</div>
-              <h3>TechEx Europe<br>× EuroBLECH</h3>
-              <p>美馬・金築がEuroBLECH（ハノーバー）とブレーメンの工場見学へ。村上は不参加となり、TechEx Europeには誰も行きません。旅程ページは当初の3名版のまま残しています。</p>
-              <a class="open-link" href="202610_Europe_TechEx_EuroBLECH/">
-                旅程を開く <span class="arrow" aria-hidden="true">→</span>
-              </a>
-            </div>
-          </article>
-        </div>
+        <p class="upcoming-empty">いま決まっている予定はありません。次の候補は下の俯瞰資料で比べられます。</p>
 
         <a class="resource-card" id="overview" href="physical_ai_events_overview.html">
           <div>
@@ -544,10 +532,10 @@
         <p class="result-meta" id="result-meta" aria-live="polite">13件を表示中</p>
 
         <div class="event-list" id="event-list">
-          <article class="event-card" data-year="2026" data-status="upcoming" data-search="TechEx EuroBLECH Europe ヨーロッパ ドイツ オランダ ハノーバー ブレーメン 美馬 金築 展示会 2026 10月">
+          <article class="event-card" data-year="2026" data-status="completed" data-search="TechEx EuroBLECH Europe ヨーロッパ ドイツ オランダ ハノーバー ブレーメン 美馬 金築 展示会 2026 10月">
             <div class="event-top"><span class="event-index">01</span><span class="event-year">OCT 2026</span></div>
             <h3><a href="202610_Europe_TechEx_EuroBLECH/">TechEx Europe × EuroBLECH</a></h3>
-            <p class="event-desc">10月18日〜25日。美馬・金築がEuroBLECHと工場見学へ。村上の不参加（TechEx Europe取りやめ）が決まる前の3名版の旅程を残しています。</p>
+            <p class="event-desc">10月18日〜25日。村上は不参加、美馬・金築がEuroBLECHと工場見学へ。旅程ページは記録として、不参加が決まる前の3名版のまま残しています。</p>
             <dl class="event-stats"><div><dt>期間</dt><dd>8日間</dd></div><div><dt>訪問国</dt><dd>1か国</dd></div><div><dt>都市</dt><dd>5都市</dd></div></dl>
             <p class="event-cities">ゲッティンゲン・ヴォルフスブルク・ハノーファー・ブレーメン・フランクフルト（美馬・金築）</p>
             <div class="tags"><span class="tag">Hannover</span><span class="tag">Bremen</span><span class="tag">展示会</span></div>
