@@ -5,3 +5,5 @@
 - [共通部品の仕様](../shared/trip-field/README.md)：テンプレート・保存・同期の契約
 
 イベント固有の設計・引き継ぎは、そのイベントのフォルダに置きます。過去の設計判断は削除せず、現行と区別して保存します。
+
+イベントに属さない資料の旧案は `docs/<分野>/superseded/` に置きます。2027年Physical AI候補リストの2版（9/16時点）は [physical-ai/superseded/](physical-ai/superseded/) にあり、どちらも現行の俯瞰資料（ルートの `physical_ai_events_overview.html`）へ取り込み済みです。

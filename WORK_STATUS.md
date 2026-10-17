@@ -161,7 +161,8 @@ git status --branch --short
   - MACHINA Summit 2027（7月・Paris）、THE Physical AI Expo London 2027（Q3）、
     Physical AI Summit Munich 2027
 - **2027年のPhysical AI系候補（2026-09-23）** … ローカルの未追跡ファイル
-  `physical_ai_2027_candidate_events_v2.html`（9/16時点・14件）を、9/23に公式ページで
+  `physical_ai_2027_candidate_events_v2.html`（9/16時点・14件。2026-10-17に v1 とともに
+  `docs/physical-ai/superseded/` へ移した）を、9/23に公式ページで
   確かめ直して取り込んだ。狙いは、既存の予定と続けて回れるイベントがあるかどうかを見ること
   - Humanoid Evolution Summit 2027 は Advanced Humanoid Forum 2027 と同じイベント
     （旧ドメインが新サイトへ302転送）。新しい行は作らず、既存の行の名前・会場・出典を直した

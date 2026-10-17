@@ -22,10 +22,10 @@
 | [physical_ai_events_overview.html](physical_ai_events_overview.html) | 現行の俯瞰表示 |
 | [physical_ai_events.js](physical_ai_events.js) | 現行表示の正本データ |
 | [validate_physical_ai_events.mjs](validate_physical_ai_events.mjs) | データ・表示の検査 |
-| [physical_ai_2027_candidate_events.html](physical_ai_2027_candidate_events.html) | 2027年候補の検討資料 |
-| [physical_ai_2027_candidate_events_v2.html](physical_ai_2027_candidate_events_v2.html) | 上記の別版の検討資料 |
+| [docs/physical-ai/superseded/physical_ai_2027_candidate_events.html](docs/physical-ai/superseded/physical_ai_2027_candidate_events.html) | 2027年候補の検討資料（旧案・9/16時点） |
+| [docs/physical-ai/superseded/physical_ai_2027_candidate_events_v2.html](docs/physical-ai/superseded/physical_ai_2027_candidate_events_v2.html) | 上記の別版の検討資料（旧案・9/16時点） |
 
-候補の2版は内容・構成が異なるため、両方を保持します。現在の予定は現行の俯瞰資料から確認し、検討資料の古い日程をそのまま採用しません。
+候補の2版は内容・構成が異なるため、両方を保持します。どちらも9/23に現行の俯瞰資料へ取り込み済みの旧案なので、2026-10-17に `docs/physical-ai/superseded/` へ移しました。現在の予定は現行の俯瞰資料から確認し、検討資料の古い日程をそのまま採用しません。
 
 個人用の予定ページは、このリポジトリ（公開）には置きません。
 
