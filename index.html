@@ -383,6 +383,11 @@
     .event-card h3 a { text-decoration: none; }
     .event-card h3 a:hover { color: var(--orange); }
     .event-desc { max-width: 760px; margin-bottom: 20px; color: var(--muted); font-size: .9rem; }
+    .event-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 8px; max-width: 420px; }
+    .event-stats div { padding: 7px 10px; background: rgba(16, 42, 42, .05); border-radius: 4px; }
+    .event-stats dt { color: var(--muted); font-size: .66rem; font-weight: 800; letter-spacing: .08em; }
+    .event-stats dd { margin: 0; color: var(--forest); font-size: .95rem; font-weight: 900; line-height: 1.3; }
+    .event-cities { margin: 0 0 18px; color: #4a5a57; font-size: .78rem; }
     .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; }
     .tag { padding: 5px 9px; color: #4a5a57; background: rgba(16, 42, 42, .06); border-radius: 4px; font-size: .71rem; font-weight: 800; }
     .event-footer {
@@ -520,7 +525,7 @@
             <p class="kicker">Library</p>
             <h2>イベント一覧</h2>
           </div>
-          <p class="section-lead">学会名、都市名、年などで検索できます。完了したイベントもここから参照できます。</p>
+          <p class="section-lead">学会名、都市名、年などで検索できます。完了したイベントもここから参照できます。期間は出発日から帰着日まで、訪問国・都市は日本と乗り継ぎだけの空港を除いて数えています。</p>
         </div>
 
         <div class="tools">
@@ -543,6 +548,8 @@
             <div class="event-top"><span class="event-index">01</span><span class="event-year">OCT 2026</span></div>
             <h3><a href="202610_Europe_TechEx_EuroBLECH/">TechEx Europe × EuroBLECH</a></h3>
             <p class="event-desc">10月18日〜25日。美馬・金築がEuroBLECHと工場見学へ。村上の不参加（TechEx Europe取りやめ）が決まる前の3名版の旅程を残しています。</p>
+            <dl class="event-stats"><div><dt>期間</dt><dd>8日間</dd></div><div><dt>訪問国</dt><dd>1か国</dd></div><div><dt>都市</dt><dd>5都市</dd></div></dl>
+            <p class="event-cities">ゲッティンゲン・ヴォルフスブルク・ハノーファー・ブレーメン・フランクフルト（美馬・金築）</p>
             <div class="tags"><span class="tag">Hannover</span><span class="tag">Bremen</span><span class="tag">展示会</span></div>
             <div class="event-footer"><a href="202610_Europe_TechEx_EuroBLECH/">旅程ページ →</a></div>
           </article>
@@ -551,6 +558,8 @@
             <div class="event-top"><span class="event-index">02</span><span class="event-year">SEP 2026</span></div>
             <h3><a href="202609_tokyo-family-trip/">東京・千葉 家族旅行</a></h3>
             <p class="event-desc">9月22日〜23日。東京・千葉を巡る2日間の家族旅行プラン。</p>
+            <dl class="event-stats"><div><dt>期間</dt><dd>2日間</dd></div><div><dt>訪問国</dt><dd>国内</dd></div><div><dt>都市</dt><dd>3都市</dd></div></dl>
+            <p class="event-cities">東京・浦安・船橋</p>
             <div class="tags"><span class="tag">東京</span><span class="tag">千葉</span><span class="tag">家族旅行</span></div>
             <div class="event-footer"><a href="202609_tokyo-family-trip/">旅程ページ →</a></div>
           </article>
@@ -559,6 +568,8 @@
             <div class="event-top"><span class="event-index">03</span><span class="event-year">SEP 2026</span></div>
             <h3><a href="202609_HumanoidSummitEurope/">Humanoid Robots Summit Europe 2026</a></h3>
             <p class="event-desc">9月7日〜14日。HRS Europe本体は9/9〜9/11（Liederhalle）。フライト・宿泊・週末の行動案までまとめた2名分の出張ガイド。</p>
+            <dl class="event-stats"><div><dt>期間</dt><dd>8日間</dd></div><div><dt>訪問国</dt><dd>1か国</dd></div><div><dt>都市</dt><dd>2都市＋</dd></div></dl>
+            <p class="event-cities">シュトゥットガルト・フランクフルト（週末の行き先は旅程上未定）</p>
             <div class="tags"><span class="tag">Stuttgart</span><span class="tag">Frankfurt</span><span class="tag">Humanoid</span><span class="tag">Robotics</span></div>
             <div class="event-footer"><a href="202609_HumanoidSummitEurope/">旅程ページ →</a></div>
           </article>
@@ -567,6 +578,8 @@
             <div class="event-top"><span class="event-index">04</span><span class="event-year">JUL 2026</span></div>
             <h3><a href="202607_RSS/">RSS 2026 · Sydney</a></h3>
             <p class="event-desc">7月11日〜18日。シドニーで開催された Robotics: Science and Systems の日別旅程と参加計画。</p>
+            <dl class="event-stats"><div><dt>期間</dt><dd>8日間</dd></div><div><dt>訪問国</dt><dd>1か国</dd></div><div><dt>都市</dt><dd>1都市</dd></div></dl>
+            <p class="event-cities">シドニー</p>
             <div class="tags"><span class="tag">Sydney</span><span class="tag">Robotics</span><span class="tag">国際会議</span></div>
             <div class="event-footer">
               <a href="202607_RSS/">日別旅程 →</a>
@@ -578,6 +591,8 @@
             <div class="event-top"><span class="event-index">05</span><span class="event-year">MAY — JUN 2026</span></div>
             <h3><a href="202605_RoboticsSummit_ICRA/robotics_icra/trip_overview.html">Robotics Summit × ICRA 2026</a></h3>
             <p class="event-desc">5月25日〜6月7日。ボストンの Robotics Summit &amp; Expo とウィーンの ICRA 2026を巡る旅程。</p>
+            <dl class="event-stats"><div><dt>期間</dt><dd>14日間</dd></div><div><dt>訪問国</dt><dd>2か国</dd></div><div><dt>都市</dt><dd>2都市</dd></div></dl>
+            <p class="event-cities">ボストン・ウィーン（村上の日程。人により異なる）</p>
             <div class="tags"><span class="tag">Boston</span><span class="tag">Vienna</span><span class="tag">Robotics</span></div>
             <div class="event-footer">
               <a href="202605_RoboticsSummit_ICRA/robotics_icra/trip_overview.html">旅程概観 →</a>
@@ -590,6 +605,8 @@
             <div class="event-top"><span class="event-index">06</span><span class="event-year">APR — MAY 2026</span></div>
             <h3><a href="202604_Taiwan_Malaysia/01_行程管理_Itinerary/台湾～マレーシア_travel_itinerary_complete.html">台湾 × マレーシア出張</a></h3>
             <p class="event-desc">4月28日〜5月7日。台湾での実験とマレーシアでの市場視察・SEMICON SEAをまとめた旅程。</p>
+            <dl class="event-stats"><div><dt>期間</dt><dd>10日間</dd></div><div><dt>訪問国</dt><dd>2か国</dd></div><div><dt>都市</dt><dd>2都市</dd></div></dl>
+            <p class="event-cities">台北・クアラルンプール</p>
             <div class="tags"><span class="tag">Taiwan</span><span class="tag">Malaysia</span><span class="tag">SEMICON SEA</span></div>
             <div class="event-footer">
               <a href="202604_Taiwan_Malaysia/01_行程管理_Itinerary/台湾～マレーシア_travel_itinerary_complete.html">出張旅程 →</a>
@@ -601,6 +618,8 @@
             <div class="event-top"><span class="event-index">07</span><span class="event-year">MAR 2026</span></div>
             <h3><a href="202603_Tokyo_Family/tokyo_family_trip_2026_complete.html">東京 日帰り家族旅行</a></h3>
             <p class="event-desc">3月28日。東京を巡る日帰り家族旅行の完成版プラン。</p>
+            <dl class="event-stats"><div><dt>期間</dt><dd>日帰り</dd></div><div><dt>訪問国</dt><dd>国内</dd></div><div><dt>都市</dt><dd>1都市</dd></div></dl>
+            <p class="event-cities">東京</p>
             <div class="tags"><span class="tag">東京</span><span class="tag">日帰り</span><span class="tag">家族旅行</span></div>
             <div class="event-footer"><a href="202603_Tokyo_Family/tokyo_family_trip_2026_complete.html">旅程ページ →</a></div>
           </article>
@@ -609,6 +628,8 @@
             <div class="event-top"><span class="event-index">08</span><span class="event-year">DEC 2025</span></div>
             <h3><a href="202512_ICNAP/Trip_Itinerary_Germany_2025.html">ICNAP・ドイツ出張 2025</a></h3>
             <p class="event-desc">12月8日〜13日。ドイツ出張から帰宅までの移動と予定をまとめた旅程表。</p>
+            <dl class="event-stats"><div><dt>期間</dt><dd>6日間</dd></div><div><dt>訪問国</dt><dd>1か国</dd></div><div><dt>都市</dt><dd>2都市</dd></div></dl>
+            <p class="event-cities">アーヘン・フランクフルト</p>
             <div class="tags"><span class="tag">Germany</span><span class="tag">出張</span><span class="tag">Archive</span></div>
             <div class="event-footer"><a href="202512_ICNAP/Trip_Itinerary_Germany_2025.html">旅程ページ →</a></div>
           </article>
@@ -617,6 +638,8 @@
             <div class="event-top"><span class="event-index">09</span><span class="event-year">NOV 2025</span></div>
             <h3><a href="202511_HumanoidChina/humanoidsChina_itinerary_withConversation.html">中国ヒューマノイド視察</a></h3>
             <p class="event-desc">11月16日〜21日。蘇州・上海・深センを巡るヒューマノイド関連企業の視察旅程。</p>
+            <dl class="event-stats"><div><dt>期間</dt><dd>6日間</dd></div><div><dt>訪問国</dt><dd>1か国</dd></div><div><dt>都市</dt><dd>3都市</dd></div></dl>
+            <p class="event-cities">蘇州・上海・深セン</p>
             <div class="tags"><span class="tag">Suzhou</span><span class="tag">Shanghai</span><span class="tag">Shenzhen</span></div>
             <div class="event-footer"><a href="202511_HumanoidChina/humanoidsChina_itinerary_withConversation.html">旅程ページ →</a></div>
           </article>
@@ -625,6 +648,8 @@
             <div class="event-top"><span class="event-index">10</span><span class="event-year">SEP 2025</span></div>
             <h3><a href="202509_EMO/">EMO Hannover 2025</a></h3>
             <p class="event-desc">9月20日〜26日。ハノーバーでのEMO視察とベルリン移動をまとめた出張旅程。</p>
+            <dl class="event-stats"><div><dt>期間</dt><dd>7日間</dd></div><div><dt>訪問国</dt><dd>1か国</dd></div><div><dt>都市</dt><dd>3都市</dd></div></dl>
+            <p class="event-cities">ヴォルフスブルク・ハノーファー・ベルリン</p>
             <div class="tags"><span class="tag">Hannover</span><span class="tag">Berlin</span><span class="tag">展示会</span></div>
             <div class="event-footer">
               <a href="202509_EMO/">旅程ページ →</a>
@@ -636,6 +661,8 @@
             <div class="event-top"><span class="event-index">11</span><span class="event-year">AUG — SEP 2025</span></div>
             <h3><a href="202508_Fraunhofer/ForFamily.html">Fraunhofer・IFA視察</a></h3>
             <p class="event-desc">8月30日〜9月10日。スウェーデンとドイツを巡る技術視察・IFA出張の旅程。</p>
+            <dl class="event-stats"><div><dt>期間</dt><dd>12日間</dd></div><div><dt>訪問国</dt><dd>2か国</dd></div><div><dt>都市</dt><dd>6都市</dd></div></dl>
+            <p class="event-cities">ヨーテボリ・マクデブルク・ドルトムント・シュトゥットガルト・フランクフルト・ベルリン</p>
             <div class="tags"><span class="tag">Sweden</span><span class="tag">Germany</span><span class="tag">IFA</span></div>
             <div class="event-footer">
               <a href="202508_Fraunhofer/ForFamily.html">旅程ページ →</a>
@@ -647,6 +674,8 @@
             <div class="event-top"><span class="event-index">12</span><span class="event-year">MAY — JUN 2025</span></div>
             <h3><a href="202505_HumanoidsSummit_AI_BIGDATA_EXPO/LondonSanFrancisco2025_Expanded.html">Humanoids Summit × AI &amp; Big Data Expo</a></h3>
             <p class="event-desc">5月27日〜6月7日。ロンドンとサンフランシスコを巡る国際イベント出張。</p>
+            <dl class="event-stats"><div><dt>期間</dt><dd>12日間</dd></div><div><dt>訪問国</dt><dd>2か国</dd></div><div><dt>都市</dt><dd>5都市</dd></div></dl>
+            <p class="event-cities">ロンドン・オックスフォード・ミルピタス・サンタクララ・サンフランシスコ</p>
             <div class="tags"><span class="tag">London</span><span class="tag">San Francisco</span><span class="tag">AI</span></div>
             <div class="event-footer">
               <a href="202505_HumanoidsSummit_AI_BIGDATA_EXPO/LondonSanFrancisco2025_Expanded.html">旅程ページ →</a>
@@ -658,6 +687,7 @@
             <div class="event-top"><span class="event-index">13</span><span class="event-year">APR 2025</span></div>
             <h3><a href="202504_GITEX-ASIA/GITEX_AI_Robotics_Companies_Alphabetical_Corrected.html">GITEX Asia 2025</a></h3>
             <p class="event-desc">シンガポールで開催されたGITEX AsiaのAI・ロボティクス関連企業リスト。</p>
+            <p class="event-cities">旅程の記録なし（開催地はシンガポール）</p>
             <div class="tags"><span class="tag">Singapore</span><span class="tag">AI</span><span class="tag">Robotics</span></div>
             <div class="event-footer"><a href="202504_GITEX-ASIA/GITEX_AI_Robotics_Companies_Alphabetical_Corrected.html">企業一覧 →</a></div>
           </article>
