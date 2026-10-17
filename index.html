@@ -384,6 +384,15 @@
     .event-card h3 a { text-decoration: none; }
     .event-card h3 a:hover { color: var(--orange); }
     .event-desc { max-width: 760px; margin-bottom: 20px; color: var(--muted); font-size: .9rem; }
+    .totals { margin: 0 0 40px; padding: 26px clamp(20px, 3vw, 34px); background: var(--white); border: 1px solid var(--line); border-radius: 2px 34px 2px 2px; }
+    .totals-period { margin: 0 0 14px; color: var(--forest); font-weight: 800; font-size: .9rem; }
+    .totals-period span { margin-right: 10px; color: var(--orange); font-size: .72rem; letter-spacing: .12em; }
+    .totals-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0 0 14px; }
+    .totals-grid div { padding: 12px 14px; background: rgba(16, 42, 42, .05); border-radius: 4px; }
+    .totals-grid dt { color: var(--muted); font-size: .72rem; font-weight: 800; }
+    .totals-grid dd { margin: 0; color: var(--forest); font-family: Georgia, serif; font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 700; line-height: 1.2; }
+    .totals-grid small { margin-left: 3px; font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", system-ui, sans-serif; font-size: .8rem; }
+    .totals-note { margin: 0; color: var(--muted); font-size: .76rem; }
     .event-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 8px; max-width: 420px; }
     .event-stats div { padding: 7px 10px; background: rgba(16, 42, 42, .05); border-radius: 4px; }
     .event-stats dt { color: var(--muted); font-size: .66rem; font-weight: 800; letter-spacing: .08em; }
@@ -515,6 +524,16 @@
           </div>
           <p class="section-lead">学会名、都市名、年などで検索できます。完了したイベントもここから参照できます。期間は出発日から帰着日まで、訪問国・都市は日本と乗り継ぎだけの空港を除いて数えています。</p>
         </div>
+
+        <section class="totals" aria-label="掲載イベントの合計">
+          <p class="totals-period"><span>集計期間</span>2025年4月〜2026年10月 · 13件</p>
+          <dl class="totals-grid">
+            <div><dt>延べ日数</dt><dd>97<small>日</small></dd></div>
+            <div><dt>訪問国</dt><dd>10<small>か国</small></dd></div>
+            <div><dt>訪問都市</dt><dd>28<small>都市</small></dd></div>
+          </dl>
+          <p class="totals-note">国と都市は重複を除いた数。国は日本を除く（ドイツ・スウェーデン・オーストリア・英国・米国・中国・台湾・マレーシア・シンガポール・オーストラリア）。都市は国内3都市（東京・浦安・船橋）を含み、HRSの週末の行き先は含まない</p>
+        </section>
 
         <div class="tools">
           <div class="filters" role="group" aria-label="イベントの絞り込み">
